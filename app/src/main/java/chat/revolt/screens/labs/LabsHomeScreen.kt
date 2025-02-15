@@ -159,15 +159,6 @@ fun LabsHomeScreen(navController: NavController) {
                     ) {
                         ListItem(
                             headlineContent = {
-                                Text("Cryptographic Age Verification")
-                            },
-                            modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/cryptoageverif")
-                            }
-                        )
-                        HorizontalDivider()
-                        ListItem(
-                            headlineContent = {
                                 Text("Settings DSL")
                             },
                             modifier = Modifier.clickable {

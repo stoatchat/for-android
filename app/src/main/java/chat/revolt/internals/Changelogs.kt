@@ -1,7 +1,6 @@
 package chat.revolt.internals
 
 import android.content.Context
-import chat.revolt.BuildConfig
 import chat.revolt.api.REVOLT_KJBOOK
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.RevoltJson
@@ -107,17 +106,14 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
         }
 
         val latest = getLatestChangelog().version.code
-        val appVersion = BuildConfig.VERSION_CODE
+        val lastRead = kvStorage.get("latestChangelogRead")
 
-        val appIsNewerThanLatestServerChangelog = appVersion > latest
-
-        // If the app is newer than the latest server changelog
-        if (appIsNewerThanLatestServerChangelog) {
-            return true
+        if (lastRead == null) {
+            return false
         }
 
-        // Otherwise, check if the latest changelog has been read
-        return kvStorage.get("latestChangelogRead") == latest.toString()
+        // If the last read changelog is >= the latest, it has been read
+        return lastRead.toLong() >= latest
     }
 
     suspend fun markAsSeen() {
