@@ -41,7 +41,6 @@
     <string name="badge_bot_alt">Botti</string>
     <string name="badge_masquerade_alt">Linkitetyltä kanavalta</string>
     <string name="unknown">Tuntematon</string>
-    <string name="home">Koti</string>
     <string name="menu">Valikko</string>
     <string name="server_plus_alt">Lisää palvelin</string>
     <string name="no_channels_body">Tällä palvelimella ei ole yhtään kanavaa. Ei edes tervetuloa-kanavaa. Töykeätä.</string>
@@ -195,8 +194,6 @@
     <string name="media_viewer_share_audio">Jaa ääni</string>
     <string name="media_viewer_share_video">Jaa video</string>
     <string name="media_viewer_share_image">Jaa kuva</string>
-    <string name="spark_sidebar_settings_tutorial">Asetukset löytyvät sivupalkista</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Voit avata sivupalkin vetämällä näytön vasemmasta laidasta.</string>
     <string name="register_form_heading">Mennään laittamaan sinut kuntoon.</string>
     <string name="mfa_interstitial_lead">Sinulla on kaksivaiheinen todennus päällä että tilisi pystyy turvallisena.</string>
     <string name="direct_messages">Yksityisviestit</string>
@@ -209,8 +206,6 @@
     <string name="report_message_bridge_notice">Huomautus: Tämä viesti on mahdollisesti lähetetty toiselta alustalta. Suosittelemme, että raportoit viestin myös sillä alustalla, mistä se on alunperin lähetetty.</string>
     <string name="report_user">Kiitoksia että raportoit tämän käyttäjän. Anna syy käyttäjän raportoinnille.</string>
     <string name="report_server">Kiitoksia että raportoit tämän palvelimen. Anna syy palvelimen raportoinnille.</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Ja sitten pidä profiilikuvaasi pohjassa pitkään avataksesi asetukset.</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Selvä</string>
     <string name="settings_category_general">Yleinen</string>
     <string name="settings_category_miscellaneous">Sekalaista</string>
     <string name="settings_appearance">Ulkoasu</string>

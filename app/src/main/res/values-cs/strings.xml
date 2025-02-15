@@ -57,7 +57,6 @@
     <string name="about">O službě</string>
     <string name="oss_attribution">Atribuce OSS</string>
     <string name="comingsoon_toast">Omlouváme se, ale tato funkce ještě není dokončena.</string>
-    <string name="home">Domů</string>
     <string name="channel_dm">Přímá zpráva</string>
     <string name="channel_text">Textový kanál</string>
     <string name="channel_voice">Hlasový kanál</string>
@@ -248,10 +247,7 @@
     <string name="media_viewer_share_url">Sdílet adresu URL</string>
     <string name="media_viewer_share_video">Sdílet video</string>
     <string name="media_viewer_share_image">Sdílet obrázek</string>
-    <string name="file_picker_cannot_attach_file_invalid">Tento soubor je neplatný a nelze jej připojit ke zprávě.</string>
     <string name="file_picker_chip_documents">Připojit soubor</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Postranní lištu otevřete přejetím prstem z levého okraje obrazovky.</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Chápu</string>
     <string name="notice_platform_mod_dm_title">Důležité informace ohledně vašeho účtu</string>
     <string name="notice_platform_mod_dm_acknowledge">Zobrazit</string>
     <string name="settings_category_general">Obecné</string>
@@ -287,7 +283,6 @@
     <string name="settings_appearance_colour_overrides_outline">Obrys</string>
     <string name="settings_appearance_colour_overrides_outline_variant">Varianta obrysu</string>
     <string name="settings_appearance_colour_overrides_scrim">Ztmavení</string>
-    <string name="settings_appearance_colour_overrides_apply">Použít</string>
     <string name="settings_appearance_colour_overrides_import">Import</string>
     <string name="settings_appearance_colour_overrides_import_error">Tento soubor není platným souborem přepsání barev.</string>
     <string name="settings_feedback">Zpětná vazba</string>
@@ -321,7 +316,6 @@
     <string name="report_reason_content_malware">Malware nebo phishing</string>
     <string name="invite_error_unknown">Došlo k neznámé chybě.</string>
     <string name="media_viewer_share_audio">Sdílet zvuk</string>
-    <string name="file_picker_permission_unpartialise_request_cta">Povolit plný přístup</string>
     <string name="notice_platform_mod_dm_description">Od našeho týmu moderátorů jste obdrželi důležité informace ohledně vašeho účtu. Pečlivě si je prosím přečtěte.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (nepodporovaný)</string>
     <string name="settings_appearance_colour_overrides_on_error_container">Na kontejneru chyby</string>
@@ -338,12 +332,8 @@
     <string name="report_reason_content_promotes_harm">Propaguje ubližování</string>
     <string name="report_reason_content_unsolicited_spam">Nevyžádaná reklama nebo spam</string>
     <string name="report_reason_content_raid">Nájezd nebo spamový útok</string>
-    <string name="file_picker_permission_request_cta">Povolit přístup</string>
-    <string name="file_picker_permission_unpartialise_request_header">Udělili jste částečný přístup k vaším fotkám a videím</string>
-    <string name="file_picker_permission_unpartialise_request_body">Pro připojení všech vašich fotek a videí potřebujeme vaše oprávnění</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_4">Střední odstín pleti</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_5">Středně tmavý odstín pleti</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Poté dlouze podržte prst na profilovém obrázku pro otevření nastavení.</string>
     <string name="settings_profile">Profil</string>
     <string name="settings_profile_profile_picture">Profilový obrázek</string>
     <string name="settings_profile_custom_background">Vlastní pozadí</string>
@@ -380,10 +370,8 @@
     <string name="user_info_sheet_edit_profile">Upravit profil</string>
     <string name="user_info_sheet_report">Nahlásit</string>
     <string name="report_submit">Odeslat</string>
-    <string name="file_picker_permission_request_header">Potřebujeme vaše oprávnění pro přístup k fotkám a videím</string>
     <string name="settings_appearance_colour_overrides_inverse_primary">Inverzní primární</string>
     <string name="settings_appearance_colour_overrides_inverse_surface">Inverzní povrch</string>
-    <string name="settings_appearance_colour_overrides_reset">Resetovat</string>
     <string name="settings_appearance_colour_overrides_export">Export</string>
     <string name="channel_age_gate_dob_proceed">Pokračovat</string>
     <string name="user_info_sheet_user_is_bot">Toto je bot.</string>
@@ -422,14 +410,12 @@
     <string name="emoji_picker_skin_tone_fitzpatrick_6">Tmavý odstín pleti</string>
     <string name="emoji_picker_search_results_header">Výsledky vyhledávání</string>
     <string name="emoji_picker_clear_search">Vymazat vyhledávání</string>
-    <string name="spark_sidebar_settings_tutorial">Nastavení se nacházejí v postranní liště</string>
     <string name="settings_category_account">Účet</string>
     <string name="report_reason_user_underage">Nedosažení minimálního věku pro používání platformy</string>
     <string name="report_block_question">Chcete tohoto uživatele zablokovat\?</string>
     <string name="report_block_yes">Zablokovat</string>
     <string name="report_block_no">Neblokovat</string>
     <string name="media_viewer_more">Další…</string>
-    <string name="file_picker_permission_request_body">Poté budete moci ke svým zprávám připojit fotky a videa.</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_1_2">Světlý odstín pleti</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_3">Středně světlý odstín pleti</string>
     <string name="settings_sessions_first_seen">Poprvé spatřeno %1$s</string>

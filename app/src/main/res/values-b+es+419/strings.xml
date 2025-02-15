@@ -69,7 +69,6 @@
     <string name="add_attachment_alt">Añadir un archivo adjunto</string>
     <string name="remove_attachment_alt">Eliminar archivo adjunto</string>
     <string name="badge_masquerade_alt">Desde el canal enlazado</string>
-    <string name="home">Inicio</string>
     <string name="menu">Menú</string>
     <string name="logout">Cerrar sesión</string>
     <string name="server_plus_alt">Añadir servidor</string>
@@ -182,8 +181,6 @@
     <string name="media_viewer_open">Abrir</string>
     <string name="media_viewer_share_url">Compartir URL</string>
     <string name="media_viewer_share_audio">Compartir audio</string>
-    <string name="spark_sidebar_settings_tutorial">Los ajustes se encuentran en la barra lateral</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Entendido</string>
     <string name="settings_category_general">General</string>
     <string name="settings_appearance">Apariencia</string>
     <string name="settings_appearance_theme">Tema</string>
@@ -213,8 +210,6 @@
     <string name="media_viewer_save_failed_image">Se produjo un error al guardar la imagen</string>
     <string name="media_viewer_share_video">Compartir video</string>
     <string name="media_viewer_share_image">Compartir imagen</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Puedes abrir la barra lateral deslizando el dedo desde el borde izquierdo de tu pantalla.</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">A continuación, mantén presionada tu imagen de perfil para acceder a los ajustes.</string>
     <string name="settings_category_miscellaneous">Otros</string>
     <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -246,7 +241,6 @@
     <string name="user_info_sheet_failed_to_open_dm">No se pudo abrir un MD con este usuario.</string>
     <string name="user_badge_developer">Desarrollador</string>
     <string name="user_badge_translator">Traductor</string>
-    <string name="file_picker_permission_request_header">Necesitamos tu permiso para acceder a fotos y videos</string>
     <string name="system_message_channel_icon_changed">%1$s ha cambiado el icono del canal</string>
     <string name="system_message_channel_description_changed">%1$s ha cambiado la descripción del canal</string>
     <string name="system_message_channel_renamed">%1$s renombró el canal a %2$s</string>
@@ -289,7 +283,6 @@
     <string name="report_reason_content_illegal_extortion">Extorsión o blackmail</string>
     <string name="report_reason_content_extreme_violence">Violencia extrema, sangre o crueldad animal</string>
     <string name="report_reason_content_scams_fraud">Estafas o fraude</string>
-    <string name="file_picker_cannot_attach_file_invalid">Este archivo es inválido y no se puede adjuntar.</string>
     <string name="user_info_sheet_bio_not_found">La biografía de este usuario no se pudo obtener. Por favor, verifica que comparten un servidor o son amigos.</string>
     <string name="about_brought_to_you_by">Presentado con ❤️ por el equipo de Revolt.</string>
     <string name="about_tab_version">Versión</string>
@@ -336,13 +329,8 @@
     <string name="oss_attribution_tap_to_view_license">Toque aquí para ver la licencia</string>
     <string name="system_message_channel_renamed_alt">Canal renombrado</string>
     <string name="system_message_text_alt">Mensaje del sistema</string>
-    <string name="file_picker_permission_request_cta">Permitir acceso</string>
-    <string name="file_picker_permission_unpartialise_request_header">Has concedido acceso parcial a fotos y videos.</string>
-    <string name="file_picker_permission_unpartialise_request_cta">Permitir acceso completo</string>
     <string name="file_picker_chip_documents">Adjuntar un archivo</string>
     <string name="file_picker_chip_camera">Tomar foto</string>
-    <string name="file_picker_permission_request_body">Podrás adjuntar fotos y videos a tus mensajes.</string>
-    <string name="file_picker_permission_unpartialise_request_body">Para adjuntar fotos y videos, necesitamos tu permiso</string>
     <string name="invite_dialog_header">Invitar a #%1$s</string>
     <string name="invite_dialog_description">Envía este enlace para invitar gente a este canal.</string>
     <string name="invite_dialog_copy">Copiar</string>

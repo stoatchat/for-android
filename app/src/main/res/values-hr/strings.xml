@@ -33,7 +33,6 @@
     <string name="media_viewer_save">Spremi</string>
     <string name="media_viewer_share_audio">Podijeli audio zapis</string>
     <string name="media_viewer_share_image">Podijeli sliku</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Razumijem</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistem</string>
     <string name="settings_appearance_theme_revolt">Revolt</string>
@@ -125,9 +124,6 @@
     <string name="media_viewer_save_failed_audio">Neuspješno spremanje audio zapisa</string>
     <string name="media_viewer_save_failed_video">Neuspješno spremanje video zapisa</string>
     <string name="media_viewer_save_failed_image">Neuspješno spremanje slike</string>
-    <string name="spark_sidebar_settings_tutorial">Postavke su u traci sa strane</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Možete otvoriti bočnu traku povlačenjem sa lijevog ruba ekrana.</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Onda dugo pritisnite vašu korisničku sliku da bi otvorili postavke.</string>
     <string name="ok">OK</string>
     <string name="share">Podijeli</string>
     <string name="lets_go">Krenimo</string>
@@ -195,7 +191,6 @@
     <string name="badge_bot_alt">Robot</string>
     <string name="badge_masquerade_alt">Iz povezanog kanala</string>
     <string name="unknown">Nepoznato</string>
-    <string name="home">Početna</string>
     <string name="menu">Izbornik</string>
     <string name="logout">Odjavi se</string>
     <string name="server_plus_alt">Dodaj server</string>

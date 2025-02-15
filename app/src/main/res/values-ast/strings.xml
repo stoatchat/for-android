@@ -229,10 +229,6 @@
     <string name="media_viewer_share_url">Compartir URL</string>
     <string name="media_viewer_share_audio">Compartir audiu</string>
     <string name="media_viewer_share_image">Compartir imaxe</string>
-    <string name="file_picker_permission_request_header">Necesitamos el to permisu p\'acceder a semeyes y vídeos</string>
-    <string name="file_picker_permission_request_body">Depués vas poder axuntar semeyes y vídeos a los tos mensaxes.</string>
-    <string name="file_picker_permission_unpartialise_request_header">Autorizasti accesu parcial a semeyes y vídeos</string>
-    <string name="file_picker_permission_unpartialise_request_cta">Autorizar accesu completu</string>
     <string name="file_picker_chip_camera">Quitar una semeya</string>
     <string name="inline_media_picker_no_media_placeholder">Escoyer archivu…</string>
     <string name="inline_media_picker_remove">Esaniciar</string>
@@ -241,11 +237,8 @@
     <string name="emoji_picker_skin_tone_fitzpatrick_6">Tonu de pelleyu escuru</string>
     <string name="emoji_picker_search_results_header">Resultaos de búsqueda</string>
     <string name="emoji_picker_clear_search">Llimpiar búsqueda</string>
-    <string name="spark_sidebar_settings_tutorial">Los axustes tán na barra llateral</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_1_2">Tonu de pelleyu claru</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_3">Tonu de pelleyu mediu claru</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Lluegu caltién pulsáu la to semeya de perfil p\'abrir la configuración.</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Entendíu</string>
     <string name="notice_platform_mod_dm_title">Avisu importante sobro la to cuenta</string>
     <string name="settings_category_account">Cuenta</string>
     <string name="settings_category_general">Xeneral</string>
@@ -290,8 +283,6 @@
     <string name="settings_appearance_colour_overrides_outline">Contorna</string>
     <string name="settings_appearance_colour_overrides_outline_variant">Variante de contorna</string>
     <string name="settings_appearance_colour_overrides_scrim">Tela</string>
-    <string name="settings_appearance_colour_overrides_apply">Aplicar</string>
-    <string name="settings_appearance_colour_overrides_reset">Resetear</string>
     <string name="settings_appearance_colour_overrides_export">Esportar</string>
     <string name="settings_appearance_colour_overrides_import">Importar</string>
     <string name="settings_feedback">Comentariu</string>
@@ -328,7 +319,6 @@
     <string name="reply_mention_on">\@ activáu</string>
     <string name="emoji_category_food">Comida y Bebíes</string>
     <string name="emoji_category_travel">Viaxe y Llugares</string>
-    <string name="home">Fogar</string>
     <string name="home_join_jenvolt">Xuntáse a Revolt</string>
     <string name="home_join_jenvolt_description">Jenvolt ye\'l espaciu dirixíu por desenvolvedores pa toles coses d\'Android app y más. Sofitu y comentarios fácense equí. ¡Quiciabes pueas llograr probar nueves característiques! 👀</string>
     <string name="friends_deny_all_incoming">Esborrar toles solicitúes entrantes</string>
@@ -384,14 +374,10 @@
     <string name="invite_error_no_invite">Nun s\'especificó nengún códigu d\'invitación.</string>
     <string name="invite_error_invalid_invite">Nun se pudo alcontrar una invitación col códigu especificáu.</string>
     <string name="media_viewer_share_video">Compartir vídeu</string>
-    <string name="file_picker_cannot_attach_file_invalid">Esti archivu ye inválidu y nun pue ser axuntáu.</string>
-    <string name="file_picker_permission_request_cta">Autorizar accesu</string>
-    <string name="file_picker_permission_unpartialise_request_body">Pa axuntar toles tos semeyes y vídeos, necesitamos el to permisu</string>
     <string name="file_picker_chip_documents">Añedir un archivu</string>
     <string name="inline_media_picker_current_description">Archivu actualmente seleicionáu</string>
     <string name="emoji_picker_skin_tone_none">Nengún tonu de pelleyu</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_5">Tonu de pelleyu mediu escuru</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Pues abrir la barra llateral esñidiando\'l deu dende la esquierda de la pantaya.</string>
     <string name="notice_platform_mod_dm_description">Recibisti un avisu importante sobro la to cuenta del nuesu equipu de moderación. Porfavor lleilu curioso.</string>
     <string name="notice_platform_mod_dm_acknowledge">Ver</string>
     <string name="settings_profile_profile_picture">Semeya de perfil</string>

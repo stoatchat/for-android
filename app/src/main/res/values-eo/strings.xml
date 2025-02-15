@@ -199,7 +199,6 @@
     <string name="message_context_sheet_actions_delete_confirmation_yes">Forigi</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Gardi</string>
     <string name="channel_context_sheet_actions_copy_id">Kopii Identigilo</string>
-    <string name="server_context_sheet_category_actions">Agoj</string>
     <string name="server_context_sheet_actions_copy_id">Kopii Identigilo</string>
     <string name="server_context_sheet_actions_leave_confirm">Adiaŭi %1$s \?</string>
     <string name="server_context_sheet_actions_leave_confirm_no">Resti</string>
@@ -236,7 +235,6 @@
     <string name="reply_mention_off">\@ malŝaltita</string>
     <string name="badge_bot_alt">Roboto</string>
     <string name="badge_team_member_alt">Revolt teamo membro</string>
-    <string name="home">Hejmo</string>
     <string name="friends_outgoing_requests">Elirantaj Petoj</string>
     <string name="friends_incoming_requests">Alvenintaj Petoj</string>
     <string name="friends_deny_all_incoming">Forigi ĉiojn alvenintajn petojn</string>

@@ -39,7 +39,6 @@
     <string name="mfa_password_lead">Escriu la teva contrassenya per continuar.</string>
     <string name="about">Sobre nosaltres</string>
     <string name="oss_attribution">Atribució d\'OSS</string>
-    <string name="home">Inici</string>
     <string name="today">Avui</string>
     <string name="server_context_sheet_actions_copy_id_copied">ID del servidor copiat al porta-retalls</string>
     <string name="report_reason_additional">Informació addicional</string>
@@ -156,9 +155,6 @@
     <string name="media_viewer_save_failed_video">No s\'ha pogut guardar el video</string>
     <string name="media_viewer_save_failed_image">No s\'ha pogut guardar la imatge</string>
     <string name="media_viewer_share_url">Compartir URL</string>
-    <string name="spark_sidebar_settings_tutorial">Les opcions són a la barra lateral</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Després has de mantenir pulsat la teva foto de perfil per obrir les opcions.</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Ho he entès</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_miscellaneous">Diversos</string>
     <string name="settings_appearance">Aparença</string>
@@ -219,7 +215,6 @@
     <string name="report_submit_thanks">Gràcies per ajudar a mantenir Revolt segur. Revisarem la teva denúncia el més aviat possible.</string>
     <string name="invite_message">Has sigut invitat a unir-te a aquest servidor. T\'agradaria unir-te\?</string>
     <string name="invite_error_unknown">S\'ha produït un error desconegut.</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Pots obrir la barra lateral fent lliscar el dit des de la vora esquerra de la pantalla.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (sense suport)</string>
     <string name="oss_attribution_body_2">Estem agraïts als desenvolupadors d\'aquests projectes per fer que el seu treball estigui disponible al món.</string>
     <string name="oss_attribution_body">Revolt es construeix amb l\'ajuda d\'aquests fantàstics projectes de codi obert.</string>
@@ -231,4 +226,11 @@
     <string name="oss_attribution_tap_to_view_license">Toqueu per veure la llicència</string>
     <string name="about_full_name">Revolt a Android</string>
     <string name="pick_emoji_alt">Tria emoji</string>
+    <string name="hide_password">Amaga la contrasenya</string>
+    <string name="show_password">Mostra la contrasenya</string>
+    <string name="service_health_alert_actions_dismiss">Descarta</string>
+    <string name="rate_limit_toast">Aguanta els cavalls! Ho fas massa sovint en poc temps.</string>
+    <string name="service_health_alert">Actualment en curs</string>
+    <string name="service_health_alert_actions_default">Més informació</string>
+    <string name="service_health_alert_body_default">Actualment estem experimentant problemes amb els nostres serveis. Consulteu la nostra pàgina d\'estat per a més informació.</string>
 </resources>

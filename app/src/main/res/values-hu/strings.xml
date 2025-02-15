@@ -58,7 +58,6 @@
     <string name="badge_bot_alt">Robi 🤖</string>
     <string name="badge_masquerade_alt">Hivatkozott csatornáról</string>
     <string name="unknown">Ismeretlen</string>
-    <string name="home">Kezdőhely</string>
     <string name="menu">Menü</string>
     <string name="logout">Kijelentkezés</string>
     <string name="server_plus_alt">Szerver hozzáadása</string>
@@ -162,7 +161,6 @@
     <string name="report_block_yes">Kizárom</string>
     <string name="report_block_no">Inkább nem</string>
     <string name="report_user_preview">Kiválasztott felhasználó:</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Ezután tartsd hosszan nyomva a profilképedet a beállítások megnyitásához.</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (nem támogatott)</string>
     <string name="media_viewer_more">Bővebben…</string>
@@ -174,8 +172,6 @@
     <string name="media_viewer_share_url">URL megosztása</string>
     <string name="media_viewer_share_video">Videó megosztása</string>
     <string name="media_viewer_share_image">Kép megosztása</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Vettem!</string>
-    <string name="spark_sidebar_settings_tutorial">A beállítások az oldalsó menüben találhatók</string>
     <string name="settings_category_general">Általános</string>
     <string name="settings_category_miscellaneous">Különféleségek</string>
     <string name="settings_appearance_theme">Színséma</string>
@@ -192,7 +188,6 @@
     <string name="password_forgot_instructions">Miután megadtad az e-mail-címed, levelet küldünk a jelszó megváltoztatásának mikéntjéről.</string>
     <string name="register_instructions">A Revolt olyan hely, ahol össze tudtok jönni, meg tudjátok beszélni a dolgaitokat. A legjobb ebben az, hogy mindezt az Interneten lógva tudjátok csinálni.</string>
     <string name="onboarding_changeable">Ha meggondolnád magad, később a felhasználónevedet a beállításokban bármikor megváltoztathatod.</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Az oldalsó menüt a kijelző bal szélénél elhúzással tudod megnyitni.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">A Material You-t nem támogatja a készüléked.</string>
     <string name="register_password_rules">Álljon nyolcból, vagy többől. A gyakoriak nem jók. Ajánlott szimbólumokat és számokat használni.</string>
     <string name="mfa_interstitial_lead">Kétlépéses hitelesítést használsz, amivel a fiókod extra biztonságban van.</string>
@@ -312,12 +307,6 @@
     <string name="user_info_sheet_report">Jelentem</string>
     <string name="user_info_sheet_copy_id">ID másolása</string>
     <string name="user_info_sheet_failed_to_open_dm">Nem lehetett közvetlen üzenetet írni neki.</string>
-    <string name="file_picker_cannot_attach_file_invalid">A fájlt nem lehet csatolni, mert hibás.</string>
-    <string name="file_picker_permission_request_header">Engedélyezned kell nekünk, hogy hozzáférhessünk a képeidhez és videóidhoz</string>
-    <string name="file_picker_permission_request_body">Ezután fogsz tudni képeket és videókat csatolni az üzeneteidhez.</string>
-    <string name="file_picker_permission_request_cta">Engedélyezem</string>
-    <string name="file_picker_permission_unpartialise_request_body">A fotók és videók csatolásához szükségünk van az engedélyedre</string>
-    <string name="file_picker_permission_unpartialise_request_cta">Teljes hozzáférést engedélyezek</string>
     <string name="file_picker_chip_documents">Fájl csatolása</string>
     <string name="file_picker_chip_camera">Fotó készítése</string>
     <string name="inline_media_picker_current_description">Kiválasztott anyag</string>
@@ -374,8 +363,6 @@
     <string name="settings_appearance_colour_overrides_on_error_container">Aktív, hibát tároló</string>
     <string name="settings_appearance_colour_overrides_error_container">Hibát tároló</string>
     <string name="settings_appearance_colour_overrides_scrim">Kiemelés</string>
-    <string name="settings_appearance_colour_overrides_apply">Elfogad</string>
-    <string name="settings_appearance_colour_overrides_reset">Töröl</string>
     <string name="settings_appearance_colour_overrides_export">Exportál</string>
     <string name="settings_appearance_colour_overrides_import">Importál</string>
     <string name="settings_changelogs">Változások</string>
@@ -388,7 +375,6 @@
     <string name="status_invisible_explainer">Szokás szerint használhatod a Revoltot, viszont a többiek offlineként fognak Téged látni.</string>
     <string name="server_context_sheet_actions_leave_confirm">Végleg elhagyod ezt a helyet\? „%1$s”</string>
     <string name="user_info_sheet_user_not_found_description">Vagy már törölték a tagot, vagy pedig nincs engedélyed őt megtekinteni.</string>
-    <string name="file_picker_permission_unpartialise_request_header">Részleges engedélyt adtál a fotókhoz és videókhoz való hozzáféréshez</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_5">Közepesen sötét bőrszín</string>
     <string name="notice_platform_mod_dm_description">Fontos értesítést kaptál a moderáló csapatunktól a fiókoddal kapcsolatban, ezért kérünk, hogy figyelmesen olvasd végig!</string>
     <string name="settings_sessions_this_device_unavailable">Ezen eszköz jelenlegi munkamenete nem elérhető. _Jelentkezz be újból,_ hogy lásd a jelenlegi munkamenetedet!</string>

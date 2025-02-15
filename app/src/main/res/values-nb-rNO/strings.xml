@@ -61,7 +61,6 @@
     <string name="reply_mention_off">\@ av</string>
     <string name="badge_bot_alt">Robot</string>
     <string name="unknown">Ukjent</string>
-    <string name="home">Hjem</string>
     <string name="menu">Meny</string>
     <string name="logout">Logg ut</string>
     <string name="server_plus_alt">Legg til server</string>
@@ -186,9 +185,6 @@
     <string name="media_viewer_share_audio">Del lyd</string>
     <string name="media_viewer_share_video">Del video</string>
     <string name="media_viewer_share_image">Del bilde</string>
-    <string name="spark_sidebar_settings_tutorial">Innstillingene er i sidelinja</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Trykk deretter lenge på profilbildet ditt for å åpne innstillingene.</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Mottatt</string>
     <string name="settings_category_general">Generelt</string>
     <string name="settings_category_miscellaneous">Diverse</string>
     <string name="settings_appearance">Utseende</string>
@@ -218,5 +214,4 @@
     <string name="report_submit_thanks">Tusen takk for at du hjelper å holde Revolt trygt. Vi vil se igjennom rapporten din så snart som mulig.</string>
     <string name="invite_error_no_invite">Ingen invitasjonskode ble gitt.</string>
     <string name="media_viewer_save_failed_audio">Kunne ikke lagre lyd</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Du kan åpne sidelinja med å sveipe fra venstre kant av skjermen.</string>
 </resources>

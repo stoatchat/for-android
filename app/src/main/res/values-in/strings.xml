@@ -124,7 +124,7 @@
     <string name="report_server_preview">Server yang dipilih:</string>
     <string name="report_user">Terima kasih telah meluangkan waktu untuk melaporkan pengguna ini. Harap berikan alasan mengapa pengguna ini dilaporkan.</string>
     <string name="report_user_preview">Pengguna yang dipilih:</string>
-    <string name="report_reason">Alasan</string>
+    <string name="report_reason">Pilih kategori</string>
     <string name="report_reason_content_illegal">Konten ilegal</string>
     <string name="report_reason_content_promotes_harm">Menganjurkan kejahatan</string>
     <string name="report_reason_content_spam_abuse">Spam atau penyalahgunaan yang serupa</string>
@@ -147,7 +147,6 @@
     <string name="invite_cancel">Batal</string>
     <string name="invite_already_member">Kamu sudah menjadi anggota server ini.</string>
     <string name="invite_error_header">Terjadi kesalahan</string>
-    <string name="home">Beranda</string>
     <string name="server_plus_alt">Tambah server</string>
     <string name="no_channels_body">Tak ada saluran apa pun di server ini, apalagi saluran selamat datang. Dasar tidak sopan.</string>
     <string name="message_field_placeholder_text">Kirimkan pesan ke #%1$s</string>
@@ -197,11 +196,7 @@
     <string name="invite_error_invalid_invite">Tidak dapat menemukan undangan dengan kode tersebut.</string>
     <string name="media_viewer_title_image">%1$s</string>
     <string name="media_viewer_title_video">%1$s</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">Baiklah</string>
-    <string name="spark_sidebar_settings_tutorial">Pengaturan terdapat di sidebar</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">Kamu dapat membuka sidebar dengan menggeser dari sisi kiri layar.</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">Kemudian ketuk dan tahan gambar profil kamu untuk membuka pengaturan.</string>
-    <string name="settings_appearance_theme_amoled">Hitam</string>
+    <string name="settings_appearance_theme_amoled">Hitam Murni</string>
     <string name="invite_error_no_invite">Kode undangan tidak ditentukan.</string>
     <string name="direct_messages">Pesan Langsung</string>
     <string name="lets_go">Mari mulai</string>
@@ -209,7 +204,6 @@
     <string name="reply_message_empty_has_attachments">Kirimkan lampiran</string>
     <string name="server_context_sheet_actions_leave_silently">Tinggalkan Diam-Diam</string>
     <string name="user_info_sheet_failed_to_open_dm">Tidak dapat membuka DM dengan pengguna ini.</string>
-    <string name="file_picker_permission_request_body">Kamu akan bisa melampirkan foto dan video pada pesan yang kamu kirim.</string>
     <string name="notice_platform_mod_dm_acknowledge">Lihat</string>
     <string name="settings_profile_profile_picture">Gambar profil</string>
     <string name="oss_attribution_generation_date">Terakhir diperbarui: %1$s</string>
@@ -267,11 +261,8 @@
     <string name="user_info_sheet_edit_profile">Ubah Profil</string>
     <string name="user_info_sheet_report">Laporkan</string>
     <string name="user_info_sheet_copy_id">Salin ID</string>
-    <string name="file_picker_cannot_attach_file_invalid">Berkas ini tidak sah dan tidak dapat dilampirkan.</string>
-    <string name="file_picker_permission_request_header">Kami butuh izinmu untuk mengakses foto dan video</string>
-    <string name="file_picker_permission_request_cta">Izinkan</string>
-    <string name="file_picker_chip_documents">Lampirkan berkas</string>
-    <string name="file_picker_chip_camera">Ambil foto</string>
+    <string name="file_picker_chip_documents">Berkas</string>
+    <string name="file_picker_chip_camera">Kamera</string>
     <string name="inline_media_picker_no_media_placeholder">Pilih media…</string>
     <string name="inline_media_picker_remove">Hapus</string>
     <string name="emoji_picker_search_results_header">Hasil pencarian</string>
@@ -332,4 +323,22 @@
     <string name="message_context_sheet_actions_delete_confirmation_yes">Hapus</string>
     <string name="server_context_sheet_description_empty">Deskripsi server ini belum diatur.</string>
     <string name="server_context_sheet_actions_leave_confirm_eyebrow">Kamu tidak akan bisa bergabung lagi kecuali diundang lagi.</string>
+    <string name="overview_screen_settings">Buka Pengaturan</string>
+    <string name="overview_screen_share_profile">Bagikan Profil</string>
+    <string name="message_field_placeholder_voice">Kirimkan pesan ke #%1$s</string>
+    <string name="message_field_placeholder_group">Kirimkan pesan ke %1$s</string>
+    <string name="user_badge_translator">Penerjemah</string>
+    <string name="user_badge_developer">Pengembang</string>
+    <string name="user_badge_supporter">Pendukung</string>
+    <string name="channel_settings_delete">Hapus Saluran</string>
+    <string name="attachment_preview_remove">Hapus</string>
+    <string name="user_badge_early_adopter">Pengadopsi Awal</string>
+    <string name="user_badge_founder">Pendiri</string>
+    <string name="user_badge_active_supporter">Pendukung Aktif</string>
+    <string name="user_badge_platform_moderation">Moderasi Platform</string>
+    <string name="user_info_sheet_user_is_bot">Akun ini adalah bot.</string>
+    <string name="attachment_preview_close">Tutup</string>
+    <string name="message_embed_special_youtube_switch_alt">Tekan untuk memutar video dari YouTube</string>
+    <string name="programming_language_default">Teks Biasa</string>
+    <string name="scroll_to_bottom">Gulir ke bawah</string>
 </resources>

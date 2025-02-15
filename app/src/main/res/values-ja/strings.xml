@@ -51,7 +51,6 @@
     <string name="too_many_replies">一度に%1$dのメッセージにのみ返信できます。</string>
     <string name="badge_bot_alt">ボット</string>
     <string name="badge_masquerade_alt">リンクされたチャンネルから</string>
-    <string name="home">ホーム</string>
     <string name="menu">メニュー</string>
     <string name="server_plus_alt">サーバーを追加</string>
     <string name="no_active_channel">あなたは今チャンネルにいません。</string>
@@ -207,10 +206,6 @@
     <string name="media_viewer_save_failed_video">動画の保存に失敗しました</string>
     <string name="media_viewer_save_failed_image">画像の保存に失敗しました</string>
     <string name="media_viewer_share_url">URLを共有</string>
-    <string name="spark_sidebar_settings_tutorial">設定はサイドバーにあります</string>
-    <string name="spark_sidebar_settings_tutorial_description_1">画面の左端からスワイプするとサイドバーを開けます。</string>
-    <string name="spark_sidebar_settings_tutorial_description_2">次にあなたのプロフィール画像を長押しして設定を開きます。</string>
-    <string name="spark_sidebar_settings_tutorial_acknowledge">了解しました</string>
     <string name="settings_appearance">外観</string>
     <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">ライト</string>
@@ -221,4 +216,14 @@
     <string name="login_onboarding_body">Revoltは、いつでもどこでも、友人やコミュニティとのつながりを維持するための最良の方法の1つです。</string>
     <string name="register_instructions">たむろしたり、集まったり、話したりするための場所のようなものです。インターネット上にあることが素晴らしいです。</string>
     <string name="instructions_at_mail">%1$sにさらなる指示を送りました。</string>
+    <string name="hide_password">パスワードを非表示</string>
+    <string name="show_password">パスワードを表示</string>
+    <string name="service_health_alert">現在進行中</string>
+    <string name="service_health_alert_body_default">現在、サービスに問題が発生しております。詳しくはステータスページをご確認ください。</string>
+    <string name="service_health_alert_actions_default">さらに詳しく</string>
+    <string name="service_health_alert_actions_dismiss">解任</string>
+    <string name="could_not_log_in_heading">ログインに問題が発生しました</string>
+    <string name="could_not_log_in_body">他のデバイスからログアウトしたか、インターネットが切断されている可能性があります。</string>
+    <string name="could_not_log_in_cta_try_again">もう一度お試し下さい</string>
+    <string name="could_not_log_in_cta_logout">ログアウト</string>
 </resources>
