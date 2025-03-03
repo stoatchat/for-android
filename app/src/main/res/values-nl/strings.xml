@@ -40,4 +40,6 @@
     <string name="onboarding_lead">Het is tijd om een gebruikersnaam te kiezen!</string>
     <string name="verify_then_choose_username">Verifieer je email, en dan gaan we verder met het kiesen van jouw gebruikersnaam.</string>
     <string name="onboarding_others">Anderen zullen je vinden, herkennen en vermelden met deze naam.</string>
+    <string name="could_not_log_in_cta_try_again">Probeer opnieuw</string>
+    <string name="could_not_log_in_cta_logout">Log uit</string>
 </resources>
