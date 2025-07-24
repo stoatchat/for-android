@@ -333,7 +333,9 @@ aboutLibraries {
         "BSD-2-Clause",
         "cmark",
         "EPL-1.0",
-        "BSD-3-Clause"
+        "BSD-3-Clause",
+        "BSD License",
+        "ML Kit Terms of Service"
     )
     configPath = "compliance"
 }
