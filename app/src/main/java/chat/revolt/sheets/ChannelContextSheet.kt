@@ -51,7 +51,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_content_copy_id_24dp),
+                painter = painterResource(id = R.drawable.icn_identifier_copy_24dp),
                 contentDescription = null
             )
         },
@@ -82,7 +82,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_eye_check_24dp),
+                painter = painterResource(id = R.drawable.icn_mark_chat_read_24dp),
                 contentDescription = null
             )
         },

@@ -92,7 +92,7 @@ fun BadgeListEntry(badge: UserBadges) {
         UserBadges.ActiveSupporter.value -> {
             BadgeListEntryTemplate(
                 label = stringResource(R.string.user_badge_active_supporter),
-                icon = painterResource(R.drawable.ic_human_greeting_variant_24dp)
+                icon = painterResource(R.drawable.icn_emoji_people_24dp)
             )
         }
 
@@ -157,7 +157,7 @@ fun UserBadgeRow(badges: Long) {
                         UserBadges.ResponsibleDisclosure -> painterResource(R.drawable.user_badge_disclosure)
                         UserBadges.Founder -> painterResource(R.drawable.user_badge_founder)
                         UserBadges.PlatformModeration -> painterResource(R.drawable.user_badge_moderation)
-                        UserBadges.ActiveSupporter -> painterResource(R.drawable.ic_human_greeting_variant_24dp)
+                        UserBadges.ActiveSupporter -> painterResource(R.drawable.icn_emoji_people_24dp)
                         UserBadges.Paw -> painterResource(R.drawable.user_badge_paw)
                         UserBadges.EarlyAdopter -> painterResource(R.drawable.user_badge_early_adopter)
                         UserBadges.ReservedRelevantJokeBadge1 -> painterResource(R.drawable.user_badge_reserved_relevant_one)

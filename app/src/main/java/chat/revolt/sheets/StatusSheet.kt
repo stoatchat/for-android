@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -225,7 +226,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
             )
 
             Icon(
-                imageVector = Icons.Default.Edit,
+                painter = painterResource(R.drawable.icn_edit_24dp),
                 contentDescription = null,
                 modifier = Modifier.padding(16.dp)
             )
@@ -235,7 +236,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     SheetButton(
         leadingContent = {
             Icon(
-                imageVector = Icons.Default.Settings,
+                painter = painterResource(R.drawable.icn_settings_24dp),
                 contentDescription = null
             )
         },

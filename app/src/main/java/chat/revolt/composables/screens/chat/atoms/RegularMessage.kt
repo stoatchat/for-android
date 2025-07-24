@@ -242,7 +242,7 @@ fun RegularMessage(
                     )
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_reply_24dp),
+                        painter = painterResource(R.drawable.icn_reply_24dp),
                         contentDescription = null,
                         modifier = Modifier.size(
                             min(

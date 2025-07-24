@@ -252,14 +252,14 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                             when {
                                 showPassword.value -> {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_eye_off_24dp),
+                                        painter = painterResource(R.drawable.icn_visibility_off_24dp),
                                         contentDescription = stringResource(R.string.hide_password)
                                     )
                                 }
 
                                 else -> {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_eye_24dp),
+                                        painter = painterResource(R.drawable.icn_visibility_24dp),
                                         contentDescription = stringResource(R.string.show_password)
                                     )
                                 }

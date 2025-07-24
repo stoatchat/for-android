@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,6 +44,7 @@ import chat.revolt.api.routes.channel.leaveDeleteOrCloseChannel
 import chat.revolt.api.schemas.ChannelType
 import chat.revolt.api.settings.FeatureFlags
 import chat.revolt.internals.extensions.rememberChannelPermissions
+import chat.revolt.screens.settings.SettingsIcon
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +110,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -136,10 +133,12 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                                 )
                             },
                             leadingContent = {
-                                Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                )
+                                SettingsIcon {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_info_24dp),
+                                        contentDescription = null,
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .testTag("channel_settings_view_overview")
@@ -158,10 +157,12 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                                 )
                             },
                             leadingContent = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_list_status_24dp),
-                                    contentDescription = null,
-                                )
+                                SettingsIcon {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.icn_page_info_24dp),
+                                        contentDescription = null,
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .testTag("channel_settings_view_permissions")
@@ -181,9 +182,9 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                                 }
                             },
                             leadingContent = {
-                                CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
+                                SettingsIcon(danger = true) {
                                     Icon(
-                                        imageVector = Icons.Default.Delete,
+                                        painter = painterResource(R.drawable.icn_delete_24dp),
                                         contentDescription = null,
                                     )
                                 }

@@ -60,7 +60,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
             leadingContent = {
                 CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_account_cancel_24dp),
+                        painter = painterResource(R.drawable.icn_person_off_24dp),
                         contentDescription = null
                     )
                 }
@@ -82,7 +82,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
         },
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.ic_content_copy_id_24dp),
+                painter = painterResource(R.drawable.icn_identifier_copy_24dp),
                 contentDescription = null
             )
         },
@@ -132,7 +132,7 @@ fun ColumnScope.ServerMemberContextSheet(
         },
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.ic_content_copy_id_24dp),
+                painter = painterResource(R.drawable.icn_identifier_copy_24dp),
                 contentDescription = null
             )
         },

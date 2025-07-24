@@ -90,7 +90,7 @@ fun UserInfoSheet(
         NonIdealState(
             icon = {
                 Icon(
-                    painter = painterResource(R.drawable.ic_alert_decagram_24dp),
+                    painter = painterResource(R.drawable.icn_error_24dp),
                     contentDescription = null,
                     modifier = Modifier.size(it)
                 )
@@ -164,7 +164,7 @@ fun UserInfoSheet(
                             onClick = { showUserCard = true },
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_badge_account_horizontal_24dp),
+                                painter = painterResource(R.drawable.icn_badge_24dp),
                                 contentDescription = null
                             )
                         }
@@ -360,7 +360,7 @@ fun UserInfoSheet(
                                 )
                             } ?: run {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.ic_alert_decagram_24dp),
+                                    painter = painterResource(id = R.drawable.icn_error_24dp),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -380,7 +380,7 @@ fun UserInfoSheet(
                         NonIdealState(
                             icon = {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_alert_decagram_24dp),
+                                    painter = painterResource(R.drawable.icn_error_24dp),
                                     contentDescription = null,
                                     modifier = Modifier.size(24.dp)
                                 )

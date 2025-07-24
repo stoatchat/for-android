@@ -28,8 +28,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -500,7 +498,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Menu,
+                                    painter = painterResource(R.drawable.icn_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -511,7 +509,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             overflowMenuShown = true
                         }) {
                             Icon(
-                                imageVector = Icons.Default.MoreVert,
+                                painter = painterResource(R.drawable.icn_more_vert_24dp),
                                 contentDescription = stringResource(R.string.menu)
                             )
                         }
@@ -720,7 +718,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.ic_account_multiple_plus_24dp),
+                            painterResource(R.drawable.icn_group_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -734,7 +732,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.ic_qrcode_scan_24dp),
+                            painterResource(R.drawable.icn_qr_code_scanner_24dp),
                             contentDescription = null
                         )
                     },
@@ -748,7 +746,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.ic_pound_24dp),
+                            painterResource(R.drawable.icn_tag_24dp),
                             contentDescription = null
                         )
                     },

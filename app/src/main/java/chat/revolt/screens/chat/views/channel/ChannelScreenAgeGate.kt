@@ -122,7 +122,7 @@ fun ChannelScreenAgeGate(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_comment_alert_24dp),
+            painter = painterResource(R.drawable.icn_eda_24dp),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
         )

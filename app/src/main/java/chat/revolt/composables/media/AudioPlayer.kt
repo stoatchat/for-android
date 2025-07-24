@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -235,12 +232,12 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                 } else {
                     if (isPlaying.value) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_pause_24dp),
+                            painter = painterResource(R.drawable.icn_pause_24dp),
                             contentDescription = stringResource(R.string.media_viewer_pause)
                         )
                     } else {
                         Icon(
-                            imageVector = Icons.Filled.PlayArrow,
+                            painter = painterResource(R.drawable.icn_play_arrow_24dp),
                             contentDescription = stringResource(R.string.media_viewer_play)
                         )
                     }
@@ -268,7 +265,7 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                 showMenu.value = !showMenu.value
             }) {
                 Icon(
-                    imageVector = Icons.Filled.MoreVert,
+                    painter = painterResource(R.drawable.icn_more_vert_24dp),
                     contentDescription = stringResource(R.string.media_viewer_more)
                 )
                 DropdownMenu(

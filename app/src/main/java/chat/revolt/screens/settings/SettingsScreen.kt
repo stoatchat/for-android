@@ -10,11 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -90,7 +85,7 @@ fun SettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -120,10 +115,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_card_account_details_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_id_card_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_profile")
@@ -139,10 +136,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_tablet_cellphone_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_devices_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_sessions")
@@ -162,10 +161,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_palette_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_palette_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_appearance")
@@ -181,10 +182,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_earth_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_language_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_language")
@@ -200,10 +203,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_message_text_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_chat_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_chat")
@@ -223,10 +228,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                imageVector = Icons.Default.Info,
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_info_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_about")
@@ -243,10 +250,12 @@ fun SettingsScreen(
                                 )
                             },
                             leadingContent = {
-                                Icon(
-                                    imageVector = Icons.Default.Settings,
-                                    contentDescription = null,
-                                )
+                                SettingsIcon {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_sign_language_24dp),
+                                        contentDescription = null,
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .testTag("settings_view_debug")
@@ -264,10 +273,12 @@ fun SettingsScreen(
                                 )
                             },
                             leadingContent = {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowForward,
-                                    contentDescription = null,
-                                )
+                                SettingsIcon {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_sign_language_24dp),
+                                        contentDescription = null,
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .testTag("settings_view_labs")
@@ -285,10 +296,12 @@ fun SettingsScreen(
                                 )
                             },
                             leadingContent = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_flask_24dp),
-                                    contentDescription = null,
-                                )
+                                SettingsIcon {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_brand_family_24dp),
+                                        contentDescription = null,
+                                    )
+                                }
                             },
                             modifier = Modifier
                                 .testTag("settings_view_experiments")
@@ -314,10 +327,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                imageVector = Icons.Default.DateRange,
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_wand_shine_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_changelogs")
@@ -338,10 +353,12 @@ fun SettingsScreen(
                             )
                         },
                         leadingContent = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_comment_quote_24dp),
-                                contentDescription = null,
-                            )
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.icn_feedback_24dp),
+                                    contentDescription = null,
+                                )
+                            }
                         },
                         modifier = Modifier
                             .testTag("settings_view_feedback")
@@ -365,9 +382,9 @@ fun SettingsScreen(
                             }
                         },
                         leadingContent = {
-                            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
+                            SettingsIcon(danger = true) {
                                 Icon(
-                                    imageVector = Icons.Default.Close,
+                                    painter = painterResource(R.drawable.icn_logout_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -390,7 +407,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsIcon(danger: Boolean = false, content: @Composable () -> Unit) {
+fun SettingsIcon(danger: Boolean = false, content: @Composable () -> Unit) {
     CompositionLocalProvider(
         LocalContentColor provides
                 if (danger) MaterialTheme.colorScheme.error

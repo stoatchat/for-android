@@ -44,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -300,7 +301,7 @@ fun ChannelSettingsOverview(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -315,7 +316,7 @@ fun ChannelSettingsOverview(
             ) {
                 FloatingActionButton(onClick = { viewModel.updateChannel() }) {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        painter = painterResource(R.drawable.icn_check_24dp),
                         contentDescription = stringResource(R.string.channel_settings_overview_save)
                     )
                 }

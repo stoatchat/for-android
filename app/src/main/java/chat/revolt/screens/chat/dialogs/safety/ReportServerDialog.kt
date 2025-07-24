@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -236,7 +237,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Check,
+                        painter = painterResource(R.drawable.icn_check_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -281,7 +282,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        painter = painterResource(R.drawable.icn_close_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )

@@ -23,9 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -292,7 +289,7 @@ fun AppearanceSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -425,7 +422,7 @@ fun AppearanceSettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                        painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 20.dp, end = 4.dp)
@@ -457,7 +454,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_folder_24dp),
+                                    painter = painterResource(R.drawable.icn_file_open_24dp),
                                     contentDescription = null
                                 )
 
@@ -475,7 +472,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_content_save_24dp),
+                                    painter = painterResource(R.drawable.icn_file_export_24dp),
                                     contentDescription = null
                                 )
 

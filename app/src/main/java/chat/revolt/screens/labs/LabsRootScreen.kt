@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.revolt.api.settings.FeatureFlags
-import chat.revolt.screens.labs.ui.mockups.CallScreenMockup
 import chat.revolt.screens.labs.ui.mockups.NewLoginExperienceMockup
 import chat.revolt.screens.labs.ui.sandbox.CoreLibSandbox
 import chat.revolt.screens.labs.ui.sandbox.GradientEditorSandbox
@@ -64,9 +63,6 @@ fun LabsRootScreen(topNav: NavController) {
                     LabsHomeScreen(labsNav, topNav)
                 }
 
-                composable("mockups/call") {
-                    CallScreenMockup()
-                }
                 composable("mockups/newlogin") {
                     NewLoginExperienceMockup(labsNav)
                 }

@@ -37,10 +37,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -410,7 +406,7 @@ fun ChannelSideDrawer(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
+                        painter = painterResource(R.drawable.icn_add_24dp),
                         contentDescription = stringResource(R.string.server_plus_alt)
                     )
                 }
@@ -428,7 +424,7 @@ fun ChannelSideDrawer(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_compass_24dp),
+                        painter = painterResource(R.drawable.icn_explore_24dp),
                         contentDescription = stringResource(R.string.discover_alt)
                     )
                 }
@@ -450,7 +446,7 @@ fun ChannelSideDrawer(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Settings,
+                            painter = painterResource(R.drawable.icn_settings_24dp),
                             contentDescription = stringResource(R.string.settings)
                         )
                     }
@@ -564,7 +560,7 @@ fun ChannelSideDrawer(
                                 server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.MoreVert,
+                                    painter = painterResource(R.drawable.icn_more_vert_24dp),
                                     contentDescription = stringResource(R.string.menu),
                                     tint = LocalContentColor.current
                                 )
@@ -628,7 +624,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     name = stringResource(R.string.overview_screen_title),
                     channelType = ChannelType.TextChannel
                 ),
-                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.ic_creation_24dp)),
+                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_star_shine_24dp)),
                 isCurrent = currentDestination is ChatRouterDestination.Overview,
                 onDestinationChanged = {
                     onDestinationChanged(ChatRouterDestination.Overview)
@@ -649,7 +645,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     name = stringResource(R.string.friends),
                     channelType = ChannelType.TextChannel
                 ),
-                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.ic_human_greeting_variant_24dp)),
+                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_group_24dp)),
                 isCurrent = currentDestination is ChatRouterDestination.Friends,
                 onDestinationChanged = {
                     onDestinationChanged(ChatRouterDestination.Friends)

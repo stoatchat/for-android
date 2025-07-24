@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,7 +68,7 @@ fun InlineMediaPicker(
                     enabled = (currentModel != null) && enabled
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        painter = painterResource(R.drawable.icn_close_24dp),
                         contentDescription = stringResource(R.string.inline_media_picker_remove)
                     )
                 }
@@ -96,7 +94,7 @@ fun InlineMediaPicker(
                     modifier = Modifier.width(480.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        painter = painterResource(R.drawable.icn_close_24dp),
                         contentDescription = null
                     )
 
@@ -183,7 +181,7 @@ fun InlineMediaPickerMediaPicker(
         ) {
             if (circular) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    painter = painterResource(R.drawable.icn_add_24dp),
                     contentDescription = stringResource(R.string.inline_media_picker_no_media_placeholder)
                 )
             } else {

@@ -28,8 +28,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -267,7 +265,7 @@ fun Message(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_close_octagon_24dp),
+                            painter = painterResource(R.drawable.icn_block_24dp),
                             contentDescription = null
                         )
 
@@ -415,7 +413,7 @@ fun Message(
 
                                 if (message.edited != null) {
                                     Icon(
-                                        imageVector = Icons.Default.Edit,
+                                        painter = painterResource(R.drawable.icn_edit_24dp),
                                         contentDescription = stringResource(id = R.string.edited),
                                         tint = MaterialTheme.colorScheme.onBackground.copy(
                                             alpha = 0.5f
@@ -619,7 +617,7 @@ fun Message(
                                         .padding(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_hamburger_plus_24dp),
+                                        painter = painterResource(R.drawable.icn_add_reaction_24dp),
                                         contentDescription = stringResource(R.string.message_context_sheet_actions_react),
                                         modifier = Modifier.size(16.dp)
                                     )

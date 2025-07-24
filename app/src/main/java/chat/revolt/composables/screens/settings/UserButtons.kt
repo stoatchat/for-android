@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -71,7 +69,7 @@ fun UserButtons(
                     } catch (e: Exception) {
                         // Button did nothing, but not an error
                         if (e.message == "NoEffect") return@launch
-                        
+
                         // Log all other errors
                         logcat(LogPriority.ERROR) { e.asLog() }
                     }
@@ -120,7 +118,7 @@ fun UserButtons(
                             .weight(1f)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_robot_24dp),
+                            painter = painterResource(R.drawable.icn_smart_toy_24dp),
                             contentDescription = null
                         )
                         Text(
@@ -336,7 +334,7 @@ fun UserButtons(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
+                        painter = painterResource(R.drawable.icn_more_vert_24dp),
                         contentDescription = stringResource(R.string.menu)
                     )
                 }

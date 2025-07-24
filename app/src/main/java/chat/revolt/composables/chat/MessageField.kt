@@ -35,9 +35,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -584,7 +582,7 @@ fun MessageField(
             )
 
             Icon(
-                painter = painterResource(R.drawable.ic_emoticon_24dp),
+                painter = painterResource(R.drawable.icn_mood_24dp),
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 contentDescription = stringResource(id = R.string.pick_emoji_alt),
                 modifier = Modifier
@@ -622,9 +620,9 @@ fun MessageField(
                 ) + fadeOut(animationSpec = RevoltTweenFloat)
             ) {
                 Icon(
-                    when {
-                        editMode -> Icons.Default.Edit
-                        else -> Icons.AutoMirrored.Default.Send
+                    painter = when {
+                        editMode -> painterResource(R.drawable.icn_edit_24dp)
+                        else -> painterResource(R.drawable.icn_send_24dp)
                     },
                     tint = MaterialTheme.colorScheme.primary,
                     contentDescription = stringResource(id = R.string.send_alt),

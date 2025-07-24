@@ -134,7 +134,7 @@ class HandlerService : FirebaseMessagingService() {
 
         val action: NotificationCompat.Action =
             NotificationCompat.Action.Builder(
-                R.drawable.ic_reply_24dp,
+                R.drawable.icn_reply_24dp,
                 getString(R.string.message_context_sheet_actions_reply),
                 PendingIntent.getActivity(
                     this,
@@ -147,7 +147,7 @@ class HandlerService : FirebaseMessagingService() {
                 .build()
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID_GROUP_SOCIAL_FRIENDREQUESTS)
-            .setSmallIcon(R.drawable.ic_message_text_24dp)
+            .setSmallIcon(R.drawable.icn_chat_24dp)
             .setContentTitle(user.displayName ?: user.username)
             .setContentText(message.content)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)

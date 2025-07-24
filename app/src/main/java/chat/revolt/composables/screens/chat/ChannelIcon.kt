@@ -1,8 +1,5 @@
 package chat.revolt.composables.screens.chat
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,35 +16,39 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
     when (channelType) {
         ChannelType.TextChannel -> {
             Icon(
-                painter = painterResource(R.drawable.ic_pound_24dp),
+                painter = painterResource(R.drawable.icn_tag_24dp),
                 contentDescription = stringResource(R.string.channel_text),
                 modifier = modifier
             )
         }
+
         ChannelType.VoiceChannel -> {
             Icon(
-                painter = painterResource(R.drawable.ic_volume_up_24dp),
+                painter = painterResource(R.drawable.icn_volume_up_24dp),
                 contentDescription = stringResource(R.string.channel_voice),
                 modifier = modifier
             )
         }
+
         ChannelType.SavedMessages -> {
             Icon(
-                painter = painterResource(R.drawable.ic_note_24dp),
+                painter = painterResource(R.drawable.icn_note_stack_24dp),
                 contentDescription = stringResource(R.string.channel_notes),
                 modifier = modifier
             )
         }
+
         ChannelType.DirectMessage -> {
             Icon(
-                imageVector = Icons.Default.AccountCircle,
+                painter = painterResource(R.drawable.icn_account_circle_24dp),
                 contentDescription = stringResource(R.string.channel_dm),
                 modifier = modifier
             )
         }
+
         ChannelType.Group -> {
             Icon(
-                imageVector = Icons.Default.AccountBox,
+                painter = painterResource(R.drawable.icn_account_box_24dp),
                 contentDescription = stringResource(R.string.channel_group),
                 modifier = modifier
             )

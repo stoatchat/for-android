@@ -22,10 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -131,7 +127,7 @@ fun OverviewScreen(
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Menu,
+                                    painter = painterResource(R.drawable.icn_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -149,7 +145,7 @@ fun OverviewScreen(
             NonIdealState(
                 icon = { size ->
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        painter = painterResource(R.drawable.icn_error_24dp),
                         contentDescription = null,
                         modifier = Modifier.size(size)
                     )
@@ -219,7 +215,7 @@ fun OverviewScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Settings,
+                                        painter = painterResource(R.drawable.icn_settings_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(22.dp)
                                     )
@@ -242,7 +238,7 @@ fun OverviewScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_share_24dp),
+                                        painter = painterResource(R.drawable.icn_ios_share_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(22.dp)
                                     )
@@ -266,7 +262,7 @@ fun OverviewScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_flask_24dp),
+                                        painter = painterResource(R.drawable.icn_wand_shine_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(22.dp)
                                     )
@@ -294,7 +290,7 @@ fun OverviewScreen(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_creation_24dp),
+                                        painter = painterResource(R.drawable.icn_star_shine_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(22.dp)
                                     )

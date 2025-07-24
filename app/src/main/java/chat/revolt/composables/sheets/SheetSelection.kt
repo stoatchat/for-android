@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
@@ -15,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import chat.revolt.R
 
 /**
  * Sheet selection. Used when a modal sheet prompts a choice out of x options.
@@ -55,7 +55,7 @@ fun SheetSelection(
             }
         }
         Icon(
-            imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+            painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
             contentDescription = null,
             tint = arrowTint
         )

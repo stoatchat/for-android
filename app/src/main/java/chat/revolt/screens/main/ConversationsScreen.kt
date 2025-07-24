@@ -103,7 +103,7 @@ fun ConversationsScreen(navController: NavController) {
                                 }
                                 Badge {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_pin_24dp),
+                                        painter = painterResource(R.drawable.icn_keep_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(12.dp)
                                     )
@@ -118,11 +118,12 @@ fun ConversationsScreen(navController: NavController) {
                 }
             }
             items(1000) {
-                Text("Conversation $it", modifier = Modifier
-                    .clickable {
-                        navController.navigate("main/conversation/${it}")
-                    }
-                    .fillMaxWidth())
+                Text(
+                    "Conversation $it", modifier = Modifier
+                        .clickable {
+                            navController.navigate("main/conversation/${it}")
+                        }
+                        .fillMaxWidth())
             }
         }
     }

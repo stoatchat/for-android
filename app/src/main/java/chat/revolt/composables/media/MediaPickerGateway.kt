@@ -66,7 +66,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_image_multiple_24dp),
+                        painterResource(R.drawable.icn_photo_library_24dp),
                         contentDescription = null,
                     )
                     Text(
@@ -102,7 +102,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_paperclip_24dp),
+                        painterResource(R.drawable.icn_attach_file_24dp),
                         contentDescription = null,
                     )
                     Text(
@@ -126,7 +126,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(R.drawable.ic_camera_24dp),
+                        painterResource(R.drawable.icn_camera_24dp),
                         contentDescription = null,
                     )
                     Text(

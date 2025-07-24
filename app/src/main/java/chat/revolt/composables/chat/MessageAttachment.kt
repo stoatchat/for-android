@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +56,7 @@ fun FileAttachment(attachment: AutumnResource) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_file_24dp),
+                painter = painterResource(id = R.drawable.icn_file_present_24dp),
                 contentDescription = null
             )
 
@@ -140,7 +138,7 @@ fun VideoPlayButton() {
     )
 
     Icon(
-        imageVector = Icons.Default.PlayArrow,
+        painter = painterResource(R.drawable.icn_play_arrow_24dp),
         contentDescription = stringResource(id = R.string.media_viewer_play),
         modifier = Modifier
             .width(32.dp)

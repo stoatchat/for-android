@@ -209,7 +209,7 @@ fun UserCardSheet(user: User?) {
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_share_24dp),
+                        painter = painterResource(R.drawable.icn_ios_share_24dp),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -229,7 +229,7 @@ fun UserCardSheet(user: User?) {
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_content_copy_24dp),
+                        painter = painterResource(R.drawable.icn_content_copy_24dp),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))

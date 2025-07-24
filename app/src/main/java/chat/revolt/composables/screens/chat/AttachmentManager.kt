@@ -137,7 +137,7 @@ fun FilePreviewSheet(
                     onRemove()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        painterResource(R.drawable.ic_paperclip_minus_24dp),
+                        painterResource(R.drawable.icn_attach_file_off_24dp),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))

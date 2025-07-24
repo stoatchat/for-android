@@ -6,11 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -26,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -128,7 +124,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 },
                 leadingContent = {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.List,
+                        painter = painterResource(R.drawable.icn_list_24dp),
                         contentDescription = null
                     )
                 },
@@ -157,7 +153,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            imageVector = Icons.Default.Add,
+                            painter = painterResource(R.drawable.icn_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -176,7 +172,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            imageVector = Icons.Default.Add,
+                            painter = painterResource(R.drawable.icn_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -196,7 +192,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                imageVector = Icons.Default.Notifications,
+                painter = painterResource(R.drawable.icn_notification_settings_24dp),
                 contentDescription = null
             )
         },
@@ -215,7 +211,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             },
             leadingContent = {
                 Icon(
-                    imageVector = Icons.Default.Settings,
+                    painter = painterResource(R.drawable.icn_settings_24dp),
                     contentDescription = null
                 )
             },

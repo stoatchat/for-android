@@ -30,9 +30,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -231,7 +228,7 @@ fun EmojiPicker(
                     innerTextField()
 
                     Icon(
-                        imageVector = Icons.Default.Close,
+                        painter = painterResource(R.drawable.icn_close_24dp),
                         contentDescription = stringResource(R.string.emoji_picker_clear_search),
                         modifier = Modifier
                             .clip(CircleShape)
@@ -343,7 +340,7 @@ fun EmojiPicker(
                         textAlign = TextAlign.Center
                     )
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                        painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
                         contentDescription = stringResource(
                             R.string.emoji_picker_close_skin_tone_menu
                         ),
@@ -445,39 +442,39 @@ fun EmojiPicker(
                         Icon(
                             painter = when (category) {
                                 UnicodeEmojiSection.Smileys -> painterResource(
-                                    R.drawable.ic_emoticon_24dp
+                                    R.drawable.icn_mood_24dp
                                 )
 
                                 UnicodeEmojiSection.People -> painterResource(
-                                    R.drawable.ic_human_greeting_variant_24dp
+                                    R.drawable.icn_emoji_people_24dp
                                 )
 
                                 UnicodeEmojiSection.Animals -> painterResource(
-                                    R.drawable.ic_snake_24dp
+                                    R.drawable.icn_emoji_nature_24dp
                                 )
 
                                 UnicodeEmojiSection.Food -> painterResource(
-                                    R.drawable.ic_glass_mug_variant_24dp
+                                    R.drawable.icn_sports_bar_24dp
                                 )
 
                                 UnicodeEmojiSection.Travel -> painterResource(
-                                    R.drawable.ic_train_bus_24dp
+                                    R.drawable.icn_bus_railway_24dp
                                 )
 
                                 UnicodeEmojiSection.Activities -> painterResource(
-                                    R.drawable.ic_skate_24dp
+                                    R.drawable.icn_sports_and_outdoors_24dp
                                 )
 
                                 UnicodeEmojiSection.Objects -> painterResource(
-                                    R.drawable.ic_table_chair_24dp
+                                    R.drawable.icn_emoji_objects_24dp
                                 )
 
                                 UnicodeEmojiSection.Symbols -> painterResource(
-                                    R.drawable.ic_symbol_24dp
+                                    R.drawable.icn_emoji_symbols_24dp
                                 )
 
                                 UnicodeEmojiSection.Flags -> painterResource(
-                                    R.drawable.ic_flag_24dp
+                                    R.drawable.icn_flag_24dp
                                 )
                             },
                             contentDescription = null,

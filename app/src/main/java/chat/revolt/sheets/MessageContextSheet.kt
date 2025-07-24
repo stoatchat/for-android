@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -98,7 +95,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_content_copy_24dp),
+                            painter = painterResource(id = R.drawable.icn_content_copy_24dp),
                             contentDescription = null
                         )
                     },
@@ -144,7 +141,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_link_variant_24dp),
+                            painter = painterResource(id = R.drawable.icn_link_24dp),
                             contentDescription = null
                         )
                     },
@@ -204,7 +201,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_content_copy_id_24dp),
+                            painter = painterResource(id = R.drawable.icn_identifier_copy_24dp),
                             contentDescription = null
                         )
                     },
@@ -344,7 +341,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_reply_24dp),
+                    painter = painterResource(id = R.drawable.icn_reply_24dp),
                     contentDescription = null
                 )
             },
@@ -364,7 +361,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_hamburger_plus_24dp),
+                    painter = painterResource(id = R.drawable.icn_add_reaction_24dp),
                     contentDescription = null
                 )
             },
@@ -382,7 +379,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        imageVector = Icons.Default.Edit,
+                        painter = painterResource(R.drawable.icn_edit_24dp),
                         contentDescription = null
                     )
                 },
@@ -403,7 +400,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_eye_off_24dp),
+                    painter = painterResource(id = R.drawable.icn_visibility_off_24dp),
                     contentDescription = null
                 )
             },
@@ -429,7 +426,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_file_tree_24dp),
+                        painter = painterResource(id = R.drawable.icn_account_tree_24dp),
                         contentDescription = null
                     )
                 },
@@ -448,7 +445,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_share_24dp),
+                    painter = painterResource(id = R.drawable.icn_ios_share_24dp),
                     contentDescription = null,
                 )
             },
@@ -474,7 +471,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        imageVector = Icons.Default.Delete,
+                        painter = painterResource(R.drawable.icn_delete_24dp),
                         contentDescription = null
                     )
                 },
@@ -494,7 +491,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_flag_24dp),
+                        painter = painterResource(id = R.drawable.icn_report_24dp),
                         contentDescription = null
                     )
                 },

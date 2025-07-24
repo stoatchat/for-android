@@ -107,7 +107,7 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_content_copy_24dp),
+                painter = painterResource(R.drawable.icn_content_copy_24dp),
                 contentDescription = null
             )
         },

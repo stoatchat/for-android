@@ -1,8 +1,8 @@
 package chat.revolt.composables.settings.sessions
 
 import android.text.format.DateUtils
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +54,7 @@ fun SessionItem(
                     onLogout(session)
                 }) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_logout_24dp),
+                        painter = painterResource(R.drawable.icn_logout_24dp),
                         contentDescription = stringResource(R.string.logout)
                     )
                 }

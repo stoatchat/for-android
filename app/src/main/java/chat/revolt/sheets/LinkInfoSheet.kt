@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -83,7 +81,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.ExitToApp,
+                painter = painterResource(R.drawable.icn_open_in_browser_24dp),
                 contentDescription = null
             )
         },
@@ -114,7 +112,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_content_copy_24dp),
+                painter = painterResource(R.drawable.icn_content_copy_24dp),
                 contentDescription = null
             )
         },

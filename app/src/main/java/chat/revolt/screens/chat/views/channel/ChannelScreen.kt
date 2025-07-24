@@ -53,10 +53,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
@@ -617,7 +614,7 @@ fun ChannelScreen(
                                 }
 
                                 Icon(
-                                    imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
+                                    painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(16.dp)
@@ -631,7 +628,7 @@ fun ChannelScreen(
                         if (useDrawer) {
                             IconButton(onClick = onToggleDrawer) {
                                 Icon(
-                                    imageVector = Icons.Default.Menu,
+                                    painter = painterResource(R.drawable.icn_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -639,7 +636,7 @@ fun ChannelScreen(
                         if (useBackButton) {
                             IconButton(onClick = backButtonAction ?: {}) {
                                 Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                    painter = painterResource(R.drawable.icn_arrow_back_24dp),
                                     contentDescription = stringResource(id = R.string.back)
                                 )
                             }
@@ -856,7 +853,7 @@ fun ChannelScreen(
                                 containerColor = MaterialTheme.colorScheme.surfaceVariant
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_arrow_down_24dp),
+                                    painter = painterResource(R.drawable.icn_south_24dp),
                                     contentDescription = stringResource(R.string.scroll_to_bottom)
                                 )
                             }
@@ -1011,13 +1008,13 @@ fun ChannelScreen(
                                                 },
                                                 leadingIcon = {
                                                     Icon(
-                                                        imageVector = Icons.Default.Edit,
+                                                        painter = painterResource(R.drawable.icn_edit_24dp),
                                                         contentDescription = null
                                                     )
                                                 },
                                                 trailingIcon = {
                                                     Icon(
-                                                        imageVector = Icons.Default.Close,
+                                                        painter = painterResource(R.drawable.icn_close_24dp),
                                                         contentDescription = stringResource(R.string.message_field_editing_message_cancel_alt),
                                                         tint = MaterialTheme.colorScheme.onSurface,
                                                         modifier = Modifier.alpha(0.8f)
@@ -1084,7 +1081,7 @@ fun ChannelScreen(
                                         DropdownMenuItem(
                                             leadingIcon = {
                                                 Icon(
-                                                    painter = painterResource(R.drawable.ic_paperclip_24dp),
+                                                    painter = painterResource(R.drawable.icn_attach_file_24dp),
                                                     contentDescription = null // Provided by text below
                                                 )
                                             },
@@ -1097,7 +1094,7 @@ fun ChannelScreen(
                                         DropdownMenuItem(
                                             leadingIcon = {
                                                 Icon(
-                                                    painter = painterResource(R.drawable.ic_camera_24dp),
+                                                    painter = painterResource(R.drawable.icn_camera_24dp),
                                                     contentDescription = null // Provided by text below
                                                 )
                                             },
@@ -1110,7 +1107,7 @@ fun ChannelScreen(
                                         DropdownMenuItem(
                                             leadingIcon = {
                                                 Icon(
-                                                    painter = painterResource(R.drawable.ic_image_multiple_24dp),
+                                                    painter = painterResource(R.drawable.icn_photo_library_24dp),
                                                     contentDescription = null // Provided by text below
                                                 )
                                             },

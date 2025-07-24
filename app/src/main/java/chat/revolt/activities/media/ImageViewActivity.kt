@@ -14,8 +14,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -206,7 +204,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             onClose()
                         }) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                painter = painterResource(id = R.drawable.icn_arrow_back_24dp),
                                 contentDescription = stringResource(id = R.string.back)
                             )
                         }
@@ -216,7 +214,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             shareSubmenuIsOpen.value = true
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_share_24dp),
+                                painter = painterResource(id = R.drawable.icn_ios_share_24dp),
                                 contentDescription = stringResource(id = R.string.share)
                             )
                         }
@@ -255,7 +253,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             saveToGallery()
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_download_24dp),
+                                painter = painterResource(id = R.drawable.icn_download_24dp),
                                 contentDescription = stringResource(
                                     id = R.string.media_viewer_save
                                 )
