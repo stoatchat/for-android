@@ -14,16 +14,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -42,12 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.revolt.BuildConfig
 import chat.revolt.R
-import chat.revolt.api.REVOLT_MARKETING
-import chat.revolt.composables.generic.AnyLink
-import chat.revolt.composables.generic.Weblink
-import com.chuckerteam.chucker.api.Chucker
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,7 +50,7 @@ fun LoginGreetingScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 20.dp, horizontal = 0.dp)
+            .padding(vertical = 20.dp, horizontal = 16.dp)
             .safeDrawingPadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,13 +62,11 @@ fun LoginGreetingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.revolt_logo_wide),
-                colorFilter = ColorFilter.tint(LocalContentColor.current),
+                painter = painterResource(id = R.drawable.onboarding_fly_image),
                 contentDescription = "Revolt Logo",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .height(55.dp)
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = 16.dp)
                     .combinedClickable(
                         interactionSource = remember(::MutableInteractionSource),
                         indication = null,
@@ -100,7 +89,14 @@ fun LoginGreetingScreen(navController: NavController) {
                         }
                     )
             )
+        }
 
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = stringResource(R.string.login_onboarding_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
@@ -109,7 +105,7 @@ fun LoginGreetingScreen(navController: NavController) {
                     textAlign = TextAlign.Center
                 ),
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .padding(bottom = 4.dp)
                     .fillMaxWidth()
             )
 
@@ -124,17 +120,12 @@ fun LoginGreetingScreen(navController: NavController) {
                     fontWeight = FontWeight.Normal
                 ),
                 modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .padding(horizontal = 20.dp)
                     .fillMaxWidth()
             )
-        }
 
-        Column(
-            modifier = Modifier
-                .width(200.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+
             Button(
                 onClick = { navController.navigate("login/login") },
                 modifier = Modifier
@@ -177,33 +168,6 @@ fun LoginGreetingScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(40.dp))
-
-            CompositionLocalProvider(
-                LocalTextStyle provides LocalTextStyle.current.copy(textAlign = TextAlign.Center)
-            ) {
-                Weblink(
-                    text = stringResource(R.string.terms_of_service),
-                    url = "$REVOLT_MARKETING/terms"
-                )
-                Weblink(
-                    text = stringResource(R.string.privacy_policy),
-                    url = "$REVOLT_MARKETING/privacy"
-                )
-                Weblink(
-                    text = stringResource(R.string.community_guidelines),
-                    url = "$REVOLT_MARKETING/aup"
-                )
-                if (BuildConfig.DEBUG) {
-                    AnyLink(
-                        text = "Debug: Chucker",
-                        action = {
-                            Chucker.getLaunchIntent(context).apply {
-                                context.startActivity(this)
-                            }
-                        }
-                    )
-                }
-            }
         }
     }
 }

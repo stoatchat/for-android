@@ -96,6 +96,7 @@ import chat.revolt.screens.about.AboutScreen
 import chat.revolt.screens.about.AttributionScreen
 import chat.revolt.screens.chat.ChatRouterScreen
 import chat.revolt.screens.chat.views.channel.ChannelScreen
+import chat.revolt.screens.chooseplatform.ChoosePlatformScreen
 import chat.revolt.screens.create.CreateGroupScreen
 import chat.revolt.screens.labs.LabsRootScreen
 import chat.revolt.screens.login.LoginGreetingScreen
@@ -200,7 +201,7 @@ class MainActivityViewModel @Inject constructor(
             Log.d("MainActivity", "We can reach Revolt, checking if we're logged in")
 
             val token = kvStorage.get("sessionToken")
-                ?: return@launch startWithDestination("login/greeting")
+                ?: return@launch startWithDestination("choose-platform")
             val id = kvStorage.get("sessionId") ?: ""
 
             Log.d(
@@ -563,6 +564,7 @@ fun AppEntrypoint(
                         )
                     }
 
+                    composable("choose-platform") { ChoosePlatformScreen(navController) }
                     composable("login/greeting") { LoginGreetingScreen(navController) }
                     composable("login/login") { LoginScreen(navController) }
                     composable("login/mfa/{mfaTicket}/{allowedAuthTypes}") { backStackEntry ->

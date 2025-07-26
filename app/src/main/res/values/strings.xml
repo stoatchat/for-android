@@ -7,6 +7,7 @@
     <string name="cancel">Cancel</string>
     <string name="share">Share</string>
     <string name="lets_go">Let\'s go</string>
+    <string name="confirm">Confirm</string>
     <string name="loading">Fetching some info, hang in there…</string>
     <string name="rate_limit_toast">Hold your horses! You\'re doing that too often in a short amount of time.</string>
 

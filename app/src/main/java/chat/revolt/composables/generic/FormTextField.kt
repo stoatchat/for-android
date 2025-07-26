@@ -22,6 +22,9 @@ fun FormTextField(
     type: KeyboardType = KeyboardType.Text,
     action: ImeAction = ImeAction.Done,
     supportingText: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
     singleLine: Boolean = true,
     enabled: Boolean = true
 ) {
@@ -29,10 +32,13 @@ fun FormTextField(
         value = value,
         onValueChange = onChange,
         singleLine = singleLine,
+        placeholder = placeholder,
         keyboardOptions = KeyboardOptions(keyboardType = type, imeAction = action),
         visualTransformation = if (type == KeyboardType.Password) PasswordVisualTransformation() else VisualTransformation.None,
         label = { Text(label) },
         supportingText = supportingText,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         enabled = enabled,
         modifier = modifier
     )
