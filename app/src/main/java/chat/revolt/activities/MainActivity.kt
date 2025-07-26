@@ -79,10 +79,12 @@ import chat.revolt.api.HitRateLimitException
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.api
+import chat.revolt.api.routes.microservices.geo.queryGeo
 import chat.revolt.api.routes.microservices.health.healthCheck
 import chat.revolt.api.routes.onboard.needsOnboarding
 import chat.revolt.api.schemas.HealthNotice
 import chat.revolt.api.settings.Experiments
+import chat.revolt.api.settings.GeoStateProvider
 import chat.revolt.api.settings.LoadedSettings
 import chat.revolt.api.settings.SyncedSettings
 import chat.revolt.composables.generic.HealthAlert
@@ -185,6 +187,17 @@ class MainActivityViewModel @Inject constructor(
             Experiments.hydrateWithKv()
             Log.d("MainActivity", "Performing health check")
             doHealthCheck()
+            Log.d("MainActivity", "Performing update geo state")
+            updateGeoState()
+        }
+    }
+
+    private suspend fun updateGeoState() {
+        try {
+            Log.d("MainActivity", "Querying geo state")
+            GeoStateProvider.updateGeoState(queryGeo())
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Failed to query geo state", e)
         }
     }
 

@@ -43,6 +43,7 @@ import chat.revolt.api.routes.user.addUserIfUnknown
 import chat.revolt.api.routes.user.fetchUser
 import chat.revolt.api.schemas.Channel
 import chat.revolt.api.schemas.Message
+import chat.revolt.api.settings.GeoStateProvider
 import chat.revolt.callbacks.Action
 import chat.revolt.callbacks.ActionChannel
 import chat.revolt.callbacks.UiCallback
@@ -103,6 +104,7 @@ class ChannelScreenViewModel @Inject constructor(
     var editingMessage by mutableStateOf<String?>(null)
 
     var ageGateUnlocked by mutableStateOf<Boolean?>(null)
+    var showGeoGate by mutableStateOf(false)
 
     init {
         viewModelScope.launch {
@@ -126,6 +128,10 @@ class ChannelScreenViewModel @Inject constructor(
         this.denyMessageFieldReasonResource = R.string.typing_blank
         this.editingMessage = null
         this.ageGateUnlocked = channel?.nsfw != true
+        this.showGeoGate = when {
+            channel?.nsfw == true && GeoStateProvider.geoState?.isAgeRestrictedGeo == true -> true
+            else -> false
+        }
         viewModelScope.launch {
             if (ageGateUnlocked != true) {
                 ageGateUnlocked = AgeGateUnlockedStorageProvider.getAgeGateUnlocked()

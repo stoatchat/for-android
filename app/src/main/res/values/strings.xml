@@ -797,4 +797,10 @@
     <string name="keyboard_shortcut_messaging">Messaging</string>
     <string name="keyboard_shortcut_messaging_new_line">New Line</string>
     <string name="keyboard_shortcut_messaging_send_message">Send Message</string>
+
+    <string name="geogate_header">Not available in your region</string>
+    <string name="geogate_channel_icon_alt">Unavailable channel</string>
+    <string name="geogate_description">Revolt may block content in certain jurisdictions in response to legislation or legal notices</string>
+    <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
+    <string name="geogate_acknowledge">Acknowledge</string>
 </resources>
