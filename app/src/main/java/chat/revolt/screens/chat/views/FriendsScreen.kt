@@ -120,7 +120,7 @@ private fun showInvalidClipboardToast(context: Context) {
     ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
-fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: () -> Unit) {
+fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerClicked: () -> Unit) {
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
     var overflowMenuShown by remember { mutableStateOf(false) }

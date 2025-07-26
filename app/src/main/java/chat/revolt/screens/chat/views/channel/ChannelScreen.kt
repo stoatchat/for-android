@@ -190,9 +190,8 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 fun ChannelScreen(
     channelId: String,
     onToggleDrawer: () -> Unit,
-    useDrawer: Boolean,
+    useDrawer: Boolean = false,
     useBackButton: Boolean = false,
-    drawerGestureEnabled: Boolean = true,
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
     drawerIsOpen: Boolean = false,
     backButtonAction: (() -> Unit)? = null,
@@ -347,7 +346,7 @@ fun ChannelScreen(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     contentValues
                 )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(
                 context,
                 context.getString(
@@ -363,7 +362,7 @@ fun ChannelScreen(
             capturedPhotoUri.value?.let { uri ->
                 pickCameraLauncher.launch(uri)
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(
                 context,
                 context.getString(

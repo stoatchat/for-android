@@ -68,7 +68,7 @@ import io.sentry.Sentry
 @Composable
 fun OverviewScreen(
     navController: NavController,
-    useDrawer: Boolean,
+    useDrawer: Boolean = false,
     onDrawerClicked: () -> Unit,
     includePadding: Boolean = true
 ) {
