@@ -87,6 +87,7 @@ import chat.revolt.api.schemas.ChannelType
 import chat.revolt.api.schemas.ServerFlags
 import chat.revolt.api.schemas.User
 import chat.revolt.api.schemas.has
+import chat.revolt.api.settings.GeoStateProvider
 import chat.revolt.api.settings.NotificationSettingsProvider
 import chat.revolt.api.settings.SyncedSettings
 import chat.revolt.composables.generic.GroupIcon
@@ -914,7 +915,17 @@ fun ChannelItem(
                 .fillMaxWidth()) {
             when (iconType) {
                 is ChannelItemIconType.Channel -> {
-                    ChannelIcon(iconType.type)
+                    when {
+                        GeoStateProvider.geoState?.isAgeRestrictedGeo == true &&
+                                channel.nsfw == true -> {
+                            Icon(
+                                painter = painterResource(R.drawable.icn_grid_3x3_off_24dp),
+                                contentDescription = stringResource(R.string.geogate_channel_icon_alt),
+                            )
+                        }
+
+                        else -> ChannelIcon(iconType.type)
+                    }
                 }
 
                 is ChannelItemIconType.Painter -> {

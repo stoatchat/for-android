@@ -16,7 +16,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
     when (channelType) {
         ChannelType.TextChannel -> {
             Icon(
-                painter = painterResource(R.drawable.icn_tag_24dp),
+                painter = painterResource(R.drawable.icn_grid_3x3_24dp),
                 contentDescription = stringResource(R.string.channel_text),
                 modifier = modifier
             )

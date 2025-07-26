@@ -1,6 +1,7 @@
 package chat.revolt.screens.register
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,12 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
@@ -112,28 +119,59 @@ class RegisterDetailsScreenViewModel : ViewModel() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterDetailsScreen(
     navController: NavController,
     viewModel: RegisterDetailsScreenViewModel = viewModel()
 ) {
-    val context = LocalContext.current
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-            .imePadding()
-            .safeDrawingPadding(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Scaffold(
+        topBar = {
+            Column {
+                TopAppBar(
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = {},
+                    actions = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(
+                                content = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                                        contentDescription = stringResource(R.string.back)
+                                    )
+                                },
+                                onClick = { navController.popBackStack() }
+                            )
+                            Text(text = stringResource(R.string.login))
+                        }
+                    },
+                )
+                HorizontalDivider()
+            }
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .weight(1f),
-            verticalArrangement = Arrangement.Center,
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(vertical = 20.dp, horizontal = 16.dp)
+                .imePadding(),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Image(
+                modifier = Modifier
+                    .size(120.dp),
+                painter = painterResource(R.drawable.login_charachter_img),
+                contentDescription = "Login character"
+            )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.register_form_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
@@ -142,33 +180,31 @@ fun RegisterDetailsScreen(
                     textAlign = TextAlign.Center
                 ),
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 20.dp, vertical = 4.dp)
                     .fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = stringResource(R.string.register_data),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
                 style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Normal
                 ),
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 20.dp)
                     .fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 FormTextField(
                     value = viewModel.email,
@@ -176,65 +212,33 @@ fun RegisterDetailsScreen(
                     label = stringResource(R.string.register_email),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
-                    modifier = Modifier.semantics { contentType = ContentType.EmailAddress }
+                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
                 )
-                Text(
-                    text = stringResource(R.string.register_email_verification_hint),
-                    color = MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = 0.5f
-                    ),
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(horizontal = 40.dp, vertical = 10.dp)
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
+                Spacer(modifier = Modifier.height(16.dp))
                 FormTextField(
                     value = viewModel.password,
                     onChange = { viewModel.password = it },
                     label = stringResource(R.string.register_password),
-                    type = KeyboardType.Password,
-                    action = ImeAction.Done,
-                    modifier = Modifier.semantics { contentType = ContentType.NewPassword }
+                    type = KeyboardType.Email,
+                    action = ImeAction.Next,
+                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
                 )
-                Text(
-                    text = stringResource(R.string.register_password_rules),
-                    color = MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = 0.5f
-                    ),
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(horizontal = 40.dp, vertical = 10.dp)
-                )
+                Spacer(modifier = Modifier.height(32.dp))
 
-                if (!viewModel.error.isNullOrBlank()) {
-                    Text(
-                        text = viewModel.error!!,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(horizontal = 40.dp, vertical = 10.dp),
-                        textAlign = TextAlign.Center
-                    )
+                val context = LocalContext.current
+
+                Button(
+                    onClick = {
+                        viewModel.initCaptcha(context) {
+                            viewModel.doRegistration(navController)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("setup_continue_button")
+                ) {
+                    Text(text = stringResource(R.string.continue_))
                 }
-            }
-        }
-
-        Row {
-            TextButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Text(text = stringResource(R.string.back))
-            }
-
-            Spacer(modifier = Modifier.width(10.dp))
-
-            Button(
-                onClick = {
-                    viewModel.initCaptcha(context) {
-                        viewModel.doRegistration(navController)
-                    }
-                },
-                enabled = viewModel.email.isNotBlank() && viewModel.password.isNotBlank()
-            ) {
-                Text(text = stringResource(R.string.signup))
             }
         }
     }

@@ -79,10 +79,12 @@ import chat.revolt.api.HitRateLimitException
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.api
+import chat.revolt.api.routes.microservices.geo.queryGeo
 import chat.revolt.api.routes.microservices.health.healthCheck
 import chat.revolt.api.routes.onboard.needsOnboarding
 import chat.revolt.api.schemas.HealthNotice
 import chat.revolt.api.settings.Experiments
+import chat.revolt.api.settings.GeoStateProvider
 import chat.revolt.api.settings.LoadedSettings
 import chat.revolt.api.settings.SyncedSettings
 import chat.revolt.composables.generic.HealthAlert
@@ -96,6 +98,7 @@ import chat.revolt.screens.about.AboutScreen
 import chat.revolt.screens.about.AttributionScreen
 import chat.revolt.screens.chat.ChatRouterScreen
 import chat.revolt.screens.chat.views.channel.ChannelScreen
+import chat.revolt.screens.chooseplatform.ChoosePlatformScreen
 import chat.revolt.screens.create.CreateGroupScreen
 import chat.revolt.screens.labs.LabsRootScreen
 import chat.revolt.screens.login.LoginGreetingScreen
@@ -184,6 +187,17 @@ class MainActivityViewModel @Inject constructor(
             Experiments.hydrateWithKv()
             Log.d("MainActivity", "Performing health check")
             doHealthCheck()
+            Log.d("MainActivity", "Performing update geo state")
+            updateGeoState()
+        }
+    }
+
+    private suspend fun updateGeoState() {
+        try {
+            Log.d("MainActivity", "Querying geo state")
+            GeoStateProvider.updateGeoState(queryGeo())
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Failed to query geo state", e)
         }
     }
 
@@ -200,7 +214,7 @@ class MainActivityViewModel @Inject constructor(
             Log.d("MainActivity", "We can reach Revolt, checking if we're logged in")
 
             val token = kvStorage.get("sessionToken")
-                ?: return@launch startWithDestination("login/greeting")
+                ?: return@launch startWithDestination("choose-platform")
             val id = kvStorage.get("sessionId") ?: ""
 
             Log.d(
@@ -563,6 +577,7 @@ fun AppEntrypoint(
                         )
                     }
 
+                    composable("choose-platform") { ChoosePlatformScreen(navController) }
                     composable("login/greeting") { LoginGreetingScreen(navController) }
                     composable("login/login") { LoginScreen(navController) }
                     composable("login/mfa/{mfaTicket}/{allowedAuthTypes}") { backStackEntry ->

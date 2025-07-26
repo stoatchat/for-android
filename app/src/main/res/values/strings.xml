@@ -7,6 +7,8 @@
     <string name="cancel">Cancel</string>
     <string name="share">Share</string>
     <string name="lets_go">Let\'s go</string>
+    <string name="confirm">Confirm</string>
+    <string name="continue_">Continue</string>
     <string name="loading">Fetching some info, hang in there…</string>
     <string name="rate_limit_toast">Hold your horses! You\'re doing that too often in a short amount of time.</string>
 
@@ -38,7 +40,8 @@
     <string name="could_not_log_in_cta_try_again">Try again</string>
     <string name="could_not_log_in_cta_logout">Log out</string>
 
-    <string name="login_heading">Let\'s log you in</string>
+    <string name="login_heading">Welcome back!</string>
+    <string name="login_subheading">Great to see you again!</string>
     <string name="password_forgot">Forgot password?</string>
     <string name="resend_verification">Resend a verification email</string>
     <string name="password_manager_hint">Using a password manager?</string>
@@ -48,8 +51,8 @@
     <string name="register_heading">Welcome to Revolt</string>
     <string name="register_image_alt">Use Revolt to chat about stuff.</string>
     <string name="register_instructions">It\'s like a place to hang out, get together, and talk about stuff. Best part, it\'s on the internet.</string>
-    <string name="register_form_heading">Let\'s get you set up.</string>
-    <string name="register_data">Your data is safe with us. We don\'t sell it, and neither do we use it to show you ads.</string>
+    <string name="register_form_heading">Make it Official!</string>
+    <string name="register_data">New Here? Let’s Get You Set Up!</string>
     <string name="register_email">Email</string>
     <string name="register_email_verification_hint">We\'ll send you a verification email to confirm your account.</string>
     <string name="register_password">Password</string>
@@ -794,4 +797,10 @@
     <string name="keyboard_shortcut_messaging">Messaging</string>
     <string name="keyboard_shortcut_messaging_new_line">New Line</string>
     <string name="keyboard_shortcut_messaging_send_message">Send Message</string>
+
+    <string name="geogate_header">Not available in your region</string>
+    <string name="geogate_channel_icon_alt">Unavailable channel</string>
+    <string name="geogate_description">Revolt may block content in certain jurisdictions in response to legislation or legal notices</string>
+    <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
+    <string name="geogate_acknowledge">Acknowledge</string>
 </resources>

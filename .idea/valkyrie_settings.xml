@@ -2,6 +2,6 @@
 <project version="4">
   <component name="Valkyrie.Settings">
     <option name="mode" value="Simple" />
-    <option name="packageName" value="chat.revolt.components.vectorassets" />
+    <option name="packageName" value="chat.revolt.composables.vectorassets" />
   </component>
 </project>
