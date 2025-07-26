@@ -138,7 +138,7 @@ fun LoginGreetingScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(5.dp))
 
             ElevatedButton(
-                onClick = { navController.navigate("register/greeting") },
+                onClick = { navController.navigate("register/details") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("view_signup_page_button")
