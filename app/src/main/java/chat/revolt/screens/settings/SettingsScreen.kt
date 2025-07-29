@@ -80,16 +80,6 @@ fun SettingsScreen(
                         overflow = TextOverflow.Ellipsis,
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        navController.popBackStack()
-                    }) {
-                        Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
-                        )
-                    }
-                },
             )
         },
     ) { pv ->

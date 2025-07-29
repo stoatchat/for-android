@@ -11,7 +11,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,7 +44,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -84,8 +82,8 @@ import chat.revolt.screens.chat.dialogs.safety.ReportServerDialog
 import chat.revolt.screens.chat.dialogs.safety.ReportUserDialog
 import chat.revolt.screens.chat.views.FriendsScreen
 import chat.revolt.screens.chat.views.NoCurrentChannelScreen
-import chat.revolt.screens.chat.views.OverviewScreen
 import chat.revolt.screens.chat.views.channel.ChannelScreen
+import chat.revolt.screens.settings.SettingsScreen
 import chat.revolt.sheets.AddServerSheet
 import chat.revolt.sheets.ChangelogSheet
 import chat.revolt.sheets.EarlyAccessSheet
@@ -107,30 +105,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ChatRouterDestination {
-    data object Overview : ChatRouterDestination()
+    data object Settings : ChatRouterDestination()
     data object Friends : ChatRouterDestination()
     data object Home : ChatRouterDestination()
     data class Channel(val channelId: String) : ChatRouterDestination()
+    data class ServersChannels(val serverID: String) : ChatRouterDestination()
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
     fun asSerialisedString(): String {
         return when (this) {
-            is Overview -> "overview"
+            is Settings -> "overview"
             is Friends -> "friends"
             is Channel -> "channel/$channelId"
+            is ServersChannels -> "channel/$serverID/servers"
             is NoCurrentChannel -> "no_current_channel/$serverId"
             ChatRouterDestination.Home -> "home"
         }
     }
 
     companion object {
-        val default = Overview
-        val defaultForDMList = Overview
+        val default = Settings
+        val defaultForDMList = Settings
 
         fun fromString(destination: String): ChatRouterDestination {
             return when {
-                destination == "home" -> Overview // previous name for overview
-                destination == "overview" -> Overview
+                destination == "home" -> Settings // previous name for overview
+                destination == "overview" -> Settings
                 destination == "friends" -> Friends
                 destination.startsWith("no_current_channel/") -> NoCurrentChannel(
                     destination.removePrefix(
@@ -258,11 +258,8 @@ class ChatRouterViewModel @Inject constructor(
                 savedLastChannel ?: RevoltAPI.serverCache[serverId]?.channels?.firstOrNull()
             val channelExists = RevoltAPI.channelCache.containsKey(channelId)
 
-            if (channelId != null && channelExists) {
-                setSaveDestination(ChatRouterDestination.Channel(channelId))
-            } else {
-                setSaveDestination(ChatRouterDestination.NoCurrentChannel(serverId))
-            }
+                setSaveDestination(ChatRouterDestination.ServersChannels(serverId))
+//
         }
     }
 }
@@ -844,6 +841,7 @@ fun Sidebar(
     currentServer: String?,
     topNav: NavController,
     onShowStatusSheet: () -> Unit,
+    navigateToServer: (String) -> Unit,
     onShowServerContextSheet: (String) -> Unit,
     onShowAddServerSheet: () -> Unit,
     showSettingsButton: Boolean,
@@ -853,7 +851,7 @@ fun Sidebar(
         onDestinationChanged = viewModel::setSaveDestination,
         currentDestination = viewModel.currentDestination,
         currentServer = currentServer,
-        navigateToServer = viewModel::navigateToServer,
+        navigateToServer = navigateToServer,
         onLongPressAvatar = onShowStatusSheet,
         onShowServerContextSheet = onShowServerContextSheet,
         showSettingsIcon = showSettingsButton,
@@ -925,10 +923,10 @@ fun ChannelNavigator(
                     label = {
                         Text(text = "you")
                     },
-                    selected = dest is ChatRouterDestination.Overview,
+                    selected = dest is ChatRouterDestination.Settings,
                     enabled = true,
                     onClick = {
-                        viewModel.setSaveDestination(ChatRouterDestination.Overview)
+                        viewModel.setSaveDestination(ChatRouterDestination.Settings)
                     }
                 )
             }
@@ -936,10 +934,9 @@ fun ChannelNavigator(
     ) { innerPadding ->
         Column {
             when (dest) {
-                is ChatRouterDestination.Overview -> {
-                    OverviewScreen(
+                is ChatRouterDestination.Settings -> {
+                    SettingsScreen(
                         navController = topNav,
-                        onDrawerClicked = toggleDrawer,
                     )
                 }
 
@@ -951,25 +948,46 @@ fun ChannelNavigator(
                 }
 
                 is ChatRouterDestination.Home -> {
-                    Row {
-                        Sidebar(
-                            viewModel = viewModel,
-                            topNav = topNav,
-                            currentServer = currentServer,
-                            onShowStatusSheet = onShowStatusSheet,
-                            onShowServerContextSheet =  onShowServerContextSheet,
-                            onShowAddServerSheet = onShowAddServerSheet,
-                            showSettingsButton = isTouchExplorationEnabled,
-                            onOpenSettings = {
-                                topNav.navigate("settings")
-                            },
-                        )
-                    }
+                    Sidebar(
+                        viewModel = viewModel,
+                        topNav = topNav,
+                        currentServer = currentServer,
+                        onShowStatusSheet = onShowStatusSheet,
+                        navigateToServer = viewModel::navigateToServer,
+                        onShowServerContextSheet =  onShowServerContextSheet,
+                        onShowAddServerSheet = onShowAddServerSheet,
+                        showSettingsButton = isTouchExplorationEnabled,
+                        onOpenSettings = {
+                            topNav.navigate("settings")
+                        },
+                    )
+                }
+                is ChatRouterDestination.ServersChannels-> {
+                    Sidebar(
+                        viewModel = viewModel,
+                        topNav = topNav,
+                        currentServer = dest.serverID,
+                        onShowStatusSheet = onShowStatusSheet,
+                        navigateToServer = viewModel::navigateToServer,
+                        onShowServerContextSheet =  onShowServerContextSheet,
+                        onShowAddServerSheet = onShowAddServerSheet,
+                        showSettingsButton = isTouchExplorationEnabled,
+                        onOpenSettings = {
+                            topNav.navigate("settings")
+                        },
+                    )
                 }
 
                 is ChatRouterDestination.Channel -> {
                     ChannelScreen(
                         channelId = dest.channelId,
+                        backToChannelsScreen = {
+                            currentServer?.let {
+                                viewModel.setSaveDestination(ChatRouterDestination.ServersChannels(
+                                    serverID =    currentServer
+                                ))
+                            }
+                        },
                         onToggleDrawer = {
                             scope.launch {
                                 if (drawerState?.isOpen == true) {

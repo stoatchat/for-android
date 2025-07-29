@@ -121,11 +121,11 @@ fun ChannelSideDrawer(
     val channelListState = rememberLazyListState()
 
     LaunchedEffect(currentDestination) {
-        if (currentDestination is ChatRouterDestination.Channel && currentServer != null) {
+        if ((currentDestination is ChatRouterDestination.ServersChannels) && currentServer != null) {
             val channelIndex = categorisedChannels?.indexOfFirst {
 
                 when (it) {
-                    is CategorisedChannelList.Channel -> it.channel.id == currentDestination.channelId
+                    is CategorisedChannelList.Channel -> it.channel.id == currentDestination.serverID
                     else -> false
                 }
             } ?: 0
@@ -614,9 +614,9 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     channelType = ChannelType.TextChannel
                 ),
                 iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_star_shine_24dp)),
-                isCurrent = currentDestination is ChatRouterDestination.Overview,
+                isCurrent = currentDestination is ChatRouterDestination.Settings,
                 onDestinationChanged = {
-                    onDestinationChanged(ChatRouterDestination.Overview)
+                    onDestinationChanged(ChatRouterDestination.Settings)
                 },
                 hasUnread = false,
                 onOpenChannelContextSheet = {}
