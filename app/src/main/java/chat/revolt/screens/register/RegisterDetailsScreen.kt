@@ -2,6 +2,7 @@ package chat.revolt.screens.register
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -129,7 +130,8 @@ fun RegisterDetailsScreen(
         topBar = {
             Column {
                 TopAppBar(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     title = {},
                     actions = {
@@ -147,7 +149,13 @@ fun RegisterDetailsScreen(
                                 },
                                 onClick = { navController.popBackStack() }
                             )
-                            Text(text = stringResource(R.string.login))
+                            Text(
+                                modifier = Modifier.clickable {
+                                    navController.popBackStack()
+                                    navController.navigate("login/login")
+                                },
+                                text = stringResource(R.string.login)
+                            )
                         }
                     },
                 )
@@ -168,7 +176,7 @@ fun RegisterDetailsScreen(
             Image(
                 modifier = Modifier
                     .size(120.dp),
-                painter = painterResource(R.drawable.login_charachter_img),
+                painter = painterResource(R.drawable.register_happy_img),
                 contentDescription = "Login character"
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -212,7 +220,9 @@ fun RegisterDetailsScreen(
                     label = stringResource(R.string.register_email),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
-                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics { contentType = ContentType.EmailAddress }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 FormTextField(
@@ -221,7 +231,9 @@ fun RegisterDetailsScreen(
                     label = stringResource(R.string.register_password),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
-                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics { contentType = ContentType.EmailAddress }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
 

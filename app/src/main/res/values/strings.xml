@@ -16,8 +16,8 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="community_guidelines">Community Guidelines</string>
 
-    <string name="login_onboarding_heading">Find your community, connect with the world.</string>
-    <string name="login_onboarding_body">Revolt is one of the best ways to stay connected with your friends and community, anywhere, anytime.</string>
+    <string name="login_onboarding_heading">Welcome to PepChat!</string>
+    <string name="login_onboarding_body">Join endless chats and connections; PepChat is your place to vibe with friends!</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
