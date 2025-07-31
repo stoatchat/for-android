@@ -629,7 +629,6 @@ fun AppEntrypoint(
                         ChatRouterScreen(
                             navController,
                             windowSizeClass,
-                            disableBackHandler = showVoiceUI,
                             onNullifiedUser = {
                                 onRetryConnection()
                                 navController.popBackStack(
@@ -698,6 +697,7 @@ fun AppEntrypoint(
                             onToggleDrawer = {},
                             useDrawer = false,
                             useBackButton = true,
+                            backToChannelsScreen = {},
                             backButtonAction = {
                                 navController.popBackStack()
                             },
