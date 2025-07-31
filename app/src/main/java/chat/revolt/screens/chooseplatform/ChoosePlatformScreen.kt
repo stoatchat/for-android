@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -193,7 +194,13 @@ fun ChoosePlatformScreen(navController: NavController) {
             modifier = Modifier
                 .padding(top = 32.dp, bottom = 16.dp)
                 .fillMaxWidth()
-                .testTag("confirm_platform_button")
+                .testTag("confirm_platform_button"),
+            shape = MaterialTheme.shapes.small.copy(
+                topStart = CornerSize(8.dp),
+                topEnd = CornerSize(8.dp),
+                bottomStart = CornerSize(8.dp),
+                bottomEnd = CornerSize(8.dp)
+            )
         ) {
             Text(text = stringResource(R.string.confirm))
         }

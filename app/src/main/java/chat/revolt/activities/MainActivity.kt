@@ -482,7 +482,7 @@ fun AppEntrypoint(
 
     RevoltTheme(
         requestedTheme = LoadedSettings.theme,
-        colourOverrides = SyncedSettings.android.colourOverrides
+        colourOverrides = SyncedSettings.android.colourOverrides,
     ) {
         Box(
             Modifier
