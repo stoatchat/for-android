@@ -1,21 +1,16 @@
 package chat.revolt.screens.chat
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityManager
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,15 +18,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DismissibleDrawerSheet
-import androidx.compose.material3.DismissibleNavigationDrawer
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
@@ -44,7 +44,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,8 +51,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -79,15 +76,14 @@ import chat.revolt.composables.chat.DisconnectedNotice
 import chat.revolt.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.revolt.dialogs.NotificationRationaleDialog
 import chat.revolt.internals.Changelogs
-import chat.revolt.internals.extensions.zero
 import chat.revolt.persistence.KVStorage
 import chat.revolt.screens.chat.dialogs.safety.ReportMessageDialog
 import chat.revolt.screens.chat.dialogs.safety.ReportServerDialog
 import chat.revolt.screens.chat.dialogs.safety.ReportUserDialog
 import chat.revolt.screens.chat.views.FriendsScreen
 import chat.revolt.screens.chat.views.NoCurrentChannelScreen
-import chat.revolt.screens.chat.views.OverviewScreen
 import chat.revolt.screens.chat.views.channel.ChannelScreen
+import chat.revolt.screens.settings.SettingsScreen
 import chat.revolt.sheets.AddServerSheet
 import chat.revolt.sheets.ChangelogSheet
 import chat.revolt.sheets.EarlyAccessSheet
@@ -109,28 +105,32 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ChatRouterDestination {
-    data object Overview : ChatRouterDestination()
+    data object Settings : ChatRouterDestination()
     data object Friends : ChatRouterDestination()
+    data object Home : ChatRouterDestination()
     data class Channel(val channelId: String) : ChatRouterDestination()
+    data class ServersChannels(val serverID: String) : ChatRouterDestination()
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
     fun asSerialisedString(): String {
         return when (this) {
-            is Overview -> "overview"
+            is Settings -> "overview"
             is Friends -> "friends"
             is Channel -> "channel/$channelId"
+            is ServersChannels -> "channel/$serverID/servers"
             is NoCurrentChannel -> "no_current_channel/$serverId"
+            ChatRouterDestination.Home -> "home"
         }
     }
 
     companion object {
-        val default = Overview
-        val defaultForDMList = Overview
+        val default = Settings
+        val defaultForDMList = Settings
 
         fun fromString(destination: String): ChatRouterDestination {
             return when {
-                destination == "home" -> Overview // previous name for overview
-                destination == "overview" -> Overview
+                destination == "home" -> Settings // previous name for overview
+                destination == "overview" -> Settings
                 destination == "friends" -> Friends
                 destination.startsWith("no_current_channel/") -> NoCurrentChannel(
                     destination.removePrefix(
@@ -258,11 +258,8 @@ class ChatRouterViewModel @Inject constructor(
                 savedLastChannel ?: RevoltAPI.serverCache[serverId]?.channels?.firstOrNull()
             val channelExists = RevoltAPI.channelCache.containsKey(channelId)
 
-            if (channelId != null && channelExists) {
-                setSaveDestination(ChatRouterDestination.Channel(channelId))
-            } else {
-                setSaveDestination(ChatRouterDestination.NoCurrentChannel(serverId))
-            }
+                setSaveDestination(ChatRouterDestination.ServersChannels(serverId))
+//
         }
     }
 }
@@ -274,7 +271,6 @@ val LocalIsConnected = compositionLocalOf(structuralEqualityPolicy()) { false }
 fun ChatRouterScreen(
     topNav: NavController,
     windowSizeClass: WindowSizeClass,
-    disableBackHandler: Boolean,
     onNullifiedUser: () -> Unit,
     onEnterVoiceUI: (String) -> Unit,
     viewModel: ChatRouterViewModel = hiltViewModel()
@@ -283,8 +279,6 @@ fun ChatRouterScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val view = LocalView.current
-
-    var drawerWidth by remember { mutableFloatStateOf(0.0f) }
 
     var showPlatformModDMHint by remember { mutableStateOf(false) }
 
@@ -736,7 +730,7 @@ fun ChatRouterScreen(
             onSelected = { accepted ->
                 if (accepted) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        askNotificationsPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        askNotificationsPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
                     } else {
                         viewModel.setRegisterForNotifications()
                     }
@@ -817,128 +811,26 @@ fun ChatRouterScreen(
         CompositionLocalProvider(
             LocalIsConnected provides (RealtimeSocket.disconnectionState == DisconnectionState.Connected)
         ) {
-            if (useTabletAwareUI) {
-                Row {
-                    DismissibleDrawerSheet(
-                        drawerContainerColor = Color.Transparent,
-                        windowInsets = WindowInsets.zero
-                    ) {
-                        Sidebar(
-                            viewModel = viewModel,
-                            topNav = topNav,
-                            currentServer = currentServer,
-                            onShowStatusSheet = {
+            ChannelNavigator(
+                dest = viewModel.currentDestination,
+                topNav = topNav,
+                toggleDrawer = {
+                    toggleDrawerLambda()
+                },
+                onShowStatusSheet = {
                                 showStatusSheet = true
-                            },
-                            onShowServerContextSheet = {
+                },
+                onShowServerContextSheet = {
                                 serverContextSheetTarget = it
                                 showServerContextSheet = true
-                            },
-                            onShowAddServerSheet = {
+                },
+                onShowAddServerSheet = {
                                 showAddServerSheet = true
-                            },
-                            showSettingsButton = isTouchExplorationEnabled,
-                            onOpenSettings = {
-                                topNav.navigate("settings")
-                            },
-                        )
-                    }
-                    ChannelNavigator(
-                        dest = viewModel.currentDestination,
-                        topNav = topNav,
-                        useDrawer = false,
-                        disableBackHandler = disableBackHandler,
-                        toggleDrawer = {
-                            toggleDrawerLambda()
-                        },
-                        onEnterVoiceUI = onEnterVoiceUI,
-                    )
-                }
-            } else {
-                var useSidebarGesture by remember { mutableStateOf(true) }
-                DismissibleNavigationDrawer(
-                    drawerState = drawerState,
-                    gesturesEnabled = useSidebarGesture,
-                    drawerContent = {
-                        DismissibleDrawerSheet(
-                            drawerContainerColor = Color.Transparent,
-                            windowInsets = WindowInsets.zero,
-                            modifier = Modifier.onSizeChanged {
-                                drawerWidth = it.width.toFloat()
-                            }
-                        ) {
-                            Sidebar(
-                                viewModel = viewModel,
-                                topNav = topNav,
-                                currentServer = currentServer,
-                                onShowStatusSheet = {
-                                    showStatusSheet = true
-                                },
-                                onShowServerContextSheet = {
-                                    serverContextSheetTarget = it
-                                    showServerContextSheet = true
-                                },
-                                onShowAddServerSheet = {
-                                    showAddServerSheet = true
-                                },
-                                showSettingsButton = isTouchExplorationEnabled,
-                                onOpenSettings = {
-                                    topNav.navigate("settings")
-                                },
-                                drawerState = drawerState
-                            )
-                        }
-                    },
-                    content = {
-                        Box(Modifier.fillMaxSize()) {
-                            ChannelNavigator(
-                                dest = viewModel.currentDestination,
-                                topNav = topNav,
-                                useDrawer = true,
-                                disableBackHandler = disableBackHandler,
-                                toggleDrawer = {
-                                    toggleDrawerLambda()
-                                },
-                                drawerState = drawerState,
-                                drawerGestureEnabled = useSidebarGesture,
-                                setDrawerGestureEnabled = {
-                                    useSidebarGesture = it
-                                },
-                                onEnterVoiceUI = onEnterVoiceUI,
-                            )
-
-                            // This is the overlay on the main content when the drawer is open
-                            val interactionSource = remember { MutableInteractionSource() }
-                            Box(
-                                Modifier
-                                    .then(
-                                        if (drawerState.isOpen) {
-                                            Modifier.clickable(
-                                                interactionSource = interactionSource,
-                                                indication = null,
-                                                enabled = drawerState.isOpen,
-                                                onClick = {
-                                                    scope.launch {
-                                                        drawerState.close()
-                                                    }
-                                                }
-                                            )
-                                        } else Modifier
-                                    )
-                                    .fillMaxSize()
-                                    .background(
-                                        MaterialTheme
-                                            .colorScheme
-                                            .surfaceContainerLowest
-                                            .copy(
-                                                alpha = (1.0f + (drawerState.currentOffset / drawerWidth)) * 0.7f
-                                            )
-                                    )
-                            )
-                        }
-                    }
-                )
-            }
+                },
+                isTouchExplorationEnabled = isTouchExplorationEnabled,
+                viewModel = viewModel,
+                currentServer = currentServer,
+            )
         }
     }
 }
@@ -948,8 +840,8 @@ fun Sidebar(
     viewModel: ChatRouterViewModel,
     currentServer: String?,
     topNav: NavController,
-    drawerState: DrawerState? = null,
     onShowStatusSheet: () -> Unit,
+    navigateToServer: (String) -> Unit,
     onShowServerContextSheet: (String) -> Unit,
     onShowAddServerSheet: () -> Unit,
     showSettingsButton: Boolean,
@@ -959,8 +851,7 @@ fun Sidebar(
         onDestinationChanged = viewModel::setSaveDestination,
         currentDestination = viewModel.currentDestination,
         currentServer = currentServer,
-        drawerState = drawerState,
-        navigateToServer = viewModel::navigateToServer,
+        navigateToServer = navigateToServer,
         onLongPressAvatar = onShowStatusSheet,
         onShowServerContextSheet = onShowServerContextSheet,
         showSettingsIcon = showSettingsButton,
@@ -974,59 +865,146 @@ fun Sidebar(
 fun ChannelNavigator(
     dest: ChatRouterDestination,
     topNav: NavController,
-    useDrawer: Boolean,
+    viewModel: ChatRouterViewModel,
+    onShowStatusSheet: () -> Unit = {},
+    onShowAddServerSheet: () -> Unit = {},
+    onShowServerContextSheet: (String) -> Unit = {},
+    currentServer: String?,
     toggleDrawer: () -> Unit,
+    isTouchExplorationEnabled: Boolean,
     drawerState: DrawerState? = null,
-    drawerGestureEnabled: Boolean = true,
-    disableBackHandler: Boolean = false,
-    onEnterVoiceUI: (String) -> Unit = {},
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
-    BackHandler(useDrawer && !disableBackHandler) {
-        toggleDrawer()
-    }
-
-    Column(Modifier.fillMaxSize()) {
-        when (dest) {
-            is ChatRouterDestination.Overview -> {
-                OverviewScreen(
-                    navController = topNav,
-                    useDrawer = useDrawer,
-                    onDrawerClicked = toggleDrawer,
-                )
-            }
-
-            is ChatRouterDestination.Friends -> {
-                FriendsScreen(
-                    topNav = topNav,
-                    useDrawer = useDrawer,
-                    onDrawerClicked = toggleDrawer,
-                )
-            }
-
-            is ChatRouterDestination.Channel -> {
-                ChannelScreen(
-                    channelId = dest.channelId,
-                    onToggleDrawer = {
-                        scope.launch {
-                            if (drawerState?.isOpen == true) {
-                                drawerState.close()
-                            } else {
-                                drawerState?.open()
-                            }
-                        }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            BottomAppBar {
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home",
+                        )
                     },
-                    useDrawer = useDrawer,
-                    drawerGestureEnabled = drawerGestureEnabled,
-                    setDrawerGestureEnabled = setDrawerGestureEnabled,
-                    drawerIsOpen = drawerState?.isOpen == true,
+                    label = {
+                        Text(text = "you")
+                    },
+                    selected = dest is ChatRouterDestination.Home,
+                    enabled = true,
+                    onClick = {
+                        viewModel.setSaveDestination(ChatRouterDestination.Home)
+                    }
+                )
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Friends",
+                        )
+                    },
+                    label = {
+                        Text(text = "Friends")
+                    },
+                    selected = dest is ChatRouterDestination.Friends,
+                    enabled = true,
+                    onClick = {
+                        viewModel.setSaveDestination(ChatRouterDestination.Friends)
+                    }
+                )
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Face,
+                            contentDescription = "You",
+                        )
+                    },
+                    label = {
+                        Text(text = "you")
+                    },
+                    selected = dest is ChatRouterDestination.Settings,
+                    enabled = true,
+                    onClick = {
+                        viewModel.setSaveDestination(ChatRouterDestination.Settings)
+                    }
                 )
             }
+        }
+    ) { innerPadding ->
+        Column {
+            when (dest) {
+                is ChatRouterDestination.Settings -> {
+                    SettingsScreen(
+                        navController = topNav,
+                    )
+                }
 
-            is ChatRouterDestination.NoCurrentChannel -> {
-                NoCurrentChannelScreen(useDrawer = useDrawer, onDrawerClicked = toggleDrawer)
+                is ChatRouterDestination.Friends -> {
+                    FriendsScreen(
+                        topNav = topNav,
+                        onDrawerClicked = toggleDrawer,
+                    )
+                }
+
+                is ChatRouterDestination.Home -> {
+                    Sidebar(
+                        viewModel = viewModel,
+                        topNav = topNav,
+                        currentServer = currentServer,
+                        onShowStatusSheet = onShowStatusSheet,
+                        navigateToServer = viewModel::navigateToServer,
+                        onShowServerContextSheet =  onShowServerContextSheet,
+                        onShowAddServerSheet = onShowAddServerSheet,
+                        showSettingsButton = isTouchExplorationEnabled,
+                        onOpenSettings = {
+                            topNav.navigate("settings")
+                        },
+                    )
+                }
+                is ChatRouterDestination.ServersChannels-> {
+                    Sidebar(
+                        viewModel = viewModel,
+                        topNav = topNav,
+                        currentServer = dest.serverID,
+                        onShowStatusSheet = onShowStatusSheet,
+                        navigateToServer = viewModel::navigateToServer,
+                        onShowServerContextSheet =  onShowServerContextSheet,
+                        onShowAddServerSheet = onShowAddServerSheet,
+                        showSettingsButton = isTouchExplorationEnabled,
+                        onOpenSettings = {
+                            topNav.navigate("settings")
+                        },
+                    )
+                }
+
+                is ChatRouterDestination.Channel -> {
+                    ChannelScreen(
+                        channelId = dest.channelId,
+                        backToChannelsScreen = {
+                            currentServer?.let {
+                                viewModel.setSaveDestination(ChatRouterDestination.ServersChannels(
+                                    serverID =    currentServer
+                                ))
+                            }
+                        },
+                        onToggleDrawer = {
+                            scope.launch {
+                                if (drawerState?.isOpen == true) {
+                                    drawerState.close()
+                                } else {
+                                    drawerState?.open()
+                                }
+                            }
+                        },
+                        setDrawerGestureEnabled = setDrawerGestureEnabled,
+                        drawerIsOpen = drawerState?.isOpen == true,
+                    )
+                }
+
+                is ChatRouterDestination.NoCurrentChannel -> {
+                    NoCurrentChannelScreen(onDrawerClicked = toggleDrawer)
+                }
             }
         }
     }

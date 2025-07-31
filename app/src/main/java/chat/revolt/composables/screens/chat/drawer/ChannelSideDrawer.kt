@@ -37,7 +37,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -99,7 +98,6 @@ import chat.revolt.composables.screens.chat.ChannelIcon
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.screens.chat.LocalIsConnected
 import chat.revolt.sheets.ChannelContextSheet
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -108,7 +106,6 @@ fun ChannelSideDrawer(
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     onLongPressAvatar: () -> Unit,
-    drawerState: DrawerState?,
     navigateToServer: (String) -> Unit,
     onShowServerContextSheet: (String) -> Unit,
     showSettingsIcon: Boolean,
@@ -124,10 +121,11 @@ fun ChannelSideDrawer(
     val channelListState = rememberLazyListState()
 
     LaunchedEffect(currentDestination) {
-        if (currentDestination is ChatRouterDestination.Channel && currentServer != null) {
+        if ((currentDestination is ChatRouterDestination.ServersChannels) && currentServer != null) {
             val channelIndex = categorisedChannels?.indexOfFirst {
+
                 when (it) {
-                    is CategorisedChannelList.Channel -> it.channel.id == currentDestination.channelId
+                    is CategorisedChannelList.Channel -> it.channel.id == currentDestination.serverID
                     else -> false
                 }
             } ?: 0
@@ -357,9 +355,6 @@ fun ChannelSideDrawer(
                             .clip(CircleShape)
                             .clickable {
                                 serverInList.id?.let { srvId -> navigateToServer(srvId) }
-                                scope.launch {
-                                    drawerState?.close()
-                                }
                             }) {
                         val icon = serverInList.icon?.id?.let { iconId ->
                             "$REVOLT_FILES/icons/$iconId"
@@ -439,9 +434,6 @@ fun ChannelSideDrawer(
                             .clip(CircleShape)
                             .clickable {
                                 onOpenSettings()
-                                scope.launch {
-                                    drawerState?.close()
-                                }
                             }
                             .size(48.dp),
                         contentAlignment = Alignment.Center
@@ -577,7 +569,6 @@ fun ChannelSideDrawer(
                 DirectMessagesChannelListRenderer(
                     currentDestination,
                     onDestinationChanged,
-                    drawerState,
                     channelListState,
                     onOpenChannelContextSheet = { channelContextSheetTarget = it }
                 )
@@ -586,7 +577,6 @@ fun ChannelSideDrawer(
                     categorisedChannels,
                     currentDestination,
                     onDestinationChanged,
-                    drawerState,
                     channelListState,
                     onOpenChannelContextSheet = { channelContextSheetTarget = it },
                     serverId = currentServer
@@ -600,11 +590,9 @@ fun ChannelSideDrawer(
 fun ColumnScope.DirectMessagesChannelListRenderer(
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
-    drawerState: DrawerState?,
     channelListState: LazyListState,
     onOpenChannelContextSheet: (String) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val dmAbleChannels =
         RevoltAPI.channelCache.values
             .filter { it.channelType == ChannelType.DirectMessage || it.channelType == ChannelType.Group }
@@ -626,12 +614,9 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     channelType = ChannelType.TextChannel
                 ),
                 iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_star_shine_24dp)),
-                isCurrent = currentDestination is ChatRouterDestination.Overview,
+                isCurrent = currentDestination is ChatRouterDestination.Settings,
                 onDestinationChanged = {
-                    onDestinationChanged(ChatRouterDestination.Overview)
-                    scope.launch {
-                        drawerState?.close()
-                    }
+                    onDestinationChanged(ChatRouterDestination.Settings)
                 },
                 hasUnread = false,
                 onOpenChannelContextSheet = {}
@@ -650,9 +635,6 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                 isCurrent = currentDestination is ChatRouterDestination.Friends,
                 onDestinationChanged = {
                     onDestinationChanged(ChatRouterDestination.Friends)
-                    scope.launch {
-                        drawerState?.close()
-                    }
                 },
                 hasUnread = FriendRequests.getIncoming().isNotEmpty(),
                 onOpenChannelContextSheet = {},
@@ -675,9 +657,6 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                             currentDestination.channelId == notesChannel.id,
                     onDestinationChanged = {
                         onDestinationChanged(it)
-                        scope.launch {
-                            drawerState?.close()
-                        }
                     },
                     hasUnread = false,
                     onOpenChannelContextSheet = {},
@@ -732,9 +711,6 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                 isMuted = NotificationSettingsProvider.isChannelMuted(channel.id!!, null),
                 onDestinationChanged = { dest ->
                     onDestinationChanged(dest)
-                    scope.launch {
-                        drawerState?.close()
-                    }
                 },
                 onOpenChannelContextSheet = onOpenChannelContextSheet
             )
@@ -756,13 +732,10 @@ fun ColumnScope.ServerChannelListRenderer(
     categorisedChannels: List<CategorisedChannelList>?,
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
-    drawerState: DrawerState?,
     channelListState: LazyListState,
     onOpenChannelContextSheet: (String) -> Unit,
     serverId: String
 ) {
-    val scope = rememberCoroutineScope()
-
     LazyColumn(
         state = channelListState,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -806,11 +779,8 @@ fun ColumnScope.ServerChannelListRenderer(
 
                             else -> false
                         },
-                        onDestinationChanged = {
-                            onDestinationChanged(it)
-                            scope.launch {
-                                drawerState?.close()
-                            }
+                        onDestinationChanged = { dest ->
+                            onDestinationChanged(dest)
                         },
                         hasUnread = channelOrCat.channel.lastMessageID?.let { lastMessageID ->
                             RevoltAPI.unreads.hasUnread(
