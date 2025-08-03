@@ -3,6 +3,7 @@
 
     <string name="back">← Back</string>
     <string name="next">Next →</string>
+    <string name="complete_registration">Complete Registration</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="share">Share</string>
@@ -16,8 +17,8 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="community_guidelines">Community Guidelines</string>
 
-    <string name="login_onboarding_heading">Find your community, connect with the world.</string>
-    <string name="login_onboarding_body">Revolt is one of the best ways to stay connected with your friends and community, anywhere, anytime.</string>
+    <string name="login_onboarding_heading">Welcome to PepChat!</string>
+    <string name="login_onboarding_body">Join endless chats and connections; PepChat is your place to vibe with friends!</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -58,15 +59,14 @@
     <string name="register_password">Password</string>
     <string name="register_password_rules">Eight or more, common ones are bad. Symbols and numbers recommended.</string>
 
-    <string name="check_mail">Check your mail!</string>
-    <string name="instructions_at_mail">We\'ve sent further instructions to %1$s.</string>
-    <string name="verify_then_choose_username">Verify your email, and then we\'ll get on with choosing your username.</string>
-    <string name="open_mail_app">Open mail app</string>
+    <string name="check_mail">Check Your Email</string>
+    <string name="instructions_at_mail">We sent a verification mail to %1$s.</string>
+    <string name="open_mail_app">Verify in Your Inbox</string>
 
-    <string name="onboarding_welcome">Welcome!</string>
-    <string name="onboarding_lead">It\'s time to choose a username!</string>
-    <string name="onboarding_others">Others will find, recognise and mention you with this name.</string>
-    <string name="onboarding_changeable">But if you change your mind, you can change your username at any time in your User Settings.</string>
+    <string name="onboarding_welcome">Name Yourself!</string>
+    <string name="onboarding_lead">It\'s time to choose a username.</string>
+    <string name="onboarding_others">Others can find, recognize, and mention you with this name; choose wisely!</string>
+    <string name="onboarding_changeable">You can change it anytime in User Settings. You’ll get a unique number tag, visible in Settings.</string>
     <string name="onboarding_username">Username</string>
 
     <string name="token_invalid_toast">You have been logged out. Please log in again.</string>

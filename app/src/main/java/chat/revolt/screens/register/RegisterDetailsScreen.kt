@@ -2,6 +2,7 @@ package chat.revolt.screens.register
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -129,7 +131,8 @@ fun RegisterDetailsScreen(
         topBar = {
             Column {
                 TopAppBar(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     title = {},
                     actions = {
@@ -147,7 +150,13 @@ fun RegisterDetailsScreen(
                                 },
                                 onClick = { navController.popBackStack() }
                             )
-                            Text(text = stringResource(R.string.login))
+                            Text(
+                                modifier = Modifier.clickable {
+                                    navController.popBackStack()
+                                    navController.navigate("login/login")
+                                },
+                                text = stringResource(R.string.login)
+                            )
                         }
                     },
                 )
@@ -168,7 +177,7 @@ fun RegisterDetailsScreen(
             Image(
                 modifier = Modifier
                     .size(120.dp),
-                painter = painterResource(R.drawable.login_charachter_img),
+                painter = painterResource(R.drawable.register_happy_img),
                 contentDescription = "Login character"
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -212,7 +221,9 @@ fun RegisterDetailsScreen(
                     label = stringResource(R.string.register_email),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
-                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics { contentType = ContentType.EmailAddress }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 FormTextField(
@@ -221,7 +232,9 @@ fun RegisterDetailsScreen(
                     label = stringResource(R.string.register_password),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
-                    modifier = Modifier.fillMaxWidth().semantics { contentType = ContentType.EmailAddress }
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics { contentType = ContentType.EmailAddress }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -235,7 +248,13 @@ fun RegisterDetailsScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag("setup_continue_button")
+                        .testTag("setup_continue_button"),
+                    shape = MaterialTheme.shapes.small.copy(
+                        topStart = CornerSize(8.dp),
+                        topEnd = CornerSize(8.dp),
+                        bottomStart = CornerSize(8.dp),
+                        bottomEnd = CornerSize(8.dp)
+                    )
                 ) {
                     Text(text = stringResource(R.string.continue_))
                 }

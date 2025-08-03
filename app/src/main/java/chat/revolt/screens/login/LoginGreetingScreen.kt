@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.LocalContentColor
@@ -37,8 +38,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import chat.revolt.R
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -130,7 +133,13 @@ fun LoginGreetingScreen(navController: NavController) {
                 onClick = { navController.navigate("login/login") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("view_login_page_button")
+                    .testTag("view_login_page_button"),
+                shape = MaterialTheme.shapes.small.copy(
+                    topStart = CornerSize(8.dp),
+                    topEnd = CornerSize(8.dp),
+                    bottomStart = CornerSize(8.dp),
+                    bottomEnd = CornerSize(8.dp)
+                )
             ) {
                 Text(text = stringResource(R.string.login))
             }
@@ -141,7 +150,13 @@ fun LoginGreetingScreen(navController: NavController) {
                 onClick = { navController.navigate("register/details") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("view_signup_page_button")
+                    .testTag("view_signup_page_button"),
+                shape = MaterialTheme.shapes.small.copy(
+                    topStart = CornerSize(8.dp),
+                    topEnd = CornerSize(8.dp),
+                    bottomStart = CornerSize(8.dp),
+                    bottomEnd = CornerSize(8.dp)
+                )
             ) {
                 Text(text = stringResource(R.string.signup))
             }
@@ -171,3 +186,11 @@ fun LoginGreetingScreen(navController: NavController) {
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun LoginGreetingScreenPreview() {
+    val navController = rememberNavController()
+    LoginGreetingScreen(navController)
+}
+
