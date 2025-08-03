@@ -73,6 +73,7 @@ data class PlatformUrls(
     val app: String,
     val invites: String,
     val websocket: String,
+    val autumn: String,
     val kjbook: String
 )
 
@@ -86,16 +87,18 @@ private val PLATFORM_URLS = mapOf(
         app = "https://app.revolt.chat",
         invites = "https://rvlt.gg",
         websocket = "wss://ws.revolt.chat",
+        autumn = "https://autumn.revolt.chat",
         kjbook = "https://revoltchat.github.io/android"
     ),
     ApplicationPlatform.PEP to PlatformUrls(
-        base = "https://api.pep.chat/0.8",
-        marketing = "https://pep.chat",
+        base = "https://a-pep.peptide.chat/api",
+        marketing = "https://peptide.chat",
         files = "https://cdn.pepusercontent.com",
-        january = "https://jan.pep.chat",
-        app = "https://app.pep.chat",
+        january = "https://a-pep.peptide.chat/january",
+        app = "https://peptide.chat",
         invites = "https://pep.gg",
-        websocket = "wss://ws.pep.chat",
+        websocket = "https://a-pep.peptide.chat/ws",
+        autumn = "https://autumn.revolt.chat",
         kjbook = "https://pepchat.github.io/android"
     )
 )
@@ -258,6 +261,7 @@ object RevoltAPI {
     fun getCurrentAppUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.app }
     fun getCurrentInvitesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.invites }
     fun getCurrentWebSocketUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.websocket }
+    fun getCurrentAutumnUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.autumn }
     fun getCurrentKjBookUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.kjbook }
 
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
