@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 
 val LightColorScheme = lightColorScheme(
@@ -178,6 +181,14 @@ fun RevoltTheme(
     val colorScheme = getColorScheme(requestedTheme, colourOverrides)
 
     MaterialTheme(
+        shapes = MaterialTheme.shapes.copy(
+            small = MaterialTheme.shapes.small.copy(
+                topStart = CornerSize(8.dp),
+                topEnd = CornerSize(8.dp),
+                bottomStart = CornerSize(8.dp),
+                bottomEnd = CornerSize(8.dp)
+            )
+        ),
         colorScheme = colorScheme,
         typography = RevoltTypography,
         content = content
