@@ -44,7 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.isUlid
 import chat.revolt.api.routes.custom.fetchEmoji
@@ -119,7 +118,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                                 if (emoji.isUlid()) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         RemoteImage(
-                                            url = "$REVOLT_FILES/emojis/${emoji}",
+                                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${emoji}",
                                             description = null,
                                             modifier = Modifier.size(16.dp)
                                         )
@@ -229,7 +228,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                         if (current.isUlid()) {
                             val cached = extendedEmojiInfo.find { it.id == current }
                             RemoteImage(
-                                url = "$REVOLT_FILES/emojis/$current",
+                                url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/$current",
                                 description = cached?.name,
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier

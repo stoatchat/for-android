@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.schemas.AutumnResource
 import chat.revolt.composables.generic.RemoteImage
 import chat.revolt.composables.media.AudioPlayer
@@ -83,7 +83,7 @@ fun FileAttachment(attachment: AutumnResource) {
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun ImageAttachment(attachment: AutumnResource) {
-    val url = "$REVOLT_FILES/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     var spoilerShown by remember { mutableStateOf(false) }
     val hazeState =
         if (attachment.filename?.startsWith("SPOILER_") == true) rememberHazeState() else null
@@ -149,7 +149,7 @@ fun VideoPlayButton() {
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun VideoAttachment(attachment: AutumnResource) {
-    val url = "$REVOLT_FILES/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
 
     BoxWithConstraints {
         Box(
@@ -179,7 +179,7 @@ fun VideoAttachment(attachment: AutumnResource) {
 
 @Composable
 fun AudioAttachment(attachment: AutumnResource) {
-    val url = "$REVOLT_FILES/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     AudioPlayer(
         url = url,
         filename = attachment.filename ?: "Audio",

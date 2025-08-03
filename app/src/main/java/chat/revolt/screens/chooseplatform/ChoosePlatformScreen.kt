@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.revolt.R
+import chat.revolt.api.ApplicationPlatform
+import chat.revolt.api.RevoltAPI
 
 @Composable
 fun ChoosePlatformScreen(navController: NavController) {
@@ -107,7 +109,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                         .padding(bottom = 8.dp)
                         .size(72.dp)
                         .clickable {
-                            apiUrlValue.value = "https://api.revolt.chat"
+                            apiUrlValue.value = "https://peptide.chat/api"
                         },
                 ) {
                     Box(
@@ -116,7 +118,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                            contentDescription = "Discord Logo"
+                            contentDescription = "PEP Logo"
                         )
                     }
                 }
@@ -150,7 +152,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_revolt_r),
-                            contentDescription = "Discord Logo"
+                            contentDescription = "Revolt Logo"
                         )
                     }
                 }
@@ -189,7 +191,20 @@ fun ChoosePlatformScreen(navController: NavController) {
                 .padding(vertical = 8.dp)
         )
         Button(
-            onClick = { navController.navigate("login/greeting") },
+            onClick = {
+                if(apiUrlValue.value.isNotEmpty()){
+                    when(apiUrlValue.value){
+                        ApplicationPlatform.PEP.baseUrl -> RevoltAPI.setPlatform(
+                            ApplicationPlatform.PEP
+                        )
+                        ApplicationPlatform.REVOLT.baseUrl -> RevoltAPI.setPlatform(
+                            ApplicationPlatform.REVOLT
+                        )
+                        else -> return@Button
+                    }
+                }
+                navController.navigate("login/greeting")
+            },
             modifier = Modifier
                 .padding(top = 32.dp, bottom = 16.dp)
                 .fillMaxWidth()

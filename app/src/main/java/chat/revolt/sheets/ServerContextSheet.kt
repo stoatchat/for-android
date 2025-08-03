@@ -41,7 +41,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.revolt.R
-import chat.revolt.api.REVOLT_APP
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.server.leaveOrDeleteServer
 import chat.revolt.composables.generic.SheetButton
@@ -194,7 +193,7 @@ fun ServerContextSheet(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    "$REVOLT_APP/server/${server.id}/settings".toUri()
+                                    "${RevoltAPI.getCurrentAppUrl()}/server/${server.id}/settings".toUri()
                                 )
                             )
                         }

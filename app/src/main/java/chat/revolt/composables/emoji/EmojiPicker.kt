@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
 import chat.revolt.activities.RevoltTweenFloat
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.callbacks.Action
 import chat.revolt.callbacks.ActionChannel
 import chat.revolt.composables.generic.IconPlaceholder
@@ -401,7 +401,7 @@ fun EmojiPicker(
                             )
                         } else {
                             RemoteImage(
-                                url = "$REVOLT_FILES/icons/${server.icon.id}",
+                                url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${server.icon.id}",
                                 allowAnimation = false,
                                 description = server.name,
                                 modifier = Modifier
@@ -619,7 +619,7 @@ fun ColumnScope.PickerItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 RemoteImage(
-                    url = "$REVOLT_FILES/emojis/${item.emote.id}",
+                    url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${item.emote.id}",
                     description = item.emote.name,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

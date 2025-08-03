@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.custom.fetchEmoji
 import chat.revolt.api.schemas.Emoji
@@ -65,7 +64,7 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             RemoteImage(
-                url = "$REVOLT_FILES/emojis/$id",
+                url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/$id",
                 description = emoteInfo?.name,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier

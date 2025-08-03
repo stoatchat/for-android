@@ -62,7 +62,6 @@ import androidx.compose.ui.unit.sp
 import chat.revolt.R
 import chat.revolt.activities.media.ImageViewActivity
 import chat.revolt.activities.media.VideoViewActivity
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.BrushCompat
 import chat.revolt.api.internals.MessageFlag
@@ -142,7 +141,7 @@ fun authorAvatarUrl(message: MessageSchema): String? {
     val member = message.author?.let { RevoltAPI.members.getMember(serverId, it) }
         ?: return null
 
-    return member.avatar?.let { "$REVOLT_FILES/avatars/${it.id}" }
+    return member.avatar?.let { "${RevoltAPI.getCurrentFilesUrl()}/avatars/${it.id}" }
 }
 
 fun viewUrlInBrowser(ctx: android.content.Context, url: String) {
@@ -153,7 +152,7 @@ fun viewUrlInBrowser(ctx: android.content.Context, url: String) {
 }
 
 fun viewAttachmentInBrowser(ctx: android.content.Context, attachment: AutumnResource) {
-    val url = "$REVOLT_FILES/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     viewUrlInBrowser(ctx, url)
 }
 

@@ -18,6 +18,7 @@ import chat.revolt.api.schemas.Message
 import chat.revolt.api.schemas.Server
 import chat.revolt.api.schemas.User
 import chat.revolt.api.unreads.Unreads
+import chat.revolt.getKVStorage
 import chat.revolt.persistence.Database
 import chat.revolt.persistence.SqlStorage
 import com.chuckerteam.chucker.api.ChuckerCollector
@@ -53,24 +54,65 @@ import kotlinx.serialization.json.Json
 import java.net.SocketException
 import chat.revolt.api.schemas.Channel as ChannelSchema
 
-private const val USE_ALPHA_API = false
+/**
+ * Enum representing available platforms in the application.
+ */
+enum class ApplicationPlatform(val baseUrl: String) {
+    REVOLT("https://api.revolt.chat"),
+    PEP("https://peptide.chat/api")
+}
 
-val REVOLT_BASE =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/api" else "https://api.revolt.chat/0.8"
-const val REVOLT_SUPPORT = "https://support.revolt.chat"
-const val REVOLT_MARKETING = "https://revolt.chat"
-val REVOLT_FILES =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/autumn" else "https://cdn.revoltusercontent.com"
-val REVOLT_JANUARY =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/january" else "https://jan.revolt.chat"
-const val REVOLT_APP = "https://app.revolt.chat"
-const val REVOLT_INVITES = "https://rvlt.gg"
-val REVOLT_WEBSOCKET =
-    if (USE_ALPHA_API) "wss://alpha.revolt.chat/ws" else "wss://ws.revolt.chat"
-const val REVOLT_KJBOOK = "https://revoltchat.github.io/android"
+/**
+ * Platform URL configuration
+ */
+data class PlatformUrls(
+    val base: String,
+    val marketing: String,
+    val files: String,
+    val january: String,
+    val app: String,
+    val invites: String,
+    val websocket: String,
+    val kjbook: String
+)
+
+// Platform URL configurations
+private val PLATFORM_URLS = mapOf(
+    ApplicationPlatform.REVOLT to PlatformUrls(
+        base = "https://api.revolt.chat/0.8",
+        marketing = "https://revolt.chat",
+        files = "https://cdn.revoltusercontent.com",
+        january = "https://jan.revolt.chat",
+        app = "https://app.revolt.chat",
+        invites = "https://rvlt.gg",
+        websocket = "wss://ws.revolt.chat",
+        kjbook = "https://revoltchat.github.io/android"
+    ),
+    ApplicationPlatform.PEP to PlatformUrls(
+        base = "https://api.pep.chat/0.8",
+        marketing = "https://pep.chat",
+        files = "https://cdn.pepusercontent.com",
+        january = "https://jan.pep.chat",
+        app = "https://app.pep.chat",
+        invites = "https://pep.gg",
+        websocket = "wss://ws.pep.chat",
+        kjbook = "https://pepchat.github.io/android"
+    )
+)
+
+object UrlsStorageKeys {
+    const val PLATFORM = "platform_key"
+}
 
 fun String.api(): String {
-    return "$REVOLT_BASE$this"
+    return "${RevoltAPI.getCurrentBaseUrl()}$this"
+}
+
+/**
+ * Helper functions to get URLs for a specific platform
+ */
+private fun getUrlForPlatform(platform: ApplicationPlatform, urlSelector: (PlatformUrls) -> String): String {
+    return urlSelector(PLATFORM_URLS[platform]!!)
 }
 
 fun buildUserAgent(accessMethod: String = "Ktor"): String {
@@ -90,58 +132,60 @@ val RevoltCbor = Cbor {
     ignoreUnknownKeys = true
 }
 
-val RevoltHttp = HttpClient(OkHttp) {
-    install(DefaultRequest)
-    install(ContentNegotiation) {
-        json(RevoltJson)
-    }
-
-    install(WebSockets)
-
-    install(HttpRequestRetry) {
-        retryOnServerErrors(maxRetries = 5)
-        retryOnException(maxRetries = 5)
-
-        modifyRequest { request ->
-            request.headers.append("x-retry-count", retryCount.toString())
+val RevoltHttp by lazy {
+    HttpClient(OkHttp) {
+        install(DefaultRequest)
+        install(ContentNegotiation) {
+            json(RevoltJson)
         }
 
-        exponentialDelay()
-    }
+        install(WebSockets)
 
-    install(Logging) { level = LogLevel.INFO }
+        install(HttpRequestRetry) {
+            retryOnServerErrors(maxRetries = 5)
+            retryOnException(maxRetries = 5)
 
-    val chuckerCollector = ChuckerCollector(
-        context = RevoltApplication.instance,
-        showNotification = true,
-        retentionPeriod = RetentionManager.Period.ONE_DAY
-    )
+            modifyRequest { request ->
+                request.headers.append("x-retry-count", retryCount.toString())
+            }
 
-    val chuckerInterceptor = ChuckerInterceptor.Builder(RevoltApplication.instance)
-        .collector(chuckerCollector)
-        .maxContentLength(250_000L)
-        .redactHeaders(RevoltAPI.TOKEN_HEADER_NAME)
-        .alwaysReadResponseBody(true)
-        .createShortcut(false)
-        .build()
+            exponentialDelay()
+        }
 
-    engine {
-        addInterceptor { chain ->
-            val request = chain.request().newBuilder()
-                .apply {
-                    if (chain.request().headers[RevoltAPI.TOKEN_HEADER_NAME] == null) {
-                        header(RevoltAPI.TOKEN_HEADER_NAME, RevoltAPI.sessionToken)
+        install(Logging) { level = LogLevel.INFO }
+
+        val chuckerCollector = ChuckerCollector(
+            context = RevoltApplication.instance,
+            showNotification = true,
+            retentionPeriod = RetentionManager.Period.ONE_DAY
+        )
+
+        val chuckerInterceptor = ChuckerInterceptor.Builder(RevoltApplication.instance)
+            .collector(chuckerCollector)
+            .maxContentLength(250_000L)
+            .redactHeaders(RevoltAPI.TOKEN_HEADER_NAME)
+            .alwaysReadResponseBody(true)
+            .createShortcut(false)
+            .build()
+
+        engine {
+            addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .apply {
+                        if (chain.request().headers[RevoltAPI.TOKEN_HEADER_NAME] == null) {
+                            header(RevoltAPI.TOKEN_HEADER_NAME, RevoltAPI.sessionToken)
+                        }
                     }
-                }
-                .build()
-            chain.proceed(request)
+                    .build()
+                chain.proceed(request)
+            }
+            addInterceptor(chuckerInterceptor)
         }
-        addInterceptor(chuckerInterceptor)
-    }
 
-    defaultRequest {
-        url(REVOLT_BASE)
-        header("User-Agent", buildUserAgent())
+        defaultRequest {
+            url(RevoltAPI.getCurrentBaseUrl())
+            header("User-Agent", buildUserAgent())
+        }
     }
 }
 
@@ -167,6 +211,55 @@ object RevoltAPI {
     var sessionId: String = ""
         private set
 
+    /**
+     * The currently selected platform.
+     * Default is REVOLT.
+     */
+    var selectedApplicationPlatform: ApplicationPlatform = ApplicationPlatform.REVOLT
+        private set
+
+    /**
+     * Sets the current platform and saves it to persistent storage.
+     * @param applicationPlatform The platform to set
+     */
+    fun setPlatform(applicationPlatform: ApplicationPlatform) {
+        selectedApplicationPlatform = applicationPlatform
+        CoroutineScope(Dispatchers.IO).launch {
+            savePlatformSelection()
+        }
+    }
+
+    /**
+     * Saves the current platform selection to persistent storage.
+     */
+    private suspend fun savePlatformSelection() {
+        val kvStorage = RevoltApplication.instance.getKVStorage()
+        kvStorage.set(UrlsStorageKeys.PLATFORM, selectedApplicationPlatform.name)
+    }
+
+    /**
+     * Loads the platform selection from persistent storage.
+     */
+    suspend fun loadPlatformSelection() {
+        val kvStorage = RevoltApplication.instance.getKVStorage()
+        val applicationPlatformName = kvStorage.get(UrlsStorageKeys.PLATFORM) ?: ApplicationPlatform.REVOLT.name
+        selectedApplicationPlatform = try {
+            ApplicationPlatform.valueOf(applicationPlatformName)
+        } catch (_: IllegalArgumentException) {
+            ApplicationPlatform.REVOLT
+        }
+    }
+
+    // URL getter functions
+    fun getCurrentBaseUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.base }
+    fun getCurrentMarketingUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.marketing }
+    fun getCurrentFilesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.files }
+    fun getCurrentJanuaryUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.january }
+    fun getCurrentAppUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.app }
+    fun getCurrentInvitesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.invites }
+    fun getCurrentWebSocketUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.websocket }
+    fun getCurrentKjBookUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.kjbook }
+
     @OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     val realtimeContext = newSingleThreadContext("RealtimeContext")
     val wsFrameChannel = Channel<Any>(Channel.UNLIMITED)
@@ -191,7 +284,7 @@ object RevoltAPI {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun connectWS() {
+    fun connectWS() {
         socketCoroutine = CoroutineScope(Dispatchers.IO).launch {
             try {
                 withContext(realtimeContext) {
@@ -220,7 +313,7 @@ object RevoltAPI {
         }
     }
 
-    private suspend fun startSocketOps() {
+    private fun startSocketOps() {
         connectWS()
 
         // Send a ping every roughly 30 seconds else the socket dies
@@ -237,6 +330,7 @@ object RevoltAPI {
     }
 
     suspend fun initialize() {
+        loadPlatformSelection()
         if (sessionToken != "") {
             fetchSelf()
         }
@@ -281,7 +375,7 @@ object RevoltAPI {
             setSessionHeader(token)
             fetchSelf()
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
@@ -304,7 +398,7 @@ object RevoltAPI {
                 id = it.id,
                 channelType = try {
                     ChannelType.valueOf(it.channelType)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     null
                 },
                 user = it.userId,

@@ -21,7 +21,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.webkit.WebViewAssetLoader
 import chat.revolt.R
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_APP
+import chat.revolt.api.RevoltAPI
 import chat.revolt.databinding.SheetChangelogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.color.MaterialColors
@@ -62,7 +62,7 @@ class ChangelogBottomSheetFragment(
 
             binding.wvChangelog.apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(REVOLT_APP).host!!)
+                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -127,7 +127,7 @@ class ChangelogBottomSheetFragment(
                 }
 
                 loadUrl(
-                    "$REVOLT_APP/_android_assets/changelogs/renderer.html"
+                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/changelogs/renderer.html"
                 )
 
                 settings.apply {

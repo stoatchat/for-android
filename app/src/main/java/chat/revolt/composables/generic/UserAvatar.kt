@@ -1,5 +1,7 @@
 package chat.revolt.composables.generic
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,8 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_BASE
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.schemas.AutumnResource
 import chat.revolt.api.settings.LoadedSettings
 
@@ -102,7 +103,7 @@ fun UserAvatar(
     ) {
         if (avatar != null) {
             RemoteImage(
-                url = rawUrl ?: "$REVOLT_FILES/avatars/${avatar.id}",
+                url = rawUrl ?: "${RevoltAPI.getCurrentFilesUrl()}/avatars/${avatar.id}",
                 contentScale = ContentScale.Crop,
                 description = stringResource(id = R.string.avatar_alt, username),
                 allowAnimation = allowAnimation,
@@ -123,7 +124,7 @@ fun UserAvatar(
             )
         } else {
             RemoteImage(
-                url = "$REVOLT_BASE/users/${userId.ifBlank { "0".repeat(26) }}/default_avatar",
+                url = "${RevoltAPI.getCurrentBaseUrl()}/users/${userId.ifBlank { "0".repeat(26) }}/default_avatar",
                 description = stringResource(id = R.string.avatar_alt, username),
                 allowAnimation = allowAnimation,
                 modifier = Modifier
@@ -167,7 +168,7 @@ fun GroupIcon(
     ) {
         if (icon?.id != null) {
             RemoteImage(
-                url = rawUrl ?: "$REVOLT_FILES/icons/${icon.id}",
+                url = rawUrl ?: "${RevoltAPI.getCurrentFilesUrl()}/icons/${icon.id}",
                 allowAnimation = false,
                 contentScale = ContentScale.Crop,
                 description = stringResource(id = R.string.avatar_alt, name),

@@ -17,8 +17,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_APP
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.ResourceLocations
 import chat.revolt.markdown.jbm.LocalJBMarkdownTreeState
@@ -36,7 +34,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
         factory = { context ->
             WebView(context).apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(REVOLT_APP).host!!)
+                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -128,7 +126,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
 
                         @JavascriptInterface
                         fun getCustomEmoteUrl(emoteId: String): String {
-                            return "$REVOLT_FILES/emojis/$emoteId/original"
+                            return "${RevoltAPI.getCurrentFilesUrl()}/emojis/$emoteId/original"
                         }
 
                         @JavascriptInterface
@@ -151,7 +149,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
                 setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
                 loadUrl(
-                    "$REVOLT_APP/_android_assets/markdown/markdown.html"
+                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/markdown/markdown.html"
                 )
             }
         }

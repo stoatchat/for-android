@@ -19,7 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.schemas.AutumnResource
 import chat.revolt.databinding.ActivityVideoplayerBinding
@@ -54,7 +54,7 @@ class VideoViewActivity : FragmentActivity() {
         }
 
         val resourceUrl =
-            "$REVOLT_FILES/attachments/${autumnResource.id}/${autumnResource.filename}"
+            "${RevoltAPI.getCurrentFilesUrl()}/attachments/${autumnResource.id}/${autumnResource.filename}"
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 

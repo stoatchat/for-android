@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.isUlid
 import chat.revolt.composables.generic.RemoteImage
@@ -74,7 +73,7 @@ fun Reaction(
         CompositionLocalProvider(LocalContentColor provides foreground) {
             if (emoji.isUlid()) {
                 RemoteImage(
-                    url = "$REVOLT_FILES/emojis/${emoji}",
+                    url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${emoji}",
                     description = null,
                     modifier = Modifier.size(16.dp)
                 )

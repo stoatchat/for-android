@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_INVITES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.channel.createInvite
 import chat.revolt.internals.Platform
@@ -120,6 +119,9 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
     }
 
     BoxWithConstraints {
+        val maxWidth = this.maxWidth
+        val maxHeight = this.maxHeight
+
         Column(
             modifier = Modifier
                 .clip(MaterialTheme.shapes.large)
@@ -139,7 +141,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             Text(
-                (Uri.parse(REVOLT_INVITES).host ?: "rvlt.gg") + "/",
+                (Uri.parse(RevoltAPI.getCurrentInvitesUrl()).host ?: "rvlt.gg") + "/",
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -202,7 +204,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                 Spacer(Modifier.width(8.dp))
                 Button(onClick = {
                     clipboardManager.setText(AnnotatedString.Builder().apply {
-                        append(REVOLT_INVITES)
+                        append(RevoltAPI.getCurrentInvitesUrl())
                         append("/")
                         append(inviteCode)
                     }.toAnnotatedString())

@@ -82,7 +82,7 @@ import androidx.compose.ui.unit.dp
 import chat.revolt.R
 import chat.revolt.activities.RevoltTweenFloat
 import chat.revolt.activities.RevoltTweenInt
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.BrushCompat
 import chat.revolt.api.schemas.ChannelType
 import chat.revolt.api.schemas.Member
@@ -318,7 +318,7 @@ fun MessageField(
                                         userId = item.user.id ?: "",
                                         avatar = item.user.avatar,
                                         rawUrl = item.member?.avatar?.id?.let {
-                                            "$REVOLT_FILES/avatars/$it"
+                                            "${RevoltAPI.getCurrentFilesUrl()}/avatars/$it"
                                         },
                                         size = SuggestionChipDefaults.IconSize,
                                     )
@@ -444,7 +444,7 @@ fun MessageField(
                                         )
                                     } else {
                                         RemoteImage(
-                                            url = "$REVOLT_FILES/emojis/${item.custom?.id}",
+                                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${item.custom?.id}",
                                             description = null,
                                             contentScale = ContentScale.Fit,
                                             modifier = Modifier
