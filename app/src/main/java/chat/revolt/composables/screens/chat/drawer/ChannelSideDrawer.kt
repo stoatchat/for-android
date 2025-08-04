@@ -53,7 +53,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +71,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.revolt.R
 import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
@@ -95,6 +93,7 @@ import chat.revolt.composables.generic.RemoteImage
 import chat.revolt.composables.generic.UserAvatar
 import chat.revolt.composables.generic.presenceFromStatus
 import chat.revolt.composables.screens.chat.ChannelIcon
+import chat.revolt.composables.screens.chat.discover.DiscoverServersList
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.screens.chat.LocalIsConnected
 import chat.revolt.sheets.ChannelContextSheet
@@ -110,10 +109,10 @@ fun ChannelSideDrawer(
     onShowServerContextSheet: (String) -> Unit,
     showSettingsIcon: Boolean,
     onOpenSettings: () -> Unit,
-    topNav: NavController,
     onShowAddServerSheet: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     val server = RevoltAPI.serverCache[currentServer]
     val categorisedChannels = server?.let {
         ChannelUtils.categoriseServerFlat(it)
@@ -123,7 +122,6 @@ fun ChannelSideDrawer(
     LaunchedEffect(currentDestination) {
         if ((currentDestination is ChatRouterDestination.ServersChannels) && currentServer != null) {
             val channelIndex = categorisedChannels?.indexOfFirst {
-
                 when (it) {
                     is CategorisedChannelList.Channel -> it.channel.id == currentDestination.serverID
                     else -> false
@@ -201,8 +199,6 @@ fun ChannelSideDrawer(
         }
     }
 
-    val scope = rememberCoroutineScope()
-
     Row(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.width(64.dp),
@@ -239,7 +235,7 @@ fun ChannelSideDrawer(
                         size = 48.dp,
                         presenceSize = 16.dp,
                         onClick = {
-                            onDestinationChanged(ChatRouterDestination.defaultForDMList)
+                            onDestinationChanged(ChatRouterDestination.Home)
                         },
                         onLongClick = onLongPressAvatar,
                         modifier = Modifier
@@ -414,7 +410,9 @@ fun ChannelSideDrawer(
                         .padding(8.dp)
                         .clip(CircleShape)
                         .clickable {
-                            topNav.navigate("discover")
+                            onDestinationChanged(
+                                ChatRouterDestination.Discover
+                            )
                         }
                         .size(48.dp),
                     contentAlignment = Alignment.Center
@@ -539,7 +537,7 @@ fun ChannelSideDrawer(
 
                             Text(
                                 text = when (currentServer) {
-                                    null -> stringResource(R.string.direct_messages)
+                                    null -> stringResource(if (currentDestination is ChatRouterDestination.Discover) R.string.discover_servers else R.string.direct_messages)
                                     else -> server?.name ?: stringResource(R.string.unknown)
                                 },
                                 style = MaterialTheme.typography.titleMedium,
@@ -564,30 +562,33 @@ fun ChannelSideDrawer(
                     }
                 }
             }
-
-            if (currentServer == null) {
-                DirectMessagesChannelListRenderer(
-                    currentDestination,
-                    onDestinationChanged,
-                    channelListState,
-                    onOpenChannelContextSheet = { channelContextSheetTarget = it }
-                )
+            if (currentDestination is ChatRouterDestination.Discover) {
+                DiscoverServersList()
             } else {
-                ServerChannelListRenderer(
-                    categorisedChannels,
-                    currentDestination,
-                    onDestinationChanged,
-                    channelListState,
-                    onOpenChannelContextSheet = { channelContextSheetTarget = it },
-                    serverId = currentServer
-                )
+                if (currentServer == null) {
+                    DirectMessagesChannelListRenderer(
+                        currentDestination,
+                        onDestinationChanged,
+                        channelListState,
+                        onOpenChannelContextSheet = { channelContextSheetTarget = it }
+                    )
+                } else {
+                    ServerChannelListRenderer(
+                        categorisedChannels,
+                        currentDestination,
+                        onDestinationChanged,
+                        channelListState,
+                        onOpenChannelContextSheet = { channelContextSheetTarget = it },
+                        serverId = currentServer
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ColumnScope.DirectMessagesChannelListRenderer(
+private fun ColumnScope.DirectMessagesChannelListRenderer(
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     channelListState: LazyListState,
@@ -727,8 +728,9 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
     }
 }
 
+
 @Composable
-fun ColumnScope.ServerChannelListRenderer(
+private fun ColumnScope.ServerChannelListRenderer(
     categorisedChannels: List<CategorisedChannelList>?,
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,

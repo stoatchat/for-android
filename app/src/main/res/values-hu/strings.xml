@@ -66,6 +66,7 @@
     <string name="no_active_channel_body">Kezdésnek válassz ki egy szervert balról. Ha merész vagy, hozz létre egy új szervert!</string>
     <string name="avatar_alt">%1$s profilképe</string>
     <string name="direct_messages">Közvetlen üzenetek</string>
+    <string name="discover_servers">Szerverek felfedezése</string>
     <string name="channel_dm">Közvetlen üzenet</string>
     <string name="channel_text">Szövegcsatorna</string>
     <string name="channel_voice">Beszédcsatorna</string>

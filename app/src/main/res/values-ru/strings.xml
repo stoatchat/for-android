@@ -216,6 +216,7 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (неподдерживаемая)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You не поддерживается на вашем устройстве.</string>
     <string name="direct_messages">Личные сообщения</string>
+    <string name="discover_servers">Обзор серверов</string>
     <string name="home_join_jenvolt_description">Jenvolt - это место, созданное разработчиками, для всего, что касается приложения Android и многого другого. Поддержка, обратная связь - всё здесь. Возможно, вы сможете опробовать новые функции! 👀</string>
     <string name="friends_incoming_requests">Входящие запросы</string>
     <string name="message_field_decoration_trusted_moderation_bot">Проверенный бот модерации</string>

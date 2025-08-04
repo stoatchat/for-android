@@ -60,6 +60,7 @@
     <string name="no_active_channel_body">从左边选择一个服务器就可以开始了。如果您要自己探索，可以创建一个新的服务器。</string>
     <string name="avatar_alt">%1$s 的头像</string>
     <string name="direct_messages">私人消息</string>
+    <string name="discover_servers">发现服务器</string>
     <string name="channel_dm">私人消息</string>
     <string name="channel_text">文字频道</string>
     <string name="channel_group">群组</string>

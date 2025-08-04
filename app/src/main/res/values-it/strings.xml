@@ -243,6 +243,7 @@
     <string name="channel_age_gate_dob_invalid_unlikely">Non puoi essere nato prima %1$d. Dovresti essere morto/a adesso.</string>
     <string name="avatar_alt">avatar di %1$s</string>
     <string name="direct_messages">Messaggi Diretti</string>
+    <string name="discover_servers">Scopri server</string>
     <string name="channel_text">Canale Testuale</string>
     <string name="channel_group">Gruppo</string>
     <string name="channel_notes">Note</string>

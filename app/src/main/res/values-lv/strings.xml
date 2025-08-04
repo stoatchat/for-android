@@ -121,6 +121,7 @@
     <string name="channel_age_gate_dob_invalid_unlikely">Jūs nevarat piedzimt pirms %1$d.</string>
     <string name="avatar_alt">%1$s avatars</string>
     <string name="direct_messages">Tiešās ziņas</string>
+    <string name="discover_servers">Atklāt serverus</string>
     <string name="channel_text">Teksta kanāls</string>
     <string name="channel_voice">Balss kanāls</string>
     <string name="channel_group">Grupa</string>

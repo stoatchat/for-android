@@ -199,6 +199,7 @@
     <string name="settings_appearance_theme_amoled">Hitam Murni</string>
     <string name="invite_error_no_invite">Kode undangan tidak ditentukan.</string>
     <string name="direct_messages">Pesan Langsung</string>
+    <string name="discover_servers">Temukan Server</string>
     <string name="lets_go">Mari mulai</string>
     <string name="community_guidelines">Pedoman Komunitas</string>
     <string name="reply_message_empty_has_attachments">Kirimkan lampiran</string>

@@ -216,6 +216,7 @@
     <string name="terms_of_service">Términos de servicio</string>
     <string name="community_guidelines">Directivas de comunidad</string>
     <string name="direct_messages">Mensajes Directos</string>
+    <string name="discover_servers">Descubrir servidores</string>
     <string name="oss_attribution_body_2">Le damos las gracias a los desarrolladores de esos proyectos por hacer disponible su trabajo para todo el mundo.</string>
     <string name="system_message_channel_icon_changed_alt">Icono del canal cambiado</string>
     <string name="system_message_channel_description_changed_alt">Descripción del canal cambiada</string>

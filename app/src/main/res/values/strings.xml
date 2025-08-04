@@ -226,6 +226,8 @@
     <string name="avatar_alt">%1$s\'s avatar</string>
 
     <string name="direct_messages">Direct Messages</string>
+    <string name="discover_servers">Discover Servers</string>
+    <string name="discover_servers_description">Join trending and official groups to be part of something big.</string>
 
     <string name="channel_dm">Direct Message</string>
     <string name="channel_text">Text Channel</string>
@@ -803,4 +805,9 @@
     <string name="geogate_description">Revolt may block content in certain jurisdictions in response to legislation or legal notices</string>
     <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
     <string name="geogate_acknowledge">Acknowledge</string>
+
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="no_servers_found">No Servers Found</string>
+    <string name="no_servers_description">There are no servers available at the moment. Please try again later.</string>
 </resources>

@@ -67,6 +67,7 @@
     <string name="no_active_channel_body">Wybierz serwer z lewej strony, aby rozpocząć. Jeśli masz ochotę na przygodę, możesz utworzyć nowy serwer.</string>
     <string name="avatar_alt">Awatar użytkownika %1$s</string>
     <string name="direct_messages">Wiadomości bezpośrednie</string>
+    <string name="discover_servers">Odkryj serwery</string>
     <string name="channel_dm">Wiadomość bezpośrednia</string>
     <string name="channel_text">Kanał Tekstowy</string>
     <string name="channel_voice">Kanał głosowy</string>

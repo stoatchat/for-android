@@ -26,6 +26,7 @@
     <string name="menu">Meniu</string>
     <string name="no_active_channel">Nu ești într-un canal acum.</string>
     <string name="direct_messages">Mesaje directe</string>
+    <string name="discover_servers">Descoperă servere</string>
     <string name="channel_dm">Mesaj direct</string>
     <string name="channel_text">Canal de text</string>
     <string name="channel_group">Grup</string>

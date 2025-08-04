@@ -42,4 +42,6 @@
     <string name="onboarding_others">Anderen zullen je vinden, herkennen en vermelden met deze naam.</string>
     <string name="could_not_log_in_cta_try_again">Probeer opnieuw</string>
     <string name="could_not_log_in_cta_logout">Log uit</string>
+    <string name="direct_messages">Directe berichten</string>
+    <string name="discover_servers">Ontdek servers</string>
 </resources>

@@ -275,7 +275,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             kvStorage.remove("sessionToken")
             kvStorage.remove("sessionId")
-            startWithDestination("login/greeting")
+            startWithDestination("choose-platform")
         }
     }
 
