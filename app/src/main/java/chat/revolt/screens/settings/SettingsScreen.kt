@@ -380,10 +380,11 @@ fun SettingsScreen(
                             }
                         },
                         modifier = Modifier
+                            .padding(bottom =92.dp)
                             .testTag("settings_view_logout")
                             .clickable {
                                 viewModel.logout()
-                                navController.navigate("login/greeting") {
+                                navController.navigate("choose-platform") {
                                     popUpTo("chat") {
                                         inclusive = true
                                     }
