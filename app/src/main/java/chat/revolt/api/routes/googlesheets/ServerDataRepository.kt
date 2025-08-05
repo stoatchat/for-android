@@ -29,26 +29,7 @@ class ServerDataRepository {
         }
         emit(servers)
     }.flowOn(Dispatchers.IO)
-    
-    /**
-     * Fetches server categories from Google Sheets and returns as a Flow
-     * @param sheetUrl The URL of the published Google Sheet (CSV or JSON)
-     * @return Flow of ServerCategory list
-     */
-    fun getServerCategories(sheetUrl: String): Flow<List<ServerCategory>> = flow {
-        val categories = GoogleSheetsService.fetchSheetData(
-            sheetUrl = sheetUrl
-        ) { rowData ->
-            ServerCategory(
-                id = rowData["id"] ?: "",
-                name = rowData["name"] ?: "",
-                description = rowData["description"] ?: "",
-                iconName = rowData["iconName"] ?: "",
-                sortOrder = rowData["sortOrder"]?.toIntOrNull() ?: 0
-            )
-        }
-        emit(categories)
-    }.flowOn(Dispatchers.IO)
+
 }
 
 /**

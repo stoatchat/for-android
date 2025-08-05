@@ -22,7 +22,6 @@ fun ServerInviteHandler(
     onDismiss: () -> Unit = {},
     onJoinSuccess: () -> Unit = {}
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isLoading by remember { mutableStateOf(true) }
     var showDialog by remember { mutableStateOf(true) }
