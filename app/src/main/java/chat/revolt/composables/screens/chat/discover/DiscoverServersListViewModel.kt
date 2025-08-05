@@ -21,154 +21,137 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Combined UI state for the discover servers screen
+ */
+data class DiscoverUiState(
+    // Server list state
+    val servers: List<ServerData> = emptyList(),
+    val isLoading: Boolean = false,
+    val error: String? = null,
+    
+    // Server invite state
+    val selectedInviteCode: String? = null,
+    val processingServerId: String? = null,
+    val loadedInviteData: Invite? = null,
+    val loadedError: RevoltError? = null
+)
+
 @HiltViewModel
 class DiscoverServersListViewModel @Inject constructor(
     private val serverDataRepository: ServerDataRepository,
 ) : ViewModel() {
     
-    // Use StateFlow to properly expose the server list to the UI
-    private val _servers = MutableStateFlow<List<ServerData>>(emptyList())
-    val servers: StateFlow<List<ServerData>> = _servers.asStateFlow()
+    // Single UI state
+    private val _uiState = MutableStateFlow(DiscoverUiState())
+    val uiState: StateFlow<DiscoverUiState> = _uiState.asStateFlow()
     
-    // Loading state
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-    
-    // Error state
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
-    
-    // Selected server invite code
-    private val _selectedServerInviteCode = MutableStateFlow<String?>(null)
-    val selectedServerInviteCodeFlow: StateFlow<String?> = _selectedServerInviteCode.asStateFlow()
-    
-    // Property for easy access to selectedServerInviteCode
-    var selectedServerInviteCode: String?
-        get() = _selectedServerInviteCode.value
-        set(value) {
-            _selectedServerInviteCode.value = value
-        }
-        
-    // Currently processing server ID
-    private val _processingServerId = MutableStateFlow<String?>(null)
-    val processingServerId: StateFlow<String?> = _processingServerId.asStateFlow()
-    
-    // Server invite data that has been loaded
-    private val _loadedInviteData = MutableStateFlow<Invite?>(null)
-    val loadedInviteData: StateFlow<Invite?> = _loadedInviteData.asStateFlow()
-    
-    // Error that occurred during loading server data
-    private val _loadedError = MutableStateFlow<RevoltError?>(null)
-    val loadedError: StateFlow<RevoltError?> = _loadedError.asStateFlow()
-    
-    // Initialize by loading servers
+    // Initialize
     init {
         loadServers()
     }
     
+    /**
+     * Load server list from repository
+     */
     fun loadServers() {
-        _isLoading.value = true
-        _error.value = null
+        updateState { it.copy(isLoading = true, error = null) }
         
         viewModelScope.launch {
             try {
-                // Use the Google Sheets published CSV URL since that's what you were using before
                 val csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRY41D-NgTE6bC3kTN3dRpisI-DoeHG8Eg7n31xb1CdydWjOLaphqYckkTiaG9oIQSWP92h3NE-7cpF/pub?gid=0&single=true&output=csv"
-                
-                serverDataRepository.getServers(csvUrl)
-                    .collect { serverList ->
-                        _servers.value = serverList
-                        _isLoading.value = false
-                    }
+                serverDataRepository.getServers(csvUrl).collect { servers ->
+                    updateState { it.copy(servers = servers, isLoading = false) }
+                }
             } catch (e: Exception) {
-                _error.value = e.message ?: "Unknown error occurred"
-                _isLoading.value = false
+                updateState { 
+                    it.copy(
+                        error = e.message ?: "Unknown error occurred",
+                        isLoading = false
+                    )
+                }
             }
         }
     }
 
-    fun loadServerInviteInfo(inviteCode: String, serverId: String): Flow<RsResult<Invite, RevoltError>> = flow {
-        _processingServerId.value = serverId
-        _error.value = null
-        
-        try {
-            val result = fetchInviteByCode(inviteCode)
-            emit(result)
-        } catch (e: Exception) {
-            _error.value = e.message ?: "Unknown error occurred"
-            emit(RsResult.err(RevoltError("Unknown")))
-        } finally {
-            _processingServerId.value = null
-        }
-    }.flowOn(Dispatchers.IO)
-    
-    fun joinServer(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
-        _isLoading.value = true
-        _error.value = null
-        
-        try {
-            val result = joinInviteByCode(inviteCode)
-            emit(result)
-        } catch (e: Exception) {
-            _error.value = e.message ?: "Unknown error occurred"
-            emit(RsResult.err(RevoltError("Unknown")))
-        } finally {
-            _isLoading.value = false
-        }
-    }.flowOn(Dispatchers.IO)
-    
     /**
-     * Join server without showing loading in the server list
-     * This is used when joining from the dialog where we only want the button to show loading
-     */
-    fun joinServerWithoutProcessingIndicator(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
-        // Don't set _processingServerId or _isLoading here
-        _error.value = null
-        
-        try {
-            val result = joinInviteByCode(inviteCode)
-            emit(result)
-        } catch (e: Exception) {
-            _error.value = e.message ?: "Unknown error occurred"
-            emit(RsResult.err(RevoltError("Unknown")))
-        }
-    }.flowOn(Dispatchers.IO)
-    
-    /**
-     * Load server data first, then show the dialog with the loaded data
+     * Load server data and show dialog when ready
      */
     fun loadServerDataAndShowDialog(inviteCode: String, serverId: String) {
-        _loadedInviteData.value = null
-        _processingServerId.value = serverId
-        _error.value = null
+        updateState { 
+            it.copy(
+                loadedInviteData = null,
+                processingServerId = serverId
+            )
+        }
         
         viewModelScope.launch {
             try {
                 val result = fetchInviteByCode(inviteCode)
                 if (result.ok) {
-                    _loadedInviteData.value = result.value
+                    updateState { 
+                        it.copy(
+                            loadedInviteData = result.value,
+                            selectedInviteCode = inviteCode,
+                            processingServerId = null
+                        )
+                    }
                 } else {
-                    // Store the error in loadedError
-                    _loadedError.value = result.error
+                    updateState { 
+                        it.copy(
+                            loadedError = result.error,
+                            selectedInviteCode = inviteCode,
+                            processingServerId = null
+                        )
+                    }
                 }
-                // Set the selected invite code to show the dialog in both success and error cases
-                _selectedServerInviteCode.value = inviteCode
-            } catch (e: Exception) {
-                // Handle exception by creating a generic error
-                _loadedError.value = RevoltError("Unknown")
-                _selectedServerInviteCode.value = inviteCode
-            } finally {
-                _processingServerId.value = null
+            } catch (_: Exception) {
+                updateState { 
+                    it.copy(
+                        loadedError = RevoltError("Unknown"),
+                        selectedInviteCode = inviteCode,
+                        processingServerId = null
+                    )
+                }
             }
         }
     }
     
     /**
+     * Join server without showing loading in the server list
+     */
+    fun joinServerWithoutProcessingIndicator(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
+        try {
+            emit(joinInviteByCode(inviteCode))
+        } catch (_: Exception) {
+            emit(RsResult.err(RevoltError("Unknown")))
+        }
+    }.flowOn(Dispatchers.IO)
+    
+    /**
      * Clear loaded data when dialog is dismissed
      */
     fun clearLoadedData() {
-        _loadedInviteData.value = null
-        _loadedError.value = null
-        _selectedServerInviteCode.value = null
+        updateState { 
+            it.copy(
+                loadedInviteData = null,
+                loadedError = null,
+                selectedInviteCode = null
+            )
+        }
     }
-} 
+    
+    /**
+     * Set selected invite code
+     */
+    fun setSelectedInviteCode(code: String?) {
+        updateState { it.copy(selectedInviteCode = code) }
+    }
+    
+    /**
+     * Helper function to update state
+     */
+    private fun updateState(update: (DiscoverUiState) -> DiscoverUiState) {
+        _uiState.value = update(_uiState.value)
+    }
+}

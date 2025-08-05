@@ -29,15 +29,14 @@ fun ServerInviteHandler(
     var showDialog by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<RevoltError?>(null) }
     
-    // Get the pre-loaded invite data and error
-    val loadedInviteData by viewModel.loadedInviteData.collectAsState()
-    val loadedError by viewModel.loadedError.collectAsState()
+    // Get the UI state
+    val uiState by viewModel.uiState.collectAsState()
     
     if (showDialog) {
         ServerInviteDialog(
             isLoading = isJoining,
-            invite = loadedInviteData,
-            error = error ?: loadedError,
+            invite = uiState.loadedInviteData,
+            error = error ?: uiState.loadedError,
             onJoinClick = {
                 isJoining = true
                 scope.launch {

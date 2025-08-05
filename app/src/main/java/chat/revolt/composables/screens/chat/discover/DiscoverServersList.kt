@@ -38,27 +38,23 @@ import chat.revolt.composables.screens.chat.discover.ServerInviteHandler
 @Composable
 fun DiscoverServersList() {
     val viewModel = hiltViewModel<DiscoverServersListViewModel>()
-    val servers by viewModel.servers.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
-    val selectedInviteCode by viewModel.selectedServerInviteCodeFlow.collectAsState()
-    val processingServerId by viewModel.processingServerId.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     
     // Handle server invite dialog
-    selectedInviteCode?.let { inviteCode ->
+    uiState.selectedInviteCode?.let { inviteCode ->
         // Find the server with this invite code
-        val selectedServer = servers.find { it.inviteCode == inviteCode }
+        val selectedServer = uiState.servers.find { it.inviteCode == inviteCode }
         selectedServer?.let { server ->
             ServerInviteHandler(
                 inviteCode = inviteCode,
                 serverId = server.id,
                 viewModel = viewModel,
                 onDismiss = {
-                    viewModel.selectedServerInviteCode = null
+                    viewModel.setSelectedInviteCode(null)
                 },
                 onJoinSuccess = {
                     // Show a success message or navigate to the joined server
-                    viewModel.selectedServerInviteCode = null
+                    viewModel.setSelectedInviteCode(null)
                 }
             )
         }
@@ -92,17 +88,17 @@ fun DiscoverServersList() {
         Spacer(modifier = Modifier.height(16.dp))
 
         when {
-            isLoading -> {
+            uiState.isLoading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(16.dp)
                         .align(Alignment.CenterHorizontally)
                 )
             }
-            error != null -> {
+            uiState.error != null -> {
                 Text(stringResource(R.string.error))
             }
-            servers.isEmpty() -> {
+            uiState.servers.isEmpty() -> {
                 Text(stringResource(R.string.no_servers_found))
             }
             else -> {
@@ -111,10 +107,10 @@ fun DiscoverServersList() {
                         .fillMaxSize()
                         .weight(1f)
                 ) {
-                    items(servers) { server ->
+                    items(uiState.servers) { server ->
                         ServerItem(
                             server = server,
-                            isProcessing = processingServerId == server.id,
+                            isProcessing = uiState.processingServerId == server.id,
                             onClick = { 
                                 if (server.inviteCode.isNotEmpty()) {
                                     // First load server data, dialog will be shown after data is loaded
