@@ -543,9 +543,9 @@
     <string name="link_type_no_intent">No app found to handle this link</string>
     <string name="link_open">Open</string>
 
-    <string name="invite_message">You\'ve been invited to join this server. Would you like to join?</string>
-    <string name="invite_join">Join</string>
-    <string name="invite_cancel">Cancel</string>
+    <string name="invite_message">You’ve been invited to join</string>
+    <string name="invite_join">Accept Invite</string>
+    <string name="invite_cancel">No Thanks</string>
     <string name="invite_already_member">You are already a member of this server.</string>
     <string name="members_count">%1$d members</string>
     <string name="invite_error_header">There was an error</string>

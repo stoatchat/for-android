@@ -2,6 +2,7 @@ package chat.revolt.composables.screens.chat.discover
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,40 +19,32 @@ import kotlinx.coroutines.launch
 @Composable
 fun ServerInviteHandler(
     inviteCode: String,
+    serverId: String,
     viewModel: DiscoverServersListViewModel = viewModel(),
     onDismiss: () -> Unit = {},
     onJoinSuccess: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
-    var isLoading by remember { mutableStateOf(true) }
+    var isJoining by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
-    var inviteResult by remember { mutableStateOf<RsResult<Invite, RevoltError>?>(null) }
     var error by remember { mutableStateOf<RevoltError?>(null) }
     
-    // Fetch server invite info
-    LaunchedEffect(inviteCode) {
-        viewModel.loadServerInviteInfo(inviteCode).collectLatest { result ->
-            inviteResult = result
-            isLoading = false
-            
-            if (result.err) {
-                error = result.error
-            }
-        }
-    }
+    // Get the pre-loaded invite data
+    val loadedInviteData by viewModel.loadedInviteData.collectAsState()
     
-    if (showDialog) {
+    if (showDialog && loadedInviteData != null) {
         ServerInviteDialog(
-            isLoading = isLoading,
-            invite = inviteResult?.value,
+            isLoading = isJoining,
+            invite = loadedInviteData,
             error = error,
             onJoinClick = {
-                isLoading = true
+                isJoining = true
                 scope.launch {
                     viewModel.joinServer(inviteCode).collectLatest { result ->
-                        isLoading = false
+                        isJoining = false
                         if (result.ok) {
                             showDialog = false
+                            viewModel.clearLoadedData()
                             onJoinSuccess()
                         } else {
                             error = result.error
@@ -61,6 +54,7 @@ fun ServerInviteHandler(
             },
             onDismiss = {
                 showDialog = false
+                viewModel.clearLoadedData()
                 onDismiss()
             }
         )

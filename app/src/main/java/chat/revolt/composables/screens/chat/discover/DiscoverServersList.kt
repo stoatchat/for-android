@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.routes.googlesheets.ServerData
+import chat.revolt.composables.screens.chat.discover.ServerInviteHandler
 
 @Composable
 fun DiscoverServersList() {
@@ -40,20 +42,26 @@ fun DiscoverServersList() {
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val selectedInviteCode by viewModel.selectedServerInviteCodeFlow.collectAsState()
+    val processingServerId by viewModel.processingServerId.collectAsState()
     
     // Handle server invite dialog
     selectedInviteCode?.let { inviteCode ->
-        ServerInviteHandler(
-            inviteCode = inviteCode,
-            viewModel = viewModel,
-            onDismiss = {
-                viewModel.selectedServerInviteCode = null
-            },
-            onJoinSuccess = {
-                // Show a success message or navigate to the joined server
-                viewModel.selectedServerInviteCode = null
-            }
-        )
+        // Find the server with this invite code
+        val selectedServer = servers.find { it.inviteCode == inviteCode }
+        selectedServer?.let { server ->
+            ServerInviteHandler(
+                inviteCode = inviteCode,
+                serverId = server.id,
+                viewModel = viewModel,
+                onDismiss = {
+                    viewModel.selectedServerInviteCode = null
+                },
+                onJoinSuccess = {
+                    // Show a success message or navigate to the joined server
+                    viewModel.selectedServerInviteCode = null
+                }
+            )
+        }
     }
     
     Column(
@@ -106,9 +114,11 @@ fun DiscoverServersList() {
                     items(servers) { server ->
                         ServerItem(
                             server = server,
+                            isProcessing = processingServerId == server.id,
                             onClick = { 
                                 if (server.inviteCode.isNotEmpty()) {
-                                    viewModel.selectedServerInviteCode = server.inviteCode
+                                    // First load server data, dialog will be shown after data is loaded
+                                    viewModel.loadServerDataAndShowDialog(server.inviteCode, server.id)
                                 }
                             }
                         )
@@ -125,13 +135,14 @@ fun DiscoverServersList() {
 @Composable
 fun ServerItem(
     server: ServerData,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isProcessing: Boolean = false
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() }
+            .clickable(enabled = !isProcessing) { onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -167,19 +178,28 @@ fun ServerItem(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            IconButton(
-                onClick = onClick,
-            ) {
-                Box(
+            
+            if (isProcessing) {
+                CircularProgressIndicator(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .size(24.dp),
+                    strokeWidth = 2.dp
+                )
+            } else {
+                IconButton(
+                    onClick = onClick,
                 ) {
-                    Image(
-                        painter = painterResource(R.drawable.icn_arrow_forward_24dp),
-                        contentDescription = "",
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.Center)
-                    )
+                            .fillMaxSize()
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.icn_arrow_forward_24dp),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }
