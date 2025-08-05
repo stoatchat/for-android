@@ -53,7 +53,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.revolt.BuildConfig
 import chat.revolt.R
-import chat.revolt.api.REVOLT_BASE
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltJson
 import chat.revolt.api.routes.misc.Root
 import chat.revolt.api.routes.misc.getRootRoute
@@ -72,7 +72,7 @@ class AboutViewModel : ViewModel() {
             "App ID" to BuildConfig.APPLICATION_ID,
             "App Version" to BuildConfig.VERSION_NAME,
             "App Type" to BuildConfig.FLAVOUR_ID,
-            "API Host" to URI(REVOLT_BASE).host,
+            "API Host" to URI(RevoltAPI.getCurrentBaseUrl()).host,
             "API Version" to (root?.revolt ?: "Unknown"),
             "Runtime SDK" to Build.VERSION.SDK_INT.toString(),
             "Model" to "${Build.MANUFACTURER} ${

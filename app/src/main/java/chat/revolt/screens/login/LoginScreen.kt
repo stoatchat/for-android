@@ -53,7 +53,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.revolt.R
 import chat.revolt.RevoltApplication
-import chat.revolt.api.REVOLT_APP
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.account.EmailPasswordAssessment
 import chat.revolt.api.routes.account.negotiateAuthentication
@@ -333,7 +332,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 )
                 Weblink(
                     text = stringResource(R.string.password_forgot),
-                    url = "$REVOLT_APP/login/reset",
+                    url = "${RevoltAPI.getCurrentAppUrl()}/login/reset",
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
                 Spacer(modifier = Modifier.height(32.dp))

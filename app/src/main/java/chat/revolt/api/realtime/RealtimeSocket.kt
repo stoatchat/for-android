@@ -3,7 +3,6 @@ package chat.revolt.api.realtime
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import chat.revolt.RevoltApplication
-import chat.revolt.api.REVOLT_WEBSOCKET
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.RevoltJson
@@ -88,7 +87,7 @@ object RealtimeSocket {
 
         socket?.close(CloseReason(CloseReason.Codes.NORMAL, "Reconnecting to websocket."))
 
-        RevoltHttp.ws(REVOLT_WEBSOCKET) {
+        RevoltHttp.ws(RevoltAPI.getCurrentWebSocketUrl()) {
             socket = this
 
             Log.d("RealtimeSocket", "Connected to websocket.")

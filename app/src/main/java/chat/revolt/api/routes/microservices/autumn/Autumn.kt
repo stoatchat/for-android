@@ -1,7 +1,6 @@
 package chat.revolt.api.routes.microservices.autumn
 
 import chat.revolt.api.HitRateLimitException
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.RevoltJson
@@ -37,7 +36,7 @@ suspend fun uploadToAutumn(
     contentType: ContentType,
     onProgress: (Long, Long) -> Unit = { _, _ -> }
 ): String {
-    val uploadUrl = "$REVOLT_FILES/$tag"
+    val uploadUrl = "${RevoltAPI.getCurrentFilesUrl()}/$tag"
 
     val response = RevoltHttp.post(uploadUrl) {
         setBody(

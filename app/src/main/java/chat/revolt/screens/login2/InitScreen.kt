@@ -1,5 +1,7 @@
 package chat.revolt.screens.login2
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.revolt.BuildConfig
 import chat.revolt.R
-import chat.revolt.api.REVOLT_MARKETING
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.settings.LoadedSettings
 import chat.revolt.composables.generic.AnyLink
 import chat.revolt.composables.generic.Weblink
@@ -156,15 +158,15 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
 
         Weblink(
             text = stringResource(R.string.terms_of_service),
-            url = "$REVOLT_MARKETING/terms"
+            url = "${RevoltAPI.getCurrentMarketingUrl()}/terms"
         )
         Weblink(
             text = stringResource(R.string.privacy_policy),
-            url = "$REVOLT_MARKETING/privacy"
+            url = "${RevoltAPI.getCurrentMarketingUrl()}/privacy"
         )
         Weblink(
             text = stringResource(R.string.community_guidelines),
-            url = "$REVOLT_MARKETING/aup"
+            url = "${RevoltAPI.getCurrentMarketingUrl()}/aup"
         )
 
         if (BuildConfig.DEBUG) {

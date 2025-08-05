@@ -73,7 +73,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import chat.revolt.R
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.BrushCompat
 import chat.revolt.api.internals.InstancedBrushCompat
@@ -762,7 +761,7 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                 } else {
                     with(LocalDensity.current) {
                         RemoteImage(
-                            url = "$REVOLT_FILES/emojis/${id}",
+                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${id}",
                             description = emote.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier

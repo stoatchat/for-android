@@ -74,7 +74,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.CategorisedChannelList
 import chat.revolt.api.internals.ChannelUtils
@@ -357,7 +356,7 @@ fun ChannelSideDrawer(
                                 serverInList.id?.let { srvId -> navigateToServer(srvId) }
                             }) {
                         val icon = serverInList.icon?.id?.let { iconId ->
-                            "$REVOLT_FILES/icons/$iconId"
+                            "${RevoltAPI.getCurrentFilesUrl()}/icons/$iconId"
                         }
                         if (icon != null) {
                             RemoteImage(
@@ -468,7 +467,7 @@ fun ChannelSideDrawer(
             ) {
                 if (server?.banner != null) {
                     RemoteImage(
-                        url = "$REVOLT_FILES/banners/${server.banner.id}",
+                        url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
                         description = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

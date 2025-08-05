@@ -31,7 +31,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.SpecialUsers
 import chat.revolt.api.internals.ULID
@@ -116,7 +115,7 @@ fun RawUserOverview(
         if (background != null) {
             RemoteImage(
                 url = backgroundUrl
-                    ?: "$REVOLT_FILES/backgrounds/${if (background is AutumnResource) background.id else null}/${if (background is AutumnResource) background.filename else background}",
+                    ?: "${RevoltAPI.getCurrentFilesUrl()}/backgrounds/${if (background is AutumnResource) background.id else null}/${if (background is AutumnResource) background.filename else background}",
                 description = null,
                 modifier = Modifier
                     .height(128.dp)

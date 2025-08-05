@@ -35,7 +35,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.revolt.BuildConfig
 import chat.revolt.R
-import chat.revolt.api.REVOLT_APP
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.PermissionBit
 import chat.revolt.api.internals.Roles
@@ -176,7 +175,7 @@ fun MessageContextSheet(
                             server.channels?.contains(message.channel) ?: false
                         }
                         val messageLink =
-                            "$REVOLT_APP/server/${server?.id}/channel/${message.channel}/${message.id}"
+                            "${RevoltAPI.getCurrentAppUrl()}/server/${server?.id}/channel/${message.channel}/${message.id}"
 
                         clipboardManager.setText(AnnotatedString(messageLink))
                         if (Platform.needsShowClipboardNotification()) {

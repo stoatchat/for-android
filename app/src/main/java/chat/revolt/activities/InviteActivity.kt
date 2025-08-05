@@ -47,7 +47,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltError
 import chat.revolt.api.routes.invites.fetchInviteByCode
 import chat.revolt.api.routes.invites.joinInviteByCode
@@ -180,7 +180,7 @@ fun InviteScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         GlideImage(
-                            model = "$REVOLT_FILES/banners/${invite?.serverBanner?.id}/${invite?.serverBanner?.filename}",
+                            model = "${RevoltAPI.getCurrentFilesUrl()}/banners/${invite?.serverBanner?.id}/${invite?.serverBanner?.filename}",
                             contentScale = ContentScale.Crop,
                             contentDescription = null,
                             modifier = Modifier
@@ -205,7 +205,7 @@ fun InviteScreen(
                         ) {
                             if (invite?.serverIcon != null) {
                                 RemoteImage(
-                                    url = "$REVOLT_FILES/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
+                                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
                                     allowAnimation = false,
                                     description = viewModel.inviteResult?.value?.serverName
                                         ?: stringResource(id = R.string.unknown),

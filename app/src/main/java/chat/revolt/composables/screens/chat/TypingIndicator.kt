@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import chat.revolt.R
 import chat.revolt.activities.RevoltTweenFloat
 import chat.revolt.activities.RevoltTweenInt
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.schemas.User
 import chat.revolt.composables.generic.UserAvatar
@@ -50,7 +49,7 @@ fun StackedUserAvatars(
                 userId = userId,
                 username = user?.let { User.resolveDefaultName(it) }
                     ?: stringResource(id = R.string.unknown),
-                rawUrl = maybeMember?.avatar?.let { "$REVOLT_FILES/avatars/${it.id}" },
+                rawUrl = maybeMember?.avatar?.let { "${RevoltAPI.getCurrentFilesUrl()}/avatars/${it.id}" },
                 size = size,
                 modifier = Modifier
                     .offset(

@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_APP
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltJson
 import chat.revolt.api.buildUserAgent
 import chat.revolt.api.internals.ThemeCompat
@@ -101,7 +101,7 @@ fun ColumnScope.DiscoverView() {
                             view: WebView?,
                             request: WebResourceRequest?
                         ): Boolean {
-                            if (request?.url?.host.equals(Uri.parse(REVOLT_APP).host)) {
+                            if (request?.url?.host.equals(Uri.parse(RevoltAPI.getCurrentAppUrl()).host)) {
                                 val intent = Intent(
                                     context,
                                     InviteActivity::class.java

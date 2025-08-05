@@ -41,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.schemas.AutumnResource
 import chat.revolt.api.settings.LoadedSettings
@@ -85,7 +85,7 @@ class ImageViewActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
-    val resourceUrl = "$REVOLT_FILES/attachments/${resource.id}/${resource.filename}"
+    val resourceUrl = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${resource.id}/${resource.filename}"
 
     val context = LocalContext.current
 

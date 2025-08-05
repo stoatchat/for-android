@@ -1,7 +1,7 @@
 package chat.revolt.internals
 
 import android.content.Context
-import chat.revolt.api.REVOLT_KJBOOK
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltHttp
 import chat.revolt.api.RevoltJson
 import chat.revolt.internals.IndexHolder.cachedIndex
@@ -55,7 +55,7 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
         }
 
         try {
-            val response = RevoltHttp.get("$REVOLT_KJBOOK/changelogs.json")
+            val response = RevoltHttp.get("${RevoltAPI.getCurrentKjBookUrl()}/changelogs.json")
             cachedIndex =
                 RevoltJson.decodeFromString(ChangelogIndex.serializer(), response.bodyAsText())
             return cachedIndex as ChangelogIndex
@@ -66,7 +66,7 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
 
     suspend fun fetchChangelogByVersionCode(versionCode: Long): Changelog {
         try {
-            val response = RevoltHttp.get("$REVOLT_KJBOOK/changelogs/$versionCode.json")
+            val response = RevoltHttp.get("${RevoltAPI.getCurrentKjBookUrl()}/changelogs/$versionCode.json")
             return RevoltJson.decodeFromString(Changelog.serializer(), response.bodyAsText())
         } catch (e: Error) {
             return Changelog(

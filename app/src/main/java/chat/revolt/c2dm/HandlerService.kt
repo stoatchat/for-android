@@ -12,7 +12,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.graphics.drawable.IconCompat
 import chat.revolt.R
 import chat.revolt.activities.MainActivity
-import chat.revolt.api.REVOLT_BASE
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.RevoltJson
 import chat.revolt.api.internals.ULID
 import chat.revolt.api.routes.push.subscribePush
@@ -78,7 +78,7 @@ class HandlerService : FirebaseMessagingService() {
 
         if (authorIcon == null) {
             authorIcon =
-                "$REVOLT_BASE/users/${message.author?.ifBlank { "0".repeat(26) }}/default_avatar"
+                "${RevoltAPI.getCurrentBaseUrl()}/users/${message.author?.ifBlank { "0".repeat(26) }}/default_avatar"
         }
 
         val db = Database(SqlStorage.driver)
