@@ -26,7 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.schemas.AutumnResource
 import chat.revolt.api.schemas.ChannelType
 import chat.revolt.api.schemas.User
@@ -66,7 +66,7 @@ fun ChannelSheetHeader(
         ) {
             if (channelIcon != null) {
                 RemoteImage(
-                    url = "$REVOLT_FILES/icons/${channelIcon.id ?: ""}",
+                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${channelIcon.id ?: ""}",
                     description = null, // decorative
                     contentScale = ContentScale.Crop,
                     height = 48,

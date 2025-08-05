@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -79,12 +77,12 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
     init {
         RevoltAPI.selfId?.let { self ->
             RevoltAPI.userCache[self]?.avatar?.id?.let {
-                pfpModel = "https://autumn.revolt.chat/avatars/${it}"
+                pfpModel = "${RevoltAPI.getCurrentAutumnUrl()}/avatars/${it}"
             }
             viewModelScope.launch {
                 currentProfile = fetchUserProfile(self)
                 currentProfile!!.background?.id?.let {
-                    backgroundModel = "https://autumn.revolt.chat/backgrounds/${it}"
+                    backgroundModel = "${RevoltAPI.getCurrentAutumnUrl()}/backgrounds/${it}"
                 }
 
                 pendingProfile = currentProfile!!.copy()
@@ -139,7 +137,7 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
             }
 
             pfpModel = RevoltAPI.userCache[RevoltAPI.selfId]?.avatar?.id?.let {
-                "https://autumn.revolt.chat/avatars/${it}"
+                "${RevoltAPI.getCurrentAutumnUrl()}/avatars/${it}"
             }
 
             uploadProgress = 0f
@@ -194,8 +192,8 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
                 currentProfile = profile
                 pendingProfile = profile
 
-                profile.background?.id?.let {
-                    "https://autumn.revolt.chat/backgrounds/${it}"
+                profile.background?.id?.let { id ->
+                    "${RevoltAPI.getCurrentAutumnUrl()}/backgrounds/${id}"
                 }
             }
 

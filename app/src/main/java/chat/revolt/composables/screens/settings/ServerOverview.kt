@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
-import chat.revolt.api.REVOLT_FILES
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.schemas.Server
 import chat.revolt.api.schemas.ServerFlags
 import chat.revolt.api.schemas.has
@@ -51,7 +51,7 @@ fun ServerOverview(server: Server) {
             )
 
             RemoteImage(
-                url = "$REVOLT_FILES/banners/${it.id}/${it.filename}",
+                url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${it.id}/${it.filename}",
                 description = null,
                 modifier = Modifier
                     .height(166.dp)
@@ -80,7 +80,7 @@ fun ServerOverview(server: Server) {
         ) {
             server.icon?.let {
                 RemoteImage(
-                    url = "$REVOLT_FILES/icons/${it.id}",
+                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${it.id}",
                     description = null,
                     allowAnimation = false,
                     modifier = Modifier

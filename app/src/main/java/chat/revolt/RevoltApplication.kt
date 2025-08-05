@@ -1,6 +1,8 @@
 package chat.revolt
 
 import android.app.Application
+import chat.revolt.api.RevoltHttp
+import chat.revolt.persistence.KVStorage
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import logcat.AndroidLogcatLogger
@@ -15,10 +17,19 @@ class RevoltApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
+        RevoltHttp // Trigger initialization
     }
 
     init {
         instance = this
         DynamicColors.applyToActivitiesIfAvailable(this)
     }
+}
+
+/**
+ * Extension function to get KVStorage instance.
+ * @return KVStorage instance
+ */
+fun RevoltApplication.getKVStorage(): KVStorage {
+    return KVStorage(this)
 }

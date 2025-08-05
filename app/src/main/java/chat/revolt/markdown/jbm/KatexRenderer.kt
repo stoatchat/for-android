@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_APP
+import chat.revolt.api.RevoltAPI
 
 internal fun Color.asHexString(includeAlphaComponent: Boolean = true): String {
     val argb = toArgb()
@@ -46,7 +46,7 @@ fun KatexRenderer(content: String, modifier: Modifier = Modifier) {
         factory = { context ->
             WebView(context).apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(REVOLT_APP).host!!)
+                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -131,7 +131,7 @@ fun KatexRenderer(content: String, modifier: Modifier = Modifier) {
                 setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
                 loadUrl(
-                    "$REVOLT_APP/_android_assets/katex/katex.html"
+                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/katex/katex.html"
                 )
             }
         }

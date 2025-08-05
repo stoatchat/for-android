@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.net.toUri
 import chat.revolt.R
 import chat.revolt.activities.InviteActivity
-import chat.revolt.api.REVOLT_FILES
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.custom.fetchEmoji
 import chat.revolt.api.schemas.isInviteUri
@@ -434,7 +433,7 @@ fun MarkdownText(textNode: AstNode, modifier: Modifier = Modifier) {
                 } else {
                     with(LocalDensity.current) {
                         RemoteImage(
-                            url = "$REVOLT_FILES/emojis/${id}",
+                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${id}",
                             description = emote.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
