@@ -553,6 +553,7 @@
     <string name="invite_error_invalid_invite">Could not find an invite with the specified code.</string>
     <string name="invite_error_banned">You are banned from this server.</string>
     <string name="invite_error_unknown">An unknown error occurred.</string>
+    <string name="joining">Joining…</string>
 
     <string name="media_viewer_title_image">%1$s</string>
     <string name="media_viewer_title_video">%1$s</string>

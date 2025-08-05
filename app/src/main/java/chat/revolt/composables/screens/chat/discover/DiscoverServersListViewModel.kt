@@ -57,6 +57,10 @@ class DiscoverServersListViewModel @Inject constructor(
     private val _loadedInviteData = MutableStateFlow<Invite?>(null)
     val loadedInviteData: StateFlow<Invite?> = _loadedInviteData.asStateFlow()
     
+    // Error that occurred during loading server data
+    private val _loadedError = MutableStateFlow<RevoltError?>(null)
+    val loadedError: StateFlow<RevoltError?> = _loadedError.asStateFlow()
+    
     // Initialize by loading servers
     init {
         loadServers()
@@ -114,6 +118,23 @@ class DiscoverServersListViewModel @Inject constructor(
     }.flowOn(Dispatchers.IO)
     
     /**
+     * Join server without showing loading in the server list
+     * This is used when joining from the dialog where we only want the button to show loading
+     */
+    fun joinServerWithoutProcessingIndicator(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
+        // Don't set _processingServerId or _isLoading here
+        _error.value = null
+        
+        try {
+            val result = joinInviteByCode(inviteCode)
+            emit(result)
+        } catch (e: Exception) {
+            _error.value = e.message ?: "Unknown error occurred"
+            emit(RsResult.err(RevoltError("Unknown")))
+        }
+    }.flowOn(Dispatchers.IO)
+    
+    /**
      * Load server data first, then show the dialog with the loaded data
      */
     fun loadServerDataAndShowDialog(inviteCode: String, serverId: String) {
@@ -126,13 +147,16 @@ class DiscoverServersListViewModel @Inject constructor(
                 val result = fetchInviteByCode(inviteCode)
                 if (result.ok) {
                     _loadedInviteData.value = result.value
-                    // Only set the selected invite code after data is loaded
-                    _selectedServerInviteCode.value = inviteCode
                 } else {
-                    _error.value = result.error?.type ?: "Unknown error occurred"
+                    // Store the error in loadedError
+                    _loadedError.value = result.error
                 }
+                // Set the selected invite code to show the dialog in both success and error cases
+                _selectedServerInviteCode.value = inviteCode
             } catch (e: Exception) {
-                _error.value = e.message ?: "Unknown error occurred"
+                // Handle exception by creating a generic error
+                _loadedError.value = RevoltError("Unknown")
+                _selectedServerInviteCode.value = inviteCode
             } finally {
                 _processingServerId.value = null
             }
@@ -144,6 +168,7 @@ class DiscoverServersListViewModel @Inject constructor(
      */
     fun clearLoadedData() {
         _loadedInviteData.value = null
+        _loadedError.value = null
         _selectedServerInviteCode.value = null
     }
 } 

@@ -29,18 +29,20 @@ fun ServerInviteHandler(
     var showDialog by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<RevoltError?>(null) }
     
-    // Get the pre-loaded invite data
+    // Get the pre-loaded invite data and error
     val loadedInviteData by viewModel.loadedInviteData.collectAsState()
+    val loadedError by viewModel.loadedError.collectAsState()
     
-    if (showDialog && loadedInviteData != null) {
+    if (showDialog) {
         ServerInviteDialog(
             isLoading = isJoining,
             invite = loadedInviteData,
-            error = error,
+            error = error ?: loadedError,
             onJoinClick = {
                 isJoining = true
                 scope.launch {
-                    viewModel.joinServer(inviteCode).collectLatest { result ->
+                    // Don't set the processing server ID here to avoid showing loading in the list
+                    viewModel.joinServerWithoutProcessingIndicator(inviteCode).collectLatest { result ->
                         isJoining = false
                         if (result.ok) {
                             showDialog = false
