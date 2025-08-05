@@ -97,9 +97,11 @@ private val PLATFORM_URLS = mapOf(
         january = "https://a-pep.peptide.chat/january",
         app = "https://peptide.chat",
         invites = "https://pep.gg",
-        websocket = "https://a-pep.peptide.chat/ws",
-        autumn = "https://autumn.revolt.chat",
-        kjbook = "https://pepchat.github.io/android"
+        websocket = "wss://a-pep.peptide.chat/ws",
+        autumn = "https://a-pep.peptide.chat/autumn",
+        // TODO: Replace with correct URL
+        kjbook = "https://revoltchat.github.io/android"
+        // TODO: Replace with correct URL
     )
 )
 
