@@ -24,13 +24,6 @@ class ServerDataRepository {
                 id = rowData["id"] ?: "",
                 name = rowData["name"] ?: "",
                 description = rowData["description"] ?: "",
-                iconUrl = rowData["iconUrl"] ?: "",
-                bannerUrl = rowData["bannerUrl"] ?: "",
-                memberCount = rowData["memberCount"]?.toIntOrNull() ?: 0,
-                category = rowData["category"] ?: "",
-                tags = rowData["tags"]?.split(",")?.map { it.trim() } ?: emptyList(),
-                isVerified = rowData["isVerified"]?.toBoolean() ?: false,
-                isOfficial = rowData["isOfficial"]?.toBoolean() ?: false
             )
         }
         emit(servers)
@@ -65,13 +58,6 @@ data class ServerData(
     val id: String,
     val name: String,
     val description: String,
-    val iconUrl: String,
-    val bannerUrl: String,
-    val memberCount: Int,
-    val category: String,
-    val tags: List<String>,
-    val isVerified: Boolean,
-    val isOfficial: Boolean
 )
 
 /**
@@ -84,4 +70,4 @@ data class ServerCategory(
     val description: String,
     val iconName: String,
     val sortOrder: Int
-) 
+)

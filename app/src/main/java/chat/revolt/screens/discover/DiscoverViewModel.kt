@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import chat.revolt.api.routes.googlesheets.ServerCategory
 import chat.revolt.api.routes.googlesheets.ServerData
 import chat.revolt.api.routes.googlesheets.ServerDataRepository
-import chat.revolt.api.routes.server.ackServer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -25,14 +24,6 @@ class DiscoverViewModel @Inject constructor(
 
     // UI state
     var uiState by mutableStateOf<DiscoverUiState>(DiscoverUiState.Loading)
-        private set
-
-    // Selected category for filtering
-    var selectedCategory by mutableStateOf<String?>(null)
-        private set
-
-    // Search query for filtering
-    var searchQuery by mutableStateOf("")
         private set
 
     // Initialize the ViewModel
@@ -66,56 +57,6 @@ class DiscoverViewModel @Inject constructor(
                             )
                         }
                 }
-        }
-    }
-
-    /**
-     * Sets the selected category for filtering
-     * @param categoryId The ID of the category to select, or null to clear selection
-     */
-    fun selectCategory(categoryId: String?) {
-        selectedCategory = categoryId
-    }
-
-    /**
-     * Updates the search query for filtering
-     * @param query The search query
-     */
-    fun updateSearchQuery(query: String) {
-        searchQuery = query
-    }
-
-    /**
-     * Returns the filtered list of servers based on selected category and search query
-     */
-    fun getFilteredServers(): List<ServerData> {
-        val currentState = uiState
-        if (currentState !is DiscoverUiState.Success) return emptyList()
-
-        return currentState.servers.filter { server ->
-            val matchesCategory = selectedCategory == null || server.category == selectedCategory
-            val matchesSearch = searchQuery.isEmpty() || 
-                server.name.contains(searchQuery, ignoreCase = true) || 
-                server.description.contains(searchQuery, ignoreCase = true) ||
-                server.tags.any { it.contains(searchQuery, ignoreCase = true) }
-            
-            matchesCategory && matchesSearch
-        }
-    }
-
-    /**
-     * Acknowledges a server selection
-     * This can be used for analytics or to mark a server as viewed
-     * @param serverId The ID of the selected server
-     */
-    fun acknowledgeServerSelection(serverId: String) {
-        viewModelScope.launch {
-            try {
-                ackServer(serverId)
-            } catch (e: Exception) {
-                // Log but don't change UI state as this is not critical
-                e.printStackTrace()
-            }
         }
     }
 }

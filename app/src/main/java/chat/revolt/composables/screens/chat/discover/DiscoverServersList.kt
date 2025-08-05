@@ -1,7 +1,6 @@
 package chat.revolt.composables.screens.chat.discover
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,18 +23,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.routes.googlesheets.ServerData
-import chat.revolt.composables.generic.NonIdealState
-import chat.revolt.composables.generic.UserAvatar
 
 @Composable
 fun DiscoverServersList() {
@@ -57,22 +51,22 @@ fun DiscoverServersList() {
             painter = painterResource(R.drawable.discover_character_image),
             contentDescription = null,
         )
-        
+
         Text(
             text = stringResource(R.string.discover_servers),
             style = MaterialTheme.typography.headlineMedium
         )
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Text(
             text = stringResource(R.string.discover_servers_description),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
         )
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         when {
             isLoading -> {
                 CircularProgressIndicator(
@@ -89,7 +83,6 @@ fun DiscoverServersList() {
             }
             else -> {
                 LazyColumn(
-                    state = rememberLazyListState(),
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f)
@@ -99,6 +92,9 @@ fun DiscoverServersList() {
                             server = server,
                             onClick = { /* Handle server selection */ }
                         )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(96.dp))
                     }
                 }
             }
@@ -120,11 +116,15 @@ fun ServerItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            
-            Spacer(modifier = Modifier.width(16.dp))
+            Image(
+                painter = painterResource(R.drawable.three_person),
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
             
             Column(
                 modifier = Modifier.weight(1f)
@@ -132,7 +132,6 @@ fun ServerItem(
                 Text(
                     text = server.name,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
                 )
                 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -140,17 +139,28 @@ fun ServerItem(
                 Text(
                     text = server.description,
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = 0.7f,
+                    ),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-                
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                Text(
-                    text = "${server.memberCount} members",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            IconButton(
+                onClick = onClick,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.icn_arrow_forward_24dp),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
             }
         }
     }
