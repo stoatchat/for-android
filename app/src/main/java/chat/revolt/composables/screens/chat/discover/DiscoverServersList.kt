@@ -21,6 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -39,6 +42,22 @@ fun DiscoverServersList() {
     val servers by viewModel.servers.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
+    val selectedInviteCode by viewModel.selectedServerInviteCodeFlow.collectAsState()
+    
+    // Handle server invite dialog
+    selectedInviteCode?.let { inviteCode ->
+        ServerInviteHandler(
+            inviteCode = inviteCode,
+            viewModel = viewModel,
+            onDismiss = {
+                viewModel.selectedServerInviteCode = null
+            },
+            onJoinSuccess = {
+                // Show a success message or navigate to the joined server
+                viewModel.selectedServerInviteCode = null
+            }
+        )
+    }
     
     Column(
         modifier = Modifier
@@ -90,7 +109,11 @@ fun DiscoverServersList() {
                     items(servers) { server ->
                         ServerItem(
                             server = server,
-                            onClick = { /* Handle server selection */ }
+                            onClick = { 
+                                if (server.inviteCode.isNotEmpty()) {
+                                    viewModel.selectedServerInviteCode = server.inviteCode
+                                }
+                            }
                         )
                     }
                     item {

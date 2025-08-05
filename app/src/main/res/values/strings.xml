@@ -547,6 +547,7 @@
     <string name="invite_join">Join</string>
     <string name="invite_cancel">Cancel</string>
     <string name="invite_already_member">You are already a member of this server.</string>
+    <string name="members_count">%1$d members</string>
     <string name="invite_error_header">There was an error</string>
     <string name="invite_error_no_invite">No invite code was specified.</string>
     <string name="invite_error_invalid_invite">Could not find an invite with the specified code.</string>

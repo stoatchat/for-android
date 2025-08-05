@@ -2,12 +2,22 @@ package chat.revolt.composables.screens.chat.discover
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import chat.revolt.api.RevoltError
 import chat.revolt.api.routes.googlesheets.ServerData
 import chat.revolt.api.routes.googlesheets.ServerDataRepository
+import chat.revolt.api.routes.invites.fetchInviteByCode
+import chat.revolt.api.routes.invites.joinInviteByCode
+import chat.revolt.api.schemas.Invite
+import chat.revolt.api.schemas.InviteJoined
+import chat.revolt.api.schemas.RsResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +37,17 @@ class DiscoverServersListViewModel @Inject constructor(
     // Error state
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
+    
+    // Selected server invite code
+    private val _selectedServerInviteCode = MutableStateFlow<String?>(null)
+    val selectedServerInviteCodeFlow: StateFlow<String?> = _selectedServerInviteCode.asStateFlow()
+    
+    // Property for easy access to selectedServerInviteCode
+    var selectedServerInviteCode: String?
+        get() = _selectedServerInviteCode.value
+        set(value) {
+            _selectedServerInviteCode.value = value
+        }
     
     // Initialize by loading servers
     init {
@@ -53,4 +74,34 @@ class DiscoverServersListViewModel @Inject constructor(
             }
         }
     }
+
+    fun loadServerInviteInfo(inviteCode: String): Flow<RsResult<Invite, RevoltError>> = flow {
+        _isLoading.value = true
+        _error.value = null
+        
+        try {
+            val result = fetchInviteByCode(inviteCode)
+            emit(result)
+        } catch (e: Exception) {
+            _error.value = e.message ?: "Unknown error occurred"
+            emit(RsResult.err(RevoltError("Unknown")))
+        } finally {
+            _isLoading.value = false
+        }
+    }.flowOn(Dispatchers.IO)
+    
+    fun joinServer(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
+        _isLoading.value = true
+        _error.value = null
+        
+        try {
+            val result = joinInviteByCode(inviteCode)
+            emit(result)
+        } catch (e: Exception) {
+            _error.value = e.message ?: "Unknown error occurred"
+            emit(RsResult.err(RevoltError("Unknown")))
+        } finally {
+            _isLoading.value = false
+        }
+    }.flowOn(Dispatchers.IO)
 } 

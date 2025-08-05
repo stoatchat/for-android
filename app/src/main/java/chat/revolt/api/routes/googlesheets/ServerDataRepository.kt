@@ -24,6 +24,7 @@ class ServerDataRepository {
                 id = rowData["id"] ?: "",
                 name = rowData["name"] ?: "",
                 description = rowData["description"] ?: "",
+                inviteCode = rowData["inviteCode"] ?: "",
             )
         }
         emit(servers)
@@ -58,6 +59,7 @@ data class ServerData(
     val id: String,
     val name: String,
     val description: String,
+    val inviteCode: String,
 )
 
 /**
