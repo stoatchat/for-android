@@ -114,21 +114,8 @@ sealed class ChatRouterDestination {
     data class ServersChannels(val serverID: String) : ChatRouterDestination()
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
-    fun asSerialisedString(): String? {
-        return when (this) {
-            is Settings -> "overview"
-            is Friends -> "friends"
-            is Discover -> "discover"
-            is Channel -> null
-            is ServersChannels -> "channel/$serverID/servers"
-            is NoCurrentChannel -> "no_current_channel/$serverId"
-            ChatRouterDestination.Home -> "home"
-        }
-    }
-
     companion object {
         val default = Settings
-        val defaultForDMList = Settings
 
         fun fromString(destination: String): ChatRouterDestination {
             return when {
@@ -245,13 +232,7 @@ class ChatRouterViewModel @Inject constructor(
 
     fun navigateToServer(serverId: String) {
         viewModelScope.launch {
-            val savedLastChannel = kvStorage.get("lastChannel/$serverId")
-            val channelId =
-                savedLastChannel ?: RevoltAPI.serverCache[serverId]?.channels?.firstOrNull()
-            val channelExists = RevoltAPI.channelCache.containsKey(channelId)
-
             setSaveDestination(ChatRouterDestination.ServersChannels(serverId))
-//
         }
     }
 }
