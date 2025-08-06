@@ -14,7 +14,6 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -65,22 +64,20 @@ fun SettingsScreen(
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
+    Column(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            LargeTopAppBar(
-                scrollBehavior = scrollBehavior,
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-            )
-        },
-    ) { pv ->
-        Box(Modifier.padding(pv)) {
+    ) {
+        LargeTopAppBar(
+            scrollBehavior = scrollBehavior,
+            title = {
+                Text(
+                    text = stringResource(R.string.settings),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
+        )
+        Box {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -377,7 +374,6 @@ fun SettingsScreen(
                             }
                         },
                         modifier = Modifier
-                            .padding(bottom =92.dp)
                             .testTag("settings_view_logout")
                             .clickable {
                                 viewModel.logout()

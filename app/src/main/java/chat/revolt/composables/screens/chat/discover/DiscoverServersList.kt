@@ -45,7 +45,7 @@ fun DiscoverServersList(
 ) {
     val viewModel = hiltViewModel<DiscoverServersListViewModel>()
     val uiState by viewModel.uiState.collectAsState()
-    
+
     // Handle server invite dialog
     uiState.selectedInviteCode?.let { inviteCode ->
         // Find the server with this invite code
@@ -63,10 +63,10 @@ fun DiscoverServersList(
             )
         }
     }
-    
+
     Column(
         modifier = Modifier
-            .padding(vertical = 24.dp, horizontal = 16.dp),
+            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
@@ -99,12 +99,15 @@ fun DiscoverServersList(
                         .align(Alignment.CenterHorizontally)
                 )
             }
+
             uiState.error != null -> {
                 Text(stringResource(R.string.error))
             }
+
             uiState.servers.isEmpty() -> {
                 Text(stringResource(R.string.no_servers_found))
             }
+
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -114,24 +117,24 @@ fun DiscoverServersList(
                     items(uiState.servers) { server ->
                         // Check if the server is already joined
                         val isJoined = isServerAlreadyJoined(server.id)
-                        
+
                         ServerItem(
                             server = server,
                             isProcessing = uiState.processingServerId == server.id,
                             isJoined = isServerAlreadyJoined(server.id),
-                            onClick = { 
+                            onClick = {
                                 if (isJoined) {
                                     // If already joined, navigate directly to server channels
                                     onJoinToServerSuccess(server.id)
                                 } else if (server.inviteCode.isNotEmpty()) {
                                     // If not joined, load server data and show invite dialog
-                                    viewModel.loadServerDataAndShowDialog(server.inviteCode, server.id)
+                                    viewModel.loadServerDataAndShowDialog(
+                                        server.inviteCode,
+                                        server.id
+                                    )
                                 }
                             }
                         )
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(96.dp))
                     }
                 }
             }
@@ -145,7 +148,7 @@ private fun isServerAlreadyJoined(serverId: String): Boolean {
 }
 
 @Composable
-    fun ServerItem(
+fun ServerItem(
     server: ServerData,
     isJoined: Boolean,
     onClick: () -> Unit,
@@ -154,7 +157,7 @@ private fun isServerAlreadyJoined(serverId: String): Boolean {
     // Calculate alpha values based on disabled state
     val contentAlpha = if (server.disabled) 0.5f else 1.0f
     val descriptionAlpha = if (server.disabled) 0.4f else 0.7f
-    
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -175,7 +178,7 @@ private fun isServerAlreadyJoined(serverId: String): Boolean {
                 )
             )
             Spacer(modifier = Modifier.width(12.dp))
-            
+
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -186,9 +189,9 @@ private fun isServerAlreadyJoined(serverId: String): Boolean {
                         alpha = contentAlpha
                     )
                 )
-                
+
                 Spacer(modifier = Modifier.height(4.dp))
-                
+
                 Text(
                     text = server.description,
                     style = MaterialTheme.typography.bodyMedium,
@@ -200,7 +203,7 @@ private fun isServerAlreadyJoined(serverId: String): Boolean {
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             if (isProcessing) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -268,6 +271,7 @@ private fun ServerItemPreview() {
         isProcessing = false
     )
 }
+
 @Preview
 @Composable
 private fun JoinedServerItemPreview() {

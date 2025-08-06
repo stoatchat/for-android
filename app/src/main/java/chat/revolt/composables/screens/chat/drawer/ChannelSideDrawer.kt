@@ -37,6 +37,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -96,6 +97,7 @@ import chat.revolt.composables.screens.chat.discover.DiscoverServersList
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.screens.chat.LocalIsConnected
 import chat.revolt.sheets.ChannelContextSheet
+import com.google.android.material.color.MaterialColors
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -203,21 +205,9 @@ fun ChannelSideDrawer(
             Modifier.width(64.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-            )
         ) {
             stickyHeader(key = "self") {
                 Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                    AnimatedVisibility(LocalIsConnected.current) {
-                        Spacer(
-                            Modifier
-                                .height(
-                                    WindowInsets.statusBars.asPaddingValues()
-                                        .calculateTopPadding()
-                                )
-                        )
-                    }
                     UserAvatar(
                         username = RevoltAPI.userCache[RevoltAPI.selfId]?.let {
                             User.resolveDefaultName(
@@ -311,6 +301,47 @@ fun ChannelSideDrawer(
                 )
             }
 
+
+            item(key = "discover") {
+                Box(
+                    Modifier
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable {
+                            onDestinationChanged(
+                                ChatRouterDestination.Discover
+                            )
+                        }
+                        .size(48.dp)
+                        .background(MaterialTheme.colorScheme.onPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_explore_24dp),
+                        contentDescription = stringResource(R.string.discover_alt)
+                    )
+                }
+            }
+
+            item(key = "add_server") {
+                Box(
+                    Modifier
+                        .padding(8.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            onShowAddServerSheet()
+                        }
+                        .size(48.dp)
+                        .background(MaterialTheme.colorScheme.onPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_add_24dp),
+                        contentDescription = stringResource(R.string.server_plus_alt)
+                    )
+                }
+            }
+
             items(
                 serverList.size,
                 key = { serverList[it].id ?: it }
@@ -385,44 +416,6 @@ fun ChannelSideDrawer(
                 }
             }
 
-            item(key = "add_server") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onShowAddServerSheet()
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_add_24dp),
-                        contentDescription = stringResource(R.string.server_plus_alt)
-                    )
-                }
-            }
-
-            item(key = "discover") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onDestinationChanged(
-                                ChatRouterDestination.Discover
-                            )
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_explore_24dp),
-                        contentDescription = stringResource(R.string.discover_alt)
-                    )
-                }
-            }
-
             if (showSettingsIcon) {
                 item(key = "settings") {
                     Box(
@@ -457,10 +450,7 @@ fun ChannelSideDrawer(
                             topEnd = CornerSize(0.dp)
                         )
                     )
-                    .height(
-                        serverBannerHeight + WindowInsets.statusBars.asPaddingValues()
-                            .calculateTopPadding()
-                    )
+                    .height(serverBannerHeight)
             ) {
                 if (server?.banner != null) {
                     RemoteImage(
@@ -492,8 +482,7 @@ fun ChannelSideDrawer(
 
                 Row(
                     Modifier
-                        .padding(16.dp)
-                        .offset(y = serverInfoOffset),
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CompositionLocalProvider(
