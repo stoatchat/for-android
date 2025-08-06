@@ -27,8 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,8 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.googlesheets.ServerData
-import com.google.android.material.color.MaterialColors
-import java.nio.file.Files.delete
 
 @Composable
 fun DiscoverServersList(
