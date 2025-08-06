@@ -421,13 +421,9 @@ fun ChannelSideDrawer(
         }
         Column(
             Modifier
-                .clip(
-                    MaterialTheme.shapes.medium.copy(
-                        topStart = CornerSize(24.dp),
-                    )
-                )
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .weight(1f)
+                .clip(shape = RoundedCornerShape(topStart = 24.dp))
+                .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                .weight(weight = 1f)
                 .fillMaxHeight()
         ) {
             Box(

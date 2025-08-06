@@ -693,7 +693,6 @@ fun AppEntrypoint(
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelScreen(
                             channelId = channelId,
-                            onToggleDrawer = {},
                             useDrawer = false,
                             useBackButton = true,
                             backToChannelsScreen = {

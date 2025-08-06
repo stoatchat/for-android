@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -823,10 +822,8 @@ fun ChannelNavigator(
     currentServer: String?,
     toggleDrawer: () -> Unit,
     isTouchExplorationEnabled: Boolean,
-    drawerState: DrawerState? = null,
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
 ) {
-    val scope = rememberCoroutineScope()
     when (dest) {
         is ChatRouterDestination.Channel -> {
             ChannelScreen(
@@ -838,19 +835,11 @@ fun ChannelNavigator(
                                 serverID = currentServer
                             )
                         )
-                    }
-                },
-                onToggleDrawer = {
-                    scope.launch {
-                        if (drawerState?.isOpen == true) {
-                            drawerState.close()
-                        } else {
-                            drawerState?.open()
-                        }
-                    }
+                    } ?: viewModel.setSaveDestination(
+                        ChatRouterDestination.Home
+                    )
                 },
                 setDrawerGestureEnabled = setDrawerGestureEnabled,
-                drawerIsOpen = drawerState?.isOpen == true,
             )
         }
 
@@ -869,7 +858,13 @@ fun ChannelNavigator(
                             label = {
                                 Text(text = "you")
                             },
-                            selected = dest is ChatRouterDestination.Home,
+                            selected = when(dest){
+                                is ChatRouterDestination.ServersChannels,
+                                is ChatRouterDestination.NoCurrentChannel,
+                                ChatRouterDestination.Home,
+                                ChatRouterDestination.Discover -> true
+                                else -> false
+                            } ,
                             enabled = true,
                             onClick = {
                                 viewModel.setSaveDestination(ChatRouterDestination.Home)
@@ -947,8 +942,7 @@ fun ChannelNavigator(
                             )
                         }
 
-                        is ChatRouterDestination.Channel -> {
-                        }
+                        is ChatRouterDestination.Channel -> {}
 
                         is ChatRouterDestination.NoCurrentChannel -> {
                             NoCurrentChannelScreen(onDrawerClicked = toggleDrawer)

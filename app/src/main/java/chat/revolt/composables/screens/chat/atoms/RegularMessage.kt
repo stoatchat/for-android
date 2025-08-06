@@ -63,7 +63,6 @@ const val SWIPE_TO_REPLY_THRESHOLD = -450f
 fun RegularMessage(
     message: Message,
     channel: Channel?,
-    drawerIsOpen: Boolean,
     setDrawerGestureEnabled: (Boolean) -> Unit,
     setDisableScroll: (Boolean) -> Unit,
     showMessageBottomSheet: (String) -> Unit,
@@ -77,7 +76,6 @@ fun RegularMessage(
     var offsetX by remember { mutableFloatStateOf(0f) }
     val animOffsetX by animateFloatAsState(
         when {
-            drawerIsOpen -> 0f
             offsetX > -20f -> 0f
             else -> offsetX
         },
@@ -103,7 +101,7 @@ fun RegularMessage(
         label = "Swipe to Reply indicator foreground"
     )
 
-    var onFingerMoveHandler: (List<PointerInputChange>) -> Unit =
+    val onFingerMoveHandler: (List<PointerInputChange>) -> Unit =
         { changeList: List<PointerInputChange> ->
             changeList.firstOrNull()
                 ?.let {

@@ -189,12 +189,10 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 @Composable
 fun ChannelScreen(
     channelId: String,
-    onToggleDrawer: () -> Unit,
     useDrawer: Boolean = false,
     backToChannelsScreen: (() -> Unit)?,
     useBackButton: Boolean = false,
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
-    drawerIsOpen: Boolean = false,
     backButtonAction: (() -> Unit)? = null,
     useChatUI: Boolean = false,
     viewModel: ChannelScreenViewModel = hiltViewModel()
@@ -629,7 +627,9 @@ fun ChannelScreen(
                     windowInsets = if (useChatUI) WindowInsets.statusBars else WindowInsets.zero,
                     navigationIcon = {
                         if (useDrawer) {
-                            IconButton(onClick = onToggleDrawer) {
+                            IconButton(onClick = {
+                                backToChannelsScreen?.invoke()
+                            }) {
                                 Icon(
                                     painter = painterResource(R.drawable.icn_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
@@ -650,7 +650,7 @@ fun ChannelScreen(
         }
     ) { pv ->
         if (viewModel.showGeoGate) {
-            ChannelScreenGeoGate { onToggleDrawer() }
+            ChannelScreenGeoGate { backToChannelsScreen?.invoke() }
         } else {
             Crossfade(
                 targetState = viewModel.ageGateUnlocked,
@@ -665,10 +665,11 @@ fun ChannelScreen(
                                 }
                             },
                             onDeny = {
-                                onToggleDrawer()
+                                backToChannelsScreen?.invoke()
                             }
                         )
                     }
+
                     null -> {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -677,6 +678,7 @@ fun ChannelScreen(
                             CircularProgressIndicator(modifier = Modifier.size(48.dp))
                         }
                     }
+
                     true -> {
                         Column(
                             modifier = Modifier
@@ -731,7 +733,6 @@ fun ChannelScreen(
                                                 RegularMessage(
                                                     item.message,
                                                     viewModel.channel,
-                                                    drawerIsOpen = drawerIsOpen,
                                                     setDrawerGestureEnabled = {
                                                         setDrawerGestureEnabled(it)
                                                     },
@@ -972,7 +973,11 @@ fun ChannelScreen(
                                                 ReplyManager(
                                                     replies = viewModel.draftReplyTo,
                                                     onToggleMention = {
-                                                        scope.launch { viewModel.toggleMentionOnReply(it.id) }
+                                                        scope.launch {
+                                                            viewModel.toggleMentionOnReply(
+                                                                it.id
+                                                            )
+                                                        }
                                                     },
                                                     onRemove = {
                                                         viewModel.draftReplyTo.remove(it)
@@ -1027,7 +1032,9 @@ fun ChannelScreen(
                                                         trailingIcon = {
                                                             Icon(
                                                                 painter = painterResource(R.drawable.icn_close_24dp),
-                                                                contentDescription = stringResource(R.string.message_field_editing_message_cancel_alt),
+                                                                contentDescription = stringResource(
+                                                                    R.string.message_field_editing_message_cancel_alt
+                                                                ),
                                                                 tint = MaterialTheme.colorScheme.onSurface,
                                                                 modifier = Modifier.alpha(0.8f)
                                                             )
@@ -1090,7 +1097,8 @@ fun ChannelScreen(
                                             DropdownMenu(
                                                 expanded = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker && notEnoughSpaceForPanes,
                                                 onDismissRequest = {
-                                                    viewModel.activePane = ChannelScreenActivePane.None
+                                                    viewModel.activePane =
+                                                        ChannelScreenActivePane.None
                                                 }
                                             ) {
                                                 DropdownMenuItem(
