@@ -10,11 +10,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -67,7 +67,7 @@ fun SettingsScreen(
     Column(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) {
-        LargeTopAppBar(
+        TopAppBar(
             scrollBehavior = scrollBehavior,
             title = {
                 Text(

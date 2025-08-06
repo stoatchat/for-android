@@ -29,6 +29,7 @@ class ServerDataRepository {
                     "false" -> false
                     else -> true
                 },
+                showColor = rowData["showcolor"]
             )
         }
         emit(servers)
@@ -46,4 +47,5 @@ data class ServerData(
     val description: String,
     val inviteCode: String,
     val disabled: Boolean,
+    val showColor: String?,
 )

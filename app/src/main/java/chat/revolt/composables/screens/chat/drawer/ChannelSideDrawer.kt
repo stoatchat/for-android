@@ -421,18 +421,17 @@ fun ChannelSideDrawer(
         }
         Column(
             Modifier
+                .clip(
+                    MaterialTheme.shapes.medium.copy(
+                        topStart = CornerSize(24.dp),
+                    )
+                )
                 .background(MaterialTheme.colorScheme.surfaceContainer)
                 .weight(1f)
                 .fillMaxHeight()
         ) {
             Box(
                 Modifier
-                    .clip(
-                        MaterialTheme.shapes.medium.copy(
-                            topStart = CornerSize(0.dp),
-                            topEnd = CornerSize(0.dp)
-                        )
-                    )
                     .height(serverBannerHeight)
             ) {
                 if (server?.banner != null) {

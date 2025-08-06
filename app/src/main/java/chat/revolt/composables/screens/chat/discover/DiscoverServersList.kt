@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
@@ -154,6 +157,26 @@ fun ServerItem(
     onClick: () -> Unit,
     isProcessing: Boolean = false
 ) {
+    // Safely convert the hex string to a Color, or return null if invalid
+    fun parseColorOrNull(hex: String?): Color? {
+        return hex?.let { raw ->
+            val normalized = if (raw.startsWith("#")) raw else "#$raw"
+            try {
+                Color(normalized.toColorInt())
+            } catch (_: IllegalArgumentException) {
+                null
+            }
+        }
+    }
+
+    // Determine card colors based on server.showColor
+    val containerColor = parseColorOrNull(server.showColor)
+    val cardColors = if (containerColor != null) {
+        CardDefaults.cardColors(containerColor = containerColor)
+    } else {
+        CardDefaults.cardColors()
+    }
+
     // Calculate alpha values based on disabled state
     val contentAlpha = if (server.disabled) 0.5f else 1.0f
     val descriptionAlpha = if (server.disabled) 0.4f else 0.7f
@@ -162,7 +185,8 @@ fun ServerItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable(enabled = !isProcessing) { onClick() }
+            .clickable(enabled = !isProcessing) { onClick() },
+        colors = cardColors,
     ) {
         Row(
             modifier = Modifier
@@ -262,7 +286,8 @@ private fun ServerItemPreview() {
         name = "Revolt Lounge",
         description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
         inviteCode = "revolt",
-        disabled = false
+        disabled = false,
+        showColor = null
     )
     ServerItem(
         server = server,
@@ -274,13 +299,34 @@ private fun ServerItemPreview() {
 
 @Preview
 @Composable
+private fun ColorfulServerItemPreview() {
+    val server = ServerData(
+        id = "1",
+        name = "Revolt Lounge",
+        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
+        inviteCode = "revolt",
+        disabled = false,
+        showColor = "#1591ea"
+    )
+    ServerItem(
+        server = server,
+        onClick = {},
+        isJoined = false,
+        isProcessing = false
+    )
+}
+
+
+@Preview
+@Composable
 private fun JoinedServerItemPreview() {
     val server = ServerData(
         id = "1",
         name = "Revolt Lounge",
         description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
         inviteCode = "revolt",
-        disabled = false
+        disabled = false,
+        showColor = null,
     )
     ServerItem(
         server = server,
