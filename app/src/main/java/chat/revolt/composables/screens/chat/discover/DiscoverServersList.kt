@@ -138,11 +138,6 @@ fun DiscoverServersList(
     }
 }
 
-/**
- * Check if the server with the given invite code is already joined
- * @param inviteCode The invite code of the server
- * @return True if the server is already joined, false otherwise
- */
 @Composable
 private fun isServerAlreadyJoined(serverId: String): Boolean {
     // Check if the server exists in RevoltAPI.serverCache
