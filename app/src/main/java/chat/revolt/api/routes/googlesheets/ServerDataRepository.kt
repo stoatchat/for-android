@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * Repository for fetching server data from a Google Sheet
  */
 class ServerDataRepository {
-    
+
     /**
      * Fetches server data from Google Sheets and returns as a Flow
      * @param sheetUrl The URL of the published Google Sheet (CSV or JSON)
@@ -25,6 +25,10 @@ class ServerDataRepository {
                 name = rowData["name"] ?: "",
                 description = rowData["description"] ?: "",
                 inviteCode = rowData["inviteCode"] ?: "",
+                disabled = when (rowData["disabled"]?.lowercase()) {
+                    "false" -> false
+                    else -> true
+                },
             )
         }
         emit(servers)
@@ -41,16 +45,5 @@ data class ServerData(
     val name: String,
     val description: String,
     val inviteCode: String,
-)
-
-/**
- * Data class representing a server category
- */
-@Serializable
-data class ServerCategory(
-    val id: String,
-    val name: String,
-    val description: String,
-    val iconName: String,
-    val sortOrder: Int
+    val disabled: Boolean,
 )

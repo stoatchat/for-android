@@ -697,7 +697,9 @@ fun AppEntrypoint(
                             onToggleDrawer = {},
                             useDrawer = false,
                             useBackButton = true,
-                            backToChannelsScreen = {},
+                            backToChannelsScreen = {
+                                navController.navigate("main")
+                            },
                             backButtonAction = {
                                 navController.popBackStack()
                             },

@@ -1,6 +1,7 @@
 package chat.revolt.composables.screens.chat.discover
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
@@ -24,6 +26,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
+import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.googlesheets.ServerData
 
 @Composable
@@ -107,12 +112,18 @@ fun DiscoverServersList(
                         .weight(1f)
                 ) {
                     items(uiState.servers) { server ->
+                        // Check if the server is already joined
+                        val isJoined = isServerAlreadyJoined(server.id)
+                        
                         ServerItem(
                             server = server,
                             isProcessing = uiState.processingServerId == server.id,
                             onClick = { 
-                                if (server.inviteCode.isNotEmpty()) {
-                                    // First load server data, dialog will be shown after data is loaded
+                                if (isJoined) {
+                                    // If already joined, navigate directly to server channels
+                                    onJoinToServerSuccess(server.id)
+                                } else if (server.inviteCode.isNotEmpty()) {
+                                    // If not joined, load server data and show invite dialog
                                     viewModel.loadServerDataAndShowDialog(server.inviteCode, server.id)
                                 }
                             }
@@ -127,12 +138,30 @@ fun DiscoverServersList(
     }
 }
 
+/**
+ * Check if the server with the given invite code is already joined
+ * @param inviteCode The invite code of the server
+ * @return True if the server is already joined, false otherwise
+ */
+@Composable
+private fun isServerAlreadyJoined(serverId: String): Boolean {
+    // Check if the server exists in RevoltAPI.serverCache
+    return RevoltAPI.serverCache.containsKey(serverId)
+}
+
 @Composable
 fun ServerItem(
     server: ServerData,
     onClick: () -> Unit,
     isProcessing: Boolean = false
 ) {
+    // Calculate alpha values based on disabled state
+    val contentAlpha = if (server.disabled) 0.5f else 1.0f
+    val descriptionAlpha = if (server.disabled) 0.4f else 0.7f
+    
+    // Check if the server is already joined
+    val isJoined = isServerAlreadyJoined(server.id)
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -148,7 +177,9 @@ fun ServerItem(
             Image(
                 painter = painterResource(R.drawable.three_person),
                 contentDescription = "",
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
+                colorFilter = ColorFilter.tint(
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
+                )
             )
             Spacer(modifier = Modifier.width(12.dp))
             
@@ -158,6 +189,7 @@ fun ServerItem(
                 Text(
                     text = server.name,
                     style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
                 )
                 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -166,7 +198,7 @@ fun ServerItem(
                     text = server.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = 0.7f,
+                        alpha = descriptionAlpha,
                     ),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -188,12 +220,34 @@ fun ServerItem(
                         modifier = Modifier
                             .fillMaxSize()
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.icn_arrow_forward_24dp),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                        )
+                        if (isJoined) {
+                            // Show tick icon with green background for joined servers
+                            Box(
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(0xFF4CAF50)) // Green color
+                                    .align(Alignment.Center),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.icn_check_24dp),
+                                    contentDescription = "Already joined",
+                                    colorFilter = ColorFilter.tint(Color.White)
+                                )
+                            }
+                        } else {
+                            // Show arrow icon for servers not joined yet
+                            Image(
+                                painter = painterResource(R.drawable.icn_arrow_forward_24dp),
+                                contentDescription = "Join server",
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                colorFilter = ColorFilter.tint(
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
+                                )
+                            )
+                        }
                     }
                 }
             }

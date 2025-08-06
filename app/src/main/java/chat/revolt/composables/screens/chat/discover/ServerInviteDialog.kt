@@ -3,7 +3,6 @@ package chat.revolt.composables.screens.chat.discover
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,10 +50,9 @@ fun ServerInviteDialog(
         AlertDialog(
             onDismissRequest = onDismiss,
             icon = {
-                Icon(
-                    painter = painterResource(R.drawable.icn_error_24dp),
+                Image(
+                    painter = painterResource(R.drawable.link_no_valid_img),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error
                 )
             },
             title = {
@@ -66,22 +63,26 @@ fun ServerInviteDialog(
                 )
             },
             text = {
-                Text(
-                    text = when (error.type) {
-                        "NotFound" -> stringResource(id = R.string.invite_error_invalid_invite)
-                        "Banned" -> stringResource(id = R.string.invite_error_banned)
-                        else -> stringResource(id = R.string.invite_error_unknown)
-                    },
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            },
-            confirmButton = {},
-            dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(text = stringResource(id = R.string.invite_cancel))
+                Column {
+                    Text(
+                        text = when (error.type) {
+                            "NotFound" -> stringResource(id = R.string.invite_error_invalid_invite)
+                            "Banned" -> stringResource(id = R.string.invite_error_banned)
+                            else -> stringResource(id = R.string.invite_error_unknown)
+                        },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(32.dp))
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(text = stringResource(id = R.string.spark_early_access_cta))
+                    }
                 }
-            }
+            },
+            confirmButton = {}
         )
         return
     }
@@ -196,7 +197,11 @@ fun ServerInviteDialog(
                                         .clip(CircleShape)
                                 )
                             } else {
-                                IconPlaceholder(name = invite.userName, modifier = Modifier.size(24.dp).clip(CircleShape), fontSize = 12.sp)
+                                IconPlaceholder(
+                                    name = invite.userName, modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(CircleShape), fontSize = 12.sp
+                                )
                             }
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(text = invite.userName, fontWeight = FontWeight.SemiBold)
@@ -234,17 +239,6 @@ fun ServerInviteDialog(
     )
 }
 
-@Preview
-@Composable
-fun ServerInviteDialogPreviewLoading() {
-    ServerInviteDialog(
-        isLoading = true,
-        invite = null,
-        error = null,
-        onJoinClick = {},
-        onDismiss = {}
-    )
-}
 
 @Preview
 @Composable
