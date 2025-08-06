@@ -33,10 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.routes.googlesheets.ServerData
-import chat.revolt.composables.screens.chat.discover.ServerInviteHandler
 
 @Composable
-fun DiscoverServersList() {
+fun DiscoverServersList(
+    onJoinToServerSuccess: (String) -> Unit,
+) {
     val viewModel = hiltViewModel<DiscoverServersListViewModel>()
     val uiState by viewModel.uiState.collectAsState()
     
@@ -47,14 +48,12 @@ fun DiscoverServersList() {
         selectedServer?.let { server ->
             ServerInviteHandler(
                 inviteCode = inviteCode,
-                serverId = server.id,
                 viewModel = viewModel,
                 onDismiss = {
                     viewModel.setSelectedInviteCode(null)
                 },
-                onJoinSuccess = {
-                    // Show a success message or navigate to the joined server
-                    viewModel.setSelectedInviteCode(null)
+                onJoinSuccess = { serverId ->
+                    onJoinToServerSuccess(serverId)
                 }
             )
         }

@@ -461,7 +461,6 @@ fun ChannelSideDrawer(
                         serverBannerHeight + WindowInsets.statusBars.asPaddingValues()
                             .calculateTopPadding()
                     )
-                //.offset(y = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
             ) {
                 if (server?.banner != null) {
                     RemoteImage(
@@ -562,7 +561,9 @@ fun ChannelSideDrawer(
                 }
             }
             if (currentDestination is ChatRouterDestination.Discover) {
-                DiscoverServersList()
+                DiscoverServersList(
+                    onJoinToServerSuccess = navigateToServer
+                )
             } else {
                 if (currentServer == null) {
                     DirectMessagesChannelListRenderer(
