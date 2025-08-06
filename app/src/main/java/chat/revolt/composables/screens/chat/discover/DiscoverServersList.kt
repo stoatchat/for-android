@@ -27,17 +27,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode.Companion.Color
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.googlesheets.ServerData
+import com.google.android.material.color.MaterialColors
+import java.nio.file.Files.delete
 
 @Composable
 fun DiscoverServersList(
@@ -118,6 +122,7 @@ fun DiscoverServersList(
                         ServerItem(
                             server = server,
                             isProcessing = uiState.processingServerId == server.id,
+                            isJoined = isServerAlreadyJoined(server.id),
                             onClick = { 
                                 if (isJoined) {
                                     // If already joined, navigate directly to server channels
@@ -138,24 +143,21 @@ fun DiscoverServersList(
     }
 }
 
-@Composable
 private fun isServerAlreadyJoined(serverId: String): Boolean {
     // Check if the server exists in RevoltAPI.serverCache
     return RevoltAPI.serverCache.containsKey(serverId)
 }
 
 @Composable
-fun ServerItem(
+    fun ServerItem(
     server: ServerData,
+    isJoined: Boolean,
     onClick: () -> Unit,
     isProcessing: Boolean = false
 ) {
     // Calculate alpha values based on disabled state
     val contentAlpha = if (server.disabled) 0.5f else 1.0f
     val descriptionAlpha = if (server.disabled) 0.4f else 0.7f
-    
-    // Check if the server is already joined
-    val isJoined = isServerAlreadyJoined(server.id)
     
     Card(
         modifier = Modifier
@@ -184,7 +186,9 @@ fun ServerItem(
                 Text(
                     text = server.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
+                    color = MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = contentAlpha
+                    )
                 )
                 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -219,16 +223,17 @@ fun ServerItem(
                             // Show tick icon with green background for joined servers
                             Box(
                                 modifier = Modifier
-                                    .size(24.dp)
+                                    .size(20.dp)
                                     .clip(CircleShape)
-                                    .background(Color(0xFF4CAF50)) // Green color
+                                    .background(MaterialTheme.colorScheme.primary) // Green color
                                     .align(Alignment.Center),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Image(
+                                    modifier = Modifier.size(16.dp),
                                     painter = painterResource(R.drawable.icn_check_24dp),
                                     contentDescription = "Already joined",
-                                    colorFilter = ColorFilter.tint(Color.White)
+                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
                                 )
                             }
                         } else {
@@ -248,4 +253,39 @@ fun ServerItem(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ServerItemPreview() {
+    val server = ServerData(
+        id = "1",
+        name = "Revolt Lounge",
+        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
+        inviteCode = "revolt",
+        disabled = false
+    )
+    ServerItem(
+        server = server,
+        onClick = {},
+        isJoined = false,
+        isProcessing = false
+    )
+}
+@Preview
+@Composable
+private fun JoinedServerItemPreview() {
+    val server = ServerData(
+        id = "1",
+        name = "Revolt Lounge",
+        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
+        inviteCode = "revolt",
+        disabled = false
+    )
+    ServerItem(
+        server = server,
+        onClick = {},
+        isJoined = true,
+        isProcessing = false
+    )
 }
