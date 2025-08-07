@@ -1,9 +1,7 @@
 package chat.revolt.composables.screens.chat.drawer
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -30,13 +28,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -53,7 +51,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,10 +66,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.CategorisedChannelList
@@ -94,8 +89,8 @@ import chat.revolt.composables.generic.RemoteImage
 import chat.revolt.composables.generic.UserAvatar
 import chat.revolt.composables.generic.presenceFromStatus
 import chat.revolt.composables.screens.chat.ChannelIcon
+import chat.revolt.composables.screens.chat.discover.DiscoverServersList
 import chat.revolt.screens.chat.ChatRouterDestination
-import chat.revolt.screens.chat.LocalIsConnected
 import chat.revolt.sheets.ChannelContextSheet
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -109,10 +104,10 @@ fun ChannelSideDrawer(
     onShowServerContextSheet: (String) -> Unit,
     showSettingsIcon: Boolean,
     onOpenSettings: () -> Unit,
-    topNav: NavController,
     onShowAddServerSheet: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     val server = RevoltAPI.serverCache[currentServer]
     val categorisedChannels = server?.let {
         ChannelUtils.categoriseServerFlat(it)
@@ -122,7 +117,6 @@ fun ChannelSideDrawer(
     LaunchedEffect(currentDestination) {
         if ((currentDestination is ChatRouterDestination.ServersChannels) && currentServer != null) {
             val channelIndex = categorisedChannels?.indexOfFirst {
-
                 when (it) {
                     is CategorisedChannelList.Channel -> it.channel.id == currentDestination.serverID
                     else -> false
@@ -151,17 +145,6 @@ fun ChannelSideDrawer(
             durationMillis = 300,
             delayMillis = 0
         ), label = "Server banner height"
-    )
-
-    val serverInfoOffset by animateDpAsState(
-        if (LocalIsConnected.current)
-            WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-        else
-            0.dp,
-        animationSpec = spring(
-            stiffness = Spring.StiffnessMediumLow,
-            visibilityThreshold = Dp.VisibilityThreshold
-        )
     )
 
     // - Take the list of servers and filter them by the ones that are in the ordering.
@@ -200,28 +183,14 @@ fun ChannelSideDrawer(
         }
     }
 
-    val scope = rememberCoroutineScope()
-
     Row(modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.width(64.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-            )
         ) {
             stickyHeader(key = "self") {
                 Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                    AnimatedVisibility(LocalIsConnected.current) {
-                        Spacer(
-                            Modifier
-                                .height(
-                                    WindowInsets.statusBars.asPaddingValues()
-                                        .calculateTopPadding()
-                                )
-                        )
-                    }
                     UserAvatar(
                         username = RevoltAPI.userCache[RevoltAPI.selfId]?.let {
                             User.resolveDefaultName(
@@ -238,7 +207,7 @@ fun ChannelSideDrawer(
                         size = 48.dp,
                         presenceSize = 16.dp,
                         onClick = {
-                            onDestinationChanged(ChatRouterDestination.defaultForDMList)
+                            onDestinationChanged(ChatRouterDestination.Home)
                         },
                         onLongClick = onLongPressAvatar,
                         modifier = Modifier
@@ -315,6 +284,47 @@ fun ChannelSideDrawer(
                 )
             }
 
+
+            item(key = "discover") {
+                Box(
+                    Modifier
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable {
+                            onDestinationChanged(
+                                ChatRouterDestination.Discover
+                            )
+                        }
+                        .size(48.dp)
+                        .background(MaterialTheme.colorScheme.onPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_explore_24dp),
+                        contentDescription = stringResource(R.string.discover_alt)
+                    )
+                }
+            }
+
+            item(key = "add_server") {
+                Box(
+                    Modifier
+                        .padding(8.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            onShowAddServerSheet()
+                        }
+                        .size(48.dp)
+                        .background(MaterialTheme.colorScheme.onPrimary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_add_24dp),
+                        contentDescription = stringResource(R.string.server_plus_alt)
+                    )
+                }
+            }
+
             items(
                 serverList.size,
                 key = { serverList[it].id ?: it }
@@ -389,42 +399,6 @@ fun ChannelSideDrawer(
                 }
             }
 
-            item(key = "add_server") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onShowAddServerSheet()
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_add_24dp),
-                        contentDescription = stringResource(R.string.server_plus_alt)
-                    )
-                }
-            }
-
-            item(key = "discover") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            topNav.navigate("discover")
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_explore_24dp),
-                        contentDescription = stringResource(R.string.discover_alt)
-                    )
-                }
-            }
-
             if (showSettingsIcon) {
                 item(key = "settings") {
                     Box(
@@ -447,23 +421,14 @@ fun ChannelSideDrawer(
         }
         Column(
             Modifier
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .weight(1f)
+                .clip(shape = RoundedCornerShape(topStart = 24.dp))
+                .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                .weight(weight = 1f)
                 .fillMaxHeight()
         ) {
             Box(
                 Modifier
-                    .clip(
-                        MaterialTheme.shapes.medium.copy(
-                            topStart = CornerSize(0.dp),
-                            topEnd = CornerSize(0.dp)
-                        )
-                    )
-                    .height(
-                        serverBannerHeight + WindowInsets.statusBars.asPaddingValues()
-                            .calculateTopPadding()
-                    )
-                //.offset(y = WindowInsets.statusBars.asPaddingValues().calculateTopPadding())
+                    .height(serverBannerHeight)
             ) {
                 if (server?.banner != null) {
                     RemoteImage(
@@ -495,8 +460,7 @@ fun ChannelSideDrawer(
 
                 Row(
                     Modifier
-                        .padding(16.dp)
-                        .offset(y = serverInfoOffset),
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     CompositionLocalProvider(
@@ -538,7 +502,7 @@ fun ChannelSideDrawer(
 
                             Text(
                                 text = when (currentServer) {
-                                    null -> stringResource(R.string.direct_messages)
+                                    null -> stringResource(if (currentDestination is ChatRouterDestination.Discover) R.string.discover_servers else R.string.direct_messages)
                                     else -> server?.name ?: stringResource(R.string.unknown)
                                 },
                                 style = MaterialTheme.typography.titleMedium,
@@ -563,30 +527,35 @@ fun ChannelSideDrawer(
                     }
                 }
             }
-
-            if (currentServer == null) {
-                DirectMessagesChannelListRenderer(
-                    currentDestination,
-                    onDestinationChanged,
-                    channelListState,
-                    onOpenChannelContextSheet = { channelContextSheetTarget = it }
+            if (currentDestination is ChatRouterDestination.Discover) {
+                DiscoverServersList(
+                    onJoinToServerSuccess = navigateToServer
                 )
             } else {
-                ServerChannelListRenderer(
-                    categorisedChannels,
-                    currentDestination,
-                    onDestinationChanged,
-                    channelListState,
-                    onOpenChannelContextSheet = { channelContextSheetTarget = it },
-                    serverId = currentServer
-                )
+                if (currentServer == null) {
+                    DirectMessagesChannelListRenderer(
+                        currentDestination,
+                        onDestinationChanged,
+                        channelListState,
+                        onOpenChannelContextSheet = { channelContextSheetTarget = it }
+                    )
+                } else {
+                    ServerChannelListRenderer(
+                        categorisedChannels,
+                        currentDestination,
+                        onDestinationChanged,
+                        channelListState,
+                        onOpenChannelContextSheet = { channelContextSheetTarget = it },
+                        serverId = currentServer
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ColumnScope.DirectMessagesChannelListRenderer(
+private fun ColumnScope.DirectMessagesChannelListRenderer(
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     channelListState: LazyListState,
@@ -726,8 +695,9 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
     }
 }
 
+
 @Composable
-fun ColumnScope.ServerChannelListRenderer(
+private fun ColumnScope.ServerChannelListRenderer(
     categorisedChannels: List<CategorisedChannelList>?,
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,

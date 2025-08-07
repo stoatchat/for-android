@@ -36,6 +36,7 @@
     <string name="media_viewer_title_video">%1$s</string>
     <string name="media_viewer_share_audio">Partager l\'audio</string>
     <string name="direct_messages">Messages directs</string>
+    <string name="discover_servers">Découvrir des serveurs</string>
     <string name="message_field_placeholder_group">Envoyer un message dans %1$s</string>
     <string name="message_field_placeholder_notes">Ajouter une note</string>
     <string name="reply_message_empty_has_attachments">Pièces jointes envoyées</string>

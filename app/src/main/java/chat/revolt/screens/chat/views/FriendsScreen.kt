@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,14 +11,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -100,7 +95,6 @@ import chat.revolt.composables.generic.CountableListHeader
 import chat.revolt.composables.generic.UserAvatar
 import chat.revolt.internals.extensions.zero
 import chat.revolt.markdown.jbm.asHexString
-import chat.revolt.screens.chat.LocalIsConnected
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
 import kotlinx.coroutines.Dispatchers
@@ -474,72 +468,61 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
 
     Scaffold(
         topBar = {
-            Column {
-                AnimatedVisibility(LocalIsConnected.current) {
-                    Spacer(
-                        Modifier
-                            .height(
-                                WindowInsets.statusBars.asPaddingValues()
-                                    .calculateTopPadding()
-                            )
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.friends),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
-                }
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(R.string.friends),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    navigationIcon = {
-                        if (useDrawer) {
-                            IconButton(onClick = {
-                                onDrawerClicked()
-                            }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.icn_menu_24dp),
-                                    contentDescription = stringResource(id = R.string.menu)
-                                )
-                            }
-                        }
-                    },
-                    actions = {
+                },
+                navigationIcon = {
+                    if (useDrawer) {
                         IconButton(onClick = {
-                            overflowMenuShown = true
+                            onDrawerClicked()
                         }) {
                             Icon(
-                                painter = painterResource(R.drawable.icn_more_vert_24dp),
-                                contentDescription = stringResource(R.string.menu)
+                                painter = painterResource(R.drawable.icn_menu_24dp),
+                                contentDescription = stringResource(id = R.string.menu)
                             )
                         }
-                        DropdownMenu(
-                            expanded = overflowMenuShown,
-                            onDismissRequest = {
-                                overflowMenuShown = false
-                            }
-                        ) {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(stringResource(R.string.friends_deny_all_incoming))
-                                },
-                                onClick = {
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        overflowMenuShown = true
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.icn_more_vert_24dp),
+                            contentDescription = stringResource(R.string.menu)
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = overflowMenuShown,
+                        onDismissRequest = {
+                            overflowMenuShown = false
+                        }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(stringResource(R.string.friends_deny_all_incoming))
+                            },
+                            onClick = {
+                                scope.launch {
+                                    overflowMenuShown = false
+                                }
+                                with(Dispatchers.IO) {
                                     scope.launch {
-                                        overflowMenuShown = false
-                                    }
-                                    with(Dispatchers.IO) {
-                                        scope.launch {
-                                            FriendRequests.getIncoming()
-                                                .forEach { it.id?.let { id -> unfriendUser(id) } }
-                                        }
+                                        FriendRequests.getIncoming()
+                                            .forEach { it.id?.let { id -> unfriendUser(id) } }
                                     }
                                 }
-                            )
-                        }
-                    },
-                    windowInsets = WindowInsets.zero
-                )
-            }
+                            }
+                        )
+                    }
+                },
+                windowInsets = WindowInsets.zero
+            )
         },
     ) { pv ->
         Box(

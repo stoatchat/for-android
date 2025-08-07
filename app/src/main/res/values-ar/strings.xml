@@ -157,6 +157,7 @@
     <string name="channel_age_gate_dob_too_young">يجب أن يكون عمرك 18 عاما أو أكثر لعرض هذه القناة.</string>
     <string name="channel_age_gate_dob_invalid_future">لا يمكنك أن تولد في المستقبل.</string>
     <string name="direct_messages">الرسائل الخاصة</string>
+    <string name="discover_servers">اكتشف الخوادم</string>
     <string name="channel_dm">رسالة خاصة</string>
     <string name="channel_text">قناة نصية</string>
     <string name="channel_voice">قناة صوتية</string>

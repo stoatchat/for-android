@@ -91,14 +91,14 @@ private val PLATFORM_URLS = mapOf(
         kjbook = "https://revoltchat.github.io/android"
     ),
     ApplicationPlatform.PEP to PlatformUrls(
-        base = "https://a-pep.peptide.chat/api",
+        base = "https://pepchat.io/api",
         marketing = "https://peptide.chat",
         files = "https://cdn.pepusercontent.com",
-        january = "https://a-pep.peptide.chat/january",
+        january = "https://pepchat.io/january",
         app = "https://peptide.chat",
         invites = "https://pep.gg",
-        websocket = "wss://a-pep.peptide.chat/ws",
-        autumn = "https://a-pep.peptide.chat/autumn",
+        websocket = "wss://pepchat.io/ws",
+        autumn = "https://pepchat.io/autumn",
         // TODO: Replace with correct URL
         kjbook = "https://revoltchat.github.io/android"
         // TODO: Replace with correct URL
@@ -220,7 +220,7 @@ object RevoltAPI {
      * The currently selected platform.
      * Default is REVOLT.
      */
-    var selectedApplicationPlatform: ApplicationPlatform = ApplicationPlatform.REVOLT
+    var selectedApplicationPlatform: ApplicationPlatform = ApplicationPlatform.PEP
         private set
 
     /**
@@ -258,7 +258,7 @@ object RevoltAPI {
     // URL getter functions
     fun getCurrentBaseUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.base }
     fun getCurrentMarketingUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.marketing }
-    fun getCurrentFilesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.files }
+    fun getCurrentFilesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.autumn }
     fun getCurrentJanuaryUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.january }
     fun getCurrentAppUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.app }
     fun getCurrentInvitesUrl(): String = getUrlForPlatform(selectedApplicationPlatform) { it.invites }

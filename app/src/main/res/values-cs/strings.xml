@@ -171,6 +171,7 @@
     <string name="no_active_channel_body">Vyberte si server zleva a začněte. Pokud se cítíte odvážně, můžete si vytvořit nový server.</string>
     <string name="avatar_alt">Avatar uživatele %1$s</string>
     <string name="direct_messages">Přímé zprávy</string>
+    <string name="discover_servers">Prozkoumat servery</string>
     <string name="channel_notes">Poznámky</string>
     <string name="start_of_conversation">Toto je začátek vaší konverzace</string>
     <string name="message_field_placeholder_text">Zpráva #%1$s</string>

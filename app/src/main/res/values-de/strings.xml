@@ -215,6 +215,7 @@
     <string name="time_rift_heading">Möglicherweise fehlen an dieser Stelle Nachrichten.</string>
     <string name="reply_message_not_cached">Unbekannte Nachricht</string>
     <string name="direct_messages">Direktnachrichten</string>
+    <string name="discover_servers">Server entdecken</string>
     <string name="login_onboarding_heading">Finde deine Community und verbinde dich mit der Welt.</string>
     <string name="message_field_decoration_trusted_moderation_bot">Verifizierter Moderationsbot</string>
     <string name="message_field_denied_generic">Du kannst in diesem Kanal keine Nachrichten senden.</string>

@@ -197,6 +197,7 @@
     <string name="register_form_heading">Mennään laittamaan sinut kuntoon.</string>
     <string name="mfa_interstitial_lead">Sinulla on kaksivaiheinen todennus päällä että tilisi pystyy turvallisena.</string>
     <string name="direct_messages">Yksityisviestit</string>
+    <string name="discover_servers">Löydä palvelimia</string>
     <string name="channel_dm">Yksityisviesti</string>
     <string name="scroll_to_bottom">Siirry alas</string>
     <string name="report_message">Kiitoksia että raportoit tämän viestin. Anna syy viestin raportoinnille.</string>

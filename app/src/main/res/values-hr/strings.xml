@@ -199,6 +199,7 @@
     <string name="no_active_channel">Nisi u kanalu trenutno.</string>
     <string name="avatar_alt">%1$s korisnička slika</string>
     <string name="direct_messages">Privatne poruke</string>
+    <string name="discover_servers">Otkrij servere</string>
     <string name="channel_dm">Privatna poruka</string>
     <string name="channel_text">Tekstni kanal</string>
     <string name="channel_voice">Govorni kanal</string>

@@ -56,6 +56,7 @@
     <string name="no_active_channel">あなたは今チャンネルにいません。</string>
     <string name="avatar_alt">%1$sのアバター</string>
     <string name="direct_messages">ダイレクトメッセージ</string>
+    <string name="discover_servers">サーバーを探す</string>
     <string name="channel_dm">ダイレクトメッセージ</string>
     <string name="channel_text">テキストチャンネル</string>
     <string name="channel_voice">ボイスチャンネル</string>

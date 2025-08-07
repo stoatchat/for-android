@@ -166,7 +166,7 @@ class MainActivityViewModel @Inject constructor(
         try {
             val res = RevoltHttp.get("/".api())
             return res.status.value == 200
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return false
         }
     }
@@ -225,7 +225,7 @@ class MainActivityViewModel @Inject constructor(
             val canReachRevolt = canReachRevolt()
             val valid = try {
                 RevoltAPI.checkSessionToken(token)
-            } catch (e: Throwable) {
+            } catch (_: Throwable) {
                 false
             }
 
@@ -275,7 +275,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             kvStorage.remove("sessionToken")
             kvStorage.remove("sessionId")
-            startWithDestination("login/greeting")
+            startWithDestination("choose-platform")
         }
     }
 
@@ -430,7 +430,6 @@ class MainActivity : AppCompatActivity() {
 val RevoltTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)
 val RevoltTweenFloat: FiniteAnimationSpec<Float> = tween(400, easing = EaseInOutExpo)
 val RevoltTweenDp: FiniteAnimationSpec<Dp> = tween(400, easing = EaseInOutExpo)
-val RevoltTweenColour: FiniteAnimationSpec<Color> = tween(400, easing = EaseInOutExpo)
 
 val NavTweenInt: FiniteAnimationSpec<IntOffset> = tween(350, easing = EaseInOutExpo)
 val NavTweenFloat: FiniteAnimationSpec<Float> = tween(350, easing = EaseInOutExpo)
@@ -694,10 +693,11 @@ fun AppEntrypoint(
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelScreen(
                             channelId = channelId,
-                            onToggleDrawer = {},
                             useDrawer = false,
                             useBackButton = true,
-                            backToChannelsScreen = {},
+                            backToChannelsScreen = {
+                                navController.navigate("main")
+                            },
                             backButtonAction = {
                                 navController.popBackStack()
                             },

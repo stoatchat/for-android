@@ -216,6 +216,7 @@
     <string name="back">← Назад</string>
     <string name="reply_message_not_cached">Невідоме повідомлення</string>
     <string name="direct_messages">Особисті повідомлення</string>
+    <string name="discover_servers">Знайти сервери</string>
     <string name="oss_attribution_body">Revolt побудований за допомогою цих чудових проєктів із відкритим вихідним кодом.</string>
     <string name="oss_attribution_generation_date">Останнє оновлення: %1$s</string>
     <string name="oss_attribution_body_2">Ми вдячні розробникам цих проєктів за те, що вони зробили свою роботу доступною для світу.</string>

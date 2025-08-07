@@ -216,6 +216,7 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">O Material You não é suportado por este dispositivo.</string>
     <string name="onboarding_changeable">Mas se mudares de ideias, podes sempre mudá-lo nas tuas Definições de Utilizador.</string>
     <string name="direct_messages">Mensagens diretas</string>
+    <string name="discover_servers">Descobrir servidores</string>
     <string name="about_full_name">Revolt no Android</string>
     <string name="about_brought_to_you_by">Trazido a ti com ❤️ pela equipa do Revolt.</string>
     <string name="about_tab_version">Versão</string>

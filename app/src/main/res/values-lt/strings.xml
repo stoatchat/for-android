@@ -210,6 +210,7 @@
     <string name="channel_age_gate_dob_invalid_unlikely">Negalite būti gimęs anksčiau nei %1$d.</string>
     <string name="avatar_alt">%1$s avataras</string>
     <string name="direct_messages">Tiesioginės žinutės</string>
+    <string name="discover_servers">Atrasti serverius</string>
     <string name="channel_dm">Tiesioginė žinutė</string>
     <string name="channel_text">Teksto kanalas</string>
     <string name="channel_voice">Balso kanalas</string>

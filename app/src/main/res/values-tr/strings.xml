@@ -216,6 +216,7 @@
     <string name="reply_message_empty_has_attachments">Ek dosyalar gönder</string>
     <string name="settings_appearance_theme_amoled">Saf Siyah</string>
     <string name="direct_messages">Direkt Mesajlar</string>
+    <string name="discover_servers">Sunucuları Keşfet</string>
     <string name="about_tab_version">Sürüm</string>
     <string name="emoji_category_food">Yiyecek &amp; İçecek</string>
     <string name="emoji_category_travel">Seyahat &amp; Yerler</string>

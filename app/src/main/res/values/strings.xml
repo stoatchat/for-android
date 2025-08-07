@@ -226,6 +226,8 @@
     <string name="avatar_alt">%1$s\'s avatar</string>
 
     <string name="direct_messages">Direct Messages</string>
+    <string name="discover_servers">Discover Servers</string>
+    <string name="discover_servers_description">Join trending and official groups to be part of something big.</string>
 
     <string name="channel_dm">Direct Message</string>
     <string name="channel_text">Text Channel</string>
@@ -541,15 +543,17 @@
     <string name="link_type_no_intent">No app found to handle this link</string>
     <string name="link_open">Open</string>
 
-    <string name="invite_message">You\'ve been invited to join this server. Would you like to join?</string>
-    <string name="invite_join">Join</string>
-    <string name="invite_cancel">Cancel</string>
+    <string name="invite_message">You’ve been invited to join</string>
+    <string name="invite_join">Accept Invite</string>
+    <string name="invite_cancel">No Thanks</string>
     <string name="invite_already_member">You are already a member of this server.</string>
-    <string name="invite_error_header">There was an error</string>
+    <string name="members_count">%1$d members</string>
+    <string name="invite_error_header">Link No Longer Valid</string>
     <string name="invite_error_no_invite">No invite code was specified.</string>
-    <string name="invite_error_invalid_invite">Could not find an invite with the specified code.</string>
+    <string name="invite_error_invalid_invite">This link seems invalid or expired. Reach out for a new invite.</string>
     <string name="invite_error_banned">You are banned from this server.</string>
     <string name="invite_error_unknown">An unknown error occurred.</string>
+    <string name="joining">Joining…</string>
 
     <string name="media_viewer_title_image">%1$s</string>
     <string name="media_viewer_title_video">%1$s</string>
@@ -803,4 +807,9 @@
     <string name="geogate_description">Revolt may block content in certain jurisdictions in response to legislation or legal notices</string>
     <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
     <string name="geogate_acknowledge">Acknowledge</string>
+
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="no_servers_found">No Servers Found</string>
+    <string name="no_servers_description">There are no servers available at the moment. Please try again later.</string>
 </resources>
