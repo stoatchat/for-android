@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -35,6 +36,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
@@ -69,6 +71,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
@@ -94,7 +97,8 @@ import chat.revolt.composables.screens.chat.discover.DiscoverServersList
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.sheets.ChannelContextSheet
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
     ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
@@ -551,7 +555,7 @@ fun ChannelSideDrawer(
                 }
             }
         }
-        if(currentDestination is ChatRouterDestination.Home){
+        if (currentDestination is ChatRouterDestination.Home) {
             FloatingActionButton(
                 modifier = Modifier
                     .padding(16.dp)
@@ -569,6 +573,84 @@ fun ChannelSideDrawer(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun DirectMessagesChannelListRendererPreview() {
+    val mockChannels = listOf(
+        Channel(id = "1", name = "Saved Messages", channelType = ChannelType.SavedMessages),
+        Channel(
+            id = "2",
+            name = "User One",
+            channelType = ChannelType.DirectMessage,
+            lastMessageID = "msg1"
+        ),
+        Channel(
+            id = "3",
+            name = "Group Chat Alpha",
+            channelType = ChannelType.Group,
+            icon = null,
+            lastMessageID = "msg2"
+        ),
+        Channel(
+            id = "4",
+            name = "User Two",
+            channelType = ChannelType.DirectMessage,
+            active = false
+        ), // inactive DM
+        Channel(
+            id = "5",
+            name = "Another Group",
+            channelType = ChannelType.Group,
+            icon = null,
+            lastMessageID = "msg3"
+        )
+    )
+    val mockUsers = mapOf(
+        "user1_id" to User(id = "user1_id", username = "User One", avatar = null, online = true),
+        "user2_id" to User(id = "user2_id", username = "User Two", avatar = null, online = false)
+    )
+
+    // Simulate RevoltAPI cache for preview
+    RevoltAPI.channelCache.clear()
+    mockChannels.forEach { RevoltAPI.channelCache[it.id!!] = it }
+    RevoltAPI.userCache.clear()
+    mockUsers.forEach { (id, user) -> RevoltAPI.userCache[id] = user }
+
+
+    //ColumnScope is required for DirectMessagesChannelListRenderer, let's provide a dummy one
+    Column(Modifier.background(MaterialTheme.colorScheme.surface)) {
+        DirectMessagesChannelListRenderer(
+            currentDestination = ChatRouterDestination.Home,
+            onDestinationChanged = {},
+            channelListState = rememberLazyListState(),
+            onOpenChannelContextSheet = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DirectMessagesChannelListRendererEmptyPreview() {
+    // Simulate RevoltAPI cache for preview - empty state
+    RevoltAPI.channelCache.clear()
+    RevoltAPI.channelCache["saved_notes_channel_id"] = Channel(
+        id = "saved_notes_channel_id",
+        name = "Saved Messages",
+        channelType = ChannelType.SavedMessages
+    )
+    RevoltAPI.userCache.clear()
+
+    //ColumnScope is required for DirectMessagesChannelListRenderer, let's provide a dummy one
+    Column(Modifier.background(MaterialTheme.colorScheme.surface)) {
+        DirectMessagesChannelListRenderer(
+            currentDestination = ChatRouterDestination.Home,
+            onDestinationChanged = {},
+            channelListState = rememberLazyListState(),
+            onOpenChannelContextSheet = {}
+        )
     }
 }
 
@@ -632,46 +714,89 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
             Spacer(Modifier.height(4.dp))
         }
 
-        items(
-            dmAbleChannels.size,
-            key = { dmAbleChannels[it].id ?: it }
-        ) {
-            val channel = dmAbleChannels.getOrNull(it) ?: return@items
-
-            val partner =
-                if (channel.channelType == ChannelType.DirectMessage) {
-                    RevoltAPI.userCache[
-                        ChannelUtils.resolveDMPartner(
-                            channel
+        if (dmAbleChannels.isEmpty()) {
+            item(key = "empty-list-state") {
+                Column(
+                    Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(100.dp),
+                        painter = painterResource(R.drawable.empty_direct_messages_img),
+                        contentDescription = "Empty Messages Sad Image"
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "It’s Quiet Here...",
+                        style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.Center,
+                        fontSize = 24.sp
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = "Find friends to chat with or create a group conversation.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Button(
+                        onClick = {
+                            onDestinationChanged(ChatRouterDestination.Friends)
+                        },
+                        shape = MaterialTheme.shapes.small.copy(
+                            topStart = CornerSize(8.dp),
+                            topEnd = CornerSize(8.dp),
+                            bottomStart = CornerSize(8.dp),
+                            bottomEnd = CornerSize(8.dp)
                         )
-                    ]
-                } else {
-                    null
+                    ) {
+                        Text(text = "New Conversation")
+                    }
                 }
+            }
+        } else {
+            items(
+                dmAbleChannels.size,
+                key = { dmAbleChannels[it].id ?: it }
+            ) {
+                val channel = dmAbleChannels.getOrNull(it) ?: return@items
 
-            DMOrGroupItem(
-                channel = channel,
-                partner = partner,
-                isCurrent = when (currentDestination) {
-                    is ChatRouterDestination.Channel -> {
-                        currentDestination.channelId == channel.id
+                val partner =
+                    if (channel.channelType == ChannelType.DirectMessage) {
+                        RevoltAPI.userCache[
+                            ChannelUtils.resolveDMPartner(
+                                channel
+                            )
+                        ]
+                    } else {
+                        null
                     }
 
-                    else -> false
-                },
-                hasUnread = channel.lastMessageID?.let { lastMessageID ->
-                    RevoltAPI.unreads.hasUnread(
-                        channel.id!!,
-                        lastMessageID,
-                        serverId = null
-                    )
-                } ?: false,
-                isMuted = NotificationSettingsProvider.isChannelMuted(channel.id!!, null),
-                onDestinationChanged = { dest ->
-                    onDestinationChanged(dest)
-                },
-                onOpenChannelContextSheet = onOpenChannelContextSheet
-            )
+                DMOrGroupItem(
+                    channel = channel,
+                    partner = partner,
+                    isCurrent = when (currentDestination) {
+                        is ChatRouterDestination.Channel -> {
+                            currentDestination.channelId == channel.id
+                        }
+
+                        else -> false
+                    },
+                    hasUnread = channel.lastMessageID?.let { lastMessageID ->
+                        RevoltAPI.unreads.hasUnread(
+                            channel.id!!,
+                            lastMessageID,
+                            serverId = null
+                        )
+                    } ?: false,
+                    isMuted = NotificationSettingsProvider.isChannelMuted(channel.id!!, null),
+                    onDestinationChanged = { dest ->
+                        onDestinationChanged(dest)
+                    },
+                    onOpenChannelContextSheet = onOpenChannelContextSheet
+                )
+            }
         }
 
         item(key = "last") {
