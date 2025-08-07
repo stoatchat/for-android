@@ -17,12 +17,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DrawerValue
@@ -56,6 +53,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -851,8 +849,9 @@ fun ChannelNavigator(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Home,
+                                    painter = painterResource(R.drawable.ic_bottom_navbar_home),
                                     contentDescription = "Home",
+                                    modifier = Modifier.size(32.dp)
                                 )
                             },
                             label = {
@@ -873,8 +872,9 @@ fun ChannelNavigator(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Person,
+                                    painter = painterResource(R.drawable.ic_bottom_navbar_friends),
                                     contentDescription = "Friends",
+                                    modifier = Modifier.size(32.dp)
                                 )
                             },
                             label = {
@@ -889,8 +889,9 @@ fun ChannelNavigator(
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    imageVector = Icons.Default.Face,
+                                    painter = painterResource(R.drawable.ic_bottom_navbar_you),
                                     contentDescription = "You",
+                                    modifier = Modifier.size(32.dp)
                                 )
                             },
                             label = {

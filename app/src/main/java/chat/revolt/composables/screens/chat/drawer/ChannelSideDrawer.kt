@@ -208,12 +208,13 @@ fun ChannelSideDrawer(
                                     onDestinationChanged(ChatRouterDestination.Home)
                                 }
                                 .size(48.dp)
-                                .background(MaterialTheme.colorScheme.secondaryContainer),
+                                .background(MaterialTheme.colorScheme.primaryContainer),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_message_text_24dp),
-                                contentDescription = stringResource(R.string.discover_alt)
+                                painter = painterResource(R.drawable.ic_direct_messages),
+                                contentDescription = stringResource(R.string.discover_alt),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         }
                     }
@@ -298,7 +299,7 @@ fun ChannelSideDrawer(
                                 )
                             }
                             .size(48.dp)
-                            .background(MaterialTheme.colorScheme.onPrimary),
+                            .background(MaterialTheme.colorScheme.secondaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -317,7 +318,7 @@ fun ChannelSideDrawer(
                                 onShowAddServerSheet()
                             }
                             .size(48.dp)
-                            .background(MaterialTheme.colorScheme.onPrimary),
+                            .background(MaterialTheme.colorScheme.secondaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -563,13 +564,14 @@ fun ChannelSideDrawer(
                 onClick = {
                     onDestinationChanged(ChatRouterDestination.Friends)
                 },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 shape = CircleShape
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.icn_message_24dp),
-                    contentDescription = stringResource(R.string.message_friends)
+                    painter = painterResource(R.drawable.ic_new_message),
+                    contentDescription = stringResource(R.string.message_friends),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
             }
         }
