@@ -674,44 +674,40 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
             .fillMaxSize()
             .weight(1f)
     ) {
-        item("top-divider") {
-            HorizontalDivider(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-        }
-
         item(key = "saved_messages") {
             val notesChannel = RevoltAPI.channelCache.values.firstOrNull {
                 it.channelType == ChannelType.SavedMessages
             }
 
             if (notesChannel != null) {
-                ChannelItem(
-                    channel = Channel(
-                        id = notesChannel.id,
-                        name = stringResource(R.string.channel_notes),
-                        channelType = ChannelType.SavedMessages
-                    ),
-                    isCurrent = currentDestination is ChatRouterDestination.Channel &&
-                            currentDestination.channelId == notesChannel.id,
-                    onDestinationChanged = {
-                        onDestinationChanged(it)
-                    },
-                    hasUnread = false,
-                    onOpenChannelContextSheet = {},
+                HorizontalDivider(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
+                Column(Modifier.fillMaxWidth()) {
+                    ChannelItem(
+                        channel = Channel(
+                            id = notesChannel.id,
+                            name = stringResource(R.string.channel_notes),
+                            channelType = ChannelType.SavedMessages
+                        ),
+                        isCurrent = currentDestination is ChatRouterDestination.Channel &&
+                                currentDestination.channelId == notesChannel.id,
+                        onDestinationChanged = {
+                            onDestinationChanged(it)
+                        },
+                        hasUnread = false,
+                        onOpenChannelContextSheet = {},
+                    )
+                    HorizontalDivider(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
             }
-        }
-
-        item("bottom-divider") {
-            HorizontalDivider(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            )
-            Spacer(Modifier.height(4.dp))
         }
 
         if (dmAbleChannels.isEmpty()) {
