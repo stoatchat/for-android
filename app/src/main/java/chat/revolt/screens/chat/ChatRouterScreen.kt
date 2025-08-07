@@ -932,7 +932,6 @@ fun ChannelNavigator(
                                     else -> null
                                 },
                                 navigateToServer = viewModel::navigateToServer,
-                                onLongPressAvatar = onShowStatusSheet,
                                 onShowServerContextSheet = onShowServerContextSheet,
                                 showSettingsIcon = isTouchExplorationEnabled,
                                 onOpenSettings = {

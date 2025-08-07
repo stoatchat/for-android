@@ -1,13 +1,21 @@
 package chat.revolt.composables.screens.chat
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import chat.revolt.R
 import chat.revolt.api.schemas.ChannelType
 
@@ -31,11 +39,20 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
         }
 
         ChannelType.SavedMessages -> {
-            Icon(
-                painter = painterResource(R.drawable.icn_note_stack_24dp),
-                contentDescription = stringResource(R.string.channel_notes),
-                modifier = modifier
-            )
+            Box(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(32.dp)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.icn_note_stack_24dp),
+                    contentDescription = stringResource(R.string.channel_notes),
+                    modifier = modifier
+                        .padding(6.dp)
+
+                )
+            }
         }
 
         ChannelType.DirectMessage -> {

@@ -35,7 +35,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonMenu
+import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +50,9 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleFloatingActionButton
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
+import androidx.compose.material3.animateFloatingActionButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -60,9 +70,13 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -73,7 +87,6 @@ import chat.revolt.api.RevoltAPI
 import chat.revolt.api.internals.CategorisedChannelList
 import chat.revolt.api.internals.ChannelUtils
 import chat.revolt.api.internals.DirectMessages
-import chat.revolt.api.internals.FriendRequests
 import chat.revolt.api.schemas.Category
 import chat.revolt.api.schemas.Channel
 import chat.revolt.api.schemas.ChannelType
@@ -93,13 +106,14 @@ import chat.revolt.composables.screens.chat.discover.DiscoverServersList
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.sheets.ChannelContextSheet
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 @Composable
 fun ChannelSideDrawer(
     currentServer: String?,
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
-    onLongPressAvatar: () -> Unit,
     navigateToServer: (String) -> Unit,
     onShowServerContextSheet: (String) -> Unit,
     showSettingsIcon: Boolean,
@@ -183,372 +197,388 @@ fun ChannelSideDrawer(
         }
     }
 
-    Row(modifier.fillMaxSize()) {
-        LazyColumn(
-            Modifier.width(64.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            stickyHeader(key = "self") {
-                Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                    UserAvatar(
-                        username = RevoltAPI.userCache[RevoltAPI.selfId]?.let {
-                            User.resolveDefaultName(
-                                it
+
+
+    Box {
+        Row(modifier.fillMaxSize()) {
+            LazyColumn(
+                Modifier.width(64.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                stickyHeader(key = "self") {
+                    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+                        Box(
+                            Modifier
+                                .padding(8.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {
+                                    onDestinationChanged(ChatRouterDestination.Home)
+                                }
+                                .size(48.dp)
+                                .background(MaterialTheme.colorScheme.secondaryContainer),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_message_text_24dp),
+                                contentDescription = stringResource(R.string.discover_alt)
                             )
                         }
-                            ?: "",
-                        presence = presenceFromStatus(
-                            RevoltAPI.userCache[RevoltAPI.selfId]?.status?.presence,
-                            RevoltAPI.userCache[RevoltAPI.selfId]?.online ?: false
-                        ),
-                        userId = RevoltAPI.selfId ?: "",
-                        avatar = RevoltAPI.userCache[RevoltAPI.selfId]?.avatar,
-                        size = 48.dp,
-                        presenceSize = 16.dp,
-                        onClick = {
-                            onDestinationChanged(ChatRouterDestination.Home)
-                        },
-                        onLongClick = onLongPressAvatar,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    )
+                    }
                 }
-            }
 
-            items(
-                DirectMessages.unreadDMs().size,
-                key = { DirectMessages.unreadDMs()[it].id ?: it }
-            ) {
-                val dm = DirectMessages.unreadDMs()[it]
-                when (dm.channelType) {
-                    ChannelType.Group -> GroupIcon(
-                        name = dm.name ?: "?",
-                        size = 48.dp,
-                        onClick = {
-                            dm.id?.let { id ->
-                                onDestinationChanged(ChatRouterDestination.Channel(id))
-                            }
-                        },
-                        icon = dm.icon,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    )
-
-                    else -> {
-                        val partner =
-                            if (dm.channelType == ChannelType.DirectMessage) {
-                                RevoltAPI.userCache[
-                                    ChannelUtils.resolveDMPartner(
-                                        dm
-                                    )
-                                ]
-                            } else {
-                                null
-                            }
-
-                        UserAvatar(
-                            username = partner?.let { p ->
-                                User.resolveDefaultName(
-                                    p
-                                )
-                            } ?: dm.name ?: "?",
-                            presence = presenceFromStatus(
-                                partner?.status?.presence,
-                                partner?.online ?: false
-                            ),
-                            userId = partner?.id ?: dm.id ?: "",
-                            avatar = partner?.avatar ?: dm.icon,
+                items(
+                    count = DirectMessages.unreadDMs().size,
+                    key = { DirectMessages.unreadDMs()[it].id ?: it }
+                ) {
+                    val dm = DirectMessages.unreadDMs()[it]
+                    when (dm.channelType) {
+                        ChannelType.Group -> GroupIcon(
+                            name = dm.name ?: "?",
                             size = 48.dp,
-                            presenceSize = 16.dp,
                             onClick = {
                                 dm.id?.let { id ->
                                     onDestinationChanged(ChatRouterDestination.Channel(id))
                                 }
                             },
+                            icon = dm.icon,
                             modifier = Modifier
                                 .padding(8.dp)
                                 .size(48.dp)
                         )
-                    }
-                }
-            }
 
-            item(key = "divider") {
-                HorizontalDivider(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                )
-            }
+                        else -> {
+                            val partner =
+                                if (dm.channelType == ChannelType.DirectMessage) {
+                                    RevoltAPI.userCache[
+                                        ChannelUtils.resolveDMPartner(
+                                            dm
+                                        )
+                                    ]
+                                } else {
+                                    null
+                                }
 
-
-            item(key = "discover") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .clickable {
-                            onDestinationChanged(
-                                ChatRouterDestination.Discover
-                            )
-                        }
-                        .size(48.dp)
-                        .background(MaterialTheme.colorScheme.onPrimary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_explore_24dp),
-                        contentDescription = stringResource(R.string.discover_alt)
-                    )
-                }
-            }
-
-            item(key = "add_server") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onShowAddServerSheet()
-                        }
-                        .size(48.dp)
-                        .background(MaterialTheme.colorScheme.onPrimary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icn_add_24dp),
-                        contentDescription = stringResource(R.string.server_plus_alt)
-                    )
-                }
-            }
-
-            items(
-                serverList.size,
-                key = { serverList[it].id ?: it }
-            ) {
-                val serverInList = serverList[it]
-                val serverHasUnread =
-                    serverInList.id?.let { srvId -> RevoltAPI.unreads.serverHasUnread(srvId) }
-                        ?: false
-                val leftIndicatorHeight = animateDpAsState(
-                    targetValue = if (serverInList.id == currentServer) 32.dp
-                    else if (serverHasUnread) 8.dp
-                    else 0.dp,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    ), label = "Left indicator width"
-                )
-                val leftIndicatorColour = animateColorAsState(
-                    targetValue =
-                        if (serverInList.id == currentServer)
-                            MaterialTheme.colorScheme.primary
-                        else if (serverHasUnread)
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        else
-                            Color.Transparent,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    ),
-                    label = "Left indicator colour"
-                )
-
-                Box(Modifier.fillMaxWidth()) {
-                    Box(
-                        Modifier
-                            .padding(8.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                serverInList.id?.let { srvId -> navigateToServer(srvId) }
-                            }) {
-                        val icon = serverInList.icon?.id?.let { iconId ->
-                            "${RevoltAPI.getCurrentFilesUrl()}/icons/$iconId"
-                        }
-                        if (icon != null) {
-                            RemoteImage(
-                                url = icon,
-                                allowAnimation = false,
+                            UserAvatar(
+                                username = partner?.let { p ->
+                                    User.resolveDefaultName(
+                                        p
+                                    )
+                                } ?: dm.name ?: "?",
+                                presence = presenceFromStatus(
+                                    partner?.status?.presence,
+                                    partner?.online ?: false
+                                ),
+                                userId = partner?.id ?: dm.id ?: "",
+                                avatar = partner?.avatar ?: dm.icon,
+                                size = 48.dp,
+                                presenceSize = 16.dp,
+                                onClick = {
+                                    dm.id?.let { id ->
+                                        onDestinationChanged(ChatRouterDestination.Channel(id))
+                                    }
+                                },
                                 modifier = Modifier
+                                    .padding(8.dp)
                                     .size(48.dp)
-                                    .clip(CircleShape),
-                                description = serverInList.name ?: stringResource(R.string.unknown)
-                            )
-                        } else {
-                            IconPlaceholder(
-                                name = serverInList.name ?: stringResource(R.string.unknown),
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
                             )
                         }
                     }
+                }
 
-                    Box(
+                item(key = "divider") {
+                    HorizontalDivider(
                         Modifier
-                            .height(leftIndicatorHeight.value)
-                            .width(8.dp)
-                            .offset(x = (-4).dp)
-                            .clip(CircleShape)
-                            .background(leftIndicatorColour.value)
-                            .align(Alignment.CenterStart)
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
                     )
                 }
-            }
 
-            if (showSettingsIcon) {
-                item(key = "settings") {
+
+                item(key = "discover") {
                     Box(
                         Modifier
                             .padding(8.dp)
-                            .clip(CircleShape)
+                            .clip(RoundedCornerShape(16.dp))
                             .clickable {
-                                onOpenSettings()
+                                onDestinationChanged(
+                                    ChatRouterDestination.Discover
+                                )
                             }
-                            .size(48.dp),
+                            .size(48.dp)
+                            .background(MaterialTheme.colorScheme.onPrimary),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_settings_24dp),
-                            contentDescription = stringResource(R.string.settings)
+                            painter = painterResource(R.drawable.icn_explore_24dp),
+                            contentDescription = stringResource(R.string.discover_alt)
+                        )
+                    }
+                }
+
+                item(key = "add_server") {
+                    Box(
+                        Modifier
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                onShowAddServerSheet()
+                            }
+                            .size(48.dp)
+                            .background(MaterialTheme.colorScheme.onPrimary),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.icn_add_24dp),
+                            contentDescription = stringResource(R.string.server_plus_alt)
+                        )
+                    }
+                }
+
+                items(
+                    serverList.size,
+                    key = { serverList[it].id ?: it }
+                ) {
+                    val serverInList = serverList[it]
+                    val serverHasUnread =
+                        serverInList.id?.let { srvId -> RevoltAPI.unreads.serverHasUnread(srvId) }
+                            ?: false
+                    val leftIndicatorHeight = animateDpAsState(
+                        targetValue = if (serverInList.id == currentServer) 32.dp
+                        else if (serverHasUnread) 8.dp
+                        else 0.dp,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ), label = "Left indicator width"
+                    )
+                    val leftIndicatorColour = animateColorAsState(
+                        targetValue =
+                            if (serverInList.id == currentServer)
+                                MaterialTheme.colorScheme.primary
+                            else if (serverHasUnread)
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            else
+                                Color.Transparent,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        ),
+                        label = "Left indicator colour"
+                    )
+
+                    Box(Modifier.fillMaxWidth()) {
+                        Box(
+                            Modifier
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    serverInList.id?.let { srvId -> navigateToServer(srvId) }
+                                }) {
+                            val icon = serverInList.icon?.id?.let { iconId ->
+                                "${RevoltAPI.getCurrentFilesUrl()}/icons/$iconId"
+                            }
+                            if (icon != null) {
+                                RemoteImage(
+                                    url = icon,
+                                    allowAnimation = false,
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .clip(CircleShape),
+                                    description = serverInList.name
+                                        ?: stringResource(R.string.unknown)
+                                )
+                            } else {
+                                IconPlaceholder(
+                                    name = serverInList.name ?: stringResource(R.string.unknown),
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .clip(CircleShape)
+                                )
+                            }
+                        }
+
+                        Box(
+                            Modifier
+                                .height(leftIndicatorHeight.value)
+                                .width(8.dp)
+                                .offset(x = (-4).dp)
+                                .clip(CircleShape)
+                                .background(leftIndicatorColour.value)
+                                .align(Alignment.CenterStart)
+                        )
+                    }
+                }
+
+                if (showSettingsIcon) {
+                    item(key = "settings") {
+                        Box(
+                            Modifier
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    onOpenSettings()
+                                }
+                                .size(48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.icn_settings_24dp),
+                                contentDescription = stringResource(R.string.settings)
+                            )
+                        }
+                    }
+                }
+            }
+            Column(
+                Modifier
+                    .clip(shape = RoundedCornerShape(topStart = 24.dp))
+                    .background(color = MaterialTheme.colorScheme.surfaceContainer)
+                    .weight(weight = 1f)
+                    .fillMaxHeight()
+            ) {
+                Box(
+                    Modifier
+                        .height(serverBannerHeight)
+                ) {
+                    if (server?.banner != null) {
+                        RemoteImage(
+                            url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
+                            description = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+
+                        with(MaterialTheme.colorScheme) {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .drawBehind {
+                                        drawRect(
+                                            Brush.linearGradient(
+                                                listOf(
+                                                    Color.Black.copy(alpha = 0.6f),
+                                                    Color.Transparent
+                                                ),
+                                                Offset.Zero,
+                                                Offset.Infinite.copy(x = 0f)
+                                            ),
+                                        )
+                                    })
+                        }
+                    }
+
+                    Row(
+                        Modifier
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        CompositionLocalProvider(
+                            LocalContentColor provides
+                                    if (server?.banner != null) Color.White
+                                    else LocalContentColor.current
+                        ) {
+                            Row(
+                                Modifier.weight(1f),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                if (server?.flags has ServerFlags.Official) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = R.drawable.ic_revolt_decagram_24dp
+                                        ),
+                                        contentDescription = stringResource(
+                                            R.string.server_flag_official
+                                        ),
+                                        tint = LocalContentColor.current,
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                    )
+                                }
+                                if (server?.flags has ServerFlags.Verified) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = R.drawable.ic_check_decagram_24dp
+                                        ),
+                                        contentDescription = stringResource(
+                                            R.string.server_flag_verified
+                                        ),
+                                        tint = LocalContentColor.current,
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                    )
+                                }
+
+                                Text(
+                                    text = when (currentServer) {
+                                        null -> stringResource(if (currentDestination is ChatRouterDestination.Discover) R.string.discover_servers else R.string.direct_messages)
+                                        else -> server?.name ?: stringResource(R.string.unknown)
+                                    },
+                                    style = MaterialTheme.typography.titleMedium,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+
+                            if (currentServer != null) {
+                                IconButton(onClick = {
+                                    server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
+                                }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_more_vert_24dp),
+                                        contentDescription = stringResource(R.string.menu),
+                                        tint = LocalContentColor.current
+                                    )
+                                }
+                            } else {
+                                Spacer(Modifier.height(64.dp))
+                            }
+                        }
+                    }
+                }
+                if (currentDestination is ChatRouterDestination.Discover) {
+                    DiscoverServersList(
+                        onJoinToServerSuccess = navigateToServer
+                    )
+                } else {
+                    if (currentServer == null) {
+                        DirectMessagesChannelListRenderer(
+                            currentDestination,
+                            onDestinationChanged,
+                            channelListState,
+                            onOpenChannelContextSheet = { channelContextSheetTarget = it }
+                        )
+                    } else {
+                        ServerChannelListRenderer(
+                            categorisedChannels,
+                            currentDestination,
+                            onDestinationChanged,
+                            channelListState,
+                            onOpenChannelContextSheet = { channelContextSheetTarget = it },
+                            serverId = currentServer
                         )
                     }
                 }
             }
         }
-        Column(
-            Modifier
-                .clip(shape = RoundedCornerShape(topStart = 24.dp))
-                .background(color = MaterialTheme.colorScheme.surfaceContainer)
-                .weight(weight = 1f)
-                .fillMaxHeight()
-        ) {
-            Box(
-                Modifier
-                    .height(serverBannerHeight)
+        if(currentDestination is ChatRouterDestination.Home){
+            FloatingActionButton(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomEnd),
+                onClick = {
+                    onDestinationChanged(ChatRouterDestination.Friends)
+                },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = CircleShape
             ) {
-                if (server?.banner != null) {
-                    RemoteImage(
-                        url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
-                        description = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                    )
-
-                    with(MaterialTheme.colorScheme) {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .drawBehind {
-                                    drawRect(
-                                        Brush.linearGradient(
-                                            listOf(
-                                                Color.Black.copy(alpha = 0.6f),
-                                                Color.Transparent
-                                            ),
-                                            Offset.Zero,
-                                            Offset.Infinite.copy(x = 0f)
-                                        ),
-                                    )
-                                })
-                    }
-                }
-
-                Row(
-                    Modifier
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CompositionLocalProvider(
-                        LocalContentColor provides
-                                if (server?.banner != null) Color.White
-                                else LocalContentColor.current
-                    ) {
-                        Row(
-                            Modifier.weight(1f),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            if (server?.flags has ServerFlags.Official) {
-                                Icon(
-                                    painter = painterResource(
-                                        id = R.drawable.ic_revolt_decagram_24dp
-                                    ),
-                                    contentDescription = stringResource(
-                                        R.string.server_flag_official
-                                    ),
-                                    tint = LocalContentColor.current,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                )
-                            }
-                            if (server?.flags has ServerFlags.Verified) {
-                                Icon(
-                                    painter = painterResource(
-                                        id = R.drawable.ic_check_decagram_24dp
-                                    ),
-                                    contentDescription = stringResource(
-                                        R.string.server_flag_verified
-                                    ),
-                                    tint = LocalContentColor.current,
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                )
-                            }
-
-                            Text(
-                                text = when (currentServer) {
-                                    null -> stringResource(if (currentDestination is ChatRouterDestination.Discover) R.string.discover_servers else R.string.direct_messages)
-                                    else -> server?.name ?: stringResource(R.string.unknown)
-                                },
-                                style = MaterialTheme.typography.titleMedium,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-
-                        if (currentServer != null) {
-                            IconButton(onClick = {
-                                server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
-                            }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.icn_more_vert_24dp),
-                                    contentDescription = stringResource(R.string.menu),
-                                    tint = LocalContentColor.current
-                                )
-                            }
-                        } else {
-                            Spacer(Modifier.height(64.dp))
-                        }
-                    }
-                }
-            }
-            if (currentDestination is ChatRouterDestination.Discover) {
-                DiscoverServersList(
-                    onJoinToServerSuccess = navigateToServer
+                Icon(
+                    painter = painterResource(R.drawable.icn_message_24dp),
+                    contentDescription = stringResource(R.string.message_friends)
                 )
-            } else {
-                if (currentServer == null) {
-                    DirectMessagesChannelListRenderer(
-                        currentDestination,
-                        onDestinationChanged,
-                        channelListState,
-                        onOpenChannelContextSheet = { channelContextSheetTarget = it }
-                    )
-                } else {
-                    ServerChannelListRenderer(
-                        categorisedChannels,
-                        currentDestination,
-                        onDestinationChanged,
-                        channelListState,
-                        onOpenChannelContextSheet = { channelContextSheetTarget = it },
-                        serverId = currentServer
-                    )
-                }
             }
         }
     }
@@ -574,45 +604,18 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
             .fillMaxSize()
             .weight(1f)
     ) {
-        item(key = "overview") {
-            ChannelItem(
-                channel = Channel(
-                    id = "overview",
-                    name = stringResource(R.string.overview_screen_title),
-                    channelType = ChannelType.TextChannel
-                ),
-                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_star_shine_24dp)),
-                isCurrent = currentDestination is ChatRouterDestination.Settings,
-                onDestinationChanged = {
-                    onDestinationChanged(ChatRouterDestination.Settings)
-                },
-                hasUnread = false,
-                onOpenChannelContextSheet = {}
+        item("top-divider") {
+            HorizontalDivider(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
             )
-            Spacer(Modifier.height(4.dp))
-        }
-
-        item(key = "friends") {
-            ChannelItem(
-                channel = Channel(
-                    id = "friends",
-                    name = stringResource(R.string.friends),
-                    channelType = ChannelType.TextChannel
-                ),
-                iconType = ChannelItemIconType.Painter(painterResource(R.drawable.icn_group_24dp)),
-                isCurrent = currentDestination is ChatRouterDestination.Friends,
-                onDestinationChanged = {
-                    onDestinationChanged(ChatRouterDestination.Friends)
-                },
-                hasUnread = FriendRequests.getIncoming().isNotEmpty(),
-                onOpenChannelContextSheet = {},
-            )
-            Spacer(Modifier.height(4.dp))
         }
 
         item(key = "saved_messages") {
-            val notesChannel =
-                RevoltAPI.channelCache.values.firstOrNull { it.channelType == ChannelType.SavedMessages }
+            val notesChannel = RevoltAPI.channelCache.values.firstOrNull {
+                it.channelType == ChannelType.SavedMessages
+            }
 
             if (notesChannel != null) {
                 ChannelItem(
@@ -629,11 +632,10 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                     hasUnread = false,
                     onOpenChannelContextSheet = {},
                 )
-                Spacer(Modifier.height(4.dp))
             }
         }
 
-        item("divider") {
+        item("bottom-divider") {
             HorizontalDivider(
                 Modifier
                     .fillMaxWidth()
