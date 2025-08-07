@@ -17,6 +17,10 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="community_guidelines">Community Guidelines</string>
     <string name="message_friends">Message Friends</string>
+    <string name="empty_messages_content_description">Empty Messages Sad Image</string>
+    <string name="empty_messages_heading">It\'s Quiet Here...</string>
+    <string name="empty_messages_body">Find friends to chat with or create a group conversation.</string>
+    <string name="new_conversation">New Conversation</string>
 
     <string name="login_onboarding_heading">Welcome to PepChat!</string>
     <string name="login_onboarding_body">Join endless chats and connections; PepChat is your place to vibe with friends!</string>

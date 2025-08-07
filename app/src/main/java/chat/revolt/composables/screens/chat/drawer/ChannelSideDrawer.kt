@@ -724,18 +724,18 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                     Image(
                         modifier = Modifier.size(100.dp),
                         painter = painterResource(R.drawable.empty_direct_messages_img),
-                        contentDescription = "Empty Messages Sad Image"
+                        contentDescription = stringResource(R.string.empty_messages_content_description)
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "It’s Quiet Here...",
+                        text = stringResource(R.string.empty_messages_heading),
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "Find friends to chat with or create a group conversation.",
+                        text = stringResource(R.string.empty_messages_body),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
@@ -751,7 +751,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                             bottomEnd = CornerSize(8.dp)
                         )
                     ) {
-                        Text(text = "New Conversation")
+                        Text(text = stringResource(R.string.new_conversation))
                     }
                 }
             }
