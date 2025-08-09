@@ -3,6 +3,7 @@ package chat.revolt.composables.screens.chat.discover
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
 import chat.revolt.api.routes.googlesheets.ServerData
+import chat.revolt.composables.generic.SquareButton
 
 @Composable
 fun DiscoverServersList(
@@ -96,19 +98,36 @@ fun DiscoverServersList(
 
         when {
             uiState.isLoading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(16.dp)
+                    )
+                }
             }
 
-            uiState.error != null -> {
-                Text(stringResource(R.string.error))
-            }
+            uiState.error != null || uiState.servers.isEmpty() -> {
+               Box(
+                   Modifier.weight(1f)
+               ) {
+                   Column(
+                       modifier = Modifier.fillMaxSize(),
+                       horizontalAlignment = Alignment.CenterHorizontally,
+                       verticalArrangement = Arrangement.Center,
 
-            uiState.servers.isEmpty() -> {
-                Text(stringResource(R.string.no_servers_found))
+                   ) {
+                       Text(stringResource(R.string.error))
+                       Spacer(Modifier.height(8.dp))
+                       SquareButton(
+                           onClick = viewModel::loadServers
+                       ) {
+                           Text(stringResource(R.string.retry))
+                       }
+                   }
+               }
             }
 
             else -> {
