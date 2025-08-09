@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +34,7 @@ import chat.revolt.R
 import chat.revolt.api.routes.onboard.OnboardingCompletionBody
 import chat.revolt.api.routes.onboard.completeOnboarding
 import chat.revolt.composables.generic.FormTextField
+import chat.revolt.composables.generic.SquareButton
 import chat.revolt.persistence.KVStorage
 import kotlinx.coroutines.launch
 
@@ -168,7 +168,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
                     label = stringResource(R.string.onboarding_username)
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                Button(
+                SquareButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         coroutineScope.launch {
@@ -176,12 +176,6 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
                         }
                     },
                     enabled = username.value.isNotBlank(),
-                    shape = MaterialTheme.shapes.small.copy(
-                        topStart = androidx.compose.foundation.shape.CornerSize(8.dp),
-                        topEnd = androidx.compose.foundation.shape.CornerSize(8.dp),
-                        bottomStart = androidx.compose.foundation.shape.CornerSize(8.dp),
-                        bottomEnd = androidx.compose.foundation.shape.CornerSize(8.dp)
-                    )
                 ) {
                     Text(text = stringResource(R.string.complete_registration))
                 }

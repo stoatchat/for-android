@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,12 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import chat.revolt.R
 import androidx.navigation.compose.rememberNavController
+import chat.revolt.R
+import chat.revolt.composables.generic.SquareButton
+import chat.revolt.composables.generic.SquareElevatedButton
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -129,34 +128,22 @@ fun LoginGreetingScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
+            SquareButton(
                 onClick = { navController.navigate("login/login") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("view_login_page_button"),
-                shape = MaterialTheme.shapes.small.copy(
-                    topStart = CornerSize(8.dp),
-                    topEnd = CornerSize(8.dp),
-                    bottomStart = CornerSize(8.dp),
-                    bottomEnd = CornerSize(8.dp)
-                )
             ) {
                 Text(text = stringResource(R.string.login))
             }
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            ElevatedButton(
+            SquareElevatedButton(
                 onClick = { navController.navigate("register/details") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("view_signup_page_button"),
-                shape = MaterialTheme.shapes.small.copy(
-                    topStart = CornerSize(8.dp),
-                    topEnd = CornerSize(8.dp),
-                    bottomStart = CornerSize(8.dp),
-                    bottomEnd = CornerSize(8.dp)
-                )
             ) {
                 Text(text = stringResource(R.string.signup))
             }

@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -52,6 +50,7 @@ import chat.revolt.api.routes.account.RegistrationBody
 import chat.revolt.api.routes.account.register
 import chat.revolt.api.routes.misc.getRootRoute
 import chat.revolt.composables.generic.FormTextField
+import chat.revolt.composables.generic.SquareButton
 import com.hcaptcha.sdk.HCaptcha
 import com.hcaptcha.sdk.HCaptchaConfig
 import com.hcaptcha.sdk.HCaptchaSize
@@ -240,7 +239,7 @@ fun RegisterDetailsScreen(
 
                 val context = LocalContext.current
 
-                Button(
+                SquareButton(
                     onClick = {
                         viewModel.initCaptcha(context) {
                             viewModel.doRegistration(navController)
@@ -249,12 +248,6 @@ fun RegisterDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("setup_continue_button"),
-                    shape = MaterialTheme.shapes.small.copy(
-                        topStart = CornerSize(8.dp),
-                        topEnd = CornerSize(8.dp),
-                        bottomStart = CornerSize(8.dp),
-                        bottomEnd = CornerSize(8.dp)
-                    )
                 ) {
                     Text(text = stringResource(R.string.continue_))
                 }

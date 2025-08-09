@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +35,7 @@ import androidx.navigation.NavController
 import chat.revolt.R
 import chat.revolt.api.ApplicationPlatform
 import chat.revolt.api.RevoltAPI
+import chat.revolt.composables.generic.SquareButton
 
 @Composable
 fun ChoosePlatformScreen(navController: NavController) {
@@ -191,7 +190,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
         )
-        Button(
+        SquareButton(
             onClick = {
                 if(apiUrlValue.value.isNotEmpty()){
                     when(apiUrlValue.value){
@@ -201,7 +200,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                         ApplicationPlatform.REVOLT.baseUrl -> RevoltAPI.setPlatform(
                             ApplicationPlatform.REVOLT
                         )
-                        else -> return@Button
+                        else -> return@SquareButton
                     }
                 }
                 navController.navigate("login/greeting")
@@ -210,12 +209,6 @@ fun ChoosePlatformScreen(navController: NavController) {
                 .padding(top = 32.dp, bottom = 16.dp)
                 .fillMaxWidth()
                 .testTag("confirm_platform_button"),
-            shape = MaterialTheme.shapes.small.copy(
-                topStart = CornerSize(8.dp),
-                topEnd = CornerSize(8.dp),
-                bottomStart = CornerSize(8.dp),
-                bottomEnd = CornerSize(8.dp)
-            )
         ) {
             Text(text = stringResource(R.string.confirm))
         }
