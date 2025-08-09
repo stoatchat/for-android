@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,9 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -31,12 +27,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import chat.revolt.R
+import chat.revolt.composables.generic.SquareButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,7 +116,7 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
+            SquareButton(
                 modifier = Modifier
                     .fillMaxWidth(),
                 onClick = {
@@ -127,12 +124,6 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
                     intent.addCategory(Intent.CATEGORY_APP_EMAIL)
                     intentLauncher.launch(intent)
                 },
-                shape = MaterialTheme.shapes.small.copy(
-                    topStart = CornerSize(8.dp),
-                    topEnd = CornerSize(8.dp),
-                    bottomStart = CornerSize(8.dp),
-                    bottomEnd = CornerSize(8.dp)
-                )
             ) {
                 Text(text = stringResource(R.string.open_mail_app))
             }

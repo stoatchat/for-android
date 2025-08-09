@@ -36,7 +36,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButton
@@ -70,8 +69,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.revolt.R
 import chat.revolt.api.RevoltAPI
@@ -90,6 +89,7 @@ import chat.revolt.api.settings.SyncedSettings
 import chat.revolt.composables.generic.GroupIcon
 import chat.revolt.composables.generic.IconPlaceholder
 import chat.revolt.composables.generic.RemoteImage
+import chat.revolt.composables.generic.SquareButton
 import chat.revolt.composables.generic.UserAvatar
 import chat.revolt.composables.generic.presenceFromStatus
 import chat.revolt.composables.screens.chat.ChannelIcon
@@ -738,16 +738,10 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                         textAlign = TextAlign.Center
                     )
                     Spacer(Modifier.height(16.dp))
-                    Button(
+                    SquareButton(
                         onClick = {
                             onDestinationChanged(ChatRouterDestination.Friends)
                         },
-                        shape = MaterialTheme.shapes.small.copy(
-                            topStart = CornerSize(8.dp),
-                            topEnd = CornerSize(8.dp),
-                            bottomStart = CornerSize(8.dp),
-                            bottomEnd = CornerSize(8.dp)
-                        )
                     ) {
                         Text(text = stringResource(R.string.new_conversation))
                     }

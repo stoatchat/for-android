@@ -13,10 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -58,6 +56,7 @@ import chat.revolt.api.routes.account.EmailPasswordAssessment
 import chat.revolt.api.routes.account.negotiateAuthentication
 import chat.revolt.api.routes.onboard.needsOnboarding
 import chat.revolt.composables.generic.FormTextField
+import chat.revolt.composables.generic.SquareButton
 import chat.revolt.composables.generic.Weblink
 import chat.revolt.persistence.KVStorage
 import chat.revolt.ui.theme.FragmentMono
@@ -337,19 +336,13 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 )
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Button(
+                SquareButton(
                     onClick = {
                         viewModel.doLogin()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("confirm_platform_button"),
-                    shape = MaterialTheme.shapes.small.copy(
-                        topStart = CornerSize(8.dp),
-                        topEnd = CornerSize(8.dp),
-                        bottomStart = CornerSize(8.dp),
-                        bottomEnd = CornerSize(8.dp)
-                    )
                 ) {
                     Text(text = stringResource(R.string.login))
                 }
