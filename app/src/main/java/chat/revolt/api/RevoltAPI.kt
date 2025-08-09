@@ -59,7 +59,14 @@ import chat.revolt.api.schemas.Channel as ChannelSchema
  */
 enum class ApplicationPlatform(val baseUrl: String) {
     REVOLT("https://api.revolt.chat"),
-    PEP("https://peptide.chat/api")
+    PEP("https://peptide.chat/api");
+
+    companion object {
+        fun fromName(name: String): ApplicationPlatform? {
+            return ApplicationPlatform.entries.find { it.name == name }
+        }
+    }
+
 }
 
 /**

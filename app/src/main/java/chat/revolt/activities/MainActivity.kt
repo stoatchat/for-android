@@ -75,9 +75,12 @@ import androidx.navigation.compose.rememberNavController
 import chat.revolt.BuildConfig
 import chat.revolt.R
 import chat.revolt.RevoltApplication
+import chat.revolt.api.ApplicationPlatform
 import chat.revolt.api.HitRateLimitException
 import chat.revolt.api.RevoltAPI
+import chat.revolt.api.RevoltAPI.setPlatform
 import chat.revolt.api.RevoltHttp
+import chat.revolt.api.UrlsStorageKeys
 import chat.revolt.api.api
 import chat.revolt.api.routes.microservices.geo.queryGeo
 import chat.revolt.api.routes.microservices.health.healthCheck
@@ -189,6 +192,23 @@ class MainActivityViewModel @Inject constructor(
             doHealthCheck()
             Log.d("MainActivity", "Performing update geo state")
             updateGeoState()
+        }
+    }
+
+    /**
+     * Sets the default platform on application creation.
+     * It retrieves the platform from key-value storage and sets it in the RevoltAPI.
+     * If the platform is not found or invalid, it logs the user out.
+     */
+    fun setDefaultPlatformOnCreate() {
+        viewModelScope.launch {
+            ApplicationPlatform.fromName(
+                name = kvStorage.get(UrlsStorageKeys.PLATFORM) ?: "---"
+            )?.let { platform ->
+                setPlatform(platform)
+            } ?: run {
+                logOut()
+            }
         }
     }
 
@@ -349,6 +369,9 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Set the default platform for the Platform API.
+        viewModel.setDefaultPlatformOnCreate()
 
         SentryAndroid.init(this) { options ->
             options.dsn = BuildConfig.SENTRY_DSN
