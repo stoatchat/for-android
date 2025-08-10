@@ -161,6 +161,34 @@
                 android:value="true" />
         </service>
 
+        <!-- DeepLink Activity for handling App Links -->
+        <activity
+            android:name=".activities.DeepLinkActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Revolt">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="peptide.chat" />
+                <data android:host="app.peptide.chat" />
+                
+                <!-- Channel deep links -->
+                <data android:pathPrefix="/channels/" />
+                <!-- Server deep links -->
+                <data android:pathPrefix="/servers/" />
+                <data android:pathPrefix="/server/" />
+                <!-- User deep links -->
+                <data android:pathPrefix="/users/" />
+                <!-- Message deep links -->
+                <data android:pathPrefix="/messages/" />
+                <!-- Server channel message deep links -->
+                <data android:pathPattern="/server/.*/channel/.*" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

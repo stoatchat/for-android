@@ -2,6 +2,7 @@ package chat.revolt.activities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -127,6 +128,7 @@ import chat.revolt.screens.settings.channel.ChannelSettingsHome
 import chat.revolt.screens.settings.channel.ChannelSettingsOverview
 import chat.revolt.screens.settings.channel.ChannelSettingsPermissions
 import chat.revolt.ui.theme.RevoltTheme
+import chat.revolt.utils.DeepLinkHandler
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -383,6 +385,9 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         RevoltAPI.hydrateFromPersistentCache()
+        
+        // Handle deep link data if available
+        handleDeepLinkData(intent)
 
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)
@@ -419,6 +424,70 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleDeepLinkData(intent)
+    }
+    
+    private fun handleDeepLinkData(intent: Intent) {
+        // Check for deep link data from DeepLinkActivity
+        val channelId = intent.getStringExtra(DeepLinkActivity.PATH_CHANNEL)
+        val serverId = intent.getStringExtra(DeepLinkActivity.PATH_SERVER)
+        val userId = intent.getStringExtra(DeepLinkActivity.PATH_USER)
+        val messageId = intent.getStringExtra(DeepLinkActivity.PATH_MESSAGE)
+        val nextDestination = intent.getStringExtra("next_destination")
+        
+        if (nextDestination != null) {
+            Log.d(TAG, "Setting next destination from deep link: $nextDestination")
+            viewModel.updateNextDestination(nextDestination)
+            return
+        }
+        
+        // Store deep link data in a static companion object for ChatRouterScreen to access
+        DeepLinkHandler.channelId = channelId
+        DeepLinkHandler.serverId = serverId
+        DeepLinkHandler.userId = userId
+        DeepLinkHandler.messageId = messageId
+        DeepLinkHandler.hasDeepLink = channelId != null || serverId != null || userId != null || messageId != null
+        
+        // Wait for the app to be ready before navigating to the deep link destination
+        viewModel.viewModelScope.launch {
+            viewModel.isReady.collect { isReady ->
+                if (isReady) {
+                    when {
+                        channelId != null -> {
+                            Log.d(TAG, "Navigating to channel from deep link: $channelId")
+                            // Check if Polar mode is enabled
+                            if (Experiments.usePolar.isEnabled) {
+                                viewModel.updateNextDestination("main/conversation/$channelId")
+                            } else {
+                                // For non-Polar mode, we'll use the DeepLinkHandler to communicate with ChatRouterScreen
+                                viewModel.updateNextDestination("chat")
+                            }
+                        }
+                        serverId != null -> {
+                            Log.d(TAG, "Navigating to server from deep link: $serverId")
+                            // Navigate to chat screen, the ChatRouterScreen will handle the server navigation
+                            viewModel.updateNextDestination("chat")
+                        }
+                        userId != null -> {
+                            Log.d(TAG, "Navigating to user from deep link: $userId")
+                            // Navigate to chat screen, the ChatRouterScreen will handle the user navigation
+                            viewModel.updateNextDestination("chat")
+                        }
+                        messageId != null -> {
+                            Log.d(TAG, "Navigating to message from deep link: $messageId")
+                            // Navigate to chat screen, the ChatRouterScreen will handle the message navigation
+                            viewModel.updateNextDestination("chat")
+                        }
+                    }
+                    // Only collect once
+                    return@collect
+                }
+            }
+        }
+    }
+    
     override fun onProvideKeyboardShortcuts(
         data: MutableList<KeyboardShortcutGroup>?,
         menu: Menu?,
@@ -444,6 +513,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "MainActivity"
         init {
             NativeLibraries.init()
         }

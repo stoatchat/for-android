@@ -77,7 +77,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "chat.revolt"
+        applicationId = "chat.peptide"
         minSdk = 24
         targetSdk = 35
         versionCode = Integer.parseInt("001_003_106".replace("_", ""), 10)

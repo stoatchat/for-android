@@ -74,6 +74,7 @@ import chat.revolt.composables.chat.DisconnectedNotice
 import chat.revolt.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.revolt.dialogs.NotificationRationaleDialog
 import chat.revolt.internals.Changelogs
+import chat.revolt.utils.DeepLinkHandler
 import chat.revolt.persistence.KVStorage
 import chat.revolt.screens.chat.dialogs.safety.ReportMessageDialog
 import chat.revolt.screens.chat.dialogs.safety.ReportServerDialog
@@ -112,12 +113,12 @@ sealed class ChatRouterDestination {
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
     companion object {
-        val default = Settings
+        val default = Home // Changed default from Settings to Home
 
         fun fromString(destination: String): ChatRouterDestination {
             return when {
-                destination == "home" -> Settings // previous name for overview
-                destination == "overview" -> Settings
+                destination == "home" -> Home // Changed from Settings to Home
+                destination == "overview" -> Home // Changed from Settings to Home
                 destination == "friends" -> Friends
                 destination.startsWith("no_current_channel/") -> NoCurrentChannel(
                     destination.removePrefix(
@@ -150,8 +151,15 @@ class ChatRouterViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val current = kvStorage.get("currentDestination")
-            setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
+            // Check if there's a deep link to handle first
+            if (DeepLinkHandler.hasDeepLink) {
+                Log.d("ChatRouterViewModel", "Deep link detected in init, skipping saved destination")
+                // Don't set any destination here, let the LaunchedEffect in ChatRouterScreen handle it
+            } else {
+                // No deep link, load the saved destination
+                val current = kvStorage.get("currentDestination")
+                setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
+            }
 
             latestChangelogRead = changelogs.hasSeenCurrent()
             latestChangelog = changelogs.getLatestChangelogCode()
@@ -361,6 +369,63 @@ fun ChatRouterScreen(
             }
     }
 
+    // Handle deep links when the ChatRouterScreen is first composed
+    LaunchedEffect(Unit) {
+        // Check if there's a deep link to handle
+        if (DeepLinkHandler.hasDeepLink) {
+            Log.d("ChatRouterScreen", "Processing deep link data")
+            
+            // Process the deep link based on priority
+            when {
+                // Priority 1: Handle server/channel/message format (most specific)
+                DeepLinkHandler.messageId != null && DeepLinkHandler.channelId != null -> {
+                    val messageId = DeepLinkHandler.messageId!!
+                    val channelId = DeepLinkHandler.channelId!!
+                    Log.d("ChatRouterScreen", "Setting destination to message: $messageId in channel: $channelId")
+                    
+                    val resolvedChannel = RevoltAPI.channelCache[channelId]
+                    if (resolvedChannel == null) {
+                        showChannelUnavailableAlert = true
+                    } else {
+                        // Navigate to the channel first, then the message will be handled by the channel screen
+                        viewModel.setSaveDestination(ChatRouterDestination.Channel(channelId))
+                        // TODO: Add logic to scroll to the specific message in the channel
+                    }
+                }
+                
+                // Priority 2: Handle channel deep link
+                DeepLinkHandler.channelId != null -> {
+                    val channelId = DeepLinkHandler.channelId!!
+                    Log.d("ChatRouterScreen", "Setting destination to channel: $channelId")
+                    val resolvedChannel = RevoltAPI.channelCache[channelId]
+                    
+                    if (resolvedChannel == null) {
+                        showChannelUnavailableAlert = true
+                    } else {
+                        viewModel.setSaveDestination(ChatRouterDestination.Channel(channelId))
+                    }
+                }
+                
+                // Priority 3: Handle server deep link
+                DeepLinkHandler.serverId != null -> {
+                    val serverId = DeepLinkHandler.serverId!!
+                    Log.d("ChatRouterScreen", "Setting destination to server: $serverId")
+                    viewModel.navigateToServer(serverId)
+                }
+                
+                // Priority 4: Handle user deep link
+                DeepLinkHandler.userId != null -> {
+                    val userId = DeepLinkHandler.userId!!
+                    Log.d("ChatRouterScreen", "Setting destination to user: $userId")
+                    // TODO: Implement user navigation if needed
+                }
+            }
+            
+            // Clear the deep link data after processing
+            DeepLinkHandler.clear()
+        }
+    }
+    
     LaunchedEffect(Unit) {
         while (true) {
             ActionChannel.receive().let { action ->
