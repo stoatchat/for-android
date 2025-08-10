@@ -3,7 +3,6 @@ package chat.revolt.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import chat.revolt.activities.DeepLinkActivity
 import chat.revolt.activities.MainActivity
 
@@ -11,8 +10,7 @@ import chat.revolt.activities.MainActivity
  * Utility class for handling deep links in the Revolt app.
  */
 object DeepLinkUtils {
-    private const val TAG = "DeepLinkUtils"
-    
+
     /**
      * Checks if the given URI is a valid Revolt deep link.
      *

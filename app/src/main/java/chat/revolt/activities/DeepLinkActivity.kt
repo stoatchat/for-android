@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import chat.revolt.persistence.KVStorage
@@ -18,9 +17,7 @@ class DeepLinkActivity : AppCompatActivity() {
     
     @Inject
     lateinit var kvStorage: KVStorage
-    
-    private val viewModel by viewModels<MainActivityViewModel>()
-    
+
     companion object {
         private const val TAG = "DeepLinkActivity"
         
