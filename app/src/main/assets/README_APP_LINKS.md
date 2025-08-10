@@ -32,7 +32,7 @@ Open the `assetlinks.json` file in this directory and replace the placeholder wi
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "chat.revolt",
+    "package_name": "chat.peptide",
     "sha256_cert_fingerprints": [
       "YOUR_SHA256_FINGERPRINT_HERE"
     ]
@@ -56,7 +56,7 @@ Make sure the file is accessible via HTTPS and returns with Content-Type: applic
 Use the Android Debug Bridge (ADB) to test your App Links:
 
 ```bash
-adb shell am start -a android.intent.action.VIEW -d "https://revolt.chat/channels/CHANNEL_ID" chat.revolt
+adb shell am start -a android.intent.action.VIEW -d "https://revolt.chat/channels/CHANNEL_ID" chat.peptide
 ```
 
 ## Troubleshooting

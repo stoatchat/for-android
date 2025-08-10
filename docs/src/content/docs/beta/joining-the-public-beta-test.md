@@ -10,8 +10,8 @@ beta test is available. The beta test is open to everyone, and you can join the 
 following these steps:
 
 1. [Join the Revolt for Android Alpha Track on Google Groups](https://groups.google.com/g/revolt-android-alpha-track).
-2. [Opt-in to the Revolt for Android Beta Test on Google Play](https://play.google.com/apps/testing/chat.revolt).
-3. [Download Revolt for Android from Google Play](https://play.google.com/store/apps/details?id=chat.revolt).
+2. [Opt-in to the Revolt for Android Beta Test on Google Play](https://play.google.com/apps/testing/chat.peptide).
+3. [Download Revolt for Android from Google Play](https://play.google.com/store/apps/details?id=chat.peptide).
 
 You're all set! You can now use Revolt on Android and help us test new features and improvements.
 

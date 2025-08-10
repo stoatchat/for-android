@@ -153,7 +153,7 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-    namespace = "chat.revolt"
+    namespace = "chat.peptide"
     externalNativeBuild {
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
@@ -337,7 +337,7 @@ aboutLibraries {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("chat.revolt.persistence")
+            packageName.set("chat.peptide.persistence")
         }
     }
 }

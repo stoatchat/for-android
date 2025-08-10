@@ -8,7 +8,7 @@ API.
 
 | Module | Package       | Description          |
 |--------|---------------|----------------------|
-| `:app` | `chat.revolt` | The main app module. |
+| `:app` | `chat.peptide` | The main app module. |
 
 The API library is part of the `app` module, and is not intended to be used as a standalone library,
 as it makes liberal use of Android-specific APIs for reactivity.
