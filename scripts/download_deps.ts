@@ -1,4 +1,14 @@
 import { resolve } from "jsr:@std/path"
+import { parseArgs } from "jsr:@std/cli/parse-args"
+
+const args = parseArgs(Deno.args, {
+    boolean: ["yes", "y", "auto-accept"],
+    alias: {
+        "y": "yes"
+    }
+})
+
+const autoAccept = args.yes || args["auto-accept"]
 
 const outputFolderParent = resolve(Deno.cwd(), "app", "src", "main", "assets")
 
@@ -13,7 +23,7 @@ try {
     console.error(
         "Usage: " +
             "\x1b[35m" + // magenta
-            "deno run -A scripts/download_deps.ts" +
+            "deno run -A scripts/download_deps.ts [--yes|-y|--auto-accept]" +
             "\x1b[0m" +
             " from the " +
             "\x1b[1;31;4m" + // bold red underline
@@ -299,10 +309,14 @@ for (const dep of deps) {
     console.log(`- ${dep.file} from ${dep.url}`)
 }
 
-console.log("Will download the above files.")
-if (!confirm("Continue?")) {
-    console.log("Aborted.")
-    Deno.exit(0)
+if (!autoAccept) {
+    console.log("Will download the above files.")
+    if (!confirm("Continue?")) {
+        console.log("Aborted.")
+        Deno.exit(0)
+    }
+} else {
+    console.log("Will download the above files. (auto-accepted)")
 }
 
 const fontsFolder = resolve(outputFolder, "fonts")
