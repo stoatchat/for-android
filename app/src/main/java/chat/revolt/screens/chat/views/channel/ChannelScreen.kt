@@ -694,6 +694,9 @@ fun ChannelScreen(
                                 items(
                                     viewModel.items.size,
                                     key = { index ->
+                                        if (index < 0 || index >= viewModel.items.size) {
+                                            return@items index
+                                        }
                                         when (val item = viewModel.items[index]) {
                                             is ChannelScreenItem.RegularMessage -> item.message.id!!
                                             is ChannelScreenItem.ProspectiveMessage -> item.message.id!!
@@ -717,6 +720,10 @@ fun ChannelScreen(
                                         }
                                     }
                                 ) { index ->
+                                    // out of bounds check
+                                    if (index < 0 || index >= viewModel.items.size) {
+                                        return@items
+                                    }
                                     when (val item = viewModel.items[index]) {
                                         is ChannelScreenItem.RegularMessage -> {
                                             RegularMessage(

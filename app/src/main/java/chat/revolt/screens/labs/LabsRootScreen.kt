@@ -16,6 +16,7 @@ import chat.revolt.screens.labs.ui.mockups.NewLoginExperienceMockup
 import chat.revolt.screens.labs.ui.sandbox.CoreLibSandbox
 import chat.revolt.screens.labs.ui.sandbox.GradientEditorSandbox
 import chat.revolt.screens.labs.ui.sandbox.JBMSandbox
+import chat.revolt.screens.labs.ui.sandbox.NewCardSandboxScreen
 import chat.revolt.screens.labs.ui.sandbox.SettingsDslSandbox
 
 annotation class LabsFeature
@@ -78,6 +79,10 @@ fun LabsRootScreen(topNav: NavController) {
                 }
                 composable("sandboxes/librevolt") {
                     CoreLibSandbox(labsNav)
+                }
+
+                composable("sandboxes/newcard") {
+                    NewCardSandboxScreen(labsNav)
                 }
             }
         }

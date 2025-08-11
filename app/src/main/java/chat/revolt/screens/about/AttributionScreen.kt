@@ -12,8 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -219,7 +217,7 @@ fun AttributionScreen(navController: NavController) {
                     ) { library ->
                         AttributionItem(library = library) {
                             licenceSheetOpen = true
-                            licenseSheetTarget = library.licenses.first()
+                            licenseSheetTarget = library.licenses.firstOrNull() ?: ""
                         }
                     }
 

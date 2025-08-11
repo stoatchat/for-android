@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -220,7 +221,11 @@ fun UserCard(
 
                 Text(
                     user?.displayName ?: user?.username ?: stringResource(R.string.unknown),
-                    fontSize = 24.sp,
+                    maxLines = 1,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 12.sp,
+                        maxFontSize = 24.sp,
+                    ),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .fillMaxWidth(0.66f)
@@ -251,7 +256,11 @@ fun UserCard(
                         append("#${user?.discriminator ?: "0000"}")
                         pop()
                     },
-                    fontSize = 24.sp,
+                    maxLines = 1,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 12.sp,
+                        maxFontSize = 24.sp,
+                    ),
                     modifier = Modifier
                         .fillMaxWidth(0.66f)
                         .constrainAs(username) {
@@ -282,7 +291,11 @@ fun UserCard(
                             )
                         )
                     ),
-                    fontSize = 24.sp,
+                    maxLines = 1,
+                    autoSize = TextAutoSize.StepBased(
+                        minFontSize = 12.sp,
+                        maxFontSize = 24.sp,
+                    ),
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier
                         .constrainAs(joinDate) {

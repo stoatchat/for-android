@@ -11,7 +11,6 @@ plugins {
     id("com.mikepenz.aboutlibraries.plugin")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
-    id("org.jmailen.kotlinter")
     id("io.sentry.android.gradle") version "4.12.0"
     id("app.cash.sqldelight") version "2.0.1"
     id("kotlin-kapt")
@@ -23,7 +22,7 @@ val composeBomVersion = "2025.03.00"
 val accompanistVersion = "0.34.0"
 val okhttpVersion = "4.12.0"
 val navVersion = "2.9.0"
-val hiltVersion = "2.52"
+val hiltVersion = "2.57"
 val glideVersion = "4.16.0"
 val ktorVersion = "3.0.0-beta-2"
 val media3Version = "1.7.1"
@@ -80,8 +79,8 @@ android {
         applicationId = "chat.revolt"
         minSdk = 24
         targetSdk = 35
-        versionCode = Integer.parseInt("001_003_106".replace("_", ""), 10)
-        versionName = "1.3.6a"
+        versionCode = Integer.parseInt("001_003_206".replace("_", ""), 10)
+        versionName = "1.3.6b"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -90,6 +89,7 @@ android {
 
         externalNativeBuild {
             cmake {
+                arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
                 cppFlags("")
             }
         }
@@ -333,7 +333,9 @@ aboutLibraries {
         "BSD-2-Clause",
         "cmark",
         "EPL-1.0",
-        "BSD-3-Clause"
+        "BSD-3-Clause",
+        "BSD License",
+        "ML Kit Terms of Service"
     )
     configPath = "compliance"
 }
