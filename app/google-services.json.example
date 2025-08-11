@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "123456789012",
     "project_id": "revolt-android-dev",
-    "storage_bucket": "revolt-android-dev.appspot.com"
+    "storage_bucket": "revolt-chat.appspot.com"
   },
   "client": [
     {
