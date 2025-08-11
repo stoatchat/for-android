@@ -424,6 +424,13 @@ fun ChannelScreen(
         }
     }
 
+    // Near bottom detection (reverseLayout = true): firstVisibleItemIndex small means near bottom/latest
+    val isNearBottom = remember(lazyListState) {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex < 3
+        }
+    }
+
     val scrollDownFABPadding by animateDpAsState(
         if (viewModel.typingUsers.isNotEmpty()) 25.dp else 0.dp,
         animationSpec = RevoltTweenDp,
@@ -467,25 +474,71 @@ fun ChannelScreen(
                 Log.w("ChannelScreen", "Target message not found after loading around window")
             }
         }
-    } ?: run {
-        LaunchedEffect(isNearTop) {
-            snapshotFlow { isNearTop.value }
-                .distinctUntilChanged()
-                .collect { isNearTop ->
-                    if (isNearTop) {
-                        Log.d("ChannelScreen", "Loading more messages")
-                        viewModel.loadMessages(before = viewModel.items.lastOrNull {
-                            it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
-                        }?.let {
-                            when (it) {
-                                is ChannelScreenItem.RegularMessage -> it.message.id
-                                is ChannelScreenItem.SystemMessage -> it.message.id
-                                else -> null
-                            }
-                        }, amount = 50)
+    }
+
+    // Always-on pagination collectors (work for both default and around modes)
+    LaunchedEffect(isNearTop) {
+        snapshotFlow { isNearTop.value }
+            .distinctUntilChanged()
+            .collect { nearTop ->
+                if (nearTop && !viewModel.endOfChannel) {
+                    val oldestId = viewModel.items.lastOrNull {
+                        it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
+                    }?.let {
+                        when (it) {
+                            is ChannelScreenItem.RegularMessage -> it.message.id
+                            is ChannelScreenItem.SystemMessage -> it.message.id
+                            else -> null
+                        }
+                    }
+                    if (oldestId != null) {
+                        Log.d("ChannelScreen", "Pagination: loading older before=$oldestId")
+                        viewModel.loadMessages(amount = 50, before = oldestId, ignoreExisting = true)
                     }
                 }
-        }
+            }
+    }
+
+    LaunchedEffect(isNearBottom) {
+        snapshotFlow { isNearBottom.value }
+            .distinctUntilChanged()
+            .collect { nearBottom ->
+                if (nearBottom) {
+                    val newestId = viewModel.items.firstOrNull {
+                        it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
+                    }?.let {
+                        when (it) {
+                            is ChannelScreenItem.RegularMessage -> it.message.id
+                            is ChannelScreenItem.SystemMessage -> it.message.id
+                            else -> null
+                        }
+                    }
+                    if (newestId != null) {
+                        // Preserve anchor: remember current first visible item and offset
+                        val beforeSize = viewModel.items.size
+                        val anchorIndex = lazyListState.firstVisibleItemIndex
+                        val anchorOffset = lazyListState.firstVisibleItemScrollOffset
+                        Log.d("ChannelScreen", "Pagination: loading newer after=$newestId (anchor index=$anchorIndex, offset=$anchorOffset, size=$beforeSize)")
+
+                        viewModel.loadMessages(amount = 50, after = newestId, ignoreExisting = true)
+
+                        // Wait until items are appended to the front (after-insert path adds to front)
+                        var attempts = 0
+                        while (attempts < 30) { // ~1.5s max
+                            kotlinx.coroutines.delay(50)
+                            val added = viewModel.items.size - beforeSize
+                            if (added > 0) {
+                                // Shift anchor forward by number of inserted items to keep viewport stable
+                                try {
+                                    lazyListState.scrollToItem(anchorIndex + added, anchorOffset)
+                                } catch (_: Exception) {}
+                                break
+                            }
+                            attempts++
+                        }
+                    }
+                }
+            }
     }
 
     // </editor-fold>
