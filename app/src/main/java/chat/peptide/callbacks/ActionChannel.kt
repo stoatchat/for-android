@@ -5,7 +5,10 @@ import kotlinx.coroutines.channels.Channel
 
 sealed class Action {
     data class OpenUserSheet(val userId: String, val serverId: String?) : Action()
-    data class SwitchChannel(val channelId: String) : Action()
+    data class SwitchChannel(
+        val channelId: String,
+        val messageId: String? = null,
+    ) : Action()
     data class LinkInfo(val url: String) : Action()
     data class EmoteInfo(val emoteId: String) : Action()
     data class MessageReactionInfo(val messageId: String, val emoji: String) : Action()

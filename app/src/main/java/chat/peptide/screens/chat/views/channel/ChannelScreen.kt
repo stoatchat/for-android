@@ -18,7 +18,9 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -49,6 +51,7 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -189,6 +192,7 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 @Composable
 fun ChannelScreen(
     channelId: String,
+    messageId: String? = null,
     useDrawer: Boolean = false,
     backToChannelsScreen: (() -> Unit)?,
     useBackButton: Boolean = false,
@@ -223,8 +227,8 @@ fun ChannelScreen(
     // <editor-fold desc="Load/switch channel">
     val channelPermissions by rememberChannelPermissions(channelId, viewModel.ensuredSelfMember)
 
-    LaunchedEffect(channelId) {
-        viewModel.switchChannel(channelId)
+    LaunchedEffect(channelId, messageId) {
+        viewModel.switchChannel(channelId, skipInitialLoad = messageId != null)
     }
     // </editor-fold>
     // <editor-fold desc="Keyboard height handling">
@@ -393,6 +397,14 @@ fun ChannelScreen(
     // <editor-fold desc="UI elements">
     val lazyListState = rememberLazyListState()
     var disableScroll by remember { mutableStateOf(false) }
+    
+    // State to track the highlighted message ID and animation
+    var highlightedMessageId by remember { mutableStateOf<String?>(null) }
+    val highlightAlpha by animateFloatAsState(
+        targetValue = if (highlightedMessageId != null) 0.3f else 0f,
+        animationSpec = tween(durationMillis = 1500),
+        finishedListener = { highlightedMessageId = null }
+    )
 
     val isScrolledToBottom = remember(lazyListState) {
         derivedStateOf {
@@ -421,24 +433,61 @@ fun ChannelScreen(
     // Load more messages when we reach the top of the list
     // TODO: Temp - use LoadTrigger instead
 
-    LaunchedEffect(isNearTop) {
-        snapshotFlow { isNearTop.value }
-            .distinctUntilChanged()
-            .collect { isNearTop ->
-                if (isNearTop) {
-                    Log.d("ChannelScreen", "Loading more messages")
-                    viewModel.loadMessages(before = viewModel.items.lastOrNull {
-                        it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
-                    }?.let {
-                        when (it) {
-                            is ChannelScreenItem.RegularMessage -> it.message.id
-                            is ChannelScreenItem.SystemMessage -> it.message.id
-                            else -> null
-                        }
-                    }, amount = 50)
+    messageId?.let { id ->
+        LaunchedEffect(id) {
+            Log.d("ChannelScreen", "Loading around message: $id")
+            // Load 60 messages centered on the target (API returns around window)
+            viewModel.loadMessages(amount = 60, around = id)
+
+            // Wait until the target message appears (poll with timeout)
+            var attempts = 0
+            var messageIndex = -1
+            while (attempts < 30 && messageIndex == -1) { // ~3s max
+                kotlinx.coroutines.delay(100)
+                messageIndex = viewModel.items.indexOfFirst { item ->
+                    when (item) {
+                        is ChannelScreenItem.RegularMessage -> item.message.id == id
+                        is ChannelScreenItem.SystemMessage -> item.message.id == id
+                        else -> false
+                    }
                 }
+                attempts++
             }
+
+            if (messageIndex != -1) {
+                Log.d("ChannelScreen", "Target message located at index: $messageIndex (reverseLayout=true)")
+                // Instantly jump to the message without long animation
+                try {
+                    lazyListState.scrollToItem(index = messageIndex)
+                    highlightedMessageId = id
+                } catch (e: Exception) {
+                    Log.e("ChannelScreen", "Error scrolling to message", e)
+                }
+            } else {
+                Log.w("ChannelScreen", "Target message not found after loading around window")
+            }
+        }
+    } ?: run {
+        LaunchedEffect(isNearTop) {
+            snapshotFlow { isNearTop.value }
+                .distinctUntilChanged()
+                .collect { isNearTop ->
+                    if (isNearTop) {
+                        Log.d("ChannelScreen", "Loading more messages")
+                        viewModel.loadMessages(before = viewModel.items.lastOrNull {
+                            it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
+                        }?.let {
+                            when (it) {
+                                is ChannelScreenItem.RegularMessage -> it.message.id
+                                is ChannelScreenItem.SystemMessage -> it.message.id
+                                else -> null
+                            }
+                        }, amount = 50)
+                    }
+                }
+        }
     }
+
     // </editor-fold>
     // <editor-fold desc="Sheets">
     var channelInfoSheetShown by remember { mutableStateOf(false) }
@@ -703,21 +752,20 @@ fun ChannelScreen(
                                     }
 
                                     items(
-                                        viewModel.items.size,
-                                        key = { index ->
-                                            when (val item = viewModel.items[index]) {
-                                                is ChannelScreenItem.RegularMessage -> item.message.id!!
-                                                is ChannelScreenItem.ProspectiveMessage -> item.message.id!!
-                                                is ChannelScreenItem.FailedMessage -> item.message.id!!
-                                                is ChannelScreenItem.SystemMessage -> item.message.id!!
-                                                is ChannelScreenItem.DateDivider -> item.instant.toEpochMilliseconds()
-                                                is ChannelScreenItem.LoadTrigger -> index
-                                                is ChannelScreenItem.Loading -> index
+                                        items = viewModel.items,
+                                        key = { item ->
+                                            when (item) {
+                                                is ChannelScreenItem.RegularMessage -> item.message.id ?: "regular_null_id"
+                                                is ChannelScreenItem.ProspectiveMessage -> item.message.id ?: "prospective_null_id"
+                                                is ChannelScreenItem.FailedMessage -> item.message.id ?: "failed_null_id"
+                                                is ChannelScreenItem.SystemMessage -> item.message.id ?: "system_null_id"
+                                                is ChannelScreenItem.DateDivider -> "date_${item.instant.toEpochMilliseconds()}"
+                                                is ChannelScreenItem.LoadTrigger -> "loadtrigger_${item.after}_${item.before}"
+                                                is ChannelScreenItem.Loading -> "loading"
                                             }
                                         },
-                                        contentType = { index ->
-                                            when (viewModel.items.getOrNull(index)) {
-                                                null -> null
+                                        contentType = { item ->
+                                            when (item) {
                                                 is ChannelScreenItem.RegularMessage -> "RegularMessage"
                                                 is ChannelScreenItem.ProspectiveMessage -> "ProspectiveMessage"
                                                 is ChannelScreenItem.FailedMessage -> "FailedMessage"
@@ -727,32 +775,46 @@ fun ChannelScreen(
                                                 is ChannelScreenItem.Loading -> "Loading"
                                             }
                                         }
-                                    ) { index ->
-                                        when (val item = viewModel.items[index]) {
+                                    ) { item ->
+                                        when (item) {
                                             is ChannelScreenItem.RegularMessage -> {
-                                                RegularMessage(
-                                                    item.message,
-                                                    viewModel.channel,
-                                                    setDrawerGestureEnabled = {
-                                                        setDrawerGestureEnabled(it)
-                                                    },
-                                                    setDisableScroll = {
-                                                        disableScroll = it
-                                                    },
-                                                    showMessageBottomSheet = {
-                                                        messageContextSheetTarget = it
-                                                        messageContextSheetShown = true
-                                                    },
-                                                    showReactBottomSheet = {
-                                                        item.message.id?.let {
-                                                            reactSheetTarget = it
-                                                            reactSheetShown = true
-                                                        }
-                                                    },
-                                                    putTextAtCursorPosition = viewModel::putAtCursorPosition,
-                                                    replyToMessage = viewModel::addReplyTo,
-                                                    scope = scope
-                                                )
+                                                // Check if this message should be highlighted
+                                                val isHighlighted = item.message.id == highlightedMessageId
+                                                
+                                                // Apply highlight effect if needed
+                                                Box(
+                                                    modifier = if (isHighlighted) {
+                                                        Modifier.background(
+                                                            MaterialTheme.colorScheme.primary.copy(alpha = highlightAlpha)
+                                                        )
+                                                    } else {
+                                                        Modifier
+                                                    }
+                                                ) {
+                                                    RegularMessage(
+                                                        item.message,
+                                                        viewModel.channel,
+                                                        setDrawerGestureEnabled = {
+                                                            setDrawerGestureEnabled(it)
+                                                        },
+                                                        setDisableScroll = {
+                                                            disableScroll = it
+                                                        },
+                                                        showMessageBottomSheet = {
+                                                            messageContextSheetTarget = it
+                                                            messageContextSheetShown = true
+                                                        },
+                                                        showReactBottomSheet = {
+                                                            item.message.id?.let {
+                                                                reactSheetTarget = it
+                                                                reactSheetShown = true
+                                                            }
+                                                        },
+                                                        putTextAtCursorPosition = viewModel::putAtCursorPosition,
+                                                        replyToMessage = viewModel::addReplyTo,
+                                                        scope = scope
+                                                    )
+                                                }
                                             }
 
                                             is ChannelScreenItem.ProspectiveMessage -> {
@@ -803,7 +865,21 @@ fun ChannelScreen(
                                             }
 
                                             is ChannelScreenItem.SystemMessage -> {
-                                                SystemMessage(message = item.message)
+                                                // Check if this message should be highlighted
+                                                val isHighlighted = item.message.id == highlightedMessageId
+                                                
+                                                // Apply highlight effect if needed
+                                                Box(
+                                                    modifier = if (isHighlighted) {
+                                                        Modifier.background(
+                                                            MaterialTheme.colorScheme.primary.copy(alpha = highlightAlpha)
+                                                        )
+                                                    } else {
+                                                        Modifier
+                                                    }
+                                                ) {
+                                                    SystemMessage(message = item.message)
+                                                }
                                             }
 
                                             is ChannelScreenItem.DateDivider -> {
@@ -858,9 +934,10 @@ fun ChannelScreen(
                                             .align(Alignment.BottomCenter)
                                             .padding(16.dp),
                                         onClick = {
-                                            scope.launch {
-                                                lazyListState.animateScrollToItem(0)
-                                            }
+                                            // Clear the around-view and reload latest messages
+                                            viewModel.reloadLatest()
+                                            // Jump to bottom instantly (latest)
+                                            scope.launch { lazyListState.scrollToItem(0) }
                                         },
                                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                         containerColor = MaterialTheme.colorScheme.surfaceVariant

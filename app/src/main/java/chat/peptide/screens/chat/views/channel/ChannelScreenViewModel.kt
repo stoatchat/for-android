@@ -114,7 +114,7 @@ class ChannelScreenViewModel @Inject constructor(
 
     private var loadMessagesJob: Job? = null
 
-    fun switchChannel(id: String) {
+    fun switchChannel(id: String, skipInitialLoad: Boolean = false) {
         // Reset state
         this.loadMessagesJob?.cancel()
         this.channel = RevoltAPI.channelCache[id]
@@ -150,6 +150,17 @@ class ChannelScreenViewModel @Inject constructor(
             denyMessageFieldIfNeeded()
         }
 
+        if (!skipInitialLoad) {
+            this.loadMessages(50, markLastAsRead = true)
+        }
+    }
+
+    fun reloadLatest() {
+        // Reset only message list state and fetch latest messages
+        this.loadMessagesJob?.cancel()
+        this.items = mutableStateListOf(ChannelScreenItem.Loading)
+        this.endOfChannel = false
+        this.didInitialChannelFetch = false
         this.loadMessages(50, markLastAsRead = true)
     }
 
@@ -465,7 +476,16 @@ class ChannelScreenViewModel @Inject constructor(
                         }
                     }
 
-                    val newItems = messages.filter {
+                    // Ensure messages are ordered newest -> oldest consistently
+                    val sortedMessages = messages.sortedByDescending { m ->
+                        try {
+                            ULID.asTimestamp(m.id ?: "0")
+                        } catch (e: Exception) {
+                            0L
+                        }
+                    }
+
+                    val newItems = sortedMessages.filter {
                         if (ignoreExisting) {
                             items.none { m ->
                                 when (m) {

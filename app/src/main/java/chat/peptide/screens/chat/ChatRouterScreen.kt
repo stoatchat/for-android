@@ -108,7 +108,10 @@ sealed class ChatRouterDestination {
     data object Friends : ChatRouterDestination()
     data object Home : ChatRouterDestination()
     data object Discover : ChatRouterDestination()
-    data class Channel(val channelId: String) : ChatRouterDestination()
+    data class Channel(
+        val channelId: String,
+        val messageId: String? = null,
+    ) : ChatRouterDestination()
     data class ServersChannels(val serverID: String) : ChatRouterDestination()
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
@@ -126,7 +129,16 @@ sealed class ChatRouterDestination {
                     )
                 )
 
-                destination.startsWith("channel/") -> Channel(destination.removePrefix("channel/"))
+                destination.startsWith("channel/") -> {
+                    val parts = destination.removePrefix("channel/").split("/")
+                    val channelId = parts.getOrNull(0)
+                    val messageId = parts.getOrNull(1)
+                    if (channelId != null) {
+                        Channel(channelId, messageId)
+                    } else {
+                        default
+                    }
+                }
                 else -> default
             }
         }
@@ -446,7 +458,8 @@ fun ChatRouterScreen(
 
                         viewModel.setSaveDestination(
                             ChatRouterDestination.Channel(
-                                action.channelId
+                                channelId = action.channelId,
+                                messageId = action.messageId,
                             )
                         )
                     }
@@ -891,6 +904,7 @@ fun ChannelNavigator(
         is ChatRouterDestination.Channel -> {
             ChannelScreen(
                 channelId = dest.channelId,
+                messageId = dest.messageId,
                 backToChannelsScreen = {
                     currentServer?.let {
                         viewModel.setSaveDestination(

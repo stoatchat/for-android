@@ -97,7 +97,7 @@ object InternalLinkHandler {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         Log.d(TAG, "Sending SwitchChannel action for channelId: $channelId")
-                        ActionChannel.send(Action.SwitchChannel(channelId))
+                        ActionChannel.send(Action.SwitchChannel(channelId,messageId))
                         Log.d(TAG, "SwitchChannel action sent successfully")
                         
                         // TODO: If messageId is not null, add logic to scroll to the message
