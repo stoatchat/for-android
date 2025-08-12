@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -985,7 +986,7 @@ fun ChannelNavigator(
                     }
                 }
             ) { innerPadding ->
-                Column(modifier = Modifier.padding(innerPadding)) {
+                Box(modifier = Modifier.padding(innerPadding)) {
                     when (dest) {
                         is ChatRouterDestination.Settings -> {
                             SettingsScreen(

@@ -661,7 +661,7 @@ fun ChannelScreen(
                                         ChannelIcon(
                                             channelType = it.channelType ?: ChannelType.TextChannel,
                                             modifier = Modifier
-                                                .size(24.dp)
+
                                                 .alpha(0.8f)
                                         )
                                     }

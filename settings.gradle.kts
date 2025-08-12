@@ -27,5 +27,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Revolt"
+rootProject.name = "PepChat"
 include(":app")
