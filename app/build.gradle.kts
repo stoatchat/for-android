@@ -190,6 +190,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-view:1.4.2")
 
     // Compose BOM
     val composeBom = platform("androidx.compose:compose-bom:$composeBomVersion")

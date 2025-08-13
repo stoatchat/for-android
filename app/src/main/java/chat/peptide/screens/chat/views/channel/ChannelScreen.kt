@@ -1,19 +1,27 @@
 package chat.peptide.screens.chat.views.channel
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Surface.ROTATION_0
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -62,6 +70,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -106,6 +115,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.peptide.R
@@ -157,6 +168,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import java.io.File
 import kotlin.math.max
+import androidx.camera.core.Preview as CameraPreview
 
 sealed class ChannelScreenItem {
     data class RegularMessage(val message: Message) : ChannelScreenItem()
@@ -298,7 +310,6 @@ fun ChannelScreen(
             }
         }
     }
-
     val pickFileLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenMultipleDocuments()
     ) { uriList ->
@@ -308,7 +319,6 @@ fun ChannelScreen(
             }
         }
     }
-
     val pickMediaLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) {
@@ -318,70 +328,71 @@ fun ChannelScreen(
             }
         }
     }
-
     val capturedPhotoUri = rememberSaveable { mutableStateOf<Uri?>(null) }
-    val pickCameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
-    ) { uriUpdated ->
-        if (uriUpdated) {
-            capturedPhotoUri.value?.let { uri ->
-                processFileUri(uri, null)
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    val imageCapture = ImageCapture.Builder().setTargetRotation(ROTATION_0).build()
+    var showCameraSheet by remember { mutableStateOf(false) }
+    val capturePhoto = {
+        scope.launch {
+            try {
+                val cameraProvider = cameraProviderFuture.get()
+                cameraProvider.unbindAll() // Unbind previous use cases
+
+                val name = "peptide-photo-${System.currentTimeMillis()}.jpg"
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                    put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                }
+                val outputOptions = ImageCapture.OutputFileOptions
+                    .Builder(
+                        context.contentResolver,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        contentValues
+                    )
+                    .build()
+
+                imageCapture.takePicture(
+                    outputOptions,
+                    ContextCompat.getMainExecutor(context),
+                    object : ImageCapture.OnImageSavedCallback {
+                        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                            output.savedUri?.let { uri ->
+                                capturedPhotoUri.value = uri
+                                processFileUri(uri, null)
+                                showCameraSheet = false
+                            }
+                        }
+
+                        override fun onError(exc: ImageCaptureException) {
+                            Toast.makeText(context, "Photo capture failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+                            Log.e("ChannelScreen", "Photo capture failed: ", exc)
+                        }
+                    })
+            } catch (e: Exception) {
+                Log.e("ChannelScreen", "Error opening camera: ", e)
+                Toast.makeText(context, "Error opening camera: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-    val openCameraCallback = cb@{
-        // Create a new content URI to store the captured image.
-        val contentResolver =
-            context.contentResolver
-        val contentValues = ContentValues().apply {
-            put(
-                MediaStore.MediaColumns.DISPLAY_NAME,
-                "RVL_${System.currentTimeMillis()}.jpg"
-            )
-            put(
-                MediaStore.MediaColumns.MIME_TYPE,
-                "image/jpeg"
-            )
-            put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES
-            )
-        }
-
-        try {
-            capturedPhotoUri.value =
-                contentResolver.insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues
-                )
-        } catch (_: Exception) {
-            Toast.makeText(
-                context,
-                context.getString(
-                    R.string.file_picker_chip_camera_failed
-                ),
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return@cb
-        }
-
-        try {
-            capturedPhotoUri.value?.let { uri ->
-                pickCameraLauncher.launch(uri)
-            }
-        } catch (_: Exception) {
-            Toast.makeText(
-                context,
-                context.getString(
-                    R.string.file_picker_chip_camera_none_installed
-                ),
-                Toast.LENGTH_SHORT
-            ).show()
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            capturePhoto()
+        } else {
+            Toast.makeText(context, "Camera permission denied", Toast.LENGTH_SHORT).show()
         }
     }
-
+    val openCameraCallback = {
+        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        if (granted) {
+            showCameraSheet = true
+        } else {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
     val openDocumentPickerCallback = {
         pickFileLauncher.launch(arrayOf("*/*"))
     }
@@ -397,7 +408,7 @@ fun ChannelScreen(
     // <editor-fold desc="UI elements">
     val lazyListState = rememberLazyListState()
     var disableScroll by remember { mutableStateOf(false) }
-    
+
     // State to track the highlighted message ID and animation
     var highlightedMessageId by remember { mutableStateOf<String?>(null) }
     val highlightAlpha by animateFloatAsState(
@@ -462,7 +473,10 @@ fun ChannelScreen(
             }
 
             if (messageIndex != -1) {
-                Log.d("ChannelScreen", "Target message located at index: $messageIndex (reverseLayout=true)")
+                Log.d(
+                    "ChannelScreen",
+                    "Target message located at index: $messageIndex (reverseLayout=true)"
+                )
                 // Instantly jump to the message without long animation
                 try {
                     lazyListState.scrollToItem(index = messageIndex)
@@ -493,7 +507,11 @@ fun ChannelScreen(
                     }
                     if (oldestId != null) {
                         Log.d("ChannelScreen", "Pagination: loading older before=$oldestId")
-                        viewModel.loadMessages(amount = 50, before = oldestId, ignoreExisting = true)
+                        viewModel.loadMessages(
+                            amount = 50,
+                            before = oldestId,
+                            ignoreExisting = true
+                        )
                     }
                 }
             }
@@ -518,7 +536,10 @@ fun ChannelScreen(
                         val beforeSize = viewModel.items.size
                         val anchorIndex = lazyListState.firstVisibleItemIndex
                         val anchorOffset = lazyListState.firstVisibleItemScrollOffset
-                        Log.d("ChannelScreen", "Pagination: loading newer after=$newestId (anchor index=$anchorIndex, offset=$anchorOffset, size=$beforeSize)")
+                        Log.d(
+                            "ChannelScreen",
+                            "Pagination: loading newer after=$newestId (anchor index=$anchorIndex, offset=$anchorOffset, size=$beforeSize)"
+                        )
 
                         viewModel.loadMessages(amount = 50, after = newestId, ignoreExisting = true)
 
@@ -531,7 +552,8 @@ fun ChannelScreen(
                                 // Shift anchor forward by number of inserted items to keep viewport stable
                                 try {
                                     lazyListState.scrollToItem(anchorIndex + added, anchorOffset)
-                                } catch (_: Exception) {}
+                                } catch (_: Exception) {
+                                }
                                 break
                             }
                             attempts++
@@ -808,12 +830,20 @@ fun ChannelScreen(
                                         items = viewModel.items,
                                         key = { item ->
                                             when (item) {
-                                                is ChannelScreenItem.RegularMessage -> item.message.id ?: "regular_null_id"
-                                                is ChannelScreenItem.ProspectiveMessage -> item.message.id ?: "prospective_null_id"
-                                                is ChannelScreenItem.FailedMessage -> item.message.id ?: "failed_null_id"
-                                                is ChannelScreenItem.SystemMessage -> item.message.id ?: "system_null_id"
+                                                is ChannelScreenItem.RegularMessage -> item.message.id
+                                                    ?: "regular_null_id"
+
+                                                is ChannelScreenItem.ProspectiveMessage -> item.message.id
+                                                    ?: "prospective_null_id"
+
+                                                is ChannelScreenItem.FailedMessage -> item.message.id
+                                                    ?: "failed_null_id"
+
+                                                is ChannelScreenItem.SystemMessage -> item.message.id
+                                                    ?: "system_null_id"
+
                                                 is ChannelScreenItem.DateDivider -> "date_${item.instant.toEpochMilliseconds()}"
-                                                is ChannelScreenItem.LoadTrigger -> "loadtrigger_${item.after}_${item.before}"
+                                                is ChannelScreenItem.LoadTrigger -> "load trigger_${item.after}_${item.before}"
                                                 is ChannelScreenItem.Loading -> "loading"
                                             }
                                         },
@@ -832,13 +862,16 @@ fun ChannelScreen(
                                         when (item) {
                                             is ChannelScreenItem.RegularMessage -> {
                                                 // Check if this message should be highlighted
-                                                val isHighlighted = item.message.id == highlightedMessageId
-                                                
+                                                val isHighlighted =
+                                                    item.message.id == highlightedMessageId
+
                                                 // Apply highlight effect if needed
                                                 Box(
                                                     modifier = if (isHighlighted) {
                                                         Modifier.background(
-                                                            MaterialTheme.colorScheme.primary.copy(alpha = highlightAlpha)
+                                                            MaterialTheme.colorScheme.primary.copy(
+                                                                alpha = highlightAlpha
+                                                            )
                                                         )
                                                     } else {
                                                         Modifier
@@ -919,13 +952,16 @@ fun ChannelScreen(
 
                                             is ChannelScreenItem.SystemMessage -> {
                                                 // Check if this message should be highlighted
-                                                val isHighlighted = item.message.id == highlightedMessageId
-                                                
+                                                val isHighlighted =
+                                                    item.message.id == highlightedMessageId
+
                                                 // Apply highlight effect if needed
                                                 Box(
                                                     modifier = if (isHighlighted) {
                                                         Modifier.background(
-                                                            MaterialTheme.colorScheme.primary.copy(alpha = highlightAlpha)
+                                                            MaterialTheme.colorScheme.primary.copy(
+                                                                alpha = highlightAlpha
+                                                            )
                                                         )
                                                     } else {
                                                         Modifier
@@ -1080,6 +1116,49 @@ fun ChannelScreen(
                                         && FeatureFlags.voiceChannels2_0Granted
                                     ) {
                                         JoinVoiceChannelButton(channelId)
+                                    }
+                                }
+                            }
+
+                            // Full-screen camera preview sheet
+                            if (showCameraSheet) {
+                                val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                                ModalBottomSheet(
+                                    sheetState = sheetState,
+                                    onDismissRequest = { showCameraSheet = false }
+                                ) {
+                                    Box(Modifier.fillMaxSize()) {
+                                        AndroidView(
+                                            modifier = Modifier.fillMaxSize(),
+                                            factory = { ctx ->
+                                                PreviewView(ctx).also { pv ->
+                                                    pv.scaleType = PreviewView.ScaleType.FILL_CENTER
+                                                    // Bind use cases when view is ready
+                                                    val cameraProvider = cameraProviderFuture.get()
+                                                    cameraProvider.unbindAll()
+                                                    val preview = CameraPreview.Builder().build().also { pr ->
+                                                        pr.surfaceProvider = pv.surfaceProvider
+                                                    }
+                                                    cameraProvider.bindToLifecycle(
+                                                        lifecycleOwner,
+                                                        CameraSelector.DEFAULT_BACK_CAMERA,
+                                                        preview,
+                                                        imageCapture
+                                                    )
+                                                }
+                                            }
+                                        )
+                                        FloatingActionButton(
+                                            modifier = Modifier
+                                                .align(Alignment.BottomCenter)
+                                                .padding(24.dp),
+                                            onClick = { capturePhoto() }
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.icn_camera_24dp),
+                                                contentDescription = stringResource(R.string.file_picker_chip_camera)
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -1358,7 +1437,7 @@ fun ChannelScreen(
                                                                 ChannelScreenActivePane.None
                                                         }
 
-                                                        MediaPickerGateway(
+                                MediaPickerGateway(
                                                             onOpenPhotoPicker = {
                                                                 openPhotoPickerCallback()
                                                                 viewModel.activePane =

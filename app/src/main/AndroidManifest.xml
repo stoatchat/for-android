@@ -19,6 +19,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     -->
 
+    <!-- Camera permission required for CameraX usage -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
