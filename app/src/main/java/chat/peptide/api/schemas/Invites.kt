@@ -2,7 +2,7 @@ package chat.peptide.api.schemas
 
 import android.net.Uri
 import androidx.core.net.toUri
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -51,10 +51,10 @@ data class InviteJoined(
 
 fun Uri.isInviteUri(): Boolean {
     val firstPathSegmentIsInvite = this.pathSegments.firstOrNull() == "invite"
-    val isAppRevoltChat = this.host == RevoltAPI.getCurrentAppUrl().toUri().host
-    val matchRvltGG = this.host == RevoltAPI.getCurrentInvitesUrl().toUri().host
+    val isAppPeptideChat = this.host == PeptideAPI.getCurrentAppUrl().toUri().host
+    val matchRvltGG = this.host == PeptideAPI.getCurrentInvitesUrl().toUri().host
 
-    val matchApp = isAppRevoltChat && firstPathSegmentIsInvite
+    val matchApp = isAppPeptideChat && firstPathSegmentIsInvite
 
     val hasEnoughSegments =
         if (matchApp) this.pathSegments.size == 2 else this.pathSegments.size == 1

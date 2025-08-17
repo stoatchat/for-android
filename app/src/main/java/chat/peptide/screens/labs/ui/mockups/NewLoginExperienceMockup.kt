@@ -94,7 +94,7 @@ fun NewLoginExperienceMockup(navController: NavController) {
                     ) {
                         Spacer(modifier = Modifier.height(64.dp))
                         Image(
-                            painter = painterResource(R.drawable.revolt_logo_wide),
+                            painter = painterResource(R.drawable.peptide_logo_wide),
                             contentDescription = null,
                             colorFilter = if (LoadedSettings.theme == Theme.M3Dynamic) ColorFilter.tint(
                                 MaterialTheme.colorScheme.onBackground
@@ -109,7 +109,7 @@ fun NewLoginExperienceMockup(navController: NavController) {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            "Revolt is the chat app that’s truly built with you in mind.",
+                            "Peptide is the chat app that’s truly built with you in mind.",
                             style = MaterialTheme.typography.bodyLargeEmphasized,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center

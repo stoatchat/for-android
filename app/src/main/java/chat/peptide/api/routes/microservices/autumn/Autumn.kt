@@ -1,9 +1,9 @@
 package chat.peptide.api.routes.microservices.autumn
 
 import chat.peptide.api.HitRateLimitException
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.schemas.AutumnError
 import chat.peptide.api.schemas.AutumnId
 import io.ktor.client.plugins.onUpload
@@ -36,9 +36,9 @@ suspend fun uploadToAutumn(
     contentType: ContentType,
     onProgress: (Long, Long) -> Unit = { _, _ -> }
 ): String {
-    val uploadUrl = "${RevoltAPI.getCurrentFilesUrl()}/$tag"
+    val uploadUrl = "${PeptideAPI.getCurrentFilesUrl()}/$tag"
 
-    val response = RevoltHttp.post(uploadUrl) {
+    val response = PeptideHttp.post(uploadUrl) {
         setBody(
             MultiPartFormDataContent(
                 formData {
@@ -53,18 +53,18 @@ suspend fun uploadToAutumn(
                 }
             )
         )
-        header(RevoltAPI.TOKEN_HEADER_NAME, RevoltAPI.sessionToken)
+        header(PeptideAPI.TOKEN_HEADER_NAME, PeptideAPI.sessionToken)
         onUpload { bytesSentTotal, contentLength ->
             contentLength?.let { onProgress(bytesSentTotal, it) }
         }
     }
 
     try {
-        val autumnId = RevoltJson.decodeFromString(AutumnId.serializer(), response.bodyAsText())
+        val autumnId = PeptideJson.decodeFromString(AutumnId.serializer(), response.bodyAsText())
         return autumnId.id
     } catch (e: Exception) {
         try {
-            val error = RevoltJson.decodeFromString(AutumnError.serializer(), response.bodyAsText())
+            val error = PeptideJson.decodeFromString(AutumnError.serializer(), response.bodyAsText())
             throw Exception(error.type)
         } catch (e: Exception) {
             if (response.status == HttpStatusCode.TooManyRequests) {

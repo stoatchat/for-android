@@ -37,7 +37,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.account.MfaResponseRecoveryCode
 import chat.peptide.api.routes.account.MfaResponseTotpCode
 import chat.peptide.api.routes.account.authenticateWithMfaRecoveryCode
@@ -93,8 +93,8 @@ class MfaScreenViewModel @Inject constructor(
                     val token = response.firstUserHints!!.token
                     val id = response.firstUserHints.id
 
-                    RevoltAPI.loginAs(token)
-                    RevoltAPI.setSessionId(id)
+                    PeptideAPI.loginAs(token)
+                    PeptideAPI.setSessionId(id)
                     kvStorage.set("sessionToken", token)
                     kvStorage.set("sessionId", id)
 
@@ -123,8 +123,8 @@ class MfaScreenViewModel @Inject constructor(
                     val token = response.firstUserHints!!.token
                     val id = response.firstUserHints.id
 
-                    RevoltAPI.loginAs(token)
-                    RevoltAPI.setSessionId(id)
+                    PeptideAPI.loginAs(token)
+                    PeptideAPI.setSessionId(id)
                     kvStorage.set("sessionToken", token)
                     kvStorage.set("sessionId", id)
 

@@ -1,6 +1,6 @@
 package chat.peptide.markdown.jbm
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 
 object MentionResolver {
     /**
@@ -12,9 +12,9 @@ object MentionResolver {
      * @return The resolved user mention.
      */
     fun resolveUser(userId: String, serverId: String? = null): String {
-        val maybeMember = serverId?.let { RevoltAPI.members.getMember(serverId, userId) }
+        val maybeMember = serverId?.let { PeptideAPI.members.getMember(serverId, userId) }
         return maybeMember?.nickname
-            ?: RevoltAPI.userCache[userId]?.username
+            ?: PeptideAPI.userCache[userId]?.username
             ?: "<@$userId>"
     }
 
@@ -26,7 +26,7 @@ object MentionResolver {
      * @return The resolved channel mention.
      */
     fun resolveChannel(channelId: String): String {
-        val channel = RevoltAPI.channelCache[channelId]
+        val channel = PeptideAPI.channelCache[channelId]
         return channel?.name?.let { name -> "#$name" } ?: "<#$channelId>"
     }
 }

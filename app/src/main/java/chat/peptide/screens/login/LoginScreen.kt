@@ -50,8 +50,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.RevoltApplication
-import chat.peptide.api.RevoltAPI
+import chat.peptide.PeptideApplication
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.account.EmailPasswordAssessment
 import chat.peptide.api.routes.account.negotiateAuthentication
 import chat.peptide.api.routes.onboard.needsOnboarding
@@ -96,7 +96,7 @@ class LoginViewModel @Inject constructor(
                 negotiateAuthentication(_email, _password)
             } catch (e: Exception) {
                 _error = if (e.message?.startsWith("Unexpected JSON token") == true) {
-                    RevoltApplication.instance.getString(R.string.service_health_alert_body_default)
+                    PeptideApplication.instance.getString(R.string.service_health_alert_body_default)
                 } else e.message ?: "Unknown error"
                 return@launch
             }
@@ -127,8 +127,8 @@ class LoginViewModel @Inject constructor(
                             return@launch
                         }
 
-                        RevoltAPI.loginAs(token)
-                        RevoltAPI.setSessionId(response.firstUserHints.token)
+                        PeptideAPI.loginAs(token)
+                        PeptideAPI.setSessionId(response.firstUserHints.token)
 
                         _navigateTo = "home"
                     } catch (e: Error) {
@@ -331,7 +331,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 )
                 Weblink(
                     text = stringResource(R.string.password_forgot),
-                    url = "${RevoltAPI.getCurrentAppUrl()}/login/reset",
+                    url = "${PeptideAPI.getCurrentAppUrl()}/login/reset",
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
                 Spacer(modifier = Modifier.height(32.dp))

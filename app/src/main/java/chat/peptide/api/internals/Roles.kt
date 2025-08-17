@@ -1,6 +1,6 @@
 package chat.peptide.api.internals
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.Channel
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.Member
@@ -27,8 +27,8 @@ object Roles {
         withColour: Boolean = false,
         hoisted: Boolean = false
     ): Role? {
-        val server = RevoltAPI.serverCache[serverId] ?: return null
-        val member = RevoltAPI.members.getMember(serverId, userId) ?: return null
+        val server = PeptideAPI.serverCache[serverId] ?: return null
+        val member = PeptideAPI.members.getMember(serverId, userId) ?: return null
 
         val roles = member.roles?.map { roleId ->
             server.roles?.get(roleId)
@@ -43,13 +43,13 @@ object Roles {
     }
 
     fun inOrder(serverId: String, predicate: (Role) -> Boolean): List<Role> {
-        val server = RevoltAPI.serverCache[serverId] ?: return emptyList()
+        val server = PeptideAPI.serverCache[serverId] ?: return emptyList()
 
         return server.roles?.values?.filter(predicate)?.sortedBy { it.rank } ?: emptyList()
     }
 
     fun permissionFor(server: Server, member: Member): Long {
-        val user = RevoltAPI.userCache[member.id?.user] ?: return 0L
+        val user = PeptideAPI.userCache[member.id?.user] ?: return 0L
 
         if (user.privileged == true) return PermissionBit.GrantAllSafe.value
         if (server.owner == member.id?.user) return PermissionBit.GrantAllSafe.value
@@ -71,7 +71,7 @@ object Roles {
     }
 
     // TODO may not be exactly accurate
-    // See https://github.com/revoltchat/revolt.js/blob/2ba023c879b2a53f9a3cc7042e6721c28dd970ba/src/permissions/calculator.ts#L80-L158
+    // See https://github.com/peptidechat/peptide.js/blob/2ba023c879b2a53f9a3cc7042e6721c28dd970ba/src/permissions/calculator.ts#L80-L158
     fun permissionFor(channel: Channel, user: User? = null, member: Member? = null): Long {
         return when (channel.channelType) {
             ChannelType.SavedMessages -> BitDefaults.SavedMessages
@@ -80,13 +80,13 @@ object Roles {
             ChannelType.Group -> if (channel.owner == user?.id) PermissionBit.GrantAllSafe.value else BitDefaults.DirectMessages
 
             ChannelType.TextChannel, ChannelType.VoiceChannel -> {
-                val server = RevoltAPI.serverCache[channel.server]
+                val server = PeptideAPI.serverCache[channel.server]
                 // FIXME this is a stupid patch to prevent it from showing "no permission" on a channel on launch
                     ?: return PermissionBit.GrantAllSafe.value
 
                 if (server.owner == user?.id) return PermissionBit.GrantAllSafe.value
 
-                val chMember = member ?: RevoltAPI.members.getMember(
+                val chMember = member ?: PeptideAPI.members.getMember(
                     server.id ?: return 0L,
                     user?.id ?: return 0L
                 ) ?: return 0L

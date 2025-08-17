@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.account
 
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.schemas.RsResult
 import chat.peptide.api.api
 import io.ktor.client.request.post
@@ -21,8 +21,8 @@ data class RegistrationBody(
     val captcha: String
 )
 
-suspend fun register(body: RegistrationBody): RsResult<Unit, RevoltError> {
-    val response = RevoltHttp.post("/auth/account/create".api()) {
+suspend fun register(body: RegistrationBody): RsResult<Unit, PeptideError> {
+    val response = PeptideHttp.post("/auth/account/create".api()) {
         setBody(body)
         contentType(ContentType.Application.Json)
     }
@@ -30,7 +30,7 @@ suspend fun register(body: RegistrationBody): RsResult<Unit, RevoltError> {
     val responseContent = response.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), responseContent)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), responseContent)
         return RsResult.err(error)
     } catch (e: SerializationException) {
         // Not an error

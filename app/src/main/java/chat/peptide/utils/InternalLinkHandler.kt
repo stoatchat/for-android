@@ -26,7 +26,7 @@ object InternalLinkHandler {
      */
     fun isInternalLink(url: String): Boolean {
         val uri = Uri.parse(url)
-        val isInternal = DeepLinkUtils.isRevoltDeepLink(uri)
+        val isInternal = DeepLinkUtils.isPeptideDeepLink(uri)
         Log.d(TAG, "isInternalLink: $url -> $isInternal")
         return isInternal
     }

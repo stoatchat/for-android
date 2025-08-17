@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.peptide.R
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.server.createServer
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
@@ -322,7 +322,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                             return@Button
                                         }
                                     } else {
-                                        "https://${RevoltAPI.getCurrentAppUrl()}/invite/${inviteState.text}".toUri()
+                                        "https://${PeptideAPI.getCurrentAppUrl()}/invite/${inviteState.text}".toUri()
                                     }
                                     context.startActivity(intent)
 

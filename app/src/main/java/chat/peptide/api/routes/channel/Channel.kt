@@ -1,9 +1,9 @@
 package chat.peptide.api.routes.channel
 
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.schemas.Channel
@@ -37,7 +37,7 @@ suspend fun fetchMessagesFromChannel(
     nearby: String? = null,
     sort: String? = null
 ): MessagesInChannel {
-    val response = RevoltHttp.get("/channels/$channelId/messages".api()) {
+    val response = PeptideHttp.get("/channels/$channelId/messages".api()) {
         parameter("limit", limit)
         parameter("include_users", includeUsers)
 
@@ -49,12 +49,12 @@ suspend fun fetchMessagesFromChannel(
         .bodyAsText()
 
     if (includeUsers) {
-        return RevoltJson.decodeFromString(
+        return PeptideJson.decodeFromString(
             MessagesInChannel.serializer(),
             response
         )
     } else {
-        val messages = RevoltJson.decodeFromString(
+        val messages = PeptideJson.decodeFromString(
             ListSerializer(Message.serializer()),
             response
         )
@@ -104,7 +104,7 @@ suspend fun sendMessage(
     attachments: List<String>? = null,
     idempotencyKey: String = ULID.makeNext()
 ): String {
-    val response = RevoltHttp.post("/channels/$channelId/messages".api()) {
+    val response = PeptideHttp.post("/channels/$channelId/messages".api()) {
         contentType(ContentType.Application.Json)
         setBody(
             SendMessageBody(
@@ -122,7 +122,7 @@ suspend fun sendMessage(
 }
 
 suspend fun editMessage(channelId: String, messageId: String, newContent: String? = null) {
-    val response = RevoltHttp.patch("/channels/$channelId/messages/$messageId".api()) {
+    val response = PeptideHttp.patch("/channels/$channelId/messages/$messageId".api()) {
         contentType(ContentType.Application.Json)
         setBody(
             EditMessageBody(
@@ -133,7 +133,7 @@ suspend fun editMessage(channelId: String, messageId: String, newContent: String
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error
@@ -141,55 +141,55 @@ suspend fun editMessage(channelId: String, messageId: String, newContent: String
 }
 
 suspend fun deleteMessage(channelId: String, messageId: String) {
-    RevoltHttp.delete("/channels/$channelId/messages/$messageId".api())
+    PeptideHttp.delete("/channels/$channelId/messages/$messageId".api())
 }
 
 suspend fun ackChannel(channelId: String, messageId: String = ULID.makeNext()) {
-    RevoltHttp.put("/channels/$channelId/ack/$messageId".api())
+    PeptideHttp.put("/channels/$channelId/ack/$messageId".api())
 }
 
 suspend fun fetchSingleChannel(channelId: String): Channel {
-    val response = RevoltHttp.get("/channels/$channelId".api())
+    val response = PeptideHttp.get("/channels/$channelId".api())
         .bodyAsText()
 
-    return RevoltJson.decodeFromString(
+    return PeptideJson.decodeFromString(
         Channel.serializer(),
         response
     )
 }
 
 suspend fun fetchGroupParticipants(channelId: String): List<User> {
-    val response = RevoltHttp.get("/channels/$channelId/members".api())
+    val response = PeptideHttp.get("/channels/$channelId/members".api())
         .bodyAsText()
 
-    return RevoltJson.decodeFromString(
+    return PeptideJson.decodeFromString(
         ListSerializer(User.serializer()),
         response
     )
 }
 
 suspend fun createInvite(channelId: String): CreateInviteResponse {
-    val response = RevoltHttp.post("/channels/$channelId/invites".api())
+    val response = PeptideHttp.post("/channels/$channelId/invites".api())
         .bodyAsText()
 
-    val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+    val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
     if (error.type != "Server") throw Error(error.type)
 
-    return RevoltJson.decodeFromString(CreateInviteResponse.serializer(), response)
+    return PeptideJson.decodeFromString(CreateInviteResponse.serializer(), response)
 }
 
 suspend fun fetchSingleMessage(channelId: String, messageId: String): Message {
-    val response = RevoltHttp.get("/channels/$channelId/messages/$messageId".api())
+    val response = PeptideHttp.get("/channels/$channelId/messages/$messageId".api())
         .bodyAsText()
 
-    return RevoltJson.decodeFromString(
+    return PeptideJson.decodeFromString(
         Message.serializer(),
         response
     )
 }
 
 suspend fun leaveDeleteOrCloseChannel(channelId: String, leaveSilently: Boolean = false) {
-    RevoltHttp.delete("/channels/$channelId".api()) {
+    PeptideHttp.delete("/channels/$channelId".api()) {
         parameter("leave_silently", leaveSilently)
     }
 }
@@ -207,33 +207,33 @@ suspend fun patchChannel(
     val body = mutableMapOf<String, JsonElement>()
 
     if (name != null) {
-        body["name"] = RevoltJson.encodeToJsonElement(String.serializer(), name)
+        body["name"] = PeptideJson.encodeToJsonElement(String.serializer(), name)
     }
 
     if (description != null) {
-        body["description"] = RevoltJson.encodeToJsonElement(String.serializer(), description)
+        body["description"] = PeptideJson.encodeToJsonElement(String.serializer(), description)
     }
 
     if (icon != null) {
-        body["icon"] = RevoltJson.encodeToJsonElement(String.serializer(), icon)
+        body["icon"] = PeptideJson.encodeToJsonElement(String.serializer(), icon)
     }
 
     if (banner != null) {
-        body["banner"] = RevoltJson.encodeToJsonElement(String.serializer(), banner)
+        body["banner"] = PeptideJson.encodeToJsonElement(String.serializer(), banner)
     }
 
     if (remove != null) {
-        body["remove"] = RevoltJson.encodeToJsonElement(ListSerializer(String.serializer()), remove)
+        body["remove"] = PeptideJson.encodeToJsonElement(ListSerializer(String.serializer()), remove)
     }
 
     if (nsfw != null) {
-        body["nsfw"] = RevoltJson.encodeToJsonElement(Boolean.serializer(), nsfw)
+        body["nsfw"] = PeptideJson.encodeToJsonElement(Boolean.serializer(), nsfw)
     }
 
-    val response = RevoltHttp.patch("/channels/$channelId".api()) {
+    val response = PeptideHttp.patch("/channels/$channelId".api()) {
         contentType(ContentType.Application.Json)
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 MapSerializer(
                     String.serializer(),
                     JsonElement.serializer()
@@ -245,14 +245,14 @@ suspend fun patchChannel(
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
     if (!pure) {
-        val channel = RevoltJson.decodeFromString(Channel.serializer(), response)
-        RevoltAPI.channelCache[channelId] = channel
+        val channel = PeptideJson.decodeFromString(Channel.serializer(), response)
+        PeptideAPI.channelCache[channelId] = channel
     }
 }

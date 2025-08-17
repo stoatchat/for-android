@@ -19,8 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
 import chat.peptide.api.schemas.AutumnResource
 import chat.peptide.databinding.ActivityVideoplayerBinding
 import chat.peptide.providers.getAttachmentContentUri
@@ -54,7 +54,7 @@ class VideoViewActivity : FragmentActivity() {
         }
 
         val resourceUrl =
-            "${RevoltAPI.getCurrentFilesUrl()}/attachments/${autumnResource.id}/${autumnResource.filename}"
+            "${PeptideAPI.getCurrentFilesUrl()}/attachments/${autumnResource.id}/${autumnResource.filename}"
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -189,13 +189,13 @@ class VideoViewActivity : FragmentActivity() {
                     ContentValues().apply {
                         put(MediaStore.Video.Media.DISPLAY_NAME, resource.filename)
                         put(MediaStore.Video.Media.MIME_TYPE, resource.contentType)
-                        put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/Revolt")
+                        put(MediaStore.Video.Media.RELATIVE_PATH, "Movies/Peptide")
                         put(MediaStore.Video.Media.IS_PENDING, 1)
                     }
                 )
             }?.let { uri ->
                 this@VideoViewActivity.contentResolver.openOutputStream(uri).use { stream ->
-                    val video = RevoltHttp.get(resourceUrl).readBytes()
+                    val video = PeptideHttp.get(resourceUrl).readBytes()
                     stream?.write(video)
 
                     this@VideoViewActivity.applicationContext.let {

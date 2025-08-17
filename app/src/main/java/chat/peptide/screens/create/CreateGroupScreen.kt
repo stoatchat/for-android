@@ -37,8 +37,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.api.RevoltAPI
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.FriendRequests
 import chat.peptide.api.routes.channel.createGroupDM
 import chat.peptide.callbacks.Action
@@ -131,8 +131,8 @@ fun CreateGroupScreen(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = viewModel.groupName.isNotBlank() && viewModel.groupMembers.isNotEmpty(),
-                enter = scaleIn(animationSpec = RevoltTweenFloat),
-                exit = scaleOut(animationSpec = RevoltTweenFloat)
+                enter = scaleIn(animationSpec = PeptideTweenFloat),
+                exit = scaleOut(animationSpec = PeptideTweenFloat)
             ) {
                 FloatingActionButton(onClick = { viewModel.createGroup(navController::popBackStack) }) {
                     Icon(
@@ -189,7 +189,7 @@ fun CreateGroupScreen(
             )
             LazyColumn(contentPadding = PaddingValues(bottom = 78.0.dp)) {
                 items(viewModel.friendsFilteredBySearch.size) { index ->
-                    val friend = RevoltAPI.userCache[viewModel.friendsFilteredBySearch[index]]
+                    val friend = PeptideAPI.userCache[viewModel.friendsFilteredBySearch[index]]
                         ?: return@items
                     val isMember = viewModel.groupMembers.contains(friend.id)
 

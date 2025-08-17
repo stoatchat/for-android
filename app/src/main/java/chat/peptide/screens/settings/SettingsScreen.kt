@@ -36,7 +36,7 @@ import androidx.navigation.NavController
 import chat.peptide.BuildConfig
 import chat.peptide.R
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.settings.FeatureFlags
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.composables.generic.ListHeader
@@ -53,7 +53,7 @@ class SettingsScreenViewModel @Inject constructor(
         runBlocking {
             kvStorage.remove("sessionToken")
             LoadedSettings.reset()
-            RevoltAPI.logout()
+            PeptideAPI.logout()
         }
     }
 }

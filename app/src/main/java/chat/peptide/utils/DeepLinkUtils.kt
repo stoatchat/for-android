@@ -7,17 +7,17 @@ import chat.peptide.activities.DeepLinkActivity
 import chat.peptide.activities.MainActivity
 
 /**
- * Utility class for handling deep links in the Revolt app.
+ * Utility class for handling deep links in the Peptide app.
  */
 object DeepLinkUtils {
 
     /**
-     * Checks if the given URI is a valid Revolt deep link.
+     * Checks if the given URI is a valid Peptide deep link.
      *
      * @param uri The URI to check
-     * @return true if the URI is a valid Revolt deep link, false otherwise
+     * @return true if the URI is a valid Peptide deep link, false otherwise
      */
-    fun isRevoltDeepLink(uri: Uri?): Boolean {
+    fun isPeptideDeepLink(uri: Uri?): Boolean {
         if (uri == null) return false
         
         val host = uri.host ?: return false
@@ -26,7 +26,7 @@ object DeepLinkUtils {
         // Check if the scheme is http or https
         if (scheme != "http" && scheme != "https") return false
         
-        // Check if the host is a valid Revolt host
+        // Check if the host is a valid Peptide host
         return host == "peptide.chat" || host == "app.peptide.chat"
     }
     

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextOverflow
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.internals.Roles
 import chat.peptide.api.internals.solidColor
@@ -74,7 +74,7 @@ fun MemberListItem(
                     ?: user?.id
                     ?: userId,
                 avatar = user?.avatar,
-                rawUrl = member?.avatar?.let { "${RevoltAPI.getCurrentFilesUrl()}/avatars/${it.id}" },
+                rawUrl = member?.avatar?.let { "${PeptideAPI.getCurrentFilesUrl()}/avatars/${it.id}" },
                 userId = userId,
                 presence = presenceFromStatus(
                     user?.status?.presence,

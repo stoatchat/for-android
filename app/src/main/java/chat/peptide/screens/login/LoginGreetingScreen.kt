@@ -65,7 +65,7 @@ fun LoginGreetingScreen(navController: NavController) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.onboarding_fly_image),
-                contentDescription = "Revolt Logo",
+                contentDescription = "Peptide Logo",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .padding(bottom = 16.dp)

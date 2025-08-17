@@ -11,7 +11,7 @@
     <string name="privacy_policy">سياسة الخصوصية</string>
     <string name="community_guidelines">ارشادات المجتمع</string>
     <string name="login_onboarding_heading">أجد مجتمعك، اتصل بالعالم.</string>
-    <string name="login_onboarding_body">Revolt من أفضل الطرق لكي تظل متصلاً مع أصدقائك ومجتمعك، في أي مكان، وفي أي وقت.</string>
+    <string name="login_onboarding_body">Peptide من أفضل الطرق لكي تظل متصلاً مع أصدقائك ومجتمعك، في أي مكان، وفي أي وقت.</string>
     <string name="email">البريد الإلكتروني</string>
     <string name="password">كلمة المرور</string>
     <string name="login">تسجيل الدخول</string>
@@ -20,8 +20,8 @@
     <string name="login_heading">هيا نسجل دخولك</string>
     <string name="password_forgot">نسيت كلمة المرور؟</string>
     <string name="password_forgot_heading">نسيت كلمة المرور؟</string>
-    <string name="register_heading">مرحبا بك في Revolt</string>
-    <string name="register_image_alt">استخدم Revolt كي تتحدث عن الأشياء.</string>
+    <string name="register_heading">مرحبا بك في Peptide</string>
+    <string name="register_image_alt">استخدم Peptide كي تتحدث عن الأشياء.</string>
     <string name="loading">نجلب بعض المعلومات، انتظرنا…</string>
     <string name="resend_verification">أعد إرسال بريد إلكتروني للتحقق</string>
     <string name="password_manager_hint">تستخدم مساعد كلمات المرور؟</string>
@@ -48,12 +48,12 @@
     <string name="mfa_password_header">أدخل كلمة المرور الخاصة بك</string>
     <string name="mfa_password_lead">أدخل كلمة المرور الخاصة بك للاستمرار.</string>
     <string name="about">عن</string>
-    <string name="about_full_name">Revolt علي Android</string>
-    <string name="about_brought_to_you_by">مقدم إليك ب❤️ من قبل فريق Revolt.</string>
+    <string name="about_full_name">Peptide علي Android</string>
+    <string name="about_brought_to_you_by">مقدم إليك ب❤️ من قبل فريق Peptide.</string>
     <string name="about_tab_version">إصدار</string>
     <string name="about_tab_details">معلومات تفصيلية</string>
     <string name="oss_attribution">إسناد البرامج مفتوحة المصدر</string>
-    <string name="oss_attribution_body">Revolt مبنيآ بمساعدة هذه البرامج المفتوحة المصدر الرائعة.</string>
+    <string name="oss_attribution_body">Peptide مبنيآ بمساعدة هذه البرامج المفتوحة المصدر الرائعة.</string>
     <string name="register_email">البريد الإلكتروني</string>
     <string name="register_email_verification_hint">سنرسل إليك بريد إلكتروني للتعريف لنعرّف حسابك.</string>
     <string name="register_password_rules">ثمانية فأكثر، كلمات المرور الشائعة سيئة. الرموز والأرقام مُستحسنة.</string>
@@ -85,7 +85,7 @@
     <string name="emoji_category_symbols">الرموز</string>
     <string name="emoji_category_flags">الأعلام</string>
     <string name="badge_bot_alt">بوت</string>
-    <string name="badge_team_member_alt">عضو من أعضاء Revolt</string>
+    <string name="badge_team_member_alt">عضو من أعضاء Peptide</string>
     <string name="unknown">غير معلوم</string>
     <string name="menu">قائمة</string>
     <string name="logout">تسجيل الخروج</string>
@@ -97,7 +97,7 @@
     <string name="badge_platform_moderation_alt">اعتدال المنصة</string>
     <string name="settings_sessions_log_out_other_confirm_yes">تسجيل خروج</string>
     <string name="notification_channel_group_conversations">المحادثات</string>
-    <string name="share_target_heading">مشاركة الى Revolt</string>
+    <string name="share_target_heading">مشاركة الى Peptide</string>
     <string name="no_connection_message">انت غير متصل بي الانترنت يرجى التحقق من اتصالك ثم حاول مره اخرا</string>
     <string name="settings_sessions_log_out_other_confirm_no">ابقي تسجيل الدخول</string>
     <string name="status_online">متصل</string>
@@ -278,7 +278,7 @@
     <string name="overview_screen_changelog">سجل التغيير</string>
     <string name="user_card_data_point_display_name">%1$d اسم</string>
     <string name="user_card_data_point_username">%1$d اسم المستخدم</string>
-    <string name="user_card_data_point_join_date">%1$d على Revolt منذ</string>
+    <string name="user_card_data_point_join_date">%1$d على Peptide منذ</string>
     <string name="badge_webhook_alt">ويب هوك</string>
     <string name="user_card_data_point_qrcode">%1$dQR Code</string>
     <string name="user_card_data_point_photo">%1$d.صورة</string>
@@ -333,7 +333,7 @@
     <string name="report_submit">إرسال</string>
     <string name="report_submitting">الإبلاغ.…</string>
     <string name="report_submit_success">تم الابلاغ</string>
-    <string name="report_submit_thanks">شكرا للمساعدة في الحفاظ على امان Revolt. سنراجع تقريرك في أقرب وقت ممكن.</string>
+    <string name="report_submit_thanks">شكرا للمساعدة في الحفاظ على امان Peptide. سنراجع تقريرك في أقرب وقت ممكن.</string>
     <string name="report_submit_error_header">خطأ</string>
     <string name="report_submit_error">حدث خطأ أثناء تقديم التقرير الخاص بك. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
     <string name="report_submit_close">إغلاق</string>
@@ -381,7 +381,7 @@
     <string name="status_focus_explainer">لن تتلقى أي إشعارات للرسائل، ولكنك ستتلقى إشعارات للإشارات @.</string>
     <string name="status_dnd">عدم الإزعاج</string>
     <string name="status_dnd_explainer">لن تتلقى أي إشعارات، بما في ذلك الرسائل و@الإشارات.</string>
-    <string name="status_invisible_explainer">ستتمكن من استخدام Revolt كالمعتاد، لكنك لن تظهر كمتصل للآخرين</string>
+    <string name="status_invisible_explainer">ستتمكن من استخدام Peptide كالمعتاد، لكنك لن تظهر كمتصل للآخرين</string>
     <string name="status_text_error_too_long">نص الحالة طويل جدا. محاولة للحفاظ عليه تحت%1$dالشخصيات</string>
     <string name="server_context_sheet_actions_leave_silently">ترك بصمت</string>
     <string name="user_info_sheet_bio_not_found">لا يمكن جلب السيرة الذاتية لهذا المستخدم. يرجى التحقق من مشاركة الخادم أو الأصدقاء.</string>

@@ -41,7 +41,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import chat.peptide.R
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideHttp
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
 import kotlinx.coroutines.delay
@@ -118,13 +118,13 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                     ContentValues().apply {
                         put(MediaStore.Audio.Media.DISPLAY_NAME, filename)
                         put(MediaStore.Audio.Media.MIME_TYPE, contentType)
-                        put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Revolt")
+                        put(MediaStore.Audio.Media.RELATIVE_PATH, "Music/Peptide")
                         put(MediaStore.Audio.Media.IS_PENDING, 1)
                     }
                 )
             }?.let { uri ->
                 context.contentResolver.openOutputStream(uri).use { stream ->
-                    val audio = RevoltHttp.get(url).readBytes()
+                    val audio = PeptideHttp.get(url).readBytes()
                     stream?.write(audio)
 
                     context.applicationContext.let {

@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.safety
 
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.schemas.ContentReportReason
 import chat.peptide.api.schemas.FullMessageReport
 import chat.peptide.api.schemas.FullServerReport
@@ -31,9 +31,9 @@ suspend fun putMessageReport(
         additional_context = additionalContext
     )
 
-    val response = RevoltHttp.post("/safety/report".api()) {
+    val response = PeptideHttp.post("/safety/report".api()) {
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 FullMessageReport.serializer(),
                 fullMessageReport
             )
@@ -42,7 +42,7 @@ suspend fun putMessageReport(
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error
@@ -63,9 +63,9 @@ suspend fun putServerReport(
         additional_context = additionalContext
     )
 
-    val response = RevoltHttp.post("/safety/report".api()) {
+    val response = PeptideHttp.post("/safety/report".api()) {
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 FullServerReport.serializer(),
                 fullServerReport
             )
@@ -74,7 +74,7 @@ suspend fun putServerReport(
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error
@@ -95,9 +95,9 @@ suspend fun putUserReport(
         additional_context = additionalContext
     )
 
-    val response = RevoltHttp.post("/safety/report".api()) {
+    val response = PeptideHttp.post("/safety/report".api()) {
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 FullUserReport.serializer(),
                 fullUserReport
             )
@@ -106,7 +106,7 @@ suspend fun putUserReport(
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error

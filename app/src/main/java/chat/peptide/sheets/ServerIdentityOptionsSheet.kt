@@ -24,14 +24,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.persistence.KVStorage
 import kotlinx.coroutines.launch
 
 // Internal: Untranslated
 @Composable
 fun ServerIdentityOptionsSheet(userId: String) {
-    val user = RevoltAPI.userCache[userId]
+    val user = PeptideAPI.userCache[userId]
 
     if (user == null) {
         Text("No such user")

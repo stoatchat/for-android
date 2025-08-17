@@ -39,7 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.internals.solidColor
@@ -65,11 +65,11 @@ fun UserInfoSheet(
     serverId: String? = null,
     dismissSheet: suspend () -> Unit
 ) {
-    val user = RevoltAPI.userCache[userId]
+    val user = PeptideAPI.userCache[userId]
 
-    val member = serverId?.let { RevoltAPI.members.getMember(it, userId) }
+    val member = serverId?.let { PeptideAPI.members.getMember(it, userId) }
 
-    val server = RevoltAPI.serverCache[serverId]
+    val server = PeptideAPI.serverCache[serverId]
 
     var profile by remember { mutableStateOf<Profile?>(null) }
     var profileNotFound by remember { mutableStateOf(false) }
@@ -258,7 +258,7 @@ fun UserInfoSheet(
                         )
 
                         Text(
-                            text = stringResource(id = R.string.user_info_sheet_category_joined_revolt),
+                            text = stringResource(id = R.string.user_info_sheet_category_joined_peptide),
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
@@ -285,7 +285,7 @@ fun UserInfoSheet(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.user_info_sheet_category_joined_revolt),
+                        text = stringResource(id = R.string.user_info_sheet_category_joined_peptide),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
@@ -331,7 +331,7 @@ fun UserInfoSheet(
         }
 
         if (user.bot != null) {
-            val resolvedOwner = user.bot.owner?.let { RevoltAPI.userCache[it] }
+            val resolvedOwner = user.bot.owner?.let { PeptideAPI.userCache[it] }
 
             item(key = "bot-owner") {
                 SheetTile(

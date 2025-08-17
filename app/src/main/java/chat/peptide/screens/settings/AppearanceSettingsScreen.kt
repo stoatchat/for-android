@@ -58,8 +58,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltCbor
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideCbor
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.ListHeader
@@ -109,11 +109,11 @@ class AppearanceSettingsScreenViewModel @Inject constructor(
 
             if (overrides != null) {
                 // Yes, this looks stupid. Please see the comments in OverridableColourScheme.kt regarding this.
-                val json = RevoltJson.encodeToString(
+                val json = PeptideJson.encodeToString(
                     OverridableColourScheme.serializer(),
                     overrides
                 )
-                val asMap = RevoltJson.decodeFromString(
+                val asMap = PeptideJson.decodeFromString(
                     MapSerializer(String.serializer(), Int.serializer()),
                     json
                 )
@@ -168,7 +168,7 @@ class AppearanceSettingsScreenViewModel @Inject constructor(
         }
 
         try {
-            RevoltCbor.decodeFromByteArray(
+            PeptideCbor.decodeFromByteArray(
                 MapSerializer(String.serializer(), Int.serializer()),
                 mFile.readBytes()
             ).let {
@@ -189,7 +189,7 @@ class AppearanceSettingsScreenViewModel @Inject constructor(
     fun saveOverridesToFile(uri: Uri) {
         context.contentResolver.openOutputStream(uri)?.use { outputStream ->
             outputStream.write(
-                RevoltCbor.encodeToByteArray(
+                PeptideCbor.encodeToByteArray(
                     OverridableColourScheme.serializer(),
                     SyncedSettings.android.colourOverrides ?: OverridableColourScheme()
                 )
@@ -219,7 +219,7 @@ fun AppearanceSettingsScreen(
         }
     }
     val fileSaver = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("application/x-revolt-android-theme-overrides"),
+        contract = ActivityResultContracts.CreateDocument("application/x-peptide-android-theme-overrides"),
     ) { uri ->
         if (uri != null) {
             viewModel.saveOverridesToFile(uri)
@@ -316,35 +316,13 @@ fun AppearanceSettingsScreen(
                 ) {
                     ColourChip(
                         color = Color(0xff333642),
-                        text = stringResource(id = R.string.settings_appearance_theme_revolt),
-                        selected = LoadedSettings.theme == Theme.Revolt,
+                        text = stringResource(id = R.string.settings_appearance_theme_peptide),
+                        selected = LoadedSettings.theme == Theme.None,
                         modifier = Modifier
                             .weight(1f)
-                            .testTag("set_theme_revolt")
+                            .testTag("set_theme_peptide")
                     ) {
-                        viewModel.saveNewTheme(Theme.Revolt)
-                    }
-
-                    ColourChip(
-                        color = Color(0xfff7f7f7),
-                        text = stringResource(id = R.string.settings_appearance_theme_light),
-                        selected = LoadedSettings.theme == Theme.Light,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_light")
-                    ) {
-                        viewModel.saveNewTheme(Theme.Light)
-                    }
-
-                    ColourChip(
-                        color = Color(0xff000000),
-                        text = stringResource(id = R.string.settings_appearance_theme_amoled),
-                        selected = LoadedSettings.theme == Theme.Amoled,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_amoled")
-                    ) {
-                        viewModel.saveNewTheme(Theme.Amoled)
+                        viewModel.saveNewTheme(Theme.None)
                     }
 
                     ColourChip(

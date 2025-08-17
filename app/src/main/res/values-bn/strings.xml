@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login_onboarding_body">Revolt হল আপনার বন্ধুদের এবং সম্প্রদায়ের (কমিউনিটির) সাথে, যেকোনো জায়গায়, যে কোনো সময় যুক্ত থাকার এক অন্যতম সেরা উপায়।</string>
+    <string name="login_onboarding_body">Peptide হল আপনার বন্ধুদের এবং সম্প্রদায়ের (কমিউনিটির) সাথে, যেকোনো জায়গায়, যে কোনো সময় যুক্ত থাকার এক অন্যতম সেরা উপায়।</string>
     <string name="resend_verification">যাচাইকরণ ই-মেইল আবার পাঠানোর জন্য অনুরোধ পাঠান</string>
     <string name="back">← ফিরে যান</string>
     <string name="next">এরপর →</string>
     <string name="ok">ঠিক আছে</string>
     <string name="cancel">বাতিল করুন</string>
     <string name="share">শেয়ার করুন</string>
-    <string name="terms_of_service">Revolt এর সার্ভিসের শর্তাবলী</string>
+    <string name="terms_of_service">Peptide এর সার্ভিসের শর্তাবলী</string>
     <string name="privacy_policy">গোপনীয়তা নীতি</string>
     <string name="email">ই-মেইল</string>
     <string name="password">পাসওয়ার্ড</string>
@@ -21,8 +21,8 @@
     <string name="mfa_interstitial_lead">আপনার অ্যাকাউন্টকে আরো নিরাপদ রাখতে আপনি 2FA চালু করেছেন।</string>
     <string name="lets_go">চলুন</string>
     <string name="password_forgot_instructions">আপনার ইমেল লিখুন এবং আমরা আপনাকে আপনার পাসওয়ার্ড রিসেট করার নির্দেশাবলী পাঠাব।</string>
-    <string name="register_heading">Revolt-এ আপনাকে স্বাগত জানাই</string>
-    <string name="register_image_alt">যে কোনো কিছু সম্পর্কে কথা বলার জন্য Revolt -কে ব্যবহার করুন।</string>
+    <string name="register_heading">Peptide-এ আপনাকে স্বাগত জানাই</string>
+    <string name="register_image_alt">যে কোনো কিছু সম্পর্কে কথা বলার জন্য Peptide -কে ব্যবহার করুন।</string>
     <string name="register_instructions">এটি আড্ডা দেওয়ার, একত্রিত হওয়ার এবং যে কোনো কিছুর বিষয়ে আলোচনা করার মতো জায়গা৷ এটি হলো ইন্টারনেটের এক অন্যতম সেরা জায়গা।</string>
     <string name="register_form_heading">চলুন, আপনাকে সমস্ত কিছু সেট আপ করানো যাক।</string>
     <string name="register_data">আপনার তথ্য আমাদের কাছে নিরাপদ। আমরা এটি কারোর কাছেই বিক্রি করি না, নাতো আমরা আপনাকে বিজ্ঞাপন দেখানোর জন্য এর ব্যবহার করি।</string>
@@ -169,7 +169,7 @@
     <string name="report_reason_user_other">অন্যান্য</string>
     <string name="report_reason_additional_hint">কোনো অতিরিক্ত তথ্য যা আমাদের তদন্তে সাহায্য করতে পারে। (প্রয়োজনীয় নয়)।</string>
     <string name="report_submit_success">রিপোর্ট করা হয়ে গেছে</string>
-    <string name="report_submit_thanks">Revolt-কে নিরাপদ রাখতে সাহায্য করার জন্য আপনাকে ধন্যবাদ। আমরা যত তাড়াতাড়ি সম্ভব আপনার রিপোর্ট দেখব ও তার উপর পুনর্বিবেচনা করব।</string>
+    <string name="report_submit_thanks">Peptide-কে নিরাপদ রাখতে সাহায্য করার জন্য আপনাকে ধন্যবাদ। আমরা যত তাড়াতাড়ি সম্ভব আপনার রিপোর্ট দেখব ও তার উপর পুনর্বিবেচনা করব।</string>
     <string name="report_block_question">আপনি কি এই ইউজারকে ব্লক করতে চান\?</string>
     <string name="invite_message">আপনাকে এই সার্ভারে যোগদানের জন্য আমন্ত্রণ জানানো হয়েছে। আপনি কি এই সার্ভারে যুক্ত হতে চান\?</string>
     <string name="media_viewer_play">চালান</string>
@@ -180,7 +180,7 @@
     <string name="settings_appearance">রুপ</string>
     <string name="settings_appearance_theme">থিম</string>
     <string name="settings_appearance_theme_none">সিস্টেম</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_feedback">মতামত</string>
     <string name="settings_appearance_theme_light">লাইট</string>
@@ -194,7 +194,7 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (সমর্থিত নয়)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You এই ডিভাইসের জন্য সমর্থিত নয়।</string>
     <string name="loading">কিছু তথ্য আনা হচ্ছে, ওখানেই অপেক্ষা করুন…</string>
-    <string name="about">Revolt সম্পর্কে জানুন</string>
+    <string name="about">Peptide সম্পর্কে জানুন</string>
     <string name="invite_error_no_invite">কোনো আমন্ত্রণ কোড পাওয়া যায়নি।</string>
     <string name="invite_error_invalid_invite">নির্দিষ্ট কোড সহ কোনো আমন্ত্রণ লিঙ্ক খুঁজে পাওয়া যায়নি।</string>
     <string name="invite_error_unknown">একটি অজানা ত্রুটি ঘটেছে।</string>
@@ -213,7 +213,7 @@
     <string name="report_reason_content_promotes_harm">কনটেন্ট এমন কিছুকে উৎসাহিত/প্রচার করছে যা নিজ বা অন্যের ক্ষতি করতে পারে</string>
     <string name="report_reason_user_spam_abuse">এটি স্প্যাম বা প্ল্যাটফর্মের অপব্যবহার/দুর্ব্যবহার</string>
     <string name="report_reason_user_impersonation">অন্যকে নকল করছেন</string>
-    <string name="oss_attribution_body">এই দুর্দান্ত ওপেন সোর্স প্রকল্পগুলির সাহায্যে Revolt তৈরি করা হয়েছে।</string>
+    <string name="oss_attribution_body">এই দুর্দান্ত ওপেন সোর্স প্রকল্পগুলির সাহায্যে Peptide তৈরি করা হয়েছে।</string>
     <string name="oss_attribution_generation_date">শেষবারের মতো আপডেট হয়েছে: %1$s</string>
     <string name="oss_attribution_warning">নীচের তালিকাটি স্বয়ংক্রিয়ভাবে তৈরি। এটা অসম্পূর্ণ বা ভুল হতে পারে।</string>
     <string name="oss_attribution_tap_to_view_license">লাইসেন্স দেখতে এখানে টিপুন</string>
@@ -225,7 +225,7 @@
     <string name="emoji_category_animals">পশুপাখি ও প্রকৃতি</string>
     <string name="emoji_category_activities">কার্যকলাপ</string>
     <string name="emoji_category_symbols">প্রতীক</string>
-    <string name="badge_team_member_alt">Revolt দলের সদস্য</string>
+    <string name="badge_team_member_alt">Peptide দলের সদস্য</string>
     <string name="home_join_jenvolt">Jenvolt -এ যুক্ত হোন</string>
     <string name="badge_masquerade_alt">লিঙ্ক করা চ্যানেল থেকে</string>
     <string name="friends_all">সমস্ত</string>
@@ -251,7 +251,7 @@
     <string name="system_message_text_alt">সিস্টেম মেসেজ</string>
     <string name="system_message_user_left">%1$s চলে গেছে</string>
     <string name="status">স্ট্যাটাস</string>
-    <string name="about_full_name">অ্যান্ড্রয়েডের (Android) এর জন্য Revolt</string>
+    <string name="about_full_name">অ্যান্ড্রয়েডের (Android) এর জন্য Peptide</string>
     <string name="emoji_category_smileys">স্মাইলি এবং আবেগ</string>
     <string name="emoji_category_people">ব্যক্তি এবং শরীর</string>
     <string name="emoji_category_food">খাবার এবং পানীয়</string>
@@ -280,7 +280,7 @@
     <string name="status_dnd_explainer">আপনি মেসেজ এবং @উল্লেখ সহ কোনোরকম নোটিফিকেশন পাবেন না।</string>
     <string name="status_offline">অফলাইন</string>
     <string name="status_invisible">অদৃশ্য</string>
-    <string name="status_invisible_explainer">আপনি স্বাভাবিক ভাবেই Revolt ব্যবহার করতে পারবেন, কিন্তু অন্য কেউ আপনাকে অনলাইন হিসেবে দেখতে পারবে না।</string>
+    <string name="status_invisible_explainer">আপনি স্বাভাবিক ভাবেই Peptide ব্যবহার করতে পারবেন, কিন্তু অন্য কেউ আপনাকে অনলাইন হিসেবে দেখতে পারবে না।</string>
     <string name="system_message_channel_icon_changed">%1$s চ্যানেলের আইকন পরিবর্তন করেছে</string>
     <string name="status_idle">অলস</string>
     <string name="server_flag_official">অফিসিয়াল সার্ভার</string>
@@ -342,7 +342,7 @@
     <string name="settings_sessions_this_device">এই ডিভাইসে</string>
     <string name="settings_sessions_this_device_unavailable">এই ডিভাইসের সেশন আর উপলব্ধ নেই। আপনার বর্তমান সেশন দেখার জন্য দয়া করে **আবার লগ ইন করুন**।</string>
     <string name="settings_sessions_other_sessions">অন্যান্য সক্রিয় সেশনগুলো</string>
-    <string name="overview_screen_changelog_description">Revolt কখনও থেমে থাকে না, একবার দেখুন আমরা কিসের উপর কাজ করছিলাম</string>
+    <string name="overview_screen_changelog_description">Peptide কখনও থেমে থাকে না, একবার দেখুন আমরা কিসের উপর কাজ করছিলাম</string>
     <string name="user_info_sheet_copy_id">আইডি কপি করুন</string>
     <string name="user_info_sheet_user_is_bot">এই ইউজার হলো একটি বট।</string>
     <string name="user_info_sheet_category_status">স্ট্যাটাস</string>
@@ -380,5 +380,5 @@
     <string name="user_badge_developer">ডেভেলপার</string>
     <string name="keyboard_shortcut_messaging_new_line">নতুন লাইন</string>
     <string name="keyboard_shortcut_messaging_send_message">মেসেজ পাঠান</string>
-    <string name="user_card_data_point_join_date">%1$d. Revolt -এ আছেন</string>
+    <string name="user_card_data_point_join_date">%1$d. Peptide -এ আছেন</string>
 </resources>

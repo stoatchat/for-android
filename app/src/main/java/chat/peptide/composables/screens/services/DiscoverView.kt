@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.buildUserAgent
 import chat.peptide.api.internals.ThemeCompat
 import kotlinx.serialization.json.JsonObject
@@ -60,13 +60,13 @@ fun ColumnScope.DiscoverView() {
                             super.onPageFinished(view, url)
                             val themeMessage = JsonObject(
                                 mapOf(
-                                    "source" to JsonPrimitive("revolt"),
+                                    "source" to JsonPrimitive("peptide"),
                                     "type" to JsonPrimitive("theme"),
                                     "theme" to themeMap
                                 )
                             )
                             val themeMessageString =
-                                RevoltJson.encodeToString(JsonObject.serializer(), themeMessage)
+                                PeptideJson.encodeToString(JsonObject.serializer(), themeMessage)
 
                             evaluateJavascript(
                                 """
@@ -101,7 +101,7 @@ fun ColumnScope.DiscoverView() {
                             view: WebView?,
                             request: WebResourceRequest?
                         ): Boolean {
-                            if (request?.url?.host.equals(Uri.parse(RevoltAPI.getCurrentAppUrl()).host)) {
+                            if (request?.url?.host.equals(Uri.parse(PeptideAPI.getCurrentAppUrl()).host)) {
                                 val intent = Intent(
                                     context,
                                     InviteActivity::class.java

@@ -61,8 +61,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.api.RevoltAPI
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.api.PeptideAPI
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
 import chat.peptide.composables.generic.IconPlaceholder
@@ -132,12 +132,12 @@ fun EmojiPicker(
     var showSkinToneMenu by remember { mutableStateOf(false) }
     val skinToneMenuAreaWeight by animateFloatAsState(
         if (showSkinToneMenu) 1f else .15f,
-        animationSpec = RevoltTweenFloat,
+        animationSpec = PeptideTweenFloat,
         label = "skinToneMenuAreaWeight"
     )
     val skinToneMenuCloseHintIconOpacity by animateFloatAsState(
         if (showSkinToneMenu) 1f else 0f,
-        animationSpec = RevoltTweenFloat,
+        animationSpec = PeptideTweenFloat,
         label = "skinToneMenuCloseHintIconOpacity"
     )
 
@@ -150,7 +150,7 @@ fun EmojiPicker(
     var searchQuery by remember { mutableStateOf("") }
     val searchFieldOpacity by animateFloatAsState(
         if (showSkinToneMenu) 0f else 1f,
-        animationSpec = RevoltTweenFloat,
+        animationSpec = PeptideTweenFloat,
         label = "searchFieldOpacity"
     )
 
@@ -188,7 +188,7 @@ fun EmojiPicker(
     }
     val clearQueryButtonOpacity = animateFloatAsState(
         if (searchQuery.isNotEmpty()) 1f else 0f,
-        animationSpec = RevoltTweenFloat,
+        animationSpec = PeptideTweenFloat,
         label = "clearQueryButtonOpacity"
     )
 
@@ -401,7 +401,7 @@ fun EmojiPicker(
                             )
                         } else {
                             RemoteImage(
-                                url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${server.icon.id}",
+                                url = "${PeptideAPI.getCurrentFilesUrl()}/icons/${server.icon.id}",
                                 allowAnimation = false,
                                 description = server.name,
                                 modifier = Modifier
@@ -619,7 +619,7 @@ fun ColumnScope.PickerItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 RemoteImage(
-                    url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${item.emote.id}",
+                    url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${item.emote.id}",
                     description = item.emote.name,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

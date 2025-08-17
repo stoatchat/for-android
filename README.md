@@ -1,9 +1,9 @@
-# Revolt on Android
+# Peptide on Android
 
 ## Description
 
-This is the official Android app for the [Revolt](https://revolt.chat) chat platform.  
-The codebase includes the app itself, as well as an internal library for interacting with the Revolt
+This is the official Android app for the [Peptide](https://peptide.chat) chat platform.  
+The codebase includes the app itself, as well as an internal library for interacting with the Peptide
 API.
 
 | Module | Package       | Description          |
@@ -29,18 +29,18 @@ of the art for Android UI development.
 
 ## Resources
 
-### Revolt on Android
+### Peptide on Android
 
-- [Revolt on Android Technical Documentation](https://revoltchat.github.io/android/)
-- [Android-specific Contribution Guide](https://revoltchat.github.io/android/contributing/guidelines/)
+- [Peptide on Android Technical Documentation](https://peptidechat.github.io/android/)
+- [Android-specific Contribution Guide](https://peptidechat.github.io/android/contributing/guidelines/)
   &mdash;**read carefully before contributing!**
 
-### Revolt
+### Peptide
 
-- [Revolt Project Board](https://github.com/revoltchat/revolt/discussions) (Submit feature requests
+- [Peptide Project Board](https://github.com/peptidechat/peptide/discussions) (Submit feature requests
   here)
-- [Revolt Testers Server](https://app.revolt.chat/invite/Testers)
-- [General Revolt Contribution Guide](https://developers.revolt.chat/contributing)
+- [Peptide Testers Server](https://app.peptide.chat/invite/Testers)
+- [General Peptide Contribution Guide](https://developers.peptide.chat/contributing)
 
 ## Quick Start
 
@@ -48,4 +48,4 @@ Open the project in Android Studio. You can then run the app on an emulator or a
 running the `app` module.
 
 In-depth setup instructions can be found
-at [Setting up your Development Environment](https://revoltchat.github.io/android/contributing/setup/)
+at [Setting up your Development Environment](https://peptidechat.github.io/android/contributing/setup/)

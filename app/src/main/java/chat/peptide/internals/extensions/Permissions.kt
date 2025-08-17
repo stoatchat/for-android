@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableLongState
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.Roles
 
 @Composable
@@ -13,16 +13,16 @@ fun rememberChannelPermissions(channelId: String, key1: Any = Unit): MutableLong
     val permissions = rememberSaveable { mutableLongStateOf(0L) }
 
     LaunchedEffect(channelId, key1) {
-        if (RevoltAPI.selfId == null) return@LaunchedEffect
-        if (RevoltAPI.userCache[RevoltAPI.selfId] == null) return@LaunchedEffect
-        if (RevoltAPI.channelCache[channelId] == null) return@LaunchedEffect
+        if (PeptideAPI.selfId == null) return@LaunchedEffect
+        if (PeptideAPI.userCache[PeptideAPI.selfId] == null) return@LaunchedEffect
+        if (PeptideAPI.channelCache[channelId] == null) return@LaunchedEffect
 
-        val channel = RevoltAPI.channelCache[channelId]
-        val selfUser = RevoltAPI.userCache[RevoltAPI.selfId]
+        val channel = PeptideAPI.channelCache[channelId]
+        val selfUser = PeptideAPI.userCache[PeptideAPI.selfId]
         val member = channel?.let {
             it.server?.let { server ->
-                RevoltAPI.selfId?.let { selfId ->
-                    RevoltAPI.members.getMember(server, selfId)
+                PeptideAPI.selfId?.let { selfId ->
+                    PeptideAPI.members.getMember(server, selfId)
                 }
             }
         }

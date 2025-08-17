@@ -45,7 +45,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.api.routes.account.RegistrationBody
 import chat.peptide.api.routes.account.register
 import chat.peptide.api.routes.misc.getRootRoute
@@ -69,7 +69,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
                 getRootRoute()
             } catch (e: Exception) {
                 error = if (e.message?.startsWith("Expected response body of the type") == true) {
-                    RevoltApplication.instance.getString(R.string.service_health_alert_body_default)
+                    PeptideApplication.instance.getString(R.string.service_health_alert_body_default)
                 } else e.message
                 return@launch
             }

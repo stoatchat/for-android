@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Theme.Revolt" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Peptide" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@color/background</item>
-        <item name="textAppearanceTitleLarge">@style/TextAppearance.Revolt.TitleLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Peptide.TitleLarge</item>
     </style>
 
     <!-- We temporarily don't use a dedicated splash screen theme due to Samsung specific issues.
          This theme is unused. -->
-    <style name="Theme.Revolt.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.Peptide.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="windowSplashScreenBackground">@color/splashscreen_background</item>
-        <item name="postSplashScreenTheme">@style/Theme.Revolt</item>
+        <item name="postSplashScreenTheme">@style/Theme.Peptide</item>
     </style>
 
-    <style name="TextAppearance.Revolt.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+    <style name="TextAppearance.Peptide.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/inter_display_semibold</item>
         <item name="android:fontFamily">@font/inter_display_semibold</item>
     </style>
 
-    <style name="Widget.Revolt.Toolbar" parent="Widget.Material3.Toolbar">
-        <item name="titleTextAppearance">@style/TextAppearance.Revolt.TitleLarge</item>
+    <style name="Widget.Peptide.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/TextAppearance.Peptide.TitleLarge</item>
     </style>
 </resources>

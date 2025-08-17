@@ -26,12 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelSettingsPermissions(navController: NavController, channelId: String) {
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(

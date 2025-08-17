@@ -4,13 +4,13 @@ import markdownIntegration from "@astropub/md"
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://revoltchat.github.io",
+    site: "https://peptidechat.github.io",
     base: "/android",
     integrations: [
         starlight({
-            title: "Revolt on Android Technical Documentation",
+            title: "Peptide on Android Technical Documentation",
             social: {
-                github: "https://github.com/revoltchat/android",
+                github: "https://github.com/peptidechat/android",
             },
             sidebar: [
                 {

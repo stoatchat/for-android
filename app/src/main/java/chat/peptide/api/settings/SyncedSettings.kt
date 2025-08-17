@@ -1,8 +1,8 @@
 package chat.peptide.api.settings
 
 import androidx.compose.runtime.mutableStateOf
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.routes.sync.getKeys
 import chat.peptide.api.routes.sync.setKey
 import chat.peptide.api.schemas.AndroidSpecificSettings
@@ -40,14 +40,14 @@ object SyncedSettings {
     val notifications: NotificationSettings
         get() = _notifications.value
 
-    suspend fun fetch(revoltToken: String = RevoltAPI.sessionToken) {
+    suspend fun fetch(peptideToken: String = PeptideAPI.sessionToken) {
         try {
             val settings =
-                getKeys("ordering", "android", "notifications", revoltToken = revoltToken)
+                getKeys("ordering", "android", "notifications", peptideToken = peptideToken)
 
             settings["ordering"]?.let {
                 try {
-                    _ordering.value = RevoltJson.decodeFromString(
+                    _ordering.value = PeptideJson.decodeFromString(
                         OrderingSettings.serializer(),
                         it.value
                     )
@@ -59,7 +59,7 @@ object SyncedSettings {
 
             settings["android"]?.let {
                 try {
-                    _android.value = RevoltJson.decodeFromString(
+                    _android.value = PeptideJson.decodeFromString(
                         AndroidSpecificSettings.serializer(),
                         it.value
                     )
@@ -82,7 +82,7 @@ object SyncedSettings {
     private fun parseNotificationSettings(value: String): NotificationSettings {
         return try {
             var intermediate =
-                RevoltJson.decodeFromString(_NotificationSettingsToParse.serializer(), value)
+                PeptideJson.decodeFromString(_NotificationSettingsToParse.serializer(), value)
 
             // Throw out any value of intermediate.server and .channel that isn't a string
             intermediate = intermediate.copy(
@@ -108,23 +108,23 @@ object SyncedSettings {
 
     suspend fun updateOrdering(value: OrderingSettings) {
         _ordering.value = value
-        setKey("ordering", RevoltJson.encodeToString(OrderingSettings.serializer(), value))
+        setKey("ordering", PeptideJson.encodeToString(OrderingSettings.serializer(), value))
     }
 
     suspend fun updateAndroid(value: AndroidSpecificSettings) {
         _android.value = value
-        setKey("android", RevoltJson.encodeToString(AndroidSpecificSettings.serializer(), value))
+        setKey("android", PeptideJson.encodeToString(AndroidSpecificSettings.serializer(), value))
     }
 
     suspend fun updateNotifications(value: NotificationSettings) {
         _notifications.value = value
-        setKey("notifications", RevoltJson.encodeToString(NotificationSettings.serializer(), value))
+        setKey("notifications", PeptideJson.encodeToString(NotificationSettings.serializer(), value))
     }
 
     suspend fun resetOrdering() {
         val default = OrderingSettings()
         _ordering.value = default
-        setKey("ordering", RevoltJson.encodeToString(OrderingSettings.serializer(), default))
+        setKey("ordering", PeptideJson.encodeToString(OrderingSettings.serializer(), default))
     }
 
     suspend fun resetAndroid() {
@@ -134,7 +134,7 @@ object SyncedSettings {
             messageReplyStyle = "None"
         )
         _android.value = default
-        setKey("android", RevoltJson.encodeToString(AndroidSpecificSettings.serializer(), default))
+        setKey("android", PeptideJson.encodeToString(AndroidSpecificSettings.serializer(), default))
     }
 
     suspend fun resetNotifications() {
@@ -142,7 +142,7 @@ object SyncedSettings {
         _notifications.value = default
         setKey(
             "notifications",
-            RevoltJson.encodeToString(NotificationSettings.serializer(), default)
+            PeptideJson.encodeToString(NotificationSettings.serializer(), default)
         )
     }
 }

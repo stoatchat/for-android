@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.patchSelf
 import chat.peptide.api.schemas.User
 import chat.peptide.composables.generic.SheetButton
@@ -163,7 +163,7 @@ fun StatusTextEditDialog(
 
 @Composable
 fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
-    val selfUser = RevoltAPI.userCache[RevoltAPI.selfId]!!
+    val selfUser = PeptideAPI.userCache[PeptideAPI.selfId]!!
     val scope = rememberCoroutineScope()
 
     var showStatusEditDialog by remember { mutableStateOf(false) }

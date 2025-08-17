@@ -12,8 +12,8 @@
     <string name="send_email">ส่งอีเมล</string>
     <string name="password_forgot">ลืมรหัสผ่าน\?</string>
     <string name="resend_verification">ส่งอีเมลยืนยันอีกครั้ง</string>
-    <string name="register_heading">ยินดีต้อนรับสู้ Revolt</string>
-    <string name="register_image_alt">ใช้ Revolt ในการคุยถึงเรื่องต่างๆ</string>
+    <string name="register_heading">ยินดีต้อนรับสู้ Peptide</string>
+    <string name="register_image_alt">ใช้ Peptide ในการคุยถึงเรื่องต่างๆ</string>
     <string name="register_email">อีเมล</string>
     <string name="register_password">รหัสผ่าน</string>
     <string name="check_mail">เช็คอีเมลของคุณ!</string>
@@ -31,7 +31,7 @@
     <string name="mfa_recovery_code">โค้ด</string>
     <string name="mfa_password_lead">ใส่รหัสผ่านของคุณเพื่อจะไปต่อ</string>
     <string name="about">เกี่ยวกับ</string>
-    <string name="about_full_name">Revolt บน Android</string>
+    <string name="about_full_name">Peptide บน Android</string>
     <string name="about_tab_version">เวอร์ชั่น</string>
     <string name="about_tab_details">รายละเอียด</string>
     <string name="settings_changelogs_historical_version_header_placeholder">เวอร์ชั้นนั้น</string>
@@ -40,7 +40,7 @@
     <string name="loading">กำลังรับข้อมูล, รอสักพักนะ…</string>
     <string name="terms_of_service">เงื่อนไขการใช้บริการ</string>
     <string name="privacy_policy">นโยบายความเป็นส่วนตัว</string>
-    <string name="login_onboarding_body">Revolt คือหนึ่งในวิธีที่ดีที่สุดเพื่อเชื่อมต่อกับเพื่อนๆ และชุมชนของคุณ ทุกที่ ทุกเวลา</string>
+    <string name="login_onboarding_body">Peptide คือหนึ่งในวิธีที่ดีที่สุดเพื่อเชื่อมต่อกับเพื่อนๆ และชุมชนของคุณ ทุกที่ ทุกเวลา</string>
     <string name="password">รหัสผ่าน</string>
     <string name="login_heading">เรามาล็องอินกัน</string>
     <string name="password_forgot_heading">ลืมรหัสผ่าน\?</string>
@@ -54,9 +54,9 @@
     <string name="onboarding_changeable">แต่ถ้าคุณเปลี่ยนใจ คุณสามารถเปลี่ยนชื่อผู้ใช้ได้ตลอดในการตั้งค่าผู้ใช้</string>
     <string name="mfa_recovery_header">ใส่โค้ดการกู้คืน</string>
     <string name="mfa_password_header">ใส่รหัสผ่านของคุณ</string>
-    <string name="about_brought_to_you_by">ให้คุณด้วย ❤️ โดยทีมงาน Revolt</string>
+    <string name="about_brought_to_you_by">ให้คุณด้วย ❤️ โดยทีมงาน Peptide</string>
     <string name="oss_attribution">การระบุแหล่งที่มาของ OSS</string>
-    <string name="oss_attribution_body">Revolt ได้ถูกสร้างโดยใช้ผลงานโปรแกรมโอเพนซอร์สสุดเจ๋งมากมาย ดังนี้</string>
+    <string name="oss_attribution_body">Peptide ได้ถูกสร้างโดยใช้ผลงานโปรแกรมโอเพนซอร์สสุดเจ๋งมากมาย ดังนี้</string>
     <string name="community_guidelines">มาตรฐานชุมชน</string>
     <string name="register_form_heading">มาลงทะเบียนกันเถอะ</string>
     <string name="mfa_interstitial_lead">คุณได้เปิดใช้ระบบยืนยันตัวตนแบบสองขั้นตอนเพื่อเสริมความปลอดภัยให้บัญชีแล้ว</string>
@@ -98,7 +98,7 @@
     <string name="friends">เพื่อน</string>
     <string name="friends_blocked">ถูกบล็อก</string>
     <string name="discover_alt">ค้นพบ</string>
-    <string name="badge_team_member_alt">สมาชิกทีม Revolt</string>
+    <string name="badge_team_member_alt">สมาชิกทีม Peptide</string>
     <string name="menu">เมนู</string>
     <string name="friends_incoming_requests">คำขอเป็นเพื่อนขาเข้า</string>
     <string name="friends_outgoing_requests">คำขอเป็นเพื่อนขาออก</string>

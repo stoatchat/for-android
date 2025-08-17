@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.isUlid
 import chat.peptide.composables.generic.RemoteImage
 
@@ -40,7 +40,7 @@ fun Reaction(
     onClick: (Boolean) -> Unit,
     onLongClick: () -> Unit
 ) {
-    val hasOwn = members.contains(RevoltAPI.selfId)
+    val hasOwn = members.contains(PeptideAPI.selfId)
 
     val background by animateColorAsState(
         targetValue = if (hasOwn) {
@@ -73,7 +73,7 @@ fun Reaction(
         CompositionLocalProvider(LocalContentColor provides foreground) {
             if (emoji.isUlid()) {
                 RemoteImage(
-                    url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${emoji}",
+                    url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${emoji}",
                     description = null,
                     modifier = Modifier.size(16.dp)
                 )

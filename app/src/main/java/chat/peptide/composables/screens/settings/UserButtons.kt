@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.acceptFriendRequest
 import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.routes.user.friendUser
@@ -155,8 +155,8 @@ fun UserButtons(
                         scope.launch {
                             val dm = openDM(user.id)
                             if (dm.id != null) {
-                                if (RevoltAPI.channelCache[dm.id] == null)
-                                    RevoltAPI.channelCache[dm.id] = dm
+                                if (PeptideAPI.channelCache[dm.id] == null)
+                                    PeptideAPI.channelCache[dm.id] = dm
                                 ActionChannel.send(Action.SwitchChannel(dm.id))
                                 dismissSheet()
                             } else {

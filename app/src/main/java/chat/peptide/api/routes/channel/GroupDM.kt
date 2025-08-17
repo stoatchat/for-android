@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.channel
 
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import chat.peptide.api.schemas.Channel
 import chat.peptide.screens.create.MAX_ADDABLE_PEOPLE_IN_GROUP
@@ -28,23 +28,23 @@ suspend fun createGroupDM(name: String, members: List<String>): Channel {
         throw Exception("Too many members, maximum is $MAX_ADDABLE_PEOPLE_IN_GROUP")
     }
 
-    val response = RevoltHttp.post("/channels/create".api()) {
+    val response = PeptideHttp.post("/channels/create".api()) {
         contentType(ContentType.Application.Json)
         setBody(CreateGroupDMBody(name, members))
     }.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    return RevoltJson.decodeFromString(Channel.serializer(), response)
+    return PeptideJson.decodeFromString(Channel.serializer(), response)
 }
 
 suspend fun removeMember(channelId: String, userId: String) {
-    val response = RevoltHttp.delete("/channels/$channelId/recipients/$userId".api())
+    val response = PeptideHttp.delete("/channels/$channelId/recipients/$userId".api())
 
     if (!response.status.isSuccess()) {
         throw Error(response.status.toString())
@@ -52,7 +52,7 @@ suspend fun removeMember(channelId: String, userId: String) {
 }
 
 suspend fun addMember(channelId: String, userId: String) {
-    val response = RevoltHttp.put("/channels/$channelId/recipients/$userId".api())
+    val response = PeptideHttp.put("/channels/$channelId/recipients/$userId".api())
 
     if (!response.status.isSuccess()) {
         throw Error(response.status.toString())

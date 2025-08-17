@@ -38,7 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.safety.putMessageReport
 import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.schemas.ContentReportReason
@@ -56,13 +56,13 @@ enum class MessageReportFlowState {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
-    val message = RevoltAPI.messageCache[messageId]
+    val message = PeptideAPI.messageCache[messageId]
     if (message == null) {
         onDismiss()
         return
     }
 
-    val author = RevoltAPI.userCache[message.author]
+    val author = PeptideAPI.userCache[message.author]
     val messageIsBridged = author?.let { author.bot != null && message.masquerade != null } ?: false
 
     val state = remember { mutableStateOf(MessageReportFlowState.Reason) }

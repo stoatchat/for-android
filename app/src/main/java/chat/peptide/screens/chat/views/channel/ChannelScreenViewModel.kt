@@ -11,8 +11,8 @@ import androidx.compose.ui.util.fastDistinctBy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.internals.ChannelUtils
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.Roles
@@ -117,7 +117,7 @@ class ChannelScreenViewModel @Inject constructor(
     fun switchChannel(id: String, skipInitialLoad: Boolean = false) {
         // Reset state
         this.loadMessagesJob?.cancel()
-        this.channel = RevoltAPI.channelCache[id]
+        this.channel = PeptideAPI.channelCache[id]
         this.items = mutableStateListOf(ChannelScreenItem.Loading)
         this.activePane = ChannelScreenActivePane.None
         this.typingUsers = mutableStateListOf()
@@ -171,8 +171,8 @@ class ChannelScreenViewModel @Inject constructor(
 
     private suspend fun ensureSelfHasMember() {
         channel?.server?.let { serverId ->
-            RevoltAPI.selfId?.let { selfId ->
-                if (!RevoltAPI.members.hasMember(serverId, selfId)) {
+            PeptideAPI.selfId?.let { selfId ->
+                if (!PeptideAPI.members.hasMember(serverId, selfId)) {
                     try {
                         fetchMember(serverId, selfId)
                     } catch (e: Exception) {
@@ -188,13 +188,13 @@ class ChannelScreenViewModel @Inject constructor(
     private suspend fun denyMessageFieldIfNeeded() {
         if (channel == null) return
 
-        val selfUser = RevoltAPI.userCache[RevoltAPI.selfId] ?: return
+        val selfUser = PeptideAPI.userCache[PeptideAPI.selfId] ?: return
         val selfMember = if (channel!!.server == null) {
             null
         } else {
             channel?.server?.let { serverId ->
                 try {
-                    RevoltAPI.members.getMember(serverId, selfUser.id!!) ?: fetchMember(
+                    PeptideAPI.members.getMember(serverId, selfUser.id!!) ?: fetchMember(
                         serverId,
                         selfUser.id
                     )
@@ -237,7 +237,7 @@ class ChannelScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            withContext(RevoltAPI.realtimeContext) {
+            withContext(PeptideAPI.realtimeContext) {
                 channel?.id?.let {
                     RealtimeSocket.beginTyping(it)
                 }
@@ -259,7 +259,7 @@ class ChannelScreenViewModel @Inject constructor(
     private fun stopTyping() {
         if (editingMessage != null) return
         viewModelScope.launch {
-            withContext(RevoltAPI.realtimeContext) {
+            withContext(PeptideAPI.realtimeContext) {
                 channel?.id?.let {
                     RealtimeSocket.endTyping(it)
                 }
@@ -383,16 +383,16 @@ class ChannelScreenViewModel @Inject constructor(
             val prospectiveMessage = Message(
                 id = nonce,
                 channel = channel?.id,
-                author = RevoltAPI.selfId,
+                author = PeptideAPI.selfId,
                 content = content,
                 nonce = nonce,
                 attachments = listOf(),
                 replies = listOf(),
                 tail = items.firstOrNull()?.let {
                     if (it is ChannelScreenItem.RegularMessage) {
-                        it.message.author == RevoltAPI.selfId
+                        it.message.author == PeptideAPI.selfId
                     } else if (it is ChannelScreenItem.ProspectiveMessage) {
-                        it.message.author == RevoltAPI.selfId
+                        it.message.author == PeptideAPI.selfId
                     } else {
                         false
                     }
@@ -452,22 +452,22 @@ class ChannelScreenViewModel @Inject constructor(
                         }
 
                         it.users?.forEach { user ->
-                            if (!RevoltAPI.userCache.containsKey(user.id)) {
-                                RevoltAPI.userCache[user.id!!] = user
+                            if (!PeptideAPI.userCache.containsKey(user.id)) {
+                                PeptideAPI.userCache[user.id!!] = user
                             }
                         }
 
                         it.messages?.forEach { message ->
                             addUserIfUnknown(message.author ?: return@forEach)
-                            if (!RevoltAPI.messageCache.containsKey(message.id)) {
-                                RevoltAPI.messageCache[message.id!!] = message
+                            if (!PeptideAPI.messageCache.containsKey(message.id)) {
+                                PeptideAPI.messageCache[message.id!!] = message
                             }
                             messages.add(message)
                         }
 
                         it.members?.forEach { member ->
-                            if (!RevoltAPI.members.hasMember(member.id!!.server, member.id.user)) {
-                                RevoltAPI.members.setMember(member.id.server, member)
+                            if (!PeptideAPI.members.hasMember(member.id!!.server, member.id.user)) {
+                                PeptideAPI.members.setMember(member.id.server, member)
                             }
                         }
 
@@ -532,10 +532,10 @@ class ChannelScreenViewModel @Inject constructor(
     }
 
     suspend fun listenToWsEvents() {
-        withContext(RevoltAPI.realtimeContext) {
+        withContext(PeptideAPI.realtimeContext) {
             flow {
                 while (true) {
-                    emit(RevoltAPI.wsFrameChannel.receive())
+                    emit(PeptideAPI.wsFrameChannel.receive())
                 }
             }.onEach {
                 when (it) {
@@ -545,8 +545,8 @@ class ChannelScreenViewModel @Inject constructor(
                         if (items.any { m -> (m is ChannelScreenItem.RegularMessage && m.message.id == it.id) || (m is ChannelScreenItem.SystemMessage && m.message.id == it.id) }) return@onEach
 
                         it.author?.let { userId ->
-                            if (RevoltAPI.userCache[userId] == null) {
-                                RevoltAPI.userCache[userId] = fetchUser(userId)
+                            if (PeptideAPI.userCache[userId] == null) {
+                                PeptideAPI.userCache[userId] = fetchUser(userId)
                             }
                         }
                         channel?.server?.let { serverId ->
@@ -596,7 +596,7 @@ class ChannelScreenViewModel @Inject constructor(
                         if (it.channel != channel?.id) return@onEach
 
                         val messageFrame =
-                            RevoltJson.decodeFromJsonElement(MessageFrame.serializer(), it.data)
+                            PeptideJson.decodeFromJsonElement(MessageFrame.serializer(), it.data)
 
                         val currentMessage = items.find { m ->
                             m is ChannelScreenItem.RegularMessage && m.message.id == it.id
@@ -632,7 +632,7 @@ class ChannelScreenViewModel @Inject constructor(
                         updateItems(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
-                                    RevoltAPI.messageCache[it.id]?.let { m ->
+                                    PeptideAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m)
                                     } ?: return@map currentMsg
                                 } else {
@@ -656,7 +656,7 @@ class ChannelScreenViewModel @Inject constructor(
                         updateItems(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
-                                    RevoltAPI.messageCache[it.id]?.let { m ->
+                                    PeptideAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m)
                                     } ?: return@map currentMsg
                                 } else {
@@ -680,7 +680,7 @@ class ChannelScreenViewModel @Inject constructor(
                         updateItems(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
-                                    RevoltAPI.messageCache[it.id]?.let { m ->
+                                    PeptideAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m)
                                     } ?: return@map currentMsg
                                 } else {
@@ -693,7 +693,7 @@ class ChannelScreenViewModel @Inject constructor(
                     is ChannelStartTypingFrame -> {
                         if (it.id != channel?.id) return@onEach
                         if (typingUsers.contains(it.user)) return@onEach
-                        if (it.user == RevoltAPI.selfId) return@onEach
+                        if (it.user == PeptideAPI.selfId) return@onEach
 
                         addUserIfUnknown(it.user)
                         typingUsers.add(it.user)

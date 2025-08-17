@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
-val Context.revoltKVStorage: DataStore<Preferences> by preferencesDataStore(name = "revolt_kv")
+val Context.peptideKVStorage: DataStore<Preferences> by preferencesDataStore(name = "peptide_kv")
 
 @Singleton
 class KVStorage @Inject constructor(
     @ApplicationContext private val mContext: Context
 ) {
-    private val dataStore = mContext.revoltKVStorage
+    private val dataStore = mContext.peptideKVStorage
 
     suspend fun set(key: String, value: String) {
         dataStore.edit { preferences ->

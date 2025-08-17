@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.activities.RevoltTweenInt
-import chat.peptide.api.RevoltAPI
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.activities.PeptideTweenInt
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.User
 import chat.peptide.composables.generic.UserAvatar
 
@@ -41,15 +41,15 @@ fun StackedUserAvatars(
             .size(size + (offset * minOf(users.size, amount)), size)
     ) {
         users.take(amount).forEachIndexed { index, userId ->
-            val user = RevoltAPI.userCache[userId]
-            val maybeMember = serverId?.let { RevoltAPI.members.getMember(serverId, userId) }
+            val user = PeptideAPI.userCache[userId]
+            val maybeMember = serverId?.let { PeptideAPI.members.getMember(serverId, userId) }
 
             UserAvatar(
                 avatar = user?.avatar,
                 userId = userId,
                 username = user?.let { User.resolveDefaultName(it) }
                     ?: stringResource(id = R.string.unknown),
-                rawUrl = maybeMember?.avatar?.let { "${RevoltAPI.getCurrentFilesUrl()}/avatars/${it.id}" },
+                rawUrl = maybeMember?.avatar?.let { "${PeptideAPI.getCurrentFilesUrl()}/avatars/${it.id}" },
                 size = size,
                 modifier = Modifier
                     .offset(
@@ -74,13 +74,13 @@ fun TypingIndicator(users: List<String>, serverId: String?) {
     AnimatedVisibility(
         visible = users.isNotEmpty(),
         enter = slideInVertically(
-            animationSpec = RevoltTweenInt,
+            animationSpec = PeptideTweenInt,
             initialOffsetY = { it }
-        ) + fadeIn(animationSpec = RevoltTweenFloat),
+        ) + fadeIn(animationSpec = PeptideTweenFloat),
         exit = slideOutVertically(
-            animationSpec = RevoltTweenInt,
+            animationSpec = PeptideTweenInt,
             targetOffsetY = { it }
-        ) + fadeOut(animationSpec = RevoltTweenFloat)
+        ) + fadeOut(animationSpec = PeptideTweenFloat)
     ) {
         Row(
             Modifier
@@ -94,9 +94,9 @@ fun TypingIndicator(users: List<String>, serverId: String?) {
                 text = stringResource(
                     id = typingMessageResource(),
                     users.joinToString { userId ->
-                        RevoltAPI.userCache[userId]?.let { u ->
+                        PeptideAPI.userCache[userId]?.let { u ->
                             val maybeMember =
-                                serverId?.let { RevoltAPI.members.getMember(serverId, userId) }
+                                serverId?.let { PeptideAPI.members.getMember(serverId, userId) }
 
                             maybeMember?.nickname ?: User.resolveDefaultName(u)
                         } ?: userId

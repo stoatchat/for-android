@@ -21,7 +21,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.webkit.WebViewAssetLoader
 import chat.peptide.R
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.databinding.SheetChangelogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.color.MaterialColors
@@ -62,7 +62,7 @@ class ChangelogBottomSheetFragment(
 
             binding.wvChangelog.apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
+                    .setDomain(Uri.parse(PeptideAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -89,7 +89,7 @@ class ChangelogBottomSheetFragment(
                         // Capture clicks on invite links
                         if (webResourceRequest.url.host == "rvlt.gg" ||
                             (
-                                    webResourceRequest.url.host?.endsWith("revolt.chat") == true && webResourceRequest.url.path?.startsWith(
+                                    webResourceRequest.url.host?.endsWith("peptide.chat") == true && webResourceRequest.url.path?.startsWith(
                                         "/invite"
                                     ) == true
                                     )
@@ -127,7 +127,7 @@ class ChangelogBottomSheetFragment(
                 }
 
                 loadUrl(
-                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/changelogs/renderer.html"
+                    "${PeptideAPI.getCurrentAppUrl()}/_android_assets/changelogs/renderer.html"
                 )
 
                 settings.apply {

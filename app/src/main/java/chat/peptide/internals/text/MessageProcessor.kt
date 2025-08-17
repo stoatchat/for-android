@@ -1,6 +1,6 @@
 package chat.peptide.internals.text
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.internals.EmojiImpl
 
@@ -25,7 +25,7 @@ object MessageProcessor {
                 ?: return@fold acc
 
             val user =
-                RevoltAPI.userCache.values.find { it.username == username && it.discriminator == discriminator }
+                PeptideAPI.userCache.values.find { it.username == username && it.discriminator == discriminator }
 
             val userId = user?.id ?: return@fold acc
             acc.replace(mention, "<@$userId>")
@@ -38,7 +38,7 @@ object MessageProcessor {
                 ?: return@fold acc
 
             val fetchedChannel =
-                RevoltAPI.channelCache.values.find {
+                PeptideAPI.channelCache.values.find {
                     it.name == channelName && it.server == serverId && it.channelType == ChannelType.TextChannel
                 }
                     ?: return@fold acc

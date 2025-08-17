@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,8 +51,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.routes.misc.Root
 import chat.peptide.api.routes.misc.getRootRoute
 import chat.peptide.composables.generic.PrimaryTabs
@@ -72,8 +70,8 @@ class AboutViewModel : ViewModel() {
             "App ID" to BuildConfig.APPLICATION_ID,
             "App Version" to BuildConfig.VERSION_NAME,
             "App Type" to BuildConfig.FLAVOUR_ID,
-            "API Host" to URI(RevoltAPI.getCurrentBaseUrl()).host,
-            "API Version" to (root?.revolt ?: "Unknown"),
+            "API Host" to URI(PeptideAPI.getCurrentBaseUrl()).host,
+            "API Version" to (root?.peptide ?: "Unknown"),
             "Runtime SDK" to Build.VERSION.SDK_INT.toString(),
             "Model" to "${Build.MANUFACTURER} ${
                 Build.DEVICE.replaceFirstChar {
@@ -143,7 +141,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
 
     fun copyDebugInformation() {
         clipboardManager.setText(
-            AnnotatedString(RevoltJson.encodeToString(viewModel.getDebugInformation()))
+            AnnotatedString(PeptideJson.encodeToString(viewModel.getDebugInformation()))
         )
 
         if (Platform.needsShowClipboardNotification()) {
@@ -211,7 +209,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                         when (viewModel.selectedTabIndex) {
                             0 -> {
                                 Image(
-                                    painter = painterResource(R.drawable.revolt_logo_wide),
+                                    painter = painterResource(R.drawable.peptide_logo_wide),
                                     contentDescription = stringResource(R.string.about_full_name),
                                     colorFilter = ColorFilter.tint(LocalContentColor.current),
                                     modifier = Modifier

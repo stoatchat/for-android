@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.api.internals.getComponentActivity
 import chat.peptide.composables.screens.splash.DisconnectedScreen
 import com.google.android.material.color.DynamicColors
@@ -39,7 +39,7 @@ fun DefaultDestinationScreen(
             // See the other one in MainActivity.kt
             val activity = context.getComponentActivity() as Activity
             DynamicColors.applyToActivityIfAvailable(activity)
-            DynamicColors.applyToActivitiesIfAvailable(RevoltApplication.instance)
+            DynamicColors.applyToActivitiesIfAvailable(PeptideApplication.instance)
             activity.window.statusBarColor = Color.Transparent.toArgb()
 
             navController.popBackStack(navController.graph.startDestinationRoute!!, true)

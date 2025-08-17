@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.googlesheets.ServerData
 import chat.peptide.composables.generic.SquareButton
 
@@ -104,7 +104,8 @@ fun DiscoverServersList(
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(16.dp)
+                            .padding(16.dp),
+                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
             }
@@ -165,8 +166,8 @@ fun DiscoverServersList(
 }
 
 private fun isServerAlreadyJoined(serverId: String): Boolean {
-    // Check if the server exists in RevoltAPI.serverCache
-    return RevoltAPI.serverCache.containsKey(serverId)
+    // Check if the server exists in PeptideAPI.serverCache
+    return PeptideAPI.serverCache.containsKey(serverId)
 }
 
 @Composable
@@ -262,12 +263,11 @@ fun ServerItem(
                             .fillMaxSize()
                     ) {
                         if (isJoined) {
-                            // Show tick icon with green background for joined servers
                             Box(
                                 modifier = Modifier
                                     .size(20.dp)
                                     .clip(CircleShape)
-                                    .background(MaterialTheme.colorScheme.primary) // Green color
+                                    .background(Color(0xFF43bf83))
                                     .align(Alignment.Center),
                                 contentAlignment = Alignment.Center
                             ) {
@@ -275,8 +275,9 @@ fun ServerItem(
                                     modifier = Modifier.size(16.dp),
                                     painter = painterResource(R.drawable.icn_check_24dp),
                                     contentDescription = "Already joined",
-                                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary)
+                                    colorFilter = ColorFilter.tint(Color.White)
                                 )
+
                             }
                         } else {
                             // Show arrow icon for servers not joined yet
@@ -302,9 +303,9 @@ fun ServerItem(
 private fun ServerItemPreview() {
     val server = ServerData(
         id = "1",
-        name = "Revolt Lounge",
-        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
-        inviteCode = "revolt",
+        name = "Peptide Lounge",
+        description = "The official Peptide server. Hang out, chat, and get help with Peptide.",
+        inviteCode = "peptide",
         disabled = false,
         showColor = null
     )
@@ -321,9 +322,9 @@ private fun ServerItemPreview() {
 private fun ColorfulServerItemPreview() {
     val server = ServerData(
         id = "1",
-        name = "Revolt Lounge",
-        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
-        inviteCode = "revolt",
+        name = "Peptide Lounge",
+        description = "The official Peptide server. Hang out, chat, and get help with Peptide.",
+        inviteCode = "peptide",
         disabled = false,
         showColor = "#1591ea"
     )
@@ -341,9 +342,9 @@ private fun ColorfulServerItemPreview() {
 private fun JoinedServerItemPreview() {
     val server = ServerData(
         id = "1",
-        name = "Revolt Lounge",
-        description = "The official Revolt server. Hang out, chat, and get help with Revolt.",
-        inviteCode = "revolt",
+        name = "Peptide Lounge",
+        description = "The official Peptide server. Hang out, chat, and get help with Peptide.",
+        inviteCode = "peptide",
         disabled = false,
         showColor = null,
     )

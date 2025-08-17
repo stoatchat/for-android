@@ -57,8 +57,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.api.RevoltAPI
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.channel.patchChannel
 import chat.peptide.api.routes.microservices.autumn.uploadToAutumn
 import chat.peptide.api.schemas.Channel
@@ -89,12 +89,12 @@ class ChannelSettingsOverviewViewModel @Inject constructor(@ApplicationContext v
     var showNsfwToggleDialogue by mutableStateOf(false)
 
     fun populateWithChannel(channelId: String) {
-        val channel = RevoltAPI.channelCache[channelId]
+        val channel = PeptideAPI.channelCache[channelId]
         initialChannel = channel
         channel?.let {
             channelName = it.name ?: ""
             channelDescription = it.description ?: ""
-            iconModel = it.icon?.let { icon -> "${RevoltAPI.getCurrentFilesUrl()}/icons/${icon.id}" }
+            iconModel = it.icon?.let { icon -> "${PeptideAPI.getCurrentFilesUrl()}/icons/${icon.id}" }
         }
     }
 
@@ -217,7 +217,7 @@ fun ChannelSettingsOverview(
     channelId: String,
     viewModel: ChannelSettingsOverviewViewModel = hiltViewModel()
 ) {
-    val currentChannel = RevoltAPI.channelCache[channelId]
+    val currentChannel = PeptideAPI.channelCache[channelId]
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     LaunchedEffect(channelId) {
@@ -312,8 +312,8 @@ fun ChannelSettingsOverview(
         floatingActionButton = {
             AnimatedVisibility(
                 visible = channelInfoUpdated,
-                enter = scaleIn(animationSpec = RevoltTweenFloat),
-                exit = scaleOut(animationSpec = RevoltTweenFloat)
+                enter = scaleIn(animationSpec = PeptideTweenFloat),
+                exit = scaleOut(animationSpec = PeptideTweenFloat)
             ) {
                 FloatingActionButton(onClick = { viewModel.updateChannel() }) {
                     Icon(

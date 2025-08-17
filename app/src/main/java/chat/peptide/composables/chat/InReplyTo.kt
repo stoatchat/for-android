@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.solidColor
 import chat.peptide.api.routes.channel.fetchSingleMessage
 import chat.peptide.api.schemas.User
@@ -47,8 +47,8 @@ fun InReplyTo(
     withMention: Boolean = false,
     onMessageClick: (String) -> Unit = { _ -> }
 ) {
-    val message = RevoltAPI.messageCache[messageId]
-    val author = RevoltAPI.userCache[message?.author ?: ""]
+    val message = PeptideAPI.messageCache[messageId]
+    val author = PeptideAPI.userCache[message?.author ?: ""]
 
     val username = message?.let { authorName(it) }
         ?: author?.let { User.resolveDefaultName(it) }
@@ -58,12 +58,12 @@ fun InReplyTo(
     val usernameColor =
         message?.let { authorColour(it) } ?: Brush.solidColor(contentColor)
 
-    val serverId = remember(channelId) { RevoltAPI.channelCache[channelId]?.server }
+    val serverId = remember(channelId) { PeptideAPI.channelCache[channelId]?.server }
 
     LaunchedEffect(messageId) {
-        if (messageId !in RevoltAPI.messageCache) {
+        if (messageId !in PeptideAPI.messageCache) {
             try {
-                RevoltAPI.messageCache[messageId] = fetchSingleMessage(channelId, messageId)
+                PeptideAPI.messageCache[messageId] = fetchSingleMessage(channelId, messageId)
             } catch (e: CancellationException) {
                 // It's fine
             } catch (e: Exception) {

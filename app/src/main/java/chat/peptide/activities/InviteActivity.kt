@@ -47,8 +47,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltError
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideError
 import chat.peptide.api.routes.invites.fetchInviteByCode
 import chat.peptide.api.routes.invites.joinInviteByCode
 import chat.peptide.api.schemas.Invite
@@ -58,7 +58,7 @@ import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.IconPlaceholder
 import chat.peptide.composables.generic.RemoteImage
-import chat.peptide.ui.theme.RevoltTheme
+import chat.peptide.ui.theme.PeptideTheme
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
@@ -90,19 +90,19 @@ class InviteViewModel : ViewModel() {
         _loadingFinished = loadingFinished
     }
 
-    private var _inviteResult by mutableStateOf<RsResult<Invite, RevoltError>?>(null)
-    val inviteResult: RsResult<Invite, RevoltError>?
+    private var _inviteResult by mutableStateOf<RsResult<Invite, PeptideError>?>(null)
+    val inviteResult: RsResult<Invite, PeptideError>?
         get() = _inviteResult
 
-    fun setInviteResult(inviteResult: RsResult<Invite, RevoltError>?) {
+    fun setInviteResult(inviteResult: RsResult<Invite, PeptideError>?) {
         _inviteResult = inviteResult
     }
 
-    private var _joinResult by mutableStateOf<RsResult<InviteJoined, RevoltError>?>(null)
-    val joinResult: RsResult<InviteJoined, RevoltError>?
+    private var _joinResult by mutableStateOf<RsResult<InviteJoined, PeptideError>?>(null)
+    val joinResult: RsResult<InviteJoined, PeptideError>?
         get() = _joinResult
 
-    fun setJoinResult(joinResult: RsResult<InviteJoined, RevoltError>?) {
+    fun setJoinResult(joinResult: RsResult<InviteJoined, PeptideError>?) {
         _joinResult = joinResult
     }
 
@@ -144,7 +144,7 @@ fun InviteScreen(
     val inviteValid = if (viewModel.loadingFinished) (viewModel.inviteResult?.ok ?: false) else null
     val invite = viewModel.inviteResult?.value
 
-    RevoltTheme(
+    PeptideTheme(
         requestedTheme = LoadedSettings.theme,
         colourOverrides = SyncedSettings.android.colourOverrides
     ) {
@@ -180,7 +180,7 @@ fun InviteScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         GlideImage(
-                            model = "${RevoltAPI.getCurrentFilesUrl()}/banners/${invite?.serverBanner?.id}/${invite?.serverBanner?.filename}",
+                            model = "${PeptideAPI.getCurrentFilesUrl()}/banners/${invite?.serverBanner?.id}/${invite?.serverBanner?.filename}",
                             contentScale = ContentScale.Crop,
                             contentDescription = null,
                             modifier = Modifier
@@ -205,7 +205,7 @@ fun InviteScreen(
                         ) {
                             if (invite?.serverIcon != null) {
                                 RemoteImage(
-                                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
+                                    url = "${PeptideAPI.getCurrentFilesUrl()}/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
                                     allowAnimation = false,
                                     description = viewModel.inviteResult?.value?.serverName
                                         ?: stringResource(id = R.string.unknown),
@@ -274,7 +274,7 @@ fun InviteScreen(
 }
 
 @Composable
-fun InvalidInviteError(error: RevoltError? = null, onDismissRequest: () -> Unit) {
+fun InvalidInviteError(error: PeptideError? = null, onDismissRequest: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {

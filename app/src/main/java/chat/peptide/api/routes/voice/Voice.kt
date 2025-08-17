@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.voice
 
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -19,17 +19,17 @@ data class JoinCallResponse(
 )
 
 suspend fun joinCall(channelId: String, nodeName: String): JoinCallResponse {
-    val response = RevoltHttp.post("/channels/$channelId/join_call".api()) {
+    val response = PeptideHttp.post("/channels/$channelId/join_call".api()) {
         contentType(ContentType.Application.Json)
         setBody(mapOf("node" to nodeName))
     }.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    return RevoltJson.decodeFromString(JoinCallResponse.serializer(), response)
+    return PeptideJson.decodeFromString(JoinCallResponse.serializer(), response)
 }

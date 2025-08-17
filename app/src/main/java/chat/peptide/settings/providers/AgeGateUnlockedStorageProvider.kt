@@ -1,10 +1,10 @@
 package chat.peptide.settings.providers
 
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.persistence.KVStorage
 
 object AgeGateUnlockedStorageProvider {
-    private val kv = KVStorage(RevoltApplication.instance)
+    private val kv = KVStorage(PeptideApplication.instance)
 
     suspend fun setAgeGateUnlocked(unlocked: Boolean) {
         kv.set("ageGateUnlocked", unlocked)

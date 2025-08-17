@@ -2,9 +2,9 @@ package chat.peptide.api.routes.account
 
 import android.os.Build
 import android.util.Log
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -104,22 +104,22 @@ data class EmailPasswordAssessment(
     val proceedMfa: Boolean = false,
     val mfaSpec: MfaLoginSpec? = null,
     val firstUserHints: UserHints? = null,
-    val error: RevoltError? = null
+    val error: PeptideError? = null
 )
 
 suspend fun negotiateAuthentication(email: String, password: String): EmailPasswordAssessment {
     val sessionName = friendlySessionName()
 
-    val response: HttpResponse = RevoltHttp.post("/auth/session/login".api()) {
+    val response: HttpResponse = PeptideHttp.post("/auth/session/login".api()) {
         contentType(ContentType.Application.Json)
         setBody(LoginNegotiation(email, password, sessionName, null))
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Revolt", "negotiateAuthentication: $responseContent")
+    Log.d("Peptide", "negotiateAuthentication: $responseContent")
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), responseContent)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), responseContent)
         return EmailPasswordAssessment(error = error)
     } catch (e: SerializationException) {
         // Not an error
@@ -127,22 +127,22 @@ suspend fun negotiateAuthentication(email: String, password: String): EmailPassw
 
     if (response.status == HttpStatusCode.InternalServerError) {
         return EmailPasswordAssessment(
-            error = RevoltError(
+            error = PeptideError(
                 "InternalServerError"
             )
         )
     }
 
-    val responseJson = RevoltJson.decodeFromString(MfaCheck.serializer(), responseContent)
+    val responseJson = PeptideJson.decodeFromString(MfaCheck.serializer(), responseContent)
 
     return when (responseJson.result) {
         "Success" -> EmailPasswordAssessment(
-            firstUserHints = RevoltJson.decodeFromString(UserHints.serializer(), responseContent)
+            firstUserHints = PeptideJson.decodeFromString(UserHints.serializer(), responseContent)
         )
 
         "MFA" -> EmailPasswordAssessment(
             proceedMfa = true,
-            mfaSpec = RevoltJson.decodeFromString(MfaLoginSpec.serializer(), responseContent)
+            mfaSpec = PeptideJson.decodeFromString(MfaLoginSpec.serializer(), responseContent)
         )
 
         else -> throw Exception("Unknown result: ${responseJson.result}")
@@ -153,23 +153,23 @@ suspend fun authenticateWithMfaTotpCode(
     mfaTicket: String,
     mfaResponse: MfaResponseTotpCode
 ): EmailPasswordAssessment {
-    val response: HttpResponse = RevoltHttp.post("/auth/session/login".api()) {
+    val response: HttpResponse = PeptideHttp.post("/auth/session/login".api()) {
         contentType(ContentType.Application.Json)
         setBody(LoginMfaAmendmentTotpCode(mfaTicket, mfaResponse, friendlySessionName()))
     }
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response.bodyAsText())
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response.bodyAsText())
         return EmailPasswordAssessment(error = error)
     } catch (e: SerializationException) {
         // Not an error
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Revolt", "authenticateWithMfaTotpCode: $responseContent")
+    Log.d("Peptide", "authenticateWithMfaTotpCode: $responseContent")
 
     return EmailPasswordAssessment(
-        firstUserHints = RevoltJson.decodeFromString(UserHints.serializer(), responseContent)
+        firstUserHints = PeptideJson.decodeFromString(UserHints.serializer(), responseContent)
     )
 }
 
@@ -177,26 +177,26 @@ suspend fun authenticateWithMfaRecoveryCode(
     mfaTicket: String,
     mfaResponse: MfaResponseRecoveryCode
 ): EmailPasswordAssessment {
-    val response: HttpResponse = RevoltHttp.post("/auth/session/login".api()) {
+    val response: HttpResponse = PeptideHttp.post("/auth/session/login".api()) {
         contentType(ContentType.Application.Json)
         setBody(LoginMfaAmendmentRecoveryCode(mfaTicket, mfaResponse, friendlySessionName()))
     }
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response.bodyAsText())
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response.bodyAsText())
         return EmailPasswordAssessment(error = error)
     } catch (e: SerializationException) {
         // Not an error
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Revolt", "authenticateWithMfaRecoveryCode: $responseContent")
+    Log.d("Peptide", "authenticateWithMfaRecoveryCode: $responseContent")
 
     return EmailPasswordAssessment(
-        firstUserHints = RevoltJson.decodeFromString(UserHints.serializer(), responseContent)
+        firstUserHints = PeptideJson.decodeFromString(UserHints.serializer(), responseContent)
     )
 }
 
 fun friendlySessionName(): String {
-    return "Revolt Android on ${Build.MANUFACTURER} ${Build.MODEL}"
+    return "Peptide Android on ${Build.MANUFACTURER} ${Build.MODEL}"
 }

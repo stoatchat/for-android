@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.custom.fetchEmoji
 import chat.peptide.api.schemas.Emoji
 import chat.peptide.api.schemas.Server
@@ -50,9 +50,9 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
     var parentServer by remember { mutableStateOf<Server?>(null) }
 
     LaunchedEffect(id) {
-        emoteInfo = RevoltAPI.emojiCache[id] ?: fetchEmoji(id)
+        emoteInfo = PeptideAPI.emojiCache[id] ?: fetchEmoji(id)
         when (emoteInfo?.parent?.type) {
-            "Server" -> parentServer = RevoltAPI.serverCache[emoteInfo?.parent?.id]
+            "Server" -> parentServer = PeptideAPI.serverCache[emoteInfo?.parent?.id]
         }
     }
 
@@ -64,7 +64,7 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             RemoteImage(
-                url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/$id",
+                url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/$id",
                 description = emoteInfo?.name,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier

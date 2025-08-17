@@ -26,7 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.AutumnResource
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.User
@@ -66,7 +66,7 @@ fun ChannelSheetHeader(
         ) {
             if (channelIcon != null) {
                 RemoteImage(
-                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${channelIcon.id ?: ""}",
+                    url = "${PeptideAPI.getCurrentFilesUrl()}/icons/${channelIcon.id ?: ""}",
                     description = null, // decorative
                     contentScale = ContentScale.Crop,
                     height = 48,

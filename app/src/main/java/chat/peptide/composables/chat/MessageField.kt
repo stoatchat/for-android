@@ -80,9 +80,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.activities.RevoltTweenInt
-import chat.peptide.api.RevoltAPI
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.activities.PeptideTweenInt
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.Member
@@ -318,7 +318,7 @@ fun MessageField(
                                         userId = item.user.id ?: "",
                                         avatar = item.user.avatar,
                                         rawUrl = item.member?.avatar?.id?.let {
-                                            "${RevoltAPI.getCurrentFilesUrl()}/avatars/$it"
+                                            "${PeptideAPI.getCurrentFilesUrl()}/avatars/$it"
                                         },
                                         size = SuggestionChipDefaults.IconSize,
                                     )
@@ -444,7 +444,7 @@ fun MessageField(
                                         )
                                     } else {
                                         RemoteImage(
-                                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${item.custom?.id}",
+                                            url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${item.custom?.id}",
                                             description = null,
                                             contentScale = ContentScale.Fit,
                                             modifier = Modifier
@@ -606,18 +606,18 @@ fun MessageField(
                         full.height
                     )
                 }) + slideInHorizontally(
-                    animationSpec = RevoltTweenInt,
+                    animationSpec = PeptideTweenInt,
                     initialOffsetX = { -it }
-                ) + fadeIn(animationSpec = RevoltTweenFloat),
+                ) + fadeIn(animationSpec = PeptideTweenFloat),
                 exit = shrinkOut(targetSize = { full ->
                     IntSize(
                         0,
                         full.height
                     )
                 }) + slideOutHorizontally(
-                    animationSpec = RevoltTweenInt,
+                    animationSpec = PeptideTweenInt,
                     targetOffsetX = { it }
-                ) + fadeOut(animationSpec = RevoltTweenFloat)
+                ) + fadeOut(animationSpec = PeptideTweenFloat)
             ) {
                 Icon(
                     painter = when {

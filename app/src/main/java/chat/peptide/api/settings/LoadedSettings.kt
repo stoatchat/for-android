@@ -25,12 +25,16 @@ object LoadedSettings {
     var poorlyFormedSettingsKeys by mutableStateOf(emptySet<String>())
 
     fun hydrateWithSettings(settings: SyncedSettings) {
-        this.theme = settings.android.theme?.let { Theme.valueOf(it) } ?: getDefaultTheme()
-        this.messageReplyStyle =
-            settings.android.messageReplyStyle?.let { MessageReplyStyle.valueOf(it) }
-                ?: MessageReplyStyle.SwipeFromEnd
-        this.avatarRadius = settings.android.avatarRadius ?: 50
-        this.specialEmbedSettings = settings.android.specialEmbedSettings ?: SpecialEmbedSettings()
+        try {
+            this.theme = settings.android.theme?.let { Theme.valueOf(it) } ?: getDefaultTheme()
+            this.messageReplyStyle =
+                settings.android.messageReplyStyle?.let { MessageReplyStyle.valueOf(it) }
+                    ?: MessageReplyStyle.SwipeFromEnd
+            this.avatarRadius = settings.android.avatarRadius ?: 50
+            this.specialEmbedSettings = settings.android.specialEmbedSettings ?: SpecialEmbedSettings()
+        } catch (_: Exception) {
+            reset()
+        }
     }
 
     fun reset() {

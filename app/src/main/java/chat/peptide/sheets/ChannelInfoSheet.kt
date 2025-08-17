@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ChannelUtils
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.Roles
@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
     var memberListSheetShown by remember { mutableStateOf(false) }
     var inviteDialogShown by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -95,7 +95,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     val partner = ChannelUtils
         .resolveDMPartner(channel)
         ?.let {
-            RevoltAPI.userCache[it]
+            PeptideAPI.userCache[it]
         }
 
     Column(
@@ -140,7 +140,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     if (
         Roles.permissionFor(
             channel,
-            RevoltAPI.userCache[RevoltAPI.selfId]
+            PeptideAPI.userCache[PeptideAPI.selfId]
         ) has PermissionBit.InviteOthers
     ) {
         when (channel.channelType) {

@@ -15,7 +15,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-revoltbuild.properties
+peptidebuild.properties
 sentry.properties
 /.kotlin/sessions
 app/src/main/assets/embedded

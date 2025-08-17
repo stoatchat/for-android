@@ -23,11 +23,11 @@
     <string name="lets_go">Kom i gang</string>
     <string name="rate_limit_toast">Klap lige hesten! Det gør du for ofte på kort tid.</string>
     <string name="login_onboarding_heading">Find dit fællesskab, forbind med verden.</string>
-    <string name="login_onboarding_body">Revolt er en af de bedste måder at holde forbindelsen med dine venner og samfund på, hvor som helst og når som helst.</string>
+    <string name="login_onboarding_body">Peptide er en af de bedste måder at holde forbindelsen med dine venner og samfund på, hvor som helst og når som helst.</string>
     <string name="login">Log på</string>
     <string name="service_health_alert">Igangværende i øjeblikket</string>
     <string name="service_health_alert_body_default">Vi oplever i øjeblikket problemer med vores tjenester. Se venligst vores statusside for mere information.</string>
     <string name="resend_verification">Send bekræftelsesmail igen</string>
     <string name="password_forgot_instructions">Indtast din mail, og vi sender dig instruktioner om, hvordan du nulstiller din adgangskode.</string>
-    <string name="register_heading">Velkommen til Revolt</string>
+    <string name="register_heading">Velkommen til Peptide</string>
 </resources>

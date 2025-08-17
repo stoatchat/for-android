@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.isUlid
 import chat.peptide.api.routes.custom.fetchEmoji
 import chat.peptide.api.routes.user.fetchUser
@@ -60,8 +60,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
-    val message = RevoltAPI.messageCache[messageId] ?: return
-    val channel = RevoltAPI.channelCache[message.channel] ?: return
+    val message = PeptideAPI.messageCache[messageId] ?: return
+    val channel = PeptideAPI.channelCache[message.channel] ?: return
     val reactions = message.reactions
     val interactions = message.interactions?.reactions ?: emptyList()
     val reactionEmoji =
@@ -71,7 +71,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
             .filterNot { it.isEmpty() }
             .sortedBy {
                 if (it.isUlid()) {
-                    RevoltAPI.emojiCache[it]?.name ?: it.codePointAt(0).toString()
+                    PeptideAPI.emojiCache[it]?.name ?: it.codePointAt(0).toString()
                 } else {
                     it.codePointAt(0).toString()
                 }
@@ -85,7 +85,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
     LaunchedEffect(reactionEmoji) {
         reactionEmoji?.forEach {
             if (it.isUlid()) {
-                extendedEmojiInfo.add(RevoltAPI.emojiCache[it] ?: fetchEmoji(it))
+                extendedEmojiInfo.add(PeptideAPI.emojiCache[it] ?: fetchEmoji(it))
             }
         }
     }
@@ -118,7 +118,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                                 if (emoji.isUlid()) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         RemoteImage(
-                                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${emoji}",
+                                            url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${emoji}",
                                             description = null,
                                             modifier = Modifier.size(16.dp)
                                         )
@@ -228,7 +228,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                         if (current.isUlid()) {
                             val cached = extendedEmojiInfo.find { it.id == current }
                             RemoteImage(
-                                url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/$current",
+                                url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/$current",
                                 description = cached?.name,
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
@@ -288,7 +288,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                                     val cached = extendedEmojiInfo.find { it.id == current }
                                     if (cached?.parent != null) {
                                         when (cached.parent.type) {
-                                            "Server" -> RevoltAPI.serverCache[cached.parent.id]?.name?.let {
+                                            "Server" -> PeptideAPI.serverCache[cached.parent.id]?.name?.let {
                                                 stringResource(
                                                     id = R.string.emote_info_from_server,
                                                     it
@@ -316,18 +316,18 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
         val reactionsForEmoji =
             reactions?.get(reactionEmoji[selectedReactionIndex]) ?: emptyList()
         items(items = reactionsForEmoji) { reaction ->
-            val userOrNull = RevoltAPI.userCache[reaction]
+            val userOrNull = PeptideAPI.userCache[reaction]
             val user = userOrNull ?: User.getPlaceholder(reaction)
             val member = if (channel.server != null && user.id != null) {
-                RevoltAPI.members.getMember(channel.server, user.id)
+                PeptideAPI.members.getMember(channel.server, user.id)
             } else {
                 null
             }
 
             LaunchedEffect(reaction) {
-                if (reaction !in RevoltAPI.userCache) {
+                if (reaction !in PeptideAPI.userCache) {
                     try {
-                        RevoltAPI.userCache[reaction] = fetchUser(reaction)
+                        PeptideAPI.userCache[reaction] = fetchUser(reaction)
                     } catch (e: Exception) {
                         // too bad!
                     }

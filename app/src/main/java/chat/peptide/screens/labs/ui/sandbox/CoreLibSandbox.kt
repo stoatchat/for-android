@@ -24,7 +24,7 @@ fun CoreLibSandbox(navController: NavController) {
             Text(
                 text = buildAnnotatedString {
                     pushStyle(SpanStyle(fontFamily = FragmentMono))
-                    append("librevolt")
+                    append("libpeptide")
                     pop()
                     append(" Sample")
                 },

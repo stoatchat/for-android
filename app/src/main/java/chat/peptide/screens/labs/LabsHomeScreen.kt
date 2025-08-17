@@ -193,13 +193,13 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                             headlineContent = {
                                 Text(buildAnnotatedString {
                                     pushStyle(SpanStyle(fontFamily = FragmentMono))
-                                    append("librevolt")
+                                    append("libpeptide")
                                     pop()
                                     append(" Sample")
                                 })
                             },
                             modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/librevolt")
+                                navController.navigate("sandboxes/libpeptide")
                             }
                         )
                         HorizontalDivider()

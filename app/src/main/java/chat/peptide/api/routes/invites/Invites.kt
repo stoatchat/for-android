@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.invites
 
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import chat.peptide.api.schemas.Invite
 import chat.peptide.api.schemas.InviteJoined
@@ -12,32 +12,32 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.SerializationException
 
-suspend fun fetchInviteByCode(code: String): RsResult<Invite, RevoltError> {
-    val response = RevoltHttp.get("/invites/$code".api())
+suspend fun fetchInviteByCode(code: String): RsResult<Invite, PeptideError> {
+    val response = PeptideHttp.get("/invites/$code".api())
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         if (error.type != "Server") return RsResult.err(error)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    val invite = RevoltJson.decodeFromString(Invite.serializer(), response)
+    val invite = PeptideJson.decodeFromString(Invite.serializer(), response)
     return RsResult.ok(invite)
 }
 
-suspend fun joinInviteByCode(code: String): RsResult<InviteJoined, RevoltError> {
-    val response = RevoltHttp.post("/invites/$code".api())
+suspend fun joinInviteByCode(code: String): RsResult<InviteJoined, PeptideError> {
+    val response = PeptideHttp.post("/invites/$code".api())
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         if (error.type != "Server") return RsResult.err(error)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    val invite = RevoltJson.decodeFromString(InviteJoined.serializer(), response)
+    val invite = PeptideJson.decodeFromString(InviteJoined.serializer(), response)
     return RsResult.ok(invite)
 }

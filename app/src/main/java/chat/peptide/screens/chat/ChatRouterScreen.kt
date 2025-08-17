@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -29,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,6 +51,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -64,7 +67,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.DirectMessages
 import chat.peptide.api.realtime.DisconnectionState
 import chat.peptide.api.realtime.RealtimeSocket
@@ -113,6 +116,7 @@ sealed class ChatRouterDestination {
         val channelId: String,
         val messageId: String? = null,
     ) : ChatRouterDestination()
+
     data class ServersChannels(val serverID: String) : ChatRouterDestination()
     data class NoCurrentChannel(val serverId: String?) : ChatRouterDestination()
 
@@ -140,6 +144,7 @@ sealed class ChatRouterDestination {
                         default
                     }
                 }
+
                 else -> default
             }
         }
@@ -166,7 +171,10 @@ class ChatRouterViewModel @Inject constructor(
         viewModelScope.launch {
             // Check if there's a deep link to handle first
             if (DeepLinkHandler.hasDeepLink) {
-                Log.d("ChatRouterViewModel", "Deep link detected in init, skipping saved destination")
+                Log.d(
+                    "ChatRouterViewModel",
+                    "Deep link detected in init, skipping saved destination"
+                )
                 // Don't set any destination here, let the LaunchedEffect in ChatRouterScreen handle it
             } else {
                 // No deep link, load the saved destination
@@ -323,7 +331,7 @@ fun ChatRouterScreen(
     val currentServer = remember(viewModel.currentDestination) {
         when (viewModel.currentDestination) {
             is ChatRouterDestination.Channel -> {
-                RevoltAPI.channelCache[(viewModel.currentDestination as ChatRouterDestination.Channel).channelId]?.server
+                PeptideAPI.channelCache[(viewModel.currentDestination as ChatRouterDestination.Channel).channelId]?.server
             }
 
             is ChatRouterDestination.NoCurrentChannel -> {
@@ -337,7 +345,7 @@ fun ChatRouterScreen(
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         if (RealtimeSocket.disconnectionState == DisconnectionState.Disconnected) {
             RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
-            scope.launch { RevoltAPI.connectWS() }
+            scope.launch { PeptideAPI.connectWS() }
         }
     }
 
@@ -353,8 +361,8 @@ fun ChatRouterScreen(
             }
     }
 
-    LaunchedEffect(RevoltAPI.selfId) {
-        snapshotFlow { RevoltAPI.selfId }
+    LaunchedEffect(PeptideAPI.selfId) {
+        snapshotFlow { PeptideAPI.selfId }
             .distinctUntilChanged()
             .collect { selfId ->
                 if (selfId == null) {
@@ -387,16 +395,19 @@ fun ChatRouterScreen(
         // Check if there's a deep link to handle
         if (DeepLinkHandler.hasDeepLink) {
             Log.d("ChatRouterScreen", "Processing deep link data")
-            
+
             // Process the deep link based on priority
             when {
                 // Priority 1: Handle server/channel/message format (most specific)
                 DeepLinkHandler.messageId != null && DeepLinkHandler.channelId != null -> {
                     val messageId = DeepLinkHandler.messageId!!
                     val channelId = DeepLinkHandler.channelId!!
-                    Log.d("ChatRouterScreen", "Setting destination to message: $messageId in channel: $channelId")
-                    
-                    val resolvedChannel = RevoltAPI.channelCache[channelId]
+                    Log.d(
+                        "ChatRouterScreen",
+                        "Setting destination to message: $messageId in channel: $channelId"
+                    )
+
+                    val resolvedChannel = PeptideAPI.channelCache[channelId]
                     if (resolvedChannel == null) {
                         showChannelUnavailableAlert = true
                     } else {
@@ -405,27 +416,27 @@ fun ChatRouterScreen(
                         // TODO: Add logic to scroll to the specific message in the channel
                     }
                 }
-                
+
                 // Priority 2: Handle channel deep link
                 DeepLinkHandler.channelId != null -> {
                     val channelId = DeepLinkHandler.channelId!!
                     Log.d("ChatRouterScreen", "Setting destination to channel: $channelId")
-                    val resolvedChannel = RevoltAPI.channelCache[channelId]
-                    
+                    val resolvedChannel = PeptideAPI.channelCache[channelId]
+
                     if (resolvedChannel == null) {
                         showChannelUnavailableAlert = true
                     } else {
                         viewModel.setSaveDestination(ChatRouterDestination.Channel(channelId))
                     }
                 }
-                
+
                 // Priority 3: Handle server deep link
                 DeepLinkHandler.serverId != null -> {
                     val serverId = DeepLinkHandler.serverId!!
                     Log.d("ChatRouterScreen", "Setting destination to server: $serverId")
                     viewModel.navigateToServer(serverId)
                 }
-                
+
                 // Priority 4: Handle user deep link
                 DeepLinkHandler.userId != null -> {
                     val userId = DeepLinkHandler.userId!!
@@ -433,12 +444,12 @@ fun ChatRouterScreen(
                     // TODO: Implement user navigation if needed
                 }
             }
-            
+
             // Clear the deep link data after processing
             DeepLinkHandler.clear()
         }
     }
-    
+
     LaunchedEffect(Unit) {
         while (true) {
             ActionChannel.receive().let { action ->
@@ -450,7 +461,7 @@ fun ChatRouterScreen(
                     }
 
                     is Action.SwitchChannel -> {
-                        val resolvedChannel = RevoltAPI.channelCache[action.channelId]
+                        val resolvedChannel = PeptideAPI.channelCache[action.channelId]
 
                         if (resolvedChannel == null) {
                             showChannelUnavailableAlert = true
@@ -856,7 +867,7 @@ fun ChatRouterScreen(
                 state = RealtimeSocket.disconnectionState,
                 onReconnect = {
                     RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
-                    scope.launch { RevoltAPI.connectWS() }
+                    scope.launch { PeptideAPI.connectWS() }
                 }
             )
         }
@@ -937,13 +948,25 @@ fun ChannelNavigator(
                             label = {
                                 Text(text = "you")
                             },
-                            selected = when(dest){
+                            selected = when (dest) {
                                 is ChatRouterDestination.ServersChannels,
                                 is ChatRouterDestination.NoCurrentChannel,
                                 ChatRouterDestination.Home,
                                 ChatRouterDestination.Discover -> true
+
                                 else -> false
-                            } ,
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = Color.Transparent,
+                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                            ),
                             enabled = true,
                             onClick = {
                                 viewModel.setSaveDestination(ChatRouterDestination.Home)
@@ -962,6 +985,17 @@ fun ChannelNavigator(
                             },
                             selected = dest is ChatRouterDestination.Friends,
                             enabled = true,
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = Color.Transparent,
+                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                            ),
                             onClick = {
                                 viewModel.setSaveDestination(ChatRouterDestination.Friends)
                             }
@@ -978,6 +1012,17 @@ fun ChannelNavigator(
                                 Text(text = "you")
                             },
                             selected = dest is ChatRouterDestination.Settings,
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = Color.Transparent,
+                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.4f
+                                ),
+                            ),
                             enabled = true,
                             onClick = {
                                 viewModel.setSaveDestination(ChatRouterDestination.Settings)

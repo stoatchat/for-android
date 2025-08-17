@@ -33,7 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.Roles
 import chat.peptide.api.internals.hasPermission
@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 val DO_NOT_FETCH_OFFLINE_MEMBERS_SERVERS = listOf(
-    "01F7ZSBSFHQ8TA81725KQCSDDP" // Revolt Lounge
+    "01F7ZSBSFHQ8TA81725KQCSDDP" // Peptide Lounge
 )
 
 sealed class MemberListSheetItem {
@@ -75,7 +75,7 @@ class MemberListSheetViewModel @Inject constructor(
                 serverId = serverId,
                 includeOffline = serverId !in DO_NOT_FETCH_OFFLINE_MEMBERS_SERVERS
             ).members
-            val channel = RevoltAPI.channelCache[channelId] ?: return@launch
+            val channel = PeptideAPI.channelCache[channelId] ?: return@launch
 
             val categories = mutableMapOf<String, List<Member>>()
 
@@ -83,7 +83,7 @@ class MemberListSheetViewModel @Inject constructor(
             val defaultCategoryName = context.getString(R.string.status_online)
 
             memberList.forEach { member ->
-                val user = RevoltAPI.userCache[member.id!!.user] ?: run {
+                val user = PeptideAPI.userCache[member.id!!.user] ?: run {
                     Log.w(
                         "MemberListSheet",
                         "User ${member.id.user} found in member list of server $serverId but not in user cache"
@@ -215,8 +215,8 @@ fun MemberListSheet(
     var memberContextSheetTarget by remember { mutableStateOf("") }
 
     // We use LaunchedEffect to make sure that this is called every time any of the users status changes
-    LaunchedEffect(RevoltAPI.userCache) {
-        snapshotFlow { RevoltAPI.userCache }.distinctUntilChanged().collect {
+    LaunchedEffect(PeptideAPI.userCache) {
+        snapshotFlow { PeptideAPI.userCache }.distinctUntilChanged().collect {
             if (serverId != null) {
                 viewModel.fetchServerMemberList(serverId, channelId)
             } else {
@@ -319,7 +319,7 @@ fun MemberListSheet(
 
                     is MemberListSheetItem.MemberItem -> item(key = item.member.id!!.user) {
                         MemberListItem(
-                            user = RevoltAPI.userCache[item.member.id.user],
+                            user = PeptideAPI.userCache[item.member.id.user],
                             member = item.member,
                             serverId = serverId,
                             userId = item.member.id.user,

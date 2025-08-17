@@ -2,10 +2,9 @@ package chat.peptide.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-object Colour {
-    val RevoltUltraPink = Color(0xFFFF005C)
+object AppColors {
 
-    val PrimaryLight = Color(0xFFBD0042)
+    val PrimaryLight = Color(0xFF662D91)
     val OnPrimaryLight = Color(0xFFFFFFFF)
     val PrimaryContainerLight = Color(0xFFFFD9DC)
     val OnPrimaryContainerLight = Color(0xFF910031)
@@ -41,14 +40,14 @@ object Colour {
     val SurfaceContainerHighLight = Color(0xFFE4E8F8)
     val SurfaceContainerHighestLight = Color(0xFFDEE2F2)
 
-    val PrimaryDark = Color(0xFFFFB2BA)
-    val OnPrimaryDark = Color(0xFF670020)
-    val PrimaryContainerDark = Color(0xFF910031)
-    val OnPrimaryContainerDark = Color(0xFFFFD9DC)
-    val SecondaryDark = Color(0xFFFFB3AE)
-    val OnSecondaryDark = Color(0xFF68000C)
-    val SecondaryContainerDark = Color(0xFF930015)
-    val OnSecondaryContainerDark = Color(0xFFFFDAD7)
+    val PrimaryDark = Color(0xFF3B1954)
+    val OnPrimaryDark = Color(0xFFFFFFFD)
+    val PrimaryContainerDark = Color(0xFF662D91)
+    val OnPrimaryContainerDark = Color(0xFFFFFFFF)
+    val SecondaryDark = Color(0xFFFFDE17)
+    val OnSecondaryDark = Color(0xFF000000)
+    val SecondaryContainerDark = Color(0xFF332E36)
+    val OnSecondaryContainerDark = Color(0xFFFFDE17)
     val TertiaryDark = Color(0xFFA2C9FF)
     val OnTertiaryDark = Color(0xFF00315B)
     val TertiaryContainerDark = Color(0xFF004881)

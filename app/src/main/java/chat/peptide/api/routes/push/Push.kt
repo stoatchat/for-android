@@ -1,6 +1,6 @@
 package chat.peptide.api.routes.push
 
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideHttp
 import chat.peptide.api.routes.account.WebPushData
 import chat.peptide.api.api
 import io.ktor.client.request.post
@@ -19,7 +19,7 @@ suspend fun subscribePush(
         auth = auth
     )
 
-    RevoltHttp.post("/push/subscribe".api()) {
+    PeptideHttp.post("/push/subscribe".api()) {
         setBody(data)
         contentType(ContentType.Application.Json)
     }

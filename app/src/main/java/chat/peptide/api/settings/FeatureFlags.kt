@@ -3,7 +3,7 @@ package chat.peptide.api.settings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.SpecialUsers
 
 annotation class FeatureFlag(val name: String)
@@ -60,7 +60,7 @@ object FeatureFlags {
     @FeatureFlag("LabsAccessControl")
     var labsAccessControl by mutableStateOf<LabsAccessControlVariates>(
         LabsAccessControlVariates.Restricted {
-            RevoltAPI.selfId == SpecialUsers.JENNIFER
+            PeptideAPI.selfId == SpecialUsers.JENNIFER
         }
     )
 
@@ -72,7 +72,7 @@ object FeatureFlags {
     @FeatureFlag("UserCards")
     var userCards by mutableStateOf<UserCardsVariates>(
         UserCardsVariates.Restricted {
-            RevoltAPI.selfId?.endsWith("Z") == true
+            PeptideAPI.selfId?.endsWith("Z") == true
         }
     )
 

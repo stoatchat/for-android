@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import chat.peptide.api.RevoltError
+import chat.peptide.api.PeptideError
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -22,7 +22,7 @@ fun ServerInviteHandler(
     val scope = rememberCoroutineScope()
     var isJoining by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(true) }
-    var error by remember { mutableStateOf<RevoltError?>(null) }
+    var error by remember { mutableStateOf<PeptideError?>(null) }
     
     // Get the UI state
     val uiState by viewModel.uiState.collectAsState()

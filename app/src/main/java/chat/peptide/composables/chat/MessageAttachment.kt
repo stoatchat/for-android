@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.AutumnResource
 import chat.peptide.composables.generic.RemoteImage
 import chat.peptide.composables.media.AudioPlayer
@@ -83,7 +83,7 @@ fun FileAttachment(attachment: AutumnResource) {
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun ImageAttachment(attachment: AutumnResource) {
-    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${PeptideAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     var spoilerShown by remember { mutableStateOf(false) }
     val hazeState =
         if (attachment.filename?.startsWith("SPOILER_") == true) rememberHazeState() else null
@@ -149,7 +149,7 @@ fun VideoPlayButton() {
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun VideoAttachment(attachment: AutumnResource) {
-    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${PeptideAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
 
     BoxWithConstraints {
         Box(
@@ -179,7 +179,7 @@ fun VideoAttachment(attachment: AutumnResource) {
 
 @Composable
 fun AudioAttachment(attachment: AutumnResource) {
-    val url = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
+    val url = "${PeptideAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     AudioPlayer(
         url = url,
         filename = attachment.filename ?: "Audio",

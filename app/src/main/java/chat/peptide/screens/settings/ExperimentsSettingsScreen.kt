@@ -22,7 +22,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.peptide.BuildConfig
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.api.settings.Experiments
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.persistence.KVStorage
@@ -31,7 +31,7 @@ import chat.peptide.settings.dsl.SubcategoryContentInsets
 import kotlinx.coroutines.launch
 
 class ExperimentsSettingsScreenViewModel : ViewModel() {
-    private val kv = KVStorage(RevoltApplication.instance)
+    private val kv = KVStorage(PeptideApplication.instance)
 
     fun init() {
         viewModelScope.launch {

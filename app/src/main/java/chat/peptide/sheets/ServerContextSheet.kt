@@ -41,7 +41,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.server.leaveOrDeleteServer
 import chat.peptide.composables.generic.SheetButton
 import chat.peptide.composables.markdown.RichMarkdown
@@ -56,7 +56,7 @@ fun ServerContextSheet(
     onReportServer: () -> Unit,
     onHideSheet: suspend () -> Unit
 ) {
-    val server = RevoltAPI.serverCache[serverId]
+    val server = PeptideAPI.serverCache[serverId]
 
     if (server == null) {
         Box(
@@ -169,7 +169,7 @@ fun ServerContextSheet(
                 )
             }
 
-            if (server.owner == RevoltAPI.selfId) {
+            if (server.owner == PeptideAPI.selfId) {
                 Box(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
@@ -193,7 +193,7 @@ fun ServerContextSheet(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    "${RevoltAPI.getCurrentAppUrl()}/server/${server.id}/settings".toUri()
+                                    "${PeptideAPI.getCurrentAppUrl()}/server/${server.id}/settings".toUri()
                                 )
                             )
                         }
@@ -250,14 +250,14 @@ fun ServerContextSheet(
             onClick = {
                 coroutineScope.launch {
                     server.id?.let {
-                        RevoltAPI.unreads.markServerAsRead(it, sync = true)
+                        PeptideAPI.unreads.markServerAsRead(it, sync = true)
                     }
                     onHideSheet()
                 }
             }
         )
 
-        if (server.owner != RevoltAPI.selfId) {
+        if (server.owner != PeptideAPI.selfId) {
             SheetButton(
                 leadingContent = {
                     Icon(

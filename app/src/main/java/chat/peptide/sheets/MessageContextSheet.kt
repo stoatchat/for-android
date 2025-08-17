@@ -35,7 +35,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.Roles
 import chat.peptide.api.internals.has
@@ -55,7 +55,7 @@ fun MessageContextSheet(
     onHideSheet: suspend () -> Unit,
     onReportMessage: () -> Unit
 ) {
-    val message = RevoltAPI.messageCache[messageId]
+    val message = PeptideAPI.messageCache[messageId]
     if (message == null) {
         Box(
             modifier = Modifier
@@ -171,11 +171,11 @@ fun MessageContextSheet(
                             return@SheetButton
                         }
 
-                        val server = RevoltAPI.serverCache.values.find { server ->
+                        val server = PeptideAPI.serverCache.values.find { server ->
                             server.channels?.contains(message.channel) ?: false
                         }
                         val messageLink =
-                            "${RevoltAPI.getCurrentAppUrl()}/server/${server?.id}/channel/${message.channel}/${message.id}"
+                            "${PeptideAPI.getCurrentAppUrl()}/server/${server?.id}/channel/${message.channel}/${message.id}"
 
                         clipboardManager.setText(AnnotatedString(messageLink))
                         if (Platform.needsShowClipboardNotification()) {
@@ -374,7 +374,7 @@ fun MessageContextSheet(
             }
         )
 
-        if (message.author == RevoltAPI.selfId) {
+        if (message.author == PeptideAPI.selfId) {
             SheetButton(
                 leadingContent = {
                     Icon(
@@ -460,12 +460,12 @@ fun MessageContextSheet(
 
         if (
             (message.channel?.let {
-                val channel = RevoltAPI.channelCache[it] ?: return@let null
+                val channel = PeptideAPI.channelCache[it] ?: return@let null
                 Roles.permissionFor(
                     channel,
-                    RevoltAPI.userCache[RevoltAPI.selfId]
+                    PeptideAPI.userCache[PeptideAPI.selfId]
                 )
-            } ?: 0) has PermissionBit.ManageMessages || message.author == RevoltAPI.selfId
+            } ?: 0) has PermissionBit.ManageMessages || message.author == PeptideAPI.selfId
         ) {
             SheetButton(
                 leadingContent = {
@@ -486,7 +486,7 @@ fun MessageContextSheet(
             )
         }
 
-        if (message.author != RevoltAPI.selfId) {
+        if (message.author != PeptideAPI.selfId) {
             SheetButton(
                 leadingContent = {
                     Icon(

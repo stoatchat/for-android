@@ -76,7 +76,7 @@ fun LabsRootScreen(topNav: NavController) {
                 composable("sandboxes/gradienteditor") {
                     GradientEditorSandbox(labsNav)
                 }
-                composable("sandboxes/librevolt") {
+                composable("sandboxes/libpeptide") {
                     CoreLibSandbox(labsNav)
                 }
             }

@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.composables.generic.SheetButton
 
 import chat.peptide.internals.Platform
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
     if (channel == null) {
         Box(
             modifier = Modifier
@@ -89,7 +89,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         onClick = {
             coroutineScope.launch {
                 channel.lastMessageID?.let {
-                    RevoltAPI.unreads.markAsRead(channelId, it, sync = true)
+                    PeptideAPI.unreads.markAsRead(channelId, it, sync = true)
                 }
                 onHideSheet()
             }

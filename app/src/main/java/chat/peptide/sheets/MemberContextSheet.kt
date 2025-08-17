@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.channel.removeMember
 import chat.peptide.composables.generic.SheetButton
 import chat.peptide.internals.Platform
@@ -31,7 +31,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
     onRequestUpdateMembers: suspend () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
@@ -43,7 +43,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
 
     if (channel == null) return
 
-    if (channel.owner == RevoltAPI.selfId && userId != RevoltAPI.selfId) {
+    if (channel.owner == PeptideAPI.selfId && userId != PeptideAPI.selfId) {
         SheetButton(
             headlineContent = {
                 CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
@@ -110,8 +110,8 @@ fun ColumnScope.ServerMemberContextSheet(
     dismissSheet: suspend () -> Unit,
     onRequestUpdateMembers: suspend () -> Unit
 ) {
-    val server = RevoltAPI.serverCache[serverId]
-    val channel = RevoltAPI.channelCache[channelId]
+    val server = PeptideAPI.serverCache[serverId]
+    val channel = PeptideAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 

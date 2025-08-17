@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ResourceLocations
 import chat.peptide.markdown.jbm.LocalJBMarkdownTreeState
 import chat.peptide.markdown.jbm.MentionResolver
@@ -34,7 +34,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
         factory = { context ->
             WebView(context).apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
+                    .setDomain(Uri.parse(PeptideAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -61,7 +61,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
                         // Capture clicks on invite links
                         if (webResourceRequest.url.host == "rvlt.gg" ||
                             (
-                                    webResourceRequest.url.host?.endsWith("revolt.chat") == true && webResourceRequest.url.path?.startsWith(
+                                    webResourceRequest.url.host?.endsWith("peptide.chat") == true && webResourceRequest.url.path?.startsWith(
                                         "/invite"
                                     ) == true
                                     )
@@ -126,7 +126,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
 
                         @JavascriptInterface
                         fun getCustomEmoteUrl(emoteId: String): String {
-                            return "${RevoltAPI.getCurrentFilesUrl()}/emojis/$emoteId/original"
+                            return "${PeptideAPI.getCurrentFilesUrl()}/emojis/$emoteId/original"
                         }
 
                         @JavascriptInterface
@@ -136,7 +136,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
 
                         @JavascriptInterface
                         fun userAvatar(userId: String): String {
-                            return ResourceLocations.userAvatarUrl(RevoltAPI.userCache[userId])
+                            return ResourceLocations.userAvatarUrl(PeptideAPI.userCache[userId])
                         }
 
                         @JavascriptInterface
@@ -149,7 +149,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
                 setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
                 loadUrl(
-                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/markdown/markdown.html"
+                    "${PeptideAPI.getCurrentAppUrl()}/_android_assets/markdown/markdown.html"
                 )
             }
         }

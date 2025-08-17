@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 
 internal fun Color.asHexString(includeAlphaComponent: Boolean = true): String {
     val argb = toArgb()
@@ -46,7 +46,7 @@ fun KatexRenderer(content: String, modifier: Modifier = Modifier) {
         factory = { context ->
             WebView(context).apply {
                 val assetLoader = WebViewAssetLoader.Builder()
-                    .setDomain(Uri.parse(RevoltAPI.getCurrentAppUrl()).host!!)
+                    .setDomain(Uri.parse(PeptideAPI.getCurrentAppUrl()).host!!)
                     .addPathHandler(
                         "/_android_assets/",
                         WebViewAssetLoader.AssetsPathHandler(context)
@@ -73,7 +73,7 @@ fun KatexRenderer(content: String, modifier: Modifier = Modifier) {
                         // Capture clicks on invite links
                         if (webResourceRequest.url.host == "rvlt.gg" ||
                             (
-                                    webResourceRequest.url.host?.endsWith("revolt.chat") == true && webResourceRequest.url.path?.startsWith(
+                                    webResourceRequest.url.host?.endsWith("peptide.chat") == true && webResourceRequest.url.path?.startsWith(
                                         "/invite"
                                     ) == true
                                     )
@@ -131,7 +131,7 @@ fun KatexRenderer(content: String, modifier: Modifier = Modifier) {
                 setBackgroundColor(android.graphics.Color.TRANSPARENT)
 
                 loadUrl(
-                    "${RevoltAPI.getCurrentAppUrl()}/_android_assets/katex/katex.html"
+                    "${PeptideAPI.getCurrentAppUrl()}/_android_assets/katex/katex.html"
                 )
             }
         }

@@ -73,7 +73,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import chat.peptide.R
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.internals.InstancedBrushCompat
 import chat.peptide.api.internals.isUlid
@@ -267,7 +267,7 @@ private fun annotateText(
                             append(annotateText(state, child))
                         }
                     } else {
-                        val server = RevoltAPI.serverCache[state.currentServer]
+                        val server = PeptideAPI.serverCache[state.currentServer]
                         val role = server?.roles?.get(roleId)
                         val isGradient = role?.colour?.contains("gradient") == true
 
@@ -722,7 +722,7 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                         placeholderVerticalAlign = PlaceholderVerticalAlign.Center
                     ),
                 ) { id ->
-                    val role = RevoltAPI.serverCache[mdState.currentServer]?.roles?.get(id)
+                    val role = PeptideAPI.serverCache[mdState.currentServer]?.roles?.get(id)
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
@@ -748,11 +748,11 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center
                 ),
             ) { id ->
-                val emote = RevoltAPI.emojiCache[id]
+                val emote = PeptideAPI.emojiCache[id]
                 if (emote == null) {
                     scope.launch {
                         try {
-                            RevoltAPI.emojiCache[id] = fetchEmoji(id)
+                            PeptideAPI.emojiCache[id] = fetchEmoji(id)
                         } catch (e: Exception) {
                             // no-op
                         }
@@ -761,7 +761,7 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                 } else {
                     with(LocalDensity.current) {
                         RemoteImage(
-                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${id}",
+                            url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${id}",
                             description = emote.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
@@ -786,7 +786,7 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                         placeholderVerticalAlign = PlaceholderVerticalAlign.Center
                     ),
                 ) { id ->
-                    val user = RevoltAPI.userCache[id]
+                    val user = PeptideAPI.userCache[id]
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier

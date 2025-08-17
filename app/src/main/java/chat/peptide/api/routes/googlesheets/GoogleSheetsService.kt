@@ -1,7 +1,7 @@
 package chat.peptide.api.routes.googlesheets
 
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +27,7 @@ object GoogleSheetsService {
         crossinline mapper: (Map<String, String>) -> T
     ): List<T> = withContext(Dispatchers.IO) {
         try {
-            val response = RevoltHttp.get(sheetUrl).bodyAsText()
+            val response = PeptideHttp.get(sheetUrl).bodyAsText()
             
             // Determine if the response is CSV or JSON
             if (sheetUrl.contains("output=csv") || response.startsWith("\"") || response.contains(",")) {
@@ -104,7 +104,7 @@ object GoogleSheetsService {
         jsonData: String,
         crossinline mapper: (Map<String, String>) -> T
     ): List<T> {
-        val sheetResponse = RevoltJson.decodeFromString<GoogleSheetResponse>(jsonData)
+        val sheetResponse = PeptideJson.decodeFromString<GoogleSheetResponse>(jsonData)
         
         // Convert the sheet data to a list of objects
         val headers = sheetResponse.feed.entry

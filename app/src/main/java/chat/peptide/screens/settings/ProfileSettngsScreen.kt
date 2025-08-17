@@ -47,7 +47,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.microservices.autumn.uploadToAutumn
 import chat.peptide.api.routes.user.fetchUserProfile
 import chat.peptide.api.routes.user.patchSelf
@@ -75,14 +75,14 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
     var bioError by mutableStateOf<String?>(null)
 
     init {
-        RevoltAPI.selfId?.let { self ->
-            RevoltAPI.userCache[self]?.avatar?.id?.let {
-                pfpModel = "${RevoltAPI.getCurrentAutumnUrl()}/avatars/${it}"
+        PeptideAPI.selfId?.let { self ->
+            PeptideAPI.userCache[self]?.avatar?.id?.let {
+                pfpModel = "${PeptideAPI.getCurrentAutumnUrl()}/avatars/${it}"
             }
             viewModelScope.launch {
                 currentProfile = fetchUserProfile(self)
                 currentProfile!!.background?.id?.let {
-                    backgroundModel = "${RevoltAPI.getCurrentAutumnUrl()}/backgrounds/${it}"
+                    backgroundModel = "${PeptideAPI.getCurrentAutumnUrl()}/backgrounds/${it}"
                 }
 
                 pendingProfile = currentProfile!!.copy()
@@ -136,8 +136,8 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
                 return@launch
             }
 
-            pfpModel = RevoltAPI.userCache[RevoltAPI.selfId]?.avatar?.id?.let {
-                "${RevoltAPI.getCurrentAutumnUrl()}/avatars/${it}"
+            pfpModel = PeptideAPI.userCache[PeptideAPI.selfId]?.avatar?.id?.let {
+                "${PeptideAPI.getCurrentAutumnUrl()}/avatars/${it}"
             }
 
             uploadProgress = 0f
@@ -187,13 +187,13 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
                 return@launch
             }
 
-            backgroundModel = RevoltAPI.selfId?.let {
+            backgroundModel = PeptideAPI.selfId?.let {
                 val profile = fetchUserProfile(it)
                 currentProfile = profile
                 pendingProfile = profile
 
                 profile.background?.id?.let { id ->
-                    "${RevoltAPI.getCurrentAutumnUrl()}/backgrounds/${id}"
+                    "${PeptideAPI.getCurrentAutumnUrl()}/backgrounds/${id}"
                 }
             }
 
@@ -221,7 +221,7 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
             try {
                 patchSelf(bio = pendingProfile?.content)
 
-                fetchUserProfile(RevoltAPI.selfId!!).let {
+                fetchUserProfile(PeptideAPI.selfId!!).let {
                     currentProfile = it
                     pendingProfile = it
                 }
@@ -298,7 +298,7 @@ fun ProfileSettingsScreen(
                             .size(48.dp)
                     )
                 } else {
-                    RevoltAPI.userCache[RevoltAPI.selfId]?.let {
+                    PeptideAPI.userCache[PeptideAPI.selfId]?.let {
                         RawUserOverview(
                             it,
                             viewModel.pendingProfile,

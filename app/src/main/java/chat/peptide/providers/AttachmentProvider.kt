@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideHttp
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
 import java.io.File
@@ -23,7 +23,7 @@ suspend fun getAttachmentContentUri(
         attachmentsDir.mkdir()
     }
 
-    val response = RevoltHttp.get(resourceUrl)
+    val response = PeptideHttp.get(resourceUrl)
     val file = File(attachmentsDir, "$id-$filename")
     file.writeBytes(response.readBytes())
 

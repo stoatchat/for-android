@@ -120,11 +120,11 @@ import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.peptide.R
-import chat.peptide.RevoltApplication
-import chat.peptide.activities.RevoltTweenDp
-import chat.peptide.activities.RevoltTweenFloat
-import chat.peptide.activities.RevoltTweenInt
-import chat.peptide.api.RevoltAPI
+import chat.peptide.PeptideApplication
+import chat.peptide.activities.PeptideTweenDp
+import chat.peptide.activities.PeptideTweenFloat
+import chat.peptide.activities.PeptideTweenInt
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ChannelUtils
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.has
@@ -191,7 +191,7 @@ sealed class ChannelScreenActivePane {
 private fun pxAsDp(px: Int): Dp {
     return (
             px / (
-                    RevoltApplication.instance.resources
+                    PeptideApplication.instance.resources
                         .displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT
                     )
             ).dp
@@ -444,7 +444,7 @@ fun ChannelScreen(
 
     val scrollDownFABPadding by animateDpAsState(
         if (viewModel.typingUsers.isNotEmpty()) 25.dp else 0.dp,
-        animationSpec = RevoltTweenDp,
+        animationSpec = PeptideTweenDp,
         label = "ScrollDownFABPadding"
     )
 
@@ -661,7 +661,7 @@ fun ChannelScreen(
                                 when (it.channelType) {
                                     ChannelType.DirectMessage -> {
                                         val partner =
-                                            RevoltAPI.userCache[ChannelUtils.resolveDMPartner(it)]
+                                            PeptideAPI.userCache[ChannelUtils.resolveDMPartner(it)]
                                         UserAvatar(
                                             username = it.name ?: stringResource(R.string.unknown),
                                             userId = ChannelUtils.resolveDMPartner(it) ?: "",
@@ -728,7 +728,7 @@ fun ChannelScreen(
 
                                 if (it.channelType == ChannelType.DirectMessage) {
                                     val partner =
-                                        RevoltAPI.userCache[ChannelUtils.resolveDMPartner(it)]
+                                        PeptideAPI.userCache[ChannelUtils.resolveDMPartner(it)]
                                     PresenceBadge(
                                         presence = presenceFromStatus(
                                             partner?.status?.presence,
@@ -1009,13 +1009,13 @@ fun ChannelScreen(
                                 androidx.compose.animation.AnimatedVisibility(
                                     !isScrolledToBottom.value,
                                     enter = slideInVertically(
-                                        animationSpec = RevoltTweenInt,
+                                        animationSpec = PeptideTweenInt,
                                         initialOffsetY = { it }
-                                    ) + fadeIn(animationSpec = RevoltTweenFloat),
+                                    ) + fadeIn(animationSpec = PeptideTweenFloat),
                                     exit = slideOutVertically(
-                                        animationSpec = RevoltTweenInt,
+                                        animationSpec = PeptideTweenInt,
                                         targetOffsetY = { it }
-                                    ) + fadeOut(animationSpec = RevoltTweenFloat)
+                                    ) + fadeOut(animationSpec = PeptideTweenFloat)
                                 ) {
                                     SmallFloatingActionButton(
                                         modifier = Modifier

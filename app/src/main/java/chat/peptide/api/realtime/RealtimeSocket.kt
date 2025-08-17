@@ -2,10 +2,10 @@ package chat.peptide.api.realtime
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import chat.peptide.RevoltApplication
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.PeptideApplication
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.realtime.frames.receivable.AnyFrame
 import chat.peptide.api.realtime.frames.receivable.BulkFrame
 import chat.peptide.api.realtime.frames.receivable.ChannelAckFrame
@@ -69,7 +69,7 @@ object RealtimeSocket {
     var socket: WebSocketSession? = null
 
     private val channelRegistrator: ChannelRegistrator
-        get() = ChannelRegistrator(RevoltApplication.instance)
+        get() = ChannelRegistrator(PeptideApplication.instance)
 
     private var _disconnectionState = mutableStateOf(DisconnectionState.Reconnecting)
     val disconnectionState: DisconnectionState
@@ -87,7 +87,7 @@ object RealtimeSocket {
 
         socket?.close(CloseReason(CloseReason.Codes.NORMAL, "Reconnecting to websocket."))
 
-        RevoltHttp.ws(RevoltAPI.getCurrentWebSocketUrl()) {
+        PeptideHttp.ws(PeptideAPI.getCurrentWebSocketUrl()) {
             socket = this
 
             Log.d("RealtimeSocket", "Connected to websocket.")
@@ -97,7 +97,7 @@ object RealtimeSocket {
             // Send authorization frame
             val authFrame = AuthorizationFrame("Authenticate", token)
             val authFrameString =
-                RevoltJson.encodeToString(AuthorizationFrame.serializer(), authFrame)
+                PeptideJson.encodeToString(AuthorizationFrame.serializer(), authFrame)
 
             Log.d(
                 "RealtimeSocket",
@@ -108,13 +108,13 @@ object RealtimeSocket {
                     )
                 }"
             )
-            send(RevoltJson.encodeToString(AuthorizationFrame.serializer(), authFrame))
+            send(PeptideJson.encodeToString(AuthorizationFrame.serializer(), authFrame))
 
             incoming.consumeEach { frame ->
                 if (frame is Frame.Text) {
                     val frameString = frame.readText()
                     val frameType =
-                        RevoltJson.decodeFromString(AnyFrame.serializer(), frameString).type
+                        PeptideJson.decodeFromString(AnyFrame.serializer(), frameString).type
 
                     handleFrame(frameType, frameString)
                 }
@@ -126,29 +126,29 @@ object RealtimeSocket {
         if (disconnectionState != DisconnectionState.Connected) return
 
         val pingPacket = PingFrame("Ping", System.currentTimeMillis())
-        socket?.send(RevoltJson.encodeToString(PingFrame.serializer(), pingPacket))
+        socket?.send(PeptideJson.encodeToString(PingFrame.serializer(), pingPacket))
         Log.d("RealtimeSocket", "Sent ping frame with ${pingPacket.data}")
     }
 
     private suspend fun handleFrame(type: String, rawFrame: String) {
         when (type) {
             "Pong" -> {
-                val pongFrame = RevoltJson.decodeFromString(PongFrame.serializer(), rawFrame)
+                val pongFrame = PeptideJson.decodeFromString(PongFrame.serializer(), rawFrame)
                 Log.d("RealtimeSocket", "Received pong frame for ${pongFrame.data}")
             }
 
             "Bulk" -> {
-                val bulkFrame = RevoltJson.decodeFromString(BulkFrame.serializer(), rawFrame)
+                val bulkFrame = PeptideJson.decodeFromString(BulkFrame.serializer(), rawFrame)
                 Log.d("RealtimeSocket", "Received bulk frame with ${bulkFrame.v.size} sub-frames.")
                 bulkFrame.v.forEach { subFrame ->
                     val subFrameType =
-                        RevoltJson.decodeFromString(AnyFrame.serializer(), subFrame.toString()).type
+                        PeptideJson.decodeFromString(AnyFrame.serializer(), subFrame.toString()).type
                     handleFrame(subFrameType, subFrame.toString())
                 }
             }
 
             "Ready" -> {
-                val readyFrame = RevoltJson.decodeFromString(ReadyFrame.serializer(), rawFrame)
+                val readyFrame = PeptideJson.decodeFromString(ReadyFrame.serializer(), rawFrame)
 
                 logcat {
                     "Received ready frame with ${readyFrame.users.size} users, " +
@@ -160,11 +160,11 @@ object RealtimeSocket {
 
                 Log.d("RealtimeSocket", "Adding users to cache.")
                 val userMap = readyFrame.users.associateBy { it.id!! }
-                RevoltAPI.userCache.putAll(userMap)
+                PeptideAPI.userCache.putAll(userMap)
 
                 Log.d("RealtimeSocket", "Adding servers to cache.")
                 val serverMap = readyFrame.servers.associateBy { it.id!! }
-                RevoltAPI.serverCache.putAll(serverMap)
+                PeptideAPI.serverCache.putAll(serverMap)
 
                 // Cache servers in persistent local database
                 readyFrame.servers.map {
@@ -195,12 +195,12 @@ object RealtimeSocket {
                         "Deleted server $it from local database due to not being in ready frame."
                     )
                     // Conversely, remove the server from the API state
-                    RevoltAPI.serverCache.remove(it)
+                    PeptideAPI.serverCache.remove(it)
                 }
 
                 Log.d("RealtimeSocket", "Adding channels to cache.")
                 val channelMap = readyFrame.channels.associateBy { it.id!! }
-                RevoltAPI.channelCache.putAll(channelMap)
+                PeptideAPI.channelCache.putAll(channelMap)
 
                 // Cache channels in persistent local database
                 readyFrame.channels.map {
@@ -215,7 +215,7 @@ object RealtimeSocket {
                         it.name,
                         it.owner,
                         it.description,
-                        if (it.channelType == ChannelType.DirectMessage) it.recipients?.firstOrNull { u -> u != RevoltAPI.selfId } else null,
+                        if (it.channelType == ChannelType.DirectMessage) it.recipients?.firstOrNull { u -> u != PeptideAPI.selfId } else null,
                         it.icon?.id,
                         it.lastMessageID,
                         if (it.active == true) 1L else 0L,
@@ -236,21 +236,21 @@ object RealtimeSocket {
                         "Deleted channel $it from local database due to not being in ready frame."
                     )
                     // Conversely, remove the channel from the API state
-                    RevoltAPI.channelCache.remove(it)
+                    PeptideAPI.channelCache.remove(it)
                 }
 
                 Log.d("RealtimeSocket", "Adding emojis to cache.")
                 val emojiMap = readyFrame.emojis.associateBy { it.id!! }
-                RevoltAPI.emojiCache.putAll(emojiMap)
+                PeptideAPI.emojiCache.putAll(emojiMap)
 
                 Log.d("RealtimeSocket", "Registering push notification channels.")
                 channelRegistrator.register()
 
-                RevoltAPI.closeHydration()
+                PeptideAPI.closeHydration()
             }
 
             "Message" -> {
-                val messageFrame = RevoltJson.decodeFromString(MessageFrame.serializer(), rawFrame)
+                val messageFrame = PeptideJson.decodeFromString(MessageFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message frame for ${messageFrame.id} in channel ${messageFrame.channel}."
@@ -261,30 +261,30 @@ object RealtimeSocket {
                     return
                 }
 
-                RevoltAPI.messageCache[messageFrame.id] = messageFrame
+                PeptideAPI.messageCache[messageFrame.id] = messageFrame
 
                 messageFrame.channel?.let {
-                    if (RevoltAPI.channelCache[it] == null) {
+                    if (PeptideAPI.channelCache[it] == null) {
                         Log.d("RealtimeSocket", "Channel $it not found in cache. Ignoring.")
                         return
                     }
 
-                    RevoltAPI.channelCache[it] =
-                        RevoltAPI.channelCache[it]!!.copy(lastMessageID = messageFrame.id)
+                    PeptideAPI.channelCache[it] =
+                        PeptideAPI.channelCache[it]!!.copy(lastMessageID = messageFrame.id)
 
-                    RevoltAPI.wsFrameChannel.send(messageFrame)
+                    PeptideAPI.wsFrameChannel.send(messageFrame)
                 }
             }
 
             "MessageAppend" -> {
                 val messageAppendFrame =
-                    RevoltJson.decodeFromString(MessageAppendFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(MessageAppendFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message append frame for ${messageAppendFrame.id} in channel ${messageAppendFrame.channel}."
                 )
 
-                var message = RevoltAPI.messageCache[messageAppendFrame.id]
+                var message = PeptideAPI.messageCache[messageAppendFrame.id]
 
                 if (message == null) {
                     Log.d(
@@ -298,20 +298,20 @@ object RealtimeSocket {
                     message = message!!.copy(embeds = message!!.embeds?.plus(it) ?: it)
                 }
 
-                RevoltAPI.messageCache[messageAppendFrame.id] = message!!
+                PeptideAPI.messageCache[messageAppendFrame.id] = message!!
 
-                RevoltAPI.wsFrameChannel.send(messageAppendFrame)
+                PeptideAPI.wsFrameChannel.send(messageAppendFrame)
             }
 
             "MessageUpdate" -> {
                 val messageUpdateFrame =
-                    RevoltJson.decodeFromString(MessageUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(MessageUpdateFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message update frame for ${messageUpdateFrame.id} in channel ${messageUpdateFrame.channel}."
                 )
 
-                val oldMessage = RevoltAPI.messageCache[messageUpdateFrame.id]
+                val oldMessage = PeptideAPI.messageCache[messageUpdateFrame.id]
                 if (oldMessage == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -323,7 +323,7 @@ object RealtimeSocket {
                 val rawMessage: MessageFrame
                 try {
                     rawMessage =
-                        RevoltJson.decodeFromJsonElement(
+                        PeptideJson.decodeFromJsonElement(
                             MessageFrame.serializer(),
                             messageUpdateFrame.data
                         )
@@ -337,28 +337,28 @@ object RealtimeSocket {
                     "Merging message ${messageUpdateFrame.id} with updated partial."
                 )
 
-                RevoltAPI.messageCache[messageUpdateFrame.id] =
+                PeptideAPI.messageCache[messageUpdateFrame.id] =
                     oldMessage.mergeWithPartial(rawMessage)
 
                 messageUpdateFrame.channel.let {
-                    if (RevoltAPI.channelCache[it] == null) {
+                    if (PeptideAPI.channelCache[it] == null) {
                         Log.d("RealtimeSocket", "Channel $it not found in cache. Ignoring.")
                         return
                     }
                 }
 
-                RevoltAPI.wsFrameChannel.send(messageUpdateFrame)
+                PeptideAPI.wsFrameChannel.send(messageUpdateFrame)
             }
 
             "MessageDelete" -> {
                 val messageDeleteFrame =
-                    RevoltJson.decodeFromString(MessageDeleteFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(MessageDeleteFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message react frame for ${messageDeleteFrame.id}."
                 )
 
-                val message = RevoltAPI.messageCache[messageDeleteFrame.id]
+                val message = PeptideAPI.messageCache[messageDeleteFrame.id]
                 if (message == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -367,19 +367,19 @@ object RealtimeSocket {
                     return
                 }
 
-                RevoltAPI.messageCache.remove(messageDeleteFrame.id)
-                RevoltAPI.wsFrameChannel.send(messageDeleteFrame)
+                PeptideAPI.messageCache.remove(messageDeleteFrame.id)
+                PeptideAPI.wsFrameChannel.send(messageDeleteFrame)
             }
 
             "MessageReact" -> {
                 val messageReactFrame =
-                    RevoltJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message react frame for ${messageReactFrame.id}."
                 )
 
-                val oldMessage = RevoltAPI.messageCache[messageReactFrame.id]
+                val oldMessage = PeptideAPI.messageCache[messageReactFrame.id]
                 if (oldMessage == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -394,21 +394,21 @@ object RealtimeSocket {
                 forEmoji.add(messageReactFrame.user_id)
                 reactions[messageReactFrame.emoji_id] = forEmoji
 
-                RevoltAPI.messageCache[messageReactFrame.id] =
+                PeptideAPI.messageCache[messageReactFrame.id] =
                     oldMessage.copy(reactions = reactions)
 
-                RevoltAPI.wsFrameChannel.send(messageReactFrame)
+                PeptideAPI.wsFrameChannel.send(messageReactFrame)
             }
 
             "MessageUnreact" -> {
                 val messageUnreactFrame =
-                    RevoltJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received message unreact frame for ${messageUnreactFrame.id}."
                 )
 
-                val oldMessage = RevoltAPI.messageCache[messageUnreactFrame.id]
+                val oldMessage = PeptideAPI.messageCache[messageUnreactFrame.id]
                 if (oldMessage == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -428,38 +428,38 @@ object RealtimeSocket {
                     reactions[messageUnreactFrame.emoji_id] = forEmoji
                 }
 
-                RevoltAPI.messageCache[messageUnreactFrame.id] =
+                PeptideAPI.messageCache[messageUnreactFrame.id] =
                     oldMessage.copy(reactions = reactions)
 
-                RevoltAPI.wsFrameChannel.send(messageUnreactFrame)
+                PeptideAPI.wsFrameChannel.send(messageUnreactFrame)
             }
 
             "UserUpdate" -> {
                 val userUpdateFrame =
-                    RevoltJson.decodeFromString(UserUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(UserUpdateFrame.serializer(), rawFrame)
 
-                val existing = RevoltAPI.userCache[userUpdateFrame.id]
+                val existing = PeptideAPI.userCache[userUpdateFrame.id]
                     ?: return // if we don't have the user no point in updating it
 
                 if (userUpdateFrame.clear != null) {
                     if (userUpdateFrame.clear.contains("Avatar")) {
-                        RevoltAPI.userCache[userUpdateFrame.id] =
+                        PeptideAPI.userCache[userUpdateFrame.id] =
                             existing.copy(avatar = null)
                     }
                 }
 
-                RevoltAPI.userCache[userUpdateFrame.id] =
+                PeptideAPI.userCache[userUpdateFrame.id] =
                     existing.mergeWithPartial(userUpdateFrame.data)
             }
 
             "UserRelationship" -> {
                 val userRelationshipFrame =
-                    RevoltJson.decodeFromString(UserRelationshipFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(UserRelationshipFrame.serializer(), rawFrame)
 
-                val existing = RevoltAPI.userCache[userRelationshipFrame.user.id]
+                val existing = PeptideAPI.userCache[userRelationshipFrame.user.id]
 
                 if (existing == null && userRelationshipFrame.user.id != null) {
-                    RevoltAPI.userCache[userRelationshipFrame.user.id] =
+                    PeptideAPI.userCache[userRelationshipFrame.user.id] =
                         userRelationshipFrame.user.copy(
                             relationship = userRelationshipFrame.status ?: "None"
                         )
@@ -467,7 +467,7 @@ object RealtimeSocket {
                     val merged = existing.mergeWithPartial(userRelationshipFrame.user).copy(
                         relationship = userRelationshipFrame.status ?: "None"
                     )
-                    RevoltAPI.userCache[userRelationshipFrame.user.id] = merged
+                    PeptideAPI.userCache[userRelationshipFrame.user.id] = merged
                 } else {
                     Log.w("RealtimeSocket", "Invalid UserRelationship frame: $rawFrame")
                 }
@@ -475,13 +475,13 @@ object RealtimeSocket {
 
             "ChannelUpdate" -> {
                 val channelUpdateFrame =
-                    RevoltJson.decodeFromString(ChannelUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ChannelUpdateFrame.serializer(), rawFrame)
 
-                val existing = RevoltAPI.channelCache[channelUpdateFrame.id]
+                val existing = PeptideAPI.channelCache[channelUpdateFrame.id]
                     ?: return // if we don't have the channel no point in updating it
 
                 val combined = existing.mergeWithPartial(channelUpdateFrame.data)
-                RevoltAPI.channelCache[channelUpdateFrame.id] = combined
+                PeptideAPI.channelCache[channelUpdateFrame.id] = combined
 
                 database.channelQueries.upsert(
                     channelUpdateFrame.id,
@@ -490,7 +490,7 @@ object RealtimeSocket {
                     combined.name,
                     combined.owner,
                     combined.description,
-                    if (combined.channelType == ChannelType.DirectMessage) combined.recipients?.firstOrNull { u -> u != RevoltAPI.selfId } else null,
+                    if (combined.channelType == ChannelType.DirectMessage) combined.recipients?.firstOrNull { u -> u != PeptideAPI.selfId } else null,
                     combined.icon?.id,
                     combined.lastMessageID,
                     if (combined.active == true) 1L else 0L,
@@ -501,14 +501,14 @@ object RealtimeSocket {
 
             "ChannelCreate" -> {
                 val channelCreateFrame =
-                    RevoltJson.decodeFromString(Channel.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(Channel.serializer(), rawFrame)
 
                 Log.d(
                     "RealtimeSocket",
                     "Received channel create frame for ${channelCreateFrame.id}, with name ${channelCreateFrame.name}. Adding to cache."
                 )
 
-                RevoltAPI.channelCache[channelCreateFrame.id!!] = channelCreateFrame
+                PeptideAPI.channelCache[channelCreateFrame.id!!] = channelCreateFrame
                 database.channelQueries.upsert(
                     channelCreateFrame.id,
                     channelCreateFrame.channelType?.value ?: ChannelType.TextChannel.value,
@@ -516,7 +516,7 @@ object RealtimeSocket {
                     channelCreateFrame.name,
                     channelCreateFrame.owner,
                     channelCreateFrame.description,
-                    if (channelCreateFrame.channelType == ChannelType.DirectMessage) channelCreateFrame.recipients?.firstOrNull { u -> u != RevoltAPI.selfId } else null,
+                    if (channelCreateFrame.channelType == ChannelType.DirectMessage) channelCreateFrame.recipients?.firstOrNull { u -> u != PeptideAPI.selfId } else null,
                     channelCreateFrame.icon?.id,
                     channelCreateFrame.lastMessageID,
                     if (channelCreateFrame.active == true) 1L else 0L,
@@ -527,13 +527,13 @@ object RealtimeSocket {
 
             "ChannelDelete" -> {
                 val channelDeleteFrame =
-                    RevoltJson.decodeFromString(ChannelDeleteFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ChannelDeleteFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received channel delete frame for ${channelDeleteFrame.id}. Removing from cache."
                 )
 
-                val currentChannel = RevoltAPI.channelCache[channelDeleteFrame.id]
+                val currentChannel = PeptideAPI.channelCache[channelDeleteFrame.id]
                 if (currentChannel == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -542,11 +542,11 @@ object RealtimeSocket {
                     return
                 }
 
-                RevoltAPI.channelCache.remove(channelDeleteFrame.id)
+                PeptideAPI.channelCache.remove(channelDeleteFrame.id)
                 database.channelQueries.delete(channelDeleteFrame.id)
 
                 if (currentChannel.server != null) {
-                    val existingServer = RevoltAPI.serverCache[currentChannel.server]
+                    val existingServer = PeptideAPI.serverCache[currentChannel.server]
 
                     if (existingServer == null) {
                         Log.d(
@@ -556,39 +556,39 @@ object RealtimeSocket {
                         return
                     }
 
-                    RevoltAPI.serverCache[currentChannel.server] = existingServer.copy(
+                    PeptideAPI.serverCache[currentChannel.server] = existingServer.copy(
                         channels = existingServer.channels?.filter { it != channelDeleteFrame.id }
                             ?: emptyList()
                     )
                 }
 
-                RevoltAPI.wsFrameChannel.send(channelDeleteFrame)
+                PeptideAPI.wsFrameChannel.send(channelDeleteFrame)
             }
 
             "ChannelAck" -> {
                 val channelAckFrame =
-                    RevoltJson.decodeFromString(ChannelAckFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ChannelAckFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received channel ack frame for ${channelAckFrame.id} with new newest ${channelAckFrame.messageId}."
                 )
 
-                RevoltAPI.unreads.processExternalAck(channelAckFrame.id, channelAckFrame.messageId)
+                PeptideAPI.unreads.processExternalAck(channelAckFrame.id, channelAckFrame.messageId)
             }
 
             "ServerCreate" -> {
                 val serverCreateFrame =
-                    RevoltJson.decodeFromString(ServerCreateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerCreateFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server create frame for ${serverCreateFrame.id}, with name ${serverCreateFrame.server.name}. Adding to cache."
                 )
 
-                RevoltAPI.serverCache[serverCreateFrame.id] = serverCreateFrame.server
+                PeptideAPI.serverCache[serverCreateFrame.id] = serverCreateFrame.server
 
                 serverCreateFrame.channels.forEach { channel ->
                     if (channel.id == null) return@forEach
-                    RevoltAPI.channelCache[channel.id] = channel
+                    PeptideAPI.channelCache[channel.id] = channel
                 }
 
                 if (serverCreateFrame.server.owner != null && serverCreateFrame.server.name != null) {
@@ -606,35 +606,35 @@ object RealtimeSocket {
 
             "ChannelStartTyping" -> {
                 val channelStartTypingFrame =
-                    RevoltJson.decodeFromString(ChannelStartTypingFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ChannelStartTypingFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received channel start typing frame for ${channelStartTypingFrame.id}."
                 )
 
-                RevoltAPI.wsFrameChannel.send(channelStartTypingFrame)
+                PeptideAPI.wsFrameChannel.send(channelStartTypingFrame)
             }
 
             "ChannelStopTyping" -> {
                 val channelStopTypingFrame =
-                    RevoltJson.decodeFromString(ChannelStopTypingFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ChannelStopTypingFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received channel stop typing frame for ${channelStopTypingFrame.id}."
                 )
 
-                RevoltAPI.wsFrameChannel.send(channelStopTypingFrame)
+                PeptideAPI.wsFrameChannel.send(channelStopTypingFrame)
             }
 
             "ServerUpdate" -> {
                 val serverUpdateFrame =
-                    RevoltJson.decodeFromString(ServerUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerUpdateFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server update frame for ${serverUpdateFrame.id}."
                 )
 
-                val existing = RevoltAPI.serverCache[serverUpdateFrame.id]
+                val existing = PeptideAPI.serverCache[serverUpdateFrame.id]
                     ?: return // if we don't have the server no point in updating it
 
                 var updated =
@@ -649,7 +649,7 @@ object RealtimeSocket {
                     }
                 }
 
-                RevoltAPI.serverCache[serverUpdateFrame.id] = updated
+                PeptideAPI.serverCache[serverUpdateFrame.id] = updated
 
                 if (updated.id != null && updated.owner != null && updated.name != null) {
                     try {
@@ -670,25 +670,25 @@ object RealtimeSocket {
 
             "ServerDelete" -> {
                 val serverDeleteFrame =
-                    RevoltJson.decodeFromString(ServerDeleteFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerDeleteFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server delete frame for ${serverDeleteFrame.id}."
                 )
 
-                RevoltAPI.serverCache.remove(serverDeleteFrame.id)
+                PeptideAPI.serverCache.remove(serverDeleteFrame.id)
                 database.serverQueries.delete(serverDeleteFrame.id)
             }
 
             "ServerMemberUpdate" -> {
                 val serverMemberUpdateFrame =
-                    RevoltJson.decodeFromString(ServerMemberUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerMemberUpdateFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server member update frame for ${serverMemberUpdateFrame.id.user} in ${serverMemberUpdateFrame.id.server}."
                 )
 
-                val existing = RevoltAPI.members.getMember(
+                val existing = PeptideAPI.members.getMember(
                     serverMemberUpdateFrame.id.server,
                     serverMemberUpdateFrame.id.user
                 )
@@ -706,12 +706,12 @@ object RealtimeSocket {
 
                 Log.d("RealtimeSocket", "Updated member: $updated")
 
-                RevoltAPI.members.setMember(serverMemberUpdateFrame.id.server, updated)
+                PeptideAPI.members.setMember(serverMemberUpdateFrame.id.server, updated)
             }
 
             "ServerMemberJoin" -> {
                 val serverMemberJoinFrame =
-                    RevoltJson.decodeFromString(ServerMemberJoinFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerMemberJoinFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server member join frame for ${serverMemberJoinFrame.user} in ${serverMemberJoinFrame.id}."
@@ -719,18 +719,18 @@ object RealtimeSocket {
 
                 val member = fetchMember(serverMemberJoinFrame.id, serverMemberJoinFrame.user)
 
-                RevoltAPI.members.setMember(serverMemberJoinFrame.id, member)
+                PeptideAPI.members.setMember(serverMemberJoinFrame.id, member)
             }
 
             "ServerMemberLeave" -> {
                 val serverMemberLeaveFrame =
-                    RevoltJson.decodeFromString(ServerMemberLeaveFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerMemberLeaveFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server member leave frame for ${serverMemberLeaveFrame.user} in ${serverMemberLeaveFrame.id}."
                 )
 
-                RevoltAPI.members.removeMember(
+                PeptideAPI.members.removeMember(
                     serverMemberLeaveFrame.id,
                     serverMemberLeaveFrame.user
                 )
@@ -738,13 +738,13 @@ object RealtimeSocket {
 
             "ServerRoleUpdate" -> {
                 val serverRoleUpdateFrame =
-                    RevoltJson.decodeFromString(ServerRoleUpdateFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerRoleUpdateFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server role update frame for ${serverRoleUpdateFrame.id}."
                 )
 
-                val server = RevoltAPI.serverCache[serverRoleUpdateFrame.id]
+                val server = PeptideAPI.serverCache[serverRoleUpdateFrame.id]
                 if (server == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -766,7 +766,7 @@ object RealtimeSocket {
                             Pair(serverRoleUpdateFrame.roleId, newRole)
                         ) ?: mapOf(serverRoleUpdateFrame.roleId to newRole)
                     )
-                    RevoltAPI.serverCache[serverRoleUpdateFrame.id] = newServer
+                    PeptideAPI.serverCache[serverRoleUpdateFrame.id] = newServer
                 } else {
                     // True role update.
                     Log.d(
@@ -779,19 +779,19 @@ object RealtimeSocket {
                             Pair(serverRoleUpdateFrame.roleId, updatedRole)
                         )
                     )
-                    RevoltAPI.serverCache[serverRoleUpdateFrame.id] = newServer
+                    PeptideAPI.serverCache[serverRoleUpdateFrame.id] = newServer
                 }
             }
 
             "ServerRoleDelete" -> {
                 val serverRoleDeleteFrame =
-                    RevoltJson.decodeFromString(ServerRoleDeleteFrame.serializer(), rawFrame)
+                    PeptideJson.decodeFromString(ServerRoleDeleteFrame.serializer(), rawFrame)
                 Log.d(
                     "RealtimeSocket",
                     "Received server role delete frame for ${serverRoleDeleteFrame.id} and role ${serverRoleDeleteFrame.roleId}."
                 )
 
-                val server = RevoltAPI.serverCache[serverRoleDeleteFrame.id]
+                val server = PeptideAPI.serverCache[serverRoleDeleteFrame.id]
                 if (server == null) {
                     Log.d(
                         "RealtimeSocket",
@@ -803,7 +803,7 @@ object RealtimeSocket {
                 val newRoles = server.roles?.toMutableMap() ?: mutableMapOf()
                 newRoles.remove(serverRoleDeleteFrame.roleId)
 
-                RevoltAPI.serverCache[serverRoleDeleteFrame.id] =
+                PeptideAPI.serverCache[serverRoleDeleteFrame.id] =
                     server.copy(roles = newRoles)
             }
 
@@ -819,7 +819,7 @@ object RealtimeSocket {
     }
 
     private suspend fun pushReconnectEvent() {
-        RevoltAPI.wsFrameChannel.send(RealtimeSocketFrames.Reconnected)
+        PeptideAPI.wsFrameChannel.send(RealtimeSocketFrames.Reconnected)
     }
 
     suspend fun beginTyping(channelId: String) {
@@ -827,7 +827,7 @@ object RealtimeSocket {
 
         val beginTypingFrame = BeginTypingFrame("BeginTyping", channelId)
         socket?.send(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 BeginTypingFrame.serializer(),
                 beginTypingFrame
             )
@@ -839,7 +839,7 @@ object RealtimeSocket {
 
         val endTypingFrame = EndTypingFrame("EndTyping", channelId)
         socket?.send(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 EndTypingFrame.serializer(),
                 endTypingFrame
             )

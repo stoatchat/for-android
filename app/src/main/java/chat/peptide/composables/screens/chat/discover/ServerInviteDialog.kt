@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltError
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideError
 import chat.peptide.api.schemas.Invite
 import chat.peptide.composables.generic.IconPlaceholder
 import chat.peptide.composables.generic.RemoteImage
@@ -41,7 +41,7 @@ import chat.peptide.composables.generic.RemoteImage
 fun ServerInviteDialog(
     isLoading: Boolean,
     invite: Invite?,
-    error: RevoltError?,
+    error: PeptideError?,
     onJoinClick: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -136,7 +136,7 @@ fun ServerInviteDialog(
             ) {
                 if (invite.serverIcon != null) {
                     RemoteImage(
-                        url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
+                        url = "${PeptideAPI.getCurrentFilesUrl()}/icons/${invite.serverIcon.id}/${invite.serverIcon.filename}",
                         allowAnimation = false,
                         description = invite.serverName ?: stringResource(id = R.string.unknown),
                         modifier = Modifier
@@ -190,7 +190,7 @@ fun ServerInviteDialog(
                         ) {
                             if (invite.userAvatar != null) {
                                 RemoteImage(
-                                    url = "${RevoltAPI.getCurrentFilesUrl()}/avatars/${invite.userAvatar.id}/${invite.userAvatar.filename}",
+                                    url = "${PeptideAPI.getCurrentFilesUrl()}/avatars/${invite.userAvatar.id}/${invite.userAvatar.filename}",
                                     description = invite.userName,
                                     modifier = Modifier
                                         .size(24.dp)
@@ -246,7 +246,7 @@ fun ServerInviteDialogPreviewError() {
     ServerInviteDialog(
         isLoading = false,
         invite = null,
-        error = RevoltError(type = "NotFound"),
+        error = PeptideError(type = "NotFound"),
         onJoinClick = {},
         onDismiss = {}
     )
@@ -256,7 +256,7 @@ fun ServerInviteDialogPreviewError() {
 @Composable
 fun ServerInviteDialogPreviewSuccess() {
     val invite = Invite(
-        serverName = "Revolt Test Server",
+        serverName = "Peptide Test Server",
         serverIcon = null, // Replace with a real AutumnResource if needed for preview
         memberCount = 123,
         userName = "TestUser",

@@ -1,6 +1,6 @@
 package chat.peptide.api.internals
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.Channel
 import chat.peptide.api.schemas.Server
 import chat.peptide.api.schemas.User
@@ -19,7 +19,7 @@ object ChannelUtils {
      */
     fun resolveName(channel: Channel): String? {
         return channel.name
-            ?: RevoltAPI.userCache[channel.recipients?.first { u -> u != RevoltAPI.selfId }]?.let {
+            ?: PeptideAPI.userCache[channel.recipients?.first { u -> u != PeptideAPI.selfId }]?.let {
                 User.resolveDefaultName(
                     it
                 )
@@ -27,7 +27,7 @@ object ChannelUtils {
     }
 
     fun resolveDMPartner(channel: Channel): String? {
-        return channel.recipients?.firstOrNull { u -> u != RevoltAPI.selfId }
+        return channel.recipients?.firstOrNull { u -> u != PeptideAPI.selfId }
     }
 
     fun categoriseServerFlat(server: Server): List<CategorisedChannelList> {
@@ -42,7 +42,7 @@ object ChannelUtils {
                 } ?: true
             }
                 ?.mapNotNull {
-                    RevoltAPI.channelCache[it]?.let { it1 ->
+                    PeptideAPI.channelCache[it]?.let { it1 ->
                         CategorisedChannelList.Channel(it1)
                     }
                 } ?: emptyList()
@@ -53,7 +53,7 @@ object ChannelUtils {
         categories.forEach {
             output.add(it)
             val channels = it.category.channels?.mapNotNull { c ->
-                RevoltAPI.channelCache[c]?.let { it1 ->
+                PeptideAPI.channelCache[c]?.let { it1 ->
                     CategorisedChannelList.Channel(it1)
                 }
             } ?: emptyList()

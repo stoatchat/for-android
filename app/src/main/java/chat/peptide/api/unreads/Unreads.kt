@@ -3,7 +3,7 @@ package chat.peptide.api.unreads
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.routes.channel.ackChannel
 import chat.peptide.api.routes.server.ackServer
@@ -50,8 +50,8 @@ class Unreads {
     fun serverHasUnread(serverId: String): Boolean {
         if (!hasLoaded.value) return false
 
-        return RevoltAPI.serverCache[serverId]?.channels?.any {
-            val channel = RevoltAPI.channelCache[it] ?: return@any false // Channel not found
+        return PeptideAPI.serverCache[serverId]?.channels?.any {
+            val channel = PeptideAPI.channelCache[it] ?: return@any false // Channel not found
             if (channel.channelType == ChannelType.VoiceChannel) return@any false // Channel is voice
             if (NotificationSettingsProvider.isChannelMuted(
                     it,
@@ -81,7 +81,7 @@ class Unreads {
     suspend fun markServerAsRead(serverId: String, sync: Boolean = true) {
         if (!hasLoaded.value) return
 
-        val server = RevoltAPI.serverCache[serverId] ?: return
+        val server = PeptideAPI.serverCache[serverId] ?: return
         server.channels?.forEach { channel ->
             channels[channel] = channels[channel]?.copy(last_id = ULID.makeNext()) ?: ChannelUnread(
                 channel,

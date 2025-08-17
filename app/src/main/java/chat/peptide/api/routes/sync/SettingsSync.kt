@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.sync
 
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
@@ -17,13 +17,13 @@ import kotlinx.serialization.json.JsonArray
 @Serializable
 data class SyncedSetting(val timestamp: Long, val value: String)
 
-suspend fun getKeys(vararg keys: String, revoltToken: String): Map<String, SyncedSetting> {
-    val response = RevoltHttp.post("/sync/settings/fetch".api()) {
-        headers.append(RevoltAPI.TOKEN_HEADER_NAME, revoltToken)
+suspend fun getKeys(vararg keys: String, peptideToken: String): Map<String, SyncedSetting> {
+    val response = PeptideHttp.post("/sync/settings/fetch".api()) {
+        headers.append(PeptideAPI.TOKEN_HEADER_NAME, peptideToken)
 
         // format: {"keys": ["key1", "key2"]}
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 MapSerializer(
                     String.serializer(),
                     ListSerializer(String.serializer())
@@ -33,7 +33,7 @@ suspend fun getKeys(vararg keys: String, revoltToken: String): Map<String, Synce
         )
     }.bodyAsText()
 
-    return RevoltJson.decodeFromString(
+    return PeptideJson.decodeFromString(
         MapSerializer(
             String.serializer(),
             JsonArray.serializer()
@@ -46,22 +46,22 @@ suspend fun getKeys(vararg keys: String, revoltToken: String): Map<String, Synce
                 .toString()
                 .removeSurrounding("\"")
                 .replace("\\\"", "\"")
-                .replace("\\\\", "\\") // the revolt API is so scuffed i can't even make this up
+                .replace("\\\\", "\\") // the peptide API is so scuffed i can't even make this up
         )
     }
 }
 
 suspend fun getKeys(vararg keys: String): Map<String, SyncedSetting> {
-    return getKeys(*keys, revoltToken = RevoltAPI.sessionToken)
+    return getKeys(*keys, peptideToken = PeptideAPI.sessionToken)
 }
 
 suspend fun setKey(key: String, value: String) {
-    RevoltHttp.post("/sync/settings/set".api()) {
+    PeptideHttp.post("/sync/settings/set".api()) {
         parameter("timestamp", System.currentTimeMillis())
 
         // format: {"key": "value"}
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 MapSerializer(
                     String.serializer(),
                     String.serializer()

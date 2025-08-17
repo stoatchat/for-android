@@ -1,6 +1,6 @@
 package chat.peptide.api.schemas
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,6 +10,6 @@ data class Session(
     val name: String
 ) {
     fun isCurrent(): Boolean {
-        return id == RevoltAPI.sessionId
+        return id == PeptideAPI.sessionId
     }
 }

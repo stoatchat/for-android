@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.User
 import chat.peptide.api.settings.LoadedSettings
@@ -43,7 +43,7 @@ import chat.peptide.internals.extensions.zero
 fun ConversationsScreen(navController: NavController) {
     val context = LocalContext.current
     val dmAbleChannels =
-        RevoltAPI.channelCache.values
+        PeptideAPI.channelCache.values
             .filter { it.channelType == ChannelType.DirectMessage || it.channelType == ChannelType.Group }
             .filter { if (it.channelType == ChannelType.DirectMessage) it.active == true else true }
             .sortedBy { it.lastMessageID ?: it.id }
@@ -63,13 +63,13 @@ fun ConversationsScreen(navController: NavController) {
         ) {
             item(key = "saved_messages") {
                 val notesChannel =
-                    RevoltAPI.channelCache.values.firstOrNull { it.channelType == ChannelType.SavedMessages }
-                val lastMessage = notesChannel?.lastMessageID?.let { RevoltAPI.messageCache[it] }
+                    PeptideAPI.channelCache.values.firstOrNull { it.channelType == ChannelType.SavedMessages }
+                val lastMessage = notesChannel?.lastMessageID?.let { PeptideAPI.messageCache[it] }
                 val hasAttachments = remember {
                     context.getString(R.string.reply_message_empty_has_attachments)
                 }
                 val preview = remember(lastMessage) {
-                    (RevoltAPI.userCache[RevoltAPI.selfId]?.let {
+                    (PeptideAPI.userCache[PeptideAPI.selfId]?.let {
                         User.resolveDefaultName(
                             it
                         )
@@ -93,7 +93,7 @@ fun ConversationsScreen(navController: NavController) {
                         },
                         leadingContent = {
                             Box(contentAlignment = Alignment.TopEnd) {
-                                RevoltAPI.userCache[RevoltAPI.selfId]?.let {
+                                PeptideAPI.userCache[PeptideAPI.selfId]?.let {
                                     UserAvatar(
                                         username = it.username.toString(),
                                         avatar = it.avatar,

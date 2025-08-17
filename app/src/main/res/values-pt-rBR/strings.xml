@@ -36,7 +36,7 @@
     <string name="media_viewer_saved">Salvo</string>
     <string name="settings_feedback">Feedback</string>
     <string name="settings_appearance">Aparência</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_none">Sistema</string>
     <string name="settings_appearance_theme_light">Claro</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -62,7 +62,7 @@
     <string name="resend">Reenviar</string>
     <string name="resend_verification">Reenviar e-mail de verificação</string>
     <string name="typing_many">%1$s estão digitando…</string>
-    <string name="register_heading">Bem-vindo(a) ao Revolt</string>
+    <string name="register_heading">Bem-vindo(a) ao Peptide</string>
     <string name="password_forgot_heading">Esqueceu sua senha\?</string>
     <string name="onboarding_welcome">Bem-vindo(a)!</string>
     <string name="onboarding_username">Nome de usuário</string>
@@ -94,11 +94,11 @@
     <string name="lets_go">Vamos lá</string>
     <string name="loading">Reunindo algumas informações, aguenta aí…</string>
     <string name="login_onboarding_heading">Encontre sua comunidade, conecte-se com o mundo.</string>
-    <string name="login_onboarding_body">Revolt é uma das melhores maneiras de se manter conectado com seus amigos e comunidade, em qualquer lugar, a qualquer hora.</string>
+    <string name="login_onboarding_body">Peptide é uma das melhores maneiras de se manter conectado com seus amigos e comunidade, em qualquer lugar, a qualquer hora.</string>
     <string name="login_heading">Vamos logar você</string>
     <string name="password_manager_hint">Usando um gerenciador de senhas\?</string>
     <string name="password_forgot_instructions">Insira seu email e nós enviaremos instruções para redefinir sua senha.</string>
-    <string name="register_image_alt">Use o Revolt para conversar sobre coisas.</string>
+    <string name="register_image_alt">Use o Peptide para conversar sobre coisas.</string>
     <string name="register_instructions">É como um lugar para curtir, se reunir e falar sobre qualquer coisa. E a melhor parte: é na internet.</string>
     <string name="register_form_heading">Vamos preparar as coisas para você.</string>
     <string name="register_data">Seus dados estão seguros com a gente. Não vendemos e nem os utilizamos para te mostrar anúncios.</string>
@@ -207,7 +207,7 @@
     <string name="report_user_preview">Usuário selecionado:</string>
     <string name="report_reason_content_promotes_harm">Incentivo à violência</string>
     <string name="report_reason_user_underage">Não possui a idade mínima para usar a plataforma</string>
-    <string name="report_submit_thanks">Obrigado por nos ajudar a manter o Revolt seguro. Vamos analisar sua denúncia assim que possível.</string>
+    <string name="report_submit_thanks">Obrigado por nos ajudar a manter o Peptide seguro. Vamos analisar sua denúncia assim que possível.</string>
     <string name="add_server_sheet_create_new_modal_under_construction">Esta funcionalidade está em desenvolvimento.</string>
     <string name="report_block_question">Gostaria de bloquear este usuário\?</string>
     <string name="invite_error_no_invite">Nenhum código de convite fornecido.</string>
@@ -216,15 +216,15 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (não suportado)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You não é suportado neste dispositivo.</string>
     <string name="badge_masquerade_alt">De canal vinculado</string>
-    <string name="oss_attribution_body">O Revolt é feito com a ajuda desses incríveis projetos de código-aberto.</string>
+    <string name="oss_attribution_body">O Peptide é feito com a ajuda desses incríveis projetos de código-aberto.</string>
     <string name="oss_attribution_body_2">Nós agradecemos aos desenvolvedores desses projetos por fazerem o seu trabalho disponível ao mundo.</string>
     <string name="oss_attribution_warning">A lista abaixo é gerada automaticamente. Ela pode estar incompleta ou imprecisa.</string>
     <string name="oss_attribution_generation_date">Última atualização: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Toque para ver a licença</string>
     <string name="system_message_channel_renamed_alt">O canal foi renomeado</string>
     <string name="system_message_ownership_changed_alt">A posse foi alterada</string>
-    <string name="about_full_name">Revolt no Android</string>
-    <string name="about_brought_to_you_by">Trazido até você com ❤️ pelo time do Revolt.</string>
+    <string name="about_full_name">Peptide no Android</string>
+    <string name="about_brought_to_you_by">Trazido até você com ❤️ pelo time do Peptide.</string>
     <string name="about_tab_version">Versão</string>
     <string name="about_tab_details">Detalhes</string>
     <string name="pick_emoji_alt">Escolher emoji</string>
@@ -236,7 +236,7 @@
     <string name="emoji_category_objects">Objetos</string>
     <string name="emoji_category_symbols">Símbolos</string>
     <string name="emoji_category_flags">Bandeiras</string>
-    <string name="badge_team_member_alt">Membro do time do Revolt</string>
+    <string name="badge_team_member_alt">Membro do time do Peptide</string>
     <string name="home_join_jenvolt">Junte-se ao Jenvolt</string>
     <string name="friends">Amigos</string>
     <string name="friends_incoming_requests">Solicitações Recebidas</string>
@@ -262,7 +262,7 @@
     <string name="channel_link_invalid_description">Este canal pode ter sido deletado ou você pode não ter permissão para vê-lo.</string>
     <string name="channel_info_sheet_options_add">Adicionar membros</string>
     <string name="user_info_sheet_bio_not_found">A bio deste usuário não pode ser alcançada. Por favor tenha a certeza de que compartilham um servidor ou de que são amigos.</string>
-    <string name="discover">Descobrir o Revolt</string>
+    <string name="discover">Descobrir o Peptide</string>
     <string name="report_message_heading">Diga-nos o que há de errado com esta mensagem</string>
     <string name="report_reason_content_illegal_hacking">Hacking ou cracking ilegais</string>
     <string name="notice_platform_mod_dm_title">Notícia importante tratando da sua conta</string>
@@ -308,7 +308,7 @@
     <string name="status_dnd_explainer">Você não vai receber qualquer notificação, incluindo mensagens e @menções.</string>
     <string name="status_offline">Offline</string>
     <string name="status_invisible">Invisível</string>
-    <string name="status_invisible_explainer">Você vai poder usar o Revolt normalmente, mas não vai aparecer como online para os outros.</string>
+    <string name="status_invisible_explainer">Você vai poder usar o Peptide normalmente, mas não vai aparecer como online para os outros.</string>
     <string name="server_flag_official">Servidor Oficial</string>
     <string name="server_flag_verified">Servidor Verificado</string>
     <string name="channel_link_invalid">Você não pode ver este canal</string>
@@ -405,10 +405,10 @@
     <string name="invite_dialog_description">Envie este link para convidar pessoas para este canal.</string>
     <string name="invite_dialog_copy">Copiar</string>
     <string name="invite_dialog_close">Fechar</string>
-    <string name="share_target_heading">Compartilhar para  Revolt</string>
-    <string name="share_target_login_first">Por favor, faça login antes de compartilhar para  Revolt .</string>
+    <string name="share_target_heading">Compartilhar para  Peptide</string>
+    <string name="share_target_login_first">Por favor, faça login antes de compartilhar para  Peptide .</string>
     <string name="share_target_invalid_intent">Esta não é uma tentativa de compartilhamento válida.</string>
-    <string name="share_target_attachment_too_large">Este anexo é muito grande para  Revolt (max. $1$s).</string>
+    <string name="share_target_attachment_too_large">Este anexo é muito grande para  Peptide (max. $1$s).</string>
     <string name="share_target_search_channels">Buscar canais</string>
     <string name="share_target_select_channel">Selecione um canal para compartilhar.</string>
     <string name="emote_info_from_unicode">Um emoji padrão que você pode usar em qualquer lugar</string>
@@ -438,7 +438,7 @@
     <string name="settings_chat_quick_reply_swipe_from_end">Deslize para responder</string>
     <string name="settings_chat_quick_reply">Resposta rápida</string>
     <string name="settings_chat_quick_reply_double_tap">Toque duas vezes para responder</string>
-    <string name="settings_feedback_description">Participe do servidor Revolt para dar feedback ou sugestões e relatar bugs.</string>
+    <string name="settings_feedback_description">Participe do servidor Peptide para dar feedback ou sugestões e relatar bugs.</string>
     <string name="channel_settings">Configurações do canal</string>
     <string name="channel_settings_header">#%1$s</string>
     <string name="channel_settings_overview">Visão geral</string>
@@ -555,7 +555,7 @@
     <string name="overview_screen_settings">Abrir Configurações</string>
     <string name="overview_screen_share_profile">Compartilhar Perfil</string>
     <string name="overview_screen_share_profile_description">Dê uma olhada no seu cartão de usuário e obtenha um link para compartilhar</string>
-    <string name="overview_screen_changelog_description">Revolt nunca para, dê uma olhada no que estamos preparando</string>
+    <string name="overview_screen_changelog_description">Peptide nunca para, dê uma olhada no que estamos preparando</string>
     <string name="overview_screen_feedback">Enviar Feedback</string>
     <string name="overview_screen_feedback_description">Tem algo a dizer\? Estamos aqui para ouvir</string>
     <string name="user_info_sheet_webhook_body">Webhooks são automatizados por outros serviços na internet. Não podem paper de volta, mas você ainda pode ver o que eles tem a dizer.</string>
@@ -563,7 +563,7 @@
     <string name="user_card_error_sharing">Ocorreu um erro ao compartilhar seu cartão de usuário.</string>
     <string name="user_card_data_point_display_name">%1$d.Nome</string>
     <string name="user_card_data_point_username">%1$d.Nome de Usuário</string>
-    <string name="user_card_data_point_join_date">%1$d.No Revolt Desde</string>
+    <string name="user_card_data_point_join_date">%1$d.No Peptide Desde</string>
     <string name="user_card_data_point_qrcode">%1$d.Código QR</string>
     <string name="user_card_data_point_photo">%1$d.Foto</string>
     <string name="could_not_log_in_heading">Ocorreu um erro ao fazer o seu login</string>
@@ -573,7 +573,7 @@
     <string name="could_not_log_in_cta_try_again">Tentar novamente</string>
     <string name="could_not_log_in_cta_logout">Encerrar Sessão</string>
     <string name="programming_language_snippet_default">[Bloco de código]</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt tem atalhos! Pressione %1$s para vê-los.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide tem atalhos! Pressione %1$s para vê-los.</string>
     <string name="spark_keyboard_shortcuts_cta">Abrir atalhos</string>
     <string name="spark_keyboard_shortcuts_dismiss">Tudo bem</string>
     <string name="keyboard_shortcut_messaging">Mensagens</string>
@@ -581,7 +581,7 @@
     <string name="keyboard_shortcut_messaging_send_message">Enviar Mensagem</string>
     <string name="spark_early_access">Bem-vindo(a) ao Acesso Antecipado! 🚀</string>
     <string name="spark_early_access_description_1">Você é um dos primeiros a testar nosso novo app Android. Estamos entusiasmados em ter você aqui!</string>
-    <string name="spark_early_access_description_2">Por ser um acesso antecipado, as coisas podem não estar perfeitas ainda. Você pode encontrar um bug, crash ou peculiariedade estranha ocasionalmente. O seu feedback nos ajuda a suavizar as arestas e fazer o Revolt ainda melhor.</string>
+    <string name="spark_early_access_description_2">Por ser um acesso antecipado, as coisas podem não estar perfeitas ainda. Você pode encontrar um bug, crash ou peculiariedade estranha ocasionalmente. O seu feedback nos ajuda a suavizar as arestas e fazer o Peptide ainda melhor.</string>
     <string name="spark_early_access_description_3">Estamos emocionados por ter você a bordo. Vamos fazer algo grande juntos!</string>
     <string name="spark_early_access_cta">Entendi</string>
     <string name="hint_provide_feedback">Amamos feedback!</string>
@@ -590,10 +590,10 @@
     <string name="hint_provide_feedback_dismiss">Feito</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Notificações</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Ordem dos Servidores</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt para Android</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Peptide para Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Redefinir configurações de %1$s</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys">Dica</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (desconhecido)</string>
-    <string name="hint_provide_feedback_description">Se você tiver quaisquer feedbacks, sugestões ou reportes de bug, deixe-nos saber. Estamos sempre procurando melhorar o Revolt.</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Algumas das suas configurações do Revolt estão corruptas. Isso pode ser devido ao uso de clientes de terceiros. As configurações afetadas são:</string>
+    <string name="hint_provide_feedback_description">Se você tiver quaisquer feedbacks, sugestões ou reportes de bug, deixe-nos saber. Estamos sempre procurando melhorar o Peptide.</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Algumas das suas configurações do Peptide estão corruptas. Isso pode ser devido ao uso de clientes de terceiros. As configurações afetadas são:</string>
 </resources>

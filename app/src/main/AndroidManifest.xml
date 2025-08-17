@@ -34,8 +34,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".RevoltApplication"
-        android:theme="@style/Theme.Revolt"
+        android:name=".PeptideApplication"
+        android:theme="@style/Theme.Peptide"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="tiramisu">
         <provider
@@ -72,7 +72,7 @@
             android:exported="true"
             android:configChanges="orientation|screenSize|colorMode"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.Revolt">
+            android:theme="@style/Theme.Peptide">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,7 +82,7 @@
 
         <activity
             android:name=".activities.InviteActivity"
-            android:theme="@style/Theme.Revolt"
+            android:theme="@style/Theme.Peptide"
             android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -118,7 +118,7 @@
 
         <activity
             android:name=".activities.ShareTargetActivity"
-            android:theme="@style/Theme.Revolt"
+            android:theme="@style/Theme.Peptide"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -134,12 +134,12 @@
 
         <activity
             android:name=".activities.media.ImageViewActivity"
-            android:theme="@style/Theme.Revolt" />
+            android:theme="@style/Theme.Peptide" />
 
         <activity
             android:name=".activities.media.VideoViewActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.Revolt" />
+            android:theme="@style/Theme.Peptide" />
 
         <!-- Backport photo picker via Google Play Services -->
         <service
@@ -168,7 +168,7 @@
         <activity
             android:name=".activities.DeepLinkActivity"
             android:exported="true"
-            android:theme="@style/Theme.Revolt">
+            android:theme="@style/Theme.Peptide">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

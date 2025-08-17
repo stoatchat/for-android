@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.Server
 import chat.peptide.api.schemas.ServerFlags
 import chat.peptide.api.schemas.has
@@ -51,7 +51,7 @@ fun ServerOverview(server: Server) {
             )
 
             RemoteImage(
-                url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${it.id}/${it.filename}",
+                url = "${PeptideAPI.getCurrentFilesUrl()}/banners/${it.id}/${it.filename}",
                 description = null,
                 modifier = Modifier
                     .height(166.dp)
@@ -80,7 +80,7 @@ fun ServerOverview(server: Server) {
         ) {
             server.icon?.let {
                 RemoteImage(
-                    url = "${RevoltAPI.getCurrentFilesUrl()}/icons/${it.id}",
+                    url = "${PeptideAPI.getCurrentFilesUrl()}/icons/${it.id}",
                     description = null,
                     allowAnimation = false,
                     modifier = Modifier
@@ -104,7 +104,7 @@ fun ServerOverview(server: Server) {
             CompositionLocalProvider(LocalContentColor provides Color.White) {
                 if (server.flags has ServerFlags.Official) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_revolt_decagram_24dp),
+                        painter = painterResource(id = R.drawable.ic_peptide_decagram_24dp),
                         contentDescription = stringResource(R.string.server_flag_official),
                         modifier = Modifier
                             .padding(end = 8.dp)

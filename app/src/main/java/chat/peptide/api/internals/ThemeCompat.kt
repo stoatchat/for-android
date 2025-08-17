@@ -26,7 +26,7 @@ fun Color.asHexJsonPrimitiveString(): JsonPrimitive {
 object ThemeCompat {
     @Composable
     fun materialThemeAsDiscoverTheme(materialTheme: MaterialTheme): JsonObject {
-        // https://github.com/revoltchat/discover/blob/6effdf4a611e89b38b5e6bccefa1cd999e4b545f/styles/variables.scss
+        // https://github.com/peptidechat/discover/blob/6effdf4a611e89b38b5e6bccefa1cd999e4b545f/styles/variables.scss
         return JsonObject(
             mapOf(
                 "accent" to materialTheme.colorScheme.primary.asHexJsonPrimitiveString(),

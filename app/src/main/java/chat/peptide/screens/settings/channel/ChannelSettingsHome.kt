@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.PermissionBit
 import chat.peptide.api.internals.hasPermission
 import chat.peptide.api.routes.channel.leaveDeleteOrCloseChannel
@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelSettingsHome(navController: NavController, channelId: String) {
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val permissions by rememberChannelPermissions(channelId)
     var showDeletionConfirmation by remember { mutableStateOf(false) }

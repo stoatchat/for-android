@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.core.net.toUri
 import chat.peptide.R
 import chat.peptide.activities.InviteActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.custom.fetchEmoji
 import chat.peptide.api.schemas.isInviteUri
 import chat.peptide.callbacks.Action
@@ -102,10 +102,10 @@ fun annotateText(node: AstNode): AnnotatedString {
                             )
                     )
                     val member = LocalMarkdownTreeConfig.current.currentServer?.let { serverId ->
-                        RevoltAPI.members.getMember(serverId, mention.groupValues[1])
+                        PeptideAPI.members.getMember(serverId, mention.groupValues[1])
                     }
                     val content = member?.nickname?.let { nick -> "@$nick" }
-                        ?: RevoltAPI.userCache[mention.groupValues[1]]?.username?.let { username -> "@$username" }
+                        ?: PeptideAPI.userCache[mention.groupValues[1]]?.username?.let { username -> "@$username" }
                         ?: "<@${mention.groupValues[1]}>"
                     append(content)
                     pop()
@@ -131,7 +131,7 @@ fun annotateText(node: AstNode): AnnotatedString {
                             )
                     )
                     val content =
-                        RevoltAPI.channelCache[channel.groupValues[1]]?.name?.let { chId -> "#$chId" }
+                        PeptideAPI.channelCache[channel.groupValues[1]]?.name?.let { chId -> "#$chId" }
                             ?: "<#${channel.groupValues[1]}>"
                     append(content)
                     pop()
@@ -200,7 +200,7 @@ fun annotateText(node: AstNode): AnnotatedString {
                     pushStyle(
                         LocalTextStyle.current.toSpanStyle()
                             .copy(
-                                color = MaterialTheme.colorScheme.primary
+								color = MaterialTheme.colorScheme.secondary
                             )
                     )
                     append(url.value)
@@ -244,7 +244,7 @@ fun annotateText(node: AstNode): AnnotatedString {
                 pushStyle(
                     LocalTextStyle.current.toSpanStyle()
                         .copy(
-                            color = MaterialTheme.colorScheme.primary
+							color = MaterialTheme.colorScheme.secondary
                         )
                 )
                 node.children?.forEach { append(annotateText(it)) }
@@ -326,22 +326,11 @@ fun MarkdownText(textNode: AstNode, modifier: Modifier = Modifier) {
                     // no-op
                 }
 
-                // Check if this is an internal link that should be handled by the app
-                Log.d("MarkdownText", "Checking if URL is internal link")
                 if (InternalLinkHandler.isInternalLink(url)) {
-                    Log.d("MarkdownText", "URL is internal link, attempting to handle internally")
-                    // Try to handle the link internally
                     val handled = InternalLinkHandler.handleInternalLink(context, url, true)
-                    Log.d("MarkdownText", "Internal link handled: $handled")
                     if (handled) {
-                        // Link was handled internally
-                        Log.d("MarkdownText", "Link handled internally, returning")
                         return@handler true
-                    } else {
-                        Log.d("MarkdownText", "Failed to handle link internally, falling back to browser")
                     }
-                } else {
-                    Log.d("MarkdownText", "URL is not internal link, opening in browser")
                 }
                 
                 // If not an internal link or couldn't be handled internally, open in browser
@@ -443,11 +432,11 @@ fun MarkdownText(textNode: AstNode, modifier: Modifier = Modifier) {
                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center
                 ),
             ) { id ->
-                val emote = RevoltAPI.emojiCache[id]
+                val emote = PeptideAPI.emojiCache[id]
                 if (emote == null) {
                     scope.launch {
                         try {
-                            RevoltAPI.emojiCache[id] = fetchEmoji(id)
+                            PeptideAPI.emojiCache[id] = fetchEmoji(id)
                         } catch (e: Exception) {
                             // no-op
                         }
@@ -456,7 +445,7 @@ fun MarkdownText(textNode: AstNode, modifier: Modifier = Modifier) {
                 } else {
                     with(LocalDensity.current) {
                         RemoteImage(
-                            url = "${RevoltAPI.getCurrentFilesUrl()}/emojis/${id}",
+                            url = "${PeptideAPI.getCurrentFilesUrl()}/emojis/${id}",
                             description = emote.name,
                             contentScale = ContentScale.Fit,
                             modifier = Modifier

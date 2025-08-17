@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Revolt.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.Peptide.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="windowSplashScreenBackground">@color/splashscreen_background</item>
         <item name="android:windowSplashScreenBehavior">icon_preferred</item>
-        <item name="postSplashScreenTheme">@style/Theme.Revolt</item>
+        <item name="postSplashScreenTheme">@style/Theme.Peptide</item>
     </style>
 </resources>

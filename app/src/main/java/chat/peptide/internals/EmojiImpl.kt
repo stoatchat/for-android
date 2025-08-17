@@ -2,9 +2,9 @@ package chat.peptide.internals
 
 import android.content.Context
 import chat.peptide.R
-import chat.peptide.RevoltApplication
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.PeptideApplication
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.schemas.Server
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
@@ -68,11 +68,11 @@ class EmojiImpl {
         val json = context.assets.open("metadata/emoji.json").use {
             it.reader().readText()
         }
-        return RevoltJson.decodeFromString(ListSerializer(EmojiGroup.serializer()), json)
+        return PeptideJson.decodeFromString(ListSerializer(EmojiGroup.serializer()), json)
     }
 
     fun serversWithEmotes(): List<Server> {
-        return RevoltAPI
+        return PeptideAPI
             .emojiCache
             .values
             .asSequence()
@@ -81,13 +81,13 @@ class EmojiImpl {
             .filter { it.type == "Server" }
             .map { it.id }
             .distinct()
-            .mapNotNull { RevoltAPI.serverCache[it] }
+            .mapNotNull { PeptideAPI.serverCache[it] }
             .toList()
     }
 
     fun serverEmoteList(server: Server): List<EmojiPickerItem> {
         val list = mutableListOf<EmojiPickerItem>()
-        val emotes = RevoltAPI.emojiCache.values.filter { it.parent?.id == server.id }
+        val emotes = PeptideAPI.emojiCache.values.filter { it.parent?.id == server.id }
 
         list.add(EmojiPickerItem.Section(Category.ServerEmoteCategory(server)))
         list.addAll(emotes.map { EmojiPickerItem.ServerEmote(it) })
@@ -149,7 +149,7 @@ class EmojiImpl {
                     it is EmojiPickerItem.Section && it.category is Category.ServerEmoteCategory && it.category.server == server
                 }
             val allEmotesInThatServer =
-                RevoltAPI.emojiCache.values.filter { it.parent?.id == server.id }
+                PeptideAPI.emojiCache.values.filter { it.parent?.id == server.id }
             val lastIndex = index + allEmotesInThatServer.size
 
             output[Category.ServerEmoteCategory(server)] = Pair(index, lastIndex)
@@ -206,7 +206,7 @@ class EmojiImpl {
         val list = mutableListOf<EmojiPickerItem>()
 
         for (server in serversWithEmotes()) {
-            val emotes = RevoltAPI.emojiCache.values.filter { it.parent?.id == server.id }
+            val emotes = PeptideAPI.emojiCache.values.filter { it.parent?.id == server.id }
             val matchingEmotes =
                 emotes.filter { it.name?.contains(query, ignoreCase = true) ?: false }
             if (matchingEmotes.isNotEmpty()) {
@@ -290,6 +290,6 @@ class EmojiImpl {
     }
 
     init {
-        metadata = initMetadata(RevoltApplication.instance.applicationContext)
+        metadata = initMetadata(PeptideApplication.instance.applicationContext)
     }
 }

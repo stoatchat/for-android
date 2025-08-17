@@ -51,7 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ChannelUtils
 import chat.peptide.api.routes.channel.sendMessage
 import chat.peptide.api.routes.microservices.autumn.FileArgs
@@ -68,7 +68,7 @@ import chat.peptide.composables.screens.chat.drawer.ChannelItemIconType
 import chat.peptide.composables.screens.chat.drawer.DMOrGroupItem
 import chat.peptide.persistence.KVStorage
 import chat.peptide.screens.chat.views.channel.ChannelScreenActivePane
-import chat.peptide.ui.theme.RevoltTheme
+import chat.peptide.ui.theme.PeptideTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.http.ContentType
@@ -180,10 +180,10 @@ class ShareTargetScreenViewModel @Inject constructor(
     }
 
     suspend fun initialiseAPI() {
-        if (!RevoltAPI.isLoggedIn()) {
+        if (!PeptideAPI.isLoggedIn()) {
             val token = kvStorage.get("sessionToken") ?: return
-            RevoltAPI.loginAs(token)
-            RevoltAPI.initialize()
+            PeptideAPI.loginAs(token)
+            PeptideAPI.initialize()
         }
         apiIsReady = true
     }
@@ -277,7 +277,7 @@ fun ShareTargetScreen(
     var channelSearchContent by remember { mutableStateOf("") }
     var selectedChannel by rememberSaveable { mutableStateOf<String?>(null) }
 
-    RevoltTheme(
+    PeptideTheme(
         requestedTheme = LoadedSettings.theme,
         colourOverrides = SyncedSettings.android.colourOverrides
     ) {
@@ -326,7 +326,7 @@ fun ShareTargetScreen(
                     Box(
                         modifier = Modifier.weight(1f)
                     ) {
-                        val filteredChannels = RevoltAPI.channelCache.values.asSequence().filter {
+                        val filteredChannels = PeptideAPI.channelCache.values.asSequence().filter {
                             it.name?.contains(
                                 channelSearchContent,
                                 ignoreCase = true
@@ -346,7 +346,7 @@ fun ShareTargetScreen(
                                     ChannelType.Group, ChannelType.DirectMessage -> DMOrGroupItem(
                                         channel = channel,
                                         partner = ChannelUtils.resolveDMPartner(channel)?.let { u ->
-                                            RevoltAPI.userCache[u]
+                                            PeptideAPI.userCache[u]
                                         },
                                         isCurrent = selectedChannel == channel.id,
                                         hasUnread = false,
@@ -421,9 +421,9 @@ fun ShareTargetScreen(
                                     }
                                 }
                             },
-                            channelType = RevoltAPI.channelCache[selectedChannel]?.channelType
+                            channelType = PeptideAPI.channelCache[selectedChannel]?.channelType
                                 ?: ChannelType.TextChannel,
-                            channelName = RevoltAPI.channelCache[selectedChannel]?.name ?: "",
+                            channelName = PeptideAPI.channelCache[selectedChannel]?.name ?: "",
                         )
 
                         AnimatedVisibility(viewModel.activeBottomPane is ChannelScreenActivePane.EmojiPicker) {

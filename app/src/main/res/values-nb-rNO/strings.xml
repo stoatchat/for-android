@@ -23,8 +23,8 @@
     <string name="password_manager_hint">Bruker du en passordbank\?</string>
     <string name="password_forgot_heading">Har du glemt passordet ditt\?</string>
     <string name="password_forgot_instructions">Skriv inn e-posten din, så skal vi sende deg instruksjoner for å tilbakestille passordet ditt.</string>
-    <string name="register_heading">Velkommen til Revolt</string>
-    <string name="register_image_alt">Du kan bruke Revolt til å snakke om ting.</string>
+    <string name="register_heading">Velkommen til Peptide</string>
+    <string name="register_image_alt">Du kan bruke Peptide til å snakke om ting.</string>
     <string name="register_data">Informasjonen din er trygg hos oss. Vi selger det ikke, og vi bruker det heller ikke til å vise deg reklamer.</string>
     <string name="register_email">E-post</string>
     <string name="register_password">Passord</string>
@@ -190,14 +190,14 @@
     <string name="settings_appearance">Utseende</string>
     <string name="settings_appearance_theme">Drakt</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Lys</string>
     <string name="settings_appearance_theme_amoled">Helt Svart</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (ikke støttet)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You er ikke støttet på denne enheten.</string>
     <string name="settings_feedback">Tilbakemelding</string>
-    <string name="login_onboarding_body">Revolt er en av de beste måtene å holde kontakt med vennene og felleskapene dine, fra hvor som helst, når som helst.</string>
+    <string name="login_onboarding_body">Peptide er en av de beste måtene å holde kontakt med vennene og felleskapene dine, fra hvor som helst, når som helst.</string>
     <string name="register_form_heading">La oss sette deg opp.</string>
     <string name="register_email_verification_hint">Vi kommer til å sende deg en bekreftelses-e-post for å bekrefte kontoen din.</string>
     <string name="verify_then_choose_username">Bekreft e-posten din, så kan vi begynne med å velge brukernavnet ditt.</string>
@@ -211,7 +211,7 @@
     <string name="message_context_sheet_actions_copy_failed_empty">Melding er tom, det er ingenting til å kopiere</string>
     <string name="add_server_sheet_join_by_invite_modal_description">Tast inn en lenke som rvlt.gg/Testers eller en invitasjonskode som Testers</string>
     <string name="report_message_bridge_notice">NB: Denne meldingen kan ha blitt sendt fra en annen tjeneste. Det er anbefalt at du rapporterer meldingen på tjenesten den ble sendt fra i tillegg.</string>
-    <string name="report_submit_thanks">Tusen takk for at du hjelper å holde Revolt trygt. Vi vil se igjennom rapporten din så snart som mulig.</string>
+    <string name="report_submit_thanks">Tusen takk for at du hjelper å holde Peptide trygt. Vi vil se igjennom rapporten din så snart som mulig.</string>
     <string name="invite_error_no_invite">Ingen invitasjonskode ble gitt.</string>
     <string name="media_viewer_save_failed_audio">Kunne ikke lagre lyd</string>
 </resources>

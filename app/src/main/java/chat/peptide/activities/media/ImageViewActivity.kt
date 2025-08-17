@@ -41,13 +41,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
 import chat.peptide.api.schemas.AutumnResource
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.providers.getAttachmentContentUri
-import chat.peptide.ui.theme.RevoltTheme
+import chat.peptide.ui.theme.PeptideTheme
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
 import kotlinx.coroutines.launch
@@ -85,7 +85,7 @@ class ImageViewActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
-    val resourceUrl = "${RevoltAPI.getCurrentFilesUrl()}/attachments/${resource.id}/${resource.filename}"
+    val resourceUrl = "${PeptideAPI.getCurrentFilesUrl()}/attachments/${resource.id}/${resource.filename}"
 
     val context = LocalContext.current
 
@@ -145,13 +145,13 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                     ContentValues().apply {
                         put(MediaStore.Images.Media.DISPLAY_NAME, resource.filename)
                         put(MediaStore.Images.Media.MIME_TYPE, resource.contentType)
-                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Revolt")
+                        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Peptide")
                         put(MediaStore.Images.Media.IS_PENDING, 1)
                     }
                 )
             }?.let { uri ->
                 context.contentResolver.openOutputStream(uri).use { stream ->
-                    val image = RevoltHttp.get(resourceUrl).readBytes()
+                    val image = PeptideHttp.get(resourceUrl).readBytes()
                     stream?.write(image)
 
                     context.applicationContext.let {
@@ -182,7 +182,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
         }
     }
 
-    RevoltTheme(
+    PeptideTheme(
         requestedTheme = LoadedSettings.theme,
         colourOverrides = SyncedSettings.android.colourOverrides
     ) {

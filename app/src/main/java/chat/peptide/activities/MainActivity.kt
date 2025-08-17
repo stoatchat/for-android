@@ -75,12 +75,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.api.ApplicationPlatform
 import chat.peptide.api.HitRateLimitException
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltAPI.setPlatform
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideAPI.setPlatform
+import chat.peptide.api.PeptideHttp
 import chat.peptide.api.UrlsStorageKeys
 import chat.peptide.api.api
 import chat.peptide.api.routes.microservices.geo.queryGeo
@@ -127,7 +127,7 @@ import chat.peptide.screens.settings.SettingsScreen
 import chat.peptide.screens.settings.channel.ChannelSettingsHome
 import chat.peptide.screens.settings.channel.ChannelSettingsOverview
 import chat.peptide.screens.settings.channel.ChannelSettingsPermissions
-import chat.peptide.ui.theme.RevoltTheme
+import chat.peptide.ui.theme.PeptideTheme
 import chat.peptide.utils.DeepLinkHandler
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.AndroidEntryPoint
@@ -167,9 +167,9 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    private suspend fun canReachRevolt(): Boolean {
+    private suspend fun canReachPeptide(): Boolean {
         try {
-            val res = RevoltHttp.get("/".api())
+            val res = PeptideHttp.get("/".api())
             return res.status.value == 200
         } catch (_: Exception) {
             return false
@@ -199,7 +199,7 @@ class MainActivityViewModel @Inject constructor(
 
     /**
      * Sets the default platform on application creation.
-     * It retrieves the platform from key-value storage and sets it in the RevoltAPI.
+     * It retrieves the platform from key-value storage and sets it in the PeptideAPI.
      * If the platform is not found or invalid, it logs the user out.
      */
     fun setDefaultPlatformOnCreate() {
@@ -229,11 +229,11 @@ class MainActivityViewModel @Inject constructor(
 
             isConnected.emit(hasInternetConnection())
 
-            Log.d("MainActivity", "Checking if we can reach Revolt")
+            Log.d("MainActivity", "Checking if we can reach Peptide")
 
             if (!isConnected.value) return@launch startWithoutDestination()
 
-            Log.d("MainActivity", "We can reach Revolt, checking if we're logged in")
+            Log.d("MainActivity", "We can reach Peptide, checking if we're logged in")
 
             val token = kvStorage.get("sessionToken")
                 ?: return@launch startWithDestination("choose-platform")
@@ -241,17 +241,17 @@ class MainActivityViewModel @Inject constructor(
 
             Log.d(
                 "MainActivity",
-                "We have a session token, checking if it's valid and if we can still reach Revolt"
+                "We have a session token, checking if it's valid and if we can still reach Peptide"
             )
 
-            val canReachRevolt = canReachRevolt()
+            val canReachPeptide = canReachPeptide()
             val valid = try {
-                RevoltAPI.checkSessionToken(token)
+                PeptideAPI.checkSessionToken(token)
             } catch (_: Throwable) {
                 false
             }
 
-            if (canReachRevolt && !valid) {
+            if (canReachPeptide && !valid) {
                 Log.d("MainActivity", "Session token is invalid, could not log in")
                 couldNotLogIn.emit(true)
             } else {
@@ -278,8 +278,8 @@ class MainActivityViewModel @Inject constructor(
 
                 try {
                     Log.d("MainActivity", "Onboarding state is complete, logging in")
-                    RevoltAPI.loginAs(token)
-                    RevoltAPI.setSessionId(id)
+                    PeptideAPI.loginAs(token)
+                    PeptideAPI.setSessionId(id)
                     if (Experiments.usePolar.isEnabled) {
                         startWithDestination("main")
                     } else {
@@ -354,7 +354,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         DynamicColors.applyToActivityIfAvailable(this)
-        DynamicColors.applyToActivitiesIfAvailable(RevoltApplication.instance)
+        DynamicColors.applyToActivitiesIfAvailable(PeptideApplication.instance)
         @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
         window.statusBarColor = Color.Transparent.toArgb()
     }
@@ -363,7 +363,7 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)
         DynamicColors.applyToActivityIfAvailable(this)
-        DynamicColors.applyToActivitiesIfAvailable(RevoltApplication.instance)
+        DynamicColors.applyToActivitiesIfAvailable(PeptideApplication.instance)
         @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
         window.statusBarColor = Color.Transparent.toArgb()
     }
@@ -384,7 +384,7 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = Color.Transparent.toArgb()
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        RevoltAPI.hydrateFromPersistentCache()
+        PeptideAPI.hydrateFromPersistentCache()
         
         // Handle deep link data if available
         handleDeepLinkData(intent)
@@ -520,9 +520,9 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-val RevoltTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)
-val RevoltTweenFloat: FiniteAnimationSpec<Float> = tween(400, easing = EaseInOutExpo)
-val RevoltTweenDp: FiniteAnimationSpec<Dp> = tween(400, easing = EaseInOutExpo)
+val PeptideTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)
+val PeptideTweenFloat: FiniteAnimationSpec<Float> = tween(400, easing = EaseInOutExpo)
+val PeptideTweenDp: FiniteAnimationSpec<Dp> = tween(400, easing = EaseInOutExpo)
 
 val NavTweenInt: FiniteAnimationSpec<IntOffset> = tween(350, easing = EaseInOutExpo)
 val NavTweenFloat: FiniteAnimationSpec<Float> = tween(350, easing = EaseInOutExpo)
@@ -572,7 +572,7 @@ fun AppEntrypoint(
 
     val navController = rememberNavController()
 
-    RevoltTheme(
+    PeptideTheme(
         requestedTheme = LoadedSettings.theme,
         colourOverrides = SyncedSettings.android.colourOverrides,
     ) {
@@ -715,7 +715,7 @@ fun AppEntrypoint(
                                     easing = EasingTokens.EmphasizedDecelerate
                                 ),
                                 initialOffset = { it / 3 }
-                            ) + fadeIn(animationSpec = RevoltTweenFloat)
+                            ) + fadeIn(animationSpec = PeptideTweenFloat)
                         }
                     ) {
                         ChatRouterScreen(
@@ -748,7 +748,7 @@ fun AppEntrypoint(
                                     easing = EasingTokens.EmphasizedDecelerate
                                 ),
                                 initialOffset = { it / 3 }
-                            ) + fadeIn(animationSpec = RevoltTweenFloat) + scaleIn(
+                            ) + fadeIn(animationSpec = PeptideTweenFloat) + scaleIn(
                                 animationSpec = tween(
                                     400,
                                     easing = EasingTokens.EmphasizedDecelerate
@@ -770,7 +770,7 @@ fun AppEntrypoint(
                                     easing = EasingTokens.EmphasizedDecelerate
                                 ),
                                 initialOffset = { it }
-                            ) + fadeIn(animationSpec = RevoltTweenFloat)
+                            ) + fadeIn(animationSpec = PeptideTweenFloat)
                         },
                         exitTransition = {
                             slideOutOfContainer(
@@ -780,7 +780,7 @@ fun AppEntrypoint(
                                     easing = EasingTokens.EmphasizedDecelerate
                                 ),
                                 targetOffset = { it }
-                            ) + fadeOut(animationSpec = RevoltTweenFloat)
+                            ) + fadeOut(animationSpec = PeptideTweenFloat)
                         }
                     ) { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""

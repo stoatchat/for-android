@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.safety.putUserReport
 import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.schemas.UserReportReason
@@ -49,7 +49,7 @@ enum class UserReportFlowState {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
-    val user = RevoltAPI.userCache[userId]
+    val user = PeptideAPI.userCache[userId]
     if (user == null) {
         onDismiss()
         return

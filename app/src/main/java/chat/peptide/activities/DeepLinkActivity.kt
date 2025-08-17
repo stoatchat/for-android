@@ -49,9 +49,9 @@ class DeepLinkActivity : AppCompatActivity() {
         if (Intent.ACTION_VIEW == appLinkAction && appLinkData != null) {
             Log.d(TAG, "Deep link received: $appLinkData")
             
-            // Check if this is a valid Revolt deep link
-            if (!DeepLinkUtils.isRevoltDeepLink(appLinkData)) {
-                Log.d(TAG, "Not a valid Revolt deep link: $appLinkData")
+            // Check if this is a valid Peptide deep link
+            if (!DeepLinkUtils.isPeptideDeepLink(appLinkData)) {
+                Log.d(TAG, "Not a valid Peptide deep link: $appLinkData")
                 startMainActivity()
                 return
             }

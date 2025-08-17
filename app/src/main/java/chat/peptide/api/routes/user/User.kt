@@ -1,9 +1,9 @@
 package chat.peptide.api.routes.user
 
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import chat.peptide.api.schemas.Profile
 import chat.peptide.api.schemas.Status
@@ -21,24 +21,24 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.JsonElement
 
 suspend fun fetchSelf(): User {
-    val response = RevoltHttp.get("/users/@me".api())
+    val response = PeptideHttp.get("/users/@me".api())
         .bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    val user = RevoltJson.decodeFromString(User.serializer(), response)
+    val user = PeptideJson.decodeFromString(User.serializer(), response)
 
     if (user.id == null) {
         throw Exception("Self user ID is null")
     }
 
-    RevoltAPI.userCache[user.id] = user
-    RevoltAPI.selfId = user.id
+    PeptideAPI.userCache[user.id] = user
+    PeptideAPI.selfId = user.id
 
     return user
 }
@@ -54,11 +54,11 @@ suspend fun patchSelf(
     val body = mutableMapOf<String, JsonElement>()
 
     if (status != null) {
-        body["status"] = RevoltJson.encodeToJsonElement(Status.serializer(), status)
+        body["status"] = PeptideJson.encodeToJsonElement(Status.serializer(), status)
     }
 
     if (avatar != null) {
-        body["avatar"] = RevoltJson.encodeToJsonElement(String.serializer(), avatar)
+        body["avatar"] = PeptideJson.encodeToJsonElement(String.serializer(), avatar)
     }
 
     if (background != null || bio != null) {
@@ -71,7 +71,7 @@ suspend fun patchSelf(
             profileMap["content"] = bio
         }
 
-        body["profile"] = RevoltJson.encodeToJsonElement(
+        body["profile"] = PeptideJson.encodeToJsonElement(
             MapSerializer(
                 String.serializer(),
                 String.serializer()
@@ -81,13 +81,13 @@ suspend fun patchSelf(
     }
 
     if (remove != null) {
-        body["remove"] = RevoltJson.encodeToJsonElement(ListSerializer(String.serializer()), remove)
+        body["remove"] = PeptideJson.encodeToJsonElement(ListSerializer(String.serializer()), remove)
     }
 
-    val response = RevoltHttp.patch("/users/@me".api()) {
+    val response = PeptideHttp.patch("/users/@me".api()) {
         contentType(ContentType.Application.Json)
         setBody(
-            RevoltJson.encodeToString(
+            PeptideJson.encodeToString(
                 MapSerializer(
                     String.serializer(),
                     JsonElement.serializer()
@@ -98,21 +98,21 @@ suspend fun patchSelf(
     }
         .bodyAsText()
 
-    if (RevoltAPI.selfId == null) {
+    if (PeptideAPI.selfId == null) {
         throw Error("Self ID is null")
     }
 
-    val currentUser = RevoltAPI.userCache[RevoltAPI.selfId] ?: fetchSelf()
-    val newUserKeys = RevoltJson.decodeFromString(User.serializer(), response)
+    val currentUser = PeptideAPI.userCache[PeptideAPI.selfId] ?: fetchSelf()
+    val newUserKeys = PeptideJson.decodeFromString(User.serializer(), response)
     val mergedUser = currentUser.mergeWithPartial(newUserKeys)
 
     if (!pure) {
-        RevoltAPI.userCache[RevoltAPI.selfId!!] = mergedUser
+        PeptideAPI.userCache[PeptideAPI.selfId!!] = mergedUser
     }
 }
 
 suspend fun fetchUser(id: String): User {
-    val res = RevoltHttp.get("/users/$id".api())
+    val res = PeptideHttp.get("/users/$id".api())
 
     if (res.status.value == 404) {
         return User.getPlaceholder(id)
@@ -121,42 +121,42 @@ suspend fun fetchUser(id: String): User {
     val response = res.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    val user = RevoltJson.decodeFromString(User.serializer(), response)
+    val user = PeptideJson.decodeFromString(User.serializer(), response)
 
     user.id?.let {
-        RevoltAPI.userCache[it] = user
+        PeptideAPI.userCache[it] = user
     }
 
     return user
 }
 
 suspend fun getOrFetchUser(id: String): User {
-    return RevoltAPI.userCache[id] ?: fetchUser(id)
+    return PeptideAPI.userCache[id] ?: fetchUser(id)
 }
 
 suspend fun addUserIfUnknown(id: String) {
-    if (RevoltAPI.userCache[id] == null) {
-        RevoltAPI.userCache[id] = fetchUser(id)
+    if (PeptideAPI.userCache[id] == null) {
+        PeptideAPI.userCache[id] = fetchUser(id)
     }
 }
 
 suspend fun fetchUserProfile(id: String): Profile {
-    val res = RevoltHttp.get("/users/$id/profile".api())
+    val res = PeptideHttp.get("/users/$id/profile".api())
 
     val response = res.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response)
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    return RevoltJson.decodeFromString(Profile.serializer(), response)
+    return PeptideJson.decodeFromString(Profile.serializer(), response)
 }

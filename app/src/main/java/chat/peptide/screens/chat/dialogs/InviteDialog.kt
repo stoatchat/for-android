@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.channel.createInvite
 import chat.peptide.internals.Platform
 import chat.peptide.ui.theme.FragmentMono
@@ -69,7 +69,7 @@ operator fun InviteCodeChar.compareTo(other: InviteCodeChar): Int {
 
 @Composable
 fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
-    val channel = RevoltAPI.channelCache[channelId]
+    val channel = PeptideAPI.channelCache[channelId]
 
     if (channel == null) {
         onDismissRequest()
@@ -141,7 +141,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             Text(
-                (Uri.parse(RevoltAPI.getCurrentInvitesUrl()).host ?: "rvlt.gg") + "/",
+                (Uri.parse(PeptideAPI.getCurrentInvitesUrl()).host ?: "rvlt.gg") + "/",
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -204,7 +204,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                 Spacer(Modifier.width(8.dp))
                 Button(onClick = {
                     clipboardManager.setText(AnnotatedString.Builder().apply {
-                        append(RevoltAPI.getCurrentInvitesUrl())
+                        append(PeptideAPI.getCurrentInvitesUrl())
                         append("/")
                         append(inviteCode)
                     }.toAnnotatedString())

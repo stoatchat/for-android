@@ -13,8 +13,8 @@
     <string name="resend_verification">Lähetä vahvistussähköposti uudelleen</string>
     <string name="password_manager_hint">Käytätkö salasanojen hallintasovellusta\?</string>
     <string name="password_forgot_heading">Unohditko salasanasi\?</string>
-    <string name="register_heading">Tervetuloa Revoltiin</string>
-    <string name="register_image_alt">Käytä Revoltia muiden kanssa keskustelemiseen.</string>
+    <string name="register_heading">Tervetuloa Peptideiin</string>
+    <string name="register_image_alt">Käytä Peptideia muiden kanssa keskustelemiseen.</string>
     <string name="register_email">Sähköposti</string>
     <string name="register_password">Salasana</string>
     <string name="check_mail">Katso sähköpostisi!</string>
@@ -123,7 +123,7 @@
     <string name="loading">Haetaan tietoa, odota hetki…</string>
     <string name="privacy_policy">Tietosuojakäytäntö</string>
     <string name="login_onboarding_heading">Löydä yhteisösi, liity maailman kanssa.</string>
-    <string name="login_onboarding_body">Revolt on yksi parhaimmista tavoista pysyä yhteydessä kavereidesi ja yhteisösi kanssa, missä vain, milloin vain.</string>
+    <string name="login_onboarding_body">Peptide on yksi parhaimmista tavoista pysyä yhteydessä kavereidesi ja yhteisösi kanssa, missä vain, milloin vain.</string>
     <string name="login_heading">Kirjaudutaan sinut sisään</string>
     <string name="password_forgot_instructions">Laita sähköpostisi tähän, ja me laitamme sinulle ohjeen salasanan vaihtamiseen.</string>
     <string name="register_data">Tietosi ovat turvassa meidän kanssa. Me emme myy niitä, ja me emme myöskään käytä niitä mainostukseen.</string>
@@ -180,7 +180,7 @@
     <string name="report_reason_user_other">Muu</string>
     <string name="report_reason_additional_hint">Mitä tahansa lisätietoa joka saattaa auttaa meitä tutkimisessa. Vapaaehtoinen.</string>
     <string name="report_submit">Lähetä</string>
-    <string name="report_submit_thanks">Kiitoksia että pidät Revoltin turvallisena. Me katsomme raporttisi läpi mahdollisimman pian.</string>
+    <string name="report_submit_thanks">Kiitoksia että pidät Peptidein turvallisena. Me katsomme raporttisi läpi mahdollisimman pian.</string>
     <string name="report_submit_error">Raporttisi lähettämisessä tapahtui virhe. Yritä myöhemmin uudelleen.</string>
     <string name="invite_message">Sinut on kutsuttu liittymään tälle palvelimelle. Haluaisitko liittyä\?</string>
     <string name="invite_already_member">Olet jo osana tätä palvelinta.</string>
@@ -211,7 +211,7 @@
     <string name="settings_category_miscellaneous">Sekalaista</string>
     <string name="settings_appearance">Ulkoasu</string>
     <string name="settings_appearance_theme">Teema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Vaalea</string>
     <string name="settings_appearance_theme_m3dynamic">Material You -teema</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You -teemaa ei tueta tällä laitteella.</string>
@@ -221,14 +221,14 @@
     <string name="oss_attribution_generation_date">Viimeksi päivitetty: %1$s</string>
     <string name="message_field_denied_no_permission">Sinulla ei ole oikeuksia lähettää viestejä tähän kanavaan.</string>
     <string name="status_dnd">Älä häiritse</string>
-    <string name="about_full_name">Revolt Androidilla</string>
+    <string name="about_full_name">Peptide Androidilla</string>
     <string name="about_tab_version">Versio</string>
     <string name="pick_emoji_alt">Valitse emoji</string>
     <string name="emoji_category_animals">Eläimet &amp; Luonto</string>
     <string name="emoji_category_activities">Aktiviteetit</string>
     <string name="emoji_category_symbols">Symbolit</string>
     <string name="emoji_category_flags">Liput</string>
-    <string name="badge_team_member_alt">Revolt tiimin jäsen</string>
+    <string name="badge_team_member_alt">Peptide tiimin jäsen</string>
     <string name="friends">Ystävät</string>
     <string name="message_field_denied_generic">Et voi lähettää viestejä tässä kanavassa.</string>
     <string name="status_online">Paikalla</string>

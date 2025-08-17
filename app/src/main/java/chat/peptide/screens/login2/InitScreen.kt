@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.composables.generic.AnyLink
 import chat.peptide.composables.generic.Weblink
@@ -101,7 +101,7 @@ private fun LeadPart(windowSizeClass: WindowSizeClass) {
             Spacer(Modifier.height(64.dp))
         }
         Image(
-            painter = painterResource(R.drawable.revolt_logo_wide),
+            painter = painterResource(R.drawable.peptide_logo_wide),
             contentDescription = null,
             colorFilter = ColorFilter.tint(
                 MaterialTheme.colorScheme.onBackground
@@ -117,7 +117,7 @@ private fun LeadPart(windowSizeClass: WindowSizeClass) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            "Revolt is the chat app that’s truly built with you in mind.", // FIXME hardcoded string
+            "Peptide is the chat app that’s truly built with you in mind.", // FIXME hardcoded string
             style = MaterialTheme.typography.bodyLarge,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -158,15 +158,15 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
 
         Weblink(
             text = stringResource(R.string.terms_of_service),
-            url = "${RevoltAPI.getCurrentMarketingUrl()}/terms"
+            url = "${PeptideAPI.getCurrentMarketingUrl()}/terms"
         )
         Weblink(
             text = stringResource(R.string.privacy_policy),
-            url = "${RevoltAPI.getCurrentMarketingUrl()}/privacy"
+            url = "${PeptideAPI.getCurrentMarketingUrl()}/privacy"
         )
         Weblink(
             text = stringResource(R.string.community_guidelines),
-            url = "${RevoltAPI.getCurrentMarketingUrl()}/aup"
+            url = "${PeptideAPI.getCurrentMarketingUrl()}/aup"
         )
 
         if (BuildConfig.DEBUG) {

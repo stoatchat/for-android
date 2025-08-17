@@ -1,6 +1,6 @@
 package chat.peptide.api.routes.misc
 
-import chat.peptide.api.RevoltHttp
+import chat.peptide.api.PeptideHttp
 import chat.peptide.api.api
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Root(
-    val revolt: String,
+    val peptide: String,
     val features: Features,
     val ws: String,
     val app: String,
@@ -61,5 +61,5 @@ data class LiveKitNode(
 )
 
 suspend fun getRootRoute(): Root {
-    return RevoltHttp.get("/".api()).body()
+    return PeptideHttp.get("/".api()).body()
 }

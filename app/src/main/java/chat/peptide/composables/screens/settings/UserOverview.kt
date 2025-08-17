@@ -31,7 +31,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.SpecialUsers
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.internals.solidColor
@@ -47,7 +47,7 @@ import kotlinx.coroutines.runBlocking
 
 @Composable
 fun SelfUserOverview() {
-    val selfUser = RevoltAPI.userCache[RevoltAPI.selfId] ?: return
+    val selfUser = PeptideAPI.userCache[PeptideAPI.selfId] ?: return
 
     UserOverview(selfUser)
 }
@@ -115,7 +115,7 @@ fun RawUserOverview(
         if (background != null) {
             RemoteImage(
                 url = backgroundUrl
-                    ?: "${RevoltAPI.getCurrentFilesUrl()}/backgrounds/${if (background is AutumnResource) background.id else null}/${if (background is AutumnResource) background.filename else background}",
+                    ?: "${PeptideAPI.getCurrentFilesUrl()}/backgrounds/${if (background is AutumnResource) background.id else null}/${if (background is AutumnResource) background.filename else background}",
                 description = null,
                 modifier = Modifier
                     .height(128.dp)

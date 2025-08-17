@@ -73,7 +73,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.CategorisedChannelList
 import chat.peptide.api.internals.ChannelUtils
 import chat.peptide.api.internals.DirectMessages
@@ -114,7 +114,7 @@ fun ChannelSideDrawer(
     modifier: Modifier = Modifier
 ) {
 
-    val server = RevoltAPI.serverCache[currentServer]
+    val server = PeptideAPI.serverCache[currentServer]
     val categorisedChannels = server?.let {
         ChannelUtils.categoriseServerFlat(it)
     }
@@ -157,12 +157,12 @@ fun ChannelSideDrawer(
     // - Sort the servers that are in the ordering using the ordering.
     // - Add the servers that aren't in the ordering to the end of the list.
     // - Sort the servers that aren't in the ordering by their ID (creation order).
-    val serverList = ((RevoltAPI.serverCache.values.filter {
+    val serverList = ((PeptideAPI.serverCache.values.filter {
         SyncedSettings.ordering.servers.contains(
             it.id
         )
     }
-        .sortedBy { SyncedSettings.ordering.servers.indexOf(it.id) }) + (RevoltAPI.serverCache.values.filter {
+        .sortedBy { SyncedSettings.ordering.servers.indexOf(it.id) }) + (PeptideAPI.serverCache.values.filter {
         !SyncedSettings.ordering.servers.contains(
             it.id
         )
@@ -243,7 +243,7 @@ fun ChannelSideDrawer(
                         else -> {
                             val partner =
                                 if (dm.channelType == ChannelType.DirectMessage) {
-                                    RevoltAPI.userCache[
+                                    PeptideAPI.userCache[
                                         ChannelUtils.resolveDMPartner(
                                             dm
                                         )
@@ -304,7 +304,8 @@ fun ChannelSideDrawer(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.icn_explore_24dp),
-                            contentDescription = stringResource(R.string.discover_alt)
+                            contentDescription = stringResource(R.string.discover_alt),
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
@@ -323,7 +324,8 @@ fun ChannelSideDrawer(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.icn_add_24dp),
-                            contentDescription = stringResource(R.string.server_plus_alt)
+                            contentDescription = stringResource(R.string.server_plus_alt),
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
@@ -334,7 +336,7 @@ fun ChannelSideDrawer(
                 ) {
                     val serverInList = serverList[it]
                     val serverHasUnread =
-                        serverInList.id?.let { srvId -> RevoltAPI.unreads.serverHasUnread(srvId) }
+                        serverInList.id?.let { srvId -> PeptideAPI.unreads.serverHasUnread(srvId) }
                             ?: false
                     val leftIndicatorHeight = animateDpAsState(
                         targetValue = if (serverInList.id == currentServer) 32.dp
@@ -369,7 +371,7 @@ fun ChannelSideDrawer(
                                     serverInList.id?.let { srvId -> navigateToServer(srvId) }
                                 }) {
                             val icon = serverInList.icon?.id?.let { iconId ->
-                                "${RevoltAPI.getCurrentFilesUrl()}/icons/$iconId"
+                                "${PeptideAPI.getCurrentFilesUrl()}/icons/$iconId"
                             }
                             if (icon != null) {
                                 RemoteImage(
@@ -436,7 +438,7 @@ fun ChannelSideDrawer(
                 ) {
                     if (server?.banner != null) {
                         RemoteImage(
-                            url = "${RevoltAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
+                            url = "${PeptideAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
                             description = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -480,7 +482,7 @@ fun ChannelSideDrawer(
                                 if (server?.flags has ServerFlags.Official) {
                                     Icon(
                                         painter = painterResource(
-                                            id = R.drawable.ic_revolt_decagram_24dp
+                                            id = R.drawable.ic_peptide_decagram_24dp
                                         ),
                                         contentDescription = stringResource(
                                             R.string.server_flag_official
@@ -564,14 +566,14 @@ fun ChannelSideDrawer(
                 onClick = {
                     onDestinationChanged(ChatRouterDestination.Friends)
                 },
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
                 shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_new_message),
                     contentDescription = stringResource(R.string.message_friends),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
         }
@@ -615,11 +617,11 @@ private fun DirectMessagesChannelListRendererPreview() {
         "user2_id" to User(id = "user2_id", username = "User Two", avatar = null, online = false)
     )
 
-    // Simulate RevoltAPI cache for preview
-    RevoltAPI.channelCache.clear()
-    mockChannels.forEach { RevoltAPI.channelCache[it.id!!] = it }
-    RevoltAPI.userCache.clear()
-    mockUsers.forEach { (id, user) -> RevoltAPI.userCache[id] = user }
+    // Simulate PeptideAPI cache for preview
+    PeptideAPI.channelCache.clear()
+    mockChannels.forEach { PeptideAPI.channelCache[it.id!!] = it }
+    PeptideAPI.userCache.clear()
+    mockUsers.forEach { (id, user) -> PeptideAPI.userCache[id] = user }
 
 
     //ColumnScope is required for DirectMessagesChannelListRenderer, let's provide a dummy one
@@ -636,14 +638,14 @@ private fun DirectMessagesChannelListRendererPreview() {
 @Preview
 @Composable
 private fun DirectMessagesChannelListRendererEmptyPreview() {
-    // Simulate RevoltAPI cache for preview - empty state
-    RevoltAPI.channelCache.clear()
-    RevoltAPI.channelCache["saved_notes_channel_id"] = Channel(
+    // Simulate PeptideAPI cache for preview - empty state
+    PeptideAPI.channelCache.clear()
+    PeptideAPI.channelCache["saved_notes_channel_id"] = Channel(
         id = "saved_notes_channel_id",
         name = "Saved Messages",
         channelType = ChannelType.SavedMessages
     )
-    RevoltAPI.userCache.clear()
+    PeptideAPI.userCache.clear()
 
     //ColumnScope is required for DirectMessagesChannelListRenderer, let's provide a dummy one
     Column(Modifier.background(MaterialTheme.colorScheme.surface)) {
@@ -664,7 +666,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
     onOpenChannelContextSheet: (String) -> Unit,
 ) {
     val dmAbleChannels =
-        RevoltAPI.channelCache.values
+        PeptideAPI.channelCache.values
             .filter { it.channelType == ChannelType.DirectMessage || it.channelType == ChannelType.Group }
             .filter { if (it.channelType == ChannelType.DirectMessage) it.active == true else true }
             .sortedBy { it.lastMessageID ?: it.id }
@@ -677,7 +679,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
             .weight(1f)
     ) {
         item(key = "saved_messages") {
-            val notesChannel = RevoltAPI.channelCache.values.firstOrNull {
+            val notesChannel = PeptideAPI.channelCache.values.firstOrNull {
                 it.channelType == ChannelType.SavedMessages
             }
 
@@ -756,7 +758,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
 
                 val partner =
                     if (channel.channelType == ChannelType.DirectMessage) {
-                        RevoltAPI.userCache[
+                        PeptideAPI.userCache[
                             ChannelUtils.resolveDMPartner(
                                 channel
                             )
@@ -776,7 +778,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                         else -> false
                     },
                     hasUnread = channel.lastMessageID?.let { lastMessageID ->
-                        RevoltAPI.unreads.hasUnread(
+                        PeptideAPI.unreads.hasUnread(
                             channel.id!!,
                             lastMessageID,
                             serverId = null
@@ -859,7 +861,7 @@ private fun ColumnScope.ServerChannelListRenderer(
                             onDestinationChanged(dest)
                         },
                         hasUnread = channelOrCat.channel.lastMessageID?.let { lastMessageID ->
-                            RevoltAPI.unreads.hasUnread(
+                            PeptideAPI.unreads.hasUnread(
                                 channelOrCat.channel.id!!,
                                 lastMessageID,
                                 serverId
@@ -981,7 +983,7 @@ fun ChannelItem(
             Text(
                 text = (ChannelUtils.resolveName(channel) ?: stringResource(R.string.unknown))
                         + if (appendServerName && channel.server != null) {
-                    " (${RevoltAPI.serverCache[channel.server]?.name ?: stringResource(R.string.unknown)})"
+                    " (${PeptideAPI.serverCache[channel.server]?.name ?: stringResource(R.string.unknown)})"
                 } else {
                     ""
                 },

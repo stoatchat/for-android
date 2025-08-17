@@ -55,7 +55,7 @@ val FragmentMono = FontFamily(
     Font(R.font.fragmentmono_italic, FontWeight.Normal, FontStyle.Italic)
 )
 
-val RevoltTypography = Typography(
+val PeptideTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = InterDisplay,
         fontWeight = FontWeight.Black,

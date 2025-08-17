@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import chat.peptide.BuildConfig
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.User
 import chat.peptide.composables.profile.UserCard
 import chat.peptide.internals.Platform
@@ -62,7 +62,7 @@ fun UserCardSheet(user: User?) {
         val folder = File(
             context.cacheDir,
             "usercards"
-        ).let { File(it, RevoltAPI.selfId.toString()) }
+        ).let { File(it, PeptideAPI.selfId.toString()) }
 
         try {
             folder.mkdirs()
@@ -114,7 +114,7 @@ fun UserCardSheet(user: User?) {
         val folder = File(
             context.cacheDir,
             "usercards"
-        ).let { File(it, RevoltAPI.selfId.toString()) }
+        ).let { File(it, PeptideAPI.selfId.toString()) }
 
         folder.mkdirs()
         val bitmap = cardGraphics.toImageBitmap()

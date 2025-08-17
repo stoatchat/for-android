@@ -1,9 +1,9 @@
 package chat.peptide.api.routes.server
 
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltError
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideError
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.api
 import chat.peptide.api.schemas.Member
 import chat.peptide.api.schemas.ServerWithChannelObjects
@@ -25,7 +25,7 @@ data class FetchMembersResponse(
 )
 
 suspend fun ackServer(serverId: String) {
-    RevoltHttp.put("/servers/$serverId/ack".api())
+    PeptideHttp.put("/servers/$serverId/ack".api())
 }
 
 suspend fun fetchMembers(
@@ -33,55 +33,55 @@ suspend fun fetchMembers(
     includeOffline: Boolean = false,
     pure: Boolean = false
 ): FetchMembersResponse {
-    val response = RevoltHttp.get("/servers/$serverId/members".api()) {
+    val response = PeptideHttp.get("/servers/$serverId/members".api()) {
         parameter("exclude_offline", !includeOffline)
     }
 
     val responseContent = response.bodyAsText()
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), responseContent)
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), responseContent)
         throw Error(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
     val membersResponse =
-        RevoltJson.decodeFromString(FetchMembersResponse.serializer(), responseContent)
+        PeptideJson.decodeFromString(FetchMembersResponse.serializer(), responseContent)
 
     if (pure) {
         return membersResponse
     }
 
     membersResponse.members.forEach { member ->
-        if (!RevoltAPI.members.hasMember(serverId, member.id!!.user)) {
-            RevoltAPI.members.setMember(serverId, member)
+        if (!PeptideAPI.members.hasMember(serverId, member.id!!.user)) {
+            PeptideAPI.members.setMember(serverId, member)
         }
     }
 
     membersResponse.users.forEach { user ->
-        user.id?.let { RevoltAPI.userCache.putIfAbsent(it, user) }
+        user.id?.let { PeptideAPI.userCache.putIfAbsent(it, user) }
     }
 
     return membersResponse
 }
 
 suspend fun fetchMember(serverId: String, userId: String, pure: Boolean = false): Member {
-    val response = RevoltHttp.get("/servers/$serverId/members/$userId".api())
+    val response = PeptideHttp.get("/servers/$serverId/members/$userId".api())
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response.bodyAsText())
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response.bodyAsText())
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    val member = RevoltJson.decodeFromString(Member.serializer(), response.bodyAsText())
+    val member = PeptideJson.decodeFromString(Member.serializer(), response.bodyAsText())
 
     if (!pure) {
         member.id?.let {
-            if (!RevoltAPI.members.hasMember(serverId, it.user)) {
-                RevoltAPI.members.setMember(serverId, member)
+            if (!PeptideAPI.members.hasMember(serverId, it.user)) {
+                PeptideAPI.members.setMember(serverId, member)
             }
         }
     }
@@ -90,7 +90,7 @@ suspend fun fetchMember(serverId: String, userId: String, pure: Boolean = false)
 }
 
 suspend fun leaveOrDeleteServer(serverId: String, leaveSilently: Boolean = false) {
-    RevoltHttp.delete("/servers/$serverId".api()) {
+    PeptideHttp.delete("/servers/$serverId".api()) {
         parameter("leave_silently", leaveSilently)
     }
 }
@@ -109,16 +109,16 @@ suspend fun createServer(
 ): ServerWithChannelObjects {
     val body = ServerCreationBody(name, description, nsfw)
 
-    val response = RevoltHttp.post("/servers/create".api()) {
-        setBody(RevoltJson.encodeToString(ServerCreationBody.serializer(), body))
+    val response = PeptideHttp.post("/servers/create".api()) {
+        setBody(PeptideJson.encodeToString(ServerCreationBody.serializer(), body))
     }
 
     try {
-        val error = RevoltJson.decodeFromString(RevoltError.serializer(), response.bodyAsText())
+        val error = PeptideJson.decodeFromString(PeptideError.serializer(), response.bodyAsText())
         throw Exception(error.type)
     } catch (e: SerializationException) {
         // Not an error
     }
 
-    return RevoltJson.decodeFromString(ServerWithChannelObjects.serializer(), response.bodyAsText())
+    return PeptideJson.decodeFromString(ServerWithChannelObjects.serializer(), response.bodyAsText())
 }

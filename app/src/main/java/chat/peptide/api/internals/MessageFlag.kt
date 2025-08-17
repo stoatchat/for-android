@@ -3,7 +3,7 @@ package chat.peptide.api.internals
 /**
  * Flags for messages that can be set to modify their behavior.
  *
- * See [Reference](https://docs.rs/revolt-models/latest/revolt_models/v0/enum.MessageFlags.html) for
+ * See [Reference](https://docs.rs/peptide-models/latest/peptide_models/v0/enum.MessageFlags.html) for
  * values
  *
  * `shl 0` is not used.

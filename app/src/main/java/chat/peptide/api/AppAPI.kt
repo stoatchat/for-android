@@ -5,8 +5,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import chat.peptide.BuildConfig
-import chat.peptide.RevoltApplication
-import chat.peptide.api.RevoltAPI.initialize
+import chat.peptide.PeptideApplication
+import chat.peptide.api.PeptideAPI.initialize
 import chat.peptide.api.internals.Members
 import chat.peptide.api.realtime.DisconnectionState
 import chat.peptide.api.realtime.RealtimeSocket
@@ -58,7 +58,7 @@ import chat.peptide.api.schemas.Channel as ChannelSchema
  * Enum representing available platforms in the application.
  */
 enum class ApplicationPlatform(val baseUrl: String) {
-    REVOLT("https://api.revolt.chat"),
+    REVOLT("https://api.peptide.chat"),
     PEP("https://peptide.chat/api");
 
     companion object {
@@ -117,7 +117,7 @@ object UrlsStorageKeys {
 }
 
 fun String.api(): String {
-    return "${RevoltAPI.getCurrentBaseUrl()}$this"
+    return "${PeptideAPI.getCurrentBaseUrl()}$this"
 }
 
 /**
@@ -128,27 +128,27 @@ private fun getUrlForPlatform(platform: ApplicationPlatform, urlSelector: (Platf
 }
 
 fun buildUserAgent(accessMethod: String = "Ktor"): String {
-    return "$accessMethod RevoltAndroid/${BuildConfig.VERSION_NAME} " +
+    return "$accessMethod PeptideAndroid/${BuildConfig.VERSION_NAME} " +
             "${BuildConfig.APPLICATION_ID} Android/${android.os.Build.VERSION.SDK_INT} " +
             "(${android.os.Build.MANUFACTURER} ${android.os.Build.DEVICE}) Kotlin/${KotlinVersion.CURRENT}"
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-val RevoltJson = Json {
+val PeptideJson = Json {
     ignoreUnknownKeys = true
     explicitNulls = false
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-val RevoltCbor = Cbor {
+val PeptideCbor = Cbor {
     ignoreUnknownKeys = true
 }
 
-val RevoltHttp by lazy {
+val PeptideHttp by lazy {
     HttpClient(OkHttp) {
         install(DefaultRequest)
         install(ContentNegotiation) {
-            json(RevoltJson)
+            json(PeptideJson)
         }
 
         install(WebSockets)
@@ -167,15 +167,15 @@ val RevoltHttp by lazy {
         install(Logging) { level = LogLevel.INFO }
 
         val chuckerCollector = ChuckerCollector(
-            context = RevoltApplication.instance,
+            context = PeptideApplication.instance,
             showNotification = true,
             retentionPeriod = RetentionManager.Period.ONE_DAY
         )
 
-        val chuckerInterceptor = ChuckerInterceptor.Builder(RevoltApplication.instance)
+        val chuckerInterceptor = ChuckerInterceptor.Builder(PeptideApplication.instance)
             .collector(chuckerCollector)
             .maxContentLength(250_000L)
-            .redactHeaders(RevoltAPI.TOKEN_HEADER_NAME)
+            .redactHeaders(PeptideAPI.TOKEN_HEADER_NAME)
             .alwaysReadResponseBody(true)
             .createShortcut(false)
             .build()
@@ -184,8 +184,8 @@ val RevoltHttp by lazy {
             addInterceptor { chain ->
                 val request = chain.request().newBuilder()
                     .apply {
-                        if (chain.request().headers[RevoltAPI.TOKEN_HEADER_NAME] == null) {
-                            header(RevoltAPI.TOKEN_HEADER_NAME, RevoltAPI.sessionToken)
+                        if (chain.request().headers[PeptideAPI.TOKEN_HEADER_NAME] == null) {
+                            header(PeptideAPI.TOKEN_HEADER_NAME, PeptideAPI.sessionToken)
                         }
                     }
                     .build()
@@ -195,7 +195,7 @@ val RevoltHttp by lazy {
         }
 
         defaultRequest {
-            url(RevoltAPI.getCurrentBaseUrl())
+            url(PeptideAPI.getCurrentBaseUrl())
             header("User-Agent", buildUserAgent())
         }
     }
@@ -203,7 +203,7 @@ val RevoltHttp by lazy {
 
 val mainHandler = Handler(Looper.getMainLooper())
 
-object RevoltAPI {
+object PeptideAPI {
     const val TOKEN_HEADER_NAME = "x-session-token"
 
     val userCache = mutableStateMapOf<String, User>()
@@ -245,7 +245,7 @@ object RevoltAPI {
      * Saves the current platform selection to persistent storage.
      */
     private suspend fun savePlatformSelection() {
-        val kvStorage = RevoltApplication.instance.getKVStorage()
+        val kvStorage = PeptideApplication.instance.getKVStorage()
         kvStorage.set(UrlsStorageKeys.PLATFORM, selectedApplicationPlatform.name)
     }
 
@@ -253,7 +253,7 @@ object RevoltAPI {
      * Loads the platform selection from persistent storage.
      */
     suspend fun loadPlatformSelection() {
-        val kvStorage = RevoltApplication.instance.getKVStorage()
+        val kvStorage = PeptideApplication.instance.getKVStorage()
         val applicationPlatformName = kvStorage.get(UrlsStorageKeys.PLATFORM) ?: ApplicationPlatform.REVOLT.name
         selectedApplicationPlatform = try {
             ApplicationPlatform.valueOf(applicationPlatformName)
@@ -304,19 +304,19 @@ object RevoltAPI {
                     try {
                         RealtimeSocket.connect(sessionToken)
                     } catch (e: SocketException) {
-                        Log.d("RevoltAPI", "Socket closed, probably no big deal /// " + e.message)
+                        Log.d("PeptideAPI", "Socket closed, probably no big deal /// " + e.message)
                         RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
                     } catch (e: Exception) {
-                        Log.e("RevoltAPI", "WebSocket error", e)
+                        Log.e("PeptideAPI", "WebSocket error", e)
                         RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
                     }
                 }
             } catch (e: Exception) {
                 try {
                     if (e is InterruptedException) {
-                        Log.d("RevoltAPI", "Socket interrupted")
+                        Log.d("PeptideAPI", "Socket interrupted")
                     } else {
-                        Log.e("RevoltAPI", "WebSocket error", e)
+                        Log.e("PeptideAPI", "WebSocket error", e)
                     }
                     RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
                 } catch (e: Exception) {
@@ -330,7 +330,7 @@ object RevoltAPI {
         connectWS()
 
         // Send a ping every roughly 30 seconds else the socket dies
-        // Same interval as the web clients (/revolt.js)
+        // Same interval as the web clients (/peptide.js)
         // Note: This will run even if the socket is closed (sendPing will just exit early)
         mainHandler.post(object : Runnable {
             override fun run() {
@@ -398,7 +398,7 @@ object RevoltAPI {
      */
     fun hydrateFromPersistentCache() {
         if (!openForLocalHydration) {
-            Log.w("RevoltAPI", "Hydration is closed, but was called")
+            Log.w("PeptideAPI", "Hydration is closed, but was called")
             // Stale data is worst case, let's track it even in prod
             Sentry.captureMessage("Local hydration called twice or after real data was fetched")
             return
@@ -476,7 +476,7 @@ object RevoltAPI {
 }
 
 @Serializable
-data class RevoltError(val type: String)
+data class PeptideError(val type: String)
 
 @Serializable
 data class RateLimitResponse(@SerialName("retry_after") val retryAfter: Int) {

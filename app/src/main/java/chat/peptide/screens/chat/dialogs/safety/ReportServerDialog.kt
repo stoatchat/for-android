@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.safety.putServerReport
 import chat.peptide.api.schemas.ContentReportReason
 import chat.peptide.composables.generic.FormTextField
@@ -50,7 +50,7 @@ enum class ServerReportFlowState {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
-    val server = RevoltAPI.serverCache[serverId]
+    val server = PeptideAPI.serverCache[serverId]
     if (server == null) {
         onDismiss()
         return

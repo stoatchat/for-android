@@ -59,7 +59,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.revolt_onboarding),
+                painter = painterResource(id = R.drawable.peptide_onboarding),
                 contentDescription = stringResource(id = R.string.register_image_alt),
                 modifier = Modifier
                     .size(300.dp)

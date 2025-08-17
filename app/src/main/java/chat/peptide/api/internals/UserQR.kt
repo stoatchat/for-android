@@ -1,7 +1,7 @@
 package chat.peptide.api.internals
 
 import androidx.core.net.toUri
-import chat.peptide.api.RevoltCbor
+import chat.peptide.api.PeptideCbor
 import chat.peptide.api.schemas.User
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -21,8 +21,8 @@ data class UserQRContents(
 object UserQR {
     @OptIn(ExperimentalSerializationApi::class, ExperimentalEncodingApi::class)
     fun contents(user: User): String {
-        return "https://revolt.chat/qr?" + Base64.encode(
-            RevoltCbor.encodeToByteArray(
+        return "https://peptide.chat/qr?" + Base64.encode(
+            PeptideCbor.encodeToByteArray(
                 UserQRContents.serializer(),
                 UserQRContents(
                     format = "rqr\$user\$0",
@@ -45,7 +45,7 @@ object UserQR {
             val uri = uriString.toUri()
             val base64 = uri.query ?: return null
             val decodedBytes = Base64.decode(base64)
-            RevoltCbor.decodeFromByteArray(UserQRContents.serializer(), decodedBytes)
+            PeptideCbor.decodeFromByteArray(UserQRContents.serializer(), decodedBytes)
         } catch (e: Exception) {
             null
         }

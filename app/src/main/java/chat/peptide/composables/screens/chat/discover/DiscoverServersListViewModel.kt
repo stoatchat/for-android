@@ -2,7 +2,7 @@ package chat.peptide.composables.screens.chat.discover
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import chat.peptide.api.RevoltError
+import chat.peptide.api.PeptideError
 import chat.peptide.api.routes.googlesheets.ServerData
 import chat.peptide.api.routes.googlesheets.ServerDataRepository
 import chat.peptide.api.routes.invites.fetchInviteByCode
@@ -34,7 +34,7 @@ data class DiscoverUiState(
     val selectedInviteCode: String? = null,
     val processingServerId: String? = null,
     val loadedInviteData: Invite? = null,
-    val loadedError: RevoltError? = null
+    val loadedError: PeptideError? = null
 )
 
 @HiltViewModel
@@ -108,7 +108,7 @@ class DiscoverServersListViewModel @Inject constructor(
             } catch (_: Exception) {
                 updateState { 
                     it.copy(
-                        loadedError = RevoltError("Unknown"),
+                        loadedError = PeptideError("Unknown"),
                         selectedInviteCode = inviteCode,
                         processingServerId = null
                     )
@@ -120,11 +120,11 @@ class DiscoverServersListViewModel @Inject constructor(
     /**
      * Join server without showing loading in the server list
      */
-    fun joinServerWithoutProcessingIndicator(inviteCode: String): Flow<RsResult<InviteJoined, RevoltError>> = flow {
+    fun joinServerWithoutProcessingIndicator(inviteCode: String): Flow<RsResult<InviteJoined, PeptideError>> = flow {
         try {
             emit(joinInviteByCode(inviteCode))
         } catch (_: Exception) {
-            emit(RsResult.err(RevoltError("Unknown")))
+            emit(RsResult.err(PeptideError("Unknown")))
         }
     }.flowOn(Dispatchers.IO)
     

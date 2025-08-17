@@ -1,6 +1,6 @@
 package chat.peptide.api.schemas
 
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,7 +31,7 @@ data class Message(
     val tail: Boolean? = null // this is used to determine if the message is the last in a message group
 ) {
     fun getAuthor(): User? {
-        return author?.let { RevoltAPI.userCache[it] }
+        return author?.let { PeptideAPI.userCache[it] }
     }
 
     fun mergeWithPartial(partial: Message): Message {

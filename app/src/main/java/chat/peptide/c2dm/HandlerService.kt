@@ -12,8 +12,8 @@ import androidx.core.app.RemoteInput
 import androidx.core.graphics.drawable.IconCompat
 import chat.peptide.R
 import chat.peptide.activities.MainActivity
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.routes.push.subscribePush
 import chat.peptide.api.schemas.Message
@@ -51,13 +51,13 @@ class HandlerService : FirebaseMessagingService() {
 
         Log.d("HandlerService", payloadString)
 
-        val payload = RevoltJson.parseToJsonElement(payloadString).jsonObject
+        val payload = PeptideJson.parseToJsonElement(payloadString).jsonObject
         val keys = payload.keys.toList().toString()
         Log.d("HandlerService", "following keys: $keys")
 
         var authorIcon = payload["icon"]?.jsonPrimitive?.contentOrNull
         val message = payload["message"]?.jsonObject?.let {
-            RevoltJson.decodeFromJsonElement(
+            PeptideJson.decodeFromJsonElement(
                 Message.serializer(),
                 it
             )
@@ -67,7 +67,7 @@ class HandlerService : FirebaseMessagingService() {
         }
 
         val user = payload["message"]?.jsonObject?.get("user")?.jsonObject?.let {
-            RevoltJson.decodeFromJsonElement(
+            PeptideJson.decodeFromJsonElement(
                 User.serializer(),
                 it
             )
@@ -78,7 +78,7 @@ class HandlerService : FirebaseMessagingService() {
 
         if (authorIcon == null) {
             authorIcon =
-                "${RevoltAPI.getCurrentBaseUrl()}/users/${message.author?.ifBlank { "0".repeat(26) }}/default_avatar"
+                "${PeptideAPI.getCurrentBaseUrl()}/users/${message.author?.ifBlank { "0".repeat(26) }}/default_avatar"
         }
 
         val db = Database(SqlStorage.driver)

@@ -63,7 +63,7 @@ import androidx.compose.ui.unit.sp
 import chat.peptide.R
 import chat.peptide.activities.media.ImageViewActivity
 import chat.peptide.activities.media.VideoViewActivity
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.internals.MessageFlag
 import chat.peptide.api.internals.Roles
@@ -103,7 +103,7 @@ fun authorColour(message: MessageSchema): Brush {
     } else {
         val defaultColour = Brush.solidColor(LocalContentColor.current)
 
-        val serverId = RevoltAPI.channelCache[message.channel]?.server ?: return defaultColour
+        val serverId = PeptideAPI.channelCache[message.channel]?.server ?: return defaultColour
 
         val highestRole = message.author?.let {
             Roles.resolveHighestRole(serverId, it, withColour = true)
@@ -121,14 +121,14 @@ fun authorName(message: MessageSchema): String {
     }
 
     val serverId =
-        RevoltAPI.channelCache[message.channel]?.server
-            ?: return RevoltAPI.userCache[message.author]?.let { User.resolveDefaultName(it) }
+        PeptideAPI.channelCache[message.channel]?.server
+            ?: return PeptideAPI.userCache[message.author]?.let { User.resolveDefaultName(it) }
                 ?: stringResource(R.string.unknown)
 
-    val member = message.author?.let { RevoltAPI.members.getMember(serverId, it) }
+    val member = message.author?.let { PeptideAPI.members.getMember(serverId, it) }
         ?: return stringResource(R.string.unknown)
     return member.nickname
-        ?: RevoltAPI.userCache[message.author]?.let { User.resolveDefaultName(it) }
+        ?: PeptideAPI.userCache[message.author]?.let { User.resolveDefaultName(it) }
         ?: stringResource(R.string.unknown)
 }
 
@@ -139,11 +139,11 @@ fun authorAvatarUrl(message: MessageSchema): String? {
     }
 
     val serverId =
-        RevoltAPI.channelCache[message.channel]?.server ?: return null
-    val member = message.author?.let { RevoltAPI.members.getMember(serverId, it) }
+        PeptideAPI.channelCache[message.channel]?.server ?: return null
+    val member = message.author?.let { PeptideAPI.members.getMember(serverId, it) }
         ?: return null
 
-    return member.avatar?.let { "${RevoltAPI.getCurrentFilesUrl()}/avatars/${it.id}" }
+    return member.avatar?.let { "${PeptideAPI.getCurrentFilesUrl()}/avatars/${it.id}" }
 }
 
 fun viewUrlInBrowser(ctx: android.content.Context, url: String) {
@@ -184,7 +184,7 @@ fun viewUrlInBrowser(ctx: android.content.Context, url: String) {
 
 fun viewAttachmentInBrowser(ctx: android.content.Context, attachment: AutumnResource) {
     val url =
-        "${RevoltAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
+        "${PeptideAPI.getCurrentFilesUrl()}/attachments/${attachment.id}/${attachment.filename}"
     viewUrlInBrowser(ctx, url)
 }
 
@@ -229,7 +229,7 @@ fun Message(
     fromWebhook: Boolean = false,
     webhookName: String? = null,
 ) {
-    val author = RevoltAPI.userCache[message.author] ?: return CircularProgressIndicator()
+    val author = PeptideAPI.userCache[message.author] ?: return CircularProgressIndicator()
     val context = LocalContext.current
 
     val scope = rememberCoroutineScope()
@@ -261,8 +261,8 @@ fun Message(
     var mentionsSelfRole by remember(message) { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         val serverId =
-            RevoltAPI.channelCache[message.channel]?.server ?: return@LaunchedEffect
-        var selfMember = RevoltAPI.selfId?.let { RevoltAPI.members.getMember(serverId, it) }
+            PeptideAPI.channelCache[message.channel]?.server ?: return@LaunchedEffect
+        var selfMember = PeptideAPI.selfId?.let { PeptideAPI.members.getMember(serverId, it) }
             ?: return@LaunchedEffect
         var messageRoleMentions = MessageProcessor.findMentionedRoleIDs(message.content)
 
@@ -312,7 +312,7 @@ fun Message(
         } else {
             Column(
                 modifier = Modifier.then(
-                    if ((message.mentions?.contains(RevoltAPI.selfId) == true)
+                    if ((message.mentions?.contains(PeptideAPI.selfId) == true)
                         || mentionsSelfRole
                         || message.flags has MessageFlag.MentionsOnline
                         || message.flags has MessageFlag.MentionsEveryone
@@ -326,7 +326,7 @@ fun Message(
                 )
             ) {
                 message.replies?.forEach { reply ->
-                    val replyMessage = RevoltAPI.messageCache[reply]
+                    val replyMessage = PeptideAPI.messageCache[reply]
 
                     message.channel?.let { chId ->
                         InReplyTo(
@@ -462,7 +462,7 @@ fun Message(
                                 if (Experiments.useKotlinBasedMarkdownRenderer.isEnabled) {
                                     CompositionLocalProvider(
                                         LocalJBMarkdownTreeState provides LocalJBMarkdownTreeState.current.copy(
-                                            currentServer = RevoltAPI.channelCache[message.channel]?.server,
+                                            currentServer = PeptideAPI.channelCache[message.channel]?.server,
                                             fontSizeMultiplier = Gigamoji.useGigamojiForMessage(
                                                 message.content
                                             )
@@ -477,7 +477,7 @@ fun Message(
                                 } else {
                                     CompositionLocalProvider(
                                         LocalMarkdownTreeConfig provides LocalMarkdownTreeConfig.current.copy(
-                                            currentServer = RevoltAPI.channelCache[message.channel]?.server,
+                                            currentServer = PeptideAPI.channelCache[message.channel]?.server,
                                             fontSizeMultiplier = Gigamoji.useGigamojiForMessage(
                                                 message.content
                                             )

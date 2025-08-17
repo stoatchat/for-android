@@ -74,7 +74,7 @@ fun JBMSandbox(navController: NavController) {
                 submitMdSource = """# Full range of MD now supported!
 1. Text with **bold**, *italics*, and ***both***!
 2. You ~~can't see me~~.
-3. [I'm a link to another website.](<https://revolt.chat>)
+3. [I'm a link to another website.](<https://peptide.chat>)
 4. I'm a spoiler with ||**bold text inside it**||
     - I'm a sub-item on this list...
         - Let's go even deeper...
@@ -91,7 +91,7 @@ let x = "I'm a multi-line code block!";
 
 | Timestamp | Mention | Channel Link | Message Link |
 |:-:|:-:|:-:|:-:|
-| <t:1663846662:f> | <@01EX2NCWQ0CHS3QJF0FEQS1GR4> | <#01H73F4RAHTPBHKJ1XBQDXK3NQ> | https://revolt.chat/server/01F7ZSBSFHQ8TA81725KQCSDDP/channel/01F92C5ZXBQWQ8KY7J8KY917NM/01J25XZM9JXVVJDDKFPB7Q48HZ |"""
+| <t:1663846662:f> | <@01EX2NCWQ0CHS3QJF0FEQS1GR4> | <#01H73F4RAHTPBHKJ1XBQDXK3NQ> | https://peptide.chat/server/01F7ZSBSFHQ8TA81725KQCSDDP/channel/01F92C5ZXBQWQ8KY7J8KY917NM/01J25XZM9JXVVJDDKFPB7Q48HZ |"""
             }) {
                 Text("Submit test document")
             }

@@ -62,9 +62,9 @@ fun property(fileName: String, propertyName: String, fallbackEnv: String? = null
     }
 }
 
-// Calls property but with revoltbuild.properties as the first argument
+// Calls property but with peptidebuild.properties as the first argument
 fun buildproperty(propertyName: String, fallbackEnv: String? = null): String? {
-    return property("revoltbuild.properties", propertyName, fallbackEnv)
+    return property("peptidebuild.properties", propertyName, fallbackEnv)
 }
 
 android {

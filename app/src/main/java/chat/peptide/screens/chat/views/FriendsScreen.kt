@@ -89,7 +89,7 @@ import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
 import chat.peptide.components.vectorassets.HL_TAG
 import chat.peptide.components.vectorassets.HL_USERNAME
-import chat.peptide.components.vectorassets.RevoltTagIntro
+import chat.peptide.components.vectorassets.PeptideTagIntro
 import chat.peptide.composables.chat.MemberListItem
 import chat.peptide.composables.generic.CountableListHeader
 import chat.peptide.composables.generic.UserAvatar
@@ -151,7 +151,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    imageVector = RevoltTagIntro,
+                    imageVector = PeptideTagIntro,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
@@ -183,7 +183,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                     TextField(
                         value = username,
                         onValueChange = {
-                            // Cf. https://github.com/revoltchat/backend/blob/aab1734615ac3e09cd447d2c2862ae0f33f5ce5f/crates/delta/src/routes/onboard/complete.rs#L16
+                            // Cf. https://github.com/peptidechat/backend/blob/aab1734615ac3e09cd447d2c2862ae0f33f5ce5f/crates/delta/src/routes/onboard/complete.rs#L16
                             if (it.length <= 32 && it.all { char ->
                                     char.isLetterOrDigit() ||
                                             char == '_' || char == '.' || char == '-'

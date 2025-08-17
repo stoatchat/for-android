@@ -13,14 +13,14 @@ import androidx.compose.ui.unit.dp
 const val HL_USERNAME = 0xFF4799F0
 const val HL_TAG = 0xFF3ABF7E
 
-val RevoltTagIntro: ImageVector
+val PeptideTagIntro: ImageVector
     @Composable
     get() {
-        if (_RevoltTagIntro != null) {
-            return _RevoltTagIntro!!
+        if (_PeptideTagIntro != null) {
+            return _PeptideTagIntro!!
         }
-        _RevoltTagIntro = ImageVector.Builder(
-            name = "RevoltTagIntro",
+        _PeptideTagIntro = ImageVector.Builder(
+            name = "PeptideTagIntro",
             defaultWidth = 700.dp,
             defaultHeight = 412.dp,
             viewportWidth = 700f,
@@ -833,17 +833,17 @@ val RevoltTagIntro: ImageVector
             }
         }.build()
 
-        return _RevoltTagIntro!!
+        return _PeptideTagIntro!!
     }
 
 @Suppress("ObjectPropertyName")
-private var _RevoltTagIntro: ImageVector? = null
+private var _PeptideTagIntro: ImageVector? = null
 
 @Preview(showBackground = true)
 @Composable
-fun RevoltTagIntroPreview() {
+fun PeptideTagIntroPreview() {
     Image(
-        imageVector = RevoltTagIntro,
+        imageVector = PeptideTagIntro,
         contentDescription = null
     )
 }

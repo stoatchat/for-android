@@ -49,7 +49,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.auth.fetchAllSessions
 import chat.peptide.api.routes.auth.logoutAllSessions
 import chat.peptide.api.routes.auth.logoutSessionById
@@ -71,7 +71,7 @@ class SessionSettingsScreenViewModel : ViewModel() {
             currentSession = sessions.firstOrNull { it.isCurrent() }
             Log.d(
                 "SessionSettingsScreen",
-                "Current session: $currentSession. Current session ID: ${RevoltAPI.sessionId}"
+                "Current session: $currentSession. Current session ID: ${PeptideAPI.sessionId}"
             )
             isLoading = false
         }

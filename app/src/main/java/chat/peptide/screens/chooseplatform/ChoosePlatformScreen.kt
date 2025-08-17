@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.peptide.R
 import chat.peptide.api.ApplicationPlatform
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.composables.generic.SquareButton
 
 @Composable
@@ -54,7 +54,7 @@ fun ChoosePlatformScreen(navController: NavController) {
     ) {
         Image(
             modifier = Modifier.padding(vertical = 24.dp),
-            painter = painterResource(id = R.drawable.pep_logo_wide),
+            painter = painterResource(id = R.drawable.peptide_logo_wide),
             contentDescription = "Pep Wide Logo"
         )
 
@@ -143,7 +143,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                         .padding(bottom = 8.dp)
                         .size(72.dp)
                         .clickable {
-                            apiUrlValue.value = "https://api.revolt.chat"
+                            apiUrlValue.value = "https://api.peptide.chat"
                         },
                 ) {
                     Box(
@@ -152,12 +152,12 @@ fun ChoosePlatformScreen(navController: NavController) {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.ic_revolt_r),
-                            contentDescription = "Revolt Logo"
+                            contentDescription = "Peptide Logo"
                         )
                     }
                 }
                 Text(
-                    text = "Revolt",
+                    text = "Peptide",
                     color = MaterialTheme.colorScheme.onBackground.copy(
                         alpha = 0.5f
                     ),
@@ -194,10 +194,10 @@ fun ChoosePlatformScreen(navController: NavController) {
             onClick = {
                 if(apiUrlValue.value.isNotEmpty()){
                     when(apiUrlValue.value){
-                        ApplicationPlatform.PEP.baseUrl -> RevoltAPI.setPlatform(
+                        ApplicationPlatform.PEP.baseUrl -> PeptideAPI.setPlatform(
                             ApplicationPlatform.PEP
                         )
-                        ApplicationPlatform.REVOLT.baseUrl -> RevoltAPI.setPlatform(
+                        ApplicationPlatform.REVOLT.baseUrl -> PeptideAPI.setPlatform(
                             ApplicationPlatform.REVOLT
                         )
                         else -> return@SquareButton

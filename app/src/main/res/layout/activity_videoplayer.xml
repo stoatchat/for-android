@@ -24,7 +24,7 @@
                 app:navigationIcon="@drawable/ic_arrow_left_24dp"
                 app:menu="@menu/menu_videoplayer"
                 app:navigationIconTint="?attr/colorOnSurface"
-                style="@style/Widget.Revolt.Toolbar" />
+                style="@style/Widget.Peptide.Toolbar" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.media3.ui.PlayerView

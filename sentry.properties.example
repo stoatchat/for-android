@@ -1,4 +1,4 @@
 defaults.url=https://sentry.actual.tld
-defaults.project=not-revolt
+defaults.project=not-peptide
 defaults.org=generic-chat-platform-inc
 auth.token=

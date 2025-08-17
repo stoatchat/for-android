@@ -12,7 +12,7 @@
     <string name="login_onboarding_heading">Намерете своята общност, свържете се със света.</string>
     <string name="loading">Извличаме информация, моля изчакайте…</string>
     <string name="login_heading">Нека ви впишем</string>
-    <string name="login_onboarding_body">Revolt е един от най-добрите начини да поддържате връзка с вашите приятели и общност, навсякъде и по всяко време.</string>
+    <string name="login_onboarding_body">Peptide е един от най-добрите начини да поддържате връзка с вашите приятели и общност, навсякъде и по всяко време.</string>
     <string name="email">Имейл</string>
     <string name="password">Парола</string>
     <string name="login">Влез</string>
@@ -24,8 +24,8 @@
     <string name="password_manager_hint">Използвате мениджър на пароли\?</string>
     <string name="password_forgot_heading">Забравена парола\?</string>
     <string name="password_forgot_instructions">Въведете вашия имейл и ние ще ви изпратим инструкции как да нулирате паролата си.</string>
-    <string name="register_heading">Добре дошли в Revolt</string>
-    <string name="register_image_alt">Използвай Revolt, за да говориш за различни неща.</string>
+    <string name="register_heading">Добре дошли в Peptide</string>
+    <string name="register_image_alt">Използвай Peptide, за да говориш за различни неща.</string>
     <string name="register_instructions">Това е като място за висене, събиране и разговаряне. Най-хубавото е, че е в интернет.</string>
     <string name="register_form_heading">Нека да ви настроим.</string>
     <string name="register_data">Вашите лични данни са в безопасност при нас. Ние не ги продаваме и не ги използваме, за да ви показваме реклами.</string>

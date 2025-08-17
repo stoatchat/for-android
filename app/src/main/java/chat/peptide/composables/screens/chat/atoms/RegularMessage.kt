@@ -42,7 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.Channel
 import chat.peptide.api.schemas.Message
 import chat.peptide.api.settings.LoadedSettings
@@ -162,7 +162,7 @@ fun RegularMessage(
                 }
             },
             onNameClick = {
-                val author = message.author?.let { RevoltAPI.userCache[it] } ?: return@Message
+                val author = message.author?.let { PeptideAPI.userCache[it] } ?: return@Message
                 putTextAtCursorPosition("@${author.username}#${author.discriminator}")
             },
             canReply = true,

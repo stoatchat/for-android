@@ -1,10 +1,10 @@
 ---
 title: Geographic Availability of the Beta Test
-description: Find out where you can join the beta test for Revolt on Android.
+description: Find out where you can join the beta test for Peptide on Android.
 template: doc
 ---
 
-The beta test for Revolt on Android is available for testers in the following jurisdictions:
+The beta test for Peptide on Android is available for testers in the following jurisdictions:
 
 - Armenia
 - Australia

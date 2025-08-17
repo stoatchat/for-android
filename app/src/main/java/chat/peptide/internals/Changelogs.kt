@@ -1,9 +1,9 @@
 package chat.peptide.internals
 
 import android.content.Context
-import chat.peptide.api.RevoltAPI
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideAPI
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.internals.IndexHolder.cachedIndex
 import chat.peptide.persistence.KVStorage
 import io.ktor.client.request.get
@@ -55,9 +55,9 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
         }
 
         try {
-            val response = RevoltHttp.get("${RevoltAPI.getCurrentKjBookUrl()}/changelogs.json")
+            val response = PeptideHttp.get("${PeptideAPI.getCurrentKjBookUrl()}/changelogs.json")
             cachedIndex =
-                RevoltJson.decodeFromString(ChangelogIndex.serializer(), response.bodyAsText())
+                PeptideJson.decodeFromString(ChangelogIndex.serializer(), response.bodyAsText())
             return cachedIndex as ChangelogIndex
         } catch (e: Error) {
             return ChangelogIndex()
@@ -66,8 +66,8 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
 
     suspend fun fetchChangelogByVersionCode(versionCode: Long): Changelog {
         try {
-            val response = RevoltHttp.get("${RevoltAPI.getCurrentKjBookUrl()}/changelogs/$versionCode.json")
-            return RevoltJson.decodeFromString(Changelog.serializer(), response.bodyAsText())
+            val response = PeptideHttp.get("${PeptideAPI.getCurrentKjBookUrl()}/changelogs/$versionCode.json")
+            return PeptideJson.decodeFromString(Changelog.serializer(), response.bodyAsText())
         } catch (e: Error) {
             return Changelog(
                 id = "",

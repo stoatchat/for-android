@@ -1,6 +1,6 @@
 # Android App Links Setup Instructions
 
-This document provides instructions for setting up Android App Links for the Revolt app.
+This document provides instructions for setting up Android App Links for the Peptide app.
 
 ## What are Android App Links?
 
@@ -45,8 +45,8 @@ Open the `assetlinks.json` file in this directory and replace the placeholder wi
 Upload the `assetlinks.json` file to the following location on your server:
 
 ```
-https://revolt.chat/.well-known/assetlinks.json
-https://app.revolt.chat/.well-known/assetlinks.json
+https://peptide.chat/.well-known/assetlinks.json
+https://app.peptide.chat/.well-known/assetlinks.json
 ```
 
 Make sure the file is accessible via HTTPS and returns with Content-Type: application/json.
@@ -56,7 +56,7 @@ Make sure the file is accessible via HTTPS and returns with Content-Type: applic
 Use the Android Debug Bridge (ADB) to test your App Links:
 
 ```bash
-adb shell am start -a android.intent.action.VIEW -d "https://revolt.chat/channels/CHANNEL_ID" chat.peptide
+adb shell am start -a android.intent.action.VIEW -d "https://peptide.chat/channels/CHANNEL_ID" chat.peptide
 ```
 
 ## Troubleshooting

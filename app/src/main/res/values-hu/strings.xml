@@ -8,7 +8,7 @@
     <string name="terms_of_service">Szolgáltatási feltételek</string>
     <string name="privacy_policy">Adatvédelmi szabályzat</string>
     <string name="community_guidelines">Közösségi aranyszabályok</string>
-    <string name="login_onboarding_body">A Revolt az egyik legjobb módja annak, hogy bárhol, bármikor tudd tartani a közösségeddel, ismerőseiddel a kapcsolatot.</string>
+    <string name="login_onboarding_body">A Peptide az egyik legjobb módja annak, hogy bárhol, bármikor tudd tartani a közösségeddel, ismerőseiddel a kapcsolatot.</string>
     <string name="email">E-mail</string>
     <string name="password">Jelszó</string>
     <string name="login">Bejelentkezés</string>
@@ -18,8 +18,8 @@
     <string name="resend_verification">Visszaigazoló e-mail újraküldése</string>
     <string name="password_manager_hint">Használsz jelszókezelőt\?</string>
     <string name="password_forgot_heading">Nem emlékszel a jelszavadra\?</string>
-    <string name="register_heading">Üdvözöl a Revolt</string>
-    <string name="register_image_alt">A dolgaid megbeszéléséhez gyere a Revoltra.</string>
+    <string name="register_heading">Üdvözöl a Peptide</string>
+    <string name="register_image_alt">A dolgaid megbeszéléséhez gyere a Peptidera.</string>
     <string name="register_form_heading">Állítsuk be a dolgaidat!</string>
     <string name="signup">Regisztrálás</string>
     <string name="register_data">Az adataidat biztonságban tudhatod nálunk. Nem adjuk el és nem használjuk fel, hogy reklámokat mutogassunk neked.</string>
@@ -43,9 +43,9 @@
     <string name="mfa_totp_code">Kód</string>
     <string name="mfa_recovery_lead">Add meg az egyik helyreállító kódod</string>
     <string name="mfa_recovery_code">Kód</string>
-    <string name="mfa_password_header">A Revolt-jelszavad helye</string>
-    <string name="mfa_password_lead">A folytatáshoz add meg a Revolt-jelszavad</string>
-    <string name="about">A Revoltról</string>
+    <string name="mfa_password_header">A Peptide-jelszavad helye</string>
+    <string name="mfa_password_lead">A folytatáshoz add meg a Peptide-jelszavad</string>
+    <string name="about">A Peptideról</string>
     <string name="comingsoon_toast">Sajnáljuk, de ez a lehetőség még nem áll készen a használatra.</string>
     <string name="typing_one">%1$s éppen gépel…</string>
     <string name="typing_many">%1$s éppen gépelnek…</string>
@@ -177,7 +177,7 @@
     <string name="settings_category_miscellaneous">Különféleségek</string>
     <string name="settings_appearance_theme">Színséma</string>
     <string name="settings_appearance_theme_none">Rendszer</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Világos</string>
     <string name="settings_appearance_theme_amoled">Tisztán fekete</string>
     <string name="settings_feedback">Visszajelzés</string>
@@ -187,7 +187,7 @@
     <string name="login_onboarding_heading">Találj rá a közösségedre, lépj kapcsolatba a világgal!</string>
     <string name="password_forgot">Nem emlékszel a jelszavadra\?</string>
     <string name="password_forgot_instructions">Miután megadtad az e-mail-címed, levelet küldünk a jelszó megváltoztatásának mikéntjéről.</string>
-    <string name="register_instructions">A Revolt olyan hely, ahol össze tudtok jönni, meg tudjátok beszélni a dolgaitokat. A legjobb ebben az, hogy mindezt az Interneten lógva tudjátok csinálni.</string>
+    <string name="register_instructions">A Peptide olyan hely, ahol össze tudtok jönni, meg tudjátok beszélni a dolgaitokat. A legjobb ebben az, hogy mindezt az Interneten lógva tudjátok csinálni.</string>
     <string name="onboarding_changeable">Ha meggondolnád magad, később a felhasználónevedet a beállításokban bármikor megváltoztathatod.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">A Material You-t nem támogatja a készüléked.</string>
     <string name="register_password_rules">Álljon nyolcból, vagy többől. A gyakoriak nem jók. Ajánlott szimbólumokat és számokat használni.</string>
@@ -212,7 +212,7 @@
     <string name="report_reason_content_spam_abuse">Spam vagy egyéb visszaélés a platformmal</string>
     <string name="report_reason_user_inappropriate_content">Nem helyénvaló tartalom (például NSFW)</string>
     <string name="report_reason_additional">Kiegészítő információ</string>
-    <string name="report_submit_thanks">Köszönjük, amiért segíted megőrizni a Revolt biztonságát. Amint lehetséges, felülvizsgáljuk jelentésed.</string>
+    <string name="report_submit_thanks">Köszönjük, amiért segíted megőrizni a Peptide biztonságát. Amint lehetséges, felülvizsgáljuk jelentésed.</string>
     <string name="invite_message">Meghívtak erre a szerverre. Csatlakozol\?</string>
     <string name="invite_error_unknown">Nem ismert hiba történt</string>
     <string name="media_viewer_share_audio">Hang megosztása</string>
@@ -224,13 +224,13 @@
     <string name="user_info_sheet_cancel_request">Visszavonom a jelölést</string>
     <string name="settings_profile_custom_background">Egyéni háttér</string>
     <string name="settings_appearance_colour_overrides_on_primary">Aktív elsődleges</string>
-    <string name="oss_attribution_body">A Revoltot ezeknek a remek, nyílt foráskódú projekteknek köszönhetően készítettük el.</string>
+    <string name="oss_attribution_body">A Peptideot ezeknek a remek, nyílt foráskódú projekteknek köszönhetően készítettük el.</string>
     <string name="oss_attribution_body_2">Hálásak vagyunk a fejlesztőiknek, hogy elérhetővé tették munkájukat a világ számára.</string>
     <string name="oss_attribution_warning">Az alábbi listát automatikusan hozták létre, ezért hiányos vagy pontatlan lehet.</string>
     <string name="oss_attribution_generation_date">Legutóbb frissítve: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Koppints a licenchez</string>
-    <string name="about_full_name">Androidos Revolt</string>
-    <string name="about_brought_to_you_by">❤️-tel készítette el Neked a Revolt csapata.</string>
+    <string name="about_full_name">Androidos Peptide</string>
+    <string name="about_brought_to_you_by">❤️-tel készítette el Neked a Peptide csapata.</string>
     <string name="about_tab_version">Verzió</string>
     <string name="about_tab_details">Részletek</string>
     <string name="pick_emoji_alt">Válassz emodzsit</string>
@@ -242,7 +242,7 @@
     <string name="emoji_category_symbols">Jelképek</string>
     <string name="emoji_category_flags">Zászlók</string>
     <string name="badge_platform_moderation_alt">Platformmoderáció</string>
-    <string name="badge_team_member_alt">Revolt-csapattag</string>
+    <string name="badge_team_member_alt">Peptide-csapattag</string>
     <string name="home_join_jenvolt">Csatlakozz a Jenvolthoz</string>
     <string name="friends">Ismerősök</string>
     <string name="friends_incoming_requests">Ismerősnek jelölt meg</string>
@@ -373,7 +373,7 @@
     <string name="home_join_jenvolt_description">A Jenvolt a fejlesztők által vitt, androidos appal és minden mással kapcsolatos hely. Itt kérhetsz segítséget és jelezhetsz vissza nekünk. Lehet, új feature-öket is kipróbálhatsz majd! 👀</string>
     <string name="message_field_denied_platform_moderation">Ez egy bizalmas csatorna, ahonnan a moderáló csapatunk küld értesítéseket. Ide nem tudsz üzenetet írni.</string>
     <string name="status_focus_explainer">Nem kapsz értesítéseket az üzenetekről, viszont az @említésekről szólóakat megkapod.</string>
-    <string name="status_invisible_explainer">Szokás szerint használhatod a Revoltot, viszont a többiek offlineként fognak Téged látni.</string>
+    <string name="status_invisible_explainer">Szokás szerint használhatod a Peptideot, viszont a többiek offlineként fognak Téged látni.</string>
     <string name="server_context_sheet_actions_leave_confirm">Végleg elhagyod ezt a helyet\? „%1$s”</string>
     <string name="user_info_sheet_user_not_found_description">Vagy már törölték a tagot, vagy pedig nincs engedélyed őt megtekinteni.</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_5">Közepesen sötét bőrszín</string>
@@ -382,7 +382,7 @@
     <string name="settings_appearance_colour_overrides_inverse_surface">A felület fordítottja</string>
     <string name="settings_appearance_colour_overrides_import_error">Hibás ez a színsémát felülíró fájl.</string>
     <string name="discover_alt">Fedezd fel</string>
-    <string name="discover">Fedezd fel a Revoltot</string>
+    <string name="discover">Fedezd fel a Peptideot</string>
     <string name="report_server_heading">Oszd meg velünk, mi baj van ezzel a szerverrel</string>
     <string name="report_message_heading">Oszd meg velünk, mi baj van ezzel az üzenettel</string>
     <string name="report_user_heading">Oszd meg velünk, mi baj van ezzel a taggal</string>
@@ -412,11 +412,11 @@
     <string name="invite_dialog_close">Bezár</string>
     <string name="invite_dialog_header">#%1$s meghívója</string>
     <string name="share_target_search_channels">Csatonák keresése</string>
-    <string name="share_target_login_first">Jelentkezz be, mielőtt megosztanád a Revolton!</string>
+    <string name="share_target_login_first">Jelentkezz be, mielőtt megosztanád a Peptideon!</string>
     <string name="share_target_select_channel">Válaszd ki, hova szeretnéd megosztani!</string>
-    <string name="share_target_heading">Megosztás a Revolton</string>
+    <string name="share_target_heading">Megosztás a Peptideon</string>
     <string name="share_target_invalid_intent">Nem oszthatsz meg érvénytelen „intentet”</string>
-    <string name="share_target_attachment_too_large">A Revolttal legfeljebb $1$s méretű csatolmányt tudsz megosztani</string>
+    <string name="share_target_attachment_too_large">A Peptidetal legfeljebb $1$s méretű csatolmányt tudsz megosztani</string>
     <string name="channel_age_gate_title">Ez a csatorna NSFW-ként van jelölve</string>
     <string name="channel_age_gate_description">18 évnél idősebbnek kell lenned a csatorna megtekintéséhez.</string>
     <string name="channel_age_gate_dob_section">Születési időd</string>
@@ -434,7 +434,7 @@
     <string name="message_context_sheet_actions_delete_confirmation_body">Örökre el fog veszni (ami sok idő)!</string>
     <string name="message_context_sheet_actions_delete_confirmation_yes">Törlés</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Mégsem törlöm</string>
-    <string name="settings_feedback_description">Csatlakozz a Revolt szerveréhez – itt jelezhetsz vissza nekünk és tudsz minket elérni, jelentheted a hibákat.</string>
+    <string name="settings_feedback_description">Csatlakozz a Peptide szerveréhez – itt jelezhetsz vissza nekünk és tudsz minket elérni, jelentheted a hibákat.</string>
     <string name="friends_new_group">Új csoport</string>
     <string name="create_group_description">Szedd össze a csapatodat csoportos chatbe. Legfeljebb %1$d személyt adhatsz hozzá.</string>
     <string name="user_info_sheet_user_is_bot">Ez egy Robi 🤖</string>

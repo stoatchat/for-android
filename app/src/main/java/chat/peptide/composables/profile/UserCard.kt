@@ -142,32 +142,32 @@ fun UserCard(
             LocalTextStyle provides LocalTextStyle.current.copy(
                 fontFamily = FontFamily(
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(200)),
                         weight = FontWeight.ExtraLight
                     ),
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(300)),
                         weight = FontWeight.Light
                     ),
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(400)),
                         weight = FontWeight.Normal
                     ),
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(500)),
                         weight = FontWeight.Medium
                     ),
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(700)),
                         weight = FontWeight.Bold
                     ),
                     Font(
-                        R.font.revolt_usercard,
+                        R.font.peptide_usercard,
                         variationSettings = FontVariation.Settings(FontVariation.weight(900)),
                         weight = FontWeight.Black
                     )
@@ -342,7 +342,7 @@ fun UserCard(
                 }
 
                 Text(
-                    "revolt.chat",
+                    "peptide.chat",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier

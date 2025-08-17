@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import chat.peptide.BuildConfig
-import chat.peptide.RevoltApplication
+import chat.peptide.PeptideApplication
 import chat.peptide.persistence.KVStorage
 
 class ExperimentInstance(default: Boolean) {
@@ -31,7 +31,7 @@ object Experiments {
     val enableServerIdentityOptions = ExperimentInstance(false)
 
     suspend fun hydrateWithKv() {
-        val kvStorage = KVStorage(RevoltApplication.instance)
+        val kvStorage = KVStorage(PeptideApplication.instance)
 
         if (BuildConfig.DEBUG) {
             LoadedSettings.experimentsEnabled = true

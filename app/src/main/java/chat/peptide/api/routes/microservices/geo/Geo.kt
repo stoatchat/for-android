@@ -1,8 +1,8 @@
 package chat.peptide.api.routes.microservices.geo
 
 import chat.peptide.api.HitRateLimitException
-import chat.peptide.api.RevoltHttp
-import chat.peptide.api.RevoltJson
+import chat.peptide.api.PeptideHttp
+import chat.peptide.api.PeptideJson
 import chat.peptide.api.buildUserAgent
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -18,12 +18,12 @@ data class GeoResponse(
 
 suspend fun queryGeo(): GeoResponse {
     try {
-        val response = RevoltHttp.get("https://geo.revolt.chat/?client=android") {
+        val response = PeptideHttp.get("https://geo.peptide.chat/?client=android") {
             header("User-Agent", buildUserAgent("Ktor queryGeo"))
         }
 
         if (response.status == HttpStatusCode.OK) {
-            return RevoltJson.decodeFromString(response.bodyAsText())
+            return PeptideJson.decodeFromString(response.bodyAsText())
         } else throw Exception("Failed to query geo: ${response.status.value} ${response.status.description}")
     } catch (e: Exception) {
         throw Exception("Failed to query geo: ${e.message}", e).also {

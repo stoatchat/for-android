@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
-import chat.peptide.api.RevoltAPI
+import chat.peptide.api.PeptideAPI
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.routes.channel.SendMessageReply
 import chat.peptide.api.schemas.Message
@@ -48,8 +48,8 @@ fun replyContentText(message: Message): String {
 
 @Composable
 fun ManageableReply(reply: SendMessageReply, onToggleMention: () -> Unit, onRemove: () -> Unit) {
-    val replyMessage = RevoltAPI.messageCache[reply.id] ?: return onRemove()
-    val replyAuthor = RevoltAPI.userCache[replyMessage.author] ?: return onRemove()
+    val replyMessage = PeptideAPI.messageCache[reply.id] ?: return onRemove()
+    val replyAuthor = PeptideAPI.userCache[replyMessage.author] ?: return onRemove()
 
     Row(
         modifier = Modifier
