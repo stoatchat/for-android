@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -63,6 +61,7 @@ import chat.peptide.api.PeptideJson
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.ListHeader
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.screens.settings.appearance.ColourChip
 import chat.peptide.composables.screens.settings.appearance.CornerRadiusPicker
 import chat.peptide.sheets.ColourPickerSheet
@@ -317,23 +316,12 @@ fun AppearanceSettingsScreen(
                     ColourChip(
                         color = Color(0xff333642),
                         text = stringResource(id = R.string.settings_appearance_theme_peptide),
-                        selected = LoadedSettings.theme == Theme.None,
+                        selected = LoadedSettings.theme == Theme.PEPTIDE_DARK,
                         modifier = Modifier
                             .weight(1f)
                             .testTag("set_theme_peptide")
                     ) {
-                        viewModel.saveNewTheme(Theme.None)
-                    }
-
-                    ColourChip(
-                        color = if (isSystemInDarkTheme()) Color(0xff333642) else Color(0xfff7f7f7),
-                        text = stringResource(id = R.string.settings_appearance_theme_none),
-                        selected = LoadedSettings.theme == Theme.None,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_none")
-                    ) {
-                        viewModel.saveNewTheme(Theme.None)
+                        viewModel.saveNewTheme(Theme.PEPTIDE_DARK)
                     }
 
                     if (systemSupportsDynamicColors()) {
@@ -425,7 +413,7 @@ fun AppearanceSettingsScreen(
                                 .fillMaxWidth()
                                 .padding(horizontal = 20.dp)
                         ) {
-                            TextButton(
+                            PepTextButton(
                                 onClick = {
                                     filePicker.launch(arrayOf("*/*"))
                                 },
@@ -443,7 +431,7 @@ fun AppearanceSettingsScreen(
                                 )
                             }
 
-                            TextButton(
+                            PepTextButton(
                                 onClick = {
                                     fileSaver.launch("${SyncedSettings.android.theme}-colours.rato")
                                 },

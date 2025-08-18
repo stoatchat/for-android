@@ -141,7 +141,9 @@ import chat.peptide.composables.chat.MessageField
 import chat.peptide.composables.chat.SystemMessage
 import chat.peptide.composables.emoji.EmojiPicker
 import chat.peptide.composables.generic.GroupIcon
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.PresenceBadge
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.generic.UserAvatar
 import chat.peptide.composables.generic.UserAvatarWidthPlaceholder
 import chat.peptide.composables.generic.presenceFromStatus
@@ -337,6 +339,13 @@ fun ChannelScreen(
         scope.launch {
             try {
                 val cameraProvider = cameraProviderFuture.get()
+                // Ensure there's a camera available to bind to
+                val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                if (!cameraProvider.hasCamera(cameraSelector)) {
+                    Toast.makeText(context, "No camera available", Toast.LENGTH_SHORT).show()
+                    Log.e("ChannelScreen", "No camera available to bind")
+                    return@launch
+                }
                 cameraProvider.unbindAll() // Unbind previous use cases
 
                 val name = "peptide-photo-${System.currentTimeMillis()}.jpg"
@@ -353,6 +362,14 @@ fun ChannelScreen(
                     )
                     .build()
 
+                // Bind use cases before taking picture
+                val preview = CameraPreview.Builder().build() // Dummy preview, not shown
+                cameraProvider.bindToLifecycle(
+                    lifecycleOwner,
+                    cameraSelector,
+                    preview, // Bind a preview as it's often required
+                    imageCapture
+                )
                 imageCapture.takePicture(
                     outputOptions,
                     ContextCompat.getMainExecutor(context),
@@ -1091,7 +1108,7 @@ fun ChannelScreen(
                                                 Row(
                                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                                                 ) {
-                                                    Button(
+                                                    SquareButton(
                                                         onClick = {
                                                             viewModel.dismissPhysicalKeyboardSpark()
                                                         },
@@ -1099,7 +1116,7 @@ fun ChannelScreen(
                                                     ) {
                                                         Text(stringResource(R.string.spark_keyboard_shortcuts_dismiss))
                                                     }
-                                                    TextButton(
+                                                    PepTextButton(
                                                         onClick = {
                                                             (context as Activity).requestShowKeyboardShortcuts()
                                                         },

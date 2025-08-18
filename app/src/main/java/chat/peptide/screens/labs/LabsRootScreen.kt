@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.peptide.api.settings.FeatureFlags
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.screens.labs.ui.mockups.NewLoginExperienceMockup
 import chat.peptide.screens.labs.ui.sandbox.CoreLibSandbox
 import chat.peptide.screens.labs.ui.sandbox.GradientEditorSandbox
@@ -26,7 +27,7 @@ fun LabsGuard(onTurnBack: () -> Unit = {}, content: @Composable () -> Unit) {
         AlertDialog(
             onDismissRequest = { onTurnBack() },
             confirmButton = {
-                TextButton(onClick = { onTurnBack() }) {
+                PepTextButton(onClick = { onTurnBack() }) {
                     Text("Turn back")
                 }
             },

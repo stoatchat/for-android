@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun DisconnectedScreen(onRetry: () -> Unit) {
@@ -45,7 +46,7 @@ fun DisconnectedScreen(onRetry: () -> Unit) {
                 .fillMaxWidth()
         )
 
-        Button(onClick = onRetry) {
+        SquareButton(onClick = onRetry) {
             Text(stringResource(R.string.tap_to_retry))
         }
     }

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun SettingsHintBanner(
@@ -72,7 +73,7 @@ private fun SimpleSettingsHintBannerPreview() {
             )
         },
         button = {
-            Button(onClick = {}) {
+            SquareButton(onClick = {}) {
                 Text("Let's test it out!")
             }
         },

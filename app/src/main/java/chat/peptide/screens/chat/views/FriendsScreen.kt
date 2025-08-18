@@ -23,7 +23,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +36,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
@@ -92,6 +90,8 @@ import chat.peptide.components.vectorassets.HL_USERNAME
 import chat.peptide.components.vectorassets.PeptideTagIntro
 import chat.peptide.composables.chat.MemberListItem
 import chat.peptide.composables.generic.CountableListHeader
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.generic.UserAvatar
 import chat.peptide.internals.extensions.zero
 import chat.peptide.markdown.jbm.asHexString
@@ -240,7 +240,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             scope.launch {
                                 val clipboardText =
@@ -279,7 +279,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                     ) {
                         Text(stringResource(R.string.friends_add_by_tag_sheet_paste_from_clipboard))
                     }
-                    Button(
+                    SquareButton(
                         onClick = {
                             scope.launch {
                                 if (username.isNotBlank() && tag.isNotBlank()) {
@@ -353,7 +353,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
-                        Button(
+                        SquareButton(
                             onClick = {
                                 qrResult = null
                                 contents = null
@@ -413,7 +413,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        Button(
+                        SquareButton(
                             onClick = {
                                 scope.launch {
                                     contents?.let { userContents ->
@@ -451,7 +451,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean = false, onDrawerCli
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
-                        Button(
+                        SquareButton(
                             onClick = {
                                 qrResult = null
                                 contents = null

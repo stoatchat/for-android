@@ -86,7 +86,7 @@ fun InlineMediaPicker(
             if (canRemove) {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(
+                PepTextButton(
                     onClick = {
                         onRemove()
                     },

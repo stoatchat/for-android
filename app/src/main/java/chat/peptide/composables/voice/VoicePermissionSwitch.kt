@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.peptide.R
+import chat.peptide.composables.generic.SquareButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -116,7 +117,7 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Button(
+                SquareButton(
                     onClick = {
                         if (fullyRevoked) {
                             // Launch settings to allow the user to manually enable permissions

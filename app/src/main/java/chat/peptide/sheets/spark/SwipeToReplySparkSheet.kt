@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.vectorassets.SwipeToReplySpark
 
 @Composable
@@ -51,13 +51,13 @@ fun SwipeToReplySparkSheet(
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            TextButton(
+            PepTextButton(
                 onClick = onOpenOptions,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(stringResource(R.string.spark_swipe_to_reply_customise))
             }
-            Button(
+            SquareButton(
                 onClick = onDismissSheet,
                 modifier = Modifier.fillMaxWidth()
             ) {

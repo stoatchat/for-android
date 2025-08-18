@@ -64,6 +64,8 @@ import chat.peptide.api.routes.microservices.autumn.uploadToAutumn
 import chat.peptide.api.schemas.Channel
 import chat.peptide.composables.generic.InlineMediaPicker
 import chat.peptide.composables.generic.ListHeader
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.http.ContentType
@@ -257,7 +259,7 @@ fun ChannelSettingsOverview(
                 }
             },
             confirmButton = {
-                Button(
+                SquareButton(
                     onClick = {
                         viewModel.toggleNsfw()
                     }
@@ -270,7 +272,7 @@ fun ChannelSettingsOverview(
                 }
             },
             dismissButton = {
-                TextButton(
+                PepTextButton(
                     onClick = {
                         viewModel.showNsfwToggleDialogue = false
                     }

@@ -25,6 +25,8 @@ import chat.peptide.BuildConfig
 import chat.peptide.PeptideApplication
 import chat.peptide.api.settings.Experiments
 import chat.peptide.api.settings.LoadedSettings
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.persistence.KVStorage
 import chat.peptide.settings.dsl.SettingsPage
 import chat.peptide.settings.dsl.SubcategoryContentInsets
@@ -121,7 +123,7 @@ fun ExperimentsSettingsScreen(
                 Text("The changes you made require a restart to take effect.")
             },
             confirmButton = {
-                Button(
+                SquareButton(
                     onClick = {
                         viewModel.restartApp(context)
                     }
@@ -130,7 +132,7 @@ fun ExperimentsSettingsScreen(
                 }
             },
             dismissButton = {
-                TextButton(
+                PepTextButton(
                     onClick = {
                         viewModel.showNeedsRestartAlert.value = false
                     }

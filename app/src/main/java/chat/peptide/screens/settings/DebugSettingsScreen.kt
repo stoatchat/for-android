@@ -50,6 +50,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.peptide.R
 import chat.peptide.api.routes.push.subscribePush
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.dialogs.NotificationRationaleDialog
 import chat.peptide.persistence.Database
 import chat.peptide.persistence.KVStorage
@@ -178,7 +180,7 @@ fun DebugSettingsScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
+                PepTextButton(onClick = {
                     showC2dmDataDialogue = false
                 }) {
                     Text("OK")
@@ -239,7 +241,7 @@ fun DebugSettingsScreen(
                     ElevatedButton(onClick = { viewModel.forgetSwipeToReplySpark() }) {
                         Text("Forget swipe to reply spark")
                     }
-                    Button(onClick = { viewModel.forgetAllSparks() }) {
+                    SquareButton(onClick = { viewModel.forgetAllSparks() }) {
                         Text("Forget all sparks")
                     }
                 }

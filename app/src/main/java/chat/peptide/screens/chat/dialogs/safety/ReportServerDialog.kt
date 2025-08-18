@@ -37,6 +37,7 @@ import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.safety.putServerReport
 import chat.peptide.api.schemas.ContentReportReason
 import chat.peptide.composables.generic.FormTextField
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.screens.settings.ServerOverview
 import kotlinx.coroutines.launch
 
@@ -169,7 +170,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -179,7 +180,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             state.value = ServerReportFlowState.Sending
                         },
@@ -263,7 +264,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -303,7 +304,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },

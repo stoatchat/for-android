@@ -97,7 +97,7 @@ private val PeptideColorScheme = darkColorScheme(
 )
 
 enum class Theme {
-    None,
+    PEPTIDE_DARK,
     M3Dynamic,
 }
 
@@ -120,15 +120,12 @@ fun getColorScheme(
             context
         )
 
-        requestedTheme == Theme.None && systemInDarkTheme -> PeptideColorScheme
-//        requestedTheme == Theme.None && !systemInDarkTheme -> LightColorScheme
+        requestedTheme == Theme.PEPTIDE_DARK -> PeptideColorScheme
         else -> PeptideColorScheme
     }.copy()
 
     val colorSchemeIsDark = when {
         m3Supported && requestedTheme == Theme.M3Dynamic -> isSystemInDarkTheme()
-        requestedTheme == Theme.None && systemInDarkTheme -> true
-        requestedTheme == Theme.None && !systemInDarkTheme -> false
         else -> true
     }
 
@@ -140,6 +137,7 @@ fun getColorScheme(
             @Suppress("DEPRECATION")
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars =
                 !colorSchemeIsDark
+
         }
     }
 
@@ -176,15 +174,13 @@ fun systemSupportsDynamicColors(): Boolean {
 }
 
 fun getDefaultTheme(): Theme {
-    return when {
-        systemSupportsDynamicColors() -> Theme.M3Dynamic
-        else -> Theme.None
-    }
+    return Theme.PEPTIDE_DARK
 }
 
 fun isThemeDark(theme: Theme, systemIsDark: Boolean): Boolean {
     return when (theme) {
-        Theme.M3Dynamic, Theme.None -> systemIsDark
+        Theme.M3Dynamic,
+        Theme.PEPTIDE_DARK -> true
     }
 }
 

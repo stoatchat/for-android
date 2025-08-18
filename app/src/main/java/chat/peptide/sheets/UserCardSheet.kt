@@ -14,11 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +38,8 @@ import chat.peptide.BuildConfig
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.schemas.User
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.profile.UserCard
 import chat.peptide.internals.Platform
 import kotlinx.coroutines.Dispatchers
@@ -200,7 +200,7 @@ fun UserCardSheet(user: User?) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             shareCard()
@@ -220,7 +220,7 @@ fun UserCardSheet(user: User?) {
                     )
                 }
 
-                TextButton(
+                PepTextButton(
                     onClick = {
                         scope.launch {
                             copyCard()

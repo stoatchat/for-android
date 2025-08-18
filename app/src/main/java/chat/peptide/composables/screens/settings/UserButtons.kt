@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -42,6 +41,7 @@ import chat.peptide.api.routes.user.unfriendUser
 import chat.peptide.api.schemas.User
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.Platform
 import kotlinx.coroutines.launch
 import logcat.LogPriority
@@ -61,7 +61,7 @@ fun UserButtons(
     var menuOpen by remember { mutableStateOf(false) }
 
     if (user.id == null) return Row {
-        Button(
+        SquareButton(
             onClick = {
                 scope.launch {
                     try {
@@ -88,7 +88,7 @@ fun UserButtons(
         when (user.relationship) {
             "None" -> {
                 if (user.bot == null) {
-                    Button(
+                    SquareButton(
                         onClick = {
                             scope.launch {
                                 try {
@@ -134,7 +134,7 @@ fun UserButtons(
             }
 
             "User" -> {
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             ActionChannel.send(Action.TopNavigate("settings/profile"))
@@ -176,7 +176,7 @@ fun UserButtons(
             }
 
             "Outgoing" -> {
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             try {
@@ -194,7 +194,7 @@ fun UserButtons(
             }
 
             "Incoming" -> {
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             try {
@@ -209,7 +209,7 @@ fun UserButtons(
                 ) {
                     Text(stringResource(R.string.user_info_sheet_accept_request))
                 }
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             try {
@@ -231,7 +231,7 @@ fun UserButtons(
             }
 
             "Blocked" -> {
-                Button(
+                SquareButton(
                     onClick = {
                         scope.launch {
                             try {

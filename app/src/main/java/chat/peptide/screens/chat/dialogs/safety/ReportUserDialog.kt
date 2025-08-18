@@ -36,6 +36,7 @@ import chat.peptide.api.routes.safety.putUserReport
 import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.schemas.UserReportReason
 import chat.peptide.composables.generic.FormTextField
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.screens.settings.UserOverview
 import kotlinx.coroutines.launch
 
@@ -162,7 +163,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -172,7 +173,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             state.value = UserReportFlowState.Sending
                         },
@@ -267,7 +268,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -277,7 +278,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             scope.launch {
                                 blockUser(userId)
@@ -320,7 +321,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },

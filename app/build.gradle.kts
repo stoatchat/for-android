@@ -163,6 +163,8 @@ android {
     lint {
         abortOnError = false
         disable += "MissingTranslation"
+        disable += "NullSafeMutableLiveData"
+//        checkReleaseBuilds false
     }
 }
 

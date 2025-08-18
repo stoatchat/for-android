@@ -16,14 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,7 +50,9 @@ import chat.peptide.api.schemas.Emoji
 import chat.peptide.api.schemas.User
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.composables.chat.MemberListItem
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.RemoteImage
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.text.MessageProcessor
 import chat.peptide.persistence.KVStorage
 import kotlinx.coroutines.launch
@@ -181,7 +181,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                         title = { Text("Traveller, you may not unsee your knowledge...") },
                         text = { Text("Experimental features are already unlocked.") },
                         confirmButton = {
-                            TextButton(onClick = { showEnabledAlreadyAlert = false }) {
+                            PepTextButton(onClick = { showEnabledAlreadyAlert = false }) {
                                 Text("OK")
                             }
                         }
@@ -194,7 +194,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                         title = { Text("You hear a faint whisper in the wind...") },
                         text = { Text("Would you like to enable experimental features? They may be unstable.") },
                         confirmButton = {
-                            TextButton(onClick = {
+                            PepTextButton(onClick = {
                                 showEnabledConfirmAlert = false
                                 LoadedSettings.experimentsEnabled = true
                                 scope.launch {
@@ -205,7 +205,7 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                             }
                         },
                         dismissButton = {
-                            Button(onClick = { showEnabledConfirmAlert = false }) {
+                            SquareButton(onClick = { showEnabledConfirmAlert = false }) {
                                 Text("I shall not risk it.")
                             }
                         }

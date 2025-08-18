@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.sp
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.channel.createInvite
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.Platform
 import chat.peptide.ui.theme.FragmentMono
 import kotlinx.coroutines.Job
@@ -196,13 +198,13 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = {
+                PepTextButton(onClick = {
                     onDismissRequest()
                 }) {
                     Text(stringResource(R.string.invite_dialog_close))
                 }
                 Spacer(Modifier.width(8.dp))
-                Button(onClick = {
+                SquareButton(onClick = {
                     clipboardManager.setText(AnnotatedString.Builder().apply {
                         append(PeptideAPI.getCurrentInvitesUrl())
                         append("/")

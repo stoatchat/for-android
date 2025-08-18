@@ -208,13 +208,19 @@ fun ChannelSideDrawer(
                                     onDestinationChanged(ChatRouterDestination.Home)
                                 }
                                 .size(48.dp)
-                                .background(MaterialTheme.colorScheme.primaryContainer),
+                                .background(
+                                    color = if (currentDestination is ChatRouterDestination.Home) {
+                                        MaterialTheme.colorScheme.secondaryContainer
+                                    } else MaterialTheme.colorScheme.primaryContainer
+                                ),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_direct_messages),
                                 contentDescription = stringResource(R.string.discover_alt),
-                                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                                tint = if (currentDestination is ChatRouterDestination.Home) {
+                                    MaterialTheme.colorScheme.onSecondaryContainer
+                                } else MaterialTheme.colorScheme.onBackground
                             )
                         }
                     }
@@ -292,20 +298,32 @@ fun ChannelSideDrawer(
                     Box(
                         Modifier
                             .padding(8.dp)
-                            .clip(RoundedCornerShape(16.dp))
+                            .clip(animateDpAsState(
+                                targetValue = if (currentDestination is ChatRouterDestination.Discover) 16.dp else 24.dp,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                label = "Discover button corner radius"
+                            ).value.let { RoundedCornerShape(it) })
                             .clickable {
                                 onDestinationChanged(
                                     ChatRouterDestination.Discover
                                 )
                             }
                             .size(48.dp)
-                            .background(MaterialTheme.colorScheme.secondaryContainer),
+                            .background(animateColorAsState(
+                                targetValue = if (currentDestination is ChatRouterDestination.Discover) {
+                                        MaterialTheme.colorScheme.secondaryContainer
+                                    } else MaterialTheme.colorScheme.primaryContainer,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                label = "Discover button background"
+                            ).value),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.icn_explore_24dp),
                             contentDescription = stringResource(R.string.discover_alt),
-                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                            tint = if (currentDestination is ChatRouterDestination.Discover) {
+                                MaterialTheme.colorScheme.onSecondaryContainer
+                            } else MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -319,13 +337,13 @@ fun ChannelSideDrawer(
                                 onShowAddServerSheet()
                             }
                             .size(48.dp)
-                            .background(MaterialTheme.colorScheme.secondaryContainer),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.icn_add_24dp),
                             contentDescription = stringResource(R.string.server_plus_alt),
-                            tint = MaterialTheme.colorScheme.onSecondaryContainer
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }
@@ -566,14 +584,13 @@ fun ChannelSideDrawer(
                 onClick = {
                     onDestinationChanged(ChatRouterDestination.Friends)
                 },
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary,
+                containerColor = MaterialTheme.colorScheme.primary,
                 shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_new_message),
                     contentDescription = stringResource(R.string.message_friends),
-                    tint = MaterialTheme.colorScheme.onSecondary
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -929,9 +946,7 @@ fun ChannelItem(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp)
-                .clip(
-                    CircleShape
-                )
+                .clip(CircleShape)
                 .combinedClickable(
                     onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
                     onLongClick = {

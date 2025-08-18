@@ -58,6 +58,7 @@ import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.server.createServer
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.sheets.SheetSelection
 import chat.peptide.composables.vectorassets.CreateServer
 import chat.peptide.composables.vectorassets.JoinServer
@@ -307,7 +308,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                     .padding(vertical = 16.dp, horizontal = 8.dp)
                             )
 
-                            Button(
+                            SquareButton(
                                 onClick = {
                                     val intent = Intent(context, InviteActivity::class.java)
                                     intent.data = if (inviteState.text.startsWith("https://")) {
@@ -319,7 +320,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                                 "Invalid URL: ${inviteState.text}",
                                                 e
                                             )
-                                            return@Button
+                                            return@SquareButton
                                         }
                                     } else {
                                         "https://${PeptideAPI.getCurrentAppUrl()}/invite/${inviteState.text}".toUri()
@@ -452,7 +453,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                     .padding(vertical = 16.dp, horizontal = 8.dp)
                             )
 
-                            Button(
+                            SquareButton(
                                 onClick = {
                                     serverCreationError = false
 

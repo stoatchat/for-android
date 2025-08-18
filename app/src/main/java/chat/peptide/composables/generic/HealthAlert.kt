@@ -32,7 +32,7 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
         confirmButton = {
             notice.alert?.actions?.map { action ->
                 when (action.type) {
-                    "external" -> TextButton(
+                    "external" -> PepTextButton(
                         onClick = {
                             val customTab = CustomTabsIntent.Builder()
                                 .setShowTitle(true)
@@ -42,7 +42,7 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
                                         .build()
                                 )
                                 .build()
-                            customTab.launchUrl(context, action.href?.toUri() ?: return@TextButton)
+                            customTab.launchUrl(context, action.href?.toUri() ?: return@PepTextButton)
                         }
                     ) {
                         Text(
@@ -52,7 +52,7 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
                     }
                 }
             }
-            TextButton(onClick = onDismiss) {
+            PepTextButton(onClick = onDismiss) {
                 Text(stringResource(R.string.service_health_alert_actions_dismiss))
             }
         }

@@ -75,6 +75,7 @@ import chat.peptide.api.routes.push.subscribePush
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
 import chat.peptide.composables.chat.DisconnectedNotice
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.peptide.dialogs.NotificationRationaleDialog
 import chat.peptide.internals.Changelogs
@@ -554,7 +555,7 @@ fun ChatRouterScreen(
                 Text(stringResource(id = R.string.notice_platform_mod_dm_description))
             },
             confirmButton = {
-                TextButton(onClick = {
+                PepTextButton(onClick = {
                     showPlatformModDMHint = false
                     DirectMessages.getPlatformModerationDM()?.id?.let {
                         viewModel.setSaveDestination(ChatRouterDestination.Channel(it))
@@ -714,7 +715,7 @@ fun ChatRouterScreen(
                 )
             },
             confirmButton = {
-                TextButton(onClick = {
+                PepTextButton(onClick = {
                     showChannelUnavailableAlert = false
                 }) {
                     Text(text = stringResource(id = R.string.ok))

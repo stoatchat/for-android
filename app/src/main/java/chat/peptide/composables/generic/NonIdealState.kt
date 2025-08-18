@@ -95,7 +95,7 @@ fun NonIdealStatePreview() {
         title = { Text("Channel") },
         description = { Text("You are not in any channels.") },
         actions = {
-            Button(onClick = {}) {
+            SquareButton(onClick = {}) {
                 Text("Create a channel")
             }
         }

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
 
 @Composable
 fun EarlyAccessSheet(onClose: () -> Unit) {
@@ -55,7 +56,7 @@ fun EarlyAccessSheet(onClose: () -> Unit) {
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
-        TextButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
+        PepTextButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.spark_early_access_cta))
         }
     }

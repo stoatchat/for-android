@@ -13,14 +13,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,11 +32,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.patchSelf
 import chat.peptide.api.schemas.User
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.SheetButton
 import chat.peptide.composables.generic.asApiName
 import chat.peptide.composables.generic.presenceFromStatus
@@ -101,7 +99,7 @@ fun StatusTextEditDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            PepTextButton(
                 enabled = isConfirmEnabled,
                 onClick = {
                     errorText = null
@@ -110,11 +108,11 @@ fun StatusTextEditDialog(
                     } else {
                         if (fieldState.text == initialStatus) {
                             onDismiss()
-                            return@TextButton
+                            return@PepTextButton
                         } else if (fieldState.text.isBlank()) {
                             if (selfUser.status?.text == null) {
                                 onDismiss()
-                                return@TextButton
+                                return@PepTextButton
                             }
                             scope.launch {
                                 try {
@@ -150,7 +148,7 @@ fun StatusTextEditDialog(
             }
         },
         dismissButton = {
-            TextButton(
+            PepTextButton(
                 onClick = onDismiss
             ) {
                 Text(
@@ -160,6 +158,17 @@ fun StatusTextEditDialog(
         }
     )
 }
+
+@Composable
+@Preview
+fun StatusTextEditDialogPreview() {
+    StatusTextEditDialog(
+        selfUser = User.getPlaceholder("01G00000000000000000000000"),
+        initialStatus = "This is a test status",
+        onDismiss = {}
+    )
+}
+
 
 @Composable
 fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
@@ -252,4 +261,13 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     )
 
 
+}
+
+@Preview
+@Composable
+fun StatusSheetPreview() {
+    StatusSheet(
+        onBeforeNavigation = {},
+        onGoSettings = {}
+    )
 }

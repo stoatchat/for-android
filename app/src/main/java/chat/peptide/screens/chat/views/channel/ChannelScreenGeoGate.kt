@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
 import chat.peptide.api.settings.GeoStateProvider
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.vectorassets.GeoGateUX
 
 @Composable
@@ -68,7 +69,7 @@ fun ChannelScreenGeoGate(
             }
         }
 
-        Button(onClick = { onAcknowledge() }) {
+        SquareButton(onClick = { onAcknowledge() }) {
             Text(stringResource(R.string.geogate_acknowledge))
         }
     }

@@ -1,6 +1,5 @@
 package chat.peptide.screens.labs.ui.sandbox
 
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,6 +10,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.settings.dsl.SettingsPage
 import chat.peptide.ui.theme.FragmentMono
 
@@ -33,7 +33,7 @@ fun CoreLibSandbox(navController: NavController) {
             )
         }
     ) {
-        Button(onClick = {
+        SquareButton(onClick = {
             greeting = librevolt.greet()
         }) {
             Text("Greet")

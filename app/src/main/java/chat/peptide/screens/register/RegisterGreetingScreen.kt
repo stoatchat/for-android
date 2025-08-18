@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun RegisterGreetingScreen(navController: NavController) {
@@ -83,7 +85,7 @@ fun RegisterGreetingScreen(navController: NavController) {
         }
 
         Row {
-            TextButton(onClick = {
+            PepTextButton(onClick = {
                 navController.popBackStack()
             }) {
                 Text(text = stringResource(R.string.back))
@@ -91,7 +93,7 @@ fun RegisterGreetingScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            Button(onClick = {
+            SquareButton(onClick = {
                 navController.navigate("register/details")
             }) {
                 Text(text = stringResource(R.string.next))

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,7 +18,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -43,6 +41,8 @@ import chat.peptide.api.internals.hasPermission
 import chat.peptide.api.routes.channel.leaveDeleteOrCloseChannel
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.settings.FeatureFlags
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.extensions.rememberChannelPermissions
 import chat.peptide.screens.settings.SettingsIcon
 import kotlinx.coroutines.launch
@@ -64,14 +64,14 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
             title = { Text(stringResource(R.string.channel_settings_delete_confirm)) },
             text = { Text(stringResource(R.string.channel_settings_delete_confirm_description)) },
             dismissButton = {
-                TextButton(onClick = {
+                PepTextButton(onClick = {
                     showDeletionConfirmation = false
                 }) {
                     Text(stringResource(R.string.channel_settings_delete_confirm_no))
                 }
             },
             confirmButton = {
-                Button(onClick = {
+                SquareButton(onClick = {
                     showDeletionConfirmation = false
                     scope.launch {
                         leaveDeleteOrCloseChannel(channelId)

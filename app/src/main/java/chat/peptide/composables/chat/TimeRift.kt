@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
 
 @Composable
 fun TimeRift(modifier: Modifier = Modifier, onMessageLoad: () -> Unit) {
@@ -48,7 +49,7 @@ fun TimeRift(modifier: Modifier = Modifier, onMessageLoad: () -> Unit) {
 
         Spacer(modifier = Modifier.height(5.dp))
 
-        TextButton(onClick = onMessageLoad) {
+        PepTextButton(onClick = onMessageLoad) {
             Text(
                 text = stringResource(id = R.string.time_rift_cta),
                 color = LocalContentColor.current.copy(

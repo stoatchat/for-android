@@ -102,12 +102,12 @@ fun VoiceSheet(
                     Text("status = ${room.state.name}")
                 }
                 item(key = "controls") {
-                    Button(onClick = {
+                    SquareButton(onClick = {
                         room.setMicrophoneMute(true)
                     }) {
                         Text("mute 🎤🫷😤")
                     }
-                    Button(onClick = {
+                    SquareButton(onClick = {
                         room.setMicrophoneMute(false)
                     }) {
                         Text("unmute 🗣️📢🔥")
@@ -117,7 +117,7 @@ fun VoiceSheet(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Button(
+                SquareButton(
                     colors = ButtonDefaults.buttonColors().copy(
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                         contentColor = MaterialTheme.colorScheme.onErrorContainer,

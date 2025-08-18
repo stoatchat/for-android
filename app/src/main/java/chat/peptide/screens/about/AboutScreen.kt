@@ -55,6 +55,7 @@ import chat.peptide.api.PeptideAPI
 import chat.peptide.api.PeptideJson
 import chat.peptide.api.routes.misc.Root
 import chat.peptide.api.routes.misc.getRootRoute
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.PrimaryTabs
 import chat.peptide.internals.Platform
 import kotlinx.coroutines.launch
@@ -250,7 +251,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
 
                             1 -> {
                                 DebugInfo(viewModel)
-                                TextButton(onClick = ::copyDebugInformation) {
+                                PepTextButton(onClick = ::copyDebugInformation) {
                                     Text(text = stringResource(id = R.string.copy))
                                 }
                             }

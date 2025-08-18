@@ -44,7 +44,7 @@ fun Reaction(
 
     val background by animateColorAsState(
         targetValue = if (hasOwn) {
-            MaterialTheme.colorScheme.primary
+            MaterialTheme.colorScheme.secondary
         } else {
             MaterialTheme.colorScheme.surfaceContainer
         },
@@ -52,7 +52,7 @@ fun Reaction(
     )
     val foreground by animateColorAsState(
         targetValue = if (hasOwn) {
-            MaterialTheme.colorScheme.onPrimary
+            MaterialTheme.colorScheme.onSecondaryContainer
         } else {
             MaterialTheme.colorScheme.onSurface
         },

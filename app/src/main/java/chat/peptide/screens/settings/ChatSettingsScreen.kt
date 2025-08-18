@@ -43,6 +43,7 @@ import chat.peptide.api.settings.MessageReplyStyle
 import chat.peptide.api.settings.SpecialEmbedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.ListHeader
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.RadioItem
 import kotlinx.coroutines.launch
 
@@ -141,7 +142,7 @@ fun ChatSettingsScreen(
                             for (key in LoadedSettings.poorlyFormedSettingsKeys.filter {
                                 it in setOf("ordering", "android", "notifications")
                             }) {
-                                TextButton(
+                                PepTextButton(
                                     onClick = {
                                         scope.launch {
                                             when (key) {

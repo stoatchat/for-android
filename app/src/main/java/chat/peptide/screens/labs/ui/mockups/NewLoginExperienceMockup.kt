@@ -38,6 +38,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.peptide.R
 import chat.peptide.api.settings.LoadedSettings
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.ui.theme.Theme
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -126,13 +128,13 @@ fun NewLoginExperienceMockup(navController: NavController) {
                             .padding(horizontal = 16.dp)
                             .widthIn(max = 150.dp)
                     ) {
-                        Button(
+                        SquareButton(
                             onClick = { loginNav.navigate("login") },
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text("Log In")
                         }
-                        TextButton(
+                        PepTextButton(
                             onClick = { navController.popBackStack() },
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -149,7 +151,7 @@ fun NewLoginExperienceMockup(navController: NavController) {
                     .fillMaxSize()
                     .background(Color.Blue), Alignment.Center
             ) {
-                Button(onClick = { loginNav.navigate("greet") }) {
+                SquareButton(onClick = { loginNav.navigate("greet") }) {
                     Text("Greetings!")
                 }
             }

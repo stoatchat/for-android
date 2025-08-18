@@ -17,13 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,7 +55,9 @@ import chat.peptide.api.schemas.RsResult
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.IconPlaceholder
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.RemoteImage
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.ui.theme.PeptideTheme
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -245,7 +245,7 @@ fun InviteScreen(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Row {
-                                Button(
+                                SquareButton(
                                     onClick = {
                                         viewModel.joinInvite(inviteCode)
                                     },
@@ -257,7 +257,7 @@ fun InviteScreen(
 
                                 Spacer(modifier = Modifier.width(8.dp))
 
-                                TextButton(
+                                PepTextButton(
                                     onClick = onFinish,
                                     modifier = Modifier
                                         .testTag("decline_invite")
@@ -307,7 +307,7 @@ fun InvalidInviteError(error: PeptideError? = null, onDismissRequest: () -> Unit
             }
         },
         dismissButton = {
-            TextButton(
+            PepTextButton(
                 onClick = {
                     onDismissRequest()
                 }
@@ -347,7 +347,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
             }
         },
         dismissButton = {
-            TextButton(
+            PepTextButton(
                 onClick = {
                     onDismissRequest()
                 }

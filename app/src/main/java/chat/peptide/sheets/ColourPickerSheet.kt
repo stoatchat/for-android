@@ -29,7 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,7 +39,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -62,6 +60,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.TailwindColourScheme
 import org.intellij.lang.annotations.Language
 
@@ -629,7 +629,7 @@ fun ColumnScope.ColourPickerSheet(
                                 },
                         )
 
-                        TextButton(
+                        PepTextButton(
                             onClick = {
                                 try {
                                     color = Color(android.graphics.Color.parseColor(hex))
@@ -671,7 +671,7 @@ fun ColumnScope.ColourPickerSheet(
             Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            TextButton(onClick = onUseDefaultColour, Modifier.fillMaxWidth()) {
+            PepTextButton(onClick = onUseDefaultColour, Modifier.fillMaxWidth()) {
                 Icon(Icons.Default.CheckCircle, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.colour_picker_use_default))
@@ -681,12 +681,12 @@ fun ColumnScope.ColourPickerSheet(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
+                PepTextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Default.Close, null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.colour_picker_cancel))
                 }
-                Button(
+                SquareButton(
                     onClick = { onColourSelected(color.toArgb()) },
                     modifier = Modifier.weight(1f)
                 ) {

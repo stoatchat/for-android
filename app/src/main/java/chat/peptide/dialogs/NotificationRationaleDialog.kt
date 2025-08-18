@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.peptide.BuildConfig
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun NotificationRationaleDialog(
@@ -62,15 +62,17 @@ fun NotificationRationaleDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = {
-                onSelected(false)
-                onDismiss()
-            }) {
+            PepTextButton(
+                onClick = {
+                    onSelected(false)
+                    onDismiss()
+                }
+            ) {
                 Text(stringResource(id = R.string.spark_notifications_rationale_dismiss))
             }
         },
         confirmButton = {
-            Button(onClick = {
+            SquareButton(onClick = {
                 onSelected(true)
                 onDismiss()
             }) {

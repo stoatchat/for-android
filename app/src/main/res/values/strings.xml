@@ -485,6 +485,13 @@
     <string name="add_server_sheet_step_1c_name_error_range">Server name can be up to %1$d characters in length.</string>
     <string name="add_server_sheet_step_1c_error">An error occurred while creating your server. Please try again later.</string>
     <string name="add_server_sheet_step_1c_create">Create</string>
+    <string name="add_server_sheet_title">Add to server</string>
+    <string name="add_server_sheet_join_by_invite_modal_title">Invite code or link</string>
+    <string name="add_server_sheet_join_by_invite_modal_hint">Invite code or link</string>
+    <string name="add_server_sheet_join_by_invite_modal_join">Join</string>
+    <string name="add_server_sheet_create_new">Create a new server</string>
+    <string name="add_server_sheet_create_new_modal_title">Create a new server</string>
+    <string name="add_server_sheet_create_new_modal_under_construction">This feature is currently under construction.</string>
 
     <string name="discover">Discover Peptide</string>
 
@@ -695,7 +702,7 @@
     <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Light</string>
     <string name="settings_appearance_theme_amoled">Pure Black</string>
-    <string name="settings_appearance_theme_m3dynamic">Material You</string>
+    <string name="settings_appearance_theme_m3dynamic">Material</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (unsupported)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You is not supported on this device.</string>
 

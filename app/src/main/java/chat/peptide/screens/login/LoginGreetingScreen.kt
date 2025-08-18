@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import chat.peptide.R
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.generic.SquareElevatedButton
 
@@ -151,7 +152,7 @@ fun LoginGreetingScreen(navController: NavController) {
             AnimatedVisibility(showBoringButton) {
                 Spacer(modifier = Modifier.height(10.dp))
 
-                TextButton(
+                PepTextButton(
                     onClick = { navController.navigate("login2/init") },
                     modifier = Modifier
                         .fillMaxWidth()

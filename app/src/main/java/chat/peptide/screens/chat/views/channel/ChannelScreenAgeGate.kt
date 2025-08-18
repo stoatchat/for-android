@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import chat.peptide.R
 import chat.peptide.composables.generic.DobPicker
 import chat.peptide.composables.generic.DobRegion
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -171,11 +173,11 @@ fun ChannelScreenAgeGate(
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         ) {
-            Button(onClick = { onDeny() }) {
+            SquareButton(onClick = { onDeny() }) {
                 Text(stringResource(R.string.channel_age_gate_dob_cancel))
             }
 
-            TextButton(onClick = { onAccept() }, enabled = dobValid) {
+            PepTextButton(onClick = { onAccept() }, enabled = dobValid) {
                 Text(stringResource(R.string.channel_age_gate_dob_proceed))
             }
         }

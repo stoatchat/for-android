@@ -105,7 +105,6 @@ fun DiscoverServersList(
                     CircularProgressIndicator(
                         modifier = Modifier
                             .padding(16.dp),
-                        color = MaterialTheme.colorScheme.secondary
                     )
                 }
             }
@@ -238,7 +237,7 @@ fun ServerItem(
 
                 Text(
                     text = server.description,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onBackground.copy(
                         alpha = descriptionAlpha,
                     ),
@@ -248,46 +247,43 @@ fun ServerItem(
             }
             Spacer(modifier = Modifier.height(12.dp))
 
-            if (isProcessing) {
-                CircularProgressIndicator(
+            IconButton(
+                onClick = onClick,
+            ) {
+                Box(
                     modifier = Modifier
-                        .size(24.dp),
-                    strokeWidth = 2.dp
-                )
-            } else {
-                IconButton(
-                    onClick = onClick,
+                        .fillMaxSize()
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        if (isJoined) {
-                            Box(
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clip(CircleShape)
-                                    .background(Color(0xFF43bf83))
-                                    .align(Alignment.Center),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Image(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(R.drawable.icn_check_24dp),
-                                    contentDescription = "Already joined",
-                                    colorFilter = ColorFilter.tint(Color.White)
-                                )
-
-                            }
-                        } else {
-                            // Show arrow icon for servers not joined yet
+                    when {
+                        isProcessing -> CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp)
+                                .align(Alignment.Center),
+                            strokeWidth = 2.dp
+                        )
+                        isJoined -> Box(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clip(CircleShape)
+                                .background(Color(0xFF43bf83))
+                                .align(Alignment.Center),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(R.drawable.icn_check_24dp),
+                                contentDescription = "Already joined",
+                                colorFilter = ColorFilter.tint(Color.White)
+                            )
+                        }
+                        else -> {
                             Image(
                                 painter = painterResource(R.drawable.icn_arrow_forward_24dp),
                                 contentDescription = "Join server",
-                                modifier = Modifier
-                                    .align(Alignment.Center),
+                                modifier = Modifier.align(Alignment.Center),
                                 colorFilter = ColorFilter.tint(
-                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(
+                                        alpha = contentAlpha
+                                    )
                                 )
                             )
                         }
@@ -353,5 +349,23 @@ private fun JoinedServerItemPreview() {
         onClick = {},
         isJoined = true,
         isProcessing = false
+    )
+}
+@Preview
+@Composable
+private fun JoinedServerItemLoadingPreview() {
+    val server = ServerData(
+        id = "1",
+        name = "Peptide Lounge",
+        description = "The official Peptide server. Hang out, chat, and get help with Peptide.",
+        inviteCode = "peptide",
+        disabled = false,
+        showColor = null,
+    )
+    ServerItem(
+        server = server,
+        onClick = {},
+        isJoined = true,
+        isProcessing = true
     )
 }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -22,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -43,7 +41,9 @@ import androidx.core.net.toUri
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.server.leaveOrDeleteServer
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.SheetButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.markdown.RichMarkdown
 import chat.peptide.composables.screens.settings.ServerOverview
 import chat.peptide.composables.sheets.SheetSelection
@@ -116,7 +116,7 @@ fun ServerContextSheet(
                 }
             },
             confirmButton = {
-                Button(
+                SquareButton(
                     onClick = {
                         coroutineScope.launch {
                             onHideSheet()
@@ -134,7 +134,7 @@ fun ServerContextSheet(
                 }
             },
             dismissButton = {
-                TextButton(
+                PepTextButton(
                     onClick = {
                         showLeaveConfirmation = false
                     }

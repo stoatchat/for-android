@@ -53,6 +53,7 @@ import chat.peptide.api.routes.user.fetchUserProfile
 import chat.peptide.api.routes.user.patchSelf
 import chat.peptide.api.schemas.Profile
 import chat.peptide.composables.generic.InlineMediaPicker
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.screens.settings.RawUserOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -415,7 +416,7 @@ fun ProfileSettingsScreen(
 
                         Spacer(Modifier.height(8.dp))
 
-                        TextButton(
+                        PepTextButton(
                             onClick = {
                                 viewModel.saveBio()
                             },

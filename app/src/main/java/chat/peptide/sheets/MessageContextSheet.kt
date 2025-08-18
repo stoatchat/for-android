@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +42,9 @@ import chat.peptide.api.routes.channel.react
 import chat.peptide.api.settings.Experiments
 import chat.peptide.callbacks.UiCallbacks
 import chat.peptide.composables.chat.Message
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.SheetButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.internals.Platform
 import kotlinx.coroutines.launch
 
@@ -76,7 +76,7 @@ fun MessageContextSheet(
     var showDeleteMessageConfirmation by remember { mutableStateOf(false) }
     var showInspectASTSheet by remember { mutableStateOf(false) }
     val showInspectASTSheetButton =
-        BuildConfig.DEBUG || (message.content != null && Experiments.useKotlinBasedMarkdownRenderer.isEnabled)
+        BuildConfig.DEBUG && (message.content != null && Experiments.useKotlinBasedMarkdownRenderer.isEnabled)
 
     if (showShareSheet) {
         val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -280,7 +280,7 @@ fun MessageContextSheet(
                 )
             },
             confirmButton = {
-                Button(
+                SquareButton(
                     onClick = {
                         showDeleteMessageConfirmation = false
                         coroutineScope.launch {
@@ -295,7 +295,7 @@ fun MessageContextSheet(
                 }
             },
             dismissButton = {
-                TextButton(
+                PepTextButton(
                     onClick = {
                         showDeleteMessageConfirmation = false
                     }

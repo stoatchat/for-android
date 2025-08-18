@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.peptide.composables.generic.GradientStopEditor
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.settings.dsl.SettingsPage
 
 @Composable
@@ -35,7 +36,7 @@ fun GradientEditorSandbox(navController: NavController) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextButton(
+            PepTextButton(
                 onClick = {
                     if (segmentCount >= 2)
                         segmentCount--
@@ -50,7 +51,7 @@ fun GradientEditorSandbox(navController: NavController) {
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
             )
-            TextButton(
+            PepTextButton(
                 onClick = { segmentCount++ },
                 modifier = Modifier.weight(1f)
             ) {

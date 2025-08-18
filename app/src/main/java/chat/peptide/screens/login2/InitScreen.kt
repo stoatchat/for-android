@@ -38,6 +38,8 @@ import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.composables.generic.AnyLink
+import chat.peptide.composables.generic.PepTextButton
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.composables.generic.Weblink
 import chat.peptide.ui.theme.Theme
 import com.chuckerteam.chucker.api.Chucker
@@ -140,13 +142,13 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
             .fillMaxWidth()
     ) {
         Column(Modifier.widthIn(max = 150.dp)) {
-            Button(
+            SquareButton(
                 onClick = {/* navController.navigate("login2/existing/details") */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Log In") // FIXME hardcoded string
             }
-            TextButton(
+            PepTextButton(
                 onClick = {/* navController.navigate("login2/new/details") */ },
                 modifier = Modifier.fillMaxWidth()
             ) {

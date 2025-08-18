@@ -35,7 +35,9 @@ import chat.peptide.api.PeptideAPI
 import chat.peptide.api.PeptideError
 import chat.peptide.api.schemas.Invite
 import chat.peptide.composables.generic.IconPlaceholder
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.generic.RemoteImage
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun ServerInviteDialog(
@@ -74,7 +76,7 @@ fun ServerInviteDialog(
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(Modifier.height(32.dp))
-                    Button(
+                    SquareButton(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
@@ -100,7 +102,7 @@ fun ServerInviteDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom // Align buttons to the bottom
             ) {
-                Button(
+                SquareButton(
                     onClick = onJoinClick,
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !isLoading
@@ -121,7 +123,7 @@ fun ServerInviteDialog(
                         Text(text = stringResource(id = R.string.invite_join))
                     }
                 }
-                TextButton(
+                PepTextButton(
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth()
                 ) {

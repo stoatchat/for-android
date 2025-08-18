@@ -92,6 +92,7 @@ import chat.peptide.api.settings.GeoStateProvider
 import chat.peptide.api.settings.LoadedSettings
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.composables.generic.HealthAlert
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.composables.voice.VoicePermissionSwitch
 import chat.peptide.composables.voice.VoiceSheet
 import chat.peptide.material.EasingTokens
@@ -137,7 +138,8 @@ import io.ktor.client.request.get
 import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import javax.inject.Injectimport io.sentry.Sentry
+
 
 @HiltViewModel
 @SuppressLint("StaticFieldLeak")
@@ -371,6 +373,15 @@ class MainActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    // waiting for view to draw to better represent a captured error with a screenshot
+    findViewById<android.view.View>(android.R.id.content).viewTreeObserver.addOnGlobalLayoutListener {
+      try {
+        throw Exception("This app uses Sentry! :)")
+      } catch (e: Exception) {
+        Sentry.captureException(e)
+      }
+    }
+
 
         // Set the default platform for the Platform API.
         viewModel.setDefaultPlatformOnCreate()
@@ -606,7 +617,7 @@ fun AppEntrypoint(
                             Text(stringResource(R.string.could_not_log_in_body))
                         },
                         confirmButton = {
-                            TextButton(
+                            PepTextButton(
                                 onClick = {
                                     onDismissLoginError()
                                     onRetryConnection()
@@ -616,7 +627,7 @@ fun AppEntrypoint(
                             }
                         },
                         dismissButton = {
-                            TextButton(
+                            PepTextButton(
                                 onClick = {
                                     onDismissLoginError()
                                     onLogout()

@@ -44,6 +44,7 @@ import chat.peptide.api.routes.account.authenticateWithMfaRecoveryCode
 import chat.peptide.api.routes.account.authenticateWithMfaTotpCode
 import chat.peptide.composables.generic.CollapsibleCard
 import chat.peptide.composables.generic.FormTextField
+import chat.peptide.composables.generic.SquareButton
 import chat.peptide.persistence.KVStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -255,7 +256,7 @@ fun MfaScreen(
                                     value = viewModel.totpCode
                                 )
 
-                                Button(
+                                SquareButton(
                                     onClick = { viewModel.tryAuthorizeTotp(mfaTicket) },
                                     modifier = Modifier
                                         .padding(horizontal = 20.dp, vertical = 10.dp)
@@ -309,7 +310,7 @@ fun MfaScreen(
                                     value = viewModel.recoveryCode
                                 )
 
-                                Button(
+                                SquareButton(
                                     onClick = { viewModel.tryAuthorizeRecovery(mfaTicket) },
                                     modifier = Modifier
                                         .padding(horizontal = 20.dp, vertical = 10.dp)

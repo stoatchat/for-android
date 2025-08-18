@@ -44,6 +44,7 @@ import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.schemas.ContentReportReason
 import chat.peptide.composables.chat.Message
 import chat.peptide.composables.generic.FormTextField
+import chat.peptide.composables.generic.PepTextButton
 import kotlinx.coroutines.launch
 
 enum class MessageReportFlowState {
@@ -200,7 +201,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -210,7 +211,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             state.value = MessageReportFlowState.Sending
                         },
@@ -305,7 +306,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },
@@ -315,7 +316,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                     }
                 },
                 confirmButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             scope.launch {
                                 blockUser(message.author ?: return@launch)
@@ -358,7 +359,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                     }
                 },
                 dismissButton = {
-                    TextButton(
+                    PepTextButton(
                         onClick = {
                             onDismiss()
                         },

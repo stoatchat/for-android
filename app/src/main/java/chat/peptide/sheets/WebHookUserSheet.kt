@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
+import chat.peptide.composables.generic.SquareButton
 
 @Composable
 fun WebHookUserSheet(modifier: Modifier = Modifier) {
@@ -45,7 +46,7 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
-        Button(
+        SquareButton(
             onClick = {
                 Toast(context).apply {
                     setText(context.getString(R.string.comingsoon_toast))

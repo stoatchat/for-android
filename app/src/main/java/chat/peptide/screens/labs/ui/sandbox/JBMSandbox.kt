@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import chat.peptide.composables.generic.PepTextButton
 import chat.peptide.markdown.jbm.JBM
 import chat.peptide.markdown.jbm.JBMRenderer
 import chat.peptide.markdown.jbm.LocalJBMarkdownTreeState
@@ -65,12 +66,12 @@ fun JBMSandbox(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            TextButton(onClick = {
+            PepTextButton(onClick = {
                 submitMdSource = mdSource
             }) {
                 Text("Submit")
             }
-            TextButton(onClick = {
+            PepTextButton(onClick = {
                 submitMdSource = """# Full range of MD now supported!
 1. Text with **bold**, *italics*, and ***both***!
 2. You ~~can't see me~~.
