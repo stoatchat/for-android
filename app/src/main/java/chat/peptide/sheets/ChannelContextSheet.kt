@@ -369,7 +369,7 @@ private fun NotificationOptionButton(
 }
 
 @Composable
-private fun NotificationRadioRow(
+fun NotificationRadioRow(
     title: String,
     type: NotificationType,
     channelId: String,

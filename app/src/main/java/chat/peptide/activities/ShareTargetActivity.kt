@@ -352,7 +352,7 @@ fun ShareTargetScreen(
                                         hasUnread = false,
                                         onDestinationChanged = { selectedChannel = channel.id },
                                         onOpenChannelContextSheet = {},
-                                        onOpenUserInfoSheet = {}
+                                        onOpenUserInfoSheet = {_ ->}
                                     )
 
                                     else -> ChannelItem(

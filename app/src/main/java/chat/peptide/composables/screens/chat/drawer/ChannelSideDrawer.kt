@@ -192,7 +192,9 @@ fun ChannelSideDrawer(
     }
 
     if (userContextSheetTarget != null) {
-        val userContextSheetState = rememberModalBottomSheetState()
+        val userContextSheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
         ModalBottomSheet(
             sheetState = userContextSheetState,
             onDismissRequest = {
@@ -826,8 +828,8 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                     onDestinationChanged = { dest ->
                         onDestinationChanged(dest)
                     },
-                    onOpenChannelContextSheet = onOpenUserInfoSheet,
-                    onOpenUserInfoSheet = onOpenUserInfoSheet
+                    onOpenChannelContextSheet = {},
+                    onOpenUserInfoSheet = {userId -> onOpenUserInfoSheet(userId)}
                 )
             }
         }
