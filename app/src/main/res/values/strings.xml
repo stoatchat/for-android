@@ -660,6 +660,13 @@
     <string name="spark_early_access_description_3">We\'re thrilled to have you on board. Let\'s make something great together!</string>
     <string name="spark_early_access_cta">Got it</string>
 
+    <!-- Notifications page labels -->
+    <string name="notification_option_use_default">Use default</string>
+    <string name="notification_option_muted">Muted</string>
+    <string name="notification_option_all_messages">All messages</string>
+    <string name="notification_option_mentions_only">Mentions only</string>
+    <string name="notification_option_none">None</string>
+
     <string name="spark_swipe_to_reply">Swipe to Reply is here.</string>
     <string name="spark_swipe_to_reply_description">Making message threads has never been easier.\nJust swipe to the left on any message.\nReply up to five messages at once.</string>
     <string name="spark_swipe_to_reply_cta">Got it</string>

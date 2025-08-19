@@ -32,7 +32,6 @@ fun SheetButton(
     Box(
         modifier = modifier
             .clickable { onClick() }
-            .padding(horizontal = 16.dp)
     ) {
         ListItem(
             colors = TransparentListItemColours,
