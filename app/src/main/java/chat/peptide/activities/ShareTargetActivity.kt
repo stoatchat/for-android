@@ -207,7 +207,7 @@ class ShareTargetScreenViewModel @Inject constructor(
                         }
                     )
                     attachmentIds.add(id)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     return@launch
                 }
             }
@@ -351,7 +351,8 @@ fun ShareTargetScreen(
                                         isCurrent = selectedChannel == channel.id,
                                         hasUnread = false,
                                         onDestinationChanged = { selectedChannel = channel.id },
-                                        onOpenChannelContextSheet = {}
+                                        onOpenChannelContextSheet = {},
+                                        onOpenUserInfoSheet = {}
                                     )
 
                                     else -> ChannelItem(

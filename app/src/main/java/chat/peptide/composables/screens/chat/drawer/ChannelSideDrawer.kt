@@ -96,6 +96,7 @@ import chat.peptide.composables.screens.chat.ChannelIcon
 import chat.peptide.composables.screens.chat.discover.DiscoverServersList
 import chat.peptide.screens.chat.ChatRouterDestination
 import chat.peptide.sheets.ChannelContextSheet
+import chat.peptide.sheets.UserInfoSheet
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
@@ -169,6 +170,7 @@ fun ChannelSideDrawer(
     }.sortedBy { it.id }))
 
     var channelContextSheetTarget by remember { mutableStateOf<String?>(null) }
+    var userContextSheetTarget by remember { mutableStateOf<String?>(null) }
 
     if (channelContextSheetTarget != null) {
         val channelContextSheetState = rememberModalBottomSheetState()
@@ -184,6 +186,25 @@ fun ChannelSideDrawer(
                 onHideSheet = {
                     channelContextSheetState.hide()
                     channelContextSheetTarget = null
+                }
+            )
+        }
+    }
+
+    if (userContextSheetTarget != null) {
+        val userContextSheetState = rememberModalBottomSheetState()
+        ModalBottomSheet(
+            sheetState = userContextSheetState,
+            onDismissRequest = {
+                userContextSheetTarget = null
+            }
+        ) {
+            UserInfoSheet(
+                userId = userContextSheetTarget!!,
+                serverId = null,
+                dismissSheet = {
+                    userContextSheetState.hide()
+                    userContextSheetTarget = null
                 }
             )
         }
@@ -561,7 +582,7 @@ fun ChannelSideDrawer(
                             currentDestination,
                             onDestinationChanged,
                             channelListState,
-                            onOpenChannelContextSheet = { channelContextSheetTarget = it }
+                            onOpenUserInfoSheet = { userId -> userContextSheetTarget = userId }
                         )
                     } else {
                         ServerChannelListRenderer(
@@ -647,7 +668,7 @@ private fun DirectMessagesChannelListRendererPreview() {
             currentDestination = ChatRouterDestination.Home,
             onDestinationChanged = {},
             channelListState = rememberLazyListState(),
-            onOpenChannelContextSheet = {}
+            onOpenUserInfoSheet = {}
         )
     }
 }
@@ -670,7 +691,7 @@ private fun DirectMessagesChannelListRendererEmptyPreview() {
             currentDestination = ChatRouterDestination.Home,
             onDestinationChanged = {},
             channelListState = rememberLazyListState(),
-            onOpenChannelContextSheet = {}
+            onOpenUserInfoSheet = {}
         )
     }
 }
@@ -680,7 +701,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
     currentDestination: ChatRouterDestination,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     channelListState: LazyListState,
-    onOpenChannelContextSheet: (String) -> Unit,
+    onOpenUserInfoSheet: (String) -> Unit,
 ) {
     val dmAbleChannels =
         PeptideAPI.channelCache.values
@@ -805,7 +826,8 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                     onDestinationChanged = { dest ->
                         onDestinationChanged(dest)
                     },
-                    onOpenChannelContextSheet = onOpenChannelContextSheet
+                    onOpenChannelContextSheet = onOpenUserInfoSheet,
+                    onOpenUserInfoSheet = onOpenUserInfoSheet
                 )
             }
         }
@@ -1042,7 +1064,8 @@ fun DMOrGroupItem(
     hasUnread: Boolean,
     isMuted: Boolean = false,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
-    onOpenChannelContextSheet: (String) -> Unit
+    onOpenChannelContextSheet: (String) -> Unit,
+    onOpenUserInfoSheet: (String) -> Unit
 ) {
     val currentIndicatorOpacity = animateFloatAsState(
         targetValue = if (isCurrent) 1f else 0f,
@@ -1060,9 +1083,12 @@ fun DMOrGroupItem(
             .combinedClickable(
                 onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
                 onLongClick = {
-                    channel.id?.let { chId ->
+                    partner?.id?.let { userId ->
+                        onOpenUserInfoSheet(userId)
+                    } ?: channel.id?.let { chId ->
                         onOpenChannelContextSheet(chId)
                     }
+
                 },
                 onClick = {
                     channel.id?.let { chId ->
@@ -1122,7 +1148,18 @@ fun DMOrGroupItem(
                     avatar = partner?.avatar ?: channel.icon,
                     size = 28.dp,
                     presenceSize = 12.dp
-                )
+                ).let { avatar ->
+                    // Placed inside a Box, otherwise the combinedClickable modifier doesn't work.
+                    Box(
+                        Modifier.combinedClickable(
+                            onLongClick = {
+                                partner?.id?.let { uid -> onOpenUserInfoSheet(uid) }
+                            },
+                            onClick = {}
+                        ),
+                        content = { avatar }
+                    )
+                }
             }
 
             Column(Modifier.weight(1f)) {

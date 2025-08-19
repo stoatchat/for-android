@@ -44,6 +44,7 @@ import chat.peptide.api.internals.BrushCompat
 import chat.peptide.api.internals.ULID
 import chat.peptide.api.internals.solidColor
 import chat.peptide.api.routes.user.fetchUserProfile
+import chat.peptide.api.routes.user.getOrFetchUser
 import chat.peptide.api.schemas.Profile
 import chat.peptide.api.settings.Experiments
 import chat.peptide.api.settings.FeatureFlags
@@ -65,7 +66,17 @@ fun UserInfoSheet(
     serverId: String? = null,
     dismissSheet: suspend () -> Unit
 ) {
-    val user = PeptideAPI.userCache[userId]
+    var resolvedUser by remember { mutableStateOf(PeptideAPI.userCache[userId]) }
+
+    LaunchedEffect(userId) {
+        try {
+            if (resolvedUser == null) {
+                resolvedUser = getOrFetchUser(userId)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
     val member = serverId?.let { PeptideAPI.members.getMember(it, userId) }
 
@@ -74,9 +85,9 @@ fun UserInfoSheet(
     var profile by remember { mutableStateOf<Profile?>(null) }
     var profileNotFound by remember { mutableStateOf(false) }
 
-    LaunchedEffect(user) {
+    LaunchedEffect(resolvedUser) {
         try {
-            user?.id?.let { fetchUserProfile(it) }?.let { profile = it }
+            resolvedUser?.id?.let { fetchUserProfile(it) }?.let { profile = it }
         } catch (e: Exception) {
             if (e.message == "NotFound") {
                 profileNotFound = true
@@ -85,8 +96,7 @@ fun UserInfoSheet(
         }
     }
 
-    if (user == null) {
-        // TODO fetch user in this scenario
+    if (resolvedUser == null) {
         NonIdealState(
             icon = {
                 Icon(
@@ -117,7 +127,7 @@ fun UserInfoSheet(
             sheetState = sheetState,
             onDismissRequest = { showUserCard = false }
         ) {
-            UserCardSheet(user)
+            UserCardSheet(resolvedUser!!)
         }
     }
 
@@ -129,7 +139,7 @@ fun UserInfoSheet(
             onDismissRequest = { showServerIdentityOptions = false }
         ) {
             ServerIdentityOptionsSheet(
-                userId = user.id!!
+                userId = resolvedUser!!.id!!
             )
         }
     }
@@ -142,7 +152,7 @@ fun UserInfoSheet(
     ) {
         item(key = "overview", span = StaggeredGridItemSpan.FullLine) {
             Box {
-                RawUserOverview(user, profile, internalPadding = false)
+                RawUserOverview(resolvedUser!!, profile, internalPadding = false)
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -214,9 +224,9 @@ fun UserInfoSheet(
                 }
             }
         }
-        val accountAt = user.id?.let {
+        val accountAt = resolvedUser!!.id?.let {
             DateUtils.getRelativeTimeSpanString(
-                ULID.asTimestamp(user.id),
+                ULID.asTimestamp(resolvedUser!!.id!!),
                 System.currentTimeMillis(),
                 DateUtils.MINUTE_IN_MILLIS
             ).toString()
@@ -292,22 +302,22 @@ fun UserInfoSheet(
             }
         }
 
-        if ((user.badges ?: 0) > 0) {
+        if ((resolvedUser?.badges ?: 0) > 0) {
             item(key = "info") {
                 SheetTile(
                     header = {
                         Text(stringResource(R.string.user_info_sheet_category_badges))
                     },
                     contentPreview = {
-                        user.badges?.let { UserBadgeRow(badges = it) }
+                        resolvedUser?.badges?.let { UserBadgeRow(badges = it) }
                     }
                 ) {
-                    user.badges?.let { UserBadgeList(badges = it) }
+                    resolvedUser?.badges?.let { UserBadgeList(badges = it) }
                 }
             }
         }
 
-        if (user.status?.text != null) {
+        if (resolvedUser?.status?.text != null) {
             item(key = "status") {
                 SheetTile(
                     header = {
@@ -315,7 +325,7 @@ fun UserInfoSheet(
                     },
                     contentPreview = {
                         Text(
-                            text = user.status.text,
+                            text = resolvedUser!!.status!!.text ?: "",
                             fontSize = 14.sp,
                             maxLines = 5,
                             overflow = TextOverflow.Ellipsis
@@ -323,15 +333,15 @@ fun UserInfoSheet(
                     }
                 ) {
                     Text(
-                        text = user.status.text,
+                        text = resolvedUser!!.status!!.text ?: "",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
         }
 
-        if (user.bot != null) {
-            val resolvedOwner = user.bot.owner?.let { PeptideAPI.userCache[it] }
+        if (resolvedUser?.bot != null) {
+            val resolvedOwner = resolvedUser!!.bot!!.owner?.let { PeptideAPI.userCache[it] }
 
             item(key = "bot-owner") {
                 SheetTile(
@@ -345,7 +355,7 @@ fun UserInfoSheet(
                             resolvedOwner?.let {
                                 UserAvatar(
                                     username = it.displayName ?: it.username
-                                    ?: stringResource(R.string.unknown),
+                                        ?: stringResource(R.string.unknown),
                                     avatar = it.avatar,
                                     userId = it.id!!,
                                     size = 32.dp
@@ -353,7 +363,7 @@ fun UserInfoSheet(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = it.displayName ?: it.username
-                                    ?: stringResource(R.string.unknown),
+                                        ?: stringResource(R.string.unknown),
                                     fontSize = 14.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -380,7 +390,7 @@ fun UserInfoSheet(
                         NonIdealState(
                             icon = {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_error_24dp),
+                                    painter = painterResource(id = R.drawable.icn_error_24dp),
                                     contentDescription = null,
                                     modifier = Modifier.size(24.dp)
                                 )
@@ -414,7 +424,7 @@ fun UserInfoSheet(
         }
 
         item(key = "actions", span = StaggeredGridItemSpan.FullLine) {
-            UserButtons(user, dismissSheet)
+            UserButtons(resolvedUser!!, dismissSheet)
         }
     }
 
