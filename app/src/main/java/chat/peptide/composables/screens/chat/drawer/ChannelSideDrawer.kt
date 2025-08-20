@@ -320,24 +320,27 @@ fun ChannelSideDrawer(
                     Box(
                         Modifier
                             .padding(8.dp)
-                            .clip(animateDpAsState(
-                                targetValue = if (currentDestination is ChatRouterDestination.Discover) 16.dp else 24.dp,
-                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-                                label = "Discover button corner radius"
-                            ).value.let { RoundedCornerShape(it) })
+                            .clip(
+                                animateDpAsState(
+                                    targetValue = if (currentDestination is ChatRouterDestination.Discover) 16.dp else 24.dp,
+                                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                    label = "Discover button corner radius"
+                                ).value.let { RoundedCornerShape(it) })
                             .clickable {
                                 onDestinationChanged(
                                     ChatRouterDestination.Discover
                                 )
                             }
                             .size(48.dp)
-                            .background(animateColorAsState(
-                                targetValue = if (currentDestination is ChatRouterDestination.Discover) {
+                            .background(
+                                animateColorAsState(
+                                    targetValue = if (currentDestination is ChatRouterDestination.Discover) {
                                         MaterialTheme.colorScheme.secondaryContainer
                                     } else MaterialTheme.colorScheme.primaryContainer,
-                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-                                label = "Discover button background"
-                            ).value),
+                                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                                    label = "Discover button background"
+                                ).value
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -402,14 +405,21 @@ fun ChannelSideDrawer(
                         label = "Left indicator colour"
                     )
 
-                    Box(Modifier.fillMaxWidth()) {
-                        Box(
-                            Modifier
-                                .padding(8.dp)
-                                .clip(CircleShape)
-                                .clickable {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                onClick = {
                                     serverInList.id?.let { srvId -> navigateToServer(srvId) }
-                                }) {
+                                },
+                                onLongClick = {
+                                    serverInList.id?.let { srvId -> onShowServerContextSheet(srvId) }
+                                }
+                            )
+                    ) {
+                        Box(
+                            Modifier.padding(8.dp)
+                        ) {
                             val icon = serverInList.icon?.id?.let { iconId ->
                                 "${PeptideAPI.getCurrentFilesUrl()}/icons/$iconId"
                             }
@@ -828,7 +838,7 @@ private fun ColumnScope.DirectMessagesChannelListRenderer(
                         onDestinationChanged(dest)
                     },
                     onOpenChannelContextSheet = {},
-                    onOpenUserInfoSheet = {userId -> onOpenUserInfoSheet(userId)}
+                    onOpenUserInfoSheet = { userId -> onOpenUserInfoSheet(userId) }
                 )
             }
         }
