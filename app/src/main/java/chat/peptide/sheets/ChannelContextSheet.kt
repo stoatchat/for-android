@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -53,6 +52,7 @@ import kotlinx.coroutines.launch
 import chat.peptide.api.settings.NotificationType
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.api.schemas.NotificationSettings
+import kotlinx.coroutines.GlobalScope
 
 @Composable
 fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
@@ -345,30 +345,6 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
 }
 
 @Composable
-private fun NotificationOptionButton(
-    title: String,
-    isSelected: Boolean,
-    onSelect: () -> Unit
-) {
-    SheetButton(
-        headlineContent = { Text(text = title) },
-        leadingContent = {
-            Icon(
-                painter = painterResource(id = R.drawable.icn_notification_settings_24dp),
-                contentDescription = null
-            )
-        },
-        trailingContent = {
-            androidx.compose.material3.RadioButton(
-                selected = isSelected,
-                onClick = onSelect
-            )
-        },
-        onClick = onSelect
-    )
-}
-
-@Composable
 fun NotificationRadioRow(
     title: String,
     type: NotificationType,
@@ -381,7 +357,13 @@ fun NotificationRadioRow(
         headlineContent = { Text(text = title) },
         leadingContent = {
             Icon(
-                painter = painterResource(id = R.drawable.icn_notification_settings_24dp),
+                painter = painterResource(id = when(type){
+                    NotificationType.DEFAULT -> R.drawable.icn_notif_use_default
+                    NotificationType.MUTED -> R.drawable.icn_notif_mute
+                    NotificationType.ALL -> R.drawable.icn_notif_all_messages
+                    NotificationType.MENTIONS_ONLY -> R.drawable.icn_notif_mention_only
+                    NotificationType.NONE -> R.drawable.icn_notif_none
+                }),
                 contentDescription = null
             )
         },
@@ -401,7 +383,7 @@ fun NotificationRadioRow(
                             }
                         }
                     )
-                    kotlinx.coroutines.GlobalScope.launch {
+                    GlobalScope.launch {
                         SyncedSettings.updateNotifications(updated)
                     }
                 }
@@ -420,7 +402,7 @@ fun NotificationRadioRow(
                     }
                 }
             )
-            kotlinx.coroutines.GlobalScope.launch {
+            GlobalScope.launch {
                 SyncedSettings.updateNotifications(updated)
             }
         }

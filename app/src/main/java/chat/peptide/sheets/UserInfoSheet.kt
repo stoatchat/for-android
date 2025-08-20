@@ -24,14 +24,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,7 +52,8 @@ import androidx.compose.ui.unit.dp
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.blockUser
-import chat.peptide.api.routes.user.getOrFetchUser
+import chat.peptide.api.routes.user.fetchUser
+import chat.peptide.api.routes.user.unblockUser
 import chat.peptide.api.routes.user.unfriendUser
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.NotificationSettings
@@ -63,7 +67,6 @@ import chat.peptide.composables.generic.NonIdealState
 import chat.peptide.composables.generic.SheetButton
 import chat.peptide.composables.generic.UserAvatar
 import chat.peptide.composables.screens.settings.UserButtons
-import chat.peptide.composables.sheets.SheetTile
 import chat.peptide.internals.Platform
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -75,24 +78,21 @@ import logcat.logcat
 @Composable
 fun UserInfoSheet(
     userId: String,
-    serverId: String? = null,
     dismissSheet: suspend () -> Unit
 ) {
     var resolvedUser by remember { mutableStateOf(PeptideAPI.userCache[userId]) }
 
     LaunchedEffect(userId) {
         try {
-            if (resolvedUser == null) {
-                resolvedUser = getOrFetchUser(userId)
-            }
+            // Show cached value immediately if present
+            resolvedUser = PeptideAPI.userCache[userId]
+            // Fetch fresh to ensure latest relationship state
+            val fresh = fetchUser(userId)
+            resolvedUser = fresh
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
-
-    val member = serverId?.let { PeptideAPI.members.getMember(it, userId) }
-
-    val server = PeptideAPI.serverCache[serverId]
 
     if (resolvedUser == null) {
         NonIdealState(
@@ -143,7 +143,7 @@ fun UserInfoSheet(
     }
 
     // Page state: 0 = main, 1 = notifications
-    var page by remember { mutableStateOf(0) }
+    var page by remember { mutableIntStateOf(0) }
 
     AnimatedContent(
         targetState = page,
@@ -195,7 +195,7 @@ fun UserInfoSheet(
                                 )
                                 resolvedUser!!.username?.let { uname ->
                                     Text(
-                                        text = "@" + uname,
+                                        text = "@$uname",
                                         style = MaterialTheme.typography.bodySmall,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -246,17 +246,6 @@ fun UserInfoSheet(
                                 .background(MaterialTheme.colorScheme.surfaceBright)
                         ) {
                             SheetButton(
-                                headlineContent = { Text(text = stringResource(id = R.string.overview_screen_settings)) },
-                                leadingContent = {
-                                    Icon(
-                                        painter = painterResource(R.drawable.icn_settings_24dp),
-                                        contentDescription = null
-                                    )
-                                },
-                                onClick = { /* open profile */ }
-                            )
-                            HorizontalDivider()
-                            SheetButton(
                                 headlineContent = { Text(text = stringResource(id = R.string.message_friends)) },
                                 leadingContent = {
                                     Icon(
@@ -303,8 +292,10 @@ fun UserInfoSheet(
                     }
                 }
 
-                // Danger block (Close DM, Report User)
-                item(key = "danger-actions", span = StaggeredGridItemSpan.FullLine) {
+                // Danger block (Block, Remove Friend, Report User)
+                item(key = "danger-actions_${resolvedUser!!.relationship}", span = StaggeredGridItemSpan.FullLine) {
+                    var isBlockActionLoading by remember { mutableStateOf(false) }
+                    var isRemoveFriendLoading by remember { mutableStateOf(false) }
                     Column(
                         modifier = Modifier
                             .padding(top = 16.dp)
@@ -312,29 +303,67 @@ fun UserInfoSheet(
                             .background(MaterialTheme.colorScheme.surfaceBright)
                     ) {
                         SheetButton(
-                            headlineContent = { Text(text = stringResource(id = R.string.user_info_sheet_block)) },
+                            headlineContent = {
+                                Text(
+                                    text = stringResource(
+                                        id = if (resolvedUser?.relationship == "Blocked") {
+                                            R.string.user_info_sheet_unblock
+                                        } else R.string.user_info_sheet_block
+                                    )
+                                )
+                            },
                             leadingContent = {
                                 Icon(
                                     painter = painterResource(R.drawable.icn_block_24dp),
                                     contentDescription = null,
                                 )
                             },
+                            trailingContent = {
+                                if (isBlockActionLoading) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        strokeWidth = 2.dp,
+                                        color = LocalContentColor.current
+                                    )
+                                }
+                            },
                             onClick = {
                                 scope.launch {
                                     try {
+                                        isBlockActionLoading = true
                                         resolvedUser?.id?.let { userId ->
-                                            blockUser(userId)
+                                            if (resolvedUser?.relationship == "Blocked") {
+                                                unblockUser(userId)
+                                                // Update local cache/state to reflect new relationship
+                                                val updated = resolvedUser!!.copy(relationship = null)
+                                                resolvedUser = updated
+                                                PeptideAPI.userCache[userId] =
+                                                    (PeptideAPI.userCache[userId]?.copy(relationship = null))
+                                                        ?: updated
+                                                try { fetchUser(userId) } catch (_: Exception) {}
+                                            } else {
+                                                blockUser(userId)
+                                                // Update local cache/state to reflect new relationship
+                                                val updated = resolvedUser!!.copy(relationship = "Blocked")
+                                                resolvedUser = updated
+                                                PeptideAPI.userCache[userId] =
+                                                    (PeptideAPI.userCache[userId]?.copy(relationship = "Blocked"))
+                                                        ?: updated
+                                                try { fetchUser(userId) } catch (_: Exception) {}
+                                            }
                                         }
                                     } catch (e: Exception) {
                                         if (e.message == "NoEffect") return@launch
                                         logcat(LogPriority.ERROR) { e.asLog() }
+                                    } finally {
+                                        isBlockActionLoading = false
                                     }
                                 }
                             },
                             modifier = Modifier,
                             dangerous = true
                         )
-                        if(resolvedUser?.relationship == "Friend"){
+                        if (resolvedUser?.relationship == "Friend") {
                             HorizontalDivider()
                             SheetButton(
                                 headlineContent = { Text(stringResource(R.string.user_info_sheet_remove_friend)) },
@@ -344,14 +373,32 @@ fun UserInfoSheet(
                                         contentDescription = null
                                     )
                                 },
+                                trailingContent = {
+                                    if (isRemoveFriendLoading) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(18.dp),
+                                            strokeWidth = 2.dp,
+                                            color = LocalContentColor.current
+                                        )
+                                    }
+                                },
                                 onClick = {
-                                    resolvedUser?.id?.let {userId ->
+                                    resolvedUser?.id?.let { userId ->
                                         scope.launch {
                                             try {
+                                                isRemoveFriendLoading = true
                                                 unfriendUser(userId)
+                                                val updated = resolvedUser!!.copy(relationship = "None")
+                                                resolvedUser = updated
+                                                PeptideAPI.userCache[userId] =
+                                                    (PeptideAPI.userCache[userId]?.copy(relationship = "None"))
+                                                        ?: updated
+                                                try { fetchUser(userId) } catch (_: Exception) {}
                                             } catch (e: Exception) {
                                                 if (e.message == "NoEffect") return@launch
                                                 logcat(LogPriority.ERROR) { e.asLog() }
+                                            } finally {
+                                                isRemoveFriendLoading = false
                                             }
                                         }
                                     }
@@ -390,8 +437,10 @@ fun UserInfoSheet(
 
                 // Removed joined, badges, and bio sections per request
 
-                item(key = "actions", span = StaggeredGridItemSpan.FullLine) {
-                    UserButtons(resolvedUser!!, dismissSheet)
+                item(key = "actions_${resolvedUser!!.id}_${resolvedUser!!.relationship}", span = StaggeredGridItemSpan.FullLine) {
+                    UserButtons(resolvedUser!!, dismissSheet, onRelationshipChanged = { newRel ->
+                        resolvedUser = resolvedUser!!.copy(relationship = newRel)
+                    })
                 }
             } else {
                 item(key = "notifications", span = StaggeredGridItemSpan.FullLine) {

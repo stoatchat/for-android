@@ -203,7 +203,6 @@ fun ChannelSideDrawer(
         ) {
             UserInfoSheet(
                 userId = userContextSheetTarget!!,
-                serverId = null,
                 dismissSheet = {
                     userContextSheetState.hide()
                     userContextSheetTarget = null

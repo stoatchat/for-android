@@ -226,7 +226,9 @@ fun MemberListSheet(
     }
 
     if (showUserInfoSheet) {
-        val userContextSheetState = rememberModalBottomSheetState()
+        val userContextSheetState = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
 
         ModalBottomSheet(
             sheetState = userContextSheetState,
@@ -236,7 +238,6 @@ fun MemberListSheet(
         ) {
             UserInfoSheet(
                 userId = userInfoSheetTarget,
-                serverId = serverId,
                 dismissSheet = {
                     userContextSheetState.hide()
                     showUserInfoSheet = false

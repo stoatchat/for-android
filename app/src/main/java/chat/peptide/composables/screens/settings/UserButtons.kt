@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,41 +24,52 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.acceptFriendRequest
-import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.routes.user.friendUser
 import chat.peptide.api.routes.user.openDM
-import chat.peptide.api.routes.user.unblockUser
 import chat.peptide.api.routes.user.unfriendUser
 import chat.peptide.api.schemas.User
 import chat.peptide.callbacks.Action
 import chat.peptide.callbacks.ActionChannel
 import chat.peptide.composables.generic.SquareButton
-import chat.peptide.internals.Platform
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 
+private const val REL_NONE: String = "None"
+private const val REL_USER: String = "User"
+private const val REL_FRIEND: String = "Friend"
+private const val REL_OUTGOING: String = "Outgoing"
+private const val REL_INCOMING: String = "Incoming"
+private const val REL_BLOCKED: String = "Blocked"
+private const val REL_BLOCKED_OTHER: String = "BlockedOther"
+
 @Composable
 fun UserButtons(
     user: User,
-    dismissSheet: suspend () -> Unit
+    dismissSheet: suspend () -> Unit,
+    onRelationshipChanged: (String?) -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
 
     var botEasterEgg by remember { mutableStateOf(false) }
-    var menuOpen by remember { mutableStateOf(false) }
+    var isAddFriendLoading by remember { mutableStateOf(false) }
+    var isOpenDMLoading by remember { mutableStateOf(false) }
+    var isCancelRequestLoading by remember { mutableStateOf(false) }
+    var isAcceptRequestLoading by remember { mutableStateOf(false) }
+    var isDeclineRequestLoading by remember { mutableStateOf(false) }
+
+    // Always derive latest user from cache to reflect relationship changes
+    val latestUser: User = user.id?.let { id -> PeptideAPI.userCache[id] } ?: user
+    val relationship: String = latestUser.relationship ?: REL_NONE
 
     if (user.id == null) return Row {
         SquareButton(
@@ -85,23 +96,39 @@ fun UserButtons(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        when (user.relationship) {
-            "None" -> {
-                if (user.bot == null) {
+        when (relationship) {
+            REL_NONE -> {
+                if (latestUser.bot == null) {
                     SquareButton(
                         onClick = {
                             scope.launch {
                                 try {
-                                    friendUser("${user.username}#${user.discriminator}")
+                                    isAddFriendLoading = true
+                                    friendUser("${latestUser.username}#${latestUser.discriminator}")
+                                    latestUser.id?.let { id ->
+                                        val updated = latestUser.copy(relationship = REL_OUTGOING)
+                                        PeptideAPI.userCache[id] =
+                                            (PeptideAPI.userCache[id]?.copy(relationship = REL_OUTGOING))
+                                                ?: updated
+                                        onRelationshipChanged(REL_OUTGOING)
+                                    }
                                 } catch (e: Exception) {
                                     if (e.message == "NoEffect") return@launch
                                     logcat(LogPriority.ERROR) { e.asLog() }
+                                } finally {
+                                    isAddFriendLoading = false
                                 }
                             }
                         },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        enabled = !isAddFriendLoading
                     ) {
-                        Text(stringResource(R.string.user_info_sheet_add_friend))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(stringResource(R.string.user_info_sheet_add_friend))
+                            if (isAddFriendLoading) {
+                                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = LocalContentColor.current)
+                            }
+                        }
                     }
                 } else {
                     Row(
@@ -133,7 +160,7 @@ fun UserButtons(
                 }
             }
 
-            "User" -> {
+            REL_USER -> {
                 SquareButton(
                     onClick = {
                         scope.launch {
@@ -149,106 +176,151 @@ fun UserButtons(
                 }
             }
 
-            "Friend" -> {
+            REL_FRIEND -> {
                 FilledTonalButton(
                     onClick = {
-                        scope.launch {
-                            val dm = openDM(user.id)
-                            if (dm.id != null) {
-                                if (PeptideAPI.channelCache[dm.id] == null)
-                                    PeptideAPI.channelCache[dm.id] = dm
-                                ActionChannel.send(Action.SwitchChannel(dm.id))
-                                dismissSheet()
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.user_info_sheet_failed_to_open_dm),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        latestUser.id?.let {
+                            scope.launch {
+                                try {
+                                    isOpenDMLoading = true
+                                    val dm = openDM(latestUser.id)
+                                    if (dm.id != null) {
+                                        if (PeptideAPI.channelCache[dm.id] == null)
+                                            PeptideAPI.channelCache[dm.id] = dm
+                                        ActionChannel.send(Action.SwitchChannel(dm.id))
+                                        dismissSheet()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.user_info_sheet_failed_to_open_dm),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                } finally {
+                                    isOpenDMLoading = false
+                                }
                             }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    enabled = !isOpenDMLoading
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_send_message))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.user_info_sheet_send_message))
+                        if (isOpenDMLoading) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = LocalContentColor.current)
+                        }
+                    }
                 }
                 // Remove friend (in overflow menu)
             }
 
-            "Outgoing" -> {
+            REL_OUTGOING -> {
                 SquareButton(
                     onClick = {
-                        scope.launch {
-                            try {
-                                unfriendUser(user.id)
-                            } catch (e: Exception) {
-                                if (e.message == "NoEffect") return@launch
-                                logcat(LogPriority.ERROR) { e.asLog() }
+                        latestUser.id?.let {
+                            scope.launch {
+                                try {
+                                    isCancelRequestLoading = true
+                                    unfriendUser(latestUser.id)
+                                    val updated = latestUser.copy(relationship = REL_NONE)
+                                    PeptideAPI.userCache[latestUser.id] =
+                                        (PeptideAPI.userCache[latestUser.id]?.copy(relationship = REL_NONE))
+                                            ?: updated
+                                    onRelationshipChanged(REL_NONE)
+                                } catch (e: Exception) {
+                                    if (e.message == "NoEffect") return@launch
+                                    logcat(LogPriority.ERROR) { e.asLog() }
+                                } finally {
+                                    isCancelRequestLoading = false
+                                }
                             }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    enabled = !isCancelRequestLoading
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_cancel_request))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.user_info_sheet_cancel_request))
+                        if (isCancelRequestLoading) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = LocalContentColor.current)
+                        }
+                    }
                 }
             }
 
-            "Incoming" -> {
+            REL_INCOMING -> {
                 SquareButton(
                     onClick = {
-                        scope.launch {
-                            try {
-                                acceptFriendRequest(user.id)
-                            } catch (e: Exception) {
-                                if (e.message == "NoEffect") return@launch
-                                logcat(LogPriority.ERROR) { e.asLog() }
+                        latestUser.id?.let {
+                            scope.launch {
+                                try {
+                                    isAcceptRequestLoading = true
+                                    acceptFriendRequest(latestUser.id)
+                                    val updated = latestUser.copy(relationship = REL_FRIEND)
+                                    PeptideAPI.userCache[latestUser.id] =
+                                        (PeptideAPI.userCache[latestUser.id]?.copy(relationship = REL_FRIEND))
+                                            ?: updated
+                                    onRelationshipChanged(REL_FRIEND)
+                                } catch (e: Exception) {
+                                    if (e.message == "NoEffect") return@launch
+                                    logcat(LogPriority.ERROR) { e.asLog() }
+                                } finally {
+                                    isAcceptRequestLoading = false
+                                }
                             }
                         }
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    enabled = !isAcceptRequestLoading
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_accept_request))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.user_info_sheet_accept_request))
+                        if (isAcceptRequestLoading) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = LocalContentColor.current)
+                        }
+                    }
                 }
                 SquareButton(
                     onClick = {
-                        scope.launch {
-                            try {
-                                unfriendUser(user.id)
-                            } catch (e: Exception) {
-                                if (e.message == "NoEffect") return@launch
-                                logcat(LogPriority.ERROR) { e.asLog() }
+                        latestUser.id?.let {
+                            scope.launch {
+                                try {
+                                    isDeclineRequestLoading = true
+                                    unfriendUser( latestUser.id)
+                                    val updated = latestUser.copy(relationship = REL_NONE)
+                                    PeptideAPI.userCache[latestUser.id] =
+                                        (PeptideAPI.userCache[latestUser.id]?.copy(relationship = REL_NONE))
+                                            ?: updated
+                                    onRelationshipChanged(REL_NONE)
+                                } catch (e: Exception) {
+                                    if (e.message == "NoEffect") return@launch
+                                    
+                                    logcat(LogPriority.ERROR) { e.asLog() }
+                                } finally {
+                                    isDeclineRequestLoading = false
+                                }
                             }
                         }
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError,
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    enabled = !isDeclineRequestLoading
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_decline_request))
-                }
-            }
-
-            "Blocked" -> {
-                SquareButton(
-                    onClick = {
-                        scope.launch {
-                            try {
-                                unblockUser(user.id)
-                            } catch (e: Exception) {
-                                if (e.message == "NoEffect") return@launch
-                                logcat(LogPriority.ERROR) { e.asLog() }
-                            }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.user_info_sheet_decline_request))
+                        if (isDeclineRequestLoading) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp, color = LocalContentColor.current)
                         }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(stringResource(R.string.user_info_sheet_unblock))
+                    }
                 }
             }
-
-            "BlockedOther" -> Box(Modifier.weight(1f))
+            REL_BLOCKED, REL_BLOCKED_OTHER -> Box(Modifier.weight(1f))
+            else -> Box(Modifier.weight(1f))
         }
     }
 }
