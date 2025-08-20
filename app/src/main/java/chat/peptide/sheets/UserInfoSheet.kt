@@ -59,7 +59,6 @@ import chat.peptide.api.routes.user.unfriendUser
 import chat.peptide.api.schemas.ChannelType
 import chat.peptide.api.schemas.NotificationSettings
 import chat.peptide.api.settings.Experiments
-import chat.peptide.api.settings.FeatureFlags
 import chat.peptide.api.settings.NotificationType
 import chat.peptide.api.settings.SyncedSettings
 import chat.peptide.callbacks.Action
