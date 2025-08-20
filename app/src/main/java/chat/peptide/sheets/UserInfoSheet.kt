@@ -53,6 +53,7 @@ import chat.peptide.R
 import chat.peptide.api.PeptideAPI
 import chat.peptide.api.routes.user.blockUser
 import chat.peptide.api.routes.user.fetchUser
+import chat.peptide.api.routes.user.openDM
 import chat.peptide.api.routes.user.unblockUser
 import chat.peptide.api.routes.user.unfriendUser
 import chat.peptide.api.schemas.ChannelType
@@ -253,7 +254,26 @@ fun UserInfoSheet(
                                         contentDescription = null
                                     )
                                 },
-                                onClick = { /* open DM screen */ }
+                                onClick = {
+                                    resolvedUser?.id?.let { targetId ->
+                                        scope.launch {
+                                            val dm = openDM(targetId)
+                                            if (dm.id != null) {
+                                                if (PeptideAPI.channelCache[dm.id] == null) {
+                                                    PeptideAPI.channelCache[dm.id] = dm
+                                                }
+                                                ActionChannel.send(Action.SwitchChannel(dm.id))
+                                                dismissSheet()
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    context.getString(R.string.user_info_sheet_failed_to_open_dm),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                    }
+                                }
                             )
                             HorizontalDivider()
                             SheetButton(
