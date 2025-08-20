@@ -203,7 +203,7 @@ fun UserInfoSheet(
                                     )
                                 }
                             }
-                            if (Experiments.enableServerIdentityOptions.isEnabled || FeatureFlags.userCardsGranted) {
+                            if (Experiments.enableServerIdentityOptions.isEnabled) {
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     if (Experiments.enableServerIdentityOptions.isEnabled) {
                                         SmallFloatingActionButton(onClick = {
@@ -211,16 +211,6 @@ fun UserInfoSheet(
                                         }) {
                                             Icon(
                                                 painter = painterResource(R.drawable.icn_psychology_alt_24dp),
-                                                contentDescription = null
-                                            )
-                                        }
-                                    }
-                                    if (FeatureFlags.userCardsGranted) {
-                                        SmallFloatingActionButton(onClick = {
-                                            showUserCard = true
-                                        }) {
-                                            Icon(
-                                                painter = painterResource(R.drawable.icn_badge_24dp),
                                                 contentDescription = null
                                             )
                                         }
@@ -247,10 +237,10 @@ fun UserInfoSheet(
                                 .background(MaterialTheme.colorScheme.surfaceBright)
                         ) {
                             SheetButton(
-                                headlineContent = { Text(text = stringResource(id = R.string.message_friends)) },
+                                headlineContent = { Text(text = stringResource(id = R.string.message)) },
                                 leadingContent = {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_new_message),
+                                        painter = painterResource(R.drawable.icn_message_to_user),
                                         contentDescription = null
                                     )
                                 },
