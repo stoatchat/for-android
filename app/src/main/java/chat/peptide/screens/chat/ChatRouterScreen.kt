@@ -101,7 +101,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.sentry.Sentry
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -221,7 +220,7 @@ class ChatRouterViewModel @Inject constructor(
             OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Log.w("FCM", "Fetching FCM registration token failed", task.exception)
-                    task.exception?.let { Sentry.captureException(it) }
+//                    task.exception?.let { Sentry.captureException(it) }
                     return@OnCompleteListener
                 }
 
@@ -691,6 +690,7 @@ fun ChatRouterScreen(
         AlertDialog(
             onDismissRequest = {
                 showChannelUnavailableAlert = false
+                viewModel.setSaveDestination(ChatRouterDestination.Discover)
             },
             icon = {
                 Icon(
@@ -716,6 +716,7 @@ fun ChatRouterScreen(
             confirmButton = {
                 PepTextButton(onClick = {
                     showChannelUnavailableAlert = false
+                    viewModel.setSaveDestination(ChatRouterDestination.Discover)
                 }) {
                     Text(text = stringResource(id = R.string.ok))
                 }

@@ -1,5 +1,4 @@
 import com.mikepenz.aboutlibraries.plugin.StrictMode
-import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -12,7 +11,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     id("org.jmailen.kotlinter")
-    id("io.sentry.android.gradle") version "4.12.0"
     id("app.cash.sqldelight") version "2.0.1"
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -99,11 +97,6 @@ android {
             )
             buildConfigField(
                 "String",
-                "SENTRY_DSN",
-                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
-            )
-            buildConfigField(
-                "String",
                 "FLAVOUR_ID",
                 "\"${buildproperty("build.flavour_id", "RVX_BUILD_FLAVOUR_ID")}\""
             )
@@ -120,11 +113,11 @@ android {
                 buildproperty("build.debug.app_name", "RVX_DEBUG_APP_NAME")!!
             )
 
-            buildConfigField(
-                "String",
-                "SENTRY_DSN",
-                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
-            )
+//            buildConfigField(
+//                "String",
+//                "SENTRY_DSN",
+//                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
+//            )
             buildConfigField(
                 "String",
                 "FLAVOUR_ID",
@@ -164,23 +157,23 @@ android {
         abortOnError = false
         disable += "MissingTranslation"
         disable += "NullSafeMutableLiveData"
-//        checkReleaseBuilds false
+        checkReleaseBuilds = false
     }
 }
 
-sentry {
-    autoUploadProguardMapping =
-        buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
-
-    tracingInstrumentation {
-        enabled = true
-
-        logcat {
-            enabled = true
-            minLevel = LogcatLevel.WARNING
-        }
-    }
-}
+//sentry {
+//    autoUploadProguardMapping =
+//        buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
+//
+//    tracingInstrumentation {
+//        enabled = true
+//
+//        logcat {
+//            enabled = true
+//            minLevel = LogcatLevel.WARNING
+//        }
+//    }
+//}
 
 dependencies {
     // Android/Kotlin Core
@@ -247,8 +240,8 @@ dependencies {
     implementation("com.mikepenz:aboutlibraries-core:11.3.0-rc02")
 
     // Sentry - crash reporting
-    implementation("io.sentry:sentry-android:8.13.2")
-    implementation("io.sentry:sentry-compose-android:8.13.2")
+//    implementation("io.sentry:sentry-android:8.19.1")
+//    implementation("io.sentry:sentry-compose-android:8.19.1")
 
     // Other AndroidX libraries
     implementation("androidx.documentfile:documentfile:1.1.0")

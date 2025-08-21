@@ -135,10 +135,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.request.get
-import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Injectimport io.sentry.Sentry
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -378,7 +377,7 @@ class MainActivity : AppCompatActivity() {
       try {
         throw Exception("This app uses Sentry! :)")
       } catch (e: Exception) {
-        Sentry.captureException(e)
+//        Sentry.captureException(e)
       }
     }
 
@@ -386,10 +385,10 @@ class MainActivity : AppCompatActivity() {
         // Set the default platform for the Platform API.
         viewModel.setDefaultPlatformOnCreate()
 
-        SentryAndroid.init(this) { options ->
-            options.dsn = BuildConfig.SENTRY_DSN
-            options.release = BuildConfig.VERSION_NAME
-        }
+//        SentryAndroid.init(this) { options ->
+//            options.dsn = BuildConfig.SENTRY_DSN
+//            options.release = BuildConfig.VERSION_NAME
+//        }
 
         @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
         window.statusBarColor = Color.Transparent.toArgb()

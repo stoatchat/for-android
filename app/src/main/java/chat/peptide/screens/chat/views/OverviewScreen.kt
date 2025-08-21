@@ -62,7 +62,6 @@ import chat.peptide.composables.skeletons.UserOverviewSkeleton
 import chat.peptide.internals.extensions.zero
 import chat.peptide.screens.chat.LocalIsConnected
 import chat.peptide.sheets.UserCardSheet
-import io.sentry.Sentry
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,7 +88,7 @@ fun OverviewScreen(
                 }
             } catch (e: Exception) {
                 Log.e("OverviewScreen", "Failed to fetch self", e)
-                Sentry.captureException(e)
+//                Sentry.captureException(e)
                 isLoading = false
             }
         }
