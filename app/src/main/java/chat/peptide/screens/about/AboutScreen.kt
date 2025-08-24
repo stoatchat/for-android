@@ -72,7 +72,7 @@ class AboutViewModel : ViewModel() {
             "App Version" to BuildConfig.VERSION_NAME,
             "App Type" to BuildConfig.FLAVOUR_ID,
             "API Host" to URI(PeptideAPI.getCurrentBaseUrl()).host,
-            "API Version" to (root?.peptide ?: "Unknown"),
+            "API Version" to (root?.revolt ?: "Unknown"),
             "Runtime SDK" to Build.VERSION.SDK_INT.toString(),
             "Model" to "${Build.MANUFACTURER} ${
                 Build.DEVICE.replaceFirstChar {

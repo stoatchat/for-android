@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Root(
-    val peptide: String,
+    val revolt: String,
     val features: Features,
     val ws: String,
     val app: String,
