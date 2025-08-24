@@ -15,7 +15,7 @@
     <string name="service_health_alert_actions_default">Uzziniet vairāk</string>
     <string name="service_health_alert_actions_dismiss">Atlaist</string>
     <string name="password_forgot">Aizmirsāt paroli\?</string>
-    <string name="register_image_alt">Izmantojiet Revolt, lai tērzētu par lietām.</string>
+    <string name="register_image_alt">Izmantojiet Peptide, lai tērzētu par lietām.</string>
     <string name="register_form_heading">Sāksim jūs iestatīšanu.</string>
     <string name="register_email">E-pasts</string>
     <string name="register_email_verification_hint">Mēs nosūtīsim jums verifikācijas e-pastu, lai apstiprinātu jūsu kontu.</string>
@@ -35,7 +35,7 @@
     <string name="mfa_recovery_code">Kods</string>
     <string name="mfa_password_header">Ievadiet savu paroli</string>
     <string name="about">Par</string>
-    <string name="about_brought_to_you_by">Ar ❤️ jums atnesa Revolt komanda.</string>
+    <string name="about_brought_to_you_by">Ar ❤️ jums atnesa Peptide komanda.</string>
     <string name="about_tab_version">Versija</string>
     <string name="about_tab_details">Sīkāka informācija</string>
     <string name="oss_attribution">OSS attiecinājums</string>
@@ -58,7 +58,7 @@
     <string name="lets_go">Ejam</string>
     <string name="rate_limit_toast">Turiet savus zirgus! Jūs to darāt pārāk bieži īsā laikā.</string>
     <string name="login_onboarding_heading">Atrodiet savu kopienu, sazinieties ar pasauli.</string>
-    <string name="login_onboarding_body">Revolt ir viens no labākajiem veidiem, kā sazināties ar draugiem un kopienu jebkurā vietā un laikā.</string>
+    <string name="login_onboarding_body">Peptide ir viens no labākajiem veidiem, kā sazināties ar draugiem un kopienu jebkurā vietā un laikā.</string>
     <string name="email">E-pasts</string>
     <string name="signup">Reģistrēties</string>
     <string name="service_health_alert">Pašlaik notiek</string>
@@ -70,11 +70,11 @@
     <string name="mfa_totp_lead">Ievadiet sešciparu kodu no savas autentifikācijas lietotnes.</string>
     <string name="mfa_recovery_header">Ievadiet atkopšanas kodu</string>
     <string name="mfa_password_lead">Lai turpinātu, ievadiet savu paroli.</string>
-    <string name="about_full_name">Revolt operētājsistēmā Android</string>
-    <string name="oss_attribution_body">Revolt tiek veidots, izmantojot šos lieliskos atvērtā pirmkoda projektus.</string>
+    <string name="about_full_name">Peptide operētājsistēmā Android</string>
+    <string name="oss_attribution_body">Peptide tiek veidots, izmantojot šos lieliskos atvērtā pirmkoda projektus.</string>
     <string name="oss_attribution_body_2">Mēs esam pateicīgi šo projektu izstrādātājiem par to, ka viņu darbs ir pieejams pasaulei.</string>
     <string name="oss_attribution_warning">Tālāk esošais saraksts tiek ģenerēts automātiski. Tas var būt nepilnīgs vai neprecīzs.</string>
-    <string name="register_heading">Laipni lūdzam Revolt</string>
+    <string name="register_heading">Laipni lūdzam Peptide</string>
     <string name="register_instructions">Tā ir kā vieta, kur pavadīt laiku, sanākt kopā un runāt par lietām. Labākā daļa, tas ir internetā.</string>
     <string name="register_data">Pie mums jūsu dati ir drošībā. Mēs to nepārdodam un neizmantojam, lai rādītu jums reklāmas.</string>
     <string name="register_password_rules">Astoņi vai vairāk, parastie ir slikti. Ieteicami simboli un cipari.</string>
@@ -87,7 +87,7 @@
     <string name="attachment_preview_close">Aizvērt</string>
     <string name="emoji_category_objects">Objekti</string>
     <string name="badge_platform_moderation_alt">Platformas moderēšana</string>
-    <string name="badge_team_member_alt">Revolt komandas dalībnieks</string>
+    <string name="badge_team_member_alt">Peptide komandas dalībnieks</string>
     <string name="password_forgot_heading">Aizmirsāt paroli\?</string>
     <string name="password_forgot_instructions">Ievadiet savu e-pastu, un mēs jums nosūtīsim norādījumus par paroles atiestatīšanu.</string>
     <string name="oss_attribution_generation_date">Pēdējo reizi atjaunināts: %1$s</string>
@@ -212,7 +212,7 @@
     <string name="status_focus">Fokuss</string>
     <string name="status_focus_explainer">Jūs nesaņemsit paziņojumus par ziņām, bet saņemsiet paziņojumus par @minējumiem.</string>
     <string name="status_dnd_explainer">Jūs nesaņemsit nekādus paziņojumus, tostarp ziņojumus un @minējumus.</string>
-    <string name="status_invisible_explainer">Jūs varēsiet izmantot Revolt kā parasti, taču citiem cilvēkiem jūs neparādīsies kā tiešsaistē.</string>
+    <string name="status_invisible_explainer">Jūs varēsiet izmantot Peptide kā parasti, taču citiem cilvēkiem jūs neparādīsies kā tiešsaistē.</string>
     <string name="no_connection_message">Jums nav izveidots savienojums ar internetu. Lūdzu, pārbaudiet savienojumu un mēģiniet vēlreiz.</string>
     <string name="scroll_to_bottom">Ritiniet līdz apakšai</string>
     <string name="copied">Kopēts starpliktuvē</string>
@@ -254,7 +254,7 @@
     <string name="message_context_sheet_actions_delete_confirmation_yes">Dzēst</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Paturēt</string>
     <string name="overview_screen_share_profile_description">Apskatiet savu lietotāja karti un saņemiet īpašu saiti, ko kopīgot</string>
-    <string name="overview_screen_changelog_description">Revolt nekad neguļ, paskatieties, lai redzētu, kas ir bijis darbos</string>
+    <string name="overview_screen_changelog_description">Peptide nekad neguļ, paskatieties, lai redzētu, kas ir bijis darbos</string>
     <string name="message_context_sheet_actions_copy_failed_empty">Ziņojums ir tukšs, nav ko kopēt</string>
     <string name="message_context_sheet_actions_copy_id_copied">Ziņojuma ID ir kopēts starpliktuvē</string>
     <string name="message_context_sheet_actions_copy_link_copied">Ziņojuma saite ir kopēta starpliktuvē</string>
@@ -317,7 +317,7 @@
     <string name="user_badge_early_adopter">Agrīnais adoptētājs</string>
     <string name="add_server_sheet_join_by_invite_modal_description">Ievadiet saiti, piemēram, rvlt.gg/Testers, vai ielūguma kodu, piemēram, Testētāji</string>
     <string name="add_server_sheet_create_new_modal_title">Izveidojiet jaunu serveri</string>
-    <string name="discover">Atklājiet Revolt</string>
+    <string name="discover">Atklājiet Peptide</string>
     <string name="report_cancel">Atcelt</string>
     <string name="report_message_heading">Pastāstiet mums, kas ar šo ziņojumu ir nepareizi</string>
     <string name="user_info_sheet_category_joined">Pievienojās</string>
@@ -348,7 +348,7 @@
     <string name="user_card_error_sharing">Koplietojot jūsu lietotāja karti, radās kļūda.</string>
     <string name="user_card_data_point_display_name">%1$d.Vārds</string>
     <string name="user_card_data_point_username">%1$d.Lietotājvārds</string>
-    <string name="user_card_data_point_join_date">%1$d.Par Revolt kopš</string>
+    <string name="user_card_data_point_join_date">%1$d.Par Peptide kopš</string>
     <string name="user_card_data_point_qrcode">%1$d.QR kods</string>
     <string name="user_card_data_point_photo">%1$d.Foto</string>
     <string name="programming_language_snippet_default">[Koda fragments]</string>

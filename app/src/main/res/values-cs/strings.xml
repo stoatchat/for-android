@@ -9,7 +9,7 @@
     <string name="loading">Načítání informací, vydržte…</string>
     <string name="privacy_policy">Ochrana údajů</string>
     <string name="community_guidelines">Pravidla komunity</string>
-    <string name="login_onboarding_body">Revolt je jedním z nejlepších způsobů, jak můžete zůstat ve spojení se svými přáteli a komunitou, kdekoli, kdykoli.</string>
+    <string name="login_onboarding_body">Peptide je jedním z nejlepších způsobů, jak můžete zůstat ve spojení se svými přáteli a komunitou, kdekoli, kdykoli.</string>
     <string name="password">Heslo</string>
     <string name="login">Přihlásit se</string>
     <string name="signup">Registrace</string>
@@ -19,14 +19,14 @@
     <string name="password_manager_hint">Používáte správce hesel\?</string>
     <string name="password_forgot_heading">Zapomněli jste heslo\?</string>
     <string name="password_forgot_instructions">Zadejte svůj e-mail, my vám na něj pošleme návod, jak můžete resetovat své heslo.</string>
-    <string name="register_heading">Víteje v Revoltu</string>
+    <string name="register_heading">Víteje v Peptideu</string>
     <string name="terms_of_service">Podmínky služby</string>
     <string name="email">E-mail</string>
     <string name="login_heading">Pojďme se přihlásit</string>
     <string name="login_onboarding_heading">Najděte svou komunitu, spojte se se světem.</string>
     <string name="resend_verification">Znovu poslat ověřovací e-mail</string>
-    <string name="register_image_alt">Chatujte s ostatními na Revoltu.</string>
-    <string name="register_instructions">Revolt je místo, kde se můžete scházet, setkávat a povídat si o čemkoli. A to nejlepší\? Je to na internetu.</string>
+    <string name="register_image_alt">Chatujte s ostatními na Peptideu.</string>
+    <string name="register_instructions">Peptide je místo, kde se můžete scházet, setkávat a povídat si o čemkoli. A to nejlepší\? Je to na internetu.</string>
     <string name="register_form_heading">Pojďme vás připravit.</string>
     <string name="register_data">Vaše údaje jsou u nás v bezpečí. Neprodáváme je a nepoužíváme je ani k zobrazování reklam.</string>
     <string name="register_email">E-mail</string>
@@ -112,7 +112,7 @@
     <string name="emote_info_from_server">ze serveru %1$s</string>
     <string name="emote_info_from_server_unknown">z soukromého serveru</string>
     <string name="channel_info_sheet_options">Možnosti</string>
-    <string name="oss_attribution_body">Revolt byl vytvořen s pomocí těchto úžasných open-source projektů.</string>
+    <string name="oss_attribution_body">Peptide byl vytvořen s pomocí těchto úžasných open-source projektů.</string>
     <string name="oss_attribution_body_2">Jsme vděční vývojářům těchto projektů za to, že svou práci zpřístupnili světu.</string>
     <string name="oss_attribution_warning">Níže uvedený seznam je generován automaticky. Může být neúplný nebo nepřesný.</string>
     <string name="oss_attribution_generation_date">Poslední aktualizace: %1$s</string>
@@ -122,8 +122,8 @@
     <string name="unknown">Neznámé</string>
     <string name="menu">Nabídka</string>
     <string name="x_days_ago">před %1$d dny</string>
-    <string name="about_full_name">Revolt na Androidu</string>
-    <string name="about_brought_to_you_by">Vyvinuto s ❤️ týmem Revolt.</string>
+    <string name="about_full_name">Peptide na Androidu</string>
+    <string name="about_brought_to_you_by">Vyvinuto s ❤️ týmem Peptide.</string>
     <string name="about_tab_version">Verze</string>
     <string name="about_tab_details">Podrobnosti</string>
     <string name="oss_attribution_tap_to_view_license">Klepnutím na zobrazíte licenci</string>
@@ -148,7 +148,7 @@
     <string name="badge_bot_alt">Bot</string>
     <string name="badge_masquerade_alt">Z odkazovaného kanálu</string>
     <string name="badge_platform_moderation_alt">Moderace platformy</string>
-    <string name="badge_team_member_alt">Člen týmu Revolt</string>
+    <string name="badge_team_member_alt">Člen týmu Peptide</string>
     <string name="logout">Odhlásit se</string>
     <string name="home_join_jenvolt">Připojit se do Jenvolt</string>
     <string name="friends">Přátelé</string>
@@ -193,7 +193,7 @@
     <string name="status_focus">Soustředěný</string>
     <string name="status_focus_explainer">Nebudete dostávat žádná oznámení o zprávách, ale budete dostávat oznámení o @zmínkách.</string>
     <string name="status_dnd_explainer">Nebudete dostávat žádná oznámení, včetně zpráv a @zmínek.</string>
-    <string name="status_invisible_explainer">Revolt budete moci používat jako obvykle, ale pro ostatní lidi se budete vypadat offline.</string>
+    <string name="status_invisible_explainer">Peptide budete moci používat jako obvykle, ale pro ostatní lidi se budete vypadat offline.</string>
     <string name="channel_link_invalid">Tento kanál nelze zobrazit</string>
     <string name="channel_info_sheet_options_notifications_manage">Správa oznámení</string>
     <string name="friends_new_group">Nová skupina</string>
@@ -219,7 +219,7 @@
     <string name="user_badge_active_supporter">Aktivní podporovatel</string>
     <string name="add_server_sheet_join_by_invite_modal_join">Připojit se</string>
     <string name="add_server_sheet_create_new_modal_title">Vytvořit nový server</string>
-    <string name="discover">Prozkoumejte Revolt</string>
+    <string name="discover">Prozkoumejte Peptide</string>
     <string name="report">Nahlásit</string>
     <string name="report_cancel">Zrušit</string>
     <string name="report_message_preview">Vybraná zpráva:</string>
@@ -287,12 +287,12 @@
     <string name="settings_appearance_colour_overrides_import">Import</string>
     <string name="settings_appearance_colour_overrides_import_error">Tento soubor není platným souborem přepsání barev.</string>
     <string name="settings_feedback">Zpětná vazba</string>
-    <string name="settings_feedback_description">Připojte se k serveru Revoltu pro udělení zpětné vazby nebo nápadů a nahlášení chyb.</string>
+    <string name="settings_feedback_description">Připojte se k serveru Peptideu pro udělení zpětné vazby nebo nápadů a nahlášení chyb.</string>
     <string name="settings_changelogs_new_header">Co jsme uvařili ✨</string>
     <string name="settings_changelogs_historical_version_header">Seznam změn pro %1$s</string>
     <string name="settings_changelogs_historical_version_header_placeholder">tamta verze</string>
-    <string name="share_target_heading">Sdílet na Revoltu</string>
-    <string name="share_target_attachment_too_large">Tato příloha je pro Revolt příliš velká (max. $1$s).</string>
+    <string name="share_target_heading">Sdílet na Peptideu</string>
+    <string name="share_target_attachment_too_large">Tato příloha je pro Peptide příliš velká (max. $1$s).</string>
     <string name="share_target_search_channels">Prohledat kanály</string>
     <string name="create_group_action">Vytvořit</string>
     <string name="channel_age_gate_description">Pro zobrazení tohoto kanálu vám musí být alespoň 18 let.</string>
@@ -321,7 +321,7 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (nepodporovaný)</string>
     <string name="settings_appearance_colour_overrides_on_error_container">Na kontejneru chyby</string>
     <string name="settings_changelogs">Seznam změn</string>
-    <string name="share_target_login_first">Před sdílením na Revoltu se prosím přihlaste.</string>
+    <string name="share_target_login_first">Před sdílením na Peptideu se prosím přihlaste.</string>
     <string name="share_target_invalid_intent">Toto není platný intent sdílení.</string>
     <string name="share_target_select_channel">Vyberte kanál, do kterého chcete sdílet.</string>
     <string name="media_viewer_open">Otevřít</string>
@@ -340,7 +340,7 @@
     <string name="settings_profile_custom_background">Vlastní pozadí</string>
     <string name="settings_profile_save">Uložit</string>
     <string name="settings_sessions">Relace</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Světlý</string>
     <string name="settings_appearance_theme_amoled">Čistě černá</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -392,7 +392,7 @@
     <string name="report_reason_additional_hint">Jakékoli další informace, které by nám mohly pomoci při vyšetřování. Nepovinné.</string>
     <string name="report_submitting">Nahlašování…</string>
     <string name="report_submit_success">Nahlášeno</string>
-    <string name="report_submit_thanks">Děkujeme, že pomáháte s udržením bezpečnosti na Revoltu. Vaše nahlášení co nejdříve prověříme.</string>
+    <string name="report_submit_thanks">Děkujeme, že pomáháte s udržením bezpečnosti na Peptideu. Vaše nahlášení co nejdříve prověříme.</string>
     <string name="report_submit_error_header">Chyba</string>
     <string name="report_submit_error">Při odesílání vašeho nahlášení došlo k chybě. Zkuste to prosím znovu později.</string>
     <string name="report_submit_close">Zavřít</string>

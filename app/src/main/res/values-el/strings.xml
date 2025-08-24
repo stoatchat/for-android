@@ -11,8 +11,8 @@
     <string name="send_email">Αποστολή email</string>
     <string name="login_heading">Ας σε συνδέσουμε</string>
     <string name="resend_verification">Αποστολή email επαλήθευσης ξανά</string>
-    <string name="register_heading">Καλωσόρισες στο Revolt</string>
-    <string name="register_image_alt">Χρησιμοποίησε το Revolt για να συζητάς διάφορα.</string>
+    <string name="register_heading">Καλωσόρισες στο Peptide</string>
+    <string name="register_image_alt">Χρησιμοποίησε το Peptide για να συζητάς διάφορα.</string>
     <string name="register_form_heading">Ας σε ετοιμάσουμε.</string>
     <string name="register_email">Εmail</string>
     <string name="register_email_verification_hint">Θα σου στείλουμε ένα email επαλήθευσης για την επιβεβαίωση του λογαριασμού σου.</string>
@@ -43,7 +43,7 @@
     <string name="terms_of_service">Όροι Χρήσης</string>
     <string name="privacy_policy">Πολιτική Απορρήτου</string>
     <string name="login_onboarding_heading">Βρες την κοινότητά σου, συνδέσου με τον κόσμο.</string>
-    <string name="login_onboarding_body">Το Revolt είναι ένας από τους καλύτερους τρόπους για να μείνεις συνδεδεμένος με τους φίλους και την κοινότητά σου, οπουδήποτε και οποτεδήποτε.</string>
+    <string name="login_onboarding_body">Το Peptide είναι ένας από τους καλύτερους τρόπους για να μείνεις συνδεδεμένος με τους φίλους και την κοινότητά σου, οπουδήποτε και οποτεδήποτε.</string>
     <string name="signup">Εγγραφή</string>
     <string name="password_forgot">Ξέχασες τον κωδικό πρόσβασης;</string>
     <string name="password_manager_hint">Χρησιμοποιείς διαχειριστή κωδικών πρόσβασης;</string>
@@ -62,8 +62,8 @@
     <string name="mfa_password_lead">Πληκτρολόγησε τον κωδικό πρόσβασής σου για να συνεχίσεις.</string>
     <string name="comingsoon_toast">Λυπούμαστε, αυτή η λειτουργία δεν είναι ακόμα έτοιμη.</string>
     <string name="check_mail">Ελέγξτε τα mail σας!</string>
-    <string name="oss_attribution_body">Το Revolt δημιουργείται με τη βοήθεια έργων ανοιχτού κώδικα.</string>
-    <string name="about_brought_to_you_by">Με ❤️ από την ομάδα της Revolt.</string>
+    <string name="oss_attribution_body">Το Peptide δημιουργείται με τη βοήθεια έργων ανοιχτού κώδικα.</string>
+    <string name="about_brought_to_you_by">Με ❤️ από την ομάδα της Peptide.</string>
     <string name="about_tab_version">Έκδοση</string>
     <string name="about_tab_details">Λεπτομέριες</string>
     <string name="remove_reply_alt">Αφαίρεση απάντησης</string>
@@ -82,11 +82,11 @@
     <string name="badge_bot_alt">Bot</string>
     <string name="badge_masquerade_alt">Από συνδεδεμένο κανάλι</string>
     <string name="badge_platform_moderation_alt">Διαχείριση πλατφόρμας</string>
-    <string name="badge_team_member_alt">Μέλος ομάδας Revolt</string>
+    <string name="badge_team_member_alt">Μέλος ομάδας Peptide</string>
     <string name="unknown">Άγνωστο</string>
     <string name="menu">Μενού</string>
     <string name="logout">Αποσύνδεση</string>
-    <string name="about_full_name">Revolt στο Android</string>
+    <string name="about_full_name">Peptide στο Android</string>
     <string name="create_group_name">Όνομα ομάδας</string>
     <string name="system_message_channel_icon_changed_alt">Το εικονίδιο καναλιού άλλαξε</string>
     <string name="system_message_channel_renamed">Οι %1$s επανονόμασε το κανάλι σε %2$s</string>
@@ -97,7 +97,7 @@
     <string name="reconnecting">Επανασυνδέεστε…</string>
     <string name="status_focus">Εστίαση</string>
     <string name="status_invisible">Αόρατοι</string>
-    <string name="status_invisible_explainer">Θα μπορείτε να χρησιμοποιήσετε το Revolt ως συνήθως, αλλά δεν θα εμφανίζεστε ως συνδεδεμένοι σε άλλα άτομα.</string>
+    <string name="status_invisible_explainer">Θα μπορείτε να χρησιμοποιήσετε το Peptide ως συνήθως, αλλά δεν θα εμφανίζεστε ως συνδεδεμένοι σε άλλα άτομα.</string>
     <string name="server_flag_verified">Επικυρωμένος Server</string>
     <string name="channel_info_sheet_options_add">Πρόσθεσε μέλη</string>
     <string name="message_context_sheet_actions_copy_link_copied">Σύνδεσμος μηνύματος αντιγράφτηκε στο πρόχειρο</string>
@@ -185,7 +185,7 @@
     <string name="add_server_sheet_create_new">Δημιούργησε νέο server</string>
     <string name="add_server_sheet_create_new_modal_title">Δημιούργησε νέο server</string>
     <string name="add_server_sheet_create_new_modal_under_construction">Αυτό το χαρακτηριστικό είναι υπό κατασκευή.</string>
-    <string name="discover">Discover Revolt</string>
+    <string name="discover">Discover Peptide</string>
     <string name="report_cancel">Ακύρωση</string>
     <string name="report_message_heading">Πείτε μας τι συμβαίνει με αυτό το μήνυμα</string>
     <string name="report_server_heading">Πείτε μας τι συμβαίνει με αυτόν τον server</string>
@@ -259,7 +259,7 @@
     <string name="settings_appearance">Εμφάνιση</string>
     <string name="settings_appearance_theme">Θέμα</string>
     <string name="settings_appearance_theme_none">Σύστημα</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Ανοικτόχρωμο</string>
     <string name="settings_appearance_theme_amoled">Καθαρό Μαύρο</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Το Material You δεν υποστηρίζεται σε αυτή τη συσκευή.</string>
@@ -454,8 +454,8 @@
     <string name="channel_settings_delete">Διαγραφή καναλιού</string>
     <string name="channel_settings_delete_confirm">Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το κανάλι;</string>
     <string name="channel_settings_delete_confirm_no">Διατήρηση</string>
-    <string name="share_target_heading">Κοινοποίηση στο Revolt</string>
-    <string name="share_target_login_first">Συνδεθείτε πριν από την κοινοποίηση στο Revolt.</string>
+    <string name="share_target_heading">Κοινοποίηση στο Peptide</string>
+    <string name="share_target_login_first">Συνδεθείτε πριν από την κοινοποίηση στο Peptide.</string>
     <string name="share_target_invalid_intent">Αυτή δεν είναι μια έγκυρη πρόθεση κοινοποίησης.</string>
     <string name="share_target_select_channel">Επιλέξτε ένα κανάλι για κοινοποίηση.</string>
     <string name="notification_channel_friend_requests">Αιτήματα φιλίας</string>
@@ -506,7 +506,7 @@
     <string name="settings_appearance_colour_overrides_on_tertiary">Στο Τριτογενές</string>
     <string name="settings_chat_interactive_embeds_description">Οι διαδραστικές ενσωματώσεις σάς επιτρέπουν να αλληλεπιδράτε με ορισμένους τύπους συνδέσμων απευθείας μέσα στη συνομιλία. Για παράδειγμα, μπορείτε να αναπαράγετε βίντεο YouTube ή να κάνετε προεπισκόπηση άλμπουμ από το Apple Music.</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
-    <string name="settings_feedback_description">Εγγραφείτε στον server του Revolt για να κάνετε σχόλια ή προτάσεις και να αναφέρετε σφάλματα.</string>
+    <string name="settings_feedback_description">Εγγραφείτε στον server του Peptide για να κάνετε σχόλια ή προτάσεις και να αναφέρετε σφάλματα.</string>
     <string name="settings_changelogs_new_header">Τι μαγειρεύεται ✨</string>
     <string name="settings_changelogs_historical_version_header">Κατάλογος αλλαγών για %1$s</string>
     <string name="channel_settings_overview_update_info_error_fallback">Παρουσιάστηκε σφάλμα κατά την ενημέρωση του καναλιού.</string>
@@ -515,11 +515,11 @@
     <string name="channel_settings_overview_nsfw_undo_confirm_yes">Κατάργηση σήμανσης ως NSFW</string>
     <string name="channel_settings_overview_nsfw_undo_confirm_no">Κρατήστε ως έχει</string>
     <string name="channel_settings_delete_confirm_description">Όλα τα μηνύματα και οι ρυθμίσεις για αυτό το κανάλι θα εξαφανιστούν για πάντα (πολύ καιρό!)</string>
-    <string name="share_target_attachment_too_large">Αυτή η επισύναψη είναι πολύ μεγάλη για το Revolt (μέγιστο $1$s).</string>
+    <string name="share_target_attachment_too_large">Αυτή η επισύναψη είναι πολύ μεγάλη για το Peptide (μέγιστο $1$s).</string>
     <string name="user_info_sheet_user_is_bot">Αυτό είναι bot.</string>
     <string name="report_reason_content_other">Άλλο</string>
     <string name="report_submit_success">Αναφέρθηκε</string>
-    <string name="report_submit_thanks">Σας ευχαριστούμε που βοηθήσατε να κρατήσουμε το Revolt ασφαλές. Θα εξετάσουμε την αναφορά σας το συντομότερο δυνατό.</string>
+    <string name="report_submit_thanks">Σας ευχαριστούμε που βοηθήσατε να κρατήσουμε το Peptide ασφαλές. Θα εξετάσουμε την αναφορά σας το συντομότερο δυνατό.</string>
     <string name="report_submit_error_header">Σφάλμα</string>
     <string name="report_submit_error">Παρουσιάστηκε σφάλμα κατά την υποβολή της αναφοράς σας. Προσπαθήστε ξανά αργότερα.</string>
     <string name="report_submit_close">Κλείσιμο</string>

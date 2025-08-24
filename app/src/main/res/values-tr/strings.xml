@@ -7,13 +7,13 @@
     <string name="tap_to_reconnect">Yeniden bağlanmak için dokun</string>
     <string name="report_reason_content_harassment">Taciz veya siber zorbalık</string>
     <string name="report_reason_additional_hint">Soruşturmamızda bize yardımcı olabilecek ek bilgiler. İsteğe bağlı.</string>
-    <string name="report_submit_thanks">Revolt\'u güvende tutmaya yardım ettiğiniz için teşekkür ederiz. Raporunuzu en kısa sürede inceleyeceğiz.</string>
+    <string name="report_submit_thanks">Peptide\'u güvende tutmaya yardım ettiğiniz için teşekkür ederiz. Raporunuzu en kısa sürede inceleyeceğiz.</string>
     <string name="invite_error_invalid_invite">Belirtilen koda sahip bir davet bulunamadı.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You bu cihazda desteklenmiyor.</string>
     <string name="register_instructions">Takılmak, bir araya gelmek ve bir şeyler hakkında konuşmak için bir yer gibi. En iyi tarafı, internette olması.</string>
     <string name="comingsoon_toast">Üzgünüz, bu özellik henüz hazır değil.</string>
     <string name="report_user">Bu kullanıcıyı raporlamak için zaman ayırdığınız için teşekkür ederiz. Raporunuz, kullanıcıyla veya sunucunun moderatörleriyle paylaşılmayacaktır.</string>
-    <string name="login_onboarding_body">Revolt, arkadaşlarınız ve topluluğunuzla her yerde, her zaman bağlantıda kalmanın en iyi yollarından biridir.</string>
+    <string name="login_onboarding_body">Peptide, arkadaşlarınız ve topluluğunuzla her yerde, her zaman bağlantıda kalmanın en iyi yollarından biridir.</string>
     <string name="onboarding_others">Diğerleri sizi bu isimle bulacak, tanıyacak ve anacaktır.</string>
     <string name="channel_text">Metin Kanalı</string>
     <string name="token_invalid_toast">Çıkış yaptın. Lütfen tekrar giriş yap.</string>
@@ -38,7 +38,7 @@
     <string name="resend">Tekrar Gönder</string>
     <string name="send_email">E-posta gönder</string>
     <string name="password_forgot_heading">Şifreni mi unuttun\?</string>
-    <string name="register_heading">Revolt\'a Hoş Geldin</string>
+    <string name="register_heading">Peptide\'a Hoş Geldin</string>
     <string name="register_email">E-posta</string>
     <string name="register_password">Şifre</string>
     <string name="check_mail">Mailini kontrol et!</string>
@@ -50,7 +50,7 @@
     <string name="community_guidelines">Topluluk İlkeleri</string>
     <string name="login_onboarding_heading">Topluluğunu bul, dünyayla bağlantı kur.</string>
     <string name="lets_go">Hadi gidelim</string>
-    <string name="register_image_alt">Bir şeyler hakkında sohbet etmek için Revolt\'u kullan.</string>
+    <string name="register_image_alt">Bir şeyler hakkında sohbet etmek için Peptide\'u kullan.</string>
     <string name="register_form_heading">Hadi seni hazırlayalım.</string>
     <string name="verify_then_choose_username">E-posta adresini doğrula, ardından kullanıcı adını seçmeye geçelim.</string>
     <string name="onboarding_lead">Kullanıcı adı seçme zamanı!</string>
@@ -203,7 +203,7 @@
     <string name="settings_appearance">Görünüm</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistem</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Aydınlık</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Materyal You (desteklenmeyen)</string>
@@ -229,18 +229,18 @@
     <string name="emoji_category_animals">Hayvanlar &amp; Doğa</string>
     <string name="emoji_category_symbols">Semboller</string>
     <string name="home_join_jenvolt">Jenvolt\'a Katıl</string>
-    <string name="about_full_name">Android\'te Revolt</string>
+    <string name="about_full_name">Android\'te Peptide</string>
     <string name="oss_attribution_body_2">Bu projelerin geliştiricilerine, projelerini dünyaya sundukları için minnettarız.</string>
     <string name="emoji_category_people">İnsanlar &amp; Haller</string>
     <string name="friends">Arkadaşlar</string>
     <string name="friends_incoming_requests">Gelen İstekler</string>
     <string name="friends_outgoing_requests">Giden İstekler</string>
     <string name="status_offline">Aktif Değil</string>
-    <string name="oss_attribution_body">Revolt bu harika açık kaynaklı projelerin yardımı ile oluşturuldu.</string>
+    <string name="oss_attribution_body">Peptide bu harika açık kaynaklı projelerin yardımı ile oluşturuldu.</string>
     <string name="oss_attribution_warning">Aşağıdaki liste otomatik olarak oluşturulmuştur. Eksik veya hatalı bilgi içeriyor olabilir.</string>
     <string name="oss_attribution_tap_to_view_license">Lisansı görüntülemek için dokunun</string>
     <string name="emoji_category_smileys">Yüzler &amp; Duygular</string>
-    <string name="badge_team_member_alt">Revolt ekip üyesi</string>
+    <string name="badge_team_member_alt">Peptide ekip üyesi</string>
     <string name="create_group_search">Arkadaşlarda Ara</string>
     <string name="channel_age_gate_dob_day">Gün</string>
     <string name="channel_age_gate_dob_invalid">Doğum tarihini gir</string>
@@ -251,7 +251,7 @@
     <string name="status_online">Aktif</string>
     <string name="invite_dialog_description">Bu linki insanlara gönder ve onları bu kanala davet et.</string>
     <string name="message_context_sheet_actions_delete_confirmation_yes">Sil</string>
-    <string name="about_brought_to_you_by">Revolt ekibi tarafından ❤️ ile geliştirildi.</string>
+    <string name="about_brought_to_you_by">Peptide ekibi tarafından ❤️ ile geliştirildi.</string>
     <string name="status_invisible">Görünmez</string>
     <string name="status_focus">Odak</string>
     <string name="status_dnd">Rahatsız Etme</string>
@@ -314,7 +314,7 @@
     <string name="emote_info_from_server">%1$s\'den</string>
     <string name="emote_info_from_server_unknown">Özel bir sunucudan</string>
     <string name="system_message_channel_renamed">%1$s kanalının adı %2$s olarak değiştirildi</string>
-    <string name="status_invisible_explainer">Revolt\'u her zamanki gibi kullanabileceksiniz, ancak diğer insanlara çevrimiçi olarak görünmeyeceksiniz.</string>
+    <string name="status_invisible_explainer">Peptide\'u her zamanki gibi kullanabileceksiniz, ancak diğer insanlara çevrimiçi olarak görünmeyeceksiniz.</string>
     <string name="programming_language_default">Düz Metin</string>
     <string name="channel_link_invalid_description">Bu kanal silinmiş olabilir veya görüntüleme izniniz olmayabilir.</string>
     <string name="status_focus_explainer">Mesajlar için herhangi bir bildirim almayacaksınız, ancak @bahsetmeler için bildirim alacaksınız.</string>
@@ -350,7 +350,7 @@
     <string name="user_info_sheet_block">Engelle</string>
     <string name="user_info_sheet_report">Rapor et</string>
     <string name="user_info_sheet_copy_id">ID\'yi Kopyala</string>
-    <string name="discover">Revolt\'u Keşfet</string>
+    <string name="discover">Peptide\'u Keşfet</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Tut</string>
     <string name="channel_context_sheet_open">Açık kanal eylemleri</string>
     <string name="server_context_sheet_description_empty">Bu sunucu için henüz bir açıklama belirlenmemiş.</string>
@@ -391,8 +391,8 @@
     <string name="channel_settings">Kanal Ayarları</string>
     <string name="settings_changelogs_historical_version_header_placeholder">bu versiyon</string>
     <string name="share_target_search_channels">Kanalları ara</string>
-    <string name="share_target_login_first">Lütfen Revolt\'ta paylaşmadan önce oturum açın.</string>
-    <string name="share_target_heading">Revolt\'ta paylaş</string>
+    <string name="share_target_login_first">Lütfen Peptide\'ta paylaşmadan önce oturum açın.</string>
+    <string name="share_target_heading">Peptide\'ta paylaş</string>
     <string name="channel_settings_overview">Genel Bakış</string>
     <string name="settings_appearance_colour_overrides_export">Dışa aktar</string>
     <string name="settings_appearance_colour_overrides_error">Hata</string>
@@ -426,10 +426,10 @@
     <string name="settings_appearance_colour_overrides_on_primary">Birincil Olarak</string>
     <string name="settings_appearance_colour_overrides_primary_container">Birincil Kapsayıcı</string>
     <string name="settings_chat">Sohbet</string>
-    <string name="settings_feedback_description">Geri bildirim veya önerilerde bulunmak ve hataları bildirmek için Revolt sunucusuna katılın.</string>
+    <string name="settings_feedback_description">Geri bildirim veya önerilerde bulunmak ve hataları bildirmek için Peptide sunucusuna katılın.</string>
     <string name="settings_changelogs_new_header">Ne pişiriyor ✨</string>
     <string name="channel_settings_permissions">İzinler</string>
-    <string name="share_target_attachment_too_large">Bu ek, Revolt için çok büyük (maks. $1$s).</string>
+    <string name="share_target_attachment_too_large">Bu ek, Peptide için çok büyük (maks. $1$s).</string>
     <string name="channel_settings_delete">Kanalı Sil</string>
     <string name="channel_settings_delete_confirm">Bu kanalı silmek istediğinize emin misiniz\?</string>
     <string name="channel_settings_delete_confirm_description">Tüm mesajlar ve ayarlar bu kanal için sonsuza dek gidecek (uzun bir süre!)</string>
@@ -541,7 +541,7 @@
     <string name="overview_screen_share_profile">Profili paylaş</string>
     <string name="overview_screen_share_profile_description">Kullanıcı kartına bir göz at ve paylaşmak için özel bir bağlantı edin</string>
     <string name="overview_screen_changelog">Değişiklik Günlüğü</string>
-    <string name="overview_screen_changelog_description">Revolt asla uyumaz, nelerin yapıldığını görmek için bir göz at</string>
+    <string name="overview_screen_changelog_description">Peptide asla uyumaz, nelerin yapıldığını görmek için bir göz at</string>
     <string name="overview_screen_feedback">Geri bildirim sağlayın</string>
     <string name="overview_screen_feedback_description">Söyleyecek bir şeyin mi var\? Hepimizin kulakları sende</string>
     <string name="overview_screen_title">Genel bakış</string>
@@ -574,9 +574,9 @@
     <string name="user_card_data_point_photo">%1$d.Fotoğraf</string>
     <string name="user_card_data_point_display_name">%1$d.Ad</string>
     <string name="user_card_data_point_username">%1$d.Soyad</string>
-    <string name="user_card_data_point_join_date">Revolt\'a şu tarihten beri üye: %1$d</string>
+    <string name="user_card_data_point_join_date">Peptide\'a şu tarihten beri üye: %1$d</string>
     <string name="programming_language_snippet">[%1$s parçası]</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt klavye kısayollarına sahip! Onları görmek için %1$s tuşuna basınız.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide klavye kısayollarına sahip! Onları görmek için %1$s tuşuna basınız.</string>
     <string name="spark_keyboard_shortcuts_cta">Kısayolları aç</string>
     <string name="spark_keyboard_shortcuts_dismiss">Pekâlâ</string>
     <string name="keyboard_shortcut_messaging_new_line">Yeni Hat</string>
@@ -586,7 +586,7 @@
     <string name="hint_provide_feedback_join_server">Test Kullanıcıları Sunucusuna Katılın</string>
     <string name="hint_provide_feedback_dismiss">Tamam</string>
     <string name="spark_early_access_description_1">Yeni Android uygulamamızı ilk deneyenlerden birisiniz Burada olmanızdan heyecan duyuyoruz!</string>
-    <string name="spark_early_access_description_2">Bu erken erişim olduğundan, işler henüz mükemmel olmayabilir. Ara sıra hatalarla karşılaşabilirsiniz. Geri bildiriminiz hataları düzeltmemize ve Revolt\'u daha da iyi hale getirmemize yardımcı olur.</string>
+    <string name="spark_early_access_description_2">Bu erken erişim olduğundan, işler henüz mükemmel olmayabilir. Ara sıra hatalarla karşılaşabilirsiniz. Geri bildiriminiz hataları düzeltmemize ve Peptide\'u daha da iyi hale getirmemize yardımcı olur.</string>
     <string name="spark_early_access_cta">Anladım</string>
-    <string name="hint_provide_feedback_description">Herhangi bir geri bildirimin, önerin veya hata bildirimin varsa lütfen bizi bundan haberdar et. Her zaman Revolt\'u iyileştirme peşindeyiz.</string>
+    <string name="hint_provide_feedback_description">Herhangi bir geri bildirimin, önerin veya hata bildirimin varsa lütfen bizi bundan haberdar et. Her zaman Peptide\'u iyileştirme peşindeyiz.</string>
 </resources>

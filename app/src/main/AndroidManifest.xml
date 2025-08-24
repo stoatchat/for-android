@@ -19,6 +19,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     -->
 
+    <!-- Camera permission required for CameraX usage -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -31,8 +34,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".RevoltApplication"
-        android:theme="@style/Theme.Revolt"
+        android:name=".PeptideApplication"
+        android:theme="@style/Theme.Peptide"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="tiramisu">
         <provider
@@ -45,9 +48,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <meta-data
-            android:name="io.sentry.auto-init"
-            android:value="false" />
+<!--        <meta-data-->
+<!--            android:name="io.sentry.auto-init"-->
+<!--            android:value="false" />-->
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -69,7 +72,7 @@
             android:exported="true"
             android:configChanges="orientation|screenSize|colorMode"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.Revolt">
+            android:theme="@style/Theme.Peptide">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +82,7 @@
 
         <activity
             android:name=".activities.InviteActivity"
-            android:theme="@style/Theme.Revolt"
+            android:theme="@style/Theme.Peptide"
             android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -90,7 +93,7 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
 
-                <data android:host="app.revolt.chat" />
+                <data android:host="app.peptide.chat" />
 
                 <data android:pathPrefix="/invite/" />
             </intent-filter>
@@ -115,7 +118,7 @@
 
         <activity
             android:name=".activities.ShareTargetActivity"
-            android:theme="@style/Theme.Revolt"
+            android:theme="@style/Theme.Peptide"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -131,12 +134,12 @@
 
         <activity
             android:name=".activities.media.ImageViewActivity"
-            android:theme="@style/Theme.Revolt" />
+            android:theme="@style/Theme.Peptide" />
 
         <activity
             android:name=".activities.media.VideoViewActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.Revolt" />
+            android:theme="@style/Theme.Peptide" />
 
         <!-- Backport photo picker via Google Play Services -->
         <service
@@ -161,6 +164,34 @@
                 android:value="true" />
         </service>
 
+        <!-- DeepLink Activity for handling App Links -->
+        <activity
+            android:name=".activities.DeepLinkActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Peptide">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="peptide.chat" />
+                <data android:host="app.peptide.chat" />
+                
+                <!-- Channel deep links -->
+                <data android:pathPrefix="/channels/" />
+                <!-- Server deep links -->
+                <data android:pathPrefix="/servers/" />
+                <data android:pathPrefix="/server/" />
+                <!-- User deep links -->
+                <data android:pathPrefix="/users/" />
+                <!-- Message deep links -->
+                <data android:pathPrefix="/messages/" />
+                <!-- Server channel message deep links -->
+                <data android:pathPattern="/server/.*/channel/.*" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

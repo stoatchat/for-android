@@ -5,7 +5,7 @@
     <string name="register_email_verification_hint">Kami akan mengirimkan email verifikasi untuk mengonfirmasi akunmu.</string>
     <string name="back">← Kembali</string>
     <string name="terms_of_service">Ketentuan Layanan</string>
-    <string name="login_onboarding_body">Revolt adalah salah satu cara terbaik untuk tetap terhubung dengan teman dan komunitas, di mana saja dan kapan saja.</string>
+    <string name="login_onboarding_body">Peptide adalah salah satu cara terbaik untuk tetap terhubung dengan teman dan komunitas, di mana saja dan kapan saja.</string>
     <string name="password_forgot_instructions">Masukkan email-mu dan kami akan mengirimkan instruksi mengatur ulang sandimu.</string>
     <string name="register_instructions">Seperti tempat nongkrong, berkumpul dan mengobrol. Hal kerennya, tempatnya di internet.</string>
     <string name="verify_then_choose_username">Verifikasi email-mu, kemudian kita bisa pilih nama penggunamu.</string>
@@ -17,10 +17,10 @@
     <string name="signup">Daftar</string>
     <string name="resend">Kirim Ulang</string>
     <string name="password_forgot_heading">Lupa sandimu\?</string>
-    <string name="register_heading">Selamat datang di Revolt</string>
+    <string name="register_heading">Selamat datang di Peptide</string>
     <string name="loading">Memuat sejumlah informasi, tunggu sebentar…</string>
     <string name="ok">OK</string>
-    <string name="register_image_alt">Gunakan Revolt untuk mengobrol.</string>
+    <string name="register_image_alt">Gunakan Peptide untuk mengobrol.</string>
     <string name="password">Sandi</string>
     <string name="privacy_policy">Kebijakan Privasi</string>
     <string name="register_data">Data kamu aman di kami. Kami tidak menjualnya atau menggunakannya untuk menampilkan iklan.</string>
@@ -137,7 +137,7 @@
     <string name="report_reason_additional">Informasi tambahan</string>
     <string name="report_submit">Kirim</string>
     <string name="report_submitting">Melaporkan…</string>
-    <string name="report_submit_thanks">Terima kasih telah menjaga Revolt tetap aman. Kami akan meninjau laporanmu segera.</string>
+    <string name="report_submit_thanks">Terima kasih telah menjaga Peptide tetap aman. Kami akan meninjau laporanmu segera.</string>
     <string name="report_submit_error_header">Kesalahan</string>
     <string name="report_submit_error">Terjadi kesalahan ketika mengirimkan laporanmu. Silakan coba lagi nanti.</string>
     <string name="report_block_question">Apa kamu ingin memblokir pengguna ini\?</string>
@@ -180,7 +180,7 @@
     <string name="settings_appearance">Tampilan</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistem</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Cerah</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (tidak didukung)</string>
@@ -210,8 +210,8 @@
     <string name="oss_attribution_generation_date">Terakhir diperbarui: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Ketuk untuk melihat lisensi</string>
     <string name="register_form_heading">Mari kita siapkan.</string>
-    <string name="about_full_name">Revolt untuk Android</string>
-    <string name="about_brought_to_you_by">Dipersembahkan dengan ❤️ oleh tim Revolt.</string>
+    <string name="about_full_name">Peptide untuk Android</string>
+    <string name="about_brought_to_you_by">Dipersembahkan dengan ❤️ oleh tim Peptide.</string>
     <string name="about_tab_version">Versi</string>
     <string name="pick_emoji_alt">Pilih emoji</string>
     <string name="emoji_category_animals">Hewan &amp; Alam</string>
@@ -220,7 +220,7 @@
     <string name="emoji_category_objects">Objek</string>
     <string name="emoji_category_symbols">Simbol</string>
     <string name="emoji_category_flags">Bendera</string>
-    <string name="badge_team_member_alt">Anggota tim Revolt</string>
+    <string name="badge_team_member_alt">Anggota tim Peptide</string>
     <string name="home_join_jenvolt">Gabung ke Jenvolt</string>
     <string name="friends">Teman</string>
     <string name="friends_blocked">Diblokir</string>
@@ -281,7 +281,7 @@
     <string name="about_tab_details">Rincian</string>
     <string name="emoji_category_smileys">Emosi</string>
     <string name="channel_age_gate_dob_too_young">Kamu harus berusia setidaknya 18 tahun untuk melihat saluran ini.</string>
-    <string name="oss_attribution_body">Revolt dibuat dengan bantuan dari proyek sumber terbuka yang luar biasa ini.</string>
+    <string name="oss_attribution_body">Peptide dibuat dengan bantuan dari proyek sumber terbuka yang luar biasa ini.</string>
     <string name="oss_attribution_body_2">Kami berterima kasih kepada pengembang proyek ini atas pekerjaannya.</string>
     <string name="oss_attribution_warning">Daftar di bawah dihasilkan secara otomatis. Mungkin tidak lengkap atau akurat.</string>
     <string name="friends_all">Semua</string>
@@ -307,7 +307,7 @@
     <string name="channel_info_sheet_options_add">Tambah anggota</string>
     <string name="status_dnd_explainer">Kamu tidak akan menerima notifikasi, termasuk pesan dan @sebutan.</string>
     <string name="status_focus_explainer">Kamu tidak akan menerima notifikasi pesan, namun kamu akan menerima notifikasi @sebutan.</string>
-    <string name="status_invisible_explainer">Kamu bisa menggunakan Revolt seperti biasa, namun kamu tidak akan terlihat daring oleh orang lain.</string>
+    <string name="status_invisible_explainer">Kamu bisa menggunakan Peptide seperti biasa, namun kamu tidak akan terlihat daring oleh orang lain.</string>
     <string name="status_offline">Luring</string>
     <string name="emote_info_from_unicode">Emoji bawaan yang bisa digunakan di mana saja</string>
     <string name="friends_new_group">Grup Baru</string>

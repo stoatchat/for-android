@@ -6,7 +6,7 @@
     <string name="password_forgot">Ai uitat parola\?</string>
     <string name="resend_verification">Retrimite e-mailul de verificare</string>
     <string name="password_forgot_heading">Ți-ai uitat parola\?</string>
-    <string name="register_heading">Bun venit la Revolt</string>
+    <string name="register_heading">Bun venit la Peptide</string>
     <string name="register_form_heading">Hai să te pregătim.</string>
     <string name="register_password">Parolă</string>
     <string name="check_mail">Verifică-ți e-mailul!</string>
@@ -103,7 +103,7 @@
     <string name="settings_category_miscellaneous">Diverse</string>
     <string name="settings_appearance">Aspect</string>
     <string name="settings_appearance_theme">Temă</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Luminos</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (nu este acceptat)</string>
@@ -118,7 +118,7 @@
     <string name="privacy_policy">Politica de confidențialitate</string>
     <string name="community_guidelines">Orientări comunitare</string>
     <string name="login_onboarding_heading">Găsește-ți comunitatea, conectează-te cu lumea.</string>
-    <string name="login_onboarding_body">Revolt este una dintre cele mai bune modalități de a rămâne conectat cu prietenii și comunitatea ta, oriunde și oricând.</string>
+    <string name="login_onboarding_body">Peptide este una dintre cele mai bune modalități de a rămâne conectat cu prietenii și comunitatea ta, oriunde și oricând.</string>
     <string name="email">E-mail</string>
     <string name="password">Parolă</string>
     <string name="login">Autentificare</string>
@@ -126,7 +126,7 @@
     <string name="login_heading">Să te autentificăm</string>
     <string name="password_manager_hint">Folosești un manager de parole\?</string>
     <string name="password_forgot_instructions">Introdu-ți adresa de e-mail și îți vom trimite instrucțiuni despre cum să-ți resetezi parola.</string>
-    <string name="register_image_alt">Folosește Revolt pentru a discuta despre lucruri.</string>
+    <string name="register_image_alt">Folosește Peptide pentru a discuta despre lucruri.</string>
     <string name="register_instructions">Este un loc în care să stai, să te distrezi și să vorbești despre lucruri. Partea cea mai bună este că este pe internet.</string>
     <string name="register_data">Datele tale sunt în siguranță cu noi. Nu le vindem și nici nu le folosim pentru a-ți arăta reclame.</string>
     <string name="register_email">E-mail</string>
@@ -192,7 +192,7 @@
     <string name="report_reason_additional_hint">Orice informații suplimentare care ne pot ajuta în investigația noastră. Opțional.</string>
     <string name="report_submit">Trimitere</string>
     <string name="report_submitting">Se face reclamația…</string>
-    <string name="report_submit_thanks">Îți mulțumi că ne ajuți să păstrăm Revolt în siguranță. Vom analiza reclamația ta cât mai curând posibil.</string>
+    <string name="report_submit_thanks">Îți mulțumi că ne ajuți să păstrăm Peptide în siguranță. Vom analiza reclamația ta cât mai curând posibil.</string>
     <string name="report_submit_error">S-a produs o eroare în timpul trimiterii reclamării. Te rugăm să încerci din nou mai târziu.</string>
     <string name="report_submit_close">Închidere</string>
     <string name="report_block_question">Ai dori să blochezi acest utilizator\?</string>
@@ -217,17 +217,17 @@
     <string name="report_user">Îți mulțumim pentru timpul acordat reclamării acestui utilizator. Te rugăm să precizezi motivul reclamației acestui utilizator.</string>
     <string name="report_reason_content_promotes_harm">Promovează vătămarea</string>
     <string name="report_reason_content_spam_abuse">Spam sau abuz de platformă similar</string>
-    <string name="about_full_name">Revolt pe Android</string>
+    <string name="about_full_name">Peptide pe Android</string>
     <string name="oss_attribution_warning">Lista de mai jos este generată automat. Aceasta poate fi incompletă sau inexactă.</string>
-    <string name="about_brought_to_you_by">Oferit cu ❤️ de către echipa Revolt.</string>
-    <string name="oss_attribution_body">Revolt este construit cu ajutorul acestor minunate proiecte open-source.</string>
+    <string name="about_brought_to_you_by">Oferit cu ❤️ de către echipa Peptide.</string>
+    <string name="oss_attribution_body">Peptide este construit cu ajutorul acestor minunate proiecte open-source.</string>
     <string name="oss_attribution_body_2">Suntem recunoscători dezvoltatorilor acestor proiecte pentru că și-au pus munca la dispoziția lumii.</string>
     <string name="about_tab_version">Versiunea</string>
     <string name="about_tab_details">Detalii</string>
     <string name="system_message_user_added">%1$s a adăugat %2$s</string>
     <string name="spark_early_access">Bun venit la Accesul timpuriu! 🚀</string>
     <string name="spark_early_access_description_1">Ești unul dintre primii care au încercat noua noastră aplicație Android. Suntem încântați să te avem aici!</string>
-    <string name="spark_early_access_description_2">Deoarece suntem în faza de acces timpuriu, este posibil ca lucrurile să nu fie perfecte încă. S-ar putea să întâmpini din când în când o eroare, un accident sau o ciudățenie. Feedback-ul tău ne ajută să șlefuim și să facem Revolt mai bun.</string>
+    <string name="spark_early_access_description_2">Deoarece suntem în faza de acces timpuriu, este posibil ca lucrurile să nu fie perfecte încă. S-ar putea să întâmpini din când în când o eroare, un accident sau o ciudățenie. Feedback-ul tău ne ajută să șlefuim și să facem Peptide mai bun.</string>
     <string name="spark_early_access_description_3">Suntem încântați să te avem alături de noi. Hai să facem ceva minunat împreună!</string>
     <string name="spark_early_access_cta">Am înțeles</string>
     <string name="hint_provide_feedback">Iubim feedback-ul!</string>
@@ -283,7 +283,7 @@
     <string name="emoji_category_objects">Obiecte</string>
     <string name="emoji_category_symbols">Simboluri</string>
     <string name="emoji_category_flags">Steaguri</string>
-    <string name="badge_team_member_alt">Membru al echipei Revolt</string>
+    <string name="badge_team_member_alt">Membru al echipei Peptide</string>
     <string name="home_join_jenvolt">Alătură-te Jenvolt</string>
     <string name="overview_screen_title">Pagina mea</string>
     <string name="overview_screen_error">Nu s-a putut încărca pagina ta</string>
@@ -292,14 +292,14 @@
     <string name="overview_screen_settings_description">Schimbă-ți aspectul, gestionează-ți contul și multe altele</string>
     <string name="overview_screen_share_profile">Distribuie profilul</string>
     <string name="overview_screen_changelog">Jurnal de schimbări</string>
-    <string name="overview_screen_changelog_description">Revolt nu doarme, aruncă o privire la ceea ce am lucrat</string>
+    <string name="overview_screen_changelog_description">Peptide nu doarme, aruncă o privire la ceea ce am lucrat</string>
     <string name="overview_screen_feedback">Oferă părerea</string>
     <string name="overview_screen_feedback_description">Ai ceva de zis? Suntem doar urechi</string>
     <string name="user_card_tap_to_copy">Apasă pentru a copia</string>
     <string name="user_card_error_sharing">Am întâmpinat o eroare la partajarea cardului de utilizator</string>
     <string name="user_card_data_point_display_name">%1$d.Nume</string>
     <string name="user_card_data_point_username">%1$d.Nume de utilizator</string>
-    <string name="user_card_data_point_join_date">%1$d.Pe Revolt din data de</string>
+    <string name="user_card_data_point_join_date">%1$d.Pe Peptide din data de</string>
     <string name="user_card_data_point_qrcode">%1$d.Cod QR</string>
     <string name="user_card_data_point_photo">%1$d.Fotografie</string>
     <string name="friends">Prieteni</string>
@@ -357,7 +357,7 @@
     <string name="status_dnd_explainer">Nu vei primi nicio notificare, inclusiv mesaje și @mențiuni.</string>
     <string name="status_offline">Offline</string>
     <string name="status_invisible">Invizibil</string>
-    <string name="status_invisible_explainer">Vei putea să folosești Revolt ca de obicei, dar nu vei apărea online pentru alte persoane.</string>
+    <string name="status_invisible_explainer">Vei putea să folosești Peptide ca de obicei, dar nu vei apărea online pentru alte persoane.</string>
     <string name="status_text_explainer">Mesajul din stare va fi vizibil tuturor. Ține-l scurt și dulce.</string>
     <string name="status_text">Mesajul stării</string>
     <string name="status_text_placeholder">Spune lumii ce pui la cale</string>
@@ -423,7 +423,7 @@
     <string name="user_badge_platform_moderation">Moderarea platformei</string>
     <string name="user_badge_active_supporter">Susținător activ</string>
     <string name="user_badge_early_adopter">Utilizator timpuriu</string>
-    <string name="discover">Descoperă Revolt</string>
+    <string name="discover">Descoperă Peptide</string>
     <string name="report_message_heading">Spune-ne ce este în neregulă cu acest mesaj</string>
     <string name="report_user_heading">Spune-ne ce este în neregulă cu acest utilizator</string>
     <string name="report_reason_content_illegal_extortion">Șantaj</string>
@@ -476,7 +476,7 @@
     <string name="spark_notifications_rationale_cta">Activează notificările</string>
     <string name="spark_notifications_rationale_dismiss">Nu acum</string>
     <string name="spark_keyboard_shortcuts">Folosești o tastatură?</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt are scurtături de taste! Apasă %1$s pentru a le vedea.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide are scurtături de taste! Apasă %1$s pentru a le vedea.</string>
     <string name="spark_keyboard_shortcuts_cta">Deschide scurtăturile</string>
     <string name="spark_keyboard_shortcuts_dismiss">În regulă</string>
 </resources>

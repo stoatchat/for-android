@@ -1,5 +1,4 @@
 import com.mikepenz.aboutlibraries.plugin.StrictMode
-import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -12,7 +11,6 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
     id("org.jmailen.kotlinter")
-    id("io.sentry.android.gradle") version "4.12.0"
     id("app.cash.sqldelight") version "2.0.1"
     id("kotlin-kapt")
     id("kotlin-parcelize")
@@ -21,7 +19,6 @@ plugins {
 
 val composeBomVersion = "2025.03.00"
 val accompanistVersion = "0.34.0"
-val okhttpVersion = "4.12.0"
 val navVersion = "2.9.0"
 val hiltVersion = "2.52"
 val glideVersion = "4.16.0"
@@ -29,11 +26,6 @@ val ktorVersion = "3.0.0-beta-2"
 val media3Version = "1.7.1"
 val material3Version = "1.4.0-alpha15"
 val androidXTestVersion = "1.6.1"
-
-object LivekitVersion {
-    val core = "2.16.0"
-    val componentsCompose = "1.3.1"
-}
 
 fun property(fileName: String, propertyName: String, fallbackEnv: String? = null): String? {
     val propsFile = rootProject.file(fileName)
@@ -68,16 +60,16 @@ fun property(fileName: String, propertyName: String, fallbackEnv: String? = null
     }
 }
 
-// Calls property but with revoltbuild.properties as the first argument
+// Calls property but with peptidebuild.properties as the first argument
 fun buildproperty(propertyName: String, fallbackEnv: String? = null): String? {
-    return property("revoltbuild.properties", propertyName, fallbackEnv)
+    return property("peptidebuild.properties", propertyName, fallbackEnv)
 }
 
 android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "chat.revolt"
+        applicationId = "chat.peptide"
         minSdk = 24
         targetSdk = 35
         versionCode = Integer.parseInt("001_003_106".replace("_", ""), 10)
@@ -105,11 +97,6 @@ android {
             )
             buildConfigField(
                 "String",
-                "SENTRY_DSN",
-                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
-            )
-            buildConfigField(
-                "String",
                 "FLAVOUR_ID",
                 "\"${buildproperty("build.flavour_id", "RVX_BUILD_FLAVOUR_ID")}\""
             )
@@ -126,11 +113,11 @@ android {
                 buildproperty("build.debug.app_name", "RVX_DEBUG_APP_NAME")!!
             )
 
-            buildConfigField(
-                "String",
-                "SENTRY_DSN",
-                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
-            )
+//            buildConfigField(
+//                "String",
+//                "SENTRY_DSN",
+//                "\"${buildproperty("sentry.dsn", "RVX_SENTRY_DSN")}\""
+//            )
             buildConfigField(
                 "String",
                 "FLAVOUR_ID",
@@ -159,7 +146,7 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-    namespace = "chat.revolt"
+    namespace = "chat.peptide"
     externalNativeBuild {
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
@@ -169,22 +156,24 @@ android {
     lint {
         abortOnError = false
         disable += "MissingTranslation"
+        disable += "NullSafeMutableLiveData"
+        checkReleaseBuilds = false
     }
 }
 
-sentry {
-    autoUploadProguardMapping =
-        buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
-
-    tracingInstrumentation {
-        enabled = true
-
-        logcat {
-            enabled = true
-            minLevel = LogcatLevel.WARNING
-        }
-    }
-}
+//sentry {
+//    autoUploadProguardMapping =
+//        buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
+//
+//    tracingInstrumentation {
+//        enabled = true
+//
+//        logcat {
+//            enabled = true
+//            minLevel = LogcatLevel.WARNING
+//        }
+//    }
+//}
 
 dependencies {
     // Android/Kotlin Core
@@ -196,6 +185,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-view:1.4.2")
 
     // Compose BOM
     val composeBom = platform("androidx.compose:compose-bom:$composeBomVersion")
@@ -247,8 +240,8 @@ dependencies {
     implementation("com.mikepenz:aboutlibraries-core:11.3.0-rc02")
 
     // Sentry - crash reporting
-    implementation("io.sentry:sentry-android:8.13.2")
-    implementation("io.sentry:sentry-compose-android:8.13.2")
+//    implementation("io.sentry:sentry-android:8.19.1")
+//    implementation("io.sentry:sentry-compose-android:8.19.1")
 
     // Other AndroidX libraries
     implementation("androidx.documentfile:documentfile:1.1.0")
@@ -343,7 +336,7 @@ aboutLibraries {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("chat.revolt.persistence")
+            packageName.set("chat.peptide.persistence")
         }
     }
 }

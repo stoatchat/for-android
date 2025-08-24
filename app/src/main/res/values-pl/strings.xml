@@ -20,8 +20,8 @@
     <string name="resend_verification">Wyślij ponownie weryfikacyjną wiadomość na email</string>
     <string name="password_manager_hint">Korzystasz z menedżera haseł\?</string>
     <string name="password_forgot_heading">Zapomniałeś hasła\?</string>
-    <string name="register_heading">Witamy na Revolt</string>
-    <string name="register_image_alt">Użyj Revolt, aby porozmawiać o różnych rzeczach.</string>
+    <string name="register_heading">Witamy na Peptide</string>
+    <string name="register_image_alt">Użyj Peptide, aby porozmawiać o różnych rzeczach.</string>
     <string name="register_form_heading">Skonfigurujmy twoje konto.</string>
     <string name="register_data">Twoje dane są u nas bezpieczne. Nie sprzedajemy ich ani nie wykorzystujemy do wyświetlania reklam.</string>
     <string name="register_email">Email</string>
@@ -147,7 +147,7 @@
     <string name="report_submit">Prześlij</string>
     <string name="report_submitting">Zgłaszanie…</string>
     <string name="report_submit_success">Zgłoszono</string>
-    <string name="report_submit_thanks">Dziękujemy za pomoc w zapewnieniu bezpieczeństwa na Revolt. Przeanalizujemy twoje zgłoszenie tak szybko, jak to możliwe.</string>
+    <string name="report_submit_thanks">Dziękujemy za pomoc w zapewnieniu bezpieczeństwa na Peptide. Przeanalizujemy twoje zgłoszenie tak szybko, jak to możliwe.</string>
     <string name="report_submit_error_header">Błąd</string>
     <string name="report_submit_error">Wystąpił błąd podczas przesyłania zgłoszenia. Spróbuj ponownie później.</string>
     <string name="report_submit_close">Zamknij</string>
@@ -183,7 +183,7 @@
     <string name="settings_appearance">Wygląd</string>
     <string name="settings_appearance_theme">Motyw</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Jasny</string>
     <string name="settings_appearance_theme_amoled">Czysta czerń</string>
     <string name="settings_appearance_theme_m3dynamic">Twój Materiał</string>
@@ -192,7 +192,7 @@
     <string name="settings_feedback">Opinie</string>
     <string name="back">← Cofnij</string>
     <string name="loading">Zbieranie informacji, poczekaj chwilę…</string>
-    <string name="login_onboarding_body">Revolt to jeden z najlepszych sposobów na pozostanie w kontakcie ze znajomymi i społecznością, w dowolnym miejscu i czasie.</string>
+    <string name="login_onboarding_body">Peptide to jeden z najlepszych sposobów na pozostanie w kontakcie ze znajomymi i społecznością, w dowolnym miejscu i czasie.</string>
     <string name="password_forgot_instructions">Wprowadź swój adres email, a my wyślemy Ci instrukcje dotyczące resetowania hasła.</string>
     <string name="register_instructions">To jak miejsce, w którym można spędzać czas, spotykać się i rozmawiać o różnych rzeczach. Najlepsze jest to, że jest w Internecie.</string>
     <string name="verify_then_choose_username">Zweryfikuj swój adres email, a następnie zajmiemy się wyborem nazwy użytkownika.</string>
@@ -217,7 +217,7 @@
     <string name="report_reason_content_malware">Złośliwe oprogramowanie lub phishing</string>
     <string name="report_reason_user_impersonation">Podszywanie się</string>
     <string name="report_reason_additional_hint">Wszelkie dodatkowe informacje, które mogą nam pomóc w dochodzeniu. Opcjonalne.</string>
-    <string name="about_full_name">Revolt na Android</string>
+    <string name="about_full_name">Peptide na Android</string>
     <string name="oss_attribution_generation_date">Ostatnia aktualizacja: %1$s</string>
     <string name="emoji_category_activities">Aktywność</string>
     <string name="home_join_jenvolt_description">Jenvolt to przestrzeń zarządzana przez deweloperów dla wszystkich aplikacji na Androida i nie tylko. Wsparcie i opinie można znaleźć tutaj. Może będziesz mógł wypróbować nowe funkcje! 👀</string>
@@ -227,17 +227,17 @@
     <string name="system_message_user_left">%1$s wyszedł</string>
     <string name="status_online">Aktywny</string>
     <string name="status_focus_explainer">Nie będziesz otrzymywać powiadomień o wiadomościach, ale będziesz otrzymywać powiadomienia o @wzmiankach.</string>
-    <string name="status_invisible_explainer">Będziesz mógł normalnie korzystać z Revolt, ale nie będziesz widoczny online dla innych osób.</string>
+    <string name="status_invisible_explainer">Będziesz mógł normalnie korzystać z Peptide, ale nie będziesz widoczny online dla innych osób.</string>
     <string name="server_flag_official">Oficjalny serwer</string>
     <string name="server_flag_verified">Zweryfikowany serwer</string>
     <string name="channel_link_invalid_description">Ten kanał mógł zostać usunięty lub nie masz uprawnień do jego wyświetlania.</string>
     <string name="server_context_sheet_actions_leave">Opuść</string>
     <string name="server_context_sheet_actions_leave_confirm_eyebrow">Dopóki nie zostaniesz ponownie zaproszony, nie będziesz mógł ponownie dołączyć.</string>
     <string name="user_info_sheet_bio_not_found">Nie można pobrać biografii tego użytkownika. Sprawdź, czy dzielicie serwer lub jesteście znajomymi.</string>
-    <string name="oss_attribution_body">Revolt jest zbudowany przy pomocy tych niesamowitych projektów open-source.</string>
+    <string name="oss_attribution_body">Peptide jest zbudowany przy pomocy tych niesamowitych projektów open-source.</string>
     <string name="oss_attribution_body_2">Jesteśmy wdzięczni twórcom tych projektów za udostępnienie ich pracy światu.</string>
     <string name="oss_attribution_warning">Poniższa lista jest generowana automatycznie. Może być niekompletna lub niedokładna.</string>
-    <string name="about_brought_to_you_by">Dostarczone z ❤️ przez zespół Revolt.</string>
+    <string name="about_brought_to_you_by">Dostarczone z ❤️ przez zespół Peptide.</string>
     <string name="about_tab_version">Wersja</string>
     <string name="about_tab_details">Szczegóły</string>
     <string name="oss_attribution_tap_to_view_license">Dotknij, aby wyświetlić licencję</string>
@@ -251,7 +251,7 @@
     <string name="emoji_category_symbols">Symbole</string>
     <string name="emoji_category_flags">Flagi</string>
     <string name="badge_platform_moderation_alt">Moderacja platformy</string>
-    <string name="badge_team_member_alt">Członek zespołu Revolt</string>
+    <string name="badge_team_member_alt">Członek zespołu Peptide</string>
     <string name="home_join_jenvolt">Dołącz do Jenvolt</string>
     <string name="friends">Przyjaciele</string>
     <string name="friends_incoming_requests">Przychodzące żądania</string>
@@ -382,7 +382,7 @@
     <string name="settings_appearance_colour_overrides_import_error">Ten plik nie jest prawidłowym plikiem zastępującym kolor.</string>
     <string name="settings_changelogs_new_header">Co tam słychać ✨</string>
     <string name="discover_alt">Odkrywaj</string>
-    <string name="discover">Odkrywaj Revolt</string>
+    <string name="discover">Odkrywaj Peptide</string>
     <string name="report_user_heading">Powiedz, co jest nie tak z tym użytkownikiem</string>
     <string name="report_reason_content_extreme_violence">Ekstremalna przemoc, gore lub okrucieństwo wobec zwierząt</string>
     <string name="report_message_heading">Powiedz, co jest nie tak z tą wiadomością</string>
@@ -412,11 +412,11 @@
     <string name="invite_dialog_close">Zamknij</string>
     <string name="invite_dialog_header">Zaproszenie do #%1$s</string>
     <string name="share_target_invalid_intent">Nie jest to ważna intencja udostępniania.</string>
-    <string name="share_target_attachment_too_large">Ten załącznik jest zbyt duży dla Revolt (maks. $1$s).</string>
+    <string name="share_target_attachment_too_large">Ten załącznik jest zbyt duży dla Peptide (maks. $1$s).</string>
     <string name="share_target_search_channels">Wyszukiwanie kanałów</string>
     <string name="share_target_select_channel">Wybierz kanał do udostępnienia.</string>
-    <string name="share_target_heading">Udostępnij na Revolt</string>
-    <string name="share_target_login_first">Zaloguj się przed udostępnieniem na Revolt.</string>
+    <string name="share_target_heading">Udostępnij na Peptide</string>
+    <string name="share_target_login_first">Zaloguj się przed udostępnieniem na Peptide.</string>
     <string name="channel_age_gate_title">Ten kanał jest oznaczony jako NSFW</string>
     <string name="channel_age_gate_description">Musisz mieć ukończone 18 lat, aby zobaczyć ten kanał.</string>
     <string name="channel_age_gate_dob_invalid_future">Nie można urodzić się w przyszłości.</string>
@@ -434,7 +434,7 @@
     <string name="message_context_sheet_actions_delete_confirmation_body">Zniknie na zawsze (na długo!)</string>
     <string name="message_context_sheet_actions_delete_confirmation_yes">Usuń</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Zachowaj</string>
-    <string name="settings_feedback_description">Dołącz do serwera Revolt, aby przekazywać opinie i sugestie oraz zgłaszać błędy.</string>
+    <string name="settings_feedback_description">Dołącz do serwera Peptide, aby przekazywać opinie i sugestie oraz zgłaszać błędy.</string>
     <string name="friends_new_group">Nowa grupa</string>
     <string name="create_group_description">Zbierz załogę na czacie grupowym. Możesz dodać do %1$d osób.</string>
     <string name="user_info_sheet_user_is_bot">To jest bot.</string>
@@ -546,7 +546,7 @@
     <string name="user_card_tap_to_copy">Stuknij, aby skopiować</string>
     <string name="user_card_data_point_display_name">%1$d.Nazwa</string>
     <string name="user_card_data_point_username">%1$d.Nazwa użytkownika</string>
-    <string name="user_card_data_point_join_date">%1$d.Na Revolt od</string>
+    <string name="user_card_data_point_join_date">%1$d.Na Peptide od</string>
     <string name="user_card_data_point_photo">%1$d.Zdjęcie</string>
     <string name="user_card_error_sharing">Wystąpił błąd podczas udostępniania karty użytkownika.</string>
     <string name="user_card_data_point_qrcode">%1$d.Kod QR</string>
@@ -559,7 +559,7 @@
     <string name="overview_screen_share_profile">Udostępnij profil</string>
     <string name="overview_screen_share_profile_description">Spójrz na swoją kartę użytkownika i uzyskaj specjalny link do udostępnienia</string>
     <string name="overview_screen_changelog">Dziennik zmian</string>
-    <string name="overview_screen_changelog_description">Revolt nigdy nie śpi, spójrz, aby zobaczyć, co jest w przygotowaniu</string>
+    <string name="overview_screen_changelog_description">Peptide nigdy nie śpi, spójrz, aby zobaczyć, co jest w przygotowaniu</string>
     <string name="overview_screen_feedback">Przekazywanie opinii</string>
     <string name="overview_screen_feedback_description">Masz coś do powiedzenia\? Zamieniamy się w słuch</string>
     <string name="user_info_sheet_webhook">Webhook został znaleziony!</string>
@@ -569,7 +569,7 @@
     <string name="settings_language_auto">Domyślny system</string>
     <string name="programming_language_snippet">[%1$s snippet]</string>
     <string name="spark_keyboard_shortcuts">Używasz klawiatury?</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt ma skróty klawiszowe! Naciśnij %1$s, aby je zobaczyć.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide ma skróty klawiszowe! Naciśnij %1$s, aby je zobaczyć.</string>
     <string name="could_not_log_in_heading">Wystąpił problem z zalogowaniem</string>
     <string name="could_not_log_in_body">Być może wylogowałeś się z innego urządzenia lub połączenie internetowe nie działa.</string>
     <string name="could_not_log_in_cta_try_again">Spróbuj ponownie</string>
@@ -588,13 +588,13 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys">Wskazówka</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Powiadomienia</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Zamówienie Serwera</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt na Androida</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Peptide na Androida</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (nieznane)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Zresetuj ustawienia %1$s</string>
     <string name="spark_early_access">Witamy we wczesnej dostępie! 🚀</string>
     <string name="spark_early_access_description_1">Jesteś jednym z pierwszych, którzy wypróbowali naszą nową aplikację na Androida. Cieszymy się, że tu jesteś!</string>
-    <string name="spark_early_access_description_2">Ponieważ jest to wczesny dostęp, wszystko może nie być jeszcze idealne. Możesz natknąć się na sporadyczne błędy, awarie lub dziwne dziwactwa. Twoja opinia pomoże nam wygładzić nierówne krawędzie i uczynić Revolt jeszcze lepszym.</string>
+    <string name="spark_early_access_description_2">Ponieważ jest to wczesny dostęp, wszystko może nie być jeszcze idealne. Możesz natknąć się na sporadyczne błędy, awarie lub dziwne dziwactwa. Twoja opinia pomoże nam wygładzić nierówne krawędzie i uczynić Peptide jeszcze lepszym.</string>
     <string name="spark_early_access_description_3">Cieszymy się, że mamy cię na pokładzie. Stwórzmy razem coś wspaniałego!</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Niektóre ustawienia Revolt są uszkodzone. Może to być spowodowane korzystaniem z klientów innych firm. Dotyczy to następujących ustawień:</string>
-    <string name="hint_provide_feedback_description">Jeśli masz jakieś uwagi, sugestie lub raporty o błędach, daj nam znać. Zawsze staramy się ulepszać Revolt.</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Niektóre ustawienia Peptide są uszkodzone. Może to być spowodowane korzystaniem z klientów innych firm. Dotyczy to następujących ustawień:</string>
+    <string name="hint_provide_feedback_description">Jeśli masz jakieś uwagi, sugestie lub raporty o błędach, daj nam znać. Zawsze staramy się ulepszać Peptide.</string>
 </resources>

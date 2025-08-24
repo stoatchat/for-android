@@ -37,7 +37,7 @@
     <string name="mfa_password_header">Introduz la to contraseña</string>
     <string name="mfa_password_lead">Introduz la to contraseña pa seguir.</string>
     <string name="about">Alrodiu de</string>
-    <string name="about_full_name">Revolt en Android</string>
+    <string name="about_full_name">Peptide en Android</string>
     <string name="about_tab_version">Versión</string>
     <string name="oss_attribution">Atribución de códigu abiertu</string>
     <string name="oss_attribution_body_2">Damos-yos les gracies a los desenvolvedores d\'esos proyeutos por facer disponible\'l so trabayu pa tol mundu.</string>
@@ -61,7 +61,7 @@
     <string name="badge_bot_alt">Bot</string>
     <string name="badge_masquerade_alt">Dende la canal venceyada</string>
     <string name="badge_platform_moderation_alt">Moderación de plataforma</string>
-    <string name="badge_team_member_alt">Miembru del equipu de Revolt</string>
+    <string name="badge_team_member_alt">Miembru del equipu de Peptide</string>
     <string name="unknown">Desconocíu</string>
     <string name="menu">Menú</string>
     <string name="logout">Zarrar sesión</string>
@@ -174,7 +174,7 @@
     <string name="add_server_sheet_join_by_invite_modal_join">Axuntase</string>
     <string name="add_server_sheet_create_new">Crear un nuevu servidor</string>
     <string name="add_server_sheet_create_new_modal_title">Crear un nuevu servidor</string>
-    <string name="discover">Escubrir Revolt</string>
+    <string name="discover">Escubrir Peptide</string>
     <string name="report">Reportar</string>
     <string name="report_cancel">Atayar</string>
     <string name="report_message_heading">Dinos lo que tá mal d\'esti mensaxe</string>
@@ -255,7 +255,7 @@
     <string name="settings_sessions_log_out_other_confirm_no">Caltener la sesión abierta</string>
     <string name="settings_appearance_theme">Temes</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Nidiu</string>
     <string name="settings_appearance_theme_amoled">Prietu dafechu</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -293,12 +293,12 @@
     <string name="back">← P\'atrás</string>
     <string name="loading">Pescanciando daqué d\'información, aguanta ehí…</string>
     <string name="login_onboarding_heading">Atopa la to comunidá, conecta col mundu.</string>
-    <string name="login_onboarding_body">Revolt ye una de les meyores formes de tar conectáu colos tos amigos y comunidá, en cualesquier llugar y en cualesquier momentu.</string>
+    <string name="login_onboarding_body">Peptide ye una de les meyores formes de tar conectáu colos tos amigos y comunidá, en cualesquier llugar y en cualesquier momentu.</string>
     <string name="signup">Inscribíte</string>
     <string name="password_forgot">¿Escaecisti la to contraseña\?</string>
     <string name="password_forgot_instructions">Introduz el to corréu electrónicu y unviarémoste instrucciones sobro como restablecer la to contraseña.</string>
-    <string name="register_heading">Bienveníu a Revolt</string>
-    <string name="register_image_alt">Usa Revolt pa falar sobro coses.</string>
+    <string name="register_heading">Bienveníu a Peptide</string>
+    <string name="register_image_alt">Usa Peptide pa falar sobro coses.</string>
     <string name="register_instructions">Ye como un llugar pa pasar el ratu, rexuntáse, y falar sobro coses. La meyor parte, tá n\'internet.</string>
     <string name="register_email">Corréu electrónicu</string>
     <string name="register_email_verification_hint">Vamos unviáte un corréu de verificación pa confirmar la to cuenta.</string>
@@ -309,9 +309,9 @@
     <string name="mfa_type_recovery">Usar un códigu de recuperación</string>
     <string name="mfa_totp_lead">Pon el códigu de seyes númberos de la to aplicación d\'autenticación.</string>
     <string name="mfa_recovery_lead">Introduz ún de los tos códigos de recuperación.</string>
-    <string name="about_brought_to_you_by">Trayíu pa ti con ❤️ pol equipu de Revolt.</string>
+    <string name="about_brought_to_you_by">Trayíu pa ti con ❤️ pol equipu de Peptide.</string>
     <string name="about_tab_details">Detalles</string>
-    <string name="oss_attribution_body">Revolt tá fechu cola ayuda d\'estos maraviyosos proyeutos de códigu abiertu.</string>
+    <string name="oss_attribution_body">Peptide tá fechu cola ayuda d\'estos maraviyosos proyeutos de códigu abiertu.</string>
     <string name="oss_attribution_warning">La llista d\'embaxu foi xenerada automáticamente. Pue tar incompleta o enquivocada.</string>
     <string name="oss_attribution_tap_to_view_license">Pulsa pa ver la llicencia</string>
     <string name="typing_several">Varies persones tán escribiendo</string>
@@ -319,7 +319,7 @@
     <string name="reply_mention_on">\@ activáu</string>
     <string name="emoji_category_food">Comida y Bebíes</string>
     <string name="emoji_category_travel">Viaxe y Llugares</string>
-    <string name="home_join_jenvolt">Xuntáse a Revolt</string>
+    <string name="home_join_jenvolt">Xuntáse a Peptide</string>
     <string name="home_join_jenvolt_description">Jenvolt ye\'l espaciu dirixíu por desenvolvedores pa toles coses d\'Android app y más. Sofitu y comentarios fácense equí. ¡Quiciabes pueas llograr probar nueves característiques! 👀</string>
     <string name="friends_deny_all_incoming">Esborrar toles solicitúes entrantes</string>
     <string name="no_channels_body">Nun hai nenguna canal nesti servidor. Nin siquier una canal de bienvenida. Qué faltoso.</string>
@@ -328,7 +328,7 @@
     <string name="time_rift_cta">Cargar mensaxes</string>
     <string name="message_field_placeholder_group">Unviar un mensaxe en %1$s</string>
     <string name="message_field_denied_no_permission">Nun tienes permisu pa unviar mensaxes nesta canal.</string>
-    <string name="message_field_denied_platform_moderation">Esta ye una canal d\'enfotu pa noticies de moderación de Revolt. Nun pues unviar mensaxes equí.</string>
+    <string name="message_field_denied_platform_moderation">Esta ye una canal d\'enfotu pa noticies de moderación de Peptide. Nun pues unviar mensaxes equí.</string>
     <string name="system_message_ownership_changed_alt">Propiedá camudada</string>
     <string name="system_message_user_added_alt">Usuariu amestáu</string>
     <string name="system_message_ownership_changed">%1$s tresfirió la propiedá a %2$s</string>
@@ -337,7 +337,7 @@
     <string name="x_days_ago">Van %1$d díes</string>
     <string name="status">Estáu</string>
     <string name="status_focus_explainer">Nun vas arrecibir notificaciones de mensaxes, pero vas arrecibir notificaciones de @menciones.</string>
-    <string name="status_invisible_explainer">Vas poder usar Revolt como siempre, pero nun vas apaecer conectáu pa otres persones.</string>
+    <string name="status_invisible_explainer">Vas poder usar Peptide como siempre, pero nun vas apaecer conectáu pa otres persones.</string>
     <string name="no_connection_message">Nun tas conectáu al Internet. Por favor, comprueba la to conexón y téntalo otra vez.</string>
     <string name="copied">Copiáu nel portapapeles</string>
     <string name="channel_link_invalid_description">Esti canal pue ser que s\'esaniciara o nun tengas permisu pa velu.</string>
@@ -368,7 +368,7 @@
     <string name="report_reason_content_harassment">Acosu o ciberacosu</string>
     <string name="report_reason_user_inappropriate_content">Conteníu inapropriáu (como NSFW)</string>
     <string name="report_reason_additional_hint">Cualesquier información adicional que puea ayudanos na nuesa investigación. Opcional.</string>
-    <string name="report_submit_thanks">Gracies por ayudar a caltener Revolt seguru. Vamos revisar el to reporte lo enantes posible.</string>
+    <string name="report_submit_thanks">Gracies por ayudar a caltener Peptide seguru. Vamos revisar el to reporte lo enantes posible.</string>
     <string name="report_submit_error">Un erru producióse al unviar el to reporte. Porfavor tentalo de nuevu más tarde.</string>
     <string name="invite_message">Fuisti convidáu pa xunite a esti servidor. ¿Gustaríate xunite\?</string>
     <string name="invite_error_no_invite">Nun s\'especificó nengún códigu d\'invitación.</string>

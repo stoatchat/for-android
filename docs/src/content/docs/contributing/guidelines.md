@@ -1,21 +1,21 @@
 ---
 title: Contribution Guidelines
-description: Read the guidelines before setting out to contribute to Revolt on Android.
+description: Read the guidelines before setting out to contribute to Peptide on Android.
 template: doc
 ---
 
-This page contains the guidelines for contributing to Revolt on Android. These guidelines are
+This page contains the guidelines for contributing to Peptide on Android. These guidelines are
 important to ensure that your contribution is accepted and merged into the main codebase.
 
 :::danger
-Make sure you read these guidelines _before starting to contribute_ to Revolt on Android.  
+Make sure you read these guidelines _before starting to contribute_ to Peptide on Android.  
 If you do not follow these guidelines, your contribution may be rejected!
 :::
 
 ## Before You Start
 
 - Make sure you have read
-  the [Code of Conduct](https://github.com/revoltchat/.github/blob/master/.github/CODE_OF_CONDUCT.md)
+  the [Code of Conduct](https://github.com/peptidechat/.github/blob/master/.github/CODE_OF_CONDUCT.md)
   before contributing. You must follow it at all times.
 
 Before you start contributing, you first need to know what to contribute. Based on that, you must
@@ -23,7 +23,7 @@ make a decision:
 
 :::tip[Translation]
 If you want to contribute to translations, you can do so by
-visiting [Weblate](https://translate.revolt.chat/projects/revolt/android/).
+visiting [Weblate](https://translate.peptide.chat/projects/peptide/android/).
 :::
 
 #### I want to fix a bug
@@ -42,13 +42,13 @@ If you are fixing a bug, you must follow these guidelines:
 you are adding a feature, you must follow these guidelines:
 
 - The feature must be useful to a wide variety of users.
-- UI/UX is centrally managed by Revolt's design team. Make sure your feature aligns closely with the
+- UI/UX is centrally managed by Peptide's design team. Make sure your feature aligns closely with the
   current design as well as [Material 3](https://m3.material.io/).
 - If you need any new UI, you are recommended to request a design from the design team and implement
   it as per the design. If your UI/UX is not up to the mark, your PR may be rejected by the design
   team.
 - The feature must not be a duplicate of an existing feature.
-- If you are adding a new feature, you should consult with the Android team at Revolt to make sure
+- If you are adding a new feature, you should consult with the Android team at Peptide to make sure
   that the feature is not already in development or planned for the future. Conflicting features
   will not be merged.
 

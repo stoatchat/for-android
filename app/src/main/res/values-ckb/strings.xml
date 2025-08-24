@@ -3,7 +3,7 @@
     <string name="cancel">ڕەتکردنەوە</string>
     <string name="loading">هێنانی هەندێک زانیاری، کەمێک بوەستە…</string>
     <string name="login_onboarding_heading">کۆمەڵگاکەت بدۆزەرەوە، پەیوەندی بە جیهانەوە بکە.</string>
-    <string name="login_onboarding_body">Revolt یەکێکە لە باشترین ڕێگاکان بۆ ئەوەی پەیوەندیت لەگەڵ هاوڕێ و کۆمەڵگاکەت هەبێت، لە هەر شوێنێک، لە هەر کاتێکدا.</string>
+    <string name="login_onboarding_body">Peptide یەکێکە لە باشترین ڕێگاکان بۆ ئەوەی پەیوەندیت لەگەڵ هاوڕێ و کۆمەڵگاکەت هەبێت، لە هەر شوێنێک، لە هەر کاتێکدا.</string>
     <string name="password_forgot_instructions">ئیمەیڵەکەت بنووسە و ئێمە ڕێنماییت بۆ دەنێرین سەبارەت بە چۆنیەتی ڕێستکردنی وشەی نهێنی.</string>
     <string name="back">← گەڕانەوە</string>
     <string name="next">دواتر ←</string>
@@ -24,5 +24,5 @@
     <string name="resend_verification">ئیمێڵێکی پشتڕاستکردنەوە بنێرە</string>
     <string name="password_manager_hint">بەڕێوەبەری وشەی نهێنی بەکاردەهێنیت؟</string>
     <string name="password_forgot_heading">وشەی نهێنیت لەبیر كردووە ؟</string>
-    <string name="register_heading">بەخێربێیت بۆ Revolt</string>
+    <string name="register_heading">بەخێربێیت بۆ Peptide</string>
 </resources>

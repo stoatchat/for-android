@@ -466,7 +466,7 @@
     <string name="settings_sessions_log_out_other">از سایر نشست ها خارج شوید</string>
     <string name="settings_sessions_log_out_other_description">این دستگاه وارد خواهد ماند.</string>
     <string name="settings_appearance_theme">تم</string>
-    <string name="settings_appearance_theme_revolt">ریولت</string>
+    <string name="settings_appearance_theme_peptide">ریولت</string>
     <string name="settings_appearance_theme_light">روشن</string>
     <string name="settings_appearance_theme_amoled">مشکی خالص</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (پشتیبانی نشده)</string>

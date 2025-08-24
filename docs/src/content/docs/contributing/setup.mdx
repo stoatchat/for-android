@@ -1,10 +1,10 @@
 ---
 title: Setting up your Development Environment
-description: A guide to setting up your development environment for Revolt on Android.
+description: A guide to setting up your development environment for Peptide on Android.
 template: doc
 ---
 
-This page contains the guidelines for setting up your development environment for Revolt on Android. These guidelines are important to ensure that your development environment is set up correctly and you can start contributing to the project.
+This page contains the guidelines for setting up your development environment for Peptide on Android. These guidelines are important to ensure that your development environment is set up correctly and you can start contributing to the project.
 
 If you want to compile the app for yourself, you can also follow these guidelines, however you may not need Android Studio and it may be possible to build the app using the command line, out of the scope of this guide.
 
@@ -85,7 +85,7 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
 4.  Clone the repository.
 
     ```sh
-    git clone --recursive https://github.com/revoltchat/android.git
+    git clone --recursive https://github.com/peptidechat/android.git
     ```
 
     Specify `--recursive` to ensure that submodules are cloned as well.
@@ -105,13 +105,13 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
     deno run -A scripts/download_deps.ts
     ```
 
-8.  Copy the `revoltbuild.properties.example` file to `revoltbuild.properties` and fill in the required values.
+8.  Copy the `peptidebuild.properties.example` file to `peptidebuild.properties` and fill in the required values.
 
     ```sh
-    cp revoltbuild.properties.example revoltbuild.properties
+    cp peptidebuild.properties.example peptidebuild.properties
     ```
 
-    The `revoltbuild.properties` file contains the following properties:
+    The `peptidebuild.properties` file contains the following properties:
 
     | Property                 | Description                                    |
     | ------------------------ | ---------------------------------------------- |
@@ -142,6 +142,6 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
     You can build the project by clicking on the 'Run' button in Android Studio.  
     If asked, build the `:app` module.
 
-11. **You're all set!** You can now start contributing to Revolt on Android.
+11. **You're all set!** You can now start contributing to Peptide on Android.
 
 </Steps>

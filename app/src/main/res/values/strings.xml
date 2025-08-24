@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Revolt</string>
+    <string name="app_name" translatable="false">Peptide</string>
 
     <string name="back">← Back</string>
     <string name="next">Next →</string>
@@ -17,6 +17,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="community_guidelines">Community Guidelines</string>
     <string name="message_friends">Message Friends</string>
+    <string name="message">Message</string>
     <string name="empty_messages_content_description">Empty Messages Sad Image</string>
     <string name="empty_messages_heading">It\'s Quiet Here...</string>
     <string name="empty_messages_body">Find friends to chat with or create a group conversation.</string>
@@ -54,8 +55,8 @@
     <string name="password_forgot_heading">Forgot your password?</string>
     <string name="password_forgot_instructions">Enter your email and we\'ll send you instructions on how to reset your password.</string>
 
-    <string name="register_heading">Welcome to Revolt</string>
-    <string name="register_image_alt">Use Revolt to chat about stuff.</string>
+    <string name="register_heading">Welcome to Peptide</string>
+    <string name="register_image_alt">Use Peptide to chat about stuff.</string>
     <string name="register_instructions">It\'s like a place to hang out, get together, and talk about stuff. Best part, it\'s on the internet.</string>
     <string name="register_form_heading">Make it Official!</string>
     <string name="register_data">New Here? Let’s Get You Set Up!</string>
@@ -93,13 +94,13 @@
     <string name="mfa_password_lead">Enter your password to continue.</string>
 
     <string name="about">About</string>
-    <string name="about_full_name">Revolt on Android</string>
-    <string name="about_brought_to_you_by">Brought to you with ❤️ by the Revolt team.</string>
+    <string name="about_full_name">Peptide on Android</string>
+    <string name="about_brought_to_you_by">Brought to you with ❤️ by the Peptide team.</string>
     <string name="about_tab_version">Version</string>
     <string name="about_tab_details">Details</string>
 
     <string name="oss_attribution">OSS Attribution</string>
-    <string name="oss_attribution_body">Revolt is built with the help of these awesome open-source projects.</string>
+    <string name="oss_attribution_body">Peptide is built with the help of these awesome open-source projects.</string>
     <string name="oss_attribution_body_2">We\'re grateful to the developers of these projects for making their work available to the world.</string>
     <string name="oss_attribution_warning">The list below is automatically generated. It may be incomplete or inaccurate.</string>
     <string name="oss_attribution_generation_date">Last updated: %1$s</string>
@@ -141,7 +142,7 @@
     <string name="badge_bot_alt">Bot</string>
     <string name="badge_masquerade_alt">From linked channel</string>
     <string name="badge_platform_moderation_alt">Platform moderation</string>
-    <string name="badge_team_member_alt">Revolt team member</string>
+    <string name="badge_team_member_alt">Peptide team member</string>
     <string name="badge_webhook_alt">Webhook</string>
 
     <string name="unknown">Unknown</string>
@@ -161,7 +162,7 @@
     <string name="overview_screen_share_profile">Share Profile</string>
     <string name="overview_screen_share_profile_description">Take a look at your user card and get a special link to share</string>
     <string name="overview_screen_changelog">Changelog</string>
-    <string name="overview_screen_changelog_description">Revolt never sleeps, take a look to see what\'s been in the works</string>
+    <string name="overview_screen_changelog_description">Peptide never sleeps, take a look to see what\'s been in the works</string>
     <string name="overview_screen_feedback">Provide Feedback</string>
     <string name="overview_screen_feedback_description">Got something to say? We\'re all ears</string>
 
@@ -169,7 +170,7 @@
     <string name="user_card_error_sharing">An error occurred while sharing your user card.</string>
     <string name="user_card_data_point_display_name">%1$d.Name</string>
     <string name="user_card_data_point_username">%1$d.Username</string>
-    <string name="user_card_data_point_join_date">%1$d.On Revolt Since</string>
+    <string name="user_card_data_point_join_date">%1$d.On Peptide Since</string>
     <string name="user_card_data_point_qrcode">%1$d.QR Code</string>
     <string name="user_card_data_point_photo">%1$d.Photo</string>
 
@@ -182,7 +183,7 @@
     <string name="friends_new_group">New group</string>
     <string name="friends_scan_qr">Scan QR code</string>
     <string name="friends_scan_qr_result_sheet_invalid_title">Invalid QR code</string>
-    <string name="friends_scan_qr_result_sheet_invalid_description">This is not a valid Revolt QR code.</string>
+    <string name="friends_scan_qr_result_sheet_invalid_description">This is not a valid Peptide QR code.</string>
     <string name="friends_scan_qr_result_sheet_missing_permission_title">Missing camera permission</string>
     <string name="friends_scan_qr_result_sheet_missing_permission_description">You need to grant the camera permission to scan QR codes.</string>
     <string name="friends_scan_qr_result_sheet_success_title">Add friend?</string>
@@ -312,7 +313,7 @@
     <string name="status_dnd_explainer">You will not receive any notifications, including messages and @mentions.</string>
     <string name="status_offline">Offline</string>
     <string name="status_invisible">Invisible</string>
-    <string name="status_invisible_explainer">You will be able to use Revolt as usual, but you will not appear as online to other people.</string>
+    <string name="status_invisible_explainer">You will be able to use Peptide as usual, but you will not appear as online to other people.</string>
     <string name="status_text_none">What\'s up?</string>
     <string name="status_text">Status text</string>
     <string name="status_text_explainer">Your status text will be visible to everyone. Keep it short and sweet.</string>
@@ -429,7 +430,7 @@
     <string name="user_info_sheet_bio_not_found">This user\'s bio could not be fetched. Please verify you share a server or are friends.</string>
     <string name="user_info_sheet_category_roles">Roles</string>
     <string name="user_info_sheet_category_joined">Joined</string>
-    <string name="user_info_sheet_category_joined_revolt" translatable="false">Revolt</string>
+    <string name="user_info_sheet_category_joined_peptide" translatable="false">Peptide</string>
     <string name="user_info_sheet_category_badges">Badges</string>
     <string name="user_info_sheet_category_owner">Owner</string>
     <string name="user_info_sheet_owner_not_found">Could not fetch owner information</string>
@@ -475,7 +476,7 @@
     <string name="add_server_sheet_step_1j_examples_heading">Examples of invite codes include:</string>
     <string name="add_server_sheet_step_1j_example_1" translatable="false">rvlt.gg/Testers</string>
     <string name="add_server_sheet_step_1j_example_2" translatable="false">Testers</string>
-    <string name="add_server_sheet_step_1j_example_3" translatable="false">app.revolt.chat/invite/Testers</string>
+    <string name="add_server_sheet_step_1j_example_3" translatable="false">app.peptide.chat/invite/Testers</string>
     <string name="add_server_sheet_step_1j_label">Invite code or link</string>
     <string name="add_server_sheet_step_1j_join">Join</string>
     <string name="add_server_sheet_step_1c_title">Create a Server</string>
@@ -485,8 +486,15 @@
     <string name="add_server_sheet_step_1c_name_error_range">Server name can be up to %1$d characters in length.</string>
     <string name="add_server_sheet_step_1c_error">An error occurred while creating your server. Please try again later.</string>
     <string name="add_server_sheet_step_1c_create">Create</string>
+    <string name="add_server_sheet_title">Add to server</string>
+    <string name="add_server_sheet_join_by_invite_modal_title">Invite code or link</string>
+    <string name="add_server_sheet_join_by_invite_modal_hint">Invite code or link</string>
+    <string name="add_server_sheet_join_by_invite_modal_join">Join</string>
+    <string name="add_server_sheet_create_new">Create a new server</string>
+    <string name="add_server_sheet_create_new_modal_title">Create a new server</string>
+    <string name="add_server_sheet_create_new_modal_under_construction">This feature is currently under construction.</string>
 
-    <string name="discover">Discover Revolt</string>
+    <string name="discover">Discover Peptide</string>
 
     <string name="report">Report</string>
     <string name="report_cancel">Cancel</string>
@@ -534,7 +542,7 @@
     <string name="report_submitting">Reporting…</string>
     <string name="report_submit_success">Reported</string>
 
-    <string name="report_submit_thanks">Thank you for helping to keep Revolt safe. We will review your report as soon as possible.</string>
+    <string name="report_submit_thanks">Thank you for helping to keep Peptide safe. We will review your report as soon as possible.</string>
 
     <string name="report_submit_error_header">Error</string>
     <string name="report_submit_error">An error occurred while submitting your report. Please try again later.</string>
@@ -643,15 +651,22 @@
     <string name="spark_notifications_rationale_dismiss">Not now</string>
 
     <string name="spark_keyboard_shortcuts">Using a keyboard?</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt has keyboard shortcuts! Press %1$s to see them.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide has keyboard shortcuts! Press %1$s to see them.</string>
     <string name="spark_keyboard_shortcuts_cta">Open shortcuts</string>
     <string name="spark_keyboard_shortcuts_dismiss">Alright</string>
 
     <string name="spark_early_access">Welcome to Early Access! 🚀</string>
     <string name="spark_early_access_description_1">You\'re one of the first to try out our new Android app. We\'re excited to have you here!</string>
-    <string name="spark_early_access_description_2">Since this is early access, things might not be perfect just yet. You might run into the occasional bug, crash, or weird quirk. Your feedback helps us smooth out the rough edges and make Revolt even better.</string>
+    <string name="spark_early_access_description_2">Since this is early access, things might not be perfect just yet. You might run into the occasional bug, crash, or weird quirk. Your feedback helps us smooth out the rough edges and make Peptide even better.</string>
     <string name="spark_early_access_description_3">We\'re thrilled to have you on board. Let\'s make something great together!</string>
     <string name="spark_early_access_cta">Got it</string>
+
+    <!-- Notifications page labels -->
+    <string name="notification_option_use_default">Use default</string>
+    <string name="notification_option_muted">Muted</string>
+    <string name="notification_option_all_messages">All messages</string>
+    <string name="notification_option_mentions_only">Mentions only</string>
+    <string name="notification_option_none">None</string>
 
     <string name="spark_swipe_to_reply">Swipe to Reply is here.</string>
     <string name="spark_swipe_to_reply_description">Making message threads has never been easier.\nJust swipe to the left on any message.\nReply up to five messages at once.</string>
@@ -659,7 +674,7 @@
     <string name="spark_swipe_to_reply_customise">Customise Quick Reply</string>
 
     <string name="hint_provide_feedback">We love feedback!</string>
-    <string name="hint_provide_feedback_description">If you have any feedback, suggestions, or bug reports, please let us know. We\'re always looking to improve Revolt.</string>
+    <string name="hint_provide_feedback_description">If you have any feedback, suggestions, or bug reports, please let us know. We\'re always looking to improve Peptide.</string>
     <string name="hint_provide_feedback_cta">Rate on Google Play</string>
     <string name="hint_provide_feedback_join_server">Join Testers Server</string>
     <string name="hint_provide_feedback_dismiss">Done</string>
@@ -671,7 +686,7 @@
     <string name="settings_category_account">Account</string>
     <string name="settings_category_general">General</string>
     <string name="settings_category_miscellaneous">Miscellaneous</string>
-    <string name="settings_category_last" translatable="false">Revolt v%1$s</string>
+    <string name="settings_category_last" translatable="false">Peptide v%1$s</string>
 
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_profile_picture">Profile picture</string>
@@ -692,10 +707,10 @@
     <string name="settings_appearance">Appearance</string>
     <string name="settings_appearance_theme">Theme</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Light</string>
     <string name="settings_appearance_theme_amoled">Pure Black</string>
-    <string name="settings_appearance_theme_m3dynamic">Material You</string>
+    <string name="settings_appearance_theme_m3dynamic">Material</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (unsupported)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You is not supported on this device.</string>
 
@@ -747,15 +762,15 @@
     <string name="settings_chat_interactive_embeds_youtube">YouTube</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys">Hint</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Some of your Revolt settings are corrupted. This may be due to the use of third-party clients. The affected settings are:</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Some of your Peptide settings are corrupted. This may be due to the use of third-party clients. The affected settings are:</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Notifications</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Server Ordering</string>
-    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt for Android</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Peptide for Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (unknown)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Reset %1$s settings</string>
 
     <string name="settings_feedback">Feedback</string>
-    <string name="settings_feedback_description">Join the Revolt server to give feedback or suggestions and report bugs.</string>
+    <string name="settings_feedback_description">Join the Peptide server to give feedback or suggestions and report bugs.</string>
 
     <string name="settings_changelogs">Changelogs</string>
     <string name="settings_changelogs_new_header">What\'s been cooking ✨</string>
@@ -791,10 +806,10 @@
     <string name="channel_settings_delete_confirm_yes">Delete</string>
     <string name="channel_settings_delete_confirm_no">Keep</string>
 
-    <string name="share_target_heading">Share to Revolt</string>
-    <string name="share_target_login_first">Please log in before sharing to Revolt.</string>
+    <string name="share_target_heading">Share to Peptide</string>
+    <string name="share_target_login_first">Please log in before sharing to Peptide.</string>
     <string name="share_target_invalid_intent">This is not a valid share intent.</string>
-    <string name="share_target_attachment_too_large">This attachment is too large for Revolt (max. $1$s).</string>
+    <string name="share_target_attachment_too_large">This attachment is too large for Peptide (max. $1$s).</string>
     <string name="share_target_search_channels">Search channels</string>
     <string name="share_target_select_channel">Select a channel to share to.</string>
 
@@ -809,7 +824,7 @@
 
     <string name="geogate_header">Not available in your region</string>
     <string name="geogate_channel_icon_alt">Unavailable channel</string>
-    <string name="geogate_description">Revolt may block content in certain jurisdictions in response to legislation or legal notices</string>
+    <string name="geogate_description">Peptide may block content in certain jurisdictions in response to legislation or legal notices</string>
     <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
     <string name="geogate_acknowledge">Acknowledge</string>
 

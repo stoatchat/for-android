@@ -32,7 +32,7 @@ namespace Stendal {
         constructArrayListMethod = env->GetMethodID(localArrayListClass, "<init>", "(I)V");
         addArrayListMethod = env->GetMethodID(localArrayListClass, "add", "(Ljava/lang/Object;)Z");
 
-        jclass localAstNodeClass = env->FindClass("chat/revolt/ndk/AstNode");
+        jclass localAstNodeClass = env->FindClass("chat/peptide/ndk/AstNode");
         astNodeClass = (jclass) env->NewGlobalRef(localAstNodeClass);
         astNodeConstructor = env->GetMethodID(localAstNodeClass, "<init>",
                                               STENDAL_ASTNODE_CONSTRUCTOR_SIGNATURE);
@@ -141,12 +141,12 @@ namespace Stendal {
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_chat_revolt_ndk_Stendal_init(JNIEnv *env, [[maybe_unused]] jobject thiz) {
+Java_chat_peptide_ndk_Stendal_init(JNIEnv *env, [[maybe_unused]] jobject thiz) {
     Stendal::init(env);
 }
 
 extern "C" JNIEXPORT jobject JNICALL
-Java_chat_revolt_ndk_Stendal_render(JNIEnv *env, [[maybe_unused]] jobject thiz, jstring input) {
+Java_chat_peptide_ndk_Stendal_render(JNIEnv *env, [[maybe_unused]] jobject thiz, jstring input) {
     const char *inputStr = env->GetStringUTFChars(input, nullptr);
     cmark_node *doc = cmark_parse_document(inputStr, strlen(inputStr),
                                            CMARK_OPT_DEFAULT | CMARK_OPT_HARDBREAKS |

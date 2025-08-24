@@ -11,7 +11,7 @@
     <string name="tap_to_reconnect">Натисніть для перепідключення</string>
     <string name="report_reason_user_underage">Недостатній вік для використання платформи</string>
     <string name="report_reason_additional_hint">Будь-яка додаткова інформація, що може допомогти нам у розслідування. Не обов\'язково.</string>
-    <string name="report_submit_thanks">Дякуємо за те, що допомагаєте тримати Revolt в безпеці. Ми розглянемо вашу скаргу якнайшвидше.</string>
+    <string name="report_submit_thanks">Дякуємо за те, що допомагаєте тримати Peptide в безпеці. Ми розглянемо вашу скаргу якнайшвидше.</string>
     <string name="invite_already_member">Ви вже учасник цього серверу.</string>
     <string name="invite_error_invalid_invite">Не вдалося знайти запрошення з таким кодом.</string>
     <string name="media_viewer_share_image">Поділитися зображенням</string>
@@ -24,7 +24,7 @@
     <string name="message_context_sheet_actions_copy_id_copied">ID повідомлення скопійовано</string>
     <string name="channel_context_sheet_actions_copy_id_copied">ID каналу скопійовано</string>
     <string name="server_context_sheet_actions_copy_id_copied">ID сервера скопійовано</string>
-    <string name="login_onboarding_body">Revolt — це один з найкращих шляхів залишатися на зв\'язку з друзями та спільнотою будь-де та будь-коли.</string>
+    <string name="login_onboarding_body">Peptide — це один з найкращих шляхів залишатися на зв\'язку з друзями та спільнотою будь-де та будь-коли.</string>
     <string name="onboarding_changeable">Проте, якщо ви зміните свою думку, ви завжди можете змінити його у своїх налаштуваннях.</string>
     <string name="register_instructions">Це як місце, де можна позависати, зібратися гуртом та побалакати про всеньке. Найкраще те, що це в інтернеті.</string>
     <string name="no_channels_body">На цьому сервері зовсім відсутні канали. Нема навіть каналу з вітанням. Як грубо.</string>
@@ -57,9 +57,9 @@
     <string name="password_forgot">Забули пароль\?</string>
     <string name="password_manager_hint">Використовуєте менеджер паролів\?</string>
     <string name="password_forgot_heading">Забули свій пароль\?</string>
-    <string name="register_heading">Вітаємо у Revolt</string>
+    <string name="register_heading">Вітаємо у Peptide</string>
     <string name="loading">Отримуємо деяку інформацію, зачекайте…</string>
-    <string name="register_image_alt">Використовуйте Revolt для спілкування про будь-що.</string>
+    <string name="register_image_alt">Використовуйте Peptide для спілкування про будь-що.</string>
     <string name="register_email">Електронна пошта</string>
     <string name="register_password">Пароль</string>
     <string name="check_mail">Перевірте свою пошту!</string>
@@ -208,7 +208,7 @@
     <string name="settings_category_general">Загальне</string>
     <string name="settings_appearance">Зовнішній вигляд</string>
     <string name="settings_appearance_theme">Тема</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Світла</string>
     <string name="settings_appearance_theme_amoled">Чисто чорна</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -217,7 +217,7 @@
     <string name="reply_message_not_cached">Невідоме повідомлення</string>
     <string name="direct_messages">Особисті повідомлення</string>
     <string name="discover_servers">Знайти сервери</string>
-    <string name="oss_attribution_body">Revolt побудований за допомогою цих чудових проєктів із відкритим вихідним кодом.</string>
+    <string name="oss_attribution_body">Peptide побудований за допомогою цих чудових проєктів із відкритим вихідним кодом.</string>
     <string name="oss_attribution_generation_date">Останнє оновлення: %1$s</string>
     <string name="oss_attribution_body_2">Ми вдячні розробникам цих проєктів за те, що вони зробили свою роботу доступною для світу.</string>
     <string name="oss_attribution_tap_to_view_license">Натисніть, щоб переглянути ліцензію</string>
@@ -233,7 +233,7 @@
     <string name="system_message_user_joined_alt">Користувач приєднався</string>
     <string name="system_message_text_alt">Системне повідомлення</string>
     <string name="status_invisible">Невидимий</string>
-    <string name="about_full_name">Revolt на Android</string>
+    <string name="about_full_name">Peptide на Android</string>
     <string name="about_tab_version">Версія</string>
     <string name="about_tab_details">Подробиці</string>
     <string name="pick_emoji_alt">Вибір емодзі</string>
@@ -243,7 +243,7 @@
     <string name="emoji_category_objects">Об\'єкти</string>
     <string name="emoji_category_symbols">Символи</string>
     <string name="emoji_category_flags">Прапори</string>
-    <string name="badge_team_member_alt">Член команди Revolt</string>
+    <string name="badge_team_member_alt">Член команди Peptide</string>
     <string name="friends">Друзі</string>
     <string name="friends_incoming_requests">Вхідні запити</string>
     <string name="friends_outgoing_requests">Вихідні запити</string>
@@ -263,7 +263,7 @@
     <string name="status_dnd">Не турбувати</string>
     <string name="status_dnd_explainer">Ви не отримуватимете жодних повідомлень, в тому числі @згадування.</string>
     <string name="status_offline">Не в мережі</string>
-    <string name="status_invisible_explainer">Ви зможете користуватися Revolt як зазвичай, але ви не будете відображатись онлайн для інших людей.</string>
+    <string name="status_invisible_explainer">Ви зможете користуватися Peptide як зазвичай, але ви не будете відображатись онлайн для інших людей.</string>
     <string name="server_flag_official">Офіційний сервер</string>
     <string name="server_flag_verified">Перевірений сервер</string>
     <string name="channel_link_invalid">Ви не можете переглядати цей канал</string>
@@ -320,7 +320,7 @@
     <string name="settings_changelogs_historical_version_header_placeholder">ця версія</string>
     <string name="settings_changelogs_historical_version_header">Список змін для %1$s</string>
     <string name="system_message_channel_icon_changed_alt">Значок каналу змінено</string>
-    <string name="about_brought_to_you_by">Створено з ❤️ для вас командою Revolt.</string>
+    <string name="about_brought_to_you_by">Створено з ❤️ для вас командою Peptide.</string>
     <string name="emoji_category_smileys">Смайлики та емоції</string>
     <string name="emoji_category_people">Люди та тіла</string>
     <string name="emoji_category_travel">Подорожі та місця</string>
@@ -367,7 +367,7 @@
     <string name="settings_appearance_colour_overrides_primary_container">Основний контейнер</string>
     <string name="settings_sessions_this_device_unavailable">Сесія цього пристрою недоступна. Будь ласка, **увійдіть ще раз**, щоб побачити поточну сесію.</string>
     <string name="discover_alt">Відкрийте для себе</string>
-    <string name="discover">Відкрийте Revolt</string>
+    <string name="discover">Відкрийте Peptide</string>
     <string name="report_server_heading">Розкажіть нам, що не так із цим сервером</string>
     <string name="report_reason_content_illegal_extortion">Вимагання чи шантаж</string>
     <string name="report_reason_content_extreme_violence">Насильство, кроваві сцени або жорстоке поводження з тваринами</string>
@@ -392,7 +392,7 @@
     <string name="settings_appearance_colour_overrides_inverse_surface">Зворотна поверхня</string>
     <string name="settings_appearance_colour_overrides_inverse_on_surface">Зворотна поверхня</string>
     <string name="settings_appearance_colour_overrides_on_error">При Помилці</string>
-    <string name="settings_feedback_description">Приєднуйтесь до сервера Revolt, щоб залишати відгуки, пропозиції та повідомляти про помилки.</string>
+    <string name="settings_feedback_description">Приєднуйтесь до сервера Peptide, щоб залишати відгуки, пропозиції та повідомляти про помилки.</string>
     <string name="channel_settings_overview_nsfw_confirm_title">Позначити цей канал як NSFW\?</string>
     <string name="channel_settings_overview_nsfw_confirm_description">Користувачам буде запропоновано підтвердити свій вік перед тим, як приєднатися до цього каналу.</string>
     <string name="channel_settings_overview_nsfw_confirm_yes">Позначити як NSFW</string>
@@ -434,7 +434,7 @@
     <string name="channel_settings_overview_description">Опис каналу</string>
     <string name="channel_settings_overview_description_hint">Цей канал призначений виключно для розмови про…</string>
     <string name="channel_settings_overview_nsfw">Позначити як NSFW</string>
-    <string name="share_target_attachment_too_large">Це вкладення занадто велике для Revolt (максимум $1$).</string>
+    <string name="share_target_attachment_too_large">Це вкладення занадто велике для Peptide (максимум $1$).</string>
     <string name="settings_appearance_colour_overrides_scrim">Скрім</string>
     <string name="settings_chat">Чат</string>
     <string name="emote_info_from_unicode">Смайлик за замовчуванням, який можна використовувати будь-де</string>
@@ -474,7 +474,7 @@
     <string name="message_context_sheet_actions_delete_confirmation_no">Залишити</string>
     <string name="user_info_sheet_category_joined">Приєднався</string>
     <string name="user_info_sheet_category_badges">Значки</string>
-    <string name="share_target_heading">Поділіться на Revolt</string>
-    <string name="share_target_login_first">Будь ласка, авторизуйтесь, перш ніж ділитися на Revolt.</string>
+    <string name="share_target_heading">Поділіться на Peptide</string>
+    <string name="share_target_login_first">Будь ласка, авторизуйтесь, перш ніж ділитися на Peptide.</string>
     <string name="share_target_invalid_intent">Це не є дійсним наміром поділитися.</string>
 </resources>

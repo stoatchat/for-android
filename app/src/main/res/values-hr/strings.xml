@@ -35,7 +35,7 @@
     <string name="media_viewer_share_image">Podijeli sliku</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistem</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_feedback">Povratne informacije</string>
     <string name="onboarding_lead">Vrijeme je da izabereš korisničko ime!</string>
     <string name="comingsoon_toast">Oprosti, ova značajka nije još spremna.</string>
@@ -87,7 +87,7 @@
     <string name="report_reason_user_other">Drugo</string>
     <string name="report_reason_additional">Dodatne informacije</string>
     <string name="report_reason_additional_hint">Sve dodatne informacije koje bi mogle pomoći našoj istrazi. Neobavezno.</string>
-    <string name="report_submit_thanks">Hvala za pomoći da držimo Revolt sigurnim. Pogledati ćemo vašu prijavu u najbržem mogućem roku.</string>
+    <string name="report_submit_thanks">Hvala za pomoći da držimo Peptide sigurnim. Pogledati ćemo vašu prijavu u najbržem mogućem roku.</string>
     <string name="report_submit_error_header">Greška</string>
     <string name="report_submit_close">Zatvori</string>
     <string name="report_block_yes">Blokiraj</string>
@@ -130,7 +130,7 @@
     <string name="terms_of_service">Uvjeti pružanja usluge</string>
     <string name="privacy_policy">Polica privatnosti</string>
     <string name="login_onboarding_heading">Pronađi svoju zajednicu, spoji se sa svijetom.</string>
-    <string name="login_onboarding_body">Revolt je jedan od najboljih načina da ostaneš u kontaktu sa svojim prijateljima i svojom zajednicom, bilo gdje, bilo kad.</string>
+    <string name="login_onboarding_body">Peptide je jedan od najboljih načina da ostaneš u kontaktu sa svojim prijateljima i svojom zajednicom, bilo gdje, bilo kad.</string>
     <string name="email">E-pošta</string>
     <string name="password">Lozinka</string>
     <string name="login">Prijava</string>
@@ -146,8 +146,8 @@
     <string name="resend_verification">Ponovo pošalji verifikacijsku e-poštu</string>
     <string name="password_forgot_heading">Zaboravili ste lozinku\?</string>
     <string name="password_forgot_instructions">Unesite svoju e-poštu i poslati ćemo vam upute kako resetirati svoju lozinku.</string>
-    <string name="register_heading">Dobrodošli na Revolt</string>
-    <string name="register_image_alt">Koristite Revolt da razgovarate o stvarima.</string>
+    <string name="register_heading">Dobrodošli na Peptide</string>
+    <string name="register_image_alt">Koristite Peptide da razgovarate o stvarima.</string>
     <string name="register_data">Vaši podatci su sigurni sa nama. Ne prodajemo ih, niti ih koristimo da bi vam prikazali oglase.</string>
     <string name="register_email">E-pošta</string>
     <string name="register_email_verification_hint">Poslati će mo vam verifikacijsku e-poštu da bi potvrdili vaš račun.</string>

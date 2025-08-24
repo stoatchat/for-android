@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "chat.peptide",
+    "sha256_cert_fingerprints": [
+      "PUT_YOUR_APP_SIGNING_CERTIFICATE_SHA256_FINGERPRINT_HERE"
+    ]
+  }
+}]

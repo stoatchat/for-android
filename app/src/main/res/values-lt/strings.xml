@@ -10,7 +10,7 @@
     <string name="signup">Registruotis</string>
     <string name="send_email">Siųsti el. laišką</string>
     <string name="password_forgot">Pamiršote slaptažodį\?</string>
-    <string name="register_heading">Sveiki atvykę į Revolt</string>
+    <string name="register_heading">Sveiki atvykę į Peptide</string>
     <string name="register_email">El. paštas</string>
     <string name="onboarding_welcome">Sveiki!</string>
     <string name="next">Pirmyn →</string>
@@ -27,8 +27,8 @@
     <string name="no_active_channel_body">Norėdami pradėti, pasirinkite serverį iš kairės. Jei jaučiatės drąsiai, galite sukurti naują serverį.</string>
     <string name="could_not_log_in_heading">Iškilo problema jus prisijungiant</string>
     <string name="lets_go">Keliaukime</string>
-    <string name="login_onboarding_body">Revolt yra vienas geriausių būdų palaikyti ryšį su draugais ir bendruomene bet kur ir bet kada.</string>
-    <string name="oss_attribution_body">Revolt sukurta naudojant šiuos nuostabius atvirojo kodo projektus.</string>
+    <string name="login_onboarding_body">Peptide yra vienas geriausių būdų palaikyti ryšį su draugais ir bendruomene bet kur ir bet kada.</string>
+    <string name="oss_attribution_body">Peptide sukurta naudojant šiuos nuostabius atvirojo kodo projektus.</string>
     <string name="mfa_totp_header">Įvesti šešiaženklį kodą</string>
     <string name="mfa_password_header">Įveskite slaptažodį</string>
     <string name="badge_masquerade_alt">Iš susieto kanalo</string>
@@ -37,7 +37,7 @@
     <string name="too_many_replies">Vienu metu galite atsakyti tik į %1$d pranešimus.</string>
     <string name="login_onboarding_heading">Raskite savo bendruomenę, susisiekite su pasauliu.</string>
     <string name="home_join_jenvolt_description">Jenvolt yra kūrėjų valdoma erdvė, skirta visiems Android programėlių ir daugiau. Parama ir atsiliepimai pateikiami čia. Galbūt galėsite išbandyti naujas funkcijas! 👀</string>
-    <string name="badge_team_member_alt">Revolt komandos narys</string>
+    <string name="badge_team_member_alt">Peptide komandos narys</string>
     <string name="overview_screen_feedback_description">Turite ką pasakyti? Jus išklausysime</string>
     <string name="friends_deny_all_incoming">Išvalyti visus gaunamus prašymus</string>
     <string name="no_channels_heading">Šiek tiek nepatogu.</string>
@@ -57,7 +57,7 @@
     <string name="resend_verification">Pakartotinai išsiųsti patvirtinimo el. laišką</string>
     <string name="password_manager_hint">Naudojate slaptažodžių tvarkyklę?</string>
     <string name="password_forgot_instructions">Įveskite savo el. pašto adresą ir mes jums atsiųsime instrukcijas, kaip iš naujo nustatyti slaptažodį.</string>
-    <string name="register_image_alt">Naudokite „Revolt“ pokalbiams apie dalykus.</string>
+    <string name="register_image_alt">Naudokite „Peptide“ pokalbiams apie dalykus.</string>
     <string name="register_instructions">Tai tarsi vieta, kur galima pabūti kartu, susitikti ir pasikalbėti apie įvairius dalykus. Geriausia, kad tai vyksta internete.</string>
     <string name="register_form_heading">Nustatykime jus.</string>
     <string name="register_data">Jūsų duomenys pas mus yra saugūs. Mes jų neparduodame ir nenaudojame, kad rodytume jums reklamas.</string>
@@ -81,8 +81,8 @@
     <string name="mfa_recovery_code">Kodas</string>
     <string name="mfa_password_lead">Norėdami tęsti, įveskite slaptažodį.</string>
     <string name="about">Apie</string>
-    <string name="about_full_name">Revolt ant Android</string>
-    <string name="about_brought_to_you_by">Su ❤️ pristato „Revolt“ komanda.</string>
+    <string name="about_full_name">Peptide ant Android</string>
+    <string name="about_brought_to_you_by">Su ❤️ pristato „Peptide“ komanda.</string>
     <string name="about_tab_version">Versija</string>
     <string name="about_tab_details">Išsami informacija</string>
     <string name="oss_attribution">OSS priskyrimas</string>
@@ -122,13 +122,13 @@
     <string name="overview_screen_share_profile">Dalytis profiliu</string>
     <string name="overview_screen_share_profile_description">Pažvelkite į savo naudotojo kortelę ir gaukite specialią nuorodą, kuria galėsite dalytis</string>
     <string name="overview_screen_changelog">Pakeitimų sąrašas</string>
-    <string name="overview_screen_changelog_description">Revolt niekada nemiega, pažiūrėkite, kas buvo kuriama</string>
+    <string name="overview_screen_changelog_description">Peptide niekada nemiega, pažiūrėkite, kas buvo kuriama</string>
     <string name="overview_screen_feedback">Pateikite atsiliepimus</string>
     <string name="user_card_tap_to_copy">Bakstelėkite , kad nukopijuotumėte</string>
     <string name="user_card_error_sharing">Dalijantis naudotojo kortele įvyko klaida.</string>
     <string name="user_card_data_point_display_name">%1$d.Vardas</string>
     <string name="user_card_data_point_username">%1$d.Vartotojo vardas</string>
-    <string name="user_card_data_point_join_date">%1$d.Ant Revolt nuo</string>
+    <string name="user_card_data_point_join_date">%1$d.Ant Peptide nuo</string>
     <string name="user_card_data_point_qrcode">%1$d.QR kodas</string>
     <string name="user_card_data_point_photo">%1$d.Nuotrauka</string>
     <string name="friends">Draugai</string>
@@ -181,7 +181,7 @@
     <string name="report_reason_user_spam_abuse">Šlamštas ar panašus piktnaudžiavimas platforma</string>
     <string name="user_info_sheet_user_not_found">Nepavyksta surasti šio naudotojo</string>
     <string name="report_server">Dėkojame, kad skyrėte laiko pranešti apie šį serverį. Jūsų pranešimas nebus perduotas serverio moderatoriams.</string>
-    <string name="report_submit_thanks">Dėkojame, kad padedate užtikrinti Revolt saugumą. Mes kuo greičiau peržiūrėsime jūsų pranešimą.</string>
+    <string name="report_submit_thanks">Dėkojame, kad padedate užtikrinti Peptide saugumą. Mes kuo greičiau peržiūrėsime jūsų pranešimą.</string>
     <string name="member_context_sheet_open">Atidaryti nario nustatymus</string>
     <string name="report_message">Dėkojame, kad skyrėte laiko pranešti apie šia žinutę. Jūsų pranešimas nebus perduotas nei žinutę siuntusiam naudotojui, nei serverio moderatoriams.</string>
     <string name="user_info_sheet_webhook_body">Webhooks yra automatinės transliacijos iš kitų paslaugų internete. Jos negali atsakyti į pokalbį, bet vis tiek galite matyti, ką jos nori pasakyti.</string>
@@ -259,7 +259,7 @@
     <string name="status_dnd_explainer">Negausite jokių pranešimų, įskaitant žinutes ir @ paminėjimus.</string>
     <string name="status_offline">Atsijungę</string>
     <string name="status_invisible">Nematomi</string>
-    <string name="status_invisible_explainer">Galėsite naudotis Revolt kaip įprastai, tačiau kitiems žmonėms atrodysite neprisijungę.</string>
+    <string name="status_invisible_explainer">Galėsite naudotis Peptide kaip įprastai, tačiau kitiems žmonėms atrodysite neprisijungę.</string>
     <string name="no_connection">Nėra ryšio</string>
     <string name="tap_to_retry">Bakstelėkite, kad bandytumėte dar kartą</string>
     <string name="settings">Nustatymai</string>
@@ -351,7 +351,7 @@
     <string name="add_server_sheet_create_new">Sukurti naują serverį</string>
     <string name="add_server_sheet_create_new_modal_title">Sukurti naują serverį</string>
     <string name="add_server_sheet_create_new_modal_under_construction">Ši funkcija šiuo metu kuriama.</string>
-    <string name="discover">Atraskite Revolt</string>
+    <string name="discover">Atraskite Peptide</string>
     <string name="report">Pranešti</string>
     <string name="report_cancel">Atšaukti</string>
     <string name="report_message_heading">Pasakykite, kas šiame pranešime yra negerai</string>
@@ -474,7 +474,7 @@
     <string name="spark_notifications_rationale_cta">Įjungti pranešimus</string>
     <string name="spark_notifications_rationale_dismiss">Ne dabar</string>
     <string name="spark_keyboard_shortcuts">Naudojate klaviatūrą?</string>
-    <string name="spark_keyboard_shortcuts_description">Revolt turi sparčiuosius klavišus! Paspauskite %1$s, kad juos pamatytumėte.</string>
+    <string name="spark_keyboard_shortcuts_description">Peptide turi sparčiuosius klavišus! Paspauskite %1$s, kad juos pamatytumėte.</string>
     <string name="spark_keyboard_shortcuts_cta">Atidaryti sparčiuosius klavišus</string>
     <string name="spark_keyboard_shortcuts_dismiss">Gerai</string>
     <string name="notice_platform_mod_dm_acknowledge">Peržiūrėti</string>
@@ -494,7 +494,7 @@
     <string name="settings_appearance">Išvaizda</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
+    <string name="settings_appearance_theme_peptide">Peptide</string>
     <string name="settings_appearance_theme_light">Šviesi</string>
     <string name="settings_appearance_theme_amoled">Grynai juoda</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -521,7 +521,7 @@
     <string name="settings_chat_interactive_embeds_youtube">YouTube</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
     <string name="settings_feedback">Atsiliepimai</string>
-    <string name="settings_feedback_description">Prisijunkite prie Revolt serverio ir pateikite atsiliepimų ar pasiūlymų bei praneškite apie klaidas.</string>
+    <string name="settings_feedback_description">Prisijunkite prie Peptide serverio ir pateikite atsiliepimų ar pasiūlymų bei praneškite apie klaidas.</string>
     <string name="settings_changelogs">Keitimų sąrašai</string>
     <string name="settings_changelogs_new_header">Kas buvo ruošiama ✨</string>
     <string name="settings_changelogs_historical_version_header">%1$s pakeitimų sąrašas</string>
@@ -568,10 +568,10 @@
     <string name="channel_settings_delete_confirm_description">Visi šio kanalo pranešimai ir nustatymai dings visiems laikams (ilgam!)</string>
     <string name="channel_settings_delete_confirm_yes">Ištrinti</string>
     <string name="channel_settings_delete_confirm_no">Laikyti</string>
-    <string name="share_target_heading">Dalytis į Revolt</string>
-    <string name="share_target_login_first">Prieš dalydamiesi su Revolt, prisijunkite.</string>
+    <string name="share_target_heading">Dalytis į Peptide</string>
+    <string name="share_target_login_first">Prieš dalydamiesi su Peptide, prisijunkite.</string>
     <string name="share_target_invalid_intent">Tai nėra galiojantis dalinimo ketinimas.</string>
-    <string name="share_target_attachment_too_large">Šis priedas yra per didelis Revolt (ne daugiau kaip $1$s).</string>
+    <string name="share_target_attachment_too_large">Šis priedas yra per didelis Peptide (ne daugiau kaip $1$s).</string>
     <string name="share_target_search_channels">Ieškoti kanalų</string>
     <string name="share_target_select_channel">m pasirinkite kanalą, į kurį norite bendrinti.</string>
     <string name="notification_channel_group_conversations">Pokalbiai</string>

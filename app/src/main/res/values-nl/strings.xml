@@ -20,13 +20,13 @@
     <string name="resend_verification">Stuur opnieuw een verificatie-e-mail</string>
     <string name="password_manager_hint">Gebruik je een wachtwoordmanager\?</string>
     <string name="password_forgot_heading">Je wachtwoord vergeten\?</string>
-    <string name="register_heading">Welkom bij Revolt</string>
-    <string name="register_image_alt">Gebruik Revolt om over dingen te praten.</string>
+    <string name="register_heading">Welkom bij Peptide</string>
+    <string name="register_image_alt">Gebruik Peptide om over dingen te praten.</string>
     <string name="register_form_heading">Laten we je opzetten.</string>
     <string name="register_data">Uw gegevens zijn veilig bij ons. We verkopen het niet en we gebruiken het ook niet om u advertenties te laten zien.</string>
     <string name="loading">Even wat info ophalen, momentje…</string>
     <string name="login_onboarding_heading">Vind uw gemeenschap, maak contact met de wereld.</string>
-    <string name="login_onboarding_body">Revolt is een van de beste manieren om altijd en overal in contact te blijven met je vrienden en de gemeenschap.</string>
+    <string name="login_onboarding_body">Peptide is een van de beste manieren om altijd en overal in contact te blijven met je vrienden en de gemeenschap.</string>
     <string name="password_forgot_instructions">Voer je e-mailadres in en we sturen je instructies om je wachtwoord opnieuw in te stellen.</string>
     <string name="register_instructions">Het is als een plek om rond te hangen, samen te komen en over dingen te praten. Het beste deel is dat het op internet staat.</string>
     <string name="register_email">Email</string>
