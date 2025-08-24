@@ -1,6 +1,8 @@
 package chat.peptide.screens.register
 
 import android.content.Context
+import android.app.Activity
+import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,17 +15,26 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextObfuscationMode
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecureTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +62,7 @@ import chat.peptide.api.routes.account.register
 import chat.peptide.api.routes.misc.getRootRoute
 import chat.peptide.composables.generic.FormTextField
 import chat.peptide.composables.generic.SquareButton
+import chat.peptide.ui.theme.FragmentMono
 import com.hcaptcha.sdk.HCaptcha
 import com.hcaptcha.sdk.HCaptchaConfig
 import com.hcaptcha.sdk.HCaptchaSize
@@ -126,6 +138,18 @@ fun RegisterDetailsScreen(
     navController: NavController,
     viewModel: RegisterDetailsScreenViewModel = viewModel()
 ) {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val window = (context as Activity).window
+        val previousMode = window.attributes.softInputMode
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        onDispose { window.setSoftInputMode(previousMode) }
+    }
+    val passwordTextFieldState = rememberTextFieldState()
+    LaunchedEffect(passwordTextFieldState.text) {
+        viewModel.password = passwordTextFieldState.text.toString()
+    }
+    val showPassword = remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             Column {
@@ -167,6 +191,7 @@ fun RegisterDetailsScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(vertical = 20.dp, horizontal = 16.dp)
                 .imePadding(),
             verticalArrangement = Arrangement.Top,
@@ -225,19 +250,48 @@ fun RegisterDetailsScreen(
                         .semantics { contentType = ContentType.EmailAddress }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                FormTextField(
-                    value = viewModel.password,
-                    onChange = { viewModel.password = it },
-                    label = stringResource(R.string.register_password),
-                    type = KeyboardType.Email,
-                    action = ImeAction.Next,
+                SecureTextField(
+                    passwordTextFieldState,
+                    label = { Text(stringResource(R.string.password)) },
+                    textObfuscationMode = if (showPassword.value) {
+                        TextObfuscationMode.Visible
+                    } else {
+                        TextObfuscationMode.RevealLastTyped
+                    },
+                    textStyle = if (showPassword.value) LocalTextStyle.current else LocalTextStyle.current.copy(
+                        fontFamily = FragmentMono
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                showPassword.value = !showPassword.value
+                            }
+                        ) {
+                            when {
+
+                                showPassword.value -> {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_visibility_off_24dp),
+                                        contentDescription = stringResource(R.string.hide_password)
+                                    )
+                                }
+
+                                else -> {
+                                    Icon(
+                                        painter = painterResource(R.drawable.icn_visibility_24dp),
+                                        contentDescription = stringResource(R.string.show_password)
+                                    )
+                                }
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { contentType = ContentType.EmailAddress }
+                        .semantics {
+                            contentType = ContentType.Password
+                        }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-
-                val context = LocalContext.current
 
                 SquareButton(
                     onClick = {
