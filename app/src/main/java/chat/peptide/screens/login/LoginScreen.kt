@@ -1,6 +1,8 @@
 package chat.peptide.screens.login
 
 import android.util.Log
+import android.app.Activity
+import android.view.WindowManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -68,6 +74,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val kvStorage: KVStorage
 ) : ViewModel() {
+    var isLoading by mutableStateOf(false)
+        private set
     private var _email by mutableStateOf("")
     val email: String
         get() = _email
@@ -90,51 +98,59 @@ class LoginViewModel @Inject constructor(
 
     fun doLogin() {
         _error = null
+        isLoading = true
 
         viewModelScope.launch {
-            val response = try {
-                negotiateAuthentication(_email, _password)
-            } catch (e: Exception) {
-                _error = if (e.message?.startsWith("Unexpected JSON token") == true) {
-                    PeptideApplication.instance.getString(R.string.service_health_alert_body_default)
-                } else e.message ?: "Unknown error"
-                return@launch
-            }
-            if (response.error != null) {
-                _error = response.error.type
-            } else {
+            try {
+                val response = negotiateAuthentication(_email, _password)
+
+                if (response.error != null) {
+                    _error = response.error.type
+                    isLoading = false
+                    return@launch
+                }
+
                 Log.d("Login", "Checking for MFA")
                 if (response.proceedMfa) {
                     Log.d("Login", "MFA required. Navigating to MFA screen")
                     _mfaResponse = response
                     _navigateTo = "mfa"
-                } else {
-                    Log.d(
-                        "Login",
-                        "No MFA required. Login is complete! We should have a session token"
-                    )
-
-                    try {
-                        val token = response.firstUserHints!!.token
-                        val id = response.firstUserHints.id
-
-                        kvStorage.set("sessionToken", token)
-                        kvStorage.set("sessionId", id)
-
-                        val onboard = needsOnboarding(token)
-                        if (onboard) {
-                            _navigateTo = "onboarding"
-                            return@launch
-                        }
-
-                        PeptideAPI.loginAs(token)
-                        PeptideAPI.setSessionId(response.firstUserHints.token)
-
-                        _navigateTo = "home"
-                    } catch (e: Error) {
-                        _error = e.message ?: "Unknown error"
-                    }
+                    isLoading = false
+                    return@launch
                 }
+
+                Log.d(
+                    "Login",
+                    "No MFA required. Login is complete! We should have a session token"
+                )
+
+                try {
+                    val token = response.firstUserHints!!.token
+                    val id = response.firstUserHints.id
+
+                    kvStorage.set("sessionToken", token)
+                    kvStorage.set("sessionId", id)
+
+                    val onboard = needsOnboarding(token)
+                    if (onboard) {
+                        _navigateTo = "onboarding"
+                        isLoading = false
+                        return@launch
+                    }
+
+                    PeptideAPI.loginAs(token)
+                    PeptideAPI.setSessionId(response.firstUserHints.token)
+
+                    _navigateTo = "home"
+                } catch (e: Exception) {
+                    _error = e.message ?: "Unknown error"
+                }
+            } catch (e: Exception) {
+                _error = if (e.message?.startsWith("Unexpected JSON token") == true) {
+                    PeptideApplication.instance.getString(R.string.service_health_alert_body_default)
+                } else e.message ?: "Unknown error"
+            } finally {
+                isLoading = false
             }
         }
     }
@@ -155,6 +171,13 @@ class LoginViewModel @Inject constructor(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val window = (context as Activity).window
+        val previousMode = window.attributes.softInputMode
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        onDispose { window.setSoftInputMode(previousMode) }
+    }
     val passwordTextFieldState = rememberTextFieldState()
     LaunchedEffect(passwordTextFieldState.text) {
         viewModel.setPassword(passwordTextFieldState.text.toString())
@@ -230,6 +253,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(vertical = 20.dp, horizontal = 16.dp)
                 .imePadding(),
             verticalArrangement = Arrangement.Top,
@@ -334,6 +358,16 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     url = "${PeptideAPI.getCurrentAppUrl()}/login/reset",
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
+                if (viewModel.error != null) {
+                    Text(
+                        text = viewModel.error ?: "",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    )
+                }
                 Spacer(modifier = Modifier.height(32.dp))
 
                 SquareButton(
@@ -343,8 +377,17 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("confirm_platform_button"),
+                    enabled = !viewModel.isLoading && viewModel.email.isNotBlank() && viewModel.password.isNotBlank()
                 ) {
-                    Text(text = stringResource(R.string.login))
+                    if (viewModel.isLoading) {
+                        androidx.compose.material3.CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Text(text = stringResource(R.string.login))
+                    }
                 }
             }
         }

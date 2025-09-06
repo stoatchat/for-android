@@ -106,6 +106,7 @@ import chat.peptide.sheets.UserInfoSheet
 fun ChannelSideDrawer(
     currentServer: String?,
     currentDestination: ChatRouterDestination,
+    selectedChannelId: String?,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     navigateToServer: (String) -> Unit,
     onShowServerContextSheet: (String) -> Unit,
@@ -120,6 +121,11 @@ fun ChannelSideDrawer(
         ChannelUtils.categoriseServerFlat(it)
     }
     val channelListState = rememberLazyListState()
+
+    val effectiveDestination = when (currentDestination) {
+        is ChatRouterDestination.Channel -> currentDestination
+        else -> selectedChannelId?.let { ChatRouterDestination.Channel(it) } ?: currentDestination
+    }
 
     LaunchedEffect(currentDestination) {
         if ((currentDestination is ChatRouterDestination.ServersChannels) && currentServer != null) {
@@ -590,7 +596,7 @@ fun ChannelSideDrawer(
                 } else {
                     if (currentServer == null) {
                         DirectMessagesChannelListRenderer(
-                            currentDestination,
+                            effectiveDestination,
                             onDestinationChanged,
                             channelListState,
                             onOpenUserInfoSheet = { userId -> userContextSheetTarget = userId }
@@ -598,7 +604,7 @@ fun ChannelSideDrawer(
                     } else {
                         ServerChannelListRenderer(
                             categorisedChannels,
-                            currentDestination,
+                            effectiveDestination,
                             onDestinationChanged,
                             channelListState,
                             onOpenChannelContextSheet = { channelContextSheetTarget = it },

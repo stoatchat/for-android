@@ -25,6 +25,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
@@ -36,6 +37,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,10 +56,12 @@ import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -80,7 +84,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -89,6 +92,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -99,6 +103,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -114,8 +120,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -170,6 +178,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import java.io.File
 import kotlin.math.max
+import kotlin.math.roundToInt
 import androidx.camera.core.Preview as CameraPreview
 
 sealed class ChannelScreenItem {
@@ -383,13 +392,18 @@ fun ChannelScreen(
                         }
 
                         override fun onError(exc: ImageCaptureException) {
-                            Toast.makeText(context, "Photo capture failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Photo capture failed: ${exc.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             Log.e("ChannelScreen", "Photo capture failed: ", exc)
                         }
                     })
             } catch (e: Exception) {
                 Log.e("ChannelScreen", "Error opening camera: ", e)
-                Toast.makeText(context, "Error opening camera: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Error opening camera: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -403,7 +417,10 @@ fun ChannelScreen(
         }
     }
     val openCameraCallback = {
-        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
         if (granted) {
             showCameraSheet = true
         } else {
@@ -652,7 +669,53 @@ fun ChannelScreen(
     }
     // </editor-fold>
     // <editor-fold desc="Begin UI composition">
+    // Swipe-back state
+    val offsetX = remember { Animatable(0f) }
+    var componentWidth by remember { mutableIntStateOf(0) }
+    var isDragging by remember { mutableStateOf(false) }
+
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f)
+            .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = { _ ->
+                        // Allow swipe-back to start anywhere on the screen
+                        isDragging = true
+                    },
+                    onDragEnd = {
+                        if (isDragging) {
+                            scope.launch {
+                                if (offsetX.value > componentWidth * 0.25f) {
+                                    backToChannelsScreen?.invoke()
+                                } else {
+                                    offsetX.animateTo(0f, animationSpec = tween(durationMillis = 300))
+                                }
+                            }
+                        }
+                        isDragging = false
+                    },
+                    onDragCancel = { isDragging = false }
+                ) { change, dragAmount ->
+                    if (isDragging) {
+                        change.consume()
+                        scope.launch {
+                            offsetX.snapTo(
+                                (offsetX.value + dragAmount).coerceIn(0f, componentWidth.toFloat())
+                            )
+                        }
+                    }
+                }
+            }
+            .layout { measurable, constraints ->
+                val placeable = measurable.measure(constraints)
+                componentWidth = placeable.width
+                layout(placeable.width, placeable.height) {
+                    placeable.place(0, 0)
+                }
+            },
         contentWindowInsets = WindowInsets.zero,
         topBar = {
             Column {
@@ -674,6 +737,16 @@ fun ChannelScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
+                            IconButton(
+                                onClick = {
+                                    backToChannelsScreen?.invoke()
+                                }
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                                    contentDescription = "back",
+                                )
+                            }
                             viewModel.channel?.let {
                                 when (it.channelType) {
                                     ChannelType.DirectMessage -> {
@@ -1139,7 +1212,8 @@ fun ChannelScreen(
 
                             // Full-screen camera preview sheet
                             if (showCameraSheet) {
-                                val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                                val sheetState =
+                                    rememberModalBottomSheetState(skipPartiallyExpanded = true)
                                 ModalBottomSheet(
                                     sheetState = sheetState,
                                     onDismissRequest = { showCameraSheet = false }
@@ -1153,9 +1227,10 @@ fun ChannelScreen(
                                                     // Bind use cases when view is ready
                                                     val cameraProvider = cameraProviderFuture.get()
                                                     cameraProvider.unbindAll()
-                                                    val preview = CameraPreview.Builder().build().also { pr ->
-                                                        pr.surfaceProvider = pv.surfaceProvider
-                                                    }
+                                                    val preview =
+                                                        CameraPreview.Builder().build().also { pr ->
+                                                            pr.surfaceProvider = pv.surfaceProvider
+                                                        }
                                                     cameraProvider.bindToLifecycle(
                                                         lifecycleOwner,
                                                         CameraSelector.DEFAULT_BACK_CAMERA,
@@ -1454,7 +1529,7 @@ fun ChannelScreen(
                                                                 ChannelScreenActivePane.None
                                                         }
 
-                                MediaPickerGateway(
+                                                        MediaPickerGateway(
                                                             onOpenPhotoPicker = {
                                                                 openPhotoPickerCallback()
                                                                 viewModel.activePane =

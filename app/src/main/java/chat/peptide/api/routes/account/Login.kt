@@ -112,6 +112,7 @@ suspend fun negotiateAuthentication(email: String, password: String): EmailPassw
 
     val response: HttpResponse = PeptideHttp.post("/auth/session/login".api()) {
         contentType(ContentType.Application.Json)
+        headers.append("x-no-retry", "true")
         setBody(LoginNegotiation(email, password, sessionName, null))
     }
 

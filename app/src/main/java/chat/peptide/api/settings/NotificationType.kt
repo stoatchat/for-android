@@ -1,7 +1,7 @@
 package chat.peptide.api.settings
 
 enum class NotificationType(val storageValue: String) {
-    DEFAULT("default"),
+    DEFAULT("all"),
     MUTED("muted"),
     ALL("all"),
     MENTIONS_ONLY("mentions"),
@@ -11,7 +11,6 @@ enum class NotificationType(val storageValue: String) {
         fun fromStorage(value: String?): NotificationType {
             return when (value) {
                 null -> DEFAULT
-                "default" -> DEFAULT
                 "muted" -> MUTED
                 "all" -> ALL
                 "mentions" -> MENTIONS_ONLY

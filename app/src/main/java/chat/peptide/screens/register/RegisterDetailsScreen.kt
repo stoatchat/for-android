@@ -74,20 +74,24 @@ class RegisterDetailsScreenViewModel : ViewModel() {
     var password by mutableStateOf("")
     var error by mutableStateOf<String?>(null)
     private var captchaToken by mutableStateOf<String?>(null)
+    var isLoading by mutableStateOf(false)
 
     fun initCaptcha(context: Context, onSuccess: () -> Unit) {
         viewModelScope.launch {
+            isLoading = true
             val root = try {
                 getRootRoute()
             } catch (e: Exception) {
                 error = if (e.message?.startsWith("Expected response body of the type") == true) {
                     PeptideApplication.instance.getString(R.string.service_health_alert_body_default)
                 } else e.message
+                isLoading = false
                 return@launch
             }
 
             if (!root.features.captcha.enabled) {
                 onSuccess()
+                isLoading = false
                 return@launch
             }
 
@@ -97,18 +101,25 @@ class RegisterDetailsScreenViewModel : ViewModel() {
                 size(HCaptchaSize.INVISIBLE)
             }.build()
 
-            HCaptcha.getClient(context).apply {
-                addOnSuccessListener {
-                    captchaToken = it.tokenResult
-                    onSuccess()
-                }
+            try {
+                HCaptcha.getClient(context).apply {
+                    addOnSuccessListener {
+                        captchaToken = it.tokenResult
+                        onSuccess()
+                        isLoading = false
+                    }
 
-                addOnFailureListener {
-                    error = it.message
-                }
+                    addOnFailureListener {
+                        error = it.message
+                        isLoading = false
+                    }
 
-                setup(config)
-                verifyWithHCaptcha()
+                    setup(config)
+                    verifyWithHCaptcha()
+                }
+            } catch (e: Exception) {
+                error = e.message
+                isLoading = false
             }
         }
     }
@@ -121,12 +132,18 @@ class RegisterDetailsScreenViewModel : ViewModel() {
         )
 
         viewModelScope.launch {
-            val result = register(body)
-
-            if (result.ok) {
-                navController.navigate("register/verify/$email")
-            } else {
-                error = result.unwrapError().type
+            isLoading = true
+            try {
+                val result = register(body)
+                if (result.ok) {
+                    navController.navigate("register/verify/$email")
+                } else {
+                    error = result.unwrapError().type
+                }
+            } catch (e: Exception) {
+                error = e.message
+            } finally {
+                isLoading = false
             }
         }
     }
@@ -293,6 +310,17 @@ fun RegisterDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
 
+                if (viewModel.error != null) {
+                    Text(
+                        text = viewModel.error ?: "",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    )
+                }
+
                 SquareButton(
                     onClick = {
                         viewModel.initCaptcha(context) {
@@ -302,8 +330,17 @@ fun RegisterDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("setup_continue_button"),
+                    enabled = !viewModel.isLoading && viewModel.email.isNotBlank() && viewModel.password.isNotBlank(),
                 ) {
-                    Text(text = stringResource(R.string.continue_))
+                    if (viewModel.isLoading) {
+                        androidx.compose.material3.CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Text(text = stringResource(R.string.continue_))
+                    }
                 }
             }
         }

@@ -153,8 +153,17 @@ val PeptideHttp by lazy {
         install(WebSockets)
 
         install(HttpRequestRetry) {
-            retryOnServerErrors(maxRetries = 5)
-            retryOnException(maxRetries = 5)
+            retryIf(maxRetries = 5) { _, response ->
+                // Do not retry for explicit no-retry requests (like login)
+                val noRetry = response.call.request.headers["x-no-retry"] == "true"
+                if (noRetry) return@retryIf false
+                // Retry only on server errors (5xx)
+                response.status.value in 500..599
+            }
+            retryOnExceptionIf(maxRetries = 5) { request, cause ->
+                // Allow network retries unless explicitly opted-out
+                request.headers["x-no-retry"] != "true"
+            }
 
             modifyRequest { request ->
                 request.headers.append("x-retry-count", retryCount.toString())

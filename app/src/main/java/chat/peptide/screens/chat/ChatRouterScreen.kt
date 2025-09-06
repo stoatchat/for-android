@@ -10,10 +10,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
@@ -23,6 +25,8 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DismissibleDrawerSheet
+import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,6 +54,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -156,6 +162,8 @@ class ChatRouterViewModel @Inject constructor(
     @ApplicationContext val context: Context
 ) : ViewModel() {
     var currentDestination by mutableStateOf<ChatRouterDestination>(ChatRouterDestination.default)
+    var previousDestination by mutableStateOf<ChatRouterDestination?>(null)
+    var lastNonChannelDestination by mutableStateOf<ChatRouterDestination?>(null)
     var latestChangelogRead by mutableStateOf(true)
     var latestChangelog by mutableStateOf("")
     var latestChangelogBody by mutableStateOf("")
@@ -179,6 +187,8 @@ class ChatRouterViewModel @Inject constructor(
                 val current = kvStorage.get("currentDestination")
                 setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
             }
+
+            setRegisterForNotifications()
 
             latestChangelogRead = changelogs.hasSeenCurrent()
             latestChangelog = changelogs.getLatestChangelogCode()
@@ -211,7 +221,13 @@ class ChatRouterViewModel @Inject constructor(
     }
 
     fun setSaveDestination(destination: ChatRouterDestination) {
-        currentDestination = destination
+        if (destination != currentDestination) {
+            previousDestination = currentDestination
+            currentDestination = destination
+            if (destination !is ChatRouterDestination.Channel) {
+                lastNonChannelDestination = destination
+            }
+        }
     }
 
     fun setRegisterForNotifications() {
@@ -913,169 +929,215 @@ fun ChannelNavigator(
     isTouchExplorationEnabled: Boolean,
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
 ) {
-    when (dest) {
-        is ChatRouterDestination.Channel -> {
-            ChannelScreen(
-                channelId = dest.channelId,
-                messageId = dest.messageId,
-                backToChannelsScreen = {
-                    currentServer?.let {
-                        viewModel.setSaveDestination(
-                            ChatRouterDestination.ServersChannels(
-                                serverID = currentServer
-                            )
-                        )
-                    } ?: viewModel.setSaveDestination(
-                        ChatRouterDestination.Home
-                    )
-                },
-                setDrawerGestureEnabled = setDrawerGestureEnabled,
-            )
-        }
+    // Keep track of the last opened channel to allow edge-swipe reopen
+    var lastChannel by remember { mutableStateOf<ChatRouterDestination.Channel?>(null) }
+    if (dest is ChatRouterDestination.Channel) {
+        lastChannel = dest
+    }
 
-        else -> {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                bottomBar = {
-                    BottomAppBar {
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_bottom_navbar_home),
-                                    contentDescription = "Home",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            },
-                            label = {
-                                Text(text = "you")
-                            },
-                            selected = when (dest) {
-                                is ChatRouterDestination.ServersChannels,
-                                is ChatRouterDestination.NoCurrentChannel,
-                                ChatRouterDestination.Home,
-                                ChatRouterDestination.Discover -> true
+    var containerWidth by remember { mutableStateOf(0) }
+    var isReopenDragging by remember { mutableStateOf(false) }
+    var reopenDragDelta by remember { mutableStateOf(0f) }
 
-                                else -> false
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                indicatorColor = Color.Transparent,
-                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                            ),
-                            enabled = true,
-                            onClick = {
-                                viewModel.setSaveDestination(ChatRouterDestination.Home)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(dest, lastChannel) {
+                if (dest !is ChatRouterDestination.Channel && lastChannel != null) {
+                    detectHorizontalDragGestures(
+                        onDragStart = { _ ->
+                            // Allow reopen swipe to start anywhere on the screen
+                            isReopenDragging = true
+                            reopenDragDelta = 0f
+                        },
+                        onDragEnd = {
+                            if (isReopenDragging) {
+                                // If dragged sufficiently left, reopen the last channel
+                                if (reopenDragDelta < -containerWidth / 6f) {
+                                    lastChannel?.let { viewModel.setSaveDestination(it) }
+                                }
                             }
-                        )
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_bottom_navbar_friends),
-                                    contentDescription = "Friends",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            },
-                            label = {
-                                Text(text = "Friends")
-                            },
-                            selected = dest is ChatRouterDestination.Friends,
-                            enabled = true,
-                            colors = NavigationBarItemDefaults.colors(
-                                indicatorColor = Color.Transparent,
-                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                            ),
-                            onClick = {
-                                viewModel.setSaveDestination(ChatRouterDestination.Friends)
-                            }
-                        )
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_bottom_navbar_you),
-                                    contentDescription = "You",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            },
-                            label = {
-                                Text(text = "you")
-                            },
-                            selected = dest is ChatRouterDestination.Settings,
-                            colors = NavigationBarItemDefaults.colors(
-                                indicatorColor = Color.Transparent,
-                                selectedIconColor = MaterialTheme.colorScheme.onBackground,
-                                selectedTextColor = MaterialTheme.colorScheme.onBackground,
-                                unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                                unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.4f
-                                ),
-                            ),
-                            enabled = true,
-                            onClick = {
-                                viewModel.setSaveDestination(ChatRouterDestination.Settings)
-                            }
-                        )
-                    }
-                }
-            ) { innerPadding ->
-                Box(modifier = Modifier.padding(innerPadding)) {
-                    when (dest) {
-                        is ChatRouterDestination.Settings -> {
-                            SettingsScreen(
-                                navController = topNav,
-                            )
+                            isReopenDragging = false
+                            reopenDragDelta = 0f
+                        },
+                        onDragCancel = {
+                            isReopenDragging = false
+                            reopenDragDelta = 0f
                         }
-
-                        is ChatRouterDestination.Friends -> {
-                            FriendsScreen(
-                                topNav = topNav,
-                                onDrawerClicked = toggleDrawer,
-                            )
-                        }
-
-                        is ChatRouterDestination.Home,
-                        is ChatRouterDestination.ServersChannels,
-                        is ChatRouterDestination.Discover -> {
-                            ChannelSideDrawer(
-                                onDestinationChanged = viewModel::setSaveDestination,
-                                currentDestination = viewModel.currentDestination,
-                                currentServer = when (dest) {
-                                    is ChatRouterDestination.Home -> currentServer
-                                    is ChatRouterDestination.ServersChannels -> dest.serverID
-                                    else -> null
-                                },
-                                navigateToServer = viewModel::navigateToServer,
-                                onShowServerContextSheet = onShowServerContextSheet,
-                                showSettingsIcon = isTouchExplorationEnabled,
-                                onOpenSettings = {
-                                    topNav.navigate("settings")
-                                },
-                                onShowAddServerSheet = onShowAddServerSheet
-                            )
-                        }
-
-                        is ChatRouterDestination.Channel -> {}
-
-                        is ChatRouterDestination.NoCurrentChannel -> {
-                            NoCurrentChannelScreen(onDrawerClicked = toggleDrawer)
+                    ) { change, dragAmount ->
+                        if (isReopenDragging) {
+                            reopenDragDelta += dragAmount
                         }
                     }
                 }
             }
+            .layout { measurable, constraints ->
+                val placeable = measurable.measure(constraints)
+                containerWidth = placeable.width
+                layout(placeable.width, placeable.height) {
+                    placeable.place(0, 0)
+                }
+            }
+    ) {
+        // Background scaffold is always rendered to act as the underlying layer
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomAppBar {
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_bottom_navbar_home),
+                                contentDescription = "Home",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        },
+                        label = {
+                            Text(text = "you")
+                        },
+                        selected = when (dest) {
+                            is ChatRouterDestination.ServersChannels,
+                            is ChatRouterDestination.NoCurrentChannel,
+                            ChatRouterDestination.Home,
+                            ChatRouterDestination.Discover -> true
+                            else -> false
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                            unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                        ),
+                        enabled = true,
+                        onClick = {
+                            viewModel.setSaveDestination(ChatRouterDestination.Home)
+                        }
+                    )
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_bottom_navbar_friends),
+                                contentDescription = "Friends",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        },
+                        label = {
+                            Text(text = "Friends")
+                        },
+                        selected = dest is ChatRouterDestination.Friends,
+                        enabled = true,
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                            unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                        ),
+                        onClick = {
+                            viewModel.setSaveDestination(ChatRouterDestination.Friends)
+                        }
+                    )
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_bottom_navbar_you),
+                                contentDescription = "You",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        },
+                        label = {
+                            Text(text = "you")
+                        },
+                        selected = dest is ChatRouterDestination.Settings,
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = MaterialTheme.colorScheme.onBackground,
+                            selectedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unselectedTextColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                            unselectedIconColor = MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.4f
+                            ),
+                        ),
+                        enabled = true,
+                        onClick = {
+                            viewModel.setSaveDestination(ChatRouterDestination.Settings)
+                        }
+                    )
+                }
+            }
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                when (dest) {
+                    is ChatRouterDestination.Settings -> {
+                        SettingsScreen(
+                            navController = topNav,
+                        )
+                    }
+
+                    is ChatRouterDestination.Friends -> {
+                        FriendsScreen(
+                            topNav = topNav,
+                            onDrawerClicked = toggleDrawer,
+                        )
+                    }
+
+                    is ChatRouterDestination.Home,
+                    is ChatRouterDestination.ServersChannels,
+                    is ChatRouterDestination.Discover,
+                    is ChatRouterDestination.Channel -> { // When Channel is active, show drawer as background
+                        ChannelSideDrawer(
+                            onDestinationChanged = viewModel::setSaveDestination,
+                            currentDestination = viewModel.currentDestination,
+                            currentServer = when (dest) {
+                                is ChatRouterDestination.Home -> currentServer
+                                is ChatRouterDestination.ServersChannels -> dest.serverID
+                                is ChatRouterDestination.Channel -> currentServer
+                                else -> null
+                            },
+                            selectedChannelId = (if (dest is ChatRouterDestination.Channel) dest.channelId else null),
+                            navigateToServer = viewModel::navigateToServer,
+                            onShowServerContextSheet = onShowServerContextSheet,
+                            showSettingsIcon = isTouchExplorationEnabled,
+                            onOpenSettings = {
+                                topNav.navigate("settings")
+                            },
+                            onShowAddServerSheet = onShowAddServerSheet
+                        )
+                    }
+
+                    is ChatRouterDestination.NoCurrentChannel -> {
+                        NoCurrentChannelScreen(onDrawerClicked = toggleDrawer)
+                    }
+                }
+            }
+        }
+
+        // Foreground overlay: Channel screen when destination is a Channel
+        if (dest is ChatRouterDestination.Channel) {
+            ChannelScreen(
+                channelId = dest.channelId,
+                messageId = dest.messageId,
+                backToChannelsScreen = {
+                    // Prefer going back to the current server's channels screen explicitly
+                    val target = currentServer?.let { ChatRouterDestination.ServersChannels(serverID = it) }
+                        ?: viewModel.lastNonChannelDestination
+                        ?: viewModel.previousDestination
+                        ?: ChatRouterDestination.Home
+                    viewModel.setSaveDestination(target)
+                },
+                setDrawerGestureEnabled = setDrawerGestureEnabled,
+            )
         }
     }
 }
