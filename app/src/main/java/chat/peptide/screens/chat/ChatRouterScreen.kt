@@ -164,6 +164,7 @@ class ChatRouterViewModel @Inject constructor(
     var currentDestination by mutableStateOf<ChatRouterDestination>(ChatRouterDestination.default)
     var previousDestination by mutableStateOf<ChatRouterDestination?>(null)
     var lastNonChannelDestination by mutableStateOf<ChatRouterDestination?>(null)
+    var lastSelectedChannelId by mutableStateOf<String?>(null)
     var latestChangelogRead by mutableStateOf(true)
     var latestChangelog by mutableStateOf("")
     var latestChangelogBody by mutableStateOf("")
@@ -226,6 +227,8 @@ class ChatRouterViewModel @Inject constructor(
             currentDestination = destination
             if (destination !is ChatRouterDestination.Channel) {
                 lastNonChannelDestination = destination
+            } else {
+                lastSelectedChannelId = destination.channelId
             }
         }
     }
@@ -1105,7 +1108,7 @@ fun ChannelNavigator(
                                 is ChatRouterDestination.Channel -> currentServer
                                 else -> null
                             },
-                            selectedChannelId = (if (dest is ChatRouterDestination.Channel) dest.channelId else null),
+                            selectedChannelId = viewModel.lastSelectedChannelId,
                             navigateToServer = viewModel::navigateToServer,
                             onShowServerContextSheet = onShowServerContextSheet,
                             showSettingsIcon = isTouchExplorationEnabled,
