@@ -1,0 +1,153 @@
+package chat.zekochat.sheets
+
+import android.widget.Toast
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextOverflow
+import chat.zekochat.R
+import chat.zekochat.api.PeptideAPI
+import chat.zekochat.api.routes.channel.removeMember
+import chat.zekochat.composables.generic.SheetButton
+import chat.zekochat.internals.Platform
+import kotlinx.coroutines.launch
+
+@Composable
+fun ColumnScope.GroupDMMemberContextSheet(
+    userId: String,
+    channelId: String,
+    dismissSheet: suspend () -> Unit,
+    onRequestUpdateMembers: suspend () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val channel = PeptideAPI.channelCache[channelId]
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+
+    LaunchedEffect(channel) {
+        if (channel == null) {
+            dismissSheet()
+        }
+    }
+
+    if (channel == null) return
+
+    if (channel.owner == PeptideAPI.selfId && userId != PeptideAPI.selfId) {
+        SheetButton(
+            headlineContent = {
+                CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
+                    Text(
+                        stringResource(
+                            R.string.member_context_sheet_remove_from_channel,
+                            channel.name ?: stringResource(R.string.unknown)
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            },
+            leadingContent = {
+                CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
+                    Icon(
+                        painter = painterResource(R.drawable.icn_person_off_24dp),
+                        contentDescription = null
+                    )
+                }
+            },
+            onClick = {
+                scope.launch {
+                    removeMember(channelId, userId)
+                    onRequestUpdateMembers()
+                    dismissSheet()
+                }
+            }
+        )
+    }
+
+    // TODO replace with something useful (currently so that your sheet is not empty if you don't have permissions)
+    SheetButton(
+        headlineContent = {
+            Text(stringResource(R.string.user_info_sheet_copy_id))
+        },
+        leadingContent = {
+            Icon(
+                painter = painterResource(R.drawable.icn_identifier_copy_24dp),
+                contentDescription = null
+            )
+        },
+        onClick = {
+            clipboardManager.setText(AnnotatedString(userId))
+
+            if (Platform.needsShowClipboardNotification()) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.copied),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    )
+
+
+}
+
+@Composable
+fun ColumnScope.ServerMemberContextSheet(
+    userId: String,
+    serverId: String,
+    channelId: String,
+    dismissSheet: suspend () -> Unit,
+    onRequestUpdateMembers: suspend () -> Unit
+) {
+    val server = PeptideAPI.serverCache[serverId]
+    val channel = PeptideAPI.channelCache[channelId]
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+
+    LaunchedEffect(server) {
+        if (server == null || channel == null) {
+            dismissSheet()
+        }
+    }
+
+    if (server == null || channel == null) return
+
+    // TODO add something useful (moderation actions)
+
+    // TODO replace with something useful (currently so that your sheet is not empty if you don't have permissions)
+    SheetButton(
+        headlineContent = {
+            Text(stringResource(R.string.user_info_sheet_copy_id))
+        },
+        leadingContent = {
+            Icon(
+                painter = painterResource(R.drawable.icn_identifier_copy_24dp),
+                contentDescription = null
+            )
+        },
+        onClick = {
+            clipboardManager.setText(AnnotatedString(userId))
+
+            if (Platform.needsShowClipboardNotification()) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.copied),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    )
+
+
+}

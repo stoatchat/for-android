@@ -32,7 +32,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:name=".PeptideApplication"
         android:theme="@style/Theme.Peptide"
@@ -54,10 +54,10 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_notification_monochrome" />
+            android:resource="@drawable/zeko_transparent_logo" />
         <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/primary" />
+            android:name="com.google.firebase.messaging.default_notification_\color"
+            android:resource="@color/notification_background" />
 
         <service
             android:name=".c2dm.HandlerService"

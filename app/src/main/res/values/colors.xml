@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#FF100518</color>
+    <color name="notification_background">#FFFEDD17</color>
     <color name="background">#FF131722</color>
     <color name="splashscreen_background">#FFFFFFFF</color>
     <color name="foreground">#FF000000</color>

@@ -109,4 +109,4 @@
     public <fields>;
 }
 
--keep class chat.peptide.ndk.AstNode { *; }
+-keep class chat.zekochat.ndk.AstNode { *; }

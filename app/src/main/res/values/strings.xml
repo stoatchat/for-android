@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PepChat</string>
+    <string name="app_name" translatable="false">ZekoChat</string>
 
     <string name="back">← Back</string>
     <string name="next">Next →</string>

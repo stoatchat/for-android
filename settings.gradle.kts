@@ -27,5 +27,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "PepChat"
+rootProject.name = "ZekoChat"
 include(":app")

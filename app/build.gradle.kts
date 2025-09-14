@@ -69,7 +69,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "chat.peptide"
+        applicationId = "com.zekochat"
         minSdk = 24
         targetSdk = 35
         versionCode = Integer.parseInt("001_003_106".replace("_", ""), 10)
@@ -146,7 +146,7 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-    namespace = "chat.peptide"
+    namespace = "chat.zekochat"
     externalNativeBuild {
         cmake {
             path(file("src/main/cpp/CMakeLists.txt"))
@@ -336,7 +336,7 @@ aboutLibraries {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("chat.peptide.persistence")
+            packageName.set("com.zekochat.persistence")
         }
     }
 }
