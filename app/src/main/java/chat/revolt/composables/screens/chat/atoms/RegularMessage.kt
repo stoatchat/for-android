@@ -70,6 +70,8 @@ fun RegularMessage(
     showReactBottomSheet: () -> Unit,
     putTextAtCursorPosition: (String) -> Unit,
     replyToMessage: suspend (String) -> Unit,
+    jumpToMessage: (String) -> Unit = {},
+    highlightedMessageId: String? = null,
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val haptic = LocalHapticFeedback.current
@@ -182,6 +184,8 @@ fun RegularMessage(
             },
             fromWebhook = message.webhook != null,
             webhookName = message.webhook?.name,
+            jumpToMessage = jumpToMessage,
+            highlightedMessageId = highlightedMessageId,
             modifier = Modifier
                 .offset(
                     x = with(LocalDensity.current) { animOffsetX.toDp() }

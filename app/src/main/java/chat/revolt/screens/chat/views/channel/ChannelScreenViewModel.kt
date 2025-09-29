@@ -106,6 +106,8 @@ class ChannelScreenViewModel @Inject constructor(
     var ageGateUnlocked by mutableStateOf<Boolean?>(null)
     var showGeoGate by mutableStateOf(false)
 
+    var highlightedMessageId by mutableStateOf<String?>(null)
+
     init {
         viewModelScope.launch {
             keyboardHeight = kvStorage.getInt("keyboardHeight") ?: 900 // reasonable default for now
@@ -309,6 +311,27 @@ class ChannelScreenViewModel @Inject constructor(
             kvStorage.set("keyboardHeight", height)
         }
         keyboardHeight = height
+    }
+
+    fun setHighlightedMessage(messageId: String) {
+        highlightedMessageId = messageId
+        
+        viewModelScope.launch {
+            delay(3000) // 3 second highlight
+            if (highlightedMessageId == messageId) {
+                highlightedMessageId = null
+            }
+        }
+    }
+    
+    fun findMessageIndex(messageId: String): Int {
+        return items.indexOfFirst { item ->
+            when (item) {
+                is ChannelScreenItem.RegularMessage -> item.message.id == messageId
+                is ChannelScreenItem.SystemMessage -> item.message.id == messageId
+                else -> false
+            }
+        }
     }
 
     private suspend fun applyMessageEdit() {

@@ -196,6 +196,8 @@ fun Message(
     onAddReaction: () -> Unit = {},
     fromWebhook: Boolean = false,
     webhookName: String? = null,
+    jumpToMessage: (String) -> Unit = {},
+    highlightedMessageId: String? = null,
     modifier: Modifier = Modifier
 ) {
     val author = RevoltAPI.userCache[message.author] ?: return CircularProgressIndicator()
@@ -281,16 +283,21 @@ fun Message(
         } else {
             Column(
                 modifier = Modifier.then(
-                    if ((message.mentions?.contains(RevoltAPI.selfId) == true)
-                        || mentionsSelfRole
-                        || message.flags has MessageFlag.MentionsOnline
-                        || message.flags has MessageFlag.MentionsEveryone
-                    ) {
-                        Modifier.background(
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                        )
-                    } else {
-                        Modifier
+                    when {
+                        highlightedMessageId == message.id -> {
+                            Modifier.background(
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
+                            )
+                        }
+                        (message.mentions?.contains(RevoltAPI.selfId) == true)
+                            || mentionsSelfRole
+                            || message.flags has MessageFlag.MentionsOnline
+                            || message.flags has MessageFlag.MentionsEveryone -> {
+                            Modifier.background(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                            )
+                        }
+                        else -> Modifier
                     }
                 )
             ) {
@@ -306,11 +313,8 @@ fun Message(
                                     replyMessage.author
                                 )
                             } == true),
-                        ) {
-                            // TODO Add jump to message
-                            if (replyMessage == null) {
-                                Toast.makeText(context, "lmao prankd", Toast.LENGTH_SHORT).show()
-                            }
+                        ) { messageId ->
+                            jumpToMessage(messageId)
                         }
                     }
                 }
