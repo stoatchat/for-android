@@ -587,6 +587,7 @@
     <string name="file_picker_chip_camera">Camera</string>
     <string name="file_picker_chip_camera_none_installed">No camera app installed</string>
     <string name="file_picker_chip_camera_failed">Failed to open camera</string>
+    <string name="file_picker_chip_camera_permission_denied">Camera permission is required to take photos</string>
 
     <string name="inline_media_picker_current_description">Currently selected media</string>
     <string name="inline_media_picker_no_media_placeholder">Pick media…</string>

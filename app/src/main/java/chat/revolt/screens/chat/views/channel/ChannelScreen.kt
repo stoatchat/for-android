@@ -1,8 +1,10 @@
 package chat.revolt.screens.chat.views.channel
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Environment
@@ -103,6 +105,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.hilt.navigation.compose.hiltViewModel
 import chat.revolt.R
@@ -371,6 +374,38 @@ fun ChannelScreen(
                 ),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            openCameraCallback()
+        }
+        else {
+            Toast.makeText(
+                    context,
+                    context.getString(
+                        R.string.file_picker_chip_camera_permission_denied
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
+        
+    }
+
+    val checkAndRequestCameraPermission = {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                openCameraCallback()
+            }
+            else -> {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
         }
     }
 
@@ -1114,7 +1149,7 @@ fun ChannelScreen(
                                                 },
                                                 text = { Text(stringResource(R.string.file_picker_chip_camera)) },
                                                 onClick = {
-                                                    openCameraCallback()
+                                                    checkAndRequestCameraPermission()
                                                     viewModel.activePane =
                                                         ChannelScreenActivePane.None
                                                 }
@@ -1230,7 +1265,7 @@ fun ChannelScreen(
                                                                 ChannelScreenActivePane.None
                                                         },
                                                         onOpenCamera = {
-                                                            openCameraCallback()
+                                                            checkAndRequestCameraPermission()
                                                             viewModel.activePane =
                                                                 ChannelScreenActivePane.None
                                                         },
