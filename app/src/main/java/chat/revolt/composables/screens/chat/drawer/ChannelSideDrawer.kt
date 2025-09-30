@@ -98,7 +98,9 @@ import chat.revolt.composables.generic.presenceFromStatus
 import chat.revolt.composables.screens.chat.ChannelIcon
 import chat.revolt.screens.chat.ChatRouterDestination
 import chat.revolt.screens.chat.LocalIsConnected
+import chat.revolt.screens.chat.dialogs.safety.ReportServerDialog
 import chat.revolt.sheets.ChannelContextSheet
+import chat.revolt.sheets.ServerContextSheet
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -183,6 +185,10 @@ fun ChannelSideDrawer(
     }.sortedBy { it.id }))
 
     var channelContextSheetTarget by remember { mutableStateOf<String?>(null) }
+    var serverContextSheetTarget by remember { mutableStateOf<String?>(null) }
+    
+    var showReportServer by remember { mutableStateOf(false) }
+    var reportServerTarget by remember { mutableStateOf("") }
 
     if (channelContextSheetTarget != null) {
         val channelContextSheetState = rememberModalBottomSheetState()
@@ -198,6 +204,29 @@ fun ChannelSideDrawer(
                 onHideSheet = {
                     channelContextSheetState.hide()
                     channelContextSheetTarget = null
+                }
+            )
+        }
+    }
+
+    if (serverContextSheetTarget != null) {
+        val serverContextSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            sheetState = serverContextSheetState,
+            onDismissRequest = {
+                serverContextSheetTarget = null
+            }
+        ) {
+            ServerContextSheet(
+                serverId = serverContextSheetTarget!!,
+                onReportServer = {
+                    reportServerTarget = serverContextSheetTarget!!
+                    showReportServer = true
+                },
+                onHideSheet = {
+                    serverContextSheetState.hide()
+                    serverContextSheetTarget = null
                 }
             )
         }
@@ -355,12 +384,19 @@ fun ChannelSideDrawer(
                         Modifier
                             .padding(8.dp)
                             .clip(CircleShape)
-                            .clickable {
-                                serverInList.id?.let { srvId -> navigateToServer(srvId) }
-                                scope.launch {
-                                    drawerState?.close()
+                            .combinedClickable(
+                                onClick = {
+                                    serverInList.id?.let { srvId -> navigateToServer(srvId) }
+                                    scope.launch {
+                                        drawerState?.close()
+                                    }
+                                },
+                                onLongClick = {
+                                    serverInList.id?.let { srvId -> 
+                                        serverContextSheetTarget = srvId
+                                    }
                                 }
-                            }) {
+                            )) {
                         val icon = serverInList.icon?.id?.let { iconId ->
                             "$REVOLT_FILES/icons/$iconId"
                         }
@@ -593,6 +629,15 @@ fun ChannelSideDrawer(
                 )
             }
         }
+    }
+
+    if (showReportServer) {
+        ReportServerDialog(
+            onDismiss = { 
+                showReportServer = false
+            },
+            serverId = reportServerTarget
+        )
     }
 }
 
