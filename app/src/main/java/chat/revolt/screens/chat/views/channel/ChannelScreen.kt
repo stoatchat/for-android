@@ -551,6 +551,14 @@ fun ChannelScreen(
                                         )
                                     }
 
+                                    ChannelType.TextChannel, ChannelType.VoiceChannel -> {
+                                        ChannelIcon(
+                                            channel = it,
+                                            size = 24.dp,
+                                            modifier = Modifier.alpha(0.8f)
+                                        )
+                                    }
+
                                     else -> {
                                         ChannelIcon(
                                             channelType = it.channelType ?: ChannelType.TextChannel,
