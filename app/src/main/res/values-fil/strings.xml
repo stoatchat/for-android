@@ -128,11 +128,6 @@
     <string name="server_context_sheet_actions_copy_id">Kopyahin ang ID</string>
     <string name="server_context_sheet_actions_copy_id_copied">Kinopya ang server ID sa clipboard</string>
     <string name="server_context_sheet_actions_mark_read">Markahan bilang binasa</string>
-    <string name="add_server_sheet_join_by_invite">Sumali sa pamamagitan ng invite code o link</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">Invite code o link</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">Invite code o link</string>
-    <string name="add_server_sheet_create_new">Gumawa ng bagong server</string>
-    <string name="add_server_sheet_create_new_modal_title">Gumawa ng bagong server</string>
     <string name="report">Iulat</string>
     <string name="report_cancel">Kanselahin</string>
     <string name="report_message_preview">Piniling mensahe:</string>
@@ -195,10 +190,6 @@
     <string name="message_context_sheet_actions_copy_link_copied">Kinopya ang link sa clipboard</string>
     <string name="channel_context_sheet_actions_copy_id">Kopyahin ang ID</string>
     <string name="channel_context_sheet_actions_copy_id_copied">Kinopya ang channel ID sa clipboard</string>
-    <string name="add_server_sheet_title">Magdagdag ng server</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Maglagay ng link tulad ng rvlt.gg/Testers o isang invite code tulad ng Testers</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">Sumali</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">Kasalukuyang ginagawa ang feature na ito.</string>
     <string name="report_message">Salamat sa paglalaan ng oras upang iulat ang mensaheng ito. Hindi ibabahagi ang iyong ulat sa user ng nagpadala ng mensahe o sa mga moderator ng server.</string>
     <string name="report_message_bridge_notice">Tandaan: Maaaring ipinadala ang mensaheng ito mula sa ibang platform. Inirerekomenda na iulat din ang mensahe sa platform kung saan ito ipinadala.</string>
     <string name="report_server_preview">Piniling server:</string>
@@ -224,7 +215,7 @@
     <string name="oss_attribution_body">Ang Revolt ay binuo sa tulong ng mga kahanga-hangang open-source na proyektong ito.</string>
     <string name="system_message_user_left_alt">Umalis ang user</string>
     <string name="system_message_user_joined_alt">Sumali ang user</string>
-    <string name="about_full_name">Revolt sa Android</string>
+    <string name="about_full_name">Revolt para sa Android</string>
     <string name="about_brought_to_you_by">Ibinahagi sa iyo na may ❤️ ng koponan ng Revolt.</string>
     <string name="about_tab_version">Bersyon</string>
     <string name="about_tab_details">Mga detalye</string>
@@ -596,4 +587,16 @@
     <string name="status_text_placeholder">Ipaalam sa mundo ang iyong ginagawa</string>
     <string name="status_text_error_too_long">Masyadong mahaba ang status text. Panatilihin itong mas mababa ng %1$d na karakter.</string>
     <string name="status_text_error_other">Nagkaroon ng error habang binabago ang iyong status text. Subukan ulit mamaya.</string>
+    <string name="friends_add_by_tag_sheet_description">Maaari kang magdagdag ng mga kaibigan gamit ang kanilang %1$susername%3$s at %2$stag%3$s. Halimbawa, kung ang kanilang username ay %1$sjane%3$s at ang kanilang tag ay %2$s1234%3$s, madadagdag mo sila gamit ang %1$sjane%3$s#%2$s1234%3$s.</string>
+    <string name="friends_scan_qr">I-scan ang QR code</string>
+    <string name="friends_scan_qr_result_sheet_invalid_description">Hindi ito isang wastong Revolt QR code.</string>
+    <string name="friends_scan_qr_result_sheet_missing_permission_title">Nawawalang pahintulot sa camera</string>
+    <string name="friends_scan_qr_result_sheet_success_title">Idagdag ang kaibigan?</string>
+    <string name="friends_add_by_tag">Magdagdag gamit ang username at tag</string>
+    <string name="friends_add_by_tag_sheet_username">Username</string>
+    <string name="attachment_spoiler">Spoiler</string>
+    <string name="attachment_preview_spoiler">Markahan bilang spoiler</string>
+    <string name="attachment_preview_spoiler_description">Ipapakita lang ang attachment na ito kapag pinindot.</string>
+    <string name="friends_scan_qr_result_sheet_invalid_title">Hindi wastong QR code</string>
+    <string name="friends_scan_qr_result_sheet_missing_permission_description">Kailangan mong ibigay ang pahintulot sa camera para mag-scan ng mga QR code.</string>
 </resources>

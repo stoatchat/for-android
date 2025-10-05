@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="rate_limit_toast">기다려주세요! 단기간 동안 너무 잦은 요청을 하셨습니다.</string>
+    <string name="terms_of_service">이용약관</string>
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="community_guidelines">커뮤니티 규칙</string>
+    <string name="login_onboarding_heading">나만의 커뮤니티를 찾고, 세상과 소통하세요.</string>
+    <string name="back">← 돌아가기</string>
+    <string name="share">공유</string>
+    <string name="loading">정보 가져오는 중.…</string>
+    <string name="next">다음 →</string>
+    <string name="lets_go">갑시다</string>
+    <string name="login_onboarding_body">Revolt는 언제 어디서든 친구와 커뮤니티에 연결될 수 있는 최고의 방법입니다.</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="hide_password">비밀번호 숨기기</string>
+    <string name="show_password">비밀번호 보기</string>
+    <string name="login">로그인</string>
+    <string name="signup">회원가입</string>
+    <string name="send_email">이메일 전송</string>
+</resources>

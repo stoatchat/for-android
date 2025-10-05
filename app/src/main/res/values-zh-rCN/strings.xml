@@ -108,13 +108,6 @@
     <string name="channel_context_sheet_actions_mark_read">标记为已读</string>
     <string name="server_context_sheet_actions_copy_id">复制 ID</string>
     <string name="server_context_sheet_actions_mark_read">标记为已读</string>
-    <string name="add_server_sheet_title">添加一个服务器</string>
-    <string name="add_server_sheet_join_by_invite">通过邀请码或链接加入</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">邀请码或链接</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">加入</string>
-    <string name="add_server_sheet_create_new">创建一个新服务器</string>
-    <string name="add_server_sheet_create_new_modal_title">创建一个新服务器</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">此功能目前仍在开发中。</string>
     <string name="report">举报</string>
     <string name="report_cancel">取消</string>
     <string name="report_message_preview">选择的消息：</string>
@@ -199,8 +192,6 @@
     <string name="message_context_sheet_actions_delete_confirm_yes">是</string>
     <string name="message_context_sheet_actions_copy_link_copied">已复制消息链接到剪贴板</string>
     <string name="server_context_sheet_actions_copy_id_copied">已复制服务器 ID 到剪贴板</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">输入形如 rvlt.gg/Testers 的链接，或形如 Testers 的邀请码</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">邀请码或链接</string>
     <string name="report_message">感谢您花时间举报此消息。发送此消息的用户或服务器管理员不会看到您的举报。</string>
     <string name="report_message_bridge_notice">注意：该消息可能是从其他平台发送的。建议也在其发送的平台上举报该消息。</string>
     <string name="report_reason_user_spam_abuse">垃圾信息或类似的平台滥用</string>

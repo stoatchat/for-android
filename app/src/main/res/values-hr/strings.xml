@@ -13,9 +13,6 @@
     <string name="channel_context_sheet_actions_mark_read">Označi kao pročitano</string>
     <string name="server_context_sheet_actions_copy_id">Kopiraj ID</string>
     <string name="server_context_sheet_actions_mark_read">Označi kao pročitano</string>
-    <string name="add_server_sheet_title">Dodaj server</string>
-    <string name="add_server_sheet_join_by_invite">Pridružite se sa pozivničkim kodom ili linkom</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">Pridruži se</string>
     <string name="report_cancel">Poništi</string>
     <string name="report_server_preview">Odabrani server:</string>
     <string name="report_user_preview">Odabrani korisnik:</string>
@@ -67,11 +64,6 @@
     <string name="channel_context_sheet_actions_copy_id">Kopiraj ID</string>
     <string name="channel_context_sheet_actions_copy_id_copied">Kopiran ID kanala u međuspremnik</string>
     <string name="server_context_sheet_actions_copy_id_copied">Kopiran ID servera u međuspremnik</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">Kod pozivnice ili link</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">Kod pozivnice ili link</string>
-    <string name="add_server_sheet_create_new">Napravi novi server</string>
-    <string name="add_server_sheet_create_new_modal_title">Napravi novi server</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">Ova značajka trenutno je u radu.</string>
     <string name="report">Prijavi</string>
     <string name="report_message">Zahvaljujemo vam na vremenu da prijavite ovu poruku. Molimo priložite razlog za prijavu ove poruke.</string>
     <string name="report_message_preview">Odabrana poruka:</string>
@@ -112,7 +104,6 @@
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Materijal You nije podržan na ovom uređaju.</string>
     <string name="onboarding_changeable">Ali, ako promjenite mišljenje, možete promijeniti korisničko ime bilo kada u vašim korisničkim postavkama.</string>
     <string name="reply_message_not_cached">Nepoznata poruka, pritisnite za skok</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Upišite link poput rvlt.gg/Testers ili pozivnički kod poput Testers</string>
     <string name="report_message_bridge_notice">Napomena: Ova poruka možda je poslana sa druge platforme. Preporučeno je prijaviti poruku sa platforme na kojoj je poruka poslana.</string>
     <string name="report_reason_user_spam_abuse">Spam ili slično okorištavanje platforme</string>
     <string name="report_submit_error">Dogodila sa greška sa slanjem vaše prijave. Molimo pokušajte kasnije.</string>

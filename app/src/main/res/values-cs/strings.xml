@@ -216,8 +216,6 @@
     <string name="user_badge_founder">Zakladatel</string>
     <string name="user_badge_platform_moderation">Moderátor platformy</string>
     <string name="user_badge_active_supporter">Aktivní podporovatel</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">Připojit se</string>
-    <string name="add_server_sheet_create_new_modal_title">Vytvořit nový server</string>
     <string name="discover">Prozkoumejte Revolt</string>
     <string name="report">Nahlásit</string>
     <string name="report_cancel">Zrušit</string>
@@ -304,8 +302,6 @@
     <string name="user_info_sheet_unblock">Odblokovat</string>
     <string name="user_info_sheet_failed_to_open_dm">Nepodařilo se otevřít PZ s tímto uživatelem.</string>
     <string name="user_badge_early_adopter">Raný uživatel</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">Kód nebo odkaz pozvánky</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">Tato funkce je momentálně ve vývoji.</string>
     <string name="report_message_heading">Dejte nám vědět, co je s touto zprávou špatně</string>
     <string name="user_info_sheet_copy_id">Kopírovat ID</string>
     <string name="report_message">Děkujeme, že jste si udělali čas k nahlášení této zprávy. Vaše nahlášení nebude sdíleno s nahlášeným uživatelem ani s moderátory serveru.</string>
@@ -348,11 +344,6 @@
     <string name="settings_appearance_colour_overrides_on_primary">Na primární</string>
     <string name="settings_appearance_colour_overrides_primary_container">Primární kontejner</string>
     <string name="settings_appearance_colour_overrides_on_secondary">Na sekundární</string>
-    <string name="add_server_sheet_title">Přidat server</string>
-    <string name="add_server_sheet_join_by_invite">Připojte se kódem nebo odkazem pozvánky</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">Kód nebo odkaz pozvánky</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Zadejte odkaz jako rvlt.gg/Testers nebo kód jako Testers</string>
-    <string name="add_server_sheet_create_new">Vytvořit nový server</string>
     <string name="message_context_sheet_actions_reply">Odpovědět</string>
     <string name="message_context_sheet_actions_edit">Upravit</string>
     <string name="message_context_sheet_actions_delete">Odstranit</string>
@@ -476,4 +467,16 @@
     <string name="user_info_sheet_owner_not_found">Nepodařilo se načíst informace o majiteli</string>
     <string name="link_type_no_intent">Nenalezena žádná aplikace pro zpracování tohoto odkazu</string>
     <string name="file_picker_chip_camera_none_installed">Není nainstalována aplikace fotoaparátu</string>
+    <string name="hide_password">Skrýt heslo</string>
+    <string name="show_password">Zobrazit heslo</string>
+    <string name="attachment_preview_remove">Odstranit</string>
+    <string name="could_not_log_in_heading">Chyba při přihlašování</string>
+    <string name="could_not_log_in_body">Byli jste možná odhlášeni z jiného zařízení, nebo je problém s internetem.</string>
+    <string name="could_not_log_in_cta_try_again">Zkuste to znovu</string>
+    <string name="could_not_log_in_cta_logout">Odhlásit se</string>
+    <string name="service_health_alert_actions_default">Více informací</string>
+    <string name="service_health_alert_actions_dismiss">Odmítnout</string>
+    <string name="rate_limit_toast">Zadrž! Děláš to příliš často v krátkém časovém úseku.</string>
+    <string name="service_health_alert">Momentálně probíhá</string>
+    <string name="service_health_alert_body_default">V současné době zaznamenáváme problémy s našimi službami. Pro více informací prosím navštivte naši stránku se stavem služeb.</string>
 </resources>

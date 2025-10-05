@@ -4,8 +4,6 @@
     <string name="copied">In Zwicheneilåge kopiert</string>
     <string name="channel_info_sheet_description_empty">Fer dänne Kanal is noch kei Beschreibong gesetzt wore.</string>
     <string name="message_context_sheet_actions_copy_link_copied">Link vun de Nachricht in Zwicheneilåge kopiert</string>
-    <string name="add_server_sheet_join_by_invite">Mit Eilådungscode oder -link beitrete</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Gib e Link ei wie rvlt.gg/Testers oder e Eilådungscode wie Testers</string>
     <string name="report_server">Danke, dass du dir de Zeit nimmscht, dänne Server zu melde. Die Meldong werd net mit’m gemeldete Nutzer:in oder de Moderator:inne vum Server geteilt.</string>
     <string name="report_reason_content_harassment">Belästigung oder Cybermobbing</string>
     <string name="report_reason_content_other">Annere</string>

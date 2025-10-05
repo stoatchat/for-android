@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back">← atrás</string>
+    <string name="next">Siguiente →</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="share">Compartir</string>
+    <string name="lets_go">Vamos</string>
+    <string name="loading">Estoy obteniendo algo de información, Espere un poco…</string>
+    <string name="rate_limit_toast">¡Tranquilo! Lo haces demasiado a menudo en tan poco tiempo.</string>
+    <string name="terms_of_service">Terminos de servicio</string>
+    <string name="privacy_policy">política de privacidad</string>
+    <string name="community_guidelines">Pautas de la comunidad</string>
+    <string name="login_onboarding_heading">Encuentra tu comunidad, conéctate con el mundo.</string>
+    <string name="login_onboarding_body">Revolt es una de las mejores maneras de mantenerse conectado con sus amigos y su comunidad, en cualquier lugar y en cualquier momento.</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+</resources>

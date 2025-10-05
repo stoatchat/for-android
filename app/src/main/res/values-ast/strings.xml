@@ -168,12 +168,6 @@
     <string name="user_info_sheet_report">Reportar</string>
     <string name="user_info_sheet_copy_id">Copiar ID</string>
     <string name="user_info_sheet_failed_to_open_dm">Nun foi posible abrir una conversación provada con esti usuariu.</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">Códigu d\'invitación o enllaz</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Pon un link como rvlt.gg/Testers o un códigu d\'invitación como Testers</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">Códigu d\'invitación o enllaz</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">Axuntase</string>
-    <string name="add_server_sheet_create_new">Crear un nuevu servidor</string>
-    <string name="add_server_sheet_create_new_modal_title">Crear un nuevu servidor</string>
     <string name="discover">Escubrir Revolt</string>
     <string name="report">Reportar</string>
     <string name="report_cancel">Atayar</string>
@@ -355,9 +349,6 @@
     <string name="user_info_sheet_bio_not_found">La biografía d\'esti usuariu nun se pudo recuperar. Porfavor verifica que compartes un servidor o sois amigos.</string>
     <string name="user_info_sheet_cancel_request">Atayar solicitú</string>
     <string name="user_info_sheet_unblock">Desbloquear</string>
-    <string name="add_server_sheet_title">Amestar al servidor</string>
-    <string name="add_server_sheet_join_by_invite">Axuntase por códigu d\'invitación o enllaz</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">Esti recursu tá en construcción nagora.</string>
     <string name="report_server_heading">Dinos que tá mal con esti servidor</string>
     <string name="report_server">Gracies por tomate\'l tiempu pa reportar esti servidor. El to reporte nun sedrá compartíu colos moderadores del servidor.</string>
     <string name="report_reason">Escueyi una categoría</string>

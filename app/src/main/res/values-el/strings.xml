@@ -180,11 +180,6 @@
     <string name="user_info_sheet_category_status">Κατάσταση</string>
     <string name="user_badge_responsible_disclosure">Υπεύθυνη Γνωστοποίηση</string>
     <string name="user_badge_platform_moderation">Εποπτεία πλατφόρμας</string>
-    <string name="add_server_sheet_join_by_invite_modal_hint">Κωδικός πρόσκλησης ή συνδέσμου</string>
-    <string name="add_server_sheet_join_by_invite_modal_join">Γίνε μέλος</string>
-    <string name="add_server_sheet_create_new">Δημιούργησε νέο server</string>
-    <string name="add_server_sheet_create_new_modal_title">Δημιούργησε νέο server</string>
-    <string name="add_server_sheet_create_new_modal_under_construction">Αυτό το χαρακτηριστικό είναι υπό κατασκευή.</string>
     <string name="discover">Discover Revolt</string>
     <string name="report_cancel">Ακύρωση</string>
     <string name="report_message_heading">Πείτε μας τι συμβαίνει με αυτό το μήνυμα</string>
@@ -417,7 +412,6 @@
     <string name="user_info_sheet_category_badges">Εμβλήματα</string>
     <string name="user_info_sheet_failed_to_open_dm">Δεν ήταν δυνατό το άνοιγμα ΠΜ με αυτόν το χρήστη.</string>
     <string name="user_info_sheet_category_roles">Ρόλοι</string>
-    <string name="add_server_sheet_join_by_invite">Συμμετοχή μέσω κωδικού πρόσκλησης ή συνδέσμου</string>
     <string name="emote_info_from_unicode">Ένα προεπιλεγμένο emoji που μπορείτε να χρησιμοποιήσετε οπουδήποτε</string>
     <string name="channel_info_sheet_options">Επιλογές</string>
     <string name="message_context_sheet_actions_reply">Απάντηση</string>
@@ -479,9 +473,6 @@
     <string name="user_info_sheet_open">Άνοιγμα πληροφοριών χρήστη</string>
     <string name="user_info_sheet_webhook_body">Τα Webhooks είναι αυτοματοποιημένες εκπομπές από άλλες υπηρεσίες στο διαδίκτυο. Δεν μπορούν να σας απαντήσουν, αλλά μπορείτε ακόμα να δείτε τι έχουν να πουν.</string>
     <string name="member_context_sheet_remove_from_channel">Αφαίρεση απο %1$s</string>
-    <string name="add_server_sheet_title">Πρόσθεσε έναν server</string>
-    <string name="add_server_sheet_join_by_invite_modal_title">Κωδικός πρόσκλησης ή σύνδεσμος</string>
-    <string name="add_server_sheet_join_by_invite_modal_description">Εισάγετε έναν σύνδεσμο όπως rvlt.gg/Testers ή έναν κωδικό πρόσκλησης όπως Testers</string>
     <string name="report_message">Σας ευχαριστούμε που αφιερώσατε χρόνο για να αναφέρετε αυτό το μήνυμα. Η αναφορά σας δεν θα κοινοποιηθεί στον χρήστη που έστειλε το μήνυμα ή στους επόπτες του server.</string>
     <string name="report_message_preview">Επιλεγμένο μήνυμα:</string>
     <string name="report_message_bridge_notice">Σημείωση: Αυτό το μήνυμα μπορεί να έχει σταλεί από άλλη πλατφόρμα. Συνιστάται επίσης να αναφέρετε το μήνυμα στην πλατφόρμα από την οποία στάλθηκε.</string>

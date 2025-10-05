@@ -7,4 +7,11 @@
     <string name="share">බෙදාගන්න</string>
     <string name="login">පිවිසෙන්න</string>
     <string name="signup">ලියාපදිංචිය</string>
+    <string name="loading">තොරතුරු ටිකක් ලබා ගනිමින්, රැඳී සිටින්න…</string>
+    <string name="terms_of_service">සේවා කොන්දේසි</string>
+    <string name="privacy_policy">රහස්යතා ප්රතිපත්තිය</string>
+    <string name="rate_limit_toast">ඉවසලා ඉන්න! ඔයා ඒක බොහෝ වේලාවක ඉතා කෙටි කාලයකදී කරනවා.</string>
+    <string name="lets_go">අපි යමු</string>
+    <string name="voice_join_offering_description_zero">ඇමතුම ආරම්භ කරන්න</string>
+    <string name="voice_join_offering">හඬ නාලිකාවට සම්බන්ධ වන්න</string>
 </resources>
