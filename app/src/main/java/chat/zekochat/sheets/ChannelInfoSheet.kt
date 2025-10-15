@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     val channel = PeptideAPI.channelCache[channelId]
     var memberListSheetShown by remember { mutableStateOf(false) }
+    var addMemberSheetShown by remember { mutableStateOf(false) }
     var inviteDialogShown by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val permissions by rememberChannelPermissions(channelId)
@@ -62,6 +63,24 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             MemberListSheet(
                 channelId = channelId,
                 serverId = channel?.server
+            )
+        }
+    }
+
+    if (addMemberSheetShown) {
+        val addMemberSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            sheetState = addMemberSheetState,
+            onDismissRequest = {
+                addMemberSheetShown = false
+            }
+        ) {
+            AddMemberToGroupSheet(
+                channelId = channelId,
+                onHideSheet = {
+                    addMemberSheetShown = false
+                }
             )
         }
     }
@@ -176,7 +195,9 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                             contentDescription = null
                         )
                     },
-                    onClick = {}
+                    onClick = {
+                        addMemberSheetShown = true
+                    }
                 )
             }
 
@@ -184,20 +205,22 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         }
     }
 
-    SheetButton(
-        headlineContent = {
-            Text(
-                text = stringResource(id = R.string.channel_info_sheet_options_notifications_manage),
-            )
-        },
-        leadingContent = {
-            Icon(
-                painter = painterResource(R.drawable.icn_notification_settings_24dp),
-                contentDescription = null
-            )
-        },
-        onClick = {}
-    )
+    if(channel.channelType != ChannelType.Group){
+        SheetButton(
+            headlineContent = {
+                Text(
+                    text = stringResource(id = R.string.channel_info_sheet_options_notifications_manage),
+                )
+            },
+            leadingContent = {
+                Icon(
+                    painter = painterResource(R.drawable.icn_notification_settings_24dp),
+                    contentDescription = null
+                )
+            },
+            onClick = {}
+        )
+    }
 
     if (
         (permissions has PermissionBit.ManageChannel || permissions has PermissionBit.ManageRole)

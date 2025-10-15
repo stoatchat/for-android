@@ -2,9 +2,8 @@
 <resources>
 
     <style name="Theme.Peptide.Starting" parent="Theme.SplashScreen">
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon_square</item>
         <item name="windowSplashScreenBackground">@color/splashscreen_background</item>
-        <item name="android:windowSplashScreenBehavior">icon_preferred</item>
         <item name="postSplashScreenTheme">@style/Theme.Peptide</item>
     </style>
 </resources>

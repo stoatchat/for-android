@@ -59,7 +59,9 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
             cachedIndex =
                 PeptideJson.decodeFromString(ChangelogIndex.serializer(), response.bodyAsText())
             return cachedIndex as ChangelogIndex
-        } catch (e: Error) {
+        } catch (_: Error) {
+            return ChangelogIndex()
+        }catch (_: Exception) {
             return ChangelogIndex()
         }
     }
@@ -95,7 +97,8 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
     }
 
     suspend fun getLatestChangelogCode(): String {
-        return getLatestChangelog().version.code.toString()
+//        return getLatestChangelog().version.code.toString()
+        return ""
     }
 
     suspend fun hasSeenCurrent(): Boolean {
@@ -105,7 +108,7 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
             )
         }
 
-        val latest = getLatestChangelog().version.code
+//        val latest = getLatestChangelog().version.code
         val lastRead = kvStorage.get("latestChangelogRead")
 
         if (lastRead == null) {
@@ -113,7 +116,8 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
         }
 
         // If the last read changelog is >= the latest, it has been read
-        return lastRead.toLong() >= latest
+//        return lastRead.toLong() >= latest
+        return true
     }
 
     suspend fun markAsSeen() {
@@ -124,7 +128,7 @@ class Changelogs(val context: Context, val kvStorage: KVStorage? = null) {
         }
 
         val index = fetchChangelogIndex()
-        val latest = index.changelogs.maxByOrNull { it.version.code }!!.version.code.toString()
-        kvStorage.set("latestChangelogRead", latest)
+//        val latest = index.changelogs.maxByOrNull { it.version.code }!!.version.code.toString()
+//        kvStorage.set("latestChangelogRead", latest)
     }
 }

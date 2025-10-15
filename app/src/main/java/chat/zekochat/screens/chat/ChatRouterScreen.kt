@@ -187,8 +187,8 @@ class ChatRouterViewModel @Inject constructor(
 
             latestChangelogRead = changelogs.hasSeenCurrent()
             latestChangelog = changelogs.getLatestChangelogCode()
-            latestChangelogBody =
-                changelogs.fetchChangelogByVersionCode(latestChangelog.toLong()).rendered
+//            latestChangelogBody =
+//                changelogs.fetchChangelogByVersionCode(latestChangelog.toLong()).rendered
             if (!latestChangelogRead) {
                 changelogs.markAsSeen()
             }
