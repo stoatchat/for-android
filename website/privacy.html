@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - ZekoChat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#100518',
+                        'background': '#131722',
+                        'accent': '#FEDD17',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-primary/90 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/logo.png" alt="ZekoChat Logo" class="h-10 w-10 rounded-lg">
+                    <span class="text-xl font-bold">ZekoChat</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-accent transition">Home</a>
+                    <a href="privacy.html" class="text-accent hover:text-accent/80 transition">Privacy Policy</a>
+                    <a href="delete-account.html" class="hover:text-accent transition">Delete Account</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 hover:text-accent transition">Home</a>
+                <a href="privacy.html" class="block py-2 text-accent">Privacy Policy</a>
+                <a href="delete-account.html" class="block py-2 hover:text-accent transition">Delete Account</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Privacy Policy Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-8">Privacy Policy</h1>
+        <p class="text-gray-400 mb-8">Last updated: <span id="last-updated"></span></p>
+
+        <div class="prose prose-invert max-w-none space-y-8">
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">1. Introduction</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    Welcome to ZekoChat ("we," "our," or "us"). We are committed to protecting your privacy and ensuring you have a positive experience while using our mobile application and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our chat application.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">2. Information We Collect</h2>
+                <h3 class="text-xl font-semibold mb-3 mt-6">2.1 Information You Provide</h3>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2">
+                    <li><strong>Account Information:</strong> Email address, username, password, and profile information (display name, profile picture, bio)</li>
+                    <li><strong>Content:</strong> Messages, media files, and other content you create or share through the app</li>
+                    <li><strong>Contact Information:</strong> Information you provide when contacting support or submitting feedback</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold mb-3 mt-6">2.2 Automatically Collected Information</h3>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2">
+                    <li><strong>Device Information:</strong> Device type, operating system, unique device identifiers, and mobile network information</li>
+                    <li><strong>Usage Data:</strong> How you interact with the app, features used, time spent, and frequency of use</li>
+                    <li><strong>Log Data:</strong> IP address, browser type, access times, and pages viewed</li>
+                    <li><strong>Location Data:</strong> With your permission, we may collect location information</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">3. How We Use Your Information</h2>
+                <p class="text-gray-300 leading-relaxed mb-4">We use the information we collect to:</p>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2">
+                    <li>Provide, maintain, and improve our services</li>
+                    <li>Process transactions and send related information</li>
+                    <li>Send technical notices, updates, security alerts, and support messages</li>
+                    <li>Respond to your comments, questions, and requests</li>
+                    <li>Monitor and analyze trends, usage, and activities</li>
+                    <li>Detect, prevent, and address technical issues and fraudulent activities</li>
+                    <li>Personalize your experience and deliver content relevant to your interests</li>
+                    <li>Comply with legal obligations and enforce our terms of service</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">4. Information Sharing and Disclosure</h2>
+                <p class="text-gray-300 leading-relaxed mb-4">We do not sell your personal information. We may share your information only in the following circumstances:</p>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2">
+                    <li><strong>With Your Consent:</strong> When you explicitly authorize us to share your information</li>
+                    <li><strong>Service Providers:</strong> With third-party service providers who perform services on our behalf (e.g., cloud storage, analytics)</li>
+                    <li><strong>Legal Requirements:</strong> When required by law, court order, or government regulation</li>
+                    <li><strong>Safety and Security:</strong> To protect the rights, property, or safety of ZekoChat, our users, or others</li>
+                    <li><strong>Business Transfers:</strong> In connection with any merger, sale, or acquisition of assets</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">5. Data Security</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">6. Data Retention</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When you delete your account, we will delete or anonymize your personal information, except where we are required to retain it for legal purposes.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">7. Your Rights and Choices</h2>
+                <p class="text-gray-300 leading-relaxed mb-4">Depending on your location, you may have the following rights:</p>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2">
+                    <li><strong>Access:</strong> Request access to your personal information</li>
+                    <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
+                    <li><strong>Deletion:</strong> Request deletion of your personal information (see our <a href="delete-account.html" class="text-accent hover:underline">Account Deletion page</a>)</li>
+                    <li><strong>Portability:</strong> Request transfer of your data to another service</li>
+                    <li><strong>Objection:</strong> Object to processing of your personal information</li>
+                    <li><strong>Restriction:</strong> Request restriction of processing your personal information</li>
+                </ul>
+                <p class="text-gray-300 leading-relaxed mt-4">
+                    To exercise these rights, please contact us using the information provided in the "Contact Us" section below.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">8. Children's Privacy</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    Our services are not intended for children under the age of 13 (or the minimum age in your jurisdiction). We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately, and we will take steps to delete such information.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">9. International Data Transfers</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    Your information may be transferred to and processed in countries other than your country of residence. These countries may have data protection laws that differ from those in your country. We take appropriate measures to ensure your information is protected in accordance with this Privacy Policy.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">10. Changes to This Privacy Policy</h2>
+                <p class="text-gray-300 leading-relaxed">
+                    We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date. You are advised to review this Privacy Policy periodically for any changes.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-semibold mb-4 text-accent">11. Contact Us</h2>
+                <p class="text-gray-300 leading-relaxed mb-4">
+                    If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us:
+                </p>
+                <div class="bg-white/5 rounded-lg p-6 border border-white/10">
+                    <p class="text-gray-300"><strong>Email:</strong> <a href="mailto:contact@zeko.chat" class="text-accent hover:underline">contact@zeko.chat</a></p>
+                    <p class="text-gray-300 mt-2"><strong>Support Server:</strong> <a href="https://app.peptide.chat/invite/Testers" class="text-accent hover:underline" target="_blank">Join Testers Server</a></p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary/50 border-t border-white/10 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="h-8 w-8 rounded-lg">
+                        <span class="text-lg font-bold">ZekoChat</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Your place to vibe with friends. Join endless chats and connections.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a></li>
+                        <li><a href="delete-account.html" class="hover:text-accent transition">Delete Account</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="hover:text-accent transition">Join Testers Server</a></li>
+                        <li><a href="https://github.com/peptidechat/peptide" class="hover:text-accent transition">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
+                <p>&copy; 2024 ZekoChat. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set last updated date
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
+

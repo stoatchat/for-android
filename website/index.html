@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZekoChat - Your Place to Vibe with Friends</title>
+    <meta name="description" content="ZekoChat is a modern chat platform where you can message friends, create groups, and build communities. Join endless chats and connections!">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#100518',
+                        'background': '#131722',
+                        'accent': '#FEDD17',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-primary/90 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/logo.png" alt="ZekoChat Logo" class="h-10 w-10 rounded-lg">
+                    <span class="text-xl font-bold">ZekoChat</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-accent hover:text-accent/80 transition">Home</a>
+                    <a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a>
+                    <a href="delete-account.html" class="hover:text-accent transition">Delete Account</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="index.html" class="block py-2 text-accent">Home</a>
+                <a href="privacy.html" class="block py-2 hover:text-accent transition">Privacy Policy</a>
+                <a href="delete-account.html" class="block py-2 hover:text-accent transition">Delete Account</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center">
+            <div class="flex justify-center mb-8">
+                <img src="assets/logo.png" alt="ZekoChat Logo" class="h-32 w-32 rounded-2xl shadow-2xl">
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-accent to-white bg-clip-text text-transparent">
+                Welcome to ZekoChat
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join endless chats and connections; ZekoChat is your place to vibe with friends!
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="bg-accent text-primary px-8 py-3 rounded-lg font-semibold hover:bg-accent/90 transition transform hover:scale-105">
+                    Download on Google Play
+                </a>
+                <a href="privacy.html" class="border-2 border-white/20 px-8 py-3 rounded-lg font-semibold hover:border-accent hover:text-accent transition">
+                    Privacy Policy
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Features</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">💬</div>
+                <h3 class="text-xl font-semibold mb-2">Message Friends</h3>
+                <p class="text-gray-400">Connect with friends through direct messages and stay in touch wherever you are.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">👥</div>
+                <h3 class="text-xl font-semibold mb-2">Group Conversations</h3>
+                <p class="text-gray-400">Create group chats and bring your crew together for seamless communication.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">🌐</div>
+                <h3 class="text-xl font-semibold mb-2">Communities & Servers</h3>
+                <p class="text-gray-400">Join or create servers to build communities around shared interests.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">🔒</div>
+                <h3 class="text-xl font-semibold mb-2">Secure & Private</h3>
+                <p class="text-gray-400">Your privacy matters. We keep your conversations secure and your data protected.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">🎨</div>
+                <h3 class="text-xl font-semibold mb-2">Customizable</h3>
+                <p class="text-gray-400">Personalize your experience with themes, custom backgrounds, and more.</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
+                <div class="text-4xl mb-4">📱</div>
+                <h3 class="text-xl font-semibold mb-2">Modern Design</h3>
+                <p class="text-gray-400">Beautiful, intuitive interface built with modern Android design principles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary/50 border-t border-white/10 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="h-8 w-8 rounded-lg">
+                        <span class="text-lg font-bold">ZekoChat</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Your place to vibe with friends. Join endless chats and connections.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a></li>
+                        <li><a href="delete-account.html" class="hover:text-accent transition">Delete Account</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="hover:text-accent transition">Join Testers Server</a></li>
+                        <li><a href="https://github.com/peptidechat/peptide" class="hover:text-accent transition">GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
+                <p>&copy; 2024 ZekoChat. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
+
