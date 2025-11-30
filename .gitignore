@@ -15,7 +15,9 @@
 .externalNativeBuild
 .cxx
 local.properties
-peptidebuild.properties
 /.kotlin/sessions
 app/src/main/assets/embedded
 pep-api-postman.json
+# Keystore files - keep these secure and share privately
+*.keystore
+*.jks

@@ -60,9 +60,9 @@ fun property(fileName: String, propertyName: String, fallbackEnv: String? = null
     }
 }
 
-// Calls property but with peptidebuild.properties as the first argument
+// Calls property but with zekobuild.properties as the first argument
 fun buildproperty(propertyName: String, fallbackEnv: String? = null): String? {
-    return property("peptidebuild.properties", propertyName, fallbackEnv)
+    return property("zekobuild.properties", propertyName, fallbackEnv)
 }
 
 android {
@@ -87,6 +87,22 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFile = buildproperty("keystore.file", "KEYSTORE_FILE")
+            val keystorePassword = buildproperty("keystore.password", "KEYSTORE_PASSWORD")
+            val aliasName = buildproperty("key.alias", "KEY_ALIAS")
+            val keyPasswordValue = buildproperty("key.password", "KEY_PASSWORD")
+
+            if (keystoreFile != null && keystorePassword != null && aliasName != null && keyPasswordValue != null) {
+                storeFile = file(keystoreFile)
+                storePassword = keystorePassword
+                keyAlias = aliasName
+                this.keyPassword = keyPasswordValue
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -100,7 +116,13 @@ android {
                 "FLAVOUR_ID",
                 "\"${buildproperty("build.flavour_id", "RVX_BUILD_FLAVOUR_ID")}\""
             )
-            signingConfig = signingConfigs.getByName("debug")
+            // Use release signing config if available, otherwise fall back to debug
+            val releaseSigningConfig = signingConfigs.findByName("release")
+            if (releaseSigningConfig != null && releaseSigningConfig.storeFile?.exists() == true) {
+                signingConfig = releaseSigningConfig
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
 
         debug {
