@@ -159,6 +159,7 @@ fun MessageField(
     channelId: String? = null,
     valueIsBlank: Boolean = false,
     editMode: Boolean = false,
+    sending: Boolean = false,
     initialValueDirtyMarker: Any = Unit,
     cancelEdit: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit = {},
@@ -624,12 +625,12 @@ fun MessageField(
                         editMode -> painterResource(R.drawable.icn_edit_24dp)
                         else -> painterResource(R.drawable.icn_send_24dp)
                     },
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = if (!sending) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                     contentDescription = stringResource(id = R.string.send_alt),
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .clip(CircleShape)
-                        .clickable { onSendMessage() }
+                        .clickable(enabled = !sending) { onSendMessage() }
                         .size(32.dp)
                         .padding(4.dp)
                         .testTag("send_message")
@@ -656,6 +657,7 @@ fun NativeMessageFieldPreview() {
         canAttach = true,
         disabled = false,
         editMode = false,
+        sending = false,
         cancelEdit = {},
         onFocusChange = {},
     )

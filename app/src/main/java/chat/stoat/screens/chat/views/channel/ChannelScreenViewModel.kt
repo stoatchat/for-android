@@ -91,6 +91,7 @@ class ChannelScreenViewModel @Inject constructor(
     var draftAttachments = mutableStateListOf<FileArgs>()
     var draftReplyTo = mutableStateListOf<SendMessageReply>()
     var attachmentUploadProgress by mutableStateOf(0f)
+    var sendingMessage by mutableStateOf(false)
 
     var endOfChannel by mutableStateOf(false)
     var didInitialChannelFetch by mutableStateOf(false)
@@ -338,6 +339,7 @@ class ChannelScreenViewModel @Inject constructor(
         //    the original content
         val content = MessageProcessor.processOutgoing(draftContent, channel?.server)
         val replyTo = draftReplyTo.toList()
+        sendingMessage = true
 
         // First we upload (the next 5) attachments...
         viewModelScope.launch {
@@ -362,6 +364,7 @@ class ChannelScreenViewModel @Inject constructor(
                 } catch (e: Exception) {
                     Log.e("ChannelScreenViewModel", "Failed to upload attachment", e)
                     attachmentUploadProgress = 0f
+                    sendingMessage = false
                     // TODO show error message
                     return@launch
                 }
@@ -408,6 +411,8 @@ class ChannelScreenViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.e("ChannelScreenViewModel", "Failed to send message", e)
                 updateItems(listOf(ChannelScreenItem.FailedMessage(prospectiveMessage)) + items.filter { it !is ChannelScreenItem.ProspectiveMessage })
+            } finally {
+                sendingMessage = false
             }
         }
     }

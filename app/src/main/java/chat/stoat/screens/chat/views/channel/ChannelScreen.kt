@@ -1092,7 +1092,8 @@ fun ChannelScreen(
                                             cancelEdit = {
                                                 viewModel.editingMessage = null
                                                 viewModel.putDraftContent("", true)
-                                            }
+                                            },
+                                            sending = viewModel.sendingMessage
                                         )
 
                                         DropdownMenu(
