@@ -216,7 +216,9 @@ fun RegularMessage(
                 )
                 .nestedScroll(nestedScrollConnection)
                 .then(
-                    if (LoadedSettings.messageReplyStyle == MessageReplyStyle.SwipeFromEnd)
+                    // FIXME Use one cache roundtrip instead of fetching the cache twice to render the message
+                    if (LoadedSettings.messageReplyStyle == MessageReplyStyle.SwipeFromEnd
+                        && StoatAPI.userCache[message.author]?.relationship != "Blocked")
                         Modifier.supportSwipeReply(
                             onDown = {},
                             onMove = onFingerMoveHandler,
