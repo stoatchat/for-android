@@ -69,6 +69,9 @@ const val STOAT_INVITES = "https://stt.gg"
 val STOAT_WEBSOCKET =
     if (USE_ALPHA_API) "wss://alpha.revolt.chat/ws" else "wss://events.stoat.chat"
 const val STOAT_KJBOOK = "https://stoatchat.github.io/for-android"
+// HACK: Temporarily support legacy invite links
+const val STOAT_LEGACY_APP = "https://app.revolt.chat"
+
 
 fun String.api(): String {
     return "$STOAT_BASE$this"
