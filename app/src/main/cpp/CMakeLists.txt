@@ -41,3 +41,7 @@ target_link_libraries(stendal
         cmark
         android
         log)
+
+# Add 16 KB page size alignment for Android 15+ compatibility
+# This ensures the library works on devices with 16 KB memory page sizes
+target_link_options(stendal PRIVATE -Wl,-z,max-page-size=16384)

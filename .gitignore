@@ -21,3 +21,5 @@ pep-api-postman.json
 # Keystore files - keep these secure and share privately
 *.keystore
 *.jks
+ZekoChatKey
+app/zekochat.keystore

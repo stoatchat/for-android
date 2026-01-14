@@ -58,6 +58,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_\color"
             android:resource="@color/notification_background" />
+        <!-- Support for 16 KB page size devices (required for Google Play) -->
+        <meta-data
+            android:name="android.app.16kb_page_size_supported"
+            android:value="true" />
 
         <service
             android:name=".c2dm.HandlerService"
