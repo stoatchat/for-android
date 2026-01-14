@@ -114,7 +114,7 @@
 
                 <uri-relative-filter-group
                     android:allow="false"
-                    tools:targetApi="35">
+                    tools:targetApi="36">
                     <data android:pathPrefix="/discover/" />
                 </uri-relative-filter-group>
             </intent-filter>

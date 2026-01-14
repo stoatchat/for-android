@@ -66,12 +66,12 @@ fun buildproperty(propertyName: String, fallbackEnv: String? = null): String? {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.zekochat"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = Integer.parseInt("001_003_107".replace("_", ""), 10)
         versionName = "1.3.6b"
 
