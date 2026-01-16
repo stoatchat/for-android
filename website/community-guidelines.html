@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Guidelines - ZekoChat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#100518',
+                        'background': '#0a0a0f',
+                        'surface': '#131722',
+                        'accent': '#FEDD17',
+                        'accent-2': '#FF6B35',
+                        'accent-3': '#8B5CF6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            'from': { opacity: '0', transform: 'translateY(30px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        },
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(135deg, #100518 0%, #1a0a2e 50%, #0a0a0f 100%)',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FEDD17 0%, #FF6B35 50%, #8B5CF6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-strong {
+            background: rgba(16, 5, 24, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+        }
+        .section-card {
+            transition: all 0.3s ease;
+        }
+        .section-card:hover {
+            border-color: rgba(254, 221, 23, 0.3);
+        }
+        .toc-link {
+            transition: all 0.2s ease;
+        }
+        .toc-link:hover {
+            padding-left: 1rem;
+            color: #FEDD17;
+        }
+    </style>
+</head>
+<body class="bg-background text-white min-h-screen font-sans antialiased overflow-x-hidden">
+    <!-- Noise Overlay -->
+    <div class="noise fixed inset-0 pointer-events-none z-50"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-strong fixed w-full top-0 z-40 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-accent via-accent-2 to-accent-3 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-11 w-11 rounded-xl">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">ZekoChat</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Home</a>
+                    <a href="privacy.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Privacy</a>
+                    <a href="terms.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Terms</a>
+                    <a href="community-guidelines.html" class="px-4 py-2 rounded-full bg-white/10 text-accent font-medium text-sm transition hover:bg-white/15">Guidelines</a>
+                    <a href="delete-account.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="ml-4 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-sm transition transform hover:scale-105 hover:shadow-lg hover:shadow-accent/25">
+                        Download
+                    </a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 transition">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-6 animate-slide-up">
+                <div class="flex flex-col space-y-2 pt-4 border-t border-white/10">
+                    <a href="index.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Home</a>
+                    <a href="privacy.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Privacy Policy</a>
+                    <a href="terms.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Terms of Service</a>
+                    <a href="community-guidelines.html" class="px-4 py-3 rounded-xl bg-white/10 text-accent font-medium">Community Guidelines</a>
+                    <a href="delete-account.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Delete Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-center">
+                        Download App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-hero-gradient"></div>
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -right-32 w-96 h-96 bg-accent-3/5 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-fade-in">
+                <!-- Icon -->
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-accent/20 to-accent-3/20 border border-white/10 mb-8">
+                    <svg class="w-10 h-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Community <span class="gradient-text">Guidelines</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-4">
+                    Help us create a safe, welcoming, and enjoyable environment for everyone. These guidelines outline our expectations for community behavior.
+                </p>
+                <p class="text-sm text-gray-500">Last updated: <span id="last-updated"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="relative pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-4 gap-12">
+                <!-- Table of Contents (Sidebar) -->
+                <aside class="hidden lg:block">
+                    <div class="sticky top-28">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">On this page</h3>
+                        <nav class="space-y-2">
+                            <a href="#introduction" class="toc-link block text-sm text-gray-400 hover:text-accent">1. Introduction</a>
+                            <a href="#respectful" class="toc-link block text-sm text-gray-400 hover:text-accent">2. Be Respectful</a>
+                            <a href="#harassment" class="toc-link block text-sm text-gray-400 hover:text-accent">3. No Harassment</a>
+                            <a href="#spam" class="toc-link block text-sm text-gray-400 hover:text-accent">4. No Spam or Scams</a>
+                            <a href="#illegal" class="toc-link block text-sm text-gray-400 hover:text-accent">5. No Illegal Content</a>
+                            <a href="#nsfw" class="toc-link block text-sm text-gray-400 hover:text-accent">6. NSFW Content</a>
+                            <a href="#privacy" class="toc-link block text-sm text-gray-400 hover:text-accent">7. Privacy</a>
+                            <a href="#reporting" class="toc-link block text-sm text-gray-400 hover:text-accent">8. Reporting</a>
+                            <a href="#enforcement" class="toc-link block text-sm text-gray-400 hover:text-accent">9. Enforcement</a>
+                            <a href="#appeals" class="toc-link block text-sm text-gray-400 hover:text-accent">10. Appeals</a>
+                            <a href="#updates" class="toc-link block text-sm text-gray-400 hover:text-accent">11. Updates</a>
+                            <a href="#contact" class="toc-link block text-sm text-gray-400 hover:text-accent">12. Contact Us</a>
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Guidelines Content -->
+                <div class="lg:col-span-3 space-y-8">
+                    <!-- Section 1 -->
+                    <section id="introduction" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">1</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Welcome to ZekoChat! Our community guidelines are designed to help create a positive, safe, and inclusive environment for all users. These guidelines apply to all users, content, and behavior on ZekoChat, including direct messages, group chats, servers, and public spaces.
+                                </p>
+                                <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+                                    <p class="text-green-400 font-medium flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Our goal is to foster a community where everyone feels welcome, respected, and free to express themselves.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 2 -->
+                    <section id="respectful" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">2</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Be Respectful</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Treat all members of the community with kindness, empathy, and respect. We are a diverse community with people from different backgrounds, cultures, and perspectives.
+                                </p>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <h4 class="font-semibold">Do</h4>
+                                        </div>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-green-400 mt-1">✓</span>
+                                                <span>Use inclusive and welcoming language</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-green-400 mt-1">✓</span>
+                                                <span>Listen to different viewpoints</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-green-400 mt-1">✓</span>
+                                                <span>Respect others' boundaries</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-green-400 mt-1">✓</span>
+                                                <span>Engage in constructive discussions</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                                                <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </div>
+                                            <h4 class="font-semibold">Don't</h4>
+                                        </div>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">✗</span>
+                                                <span>Use offensive or discriminatory language</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">✗</span>
+                                                <span>Mock or belittle others</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">✗</span>
+                                                <span>Engage in personal attacks</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">✗</span>
+                                                <span>Disrespect others' opinions</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 3 -->
+                    <section id="harassment" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">3</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">No Harassment or Bullying</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Harassment, bullying, and intimidation have no place in our community. We take these violations seriously and will take appropriate action.
+                                </p>
+                                <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-4">
+                                    <h3 class="font-semibold text-red-400 mb-3 flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                        Prohibited Behaviors
+                                    </h3>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-red-400 mt-1">•</span>
+                                            <div>Targeted harassment, threats, or intimidation</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-red-400 mt-1">•</span>
+                                            <div>Stalking or persistent unwanted contact</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-red-400 mt-1">•</span>
+                                            <div>Doxxing (sharing private information without consent)</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-red-400 mt-1">•</span>
+                                            <div>Discrimination based on race, gender, religion, sexual orientation, or other protected characteristics</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-red-400 mt-1">•</span>
+                                            <div>Encouraging self-harm or suicide</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <p class="text-gray-300 text-sm">
+                                    If you experience or witness harassment, please report it immediately using our reporting system.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 4 -->
+                    <section id="spam" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">4</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">No Spam or Scams</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Keep ZekoChat free from spam, scams, and fraudulent activities. This helps maintain a trustworthy and enjoyable experience for everyone.
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <h3 class="font-semibold mb-3 flex items-center gap-2">
+                                            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            What We Consider Spam
+                                        </h3>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Repeatedly sending the same message</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Unsolicited promotional content or advertisements</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Excessive messaging or ping abuse</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Creating multiple accounts to bypass restrictions</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+                                        <h3 class="font-semibold mb-3 text-red-400 flex items-center gap-2">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            Prohibited Scams
+                                        </h3>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">•</span>
+                                                <span>Phishing attempts or fake giveaways</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">•</span>
+                                                <span>Financial scams or pyramid schemes</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">•</span>
+                                                <span>Impersonating staff or other users</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-red-400 mt-1">•</span>
+                                                <span>Sharing malicious links or malware</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 5 -->
+                    <section id="illegal" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">5</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">No Illegal Content</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Do not post, share, or promote any content that is illegal or violates applicable laws. This includes but is not limited to:
+                                </p>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-red-400 mt-1">•</span>
+                                        <div><strong class="text-white">Copyright Infringement:</strong> Sharing copyrighted material without permission</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-red-400 mt-1">•</span>
+                                        <div><strong class="text-white">Illegal Activities:</strong> Content promoting or facilitating illegal activities</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-red-400 mt-1">•</span>
+                                        <div><strong class="text-white">Violence:</strong> Threats of violence or content glorifying violence</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-red-400 mt-1">•</span>
+                                        <div><strong class="text-white">Drugs:</strong> Illegal drug sales or distribution</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-red-400 mt-1">•</span>
+                                        <div><strong class="text-white">Weapons:</strong> Illegal weapons sales or instructions</div>
+                                    </li>
+                                </ul>
+                                <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 mt-4">
+                                    <p class="text-yellow-400 text-sm">
+                                        <strong>Note:</strong> We may report illegal content to relevant authorities and cooperate with law enforcement when necessary.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 6 -->
+                    <section id="nsfw" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">6</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">No NSFW Content in Public Spaces</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    To maintain a safe and appropriate environment for all users, including minors, adult content is not permitted in public channels, servers, or group chats.
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <h3 class="font-semibold mb-3">What is Considered NSFW?</h3>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Sexually explicit content or imagery</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Graphic violence or gore</span>
+                                            </li>
+                                            <li class="flex items-start gap-2">
+                                                <span class="text-accent mt-1">•</span>
+                                                <span>Excessive profanity or offensive language</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-5">
+                                        <h3 class="font-semibold mb-3 text-blue-400">Age-Restricted Content</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            Content that may be appropriate for adults but not for minors should be clearly marked and restricted to appropriate, age-verified channels only. Even in private conversations, be mindful of sharing such content without consent.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 7 -->
+                    <section id="privacy" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">7</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Privacy and Personal Information</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    Respect the privacy of others and protect your own personal information.
+                                </p>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <h3 class="font-semibold mb-3 flex items-center gap-2">
+                                            <svg class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                            </svg>
+                                            Do
+                                        </h3>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li>• Keep personal information private</li>
+                                            <li>• Ask permission before sharing others' information</li>
+                                            <li>• Use privacy settings appropriately</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-5">
+                                        <h3 class="font-semibold mb-3 flex items-center gap-2 text-red-400">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            Don't
+                                        </h3>
+                                        <ul class="space-y-2 text-gray-300 text-sm">
+                                            <li>• Share others' personal information without consent</li>
+                                            <li>• Doxx or reveal private details</li>
+                                            <li>• Impersonate others or use fake identities</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 8 -->
+                    <section id="reporting" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">8</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Reporting Violations</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    If you encounter content or behavior that violates these guidelines, please report it. We take all reports seriously and investigate them promptly.
+                                </p>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <h3 class="font-semibold mb-3 flex items-center gap-2">
+                                            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            How to Report
+                                        </h3>
+                                        <ol class="space-y-2 text-gray-300 text-sm list-decimal list-inside">
+                                            <li>Use the in-app reporting feature on the message or user profile</li>
+                                            <li>Provide as much context as possible (screenshots, timestamps, etc.)</li>
+                                            <li>For urgent safety concerns, contact us directly at <a href="mailto:contact@zeko.chat" class="text-accent hover:underline">contact@zeko.chat</a></li>
+                                        </ol>
+                                    </div>
+                                    <div class="bg-green-500/10 border border-green-500/30 rounded-xl p-5">
+                                        <h3 class="font-semibold mb-3 text-green-400">What Happens After Reporting?</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            Our moderation team reviews all reports. We will take appropriate action, which may include warnings, temporary suspensions, or permanent bans depending on the severity of the violation. We may not always share details of actions taken to protect user privacy.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 9 -->
+                    <section id="enforcement" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">9</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Enforcement Actions</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    When violations occur, we may take one or more of the following actions:
+                                </p>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-4 bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                                            <span class="text-yellow-400 font-bold">1</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold mb-1">Warning</h4>
+                                            <p class="text-gray-300 text-sm">A formal warning for minor violations or first-time offenses</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                                            <span class="text-orange-400 font-bold">2</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold mb-1">Temporary Suspension</h4>
+                                            <p class="text-gray-300 text-sm">Temporary restriction from certain features or the platform for repeated violations</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-4 bg-white/5 rounded-xl p-5 border border-white/5">
+                                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                                            <span class="text-red-400 font-bold">3</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold mb-1">Permanent Ban</h4>
+                                            <p class="text-gray-300 text-sm">Permanent removal from the platform for severe or repeated violations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 10 -->
+                    <section id="appeals" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">10</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Appeals Process</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    If you believe your account was suspended or banned in error, you may appeal the decision.
+                                </p>
+                                <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                    <h3 class="font-semibold mb-3">How to Appeal</h3>
+                                    <ol class="space-y-3 text-gray-300 text-sm">
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-accent font-bold">1.</span>
+                                            <div>Contact us at <a href="mailto:contact@zeko.chat" class="text-accent hover:underline">contact@zeko.chat</a> with the subject "Appeal Request"</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-accent font-bold">2.</span>
+                                            <div>Include your username and a brief explanation of why you believe the action was incorrect</div>
+                                        </li>
+                                        <li class="flex items-start gap-3">
+                                            <span class="text-accent font-bold">3.</span>
+                                            <div>Our team will review your appeal and respond within 7-14 business days</div>
+                                        </li>
+                                    </ol>
+                                    <p class="text-gray-400 text-sm mt-4">
+                                        Note: Appeals are reviewed on a case-by-case basis. Not all appeals will result in account restoration.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 11 -->
+                    <section id="updates" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">11</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Updates to Guidelines</h2>
+                                <p class="text-gray-300 leading-relaxed">
+                                    We may update these Community Guidelines from time to time to reflect changes in our community standards, legal requirements, or service features. We will notify users of significant changes by posting the updated guidelines on this page and updating the "Last updated" date. Your continued use of ZekoChat after such changes constitutes your acceptance of the updated guidelines.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 12 -->
+                    <section id="contact" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">12</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+                                <p class="text-gray-300 mb-6">
+                                    If you have questions about these Community Guidelines or need to report a violation, please contact us:
+                                </p>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <a href="mailto:contact@zeko.chat" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold mb-1">Email</div>
+                                            <div class="text-accent text-sm">contact@zeko.chat</div>
+                                        </div>
+                                    </a>
+                                    <a href="https://app.peptide.chat/invite/Testers" target="_blank" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold mb-1">Support Server</div>
+                                            <div class="text-accent text-sm">Join Testers Server</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative border-t border-white/5 bg-surface/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-3 rounded-xl blur opacity-30"></div>
+                            <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-10 w-10 rounded-xl">
+                        </div>
+                        <span class="text-xl font-bold">ZekoChat</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed max-w-sm mb-6">
+                        Your place to vibe with friends. Join endless chats and connections on the modern messaging platform.
+                    </p>
+                    <!-- Social Links -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com/peptidechat/peptide" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://app.peptide.chat/invite/Testers" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="community-guidelines.html" class="text-gray-400 hover:text-white transition">Community Guidelines</a></li>
+                        <li><a href="delete-account.html" class="text-gray-400 hover:text-white transition">Delete Account</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="text-gray-400 hover:text-white transition" target="_blank">Join Community</a></li>
+                        <li><a href="mailto:contact@zeko.chat" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2025 ZekoChat. All rights reserved.</p>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span>Made with</span>
+                    <span class="text-red-500">❤️</span>
+                    <span>for chatters everywhere</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set last updated date
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Highlight current section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('text-accent', 'pl-4');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('text-accent', 'pl-4');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

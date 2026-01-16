@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - ZekoChat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#100518',
+                        'background': '#0a0a0f',
+                        'surface': '#131722',
+                        'accent': '#FEDD17',
+                        'accent-2': '#FF6B35',
+                        'accent-3': '#8B5CF6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            'from': { opacity: '0', transform: 'translateY(30px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        },
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(135deg, #100518 0%, #1a0a2e 50%, #0a0a0f 100%)',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FEDD17 0%, #FF6B35 50%, #8B5CF6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-strong {
+            background: rgba(16, 5, 24, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+        }
+        .section-card {
+            transition: all 0.3s ease;
+        }
+        .section-card:hover {
+            border-color: rgba(254, 221, 23, 0.3);
+        }
+        .toc-link {
+            transition: all 0.2s ease;
+        }
+        .toc-link:hover {
+            padding-left: 1rem;
+            color: #FEDD17;
+        }
+    </style>
+</head>
+<body class="bg-background text-white min-h-screen font-sans antialiased overflow-x-hidden">
+    <!-- Noise Overlay -->
+    <div class="noise fixed inset-0 pointer-events-none z-50"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-strong fixed w-full top-0 z-40 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-accent via-accent-2 to-accent-3 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-11 w-11 rounded-xl">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">ZekoChat</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Home</a>
+                    <a href="privacy.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Privacy</a>
+                    <a href="terms.html" class="px-4 py-2 rounded-full bg-white/10 text-accent font-medium text-sm transition hover:bg-white/15">Terms</a>
+                    <a href="community-guidelines.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Guidelines</a>
+                    <a href="delete-account.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="ml-4 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-sm transition transform hover:scale-105 hover:shadow-lg hover:shadow-accent/25">
+                        Download
+                    </a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 transition">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-6 animate-slide-up">
+                <div class="flex flex-col space-y-2 pt-4 border-t border-white/10">
+                    <a href="index.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Home</a>
+                    <a href="privacy.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Privacy Policy</a>
+                    <a href="terms.html" class="px-4 py-3 rounded-xl bg-white/10 text-accent font-medium">Terms of Service</a>
+                    <a href="community-guidelines.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Community Guidelines</a>
+                    <a href="delete-account.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Delete Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-center">
+                        Download App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="relative pt-32 pb-20 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-hero-gradient"></div>
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -right-32 w-96 h-96 bg-accent-3/5 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-fade-in">
+                <!-- Icon -->
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-accent/20 to-accent-3/20 border border-white/10 mb-8">
+                    <svg class="w-10 h-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    Terms of <span class="gradient-text">Service</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-4">
+                    Please read these terms carefully before using ZekoChat. By using our service, you agree to be bound by these terms.
+                </p>
+                <p class="text-sm text-gray-500">Last updated: <span id="last-updated"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="relative pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-4 gap-12">
+                <!-- Table of Contents (Sidebar) -->
+                <aside class="hidden lg:block">
+                    <div class="sticky top-28">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">On this page</h3>
+                        <nav class="space-y-2">
+                            <a href="#introduction" class="toc-link block text-sm text-gray-400 hover:text-accent">1. Introduction</a>
+                            <a href="#acceptance" class="toc-link block text-sm text-gray-400 hover:text-accent">2. Acceptance of Terms</a>
+                            <a href="#description" class="toc-link block text-sm text-gray-400 hover:text-accent">3. Description of Service</a>
+                            <a href="#accounts" class="toc-link block text-sm text-gray-400 hover:text-accent">4. User Accounts</a>
+                            <a href="#conduct" class="toc-link block text-sm text-gray-400 hover:text-accent">5. User Conduct</a>
+                            <a href="#intellectual" class="toc-link block text-sm text-gray-400 hover:text-accent">6. Intellectual Property</a>
+                            <a href="#prohibited" class="toc-link block text-sm text-gray-400 hover:text-accent">7. Prohibited Activities</a>
+                            <a href="#termination" class="toc-link block text-sm text-gray-400 hover:text-accent">8. Termination</a>
+                            <a href="#disclaimers" class="toc-link block text-sm text-gray-400 hover:text-accent">9. Disclaimers</a>
+                            <a href="#indemnification" class="toc-link block text-sm text-gray-400 hover:text-accent">10. Indemnification</a>
+                            <a href="#changes" class="toc-link block text-sm text-gray-400 hover:text-accent">11. Changes to Terms</a>
+                            <a href="#governing" class="toc-link block text-sm text-gray-400 hover:text-accent">12. Governing Law</a>
+                            <a href="#contact" class="toc-link block text-sm text-gray-400 hover:text-accent">13. Contact Us</a>
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Terms Content -->
+                <div class="lg:col-span-3 space-y-8">
+                    <!-- Section 1 -->
+                    <section id="introduction" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">1</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+                                <p class="text-gray-300 leading-relaxed">
+                                    Welcome to ZekoChat ("we," "our," or "us"). These Terms of Service ("Terms") govern your access to and use of the ZekoChat mobile application, website, and related services (collectively, the "Service"). By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of these Terms, you may not access or use the Service.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 2 -->
+                    <section id="acceptance" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">2</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Acceptance of Terms</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    By creating an account, downloading, installing, or using ZekoChat, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you are using the Service on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.
+                                </p>
+                                <p class="text-gray-300 leading-relaxed">
+                                    You must be at least 13 years old (or the minimum age required in your jurisdiction) to use ZekoChat. By using the Service, you represent that you meet this age requirement.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 3 -->
+                    <section id="description" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">3</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Description of Service</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    ZekoChat is a messaging and communication platform that enables users to:
+                                </p>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Send direct messages to other users</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Create and participate in group conversations</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Join or create servers and communities</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Share media files, including images and videos</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Customize their profile and experience</div>
+                                    </li>
+                                </ul>
+                                <p class="text-gray-300 leading-relaxed mt-4">
+                                    We reserve the right to modify, suspend, or discontinue any part of the Service at any time, with or without notice.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 4 -->
+                    <section id="accounts" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">4</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">User Accounts and Registration</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Account Creation</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            To use certain features of ZekoChat, you must create an account. You agree to provide accurate, current, and complete information during registration and to update such information to keep it accurate, current, and complete.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Account Security</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Account Responsibility</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            You are solely responsible for all content posted, transmitted, or shared through your account. We are not liable for any loss or damage arising from your failure to comply with this section.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 5 -->
+                    <section id="conduct" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">5</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">User Conduct and Responsibilities</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    You agree to use ZekoChat in a lawful manner and in accordance with these Terms. You are responsible for your conduct and content while using the Service. You agree not to:
+                                </p>
+                                <ul class="space-y-3 text-gray-300">
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Violate any applicable laws, regulations, or third-party rights</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Harass, abuse, threaten, or harm other users</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Post, transmit, or share content that is illegal, harmful, or offensive</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Impersonate any person or entity or misrepresent your affiliation</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Interfere with or disrupt the Service or servers connected to the Service</div>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <span class="text-accent mt-1">•</span>
+                                        <div>Attempt to gain unauthorized access to any portion of the Service</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 6 -->
+                    <section id="intellectual" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">6</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Intellectual Property Rights</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Our Rights</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            The Service, including its original content, features, and functionality, is owned by ZekoChat and is protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Your Content</h3>
+                                        <p class="text-gray-300 text-sm mb-3">
+                                            You retain ownership of any content you post, transmit, or share through the Service. By using the Service, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and distribute your content solely for the purpose of operating and providing the Service.
+                                        </p>
+                                        <p class="text-gray-300 text-sm">
+                                            You represent and warrant that you have all necessary rights to grant this license and that your content does not infringe upon any third-party rights.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 7 -->
+                    <section id="prohibited" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">7</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Prohibited Activities</h2>
+                                <p class="text-gray-300 leading-relaxed mb-4">
+                                    You agree not to engage in any of the following prohibited activities:
+                                </p>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
+                                            <h4 class="font-semibold text-red-400">Illegal Content</h4>
+                                        </div>
+                                        <p class="text-gray-300 text-sm">Posting or sharing illegal, harmful, or offensive content</p>
+                                    </div>
+                                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                            <h4 class="font-semibold text-red-400">Spam & Scams</h4>
+                                        </div>
+                                        <p class="text-gray-300 text-sm">Sending spam, phishing, or fraudulent messages</p>
+                                    </div>
+                                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
+                                            <h4 class="font-semibold text-red-400">Harassment</h4>
+                                        </div>
+                                        <p class="text-gray-300 text-sm">Harassing, bullying, or threatening other users</p>
+                                    </div>
+                                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            <h4 class="font-semibold text-red-400">Unauthorized Access</h4>
+                                        </div>
+                                        <p class="text-gray-300 text-sm">Attempting to hack or breach security measures</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 8 -->
+                    <section id="termination" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">8</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Termination</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Termination by You</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            You may terminate your account at any time by following the account deletion process outlined in our <a href="delete-account.html" class="text-accent hover:underline">Delete Account</a> page.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Termination by Us</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            We reserve the right to suspend or terminate your account immediately, without prior notice, if you violate these Terms, engage in prohibited activities, or for any other reason we deem necessary to protect the Service and other users.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Effect of Termination</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            Upon termination, your right to use the Service will immediately cease. We may delete your account and all associated data, subject to our Privacy Policy and applicable law.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 9 -->
+                    <section id="disclaimers" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">9</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Disclaimers and Limitation of Liability</h2>
+                                <div class="space-y-4">
+                                    <div class="bg-yellow-500/5 border border-yellow-500/20 rounded-xl p-6">
+                                        <h3 class="text-lg font-semibold mb-3 text-yellow-400">Service "As Is"</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            The Service is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that the Service will be uninterrupted, secure, or error-free.
+                                        </p>
+                                    </div>
+                                    <div class="bg-white/5 rounded-xl p-6 border border-white/5">
+                                        <h3 class="text-lg font-semibold mb-3">Limitation of Liability</h3>
+                                        <p class="text-gray-300 text-sm">
+                                            To the maximum extent permitted by law, ZekoChat shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from your use of the Service.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 10 -->
+                    <section id="indemnification" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">10</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Indemnification</h2>
+                                <p class="text-gray-300 leading-relaxed">
+                                    You agree to indemnify, defend, and hold harmless ZekoChat, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses, including reasonable attorneys' fees, arising out of or in any way connected with your access to or use of the Service, your violation of these Terms, or your violation of any third-party rights.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 11 -->
+                    <section id="changes" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">11</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Changes to Terms</h2>
+                                <p class="text-gray-300 leading-relaxed">
+                                    We reserve the right to modify these Terms at any time. We will notify you of any material changes by posting the updated Terms on this page and updating the "Last updated" date. Your continued use of the Service after such modifications constitutes your acceptance of the updated Terms. If you do not agree to the modified Terms, you must stop using the Service.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 12 -->
+                    <section id="governing" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">12</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-4">Governing Law</h2>
+                                <p class="text-gray-300 leading-relaxed">
+                                    These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which ZekoChat operates, without regard to its conflict of law provisions. Any disputes arising from these Terms or your use of the Service shall be resolved in the appropriate courts of that jurisdiction.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Section 13 -->
+                    <section id="contact" class="section-card glass rounded-2xl p-8 border border-white/10">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-accent/20 to-accent-2/20 flex items-center justify-center">
+                                <span class="text-lg font-bold text-accent">13</span>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+                                <p class="text-gray-300 mb-6">
+                                    If you have any questions about these Terms of Service, please contact us:
+                                </p>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <a href="mailto:contact@zeko.chat" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold mb-1">Email</div>
+                                            <div class="text-accent text-sm">contact@zeko.chat</div>
+                                        </div>
+                                    </a>
+                                    <a href="https://app.peptide.chat/invite/Testers" target="_blank" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold mb-1">Support Server</div>
+                                            <div class="text-accent text-sm">Join Testers Server</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative border-t border-white/5 bg-surface/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-3 rounded-xl blur opacity-30"></div>
+                            <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-10 w-10 rounded-xl">
+                        </div>
+                        <span class="text-xl font-bold">ZekoChat</span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed max-w-sm mb-6">
+                        Your place to vibe with friends. Join endless chats and connections on the modern messaging platform.
+                    </p>
+                    <!-- Social Links -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com/peptidechat/peptide" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://app.peptide.chat/invite/Testers" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="community-guidelines.html" class="text-gray-400 hover:text-white transition">Community Guidelines</a></li>
+                        <li><a href="delete-account.html" class="text-gray-400 hover:text-white transition">Delete Account</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="text-gray-400 hover:text-white transition" target="_blank">Join Community</a></li>
+                        <li><a href="mailto:contact@zeko.chat" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2025 ZekoChat. All rights reserved.</p>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span>Made with</span>
+                    <span class="text-red-500">❤️</span>
+                    <span>for chatters everywhere</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set last updated date
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Highlight current section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('text-accent', 'pl-4');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('text-accent', 'pl-4');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
