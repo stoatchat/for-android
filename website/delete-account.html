@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Account Deletion - ZekoChat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,245 +14,489 @@
                 extend: {
                     colors: {
                         'primary': '#100518',
-                        'background': '#131722',
+                        'background': '#0a0a0f',
+                        'surface': '#131722',
                         'accent': '#FEDD17',
-                    }
+                        'accent-2': '#FF6B35',
+                        'accent-3': '#8B5CF6',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            'from': { opacity: '0', transform: 'translateY(30px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px)' },
+                            '75%': { transform: 'translateX(5px)' },
+                        },
+                    },
+                    backgroundImage: {
+                        'hero-gradient': 'linear-gradient(135deg, #100518 0%, #1a0a2e 50%, #0a0a0f 100%)',
+                    },
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        .gradient-text {
+            background: linear-gradient(135deg, #FEDD17 0%, #FF6B35 50%, #8B5CF6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-strong {
+            background: rgba(16, 5, 24, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+        }
+        .input-modern {
+            transition: all 0.3s ease;
+        }
+        .input-modern:focus {
+            box-shadow: 0 0 0 4px rgba(254, 221, 23, 0.1);
+        }
+        .btn-danger {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-danger:hover::before {
+            left: 100%;
+        }
+        .step-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 44px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(254, 221, 23, 0.3), transparent);
+        }
+        .step-line:last-child::before {
+            display: none;
         }
     </style>
 </head>
-<body class="bg-background text-white min-h-screen">
+<body class="bg-background text-white min-h-screen font-sans antialiased overflow-x-hidden">
+    <!-- Noise Overlay -->
+    <div class="noise fixed inset-0 pointer-events-none z-50"></div>
+
     <!-- Navigation -->
-    <nav class="bg-primary/90 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
+    <nav class="glass-strong fixed w-full top-0 z-40 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <img src="assets/logo.png" alt="ZekoChat Logo" class="h-10 w-10 rounded-lg">
-                    <span class="text-xl font-bold">ZekoChat</span>
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-accent via-accent-2 to-accent-3 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-11 w-11 rounded-xl">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">ZekoChat</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Home</a>
+                    <a href="privacy.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Privacy</a>
+                    <a href="delete-account.html" class="px-4 py-2 rounded-full bg-white/10 text-accent font-medium text-sm transition hover:bg-white/15">Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="ml-4 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-sm transition transform hover:scale-105 hover:shadow-lg hover:shadow-accent/25">
+                        Download
+                    </a>
                 </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="hover:text-accent transition">Home</a>
-                    <a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a>
-                    <a href="delete-account.html" class="text-accent hover:text-accent/80 transition">Delete Account</a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="mobile-menu-button" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 transition">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="index.html" class="block py-2 hover:text-accent transition">Home</a>
-                <a href="privacy.html" class="block py-2 hover:text-accent transition">Privacy Policy</a>
-                <a href="delete-account.html" class="block py-2 text-accent">Delete Account</a>
+            <div id="mobile-menu" class="hidden md:hidden pb-6 animate-slide-up">
+                <div class="flex flex-col space-y-2 pt-4 border-t border-white/10">
+                    <a href="index.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Home</a>
+                    <a href="privacy.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Privacy Policy</a>
+                    <a href="delete-account.html" class="px-4 py-3 rounded-xl bg-white/10 text-accent font-medium">Delete Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-center">
+                        Download App
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Header Section -->
+    <section class="relative pt-32 pb-16 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-hero-gradient"></div>
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-red-500/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 -right-32 w-96 h-96 bg-accent-3/5 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-fade-in">
+                <!-- Icon -->
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/20 mb-8">
+                    <svg class="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                    Request Account <span class="gradient-text">Deletion</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    We're sorry to see you go. Please fill out the form below to request deletion of your account.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Main Content -->
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Request Account Deletion</h1>
-            <p class="text-gray-400 text-lg">
-                We're sorry to see you go. Please fill out the form below to request deletion of your account.
-            </p>
-        </div>
-
-        <!-- Important Notice -->
-        <div class="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-6 mb-8">
-            <div class="flex items-start">
-                <svg class="h-6 w-6 text-yellow-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <div>
-                    <h3 class="font-semibold text-yellow-500 mb-2">Important Information</h3>
-                    <ul class="text-gray-300 text-sm space-y-1 list-disc list-inside">
-                        <li>Account deletion is permanent and cannot be undone</li>
-                        <li>All your messages, media, and account data will be permanently deleted</li>
-                        <li>You will lose access to all servers and groups you're a member of</li>
-                        <li>This process may take up to 30 days to complete</li>
-                        <li>Some information may be retained for legal or security purposes as required by law</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Deletion Form -->
-        <form id="deletion-form" class="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <div class="space-y-6">
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium mb-2">
-                        Email Address <span class="text-red-400">*</span>
-                    </label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required
-                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-500"
-                        placeholder="your.email@example.com"
-                    >
-                    <p class="text-gray-400 text-sm mt-1">The email address associated with your ZekoChat account</p>
-                </div>
-
-                <!-- Username -->
-                <div>
-                    <label for="username" class="block text-sm font-medium mb-2">
-                        Username <span class="text-red-400">*</span>
-                    </label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        required
-                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-500"
-                        placeholder="Your username"
-                    >
-                    <p class="text-gray-400 text-sm mt-1">Your ZekoChat username (without the tag)</p>
-                </div>
-
-                <!-- Reason -->
-                <div>
-                    <label for="reason" class="block text-sm font-medium mb-2">
-                        Reason for Deletion (Optional)
-                    </label>
-                    <textarea 
-                        id="reason" 
-                        name="reason" 
-                        rows="4"
-                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-white placeholder-gray-500 resize-none"
-                        placeholder="Help us improve by sharing why you're leaving (optional)"
-                    ></textarea>
-                </div>
-
-                <!-- Confirmation Checkbox -->
-                <div class="flex items-start">
-                    <input 
-                        type="checkbox" 
-                        id="confirm" 
-                        name="confirm" 
-                        required
-                        class="mt-1 h-5 w-5 rounded border-white/20 bg-white/10 text-accent focus:ring-accent focus:ring-2"
-                    >
-                    <label for="confirm" class="ml-3 text-sm text-gray-300">
-                        I understand that account deletion is permanent and cannot be undone. I confirm that I want to delete my ZekoChat account and all associated data. <span class="text-red-400">*</span>
-                    </label>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="pt-4">
-                    <button 
-                        type="submit"
-                        class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-background"
-                    >
-                        Submit Deletion Request
-                    </button>
-                </div>
-            </div>
-        </form>
-
-        <!-- Alternative Methods -->
-        <div class="mt-12 bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <h2 class="text-2xl font-semibold mb-4">Alternative Methods</h2>
-            <p class="text-gray-400 mb-4">
-                You can also request account deletion through the following methods:
-            </p>
-            <div class="space-y-4">
-                <div class="flex items-start">
-                    <svg class="h-6 w-6 text-accent mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <div>
-                        <h3 class="font-semibold mb-1">Email</h3>
-                        <p class="text-gray-400 text-sm">Send an email to <a href="mailto:contact@zeko.chat" class="text-accent hover:underline">contact@zeko.chat</a> with your account details and deletion request.</p>
+    <main class="relative pb-32">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Important Notice -->
+            <div class="glass rounded-2xl p-6 border border-yellow-500/30 bg-yellow-500/5 mb-8 animate-fade-in">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
                     </div>
-                </div>
-                <div class="flex items-start">
-                    <svg class="h-6 w-6 text-accent mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
                     <div>
-                        <h3 class="font-semibold mb-1">Support Server</h3>
-                        <p class="text-gray-400 text-sm">Join our <a href="https://app.peptide.chat/invite/Testers" class="text-accent hover:underline" target="_blank">Testers Server</a> and contact our support team.</p>
+                        <h3 class="font-bold text-yellow-400 text-lg mb-3">Important Information</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01" />
+                                </svg>
+                                <span>Account deletion is <strong class="text-white">permanent</strong> and cannot be undone</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01" />
+                                </svg>
+                                <span>All your messages, media, and account data will be permanently deleted</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01" />
+                                </svg>
+                                <span>You will lose access to all servers and groups you're a member of</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01" />
+                                </svg>
+                                <span>This process may take up to <strong class="text-white">30 days</strong> to complete</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- What Happens Next -->
-        <div class="mt-12 bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
-            <h2 class="text-2xl font-semibold mb-4">What Happens Next?</h2>
-            <ol class="list-decimal list-inside space-y-3 text-gray-300">
-                <li>We will verify your identity and account ownership</li>
-                <li>You will receive a confirmation email within 24-48 hours</li>
-                <li>Your account will be scheduled for deletion</li>
-                <li>Account deletion will be completed within 30 days</li>
-                <li>You will receive a final confirmation once deletion is complete</li>
-            </ol>
+            <!-- Deletion Form -->
+            <form id="deletion-form" class="glass rounded-2xl p-8 border border-white/10 mb-8 animate-fade-in">
+                <div class="space-y-6">
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="flex items-center gap-2 text-sm font-medium mb-3">
+                            <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Email Address <span class="text-red-400">*</span>
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            class="input-modern w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-accent text-white placeholder-gray-500"
+                            placeholder="your.email@example.com"
+                        >
+                        <p class="text-gray-500 text-sm mt-2">The email address associated with your ZekoChat account</p>
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="flex items-center gap-2 text-sm font-medium mb-3">
+                            <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Username <span class="text-red-400">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            required
+                            class="input-modern w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-accent text-white placeholder-gray-500"
+                            placeholder="Your username"
+                        >
+                        <p class="text-gray-500 text-sm mt-2">Your ZekoChat username (without the tag)</p>
+                    </div>
+
+                    <!-- Reason -->
+                    <div>
+                        <label for="reason" class="flex items-center gap-2 text-sm font-medium mb-3">
+                            <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            Reason for Deletion <span class="text-gray-500">(Optional)</span>
+                        </label>
+                        <textarea
+                            id="reason"
+                            name="reason"
+                            rows="4"
+                            class="input-modern w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-accent text-white placeholder-gray-500 resize-none"
+                            placeholder="Help us improve by sharing why you're leaving (optional)"
+                        ></textarea>
+                    </div>
+
+                    <!-- Confirmation Checkbox -->
+                    <div class="flex items-start gap-4 p-5 rounded-xl bg-red-500/5 border border-red-500/20">
+                        <input
+                            type="checkbox"
+                            id="confirm"
+                            name="confirm"
+                            required
+                            class="mt-1 h-5 w-5 rounded border-white/20 bg-white/10 text-red-500 focus:ring-red-500 focus:ring-2 cursor-pointer"
+                        >
+                        <label for="confirm" class="text-sm text-gray-300 cursor-pointer">
+                            I understand that account deletion is <strong class="text-white">permanent and cannot be undone</strong>. I confirm that I want to delete my ZekoChat account and all associated data. <span class="text-red-400">*</span>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button
+                            type="submit"
+                            class="btn-danger w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold py-4 px-6 rounded-xl transition transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-background flex items-center justify-center gap-3"
+                        >
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Submit Deletion Request
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- What Happens Next -->
+            <div class="glass rounded-2xl p-8 border border-white/10 mb-8 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    What Happens Next?
+                </h2>
+                <div class="space-y-6">
+                    <div class="step-line relative flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center z-10">
+                            <span class="text-accent font-bold">1</span>
+                        </div>
+                        <div class="pt-1">
+                            <h4 class="font-semibold mb-1">Identity Verification</h4>
+                            <p class="text-gray-400 text-sm">We will verify your identity and account ownership</p>
+                        </div>
+                    </div>
+                    <div class="step-line relative flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center z-10">
+                            <span class="text-accent font-bold">2</span>
+                        </div>
+                        <div class="pt-1">
+                            <h4 class="font-semibold mb-1">Confirmation Email</h4>
+                            <p class="text-gray-400 text-sm">You will receive a confirmation email within 24-48 hours</p>
+                        </div>
+                    </div>
+                    <div class="step-line relative flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center z-10">
+                            <span class="text-accent font-bold">3</span>
+                        </div>
+                        <div class="pt-1">
+                            <h4 class="font-semibold mb-1">Scheduled Deletion</h4>
+                            <p class="text-gray-400 text-sm">Your account will be scheduled for deletion</p>
+                        </div>
+                    </div>
+                    <div class="step-line relative flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center z-10">
+                            <span class="text-accent font-bold">4</span>
+                        </div>
+                        <div class="pt-1">
+                            <h4 class="font-semibold mb-1">Account Removal</h4>
+                            <p class="text-gray-400 text-sm">Account deletion will be completed within 30 days</p>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start gap-4">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center z-10">
+                            <svg class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div class="pt-1">
+                            <h4 class="font-semibold mb-1">Final Confirmation</h4>
+                            <p class="text-gray-400 text-sm">You will receive a final confirmation once deletion is complete</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alternative Methods -->
+            <div class="glass rounded-2xl p-8 border border-white/10 animate-fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    Alternative Methods
+                </h2>
+                <p class="text-gray-400 mb-6">
+                    You can also request account deletion through the following methods:
+                </p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <a href="mailto:contact@zeko.chat" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-1">Email</div>
+                            <div class="text-accent text-sm">contact@zeko.chat</div>
+                        </div>
+                    </a>
+                    <a href="https://app.peptide.chat/invite/Testers" target="_blank" class="flex items-center gap-4 bg-white/5 rounded-xl p-5 border border-white/5 hover:border-accent/30 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:scale-110 transition">
+                            <svg class="w-6 h-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold mb-1">Support Server</div>
+                            <div class="text-accent text-sm">Join Testers Server</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </main>
 
     <!-- Success Modal -->
-    <div id="success-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-background border border-white/20 rounded-xl p-8 max-w-md w-full">
+    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSuccessModal()"></div>
+        <div class="relative glass rounded-3xl p-10 max-w-md w-full border border-white/10 animate-slide-up">
             <div class="text-center">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-500/20 mb-4">
-                    <svg class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-2xl bg-green-500/20 border border-green-500/30 mb-6">
+                    <svg class="h-10 w-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-bold mb-2">Request Submitted</h3>
-                <p class="text-gray-400 mb-6">
+                <h3 class="text-2xl font-bold mb-3">Request Submitted</h3>
+                <p class="text-gray-400 mb-8">
                     Your account deletion request has been submitted successfully. We will process your request and send you a confirmation email within 24-48 hours.
                 </p>
-                <button 
+                <button
                     onclick="closeSuccessModal()"
-                    class="bg-accent text-primary px-6 py-2 rounded-lg font-semibold hover:bg-accent/90 transition"
+                    class="w-full bg-gradient-to-r from-accent to-accent-2 text-primary px-6 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-accent/25 transition transform hover:scale-[1.02]"
                 >
-                    Close
+                    Got it, thanks
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-primary/50 border-t border-white/10 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="assets/logo.png" alt="ZekoChat Logo" class="h-8 w-8 rounded-lg">
-                        <span class="text-lg font-bold">ZekoChat</span>
+    <footer class="relative border-t border-white/5 bg-surface/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-3 rounded-xl blur opacity-30"></div>
+                            <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-10 w-10 rounded-xl">
+                        </div>
+                        <span class="text-xl font-bold">ZekoChat</span>
                     </div>
-                    <p class="text-gray-400 text-sm">
-                        Your place to vibe with friends. Join endless chats and connections.
+                    <p class="text-gray-400 leading-relaxed max-w-sm mb-6">
+                        Your place to vibe with friends. Join endless chats and connections on the modern messaging platform.
                     </p>
+                    <!-- Social Links -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com/peptidechat/peptide" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://app.peptide.chat/invite/Testers" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
+
+                <!-- Legal -->
                 <div>
-                    <h4 class="font-semibold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a></li>
-                        <li><a href="delete-account.html" class="hover:text-accent transition">Delete Account</a></li>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="delete-account.html" class="text-gray-400 hover:text-white transition">Delete Account</a></li>
                     </ul>
                 </div>
+
+                <!-- Support -->
                 <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="https://app.peptide.chat/invite/Testers" class="hover:text-accent transition">Join Testers Server</a></li>
-                        <li><a href="https://github.com/peptidechat/peptide" class="hover:text-accent transition">GitHub</a></li>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="text-gray-400 hover:text-white transition" target="_blank">Join Community</a></li>
+                        <li><a href="mailto:contact@zeko.chat" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
-                <p>&copy; 2024 ZekoChat. All rights reserved.</p>
+
+            <!-- Bottom Bar -->
+            <div class="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2025 ZekoChat. All rights reserved.</p>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span>Made with</span>
+                    <span class="text-red-500">❤️</span>
+                    <span>for chatters everywhere</span>
+                </div>
             </div>
         </div>
     </footer>
@@ -264,7 +511,7 @@
         // Form submission
         document.getElementById('deletion-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
             const data = {
@@ -276,27 +523,27 @@
             };
 
             // In a real implementation, you would send this data to your backend
-            // For now, we'll just show a success message
             console.log('Deletion request submitted:', data);
-            
+
             // Show success modal
             document.getElementById('success-modal').classList.remove('hidden');
-            
+            document.body.style.overflow = 'hidden';
+
             // Reset form
             this.reset();
         });
 
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
         }
 
-        // Close modal on outside click
-        document.getElementById('success-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
                 closeSuccessModal();
             }
         });
     </script>
 </body>
 </html>
-

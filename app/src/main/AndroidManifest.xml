@@ -37,7 +37,7 @@
         android:name=".PeptideApplication"
         android:theme="@style/Theme.Peptide"
         android:enableOnBackInvokedCallback="true"
-        tools:targetApi="tiramisu">
+        tools:targetApi="baklava">
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

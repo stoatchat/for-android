@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZekoChat - Your Place to Vibe with Friends</title>
     <meta name="description" content="ZekoChat is a modern chat platform where you can message friends, create groups, and build communities. Join endless chats and connections!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,131 +15,412 @@
                 extend: {
                     colors: {
                         'primary': '#100518',
-                        'background': '#131722',
+                        'background': '#0a0a0f',
+                        'surface': '#131722',
                         'accent': '#FEDD17',
-                    }
+                        'accent-2': '#FF6B35',
+                        'accent-3': '#8B5CF6',
+                        'glow': 'rgba(254, 221, 23, 0.15)',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 2s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'gradient': 'gradient 8s ease infinite',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            'from': { boxShadow: '0 0 20px rgba(254, 221, 23, 0.3)' },
+                            'to': { boxShadow: '0 0 40px rgba(254, 221, 23, 0.6)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        slideUp: {
+                            'from': { opacity: '0', transform: 'translateY(30px)' },
+                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        },
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'hero-gradient': 'linear-gradient(135deg, #100518 0%, #1a0a2e 50%, #0a0a0f 100%)',
+                    },
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        .gradient-text {
+            background: linear-gradient(135deg, #FEDD17 0%, #FF6B35 50%, #8B5CF6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 5s ease infinite;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .glass-strong {
+            background: rgba(16, 5, 24, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+        .icon-gradient {
+            background: linear-gradient(135deg, rgba(254, 221, 23, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+        }
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+        .noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+        }
+        .blob {
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
         }
     </style>
 </head>
-<body class="bg-background text-white min-h-screen">
+<body class="bg-background text-white min-h-screen font-sans antialiased overflow-x-hidden">
+    <!-- Noise Overlay -->
+    <div class="noise fixed inset-0 pointer-events-none z-50"></div>
+
     <!-- Navigation -->
-    <nav class="bg-primary/90 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
+    <nav class="glass-strong fixed w-full top-0 z-40 border-b border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <img src="assets/logo.png" alt="ZekoChat Logo" class="h-10 w-10 rounded-lg">
-                    <span class="text-xl font-bold">ZekoChat</span>
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center space-x-3 group">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-accent via-accent-2 to-accent-3 rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-11 w-11 rounded-xl">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">ZekoChat</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="index.html" class="px-4 py-2 rounded-full bg-white/10 text-accent font-medium text-sm transition hover:bg-white/15">Home</a>
+                    <a href="privacy.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Privacy</a>
+                    <a href="delete-account.html" class="px-4 py-2 rounded-full text-gray-300 font-medium text-sm transition hover:bg-white/10 hover:text-white">Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="ml-4 px-5 py-2.5 rounded-full bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-sm transition transform hover:scale-105 hover:shadow-lg hover:shadow-accent/25">
+                        Download
+                    </a>
                 </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="index.html" class="text-accent hover:text-accent/80 transition">Home</a>
-                    <a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a>
-                    <a href="delete-account.html" class="hover:text-accent transition">Delete Account</a>
-                </div>
-                <button id="mobile-menu-button" class="md:hidden text-white">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="mobile-menu-button" class="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 transition">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <a href="index.html" class="block py-2 text-accent">Home</a>
-                <a href="privacy.html" class="block py-2 hover:text-accent transition">Privacy Policy</a>
-                <a href="delete-account.html" class="block py-2 hover:text-accent transition">Delete Account</a>
+            <div id="mobile-menu" class="hidden md:hidden pb-6 animate-slide-up">
+                <div class="flex flex-col space-y-2 pt-4 border-t border-white/10">
+                    <a href="index.html" class="px-4 py-3 rounded-xl bg-white/10 text-accent font-medium">Home</a>
+                    <a href="privacy.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Privacy Policy</a>
+                    <a href="delete-account.html" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/10 transition">Delete Account</a>
+                    <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-accent to-accent-2 text-primary font-semibold text-center">
+                        Download App
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="text-center">
-            <div class="flex justify-center mb-8">
-                <img src="assets/logo.png" alt="ZekoChat Logo" class="h-32 w-32 rounded-2xl shadow-2xl">
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 bg-hero-gradient"></div>
+
+        <!-- Animated Blobs -->
+        <div class="absolute top-1/4 -left-32 w-96 h-96 bg-accent/10 blob blur-3xl animate-float opacity-60"></div>
+        <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-3/10 blob blur-3xl animate-float-delayed opacity-60"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-2/5 rounded-full blur-3xl animate-pulse-slow"></div>
+
+        <!-- Grid Pattern -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center animate-fade-in">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-8">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-sm text-gray-300">Now available on Google Play</span>
+                </div>
+
+                <!-- Logo -->
+                <div class="flex justify-center mb-10">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-accent via-accent-2 to-accent-3 rounded-3xl blur-2xl opacity-40 group-hover:opacity-60 transition duration-700 animate-glow"></div>
+                        <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-32 w-32 md:h-40 md:w-40 rounded-3xl shadow-2xl animate-float">
+                    </div>
+                </div>
+
+                <!-- Heading -->
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight">
+                    Welcome to<br>
+                    <span class="gradient-text">ZekoChat</span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Join endless chats and connections — your place to
+                    <span class="text-white font-medium">vibe</span> with friends.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                    <a href="https://play.google.com/store/apps/details?id=com.zekochat" class="btn-glow group relative inline-flex items-center gap-3 bg-gradient-to-r from-accent to-accent-2 text-primary px-8 py-4 rounded-2xl font-bold text-lg transition transform hover:scale-105 hover:shadow-2xl hover:shadow-accent/30">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                        </svg>
+                        Download on Google Play
+                    </a>
+                    <a href="#features" class="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl border-2 border-white/20 font-semibold text-lg transition hover:border-white/40 hover:bg-white/5">
+                        Explore Features
+                        <svg class="w-5 h-5 transition group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text">10K+</div>
+                        <div class="text-sm text-gray-500 mt-1">Active Users</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text">500+</div>
+                        <div class="text-sm text-gray-500 mt-1">Communities</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text">1M+</div>
+                        <div class="text-sm text-gray-500 mt-1">Messages Sent</div>
+                    </div>
+                </div>
             </div>
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-accent to-white bg-clip-text text-transparent">
-                Welcome to ZekoChat
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                Join endless chats and connections; ZekoChat is your place to vibe with friends!
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="bg-accent text-primary px-8 py-3 rounded-lg font-semibold hover:bg-accent/90 transition transform hover:scale-105">
-                    Download on Google Play
-                </a>
-                <a href="privacy.html" class="border-2 border-white/20 px-8 py-3 rounded-lg font-semibold hover:border-accent hover:text-accent transition">
-                    Privacy Policy
-                </a>
-            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator absolute bottom-8 left-1/2 text-gray-500">
+            <svg class="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Features</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">💬</div>
-                <h3 class="text-xl font-semibold mb-2">Message Friends</h3>
-                <p class="text-gray-400">Connect with friends through direct messages and stay in touch wherever you are.</p>
+    <section id="features" class="relative py-32 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-gradient-to-b from-background via-surface/50 to-background"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">Features</span>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                    Everything you need to<br>
+                    <span class="gradient-text">stay connected</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Powerful features designed for modern communication
+                </p>
             </div>
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">👥</div>
-                <h3 class="text-xl font-semibold mb-2">Group Conversations</h3>
-                <p class="text-gray-400">Create group chats and bring your crew together for seamless communication.</p>
-            </div>
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">🌐</div>
-                <h3 class="text-xl font-semibold mb-2">Communities & Servers</h3>
-                <p class="text-gray-400">Join or create servers to build communities around shared interests.</p>
-            </div>
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">🔒</div>
-                <h3 class="text-xl font-semibold mb-2">Secure & Private</h3>
-                <p class="text-gray-400">Your privacy matters. We keep your conversations secure and your data protected.</p>
-            </div>
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">🎨</div>
-                <h3 class="text-xl font-semibold mb-2">Customizable</h3>
-                <p class="text-gray-400">Personalize your experience with themes, custom backgrounds, and more.</p>
-            </div>
-            <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-accent/50 transition">
-                <div class="text-4xl mb-4">📱</div>
-                <h3 class="text-xl font-semibold mb-2">Modern Design</h3>
-                <p class="text-gray-400">Beautiful, intuitive interface built with modern Android design principles.</p>
+
+            <!-- Feature Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Feature 1 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">💬</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Message Friends</h3>
+                    <p class="text-gray-400 leading-relaxed">Connect with friends through direct messages and stay in touch wherever you are.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">👥</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Group Conversations</h3>
+                    <p class="text-gray-400 leading-relaxed">Create group chats and bring your crew together for seamless communication.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">🌐</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Communities & Servers</h3>
+                    <p class="text-gray-400 leading-relaxed">Join or create servers to build communities around shared interests.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Secure & Private</h3>
+                    <p class="text-gray-400 leading-relaxed">Your privacy matters. We keep your conversations secure and your data protected.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">🎨</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Customizable</h3>
+                    <p class="text-gray-400 leading-relaxed">Personalize your experience with themes, custom backgrounds, and more.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="card-hover glass rounded-3xl p-8 border border-white/10 group">
+                    <div class="icon-gradient w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
+                        <span class="text-3xl">⚡</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lightning Fast</h3>
+                    <p class="text-gray-400 leading-relaxed">Built with modern technology for instant message delivery and smooth performance.</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA Section -->
+    <section class="relative py-32 overflow-hidden">
+        <!-- Background -->
+        <div class="absolute inset-0 bg-gradient-to-r from-accent/10 via-accent-2/5 to-accent-3/10"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 mb-8">
+                <span class="text-accent">🚀</span>
+                <span class="text-sm text-gray-300">Start chatting today</span>
+            </div>
+
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                Ready to join the<br>
+                <span class="gradient-text">conversation?</span>
+            </h2>
+
+            <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                Download ZekoChat now and connect with friends, join communities, and experience modern messaging.
+            </p>
+
+            <a href="https://play.google.com/store/apps/details?id=chat.peptide" class="btn-glow inline-flex items-center gap-3 bg-gradient-to-r from-accent to-accent-2 text-primary px-10 py-5 rounded-2xl font-bold text-lg transition transform hover:scale-105 hover:shadow-2xl hover:shadow-accent/30">
+                <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                </svg>
+                Get it on Google Play
+            </a>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-primary/50 border-t border-white/10 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <img src="assets/logo.png" alt="ZekoChat Logo" class="h-8 w-8 rounded-lg">
-                        <span class="text-lg font-bold">ZekoChat</span>
+    <footer class="relative border-t border-white/5 bg-surface/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="relative">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-accent to-accent-3 rounded-xl blur opacity-30"></div>
+                            <img src="assets/logo.png" alt="ZekoChat Logo" class="relative h-10 w-10 rounded-xl">
+                        </div>
+                        <span class="text-xl font-bold">ZekoChat</span>
                     </div>
-                    <p class="text-gray-400 text-sm">
-                        Your place to vibe with friends. Join endless chats and connections.
+                    <p class="text-gray-400 leading-relaxed max-w-sm mb-6">
+                        Your place to vibe with friends. Join endless chats and connections on the modern messaging platform.
                     </p>
+                    <!-- Social Links -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com/peptidechat/peptide" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://app.peptide.chat/invite/Testers" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-white/10 transition" target="_blank">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
+
+                <!-- Legal -->
                 <div>
-                    <h4 class="font-semibold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="privacy.html" class="hover:text-accent transition">Privacy Policy</a></li>
-                        <li><a href="delete-account.html" class="hover:text-accent transition">Delete Account</a></li>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="delete-account.html" class="text-gray-400 hover:text-white transition">Delete Account</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div>
+                    <h4 class="font-semibold mb-5 text-sm uppercase tracking-wider text-gray-400">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="https://app.peptide.chat/invite/Testers" class="text-gray-400 hover:text-white transition" target="_blank">Join Community</a></li>
+                        <li><a href="mailto:contact@zeko.chat" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-400">
-                <p>&copy; 2024 ZekoChat. All rights reserved.</p>
+
+            <!-- Bottom Bar -->
+            <div class="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">&copy; 2025 ZekoChat. All rights reserved.</p>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    <span>Made with</span>
+                    <span class="text-red-500">❤️</span>
+                    <span>for chatters everywhere</span>
+                </div>
             </div>
         </div>
     </footer>
@@ -147,7 +431,39 @@
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card-hover').forEach(el => {
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
-
