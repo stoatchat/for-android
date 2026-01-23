@@ -29,10 +29,11 @@ class ServerDataRepository {
                     "false" -> false
                     else -> true
                 },
-                showColor = rowData["showcolor"]
+                showColor = rowData["showcolor"],
+                sortOrder = rowData["sortorder"]?.toIntOrNull()
             )
         }
-        emit(servers)
+        emit(servers.sortedBy { it.sortOrder ?: Int.MAX_VALUE })
     }.flowOn(Dispatchers.IO)
 
 }
@@ -48,4 +49,5 @@ data class ServerData(
     val inviteCode: String,
     val disabled: Boolean,
     val showColor: String?,
+    val sortOrder: Int? = null,
 )
