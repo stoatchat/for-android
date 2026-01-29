@@ -72,7 +72,7 @@ fun DiscoverServersList(
 
     Column(
         modifier = Modifier
-            .padding(top = 12.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -99,7 +99,9 @@ fun DiscoverServersList(
         when {
             uiState.isLoading -> {
                 Box(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
@@ -111,16 +113,16 @@ fun DiscoverServersList(
 
             uiState.error != null || uiState.servers.isEmpty() -> {
                Box(
-                   Modifier.weight(1f)
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .weight(1f),
+                   contentAlignment = Alignment.Center
                ) {
                    Column(
-                       modifier = Modifier.fillMaxSize(),
                        horizontalAlignment = Alignment.CenterHorizontally,
-                       verticalArrangement = Arrangement.Center,
-
+                       verticalArrangement = Arrangement.spacedBy(8.dp),
                    ) {
                        Text(stringResource(R.string.error))
-                       Spacer(Modifier.height(8.dp))
                        SquareButton(
                            onClick = viewModel::loadServers
                        ) {

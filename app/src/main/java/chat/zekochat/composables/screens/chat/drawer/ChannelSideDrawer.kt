@@ -488,103 +488,105 @@ fun ChannelSideDrawer(
                     .weight(weight = 1f)
                     .fillMaxHeight()
             ) {
-                Box(
-                    Modifier
-                        .height(serverBannerHeight)
-                ) {
-                    if (server?.banner != null) {
-                        RemoteImage(
-                            url = "${PeptideAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
-                            description = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                        )
-
-                        with(MaterialTheme.colorScheme) {
-                            Box(
-                                Modifier
-                                    .fillMaxSize()
-                                    .drawBehind {
-                                        drawRect(
-                                            Brush.linearGradient(
-                                                listOf(
-                                                    Color.Black.copy(alpha = 0.6f),
-                                                    Color.Transparent
-                                                ),
-                                                Offset.Zero,
-                                                Offset.Infinite.copy(x = 0f)
-                                            ),
-                                        )
-                                    })
-                        }
-                    }
-
-                    Row(
+                if (currentDestination !is ChatRouterDestination.Discover) {
+                    Box(
                         Modifier
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .height(serverBannerHeight)
                     ) {
-                        CompositionLocalProvider(
-                            LocalContentColor provides
-                                    if (server?.banner != null) Color.White
-                                    else LocalContentColor.current
-                        ) {
-                            Row(
-                                Modifier.weight(1f),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                if (server?.flags has ServerFlags.Official) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.ic_peptide_decagram_24dp
-                                        ),
-                                        contentDescription = stringResource(
-                                            R.string.server_flag_official
-                                        ),
-                                        tint = LocalContentColor.current,
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                    )
-                                }
-                                if (server?.flags has ServerFlags.Verified) {
-                                    Icon(
-                                        painter = painterResource(
-                                            id = R.drawable.ic_check_decagram_24dp
-                                        ),
-                                        contentDescription = stringResource(
-                                            R.string.server_flag_verified
-                                        ),
-                                        tint = LocalContentColor.current,
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                    )
-                                }
+                        if (server?.banner != null) {
+                            RemoteImage(
+                                url = "${PeptideAPI.getCurrentFilesUrl()}/banners/${server.banner.id}",
+                                description = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            )
 
-                                Text(
-                                    text = when (currentServer) {
-                                        null -> stringResource(if (currentDestination is ChatRouterDestination.Discover) R.string.discover_servers else R.string.direct_messages)
-                                        else -> server?.name ?: stringResource(R.string.unknown)
-                                    },
-                                    style = MaterialTheme.typography.titleMedium,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
+                            with(MaterialTheme.colorScheme) {
+                                Box(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .drawBehind {
+                                            drawRect(
+                                                Brush.linearGradient(
+                                                    listOf(
+                                                        Color.Black.copy(alpha = 0.6f),
+                                                        Color.Transparent
+                                                    ),
+                                                    Offset.Zero,
+                                                    Offset.Infinite.copy(x = 0f)
+                                                ),
+                                            )
+                                        })
                             }
+                        }
 
-                            if (currentServer != null) {
-                                IconButton(onClick = {
-                                    server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
-                                }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.icn_more_vert_24dp),
-                                        contentDescription = stringResource(R.string.menu),
-                                        tint = LocalContentColor.current
+                        Row(
+                            Modifier
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CompositionLocalProvider(
+                                LocalContentColor provides
+                                        if (server?.banner != null) Color.White
+                                        else LocalContentColor.current
+                            ) {
+                                Row(
+                                    Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    if (server?.flags has ServerFlags.Official) {
+                                        Icon(
+                                            painter = painterResource(
+                                                id = R.drawable.ic_peptide_decagram_24dp
+                                            ),
+                                            contentDescription = stringResource(
+                                                R.string.server_flag_official
+                                            ),
+                                            tint = LocalContentColor.current,
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                        )
+                                    }
+                                    if (server?.flags has ServerFlags.Verified) {
+                                        Icon(
+                                            painter = painterResource(
+                                                id = R.drawable.ic_check_decagram_24dp
+                                            ),
+                                            contentDescription = stringResource(
+                                                R.string.server_flag_verified
+                                            ),
+                                            tint = LocalContentColor.current,
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                        )
+                                    }
+
+                                    Text(
+                                        text = when (currentServer) {
+                                            null -> stringResource(R.string.direct_messages)
+                                            else -> server?.name ?: stringResource(R.string.unknown)
+                                        },
+                                        style = MaterialTheme.typography.titleMedium,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
-                            } else {
-                                Spacer(Modifier.height(64.dp))
+
+                                if (currentServer != null) {
+                                    IconButton(onClick = {
+                                        server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.icn_more_vert_24dp),
+                                            contentDescription = stringResource(R.string.menu),
+                                            tint = LocalContentColor.current
+                                        )
+                                    }
+                                } else {
+                                    Spacer(Modifier.height(64.dp))
+                                }
                             }
                         }
                     }

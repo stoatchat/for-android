@@ -55,6 +55,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -948,13 +952,13 @@ fun ChannelNavigator(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                painter = painterResource(R.drawable.ic_bottom_navbar_home),
+                                imageVector = Icons.Filled.Home,
                                 contentDescription = "Home",
                                 modifier = Modifier.size(32.dp)
                             )
                         },
                         label = {
-                            Text(text = "you")
+                            Text(text = "Home")
                         },
                         selected = when (dest) {
                             is ChatRouterDestination.ServersChannels,
@@ -982,7 +986,7 @@ fun ChannelNavigator(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                painter = painterResource(R.drawable.ic_bottom_navbar_friends),
+                                imageVector = Icons.Filled.People,
                                 contentDescription = "Friends",
                                 modifier = Modifier.size(32.dp)
                             )
@@ -1010,13 +1014,13 @@ fun ChannelNavigator(
                     NavigationBarItem(
                         icon = {
                             Icon(
-                                painter = painterResource(R.drawable.ic_bottom_navbar_you),
-                                contentDescription = "You",
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Settings",
                                 modifier = Modifier.size(32.dp)
                             )
                         },
                         label = {
-                            Text(text = "you")
+                            Text(text = "Settings")
                         },
                         selected = dest is ChatRouterDestination.Settings,
                         colors = NavigationBarItemDefaults.colors(
