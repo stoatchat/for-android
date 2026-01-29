@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,30 +72,29 @@ fun DiscoverServersList(
 
     Column(
         modifier = Modifier
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(top = 12.dp, start = 16.dp, end = 16.dp),
     ) {
-        Image(
-            modifier = Modifier
-                .padding(8.dp),
-            painter = painterResource(R.drawable.discover_character_image),
-            contentDescription = null,
-        )
-
-        Text(
-            text = stringResource(R.string.discover_servers),
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(72.dp)
+                    .padding(4.dp),
+                painter = painterResource(R.drawable.discover_character_image),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+            )
+            Text(
+                text = stringResource(R.string.discover_servers_description),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f),
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(R.string.discover_servers_description),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         when {
             uiState.isLoading -> {

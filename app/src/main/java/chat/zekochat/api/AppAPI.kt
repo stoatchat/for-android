@@ -50,6 +50,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
+import java.io.IOException
 import java.net.SocketException
 import chat.zekochat.api.schemas.Channel as ChannelSchema
 
@@ -313,6 +314,9 @@ object PeptideAPI {
                         RealtimeSocket.connect(sessionToken)
                     } catch (e: SocketException) {
                         Log.d("PeptideAPI", "Socket closed, probably no big deal /// " + e.message)
+                        RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
+                    } catch (e: IOException) {
+                        Log.d("PeptideAPI", "WebSocket connection abort/reset (network): " + e.message)
                         RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
                     } catch (e: Exception) {
                         Log.e("PeptideAPI", "WebSocket error", e)
