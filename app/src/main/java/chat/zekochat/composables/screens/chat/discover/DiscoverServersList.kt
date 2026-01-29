@@ -180,7 +180,7 @@ fun ServerItem(
 ) {
     // Safely convert the hex string to a Color, or return null if invalid
     fun parseColorOrNull(hex: String?): Color? {
-        return hex?.let { raw ->
+        return hex?.trim()?.takeIf { it.isNotEmpty() }?.let { raw ->
             val normalized = if (raw.startsWith("#")) raw else "#$raw"
             try {
                 Color(normalized.toColorInt())
@@ -190,24 +190,19 @@ fun ServerItem(
         }
     }
 
-    // Determine card colors based on server.showColor
-    val containerColor = parseColorOrNull(server.showColor)
-    val cardColors = if (containerColor != null) {
-        CardDefaults.cardColors(containerColor = containerColor)
-    } else {
-        CardDefaults.cardColors()
-    }
-
-    // Calculate alpha values based on disabled state
-    val contentAlpha = if (server.disabled) 0.5f else 1.0f
-    val descriptionAlpha = if (server.disabled) 0.4f else 0.7f
+    // Use server color for icon and text (like website), not for card background
+    val accentColor = parseColorOrNull(server.showColor)
+    val contentColor = accentColor?.copy(alpha = if (server.disabled) 0.5f else 1f)
+        ?: MaterialTheme.colorScheme.onBackground.copy(alpha = if (server.disabled) 0.5f else 1f)
+    val descriptionColor = accentColor?.copy(alpha = if (server.disabled) 0.4f else 0.7f)
+        ?: MaterialTheme.colorScheme.onBackground.copy(alpha = if (server.disabled) 0.4f else 0.7f)
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable(enabled = !isProcessing) { onClick() },
-        colors = cardColors,
+        colors = CardDefaults.cardColors(),
     ) {
         Row(
             modifier = Modifier
@@ -215,12 +210,18 @@ fun ServerItem(
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Left icon: boxicons (Lock / MessageDots / MessageAdd) — same as website
             Image(
-                painter = painterResource(R.drawable.three_person),
-                contentDescription = "",
-                colorFilter = ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = contentAlpha)
-                )
+                painter = painterResource(
+                    when {
+                        server.disabled -> R.drawable.ic_discover_lock
+                        isJoined -> R.drawable.ic_discover_message_dots
+                        else -> R.drawable.ic_discover_message_add
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                colorFilter = ColorFilter.tint(contentColor)
             )
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -230,9 +231,7 @@ fun ServerItem(
                 Text(
                     text = server.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = contentAlpha
-                    )
+                    color = contentColor
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -240,9 +239,7 @@ fun ServerItem(
                 Text(
                     text = server.description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = descriptionAlpha,
-                    ),
+                    color = descriptionColor,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -282,11 +279,7 @@ fun ServerItem(
                                 painter = painterResource(R.drawable.icn_arrow_forward_24dp),
                                 contentDescription = "Join server",
                                 modifier = Modifier.align(Alignment.Center),
-                                colorFilter = ColorFilter.tint(
-                                    color = MaterialTheme.colorScheme.onBackground.copy(
-                                        alpha = contentAlpha
-                                    )
-                                )
+                                colorFilter = ColorFilter.tint(contentColor)
                             )
                         }
                     }
