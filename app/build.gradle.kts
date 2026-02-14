@@ -1,5 +1,7 @@
 import com.mikepenz.aboutlibraries.plugin.StrictMode
 import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
+import io.sentry.android.gradle.SentryPlugin
+import io.sentry.android.gradle.extensions.SentryPluginExtension
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -11,11 +13,16 @@ plugins {
     alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.sentry.android)
+    alias(libs.plugins.sentry.android) apply false
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.google.services)
     id("kotlin-kapt")
     id("kotlin-parcelize")
+}
+
+val sentryEnabled = buildproperty("sentry.dsn", "RVX_SENTRY_DSN") != "";
+if(sentryEnabled) {
+    apply<SentryPlugin>();
 }
 
 fun property(fileName: String, propertyName: String, fallbackEnv: String? = null): String? {
@@ -156,16 +163,18 @@ android {
     }
 }
 
-sentry {
-    autoUploadProguardMapping =
-        buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
+if(sentryEnabled) {
+    configure<SentryPluginExtension> {
+        autoUploadProguardMapping =
+            buildproperty("sentry.upload_mappings", "RVX_SENTRY_UPLOAD_MAPPINGS") == "true"
 
-    tracingInstrumentation {
-        enabled = true
-
-        logcat {
+        tracingInstrumentation {
             enabled = true
-            minLevel = LogcatLevel.WARNING
+
+            logcat {
+                enabled = true
+                minLevel = LogcatLevel.WARNING
+            }
         }
     }
 }

@@ -349,9 +349,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SentryAndroid.init(this) { options ->
-            options.dsn = BuildConfig.SENTRY_DSN
-            options.release = BuildConfig.VERSION_NAME
+        if(BuildConfig.SENTRY_DSN != "") {
+            SentryAndroid.init(this) { options ->
+                options.dsn = BuildConfig.SENTRY_DSN
+                options.release = BuildConfig.VERSION_NAME
+            }
         }
 
         @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
