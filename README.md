@@ -30,18 +30,18 @@ uses [Jetpack Compose](https://developer.android.com/jetpack/compose).
 
 ### Stoat for Android
 
-- [Roadmap](https://op.revolt.wtf/projects/revolt-for-android/work_packages)
-- [Stoat for Android Technical Documentation](https://revoltchat.github.io/android/)
-- [Android-specific Contribution Guide](https://revoltchat.github.io/android/contributing/guidelines/)
+- [Roadmap](https://op.stoatinternal.com/projects/revolt-for-android/work_packages)
+- [Stoat for Android Technical Documentation](https://stoatchat.github.io/for-android/)
+- [Android-specific Contribution Guide](https://stoatchat.github.io/for-android/contributing/guidelines/)
   &mdash;**read carefully before contributing!**
 
 ### Stoat
 
-- [Stoat Project Board](https://github.com/revoltchat/revolt/discussions) (Submit feature requests
+- [Stoat Project Board](https://github.com/orgs/stoatchat/discussions) (Submit feature requests
   here)
-- [Stoat Development Server](https://app.revolt.chat/invite/API)
-- [Stoat Server](https://app.revolt.chat/invite/Testers)
-- [General Stoat Contribution Guide](https://developers.revolt.chat/contrib.html)
+- [Stoat Development Server](https://stoat.chat/invite/API)
+- [Stoat Server](https://stoat.chat/invite/Testers)
+- [General Stoat Contribution Guide](https://developers.stoat.chat/developing/contrib/)
 
 ## Quick Start
 
@@ -49,4 +49,4 @@ Open the project in Android Studio. You can then run the app on an emulator or a
 running the `app` module.
 
 In-depth setup instructions can be found
-at [Setting up your Development Environment](https://revoltchat.github.io/android/contributing/setup/)
+at [Setting up your Development Environment](https://stoatchat.github.io/for-android/contributing/setup/)
