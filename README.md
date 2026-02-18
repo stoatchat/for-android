@@ -30,7 +30,7 @@ uses [Jetpack Compose](https://developer.android.com/jetpack/compose).
 
 ### Stoat for Android
 
-- [Roadmap](https://op.stoatinternal.com/projects/revolt-for-android/work_packages)
+- [Roadmap](https://op.stoatinternal.com/projects/revolt-for-android/roadmap)
 - [Stoat for Android Technical Documentation](https://stoatchat.github.io/for-android/)
 - [Android-specific Contribution Guide](https://stoatchat.github.io/for-android/contributing/guidelines/)
   &mdash;**read carefully before contributing!**
@@ -39,8 +39,8 @@ uses [Jetpack Compose](https://developer.android.com/jetpack/compose).
 
 - [Stoat Project Board](https://github.com/orgs/stoatchat/discussions) (Submit feature requests
   here)
-- [Stoat Development Server](https://app.revolt.chat/invite/API)
-- [Stoat Server](https://app.revolt.chat/invite/Testers)
+- [Stoat Development Server](https://stoat.chat/invite/API)
+- [Stoat Server](https://stoat.chat/invite/Testers)
 - [General Stoat Contribution Guide](https://developers.stoat.chat/developing/contrib/)
 
 ## Quick Start
