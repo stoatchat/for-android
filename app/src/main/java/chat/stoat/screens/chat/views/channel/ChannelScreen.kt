@@ -116,8 +116,6 @@ import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.has
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.microservices.autumn.FileArgs
-import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.core.model.schemas.Message
 import chat.stoat.api.settings.Experiments
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
@@ -141,6 +139,8 @@ import chat.stoat.composables.screens.chat.atoms.RegularMessage
 import chat.stoat.composables.screens.chat.molecules.JoinVoiceChannelButton
 import chat.stoat.composables.skeletons.MessageSkeleton
 import chat.stoat.composables.skeletons.MessageSkeletonVariant
+import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.internals.extensions.zero
 import chat.stoat.screens.chat.LocalIsConnected
@@ -917,7 +917,7 @@ fun ChannelScreen(
                                                     ) {
                                                         with(LocalDensity.current) {
                                                             Image(
-                                                                painterResource(R.drawable.ic_meta_key_24dp),
+                                                                painterResource(R.drawable.icn_action_key_24dp),
                                                                 contentDescription = null,
                                                                 colorFilter = ColorFilter.tint(
                                                                     LocalContentColor.current
