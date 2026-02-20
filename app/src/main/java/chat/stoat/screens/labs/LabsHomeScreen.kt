@@ -59,7 +59,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         topNav.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = "Back"
                         )
                     }
@@ -73,7 +73,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                     onClick = { currentTab.value = LabsHomeScreenTab.Home },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.icn_home_24dp),
+                            painter = painterResource(R.drawable.ic_home_24dp),
                             contentDescription = null,
                         )
                     },
@@ -86,7 +86,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                     onClick = { currentTab.value = LabsHomeScreenTab.Mockups },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.icn_menu_24dp),
+                            painter = painterResource(R.drawable.ic_menu_24dp),
                             contentDescription = null,
                         )
                     },
@@ -99,7 +99,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                     onClick = { currentTab.value = LabsHomeScreenTab.Sandboxes },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.icn_play_arrow_24dp),
+                            painter = painterResource(R.drawable.ic_play_arrow_24dp),
                             contentDescription = null,
                         )
                     },

@@ -108,7 +108,7 @@ fun NonIdealStatePreviewNoActions() {
     NonIdealState(
         icon = {
             Icon(
-                painter = painterResource(R.drawable.icn_error_24dp),
+                painter = painterResource(R.drawable.ic_error_24dp),
                 contentDescription = null,
                 modifier = Modifier.size(it)
             )

@@ -83,7 +83,7 @@ fun SettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -115,7 +115,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_id_card_24dp),
+                                    painter = painterResource(R.drawable.ic_id_card_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -136,7 +136,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_devices_24dp),
+                                    painter = painterResource(R.drawable.ic_devices_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -161,7 +161,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_palette_24dp),
+                                    painter = painterResource(R.drawable.ic_palette_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -182,7 +182,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_language_24dp),
+                                    painter = painterResource(R.drawable.ic_language_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -203,7 +203,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_chat_24dp),
+                                    painter = painterResource(R.drawable.ic_chat_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -228,7 +228,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_info_24dp),
+                                    painter = painterResource(R.drawable.ic_info_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -250,7 +250,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_sign_language_24dp),
+                                        painter = painterResource(R.drawable.ic_sign_language_24dp),
                                         contentDescription = null,
                                     )
                                 }
@@ -273,7 +273,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_sign_language_24dp),
+                                        painter = painterResource(R.drawable.ic_sign_language_24dp),
                                         contentDescription = null,
                                     )
                                 }
@@ -296,7 +296,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_brand_family_24dp),
+                                        painter = painterResource(R.drawable.ic_brand_family_24dp),
                                         contentDescription = null,
                                     )
                                 }
@@ -327,7 +327,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_wand_shine_24dp),
+                                    painter = painterResource(R.drawable.ic_wand_shine_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -353,7 +353,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_feedback_24dp),
+                                    painter = painterResource(R.drawable.ic_feedback_24dp),
                                     contentDescription = null,
                                 )
                             }
@@ -382,7 +382,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon(danger = true) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_logout_24dp),
+                                    painter = painterResource(R.drawable.ic_logout_24dp),
                                     contentDescription = null,
                                 )
                             }

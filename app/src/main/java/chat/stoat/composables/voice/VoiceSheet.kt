@@ -177,10 +177,10 @@ fun VoiceSheet(
                                 Icon(
                                     painter = painterResource(
                                         when (roomState) {
-                                            Room.State.CONNECTING -> R.drawable.icn_sprint_24dp
-                                            Room.State.CONNECTED -> R.drawable.icn_wifi_tethering_24dp
-                                            Room.State.DISCONNECTED -> R.drawable.icn_wifi_tethering_error_24dp
-                                            Room.State.RECONNECTING -> R.drawable.icn_sprint_24dp
+                                            Room.State.CONNECTING -> R.drawable.ic_sprint_24dp
+                                            Room.State.CONNECTED -> R.drawable.ic_wifi_tethering_24dp
+                                            Room.State.DISCONNECTED -> R.drawable.ic_wifi_tethering_error_24dp
+                                            Room.State.RECONNECTING -> R.drawable.ic_sprint_24dp
                                         }
                                     ),
                                     contentDescription = null
@@ -237,7 +237,7 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_mic_off_24dp),
+                        painter = painterResource(R.drawable.ic_mic_off_24dp),
                         contentDescription = "TODO change this string to res"
                     )
                 }
@@ -255,7 +255,7 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_videocam_off_24dp),
+                        painter = painterResource(R.drawable.ic_videocam_off_24dp),
                         contentDescription = "TODO change this string to res"
                     )
                 }
@@ -273,7 +273,7 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_mobile_share_24px),
+                        painter = painterResource(R.drawable.ic_mobile_share_24px),
                         contentDescription = "TODO change this string to res"
                     )
                 }
@@ -293,7 +293,7 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_call_end_24dp__fill),
+                        painter = painterResource(R.drawable.ic_call_end_24dp__fill),
                         contentDescription = stringResource(R.string.voice_action_disconnect)
                     )
                 }

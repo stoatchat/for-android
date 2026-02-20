@@ -42,25 +42,25 @@ fun VoiceParticipant(
             Row {
                 if (!state.isPublishing) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_mic_off_24dp),
+                        painter = painterResource(R.drawable.ic_mic_off_24dp),
                         contentDescription = stringResource(R.string.voice_muted),
                     )
                 }
                 if (!state.isReceiving) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_headset_off_24dp),
+                        painter = painterResource(R.drawable.ic_headset_off_24dp),
                         contentDescription = stringResource(R.string.voice_deafened),
                     )
                 }
                 if (state.camera) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_videocam_24dp),
+                        painter = painterResource(R.drawable.ic_videocam_24dp),
                         contentDescription = stringResource(R.string.voice_camera_on),
                     )
                 }
                 if (state.screensharing) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_screen_share_24dp),
+                        painter = painterResource(R.drawable.ic_screen_share_24dp),
                         contentDescription = stringResource(R.string.voice_screen_sharing),
                         tint = MaterialTheme.colorScheme.primary
                     )

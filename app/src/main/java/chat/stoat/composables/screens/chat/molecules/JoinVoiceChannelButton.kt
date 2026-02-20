@@ -52,7 +52,7 @@ fun JoinVoiceChannelButton(channelId: String, modifier: Modifier = Modifier) {
             )
         } else {
             Icon(
-                painter = painterResource(R.drawable.icn_voice_chat_24dp),
+                painter = painterResource(R.drawable.ic_voice_chat_24dp),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

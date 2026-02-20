@@ -475,7 +475,7 @@ fun MessageField(
                                 label = { Text("@${item.content}") },
                                 icon = {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_campaign_24dp),
+                                        painter = painterResource(R.drawable.ic_campaign_24dp),
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size(SuggestionChipDefaults.IconSize)
@@ -582,7 +582,7 @@ fun MessageField(
             )
 
             Icon(
-                painter = painterResource(R.drawable.icn_mood_24dp),
+                painter = painterResource(R.drawable.ic_mood_24dp),
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                 contentDescription = stringResource(id = R.string.pick_emoji_alt),
                 modifier = Modifier
@@ -621,8 +621,8 @@ fun MessageField(
             ) {
                 Icon(
                     painter = when {
-                        editMode -> painterResource(R.drawable.icn_edit_24dp)
-                        else -> painterResource(R.drawable.icn_send_24dp)
+                        editMode -> painterResource(R.drawable.ic_edit_24dp)
+                        else -> painterResource(R.drawable.ic_send_24dp)
                     },
                     tint = MaterialTheme.colorScheme.primary,
                     contentDescription = stringResource(id = R.string.send_alt),

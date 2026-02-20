@@ -90,7 +90,7 @@ fun UserInfoSheet(
         NonIdealState(
             icon = {
                 Icon(
-                    painter = painterResource(R.drawable.icn_error_24dp),
+                    painter = painterResource(R.drawable.ic_error_24dp),
                     contentDescription = null,
                     modifier = Modifier.size(it)
                 )
@@ -153,7 +153,7 @@ fun UserInfoSheet(
                             onClick = { showServerIdentityOptions = true },
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.icn_psychology_alt_24dp),
+                                painter = painterResource(R.drawable.ic_psychology_alt_24dp),
                                 contentDescription = null
                             )
                         }
@@ -164,7 +164,7 @@ fun UserInfoSheet(
                             onClick = { showUserCard = true },
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.icn_badge_24dp),
+                                painter = painterResource(R.drawable.ic_badge_24dp),
                                 contentDescription = null
                             )
                         }
@@ -360,7 +360,7 @@ fun UserInfoSheet(
                                 )
                             } ?: run {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.icn_error_24dp),
+                                    painter = painterResource(id = R.drawable.ic_error_24dp),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -380,7 +380,7 @@ fun UserInfoSheet(
                         NonIdealState(
                             icon = {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_error_24dp),
+                                    painter = painterResource(R.drawable.ic_error_24dp),
                                     contentDescription = null,
                                     modifier = Modifier.size(24.dp)
                                 )

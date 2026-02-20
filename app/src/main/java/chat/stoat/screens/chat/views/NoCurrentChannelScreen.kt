@@ -52,7 +52,7 @@ fun NoCurrentChannelScreen(useDrawer: Boolean, onDrawerClicked: () -> Unit) {
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_menu_24dp),
+                                    painter = painterResource(R.drawable.ic_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }

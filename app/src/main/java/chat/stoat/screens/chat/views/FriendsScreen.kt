@@ -498,7 +498,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_menu_24dp),
+                                    painter = painterResource(R.drawable.ic_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -509,7 +509,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             overflowMenuShown = true
                         }) {
                             Icon(
-                                painter = painterResource(R.drawable.icn_more_vert_24dp),
+                                painter = painterResource(R.drawable.ic_more_vert_24dp),
                                 contentDescription = stringResource(R.string.menu)
                             )
                         }
@@ -718,7 +718,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.icn_group_add_24dp),
+                            painterResource(R.drawable.ic_group_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -732,7 +732,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.icn_qr_code_scanner_24dp),
+                            painterResource(R.drawable.ic_qr_code_scanner_24dp),
                             contentDescription = null
                         )
                     },
@@ -746,7 +746,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(R.drawable.icn_tag_24dp),
+                            painterResource(R.drawable.ic_tag_24dp),
                             contentDescription = null
                         )
                     },

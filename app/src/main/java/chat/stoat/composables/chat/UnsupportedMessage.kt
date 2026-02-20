@@ -55,7 +55,7 @@ fun UnsupportedMessage(modifier: Modifier = Modifier, context: String? = null) {
                     LocalContentColor provides MaterialTheme.colorScheme.onErrorContainer,
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_error_24dp),
+                        painter = painterResource(R.drawable.ic_error_24dp),
                         contentDescription = null,
                         tint = LocalContentColor.current,
                         modifier = Modifier.size(24.dp)

@@ -298,7 +298,7 @@ fun ChannelSettingsOverview(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -313,7 +313,7 @@ fun ChannelSettingsOverview(
             ) {
                 FloatingActionButton(onClick = { viewModel.updateChannel() }) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_check_24dp),
+                        painter = painterResource(R.drawable.ic_check_24dp),
                         contentDescription = stringResource(R.string.channel_settings_overview_save)
                     )
                 }

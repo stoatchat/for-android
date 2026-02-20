@@ -208,7 +208,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_identifier_copy_24dp),
+                    painter = painterResource(id = R.drawable.ic_identifier_copy_24dp),
                     contentDescription = null
                 )
             },
@@ -239,7 +239,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_mark_chat_read_24dp),
+                    painter = painterResource(id = R.drawable.ic_mark_chat_read_24dp),
                     contentDescription = null
                 )
             },
@@ -262,7 +262,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_report_24dp),
+                        painter = painterResource(id = R.drawable.ic_report_24dp),
                         contentDescription = null
                     )
                 },
@@ -280,7 +280,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_door_open_24dp),
+                        painter = painterResource(id = R.drawable.ic_door_open_24dp),
                         contentDescription = null,
                     )
                 },

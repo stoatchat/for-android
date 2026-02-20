@@ -54,7 +54,7 @@ fun SessionItem(
                     onLogout(session)
                 }) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_logout_24dp),
+                        painter = painterResource(R.drawable.ic_logout_24dp),
                         contentDescription = stringResource(R.string.logout)
                     )
                 }

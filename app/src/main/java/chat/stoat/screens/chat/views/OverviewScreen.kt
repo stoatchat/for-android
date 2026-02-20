@@ -153,7 +153,7 @@ fun OverviewScreen(
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_menu_24dp),
+                                    painter = painterResource(R.drawable.ic_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -171,7 +171,7 @@ fun OverviewScreen(
             NonIdealState(
                 icon = { size ->
                     Icon(
-                        painter = painterResource(R.drawable.icn_error_24dp),
+                        painter = painterResource(R.drawable.ic_error_24dp),
                         contentDescription = null,
                         modifier = Modifier.size(size)
                     )
@@ -245,8 +245,8 @@ fun OverviewScreen(
                                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                                         ) {
                                             Icon(
-                                                painter = if (hasUnreads) painterResource(R.drawable.icn_move_to_inbox_24dp) else painterResource(
-                                                    R.drawable.icn_inbox_24dp
+                                                painter = if (hasUnreads) painterResource(R.drawable.ic_move_to_inbox_24dp) else painterResource(
+                                                    R.drawable.ic_inbox_24dp
                                                 ),
                                                 contentDescription = null,
                                                 modifier = Modifier.size(22.dp)
@@ -292,7 +292,7 @@ fun OverviewScreen(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         Icon(
-                                            painter = painterResource(R.drawable.icn_settings_24dp),
+                                            painter = painterResource(R.drawable.ic_settings_24dp),
                                             contentDescription = null,
                                             modifier = Modifier.size(22.dp)
                                         )
@@ -315,7 +315,7 @@ fun OverviewScreen(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         Icon(
-                                            painter = painterResource(R.drawable.icn_ios_share_24dp),
+                                            painter = painterResource(R.drawable.ic_ios_share_24dp),
                                             contentDescription = null,
                                             modifier = Modifier.size(22.dp)
                                         )
@@ -339,7 +339,7 @@ fun OverviewScreen(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         Icon(
-                                            painter = painterResource(R.drawable.icn_wand_shine_24dp),
+                                            painter = painterResource(R.drawable.ic_wand_shine_24dp),
                                             contentDescription = null,
                                             modifier = Modifier.size(22.dp)
                                         )
@@ -367,7 +367,7 @@ fun OverviewScreen(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         Icon(
-                                            painter = painterResource(R.drawable.icn_star_shine_24dp),
+                                            painter = painterResource(R.drawable.ic_star_shine_24dp),
                                             contentDescription = null,
                                             modifier = Modifier.size(22.dp)
                                         )

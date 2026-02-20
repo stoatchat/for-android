@@ -55,7 +55,7 @@ fun SheetSelection(
             }
         }
         Icon(
-            painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
+            painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
             contentDescription = null,
             tint = arrowTint
         )

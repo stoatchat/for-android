@@ -278,7 +278,7 @@ fun IncomingCallInner() {
                         .background(MaterialTheme.colorScheme.tertiaryContainer)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_call_24dp__fill),
+                        painter = painterResource(R.drawable.ic_call_24dp__fill),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier

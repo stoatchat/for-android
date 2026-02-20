@@ -81,7 +81,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.icn_open_in_browser_24dp),
+                painter = painterResource(R.drawable.ic_open_in_browser_24dp),
                 contentDescription = null
             )
         },
@@ -112,7 +112,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.icn_content_copy_24dp),
+                painter = painterResource(R.drawable.ic_content_copy_24dp),
                 contentDescription = null
             )
         },

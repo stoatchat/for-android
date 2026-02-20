@@ -58,7 +58,7 @@ fun ManageableReply(reply: SendMessageReply, onToggleMention: () -> Unit, onRemo
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.drawable.icn_close_24dp),
+            painter = painterResource(R.drawable.ic_close_24dp),
             contentDescription = stringResource(id = R.string.remove_reply_alt),
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)

@@ -68,7 +68,7 @@ fun InlineMediaPicker(
                     enabled = (currentModel != null) && enabled
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_close_24dp),
+                        painter = painterResource(R.drawable.ic_close_24dp),
                         contentDescription = stringResource(R.string.inline_media_picker_remove)
                     )
                 }
@@ -94,7 +94,7 @@ fun InlineMediaPicker(
                     modifier = Modifier.width(480.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_close_24dp),
+                        painter = painterResource(R.drawable.ic_close_24dp),
                         contentDescription = null
                     )
 
@@ -181,7 +181,7 @@ fun InlineMediaPickerMediaPicker(
         ) {
             if (circular) {
                 Icon(
-                    painter = painterResource(R.drawable.icn_add_24dp),
+                    painter = painterResource(R.drawable.ic_add_24dp),
                     contentDescription = stringResource(R.string.inline_media_picker_no_media_placeholder)
                 )
             } else {

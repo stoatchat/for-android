@@ -121,7 +121,7 @@ fun CreateGroupScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -136,7 +136,7 @@ fun CreateGroupScreen(
             ) {
                 FloatingActionButton(onClick = { viewModel.createGroup(navController::popBackStack) }) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_check_24dp),
+                        painter = painterResource(R.drawable.ic_check_24dp),
                         contentDescription = stringResource(R.string.create_group_action)
                     )
                 }
@@ -177,7 +177,7 @@ fun CreateGroupScreen(
                 onValueChange = { viewModel.updateFriendSearchQuery(it) },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_search_24dp),
+                        painter = painterResource(R.drawable.ic_search_24dp),
                         contentDescription = null
                     )
                 },

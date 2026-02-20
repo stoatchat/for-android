@@ -124,7 +124,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 },
                 leadingContent = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_list_24dp),
+                        painter = painterResource(R.drawable.ic_list_24dp),
                         contentDescription = null
                     )
                 },
@@ -153,7 +153,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            painter = painterResource(R.drawable.icn_add_24dp),
+                            painter = painterResource(R.drawable.ic_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -172,7 +172,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            painter = painterResource(R.drawable.icn_add_24dp),
+                            painter = painterResource(R.drawable.ic_add_24dp),
                             contentDescription = null
                         )
                     },
@@ -192,7 +192,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.icn_notification_settings_24dp),
+                painter = painterResource(R.drawable.ic_notification_settings_24dp),
                 contentDescription = null
             )
         },
@@ -211,7 +211,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             },
             leadingContent = {
                 Icon(
-                    painter = painterResource(R.drawable.icn_settings_24dp),
+                    painter = painterResource(R.drawable.ic_settings_24dp),
                     contentDescription = null
                 )
             },

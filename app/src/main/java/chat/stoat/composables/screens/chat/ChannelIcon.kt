@@ -16,7 +16,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
     when (channelType) {
         ChannelType.TextChannel -> {
             Icon(
-                painter = painterResource(R.drawable.icn_grid_3x3_24dp),
+                painter = painterResource(R.drawable.ic_grid_3x3_24dp),
                 contentDescription = stringResource(R.string.channel_text),
                 modifier = modifier
             )
@@ -24,7 +24,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
 
         ChannelType.VoiceChannel -> {
             Icon(
-                painter = painterResource(R.drawable.icn_volume_up_24dp),
+                painter = painterResource(R.drawable.ic_volume_up_24dp),
                 contentDescription = stringResource(R.string.channel_voice),
                 modifier = modifier
             )
@@ -32,7 +32,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
 
         ChannelType.SavedMessages -> {
             Icon(
-                painter = painterResource(R.drawable.icn_note_stack_24dp),
+                painter = painterResource(R.drawable.ic_note_stack_24dp),
                 contentDescription = stringResource(R.string.channel_notes),
                 modifier = modifier
             )
@@ -40,7 +40,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
 
         ChannelType.DirectMessage -> {
             Icon(
-                painter = painterResource(R.drawable.icn_account_circle_24dp),
+                painter = painterResource(R.drawable.ic_account_circle_24dp),
                 contentDescription = stringResource(R.string.channel_dm),
                 modifier = modifier
             )
@@ -48,7 +48,7 @@ fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
 
         ChannelType.Group -> {
             Icon(
-                painter = painterResource(R.drawable.icn_account_box_24dp),
+                painter = painterResource(R.drawable.ic_account_box_24dp),
                 contentDescription = stringResource(R.string.channel_group),
                 modifier = modifier
             )

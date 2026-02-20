@@ -270,7 +270,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_check_24dp),
+                        painter = painterResource(R.drawable.ic_check_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -337,7 +337,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_error_24dp),
+                        painter = painterResource(R.drawable.ic_error_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )

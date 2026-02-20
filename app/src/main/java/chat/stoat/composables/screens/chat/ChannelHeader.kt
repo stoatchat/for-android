@@ -46,7 +46,7 @@ fun ChannelHeader(
                 onToggleDrawer()
             }) {
                 Icon(
-                    painter = painterResource(R.drawable.icn_menu_24dp),
+                    painter = painterResource(R.drawable.ic_menu_24dp),
                     contentDescription = stringResource(R.string.menu)
                 )
             }
@@ -90,7 +90,7 @@ fun ChannelHeader(
             Spacer(modifier = Modifier.width(4.dp))
 
             Icon(
-                painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
+                painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
                 contentDescription = stringResource(R.string.menu),
                 modifier = Modifier
                     .size(18.dp)

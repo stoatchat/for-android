@@ -104,7 +104,7 @@ fun ServerOverview(server: Server) {
             CompositionLocalProvider(LocalContentColor provides Color.White) {
                 if (server.flags has ServerFlags.Official) {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_workspace_premium_24dp__fill),
+                        painter = painterResource(id = R.drawable.ic_workspace_premium_24dp__fill),
                         contentDescription = stringResource(R.string.server_flag_official),
                         modifier = Modifier
                             .padding(end = 8.dp)
@@ -113,7 +113,7 @@ fun ServerOverview(server: Server) {
                 }
                 if (server.flags has ServerFlags.Verified) {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_verified_24dp__fill),
+                        painter = painterResource(id = R.drawable.ic_verified_24dp__fill),
                         contentDescription = stringResource(R.string.server_flag_verified),
                         modifier = Modifier
                             .padding(end = 8.dp)

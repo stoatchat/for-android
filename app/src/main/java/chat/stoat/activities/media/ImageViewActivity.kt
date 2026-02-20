@@ -205,7 +205,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             onClose()
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.icn_arrow_back_24dp),
+                                painter = painterResource(id = R.drawable.ic_arrow_back_24dp),
                                 contentDescription = stringResource(id = R.string.back)
                             )
                         }
@@ -215,7 +215,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             shareSubmenuIsOpen.value = true
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.icn_ios_share_24dp),
+                                painter = painterResource(id = R.drawable.ic_ios_share_24dp),
                                 contentDescription = stringResource(id = R.string.share)
                             )
                         }
@@ -254,7 +254,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             saveToGallery()
                         }) {
                             Icon(
-                                painter = painterResource(id = R.drawable.icn_download_24dp),
+                                painter = painterResource(id = R.drawable.ic_download_24dp),
                                 contentDescription = stringResource(
                                     id = R.string.media_viewer_save
                                 )

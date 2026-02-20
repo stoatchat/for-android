@@ -185,7 +185,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
     when (type) {
         SystemMessageType.CHANNEL_OWNERSHIP_CHANGED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_key_24dp),
+                painter = painterResource(R.drawable.ic_key_24dp),
                 contentDescription = stringResource(R.string.system_message_ownership_changed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -194,7 +194,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.CHANNEL_ICON_CHANGED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_landscape_2_edit_24dp),
+                painter = painterResource(R.drawable.ic_landscape_2_edit_24dp),
                 contentDescription = stringResource(
                     R.string.system_message_channel_icon_changed_alt
                 ),
@@ -205,7 +205,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.CHANNEL_DESCRIPTION_CHANGED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_contract_edit_24dp),
+                painter = painterResource(R.drawable.ic_contract_edit_24dp),
                 contentDescription = stringResource(
                     R.string.system_message_channel_description_changed_alt
                 ),
@@ -216,7 +216,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.CHANNEL_RENAMED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_ink_highlighter_move_24dp),
+                painter = painterResource(R.drawable.ic_ink_highlighter_move_24dp),
                 contentDescription = stringResource(R.string.system_message_channel_renamed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -225,7 +225,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_REMOVE -> {
             Icon(
-                painter = painterResource(R.drawable.icn_group_remove_24dp),
+                painter = painterResource(R.drawable.ic_group_remove_24dp),
                 contentDescription = stringResource(R.string.system_message_user_removed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -234,7 +234,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_ADDED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_group_add_24dp),
+                painter = painterResource(R.drawable.ic_group_add_24dp),
                 contentDescription = stringResource(R.string.system_message_user_added_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -243,7 +243,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_BANNED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_gavel_24dp),
+                painter = painterResource(R.drawable.ic_gavel_24dp),
                 contentDescription = stringResource(R.string.system_message_user_banned_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -252,7 +252,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_KICKED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_sports_and_outdoors_24dp),
+                painter = painterResource(R.drawable.ic_sports_and_outdoors_24dp),
                 contentDescription = stringResource(R.string.system_message_user_kicked_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -261,7 +261,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_LEFT -> {
             Icon(
-                painter = painterResource(R.drawable.icn_door_open_24dp),
+                painter = painterResource(R.drawable.ic_door_open_24dp),
                 contentDescription = stringResource(R.string.system_message_user_left_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -270,7 +270,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.USER_JOINED -> {
             Icon(
-                painter = painterResource(R.drawable.icn_waving_hand_24dp),
+                painter = painterResource(R.drawable.ic_waving_hand_24dp),
                 contentDescription = stringResource(R.string.system_message_user_joined_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size),
@@ -279,7 +279,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
 
         SystemMessageType.TEXT -> {
             Icon(
-                painter = painterResource(R.drawable.icn_info_24dp),
+                painter = painterResource(R.drawable.ic_info_24dp),
                 contentDescription = stringResource(R.string.system_message_text_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)

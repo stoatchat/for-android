@@ -232,12 +232,12 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                 } else {
                     if (isPlaying.value) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_pause_24dp),
+                            painter = painterResource(R.drawable.ic_pause_24dp),
                             contentDescription = stringResource(R.string.media_viewer_pause)
                         )
                     } else {
                         Icon(
-                            painter = painterResource(R.drawable.icn_play_arrow_24dp),
+                            painter = painterResource(R.drawable.ic_play_arrow_24dp),
                             contentDescription = stringResource(R.string.media_viewer_play)
                         )
                     }
@@ -265,7 +265,7 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                 showMenu.value = !showMenu.value
             }) {
                 Icon(
-                    painter = painterResource(R.drawable.icn_more_vert_24dp),
+                    painter = painterResource(R.drawable.ic_more_vert_24dp),
                     contentDescription = stringResource(R.string.media_viewer_more)
                 )
                 DropdownMenu(

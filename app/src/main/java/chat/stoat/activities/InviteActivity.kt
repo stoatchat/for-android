@@ -280,7 +280,7 @@ fun InvalidInviteError(error: StoatAPIError? = null, onDismissRequest: () -> Uni
         onDismissRequest = onDismissRequest,
         icon = {
             Icon(
-                painter = painterResource(R.drawable.icn_error_24dp),
+                painter = painterResource(R.drawable.ic_error_24dp),
                 contentDescription = null, // decorative
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -326,7 +326,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         icon = {
             Icon(
-                painter = painterResource(R.drawable.icn_error_24dp),
+                painter = painterResource(R.drawable.ic_error_24dp),
                 contentDescription = null, // decorative
                 tint = MaterialTheme.colorScheme.primary
             )

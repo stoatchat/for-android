@@ -234,7 +234,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_check_24dp),
+                        painter = painterResource(R.drawable.ic_check_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -279,7 +279,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_close_24dp),
+                        painter = painterResource(R.drawable.ic_close_24dp),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )

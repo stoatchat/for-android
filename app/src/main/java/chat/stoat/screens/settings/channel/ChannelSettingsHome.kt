@@ -110,7 +110,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -135,7 +135,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_info_24dp),
+                                        painter = painterResource(R.drawable.ic_info_24dp),
                                         contentDescription = null,
                                     )
                                 }
@@ -159,7 +159,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(id = R.drawable.icn_page_info_24dp),
+                                        painter = painterResource(id = R.drawable.ic_page_info_24dp),
                                         contentDescription = null,
                                     )
                                 }
@@ -184,7 +184,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon(danger = true) {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_delete_24dp),
+                                        painter = painterResource(R.drawable.ic_delete_24dp),
                                         contentDescription = null,
                                     )
                                 }

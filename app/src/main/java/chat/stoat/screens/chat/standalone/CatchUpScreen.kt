@@ -136,7 +136,7 @@ fun CatchUpScreen(navController: NavController, viewModel: CatchUpScreenViewMode
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

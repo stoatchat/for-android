@@ -38,7 +38,7 @@ fun MainScreen(navController: NavController) {
                     icon = {
                         Icon(
                             painter = painterResource(
-                                R.drawable.icn_tag_24dp
+                                R.drawable.ic_tag_24dp
                             ),
                             contentDescription = null,
                         )
@@ -54,9 +54,9 @@ fun MainScreen(navController: NavController) {
                         Icon(
                             painter = painterResource(
                                 if (currentTab == MainScreenTab.Conversations) {
-                                    R.drawable.icn_forum_24dp__fill
+                                    R.drawable.ic_forum_24dp__fill
                                 } else {
-                                    R.drawable.icn_forum_24dp
+                                    R.drawable.ic_forum_24dp
                                 }
                             ),
                             contentDescription = null,
@@ -73,9 +73,9 @@ fun MainScreen(navController: NavController) {
                         Icon(
                             painter = painterResource(
                                 if (currentTab == MainScreenTab.Overview) {
-                                    R.drawable.icn_star_shine_24dp__fill
+                                    R.drawable.ic_star_shine_24dp__fill
                                 } else {
-                                    R.drawable.icn_star_shine_24dp
+                                    R.drawable.ic_star_shine_24dp
                                 }
                             ),
                             contentDescription = null,

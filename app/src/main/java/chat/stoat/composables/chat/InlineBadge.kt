@@ -27,35 +27,35 @@ fun InlineBadge(
 ) {
     when (badge) {
         InlineBadge.Bot -> Icon(
-            painter = painterResource(id = R.drawable.icn_smart_toy_24dp),
+            painter = painterResource(id = R.drawable.ic_smart_toy_24dp),
             contentDescription = stringResource(id = R.string.badge_bot_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.Bridge -> Icon(
-            painter = painterResource(id = R.drawable.icn_link_24dp),
+            painter = painterResource(id = R.drawable.ic_link_24dp),
             contentDescription = stringResource(id = R.string.badge_masquerade_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.PlatformModeration -> Icon(
-            painter = painterResource(id = R.drawable.icn_brightness_alert_24dp),
+            painter = painterResource(id = R.drawable.ic_brightness_alert_24dp),
             contentDescription = stringResource(id = R.string.badge_bot_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.TeamMember -> Icon(
-            painter = painterResource(id = R.drawable.icn_hardware_24dp),
+            painter = painterResource(id = R.drawable.ic_hardware_24dp),
             contentDescription = stringResource(id = R.string.badge_team_member_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.Webhook -> Icon(
-            painter = painterResource(id = R.drawable.icn_cloud_24dp),
+            painter = painterResource(id = R.drawable.ic_cloud_24dp),
             contentDescription = stringResource(id = R.string.badge_webhook_alt),
             tint = colour,
             modifier = modifier.padding(start = 4.dp)

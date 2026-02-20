@@ -279,7 +279,7 @@ fun Message(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_block_24dp),
+                            painter = painterResource(R.drawable.ic_block_24dp),
                             contentDescription = null
                         )
 
@@ -427,7 +427,7 @@ fun Message(
 
                                 if (message.edited != null) {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_edit_24dp),
+                                        painter = painterResource(R.drawable.ic_edit_24dp),
                                         contentDescription = stringResource(id = R.string.edited),
                                         tint = MaterialTheme.colorScheme.onBackground.copy(
                                             alpha = 0.5f
@@ -631,7 +631,7 @@ fun Message(
                                         .padding(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_add_reaction_24dp),
+                                        painter = painterResource(R.drawable.ic_add_reaction_24dp),
                                         contentDescription = stringResource(R.string.message_context_sheet_actions_react),
                                         modifier = Modifier.size(16.dp)
                                     )

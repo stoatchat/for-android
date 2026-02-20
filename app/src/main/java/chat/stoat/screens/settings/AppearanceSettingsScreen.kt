@@ -311,7 +311,7 @@ fun AppearanceSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                            painter = painterResource(R.drawable.ic_arrow_back_24dp),
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -483,7 +483,7 @@ fun AppearanceSettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
+                        painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 20.dp, end = 4.dp)
@@ -515,7 +515,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_file_open_24dp),
+                                    painter = painterResource(R.drawable.ic_file_open_24dp),
                                     contentDescription = null
                                 )
 
@@ -533,7 +533,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_file_export_24dp),
+                                    painter = painterResource(R.drawable.ic_file_export_24dp),
                                     contentDescription = null
                                 )
 

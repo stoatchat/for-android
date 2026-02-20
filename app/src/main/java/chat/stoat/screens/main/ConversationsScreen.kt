@@ -103,7 +103,7 @@ fun ConversationsScreen(navController: NavController) {
                                 }
                                 Badge {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_keep_24dp),
+                                        painter = painterResource(R.drawable.ic_keep_24dp),
                                         contentDescription = null,
                                         modifier = Modifier.size(12.dp)
                                     )

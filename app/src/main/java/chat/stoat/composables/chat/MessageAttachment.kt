@@ -56,7 +56,7 @@ fun FileAttachment(attachment: AutumnResource) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.icn_file_present_24dp),
+                painter = painterResource(id = R.drawable.ic_file_present_24dp),
                 contentDescription = null
             )
 
@@ -138,7 +138,7 @@ fun VideoPlayButton() {
     )
 
     Icon(
-        painter = painterResource(R.drawable.icn_play_arrow_24dp),
+        painter = painterResource(R.drawable.ic_play_arrow_24dp),
         contentDescription = stringResource(id = R.string.media_viewer_play),
         modifier = Modifier
             .width(32.dp)

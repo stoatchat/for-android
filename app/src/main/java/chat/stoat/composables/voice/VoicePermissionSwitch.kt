@@ -84,7 +84,7 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_mic_24dp),
+                        painter = painterResource(R.drawable.ic_mic_24dp),
                         contentDescription = null
                     )
                     Text(
@@ -99,7 +99,7 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_videocam_24dp),
+                        painter = painterResource(R.drawable.ic_videocam_24dp),
                         contentDescription = null
                     )
                     Text(

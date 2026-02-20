@@ -640,7 +640,7 @@ fun ChatRouterScreen(
             },
             icon = {
                 Icon(
-                    painter = painterResource(R.drawable.icn_lock_24dp),
+                    painter = painterResource(R.drawable.ic_lock_24dp),
                     contentDescription = null, // decorative
                     tint = MaterialTheme.colorScheme.primary
                 )

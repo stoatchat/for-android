@@ -95,7 +95,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.icn_content_copy_24dp),
+                            painter = painterResource(id = R.drawable.ic_content_copy_24dp),
                             contentDescription = null
                         )
                     },
@@ -141,7 +141,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.icn_link_24dp),
+                            painter = painterResource(id = R.drawable.ic_link_24dp),
                             contentDescription = null
                         )
                     },
@@ -201,7 +201,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(id = R.drawable.icn_identifier_copy_24dp),
+                            painter = painterResource(id = R.drawable.ic_identifier_copy_24dp),
                             contentDescription = null
                         )
                     },
@@ -341,7 +341,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_reply_24dp),
+                    painter = painterResource(id = R.drawable.ic_reply_24dp),
                     contentDescription = null
                 )
             },
@@ -361,7 +361,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_add_reaction_24dp),
+                    painter = painterResource(id = R.drawable.ic_add_reaction_24dp),
                     contentDescription = null
                 )
             },
@@ -379,7 +379,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_edit_24dp),
+                        painter = painterResource(R.drawable.ic_edit_24dp),
                         contentDescription = null
                     )
                 },
@@ -400,7 +400,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_visibility_off_24dp),
+                    painter = painterResource(id = R.drawable.ic_visibility_off_24dp),
                     contentDescription = null
                 )
             },
@@ -426,7 +426,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_account_tree_24dp),
+                        painter = painterResource(id = R.drawable.ic_account_tree_24dp),
                         contentDescription = null
                     )
                 },
@@ -445,7 +445,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = R.drawable.icn_ios_share_24dp),
+                    painter = painterResource(id = R.drawable.ic_ios_share_24dp),
                     contentDescription = null,
                 )
             },
@@ -471,7 +471,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(R.drawable.icn_delete_24dp),
+                        painter = painterResource(R.drawable.ic_delete_24dp),
                         contentDescription = null
                     )
                 },
@@ -491,7 +491,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(id = R.drawable.icn_report_24dp),
+                        painter = painterResource(id = R.drawable.ic_report_24dp),
                         contentDescription = null
                     )
                 },

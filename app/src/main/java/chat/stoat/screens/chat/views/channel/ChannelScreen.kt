@@ -612,7 +612,7 @@ fun ChannelScreen(
                                 }
 
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_keyboard_arrow_right_24dp),
+                                    painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(16.dp)
@@ -626,7 +626,7 @@ fun ChannelScreen(
                         if (useDrawer) {
                             IconButton(onClick = onToggleDrawer) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_menu_24dp),
+                                    painter = painterResource(R.drawable.ic_menu_24dp),
                                     contentDescription = stringResource(id = R.string.menu)
                                 )
                             }
@@ -634,7 +634,7 @@ fun ChannelScreen(
                         if (useBackButton) {
                             IconButton(onClick = backButtonAction ?: {}) {
                                 Icon(
-                                    painter = painterResource(R.drawable.icn_arrow_back_24dp),
+                                    painter = painterResource(R.drawable.ic_arrow_back_24dp),
                                     contentDescription = stringResource(id = R.string.back)
                                 )
                             }
@@ -872,7 +872,7 @@ fun ChannelScreen(
                                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                                 ) {
                                     Icon(
-                                        painter = painterResource(R.drawable.icn_south_24dp),
+                                        painter = painterResource(R.drawable.ic_south_24dp),
                                         contentDescription = stringResource(R.string.scroll_to_bottom)
                                     )
                                 }
@@ -917,7 +917,7 @@ fun ChannelScreen(
                                                     ) {
                                                         with(LocalDensity.current) {
                                                             Image(
-                                                                painterResource(R.drawable.icn_action_key_24dp),
+                                                                painterResource(R.drawable.ic_action_key_24dp),
                                                                 contentDescription = null,
                                                                 colorFilter = ColorFilter.tint(
                                                                     LocalContentColor.current
@@ -1028,13 +1028,13 @@ fun ChannelScreen(
                                                     },
                                                     leadingIcon = {
                                                         Icon(
-                                                            painter = painterResource(R.drawable.icn_edit_24dp),
+                                                            painter = painterResource(R.drawable.ic_edit_24dp),
                                                             contentDescription = null
                                                         )
                                                     },
                                                     trailingIcon = {
                                                         Icon(
-                                                            painter = painterResource(R.drawable.icn_close_24dp),
+                                                            painter = painterResource(R.drawable.ic_close_24dp),
                                                             contentDescription = stringResource(R.string.message_field_editing_message_cancel_alt),
                                                             tint = MaterialTheme.colorScheme.onSurface,
                                                             modifier = Modifier.alpha(0.8f)
@@ -1104,7 +1104,7 @@ fun ChannelScreen(
                                             DropdownMenuItem(
                                                 leadingIcon = {
                                                     Icon(
-                                                        painter = painterResource(R.drawable.icn_attach_file_24dp),
+                                                        painter = painterResource(R.drawable.ic_attach_file_24dp),
                                                         contentDescription = null // Provided by text below
                                                     )
                                                 },
@@ -1118,7 +1118,7 @@ fun ChannelScreen(
                                             DropdownMenuItem(
                                                 leadingIcon = {
                                                     Icon(
-                                                        painter = painterResource(R.drawable.icn_camera_24dp),
+                                                        painter = painterResource(R.drawable.ic_camera_24dp),
                                                         contentDescription = null // Provided by text below
                                                     )
                                                 },
@@ -1132,7 +1132,7 @@ fun ChannelScreen(
                                             DropdownMenuItem(
                                                 leadingIcon = {
                                                     Icon(
-                                                        painter = painterResource(R.drawable.icn_photo_library_24dp),
+                                                        painter = painterResource(R.drawable.ic_photo_library_24dp),
                                                         contentDescription = null // Provided by text below
                                                     )
                                                 },

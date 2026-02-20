@@ -118,7 +118,7 @@ fun UserButtons(
                             .weight(1f)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.icn_smart_toy_24dp),
+                            painter = painterResource(R.drawable.ic_smart_toy_24dp),
                             contentDescription = null
                         )
                         Text(
@@ -334,7 +334,7 @@ fun UserButtons(
                     }
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.icn_more_vert_24dp),
+                        painter = painterResource(R.drawable.ic_more_vert_24dp),
                         contentDescription = stringResource(R.string.menu)
                     )
                 }

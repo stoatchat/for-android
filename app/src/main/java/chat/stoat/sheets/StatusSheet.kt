@@ -223,7 +223,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
             )
 
             Icon(
-                painter = painterResource(R.drawable.icn_edit_24dp),
+                painter = painterResource(R.drawable.ic_edit_24dp),
                 contentDescription = null,
                 modifier = Modifier.padding(16.dp)
             )
@@ -233,7 +233,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     SheetButton(
         leadingContent = {
             Icon(
-                painter = painterResource(R.drawable.icn_settings_24dp),
+                painter = painterResource(R.drawable.ic_settings_24dp),
                 contentDescription = null
             )
         },
