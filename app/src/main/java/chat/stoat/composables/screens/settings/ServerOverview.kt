@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.api.STOAT_FILES
+import chat.stoat.composables.generic.IconPlaceholder
+import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.has
-import chat.stoat.composables.generic.IconPlaceholder
-import chat.stoat.composables.generic.RemoteImage
 
 @Composable
 fun ServerOverview(server: Server) {
@@ -104,7 +104,7 @@ fun ServerOverview(server: Server) {
             CompositionLocalProvider(LocalContentColor provides Color.White) {
                 if (server.flags has ServerFlags.Official) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_revolt_decagram_24dp),
+                        painter = painterResource(id = R.drawable.icn_workspace_premium_24dp__fill),
                         contentDescription = stringResource(R.string.server_flag_official),
                         modifier = Modifier
                             .padding(end = 8.dp)
@@ -113,7 +113,7 @@ fun ServerOverview(server: Server) {
                 }
                 if (server.flags has ServerFlags.Verified) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_check_decagram_24dp),
+                        painter = painterResource(id = R.drawable.icn_verified_24dp__fill),
                         contentDescription = stringResource(R.string.server_flag_verified),
                         modifier = Modifier
                             .padding(end = 8.dp)

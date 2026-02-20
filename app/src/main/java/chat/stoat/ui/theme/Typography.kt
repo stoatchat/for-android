@@ -1,5 +1,6 @@
 package chat.stoat.ui.theme
 
+import android.os.Build
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
@@ -10,6 +11,7 @@ import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
+import chat.stoat.api.settings.UserInterfaceFont
 
 val Inter = FontFamily(
     Font(R.font.inter_thin, FontWeight.Thin),
@@ -399,3 +401,10 @@ val GoogleTypography = Typography(
         fontSize = 12.sp
     )
 )
+
+fun getDefaultFont(): UserInterfaceFont {
+    if (Build.MANUFACTURER == "Google" && Build.MODEL.startsWith("Pixel")) {
+        return UserInterfaceFont.GoogleSansFlex
+    }
+    return UserInterfaceFont.Default
+}

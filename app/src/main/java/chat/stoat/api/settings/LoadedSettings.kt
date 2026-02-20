@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import chat.stoat.core.model.schemas.AndroidSpecificSettingsSpecialEmbedSettings
 import chat.stoat.ui.theme.Theme
+import chat.stoat.ui.theme.getDefaultFont
 import chat.stoat.ui.theme.getDefaultTheme
 
 enum class MessageReplyStyle {
@@ -28,7 +29,7 @@ object LoadedSettings {
     var experimentsEnabled by mutableStateOf(false)
     var specialEmbedSettings by mutableStateOf(SpecialEmbedSettings())
     var poorlyFormedSettingsKeys by mutableStateOf(emptySet<String>())
-    var font by mutableStateOf(UserInterfaceFont.Default)
+    var font by mutableStateOf(getDefaultFont())
 
     fun hydrateWithSettings(settings: SyncedSettings) {
         this.theme = settings.android.theme?.let {
@@ -45,7 +46,7 @@ object LoadedSettings {
             } catch (e: Exception) {
                 null
             }
-        } ?: UserInterfaceFont.Default
+        } ?: getDefaultFont()
     }
 
     fun reset() {
@@ -54,6 +55,6 @@ object LoadedSettings {
         avatarRadius = 50
         specialEmbedSettings = SpecialEmbedSettings()
         poorlyFormedSettingsKeys = emptySet()
-        font = UserInterfaceFont.Default
+        font = getDefaultFont()
     }
 }

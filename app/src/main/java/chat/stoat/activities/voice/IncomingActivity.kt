@@ -58,12 +58,12 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
-import chat.stoat.api.settings.UserInterfaceFont
 import chat.stoat.composables.generic.Presence
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.presenceColour
 import chat.stoat.ui.theme.StoatTheme
 import chat.stoat.ui.theme.Theme
+import chat.stoat.ui.theme.getDefaultFont
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -83,7 +83,7 @@ class IncomingActivity : ComponentActivity() {
 fun IncomingCall() {
     StoatTheme(
         requestedTheme = if (isSystemInDarkTheme()) Theme.Default else Theme.Light,
-        requestedUserInterfaceFont = UserInterfaceFont.Default
+        requestedUserInterfaceFont = getDefaultFont()
     ) {
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onBackground) {
             IncomingCallInner()
@@ -194,7 +194,7 @@ fun IncomingCallInner() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                "Incoming Call on Revolt",
+                "Incoming Call on Stoat",
                 style = MaterialTheme.typography.headlineMedium,
                 fontSize = 24.sp
             )

@@ -58,7 +58,6 @@ import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.composables.generic.PrimaryTabs
 import chat.stoat.internals.Platform
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import java.net.URI
 
 class AboutViewModel : ViewModel() {
@@ -208,7 +207,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                         when (viewModel.selectedTabIndex) {
                             0 -> {
                                 Image(
-                                    painter = painterResource(R.drawable.stoat_wordmark_white),
+                                    painter = painterResource(R.drawable.stoat_logo_white),
                                     contentDescription = stringResource(R.string.about_full_name),
                                     colorFilter = ColorFilter.tint(LocalContentColor.current),
                                     modifier = Modifier
