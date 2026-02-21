@@ -96,7 +96,7 @@ fun LoginGreetingScreen(navController: NavController) {
                             }
                         },
                         onLongClick = {
-                            showBoringButton = !showBoringButton
+                            if (BuildConfig.DEBUG) showBoringButton = !showBoringButton
                         }
                     )
             )
