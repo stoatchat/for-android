@@ -171,6 +171,7 @@ sealed class ChannelScreenItem {
 sealed class ChannelScreenActivePane {
     data object None : ChannelScreenActivePane()
     data object EmojiPicker : ChannelScreenActivePane()
+    data object GifPicker : ChannelScreenActivePane()
     data object AttachmentPicker : ChannelScreenActivePane()
 }
 
@@ -1069,6 +1070,15 @@ fun ChannelScreen(
                                                         ChannelScreenActivePane.EmojiPicker
                                                 }
                                             },
+                                            onPickGif = {
+                                                if (viewModel.activePane == ChannelScreenActivePane.GifPicker) {
+                                                    viewModel.activePane =
+                                                        ChannelScreenActivePane.None
+                                                } else {
+                                                    viewModel.activePane =
+                                                        ChannelScreenActivePane.GifPicker
+                                                }
+                                            },
                                             onSendMessage = viewModel::sendPendingMessage,
                                             channelType = viewModel.channel?.channelType
                                                 ?: ChannelType.TextChannel,
@@ -1222,6 +1232,39 @@ fun ChannelScreen(
                                                     }
                                                 }
 
+                                                ChannelScreenActivePane.GifPicker -> {
+                                                    BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.GifPicker) {
+                                                        viewModel.activePane =
+                                                            ChannelScreenActivePane.None
+                                                    }
+
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                                                            .padding(4.dp)
+                                                            .navigationBarsPadding()
+                                                    ) {
+                                                        chat.stoat.composables.gif.GifPicker(
+                                                            onGifSelected = { gifUrl ->
+                                                                viewModel.putDraftContent(gifUrl, true)
+                                                                viewModel.sendPendingMessage()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            },
+                                                            onSearchFocus = {
+                                                                emojiSearchFocused = it
+                                                            },
+                                                            bottomInset = pxAsDp(
+                                                                max(
+                                                                    imeCurrentInset - navigationBarsInset,
+                                                                    0
+                                                                )
+                                                            )
+                                                        )
+                                                    }
+                                                }
+
                                                 ChannelScreenActivePane.AttachmentPicker -> {
                                                     BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
                                                         viewModel.activePane =
@@ -1280,6 +1323,39 @@ fun ChannelScreen(
                                                 onSearchFocus = {
                                                     emojiSearchFocused = it
                                                 }
+                                            )
+                                        }
+                                    }
+                                    if (viewModel.activePane == ChannelScreenActivePane.GifPicker) {
+                                        BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.GifPicker) {
+                                            viewModel.activePane =
+                                                ChannelScreenActivePane.None
+                                        }
+
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(600.dp)
+                                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                                .padding(4.dp)
+                                                .navigationBarsPadding()
+                                        ) {
+                                            chat.stoat.composables.gif.GifPicker(
+                                                onGifSelected = { gifUrl ->
+                                                    viewModel.putDraftContent(gifUrl, true)
+                                                    viewModel.sendPendingMessage()
+                                                    viewModel.activePane =
+                                                        ChannelScreenActivePane.None
+                                                },
+                                                onSearchFocus = {
+                                                    emojiSearchFocused = it
+                                                },
+                                                bottomInset = pxAsDp(
+                                                    max(
+                                                        imeCurrentInset - navigationBarsInset,
+                                                        0
+                                                    )
+                                                )
                                             )
                                         }
                                     }

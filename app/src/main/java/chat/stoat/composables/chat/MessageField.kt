@@ -147,6 +147,7 @@ fun MessageField(
     onAddAttachment: () -> Unit,
     onCommitAttachment: (Uri) -> Unit,
     onPickEmoji: () -> Unit,
+    onPickGif: () -> Unit = {},
     onSendMessage: () -> Unit,
     channelType: ChannelType,
     channelName: String,
@@ -594,6 +595,21 @@ fun MessageField(
                     }
                     .padding(4.dp)
                     .testTag("pick_emoji")
+            )
+
+            Icon(
+                painter = painterResource(R.drawable.ic_gif_24dp),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                contentDescription = "Pick GIF",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(32.dp)
+                    .clickable {
+                        focusManager.clearFocus()
+                        onPickGif()
+                    }
+                    .padding(4.dp)
+                    .testTag("pick_gif")
             )
 
             Spacer(modifier = Modifier.width(8.dp))
