@@ -70,9 +70,17 @@ data class Embed(
     val siteName: String? = null,
 
     val colour: String? = null,
+    val video: Video? = null,
     val width: Long? = null,
     val height: Long? = null,
     val size: String? = null
+)
+
+@Serializable
+data class Video(
+    val url: String? = null,
+    val width: Long? = null,
+    val height: Long? = null
 )
 
 @Serializable
