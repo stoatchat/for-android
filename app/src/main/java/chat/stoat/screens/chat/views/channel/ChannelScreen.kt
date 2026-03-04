@@ -48,6 +48,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.InlineTextContent
@@ -86,6 +87,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -190,6 +192,8 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 @Composable
 fun ChannelScreen(
     channelId: String,
+    pendingScrollToMessageId: String? = null,
+    consumePendingScroll: () -> Unit = {},
     onToggleDrawer: () -> Unit,
     useDrawer: Boolean,
     useBackButton: Boolean = false,
@@ -221,7 +225,7 @@ fun ChannelScreen(
     val channelPermissions by rememberChannelPermissions(channelId, viewModel.ensuredSelfMember)
 
     LaunchedEffect(channelId) {
-        viewModel.switchChannel(channelId)
+        viewModel.switchChannel(channelId, pendingScrollToMessageId)
     }
     // </editor-fold>
     // <editor-fold desc="Keyboard height handling">
@@ -390,6 +394,56 @@ fun ChannelScreen(
     // <editor-fold desc="UI elements">
     val lazyListState = rememberLazyListState()
     var disableScroll by remember { mutableStateOf(false) }
+    var highlightedMessageId by remember { mutableStateOf<String?>(null) }
+    // Pulse phase: 0f = no highlight, cycles between 0.1-0.35 during pulse, settles at 0.15
+    val highlightPulseAlpha = remember { androidx.compose.animation.core.Animatable(0f) }
+
+    // Jump to linked message: scroll if found, otherwise load around it
+    LaunchedEffect(pendingScrollToMessageId, viewModel.items.size) {
+        val msgId = pendingScrollToMessageId ?: return@LaunchedEffect
+        if (viewModel.items.size <= 1) return@LaunchedEffect // still loading
+
+        val index = viewModel.items.indexOfFirst { item ->
+            when (item) {
+                is ChannelScreenItem.RegularMessage -> item.message.id == msgId
+                is ChannelScreenItem.SystemMessage -> item.message.id == msgId
+                else -> false
+            }
+        }
+        if (index >= 0) {
+            highlightedMessageId = msgId
+            // In reverseLayout, scrollToItem places item at viewport bottom.
+            // First scroll to make item visible, then scroll back to center it.
+            lazyListState.scrollToItem(index + 1)
+            val viewportHeight = lazyListState.layoutInfo.viewportEndOffset - lazyListState.layoutInfo.viewportStartOffset
+            lazyListState.animateScrollBy(-viewportHeight / 2f)
+            consumePendingScroll()
+        } else if (!viewModel.isInMiddleOfHistory) {
+            viewModel.jumpToMessage(msgId)
+        } else {
+            consumePendingScroll()
+        }
+    }
+
+    // Pulse highlight then hold, then fade out
+    LaunchedEffect(highlightedMessageId) {
+        if (highlightedMessageId != null) {
+            // Pulse 3 times (bright → dim)
+            repeat(3) {
+                highlightPulseAlpha.animateTo(0.55f, androidx.compose.animation.core.tween(300))
+                highlightPulseAlpha.animateTo(0.20f, androidx.compose.animation.core.tween(300))
+            }
+            // Settle at steady highlight
+            highlightPulseAlpha.animateTo(0.30f, androidx.compose.animation.core.tween(300))
+            // Hold for 3 seconds
+            kotlinx.coroutines.delay(3000)
+            // Fade out
+            highlightPulseAlpha.animateTo(0f, androidx.compose.animation.core.tween(1000))
+            highlightedMessageId = null
+        } else {
+            highlightPulseAlpha.snapTo(0f)
+        }
+    }
 
     val isScrolledToBottom = remember(lazyListState) {
         derivedStateOf {
@@ -735,6 +789,22 @@ fun ChannelScreen(
                                                 return@items
                                             }
 
+                                            val isHighlighted = highlightedMessageId != null && highlightedMessageId == item.message.id
+                                            val pulseAlpha = if (isHighlighted) highlightPulseAlpha.value else 0f
+                                            val highlightColor = MaterialTheme.colorScheme.primary
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .drawWithContent {
+                                                        drawContent()
+                                                        if (pulseAlpha > 0f) {
+                                                            drawRect(
+                                                                color = highlightColor,
+                                                                alpha = pulseAlpha
+                                                            )
+                                                        }
+                                                    }
+                                            ) {
                                             RegularMessage(
                                                 item.message,
                                                 viewModel.channel,
@@ -759,6 +829,7 @@ fun ChannelScreen(
                                                 replyToMessage = viewModel::addReplyTo,
                                                 scope = scope
                                             )
+                                            }
                                         }
 
                                         is ChannelScreenItem.ProspectiveMessage -> {
