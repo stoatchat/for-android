@@ -438,9 +438,17 @@ fun Message(
                             }
                         }
 
+                        val isOnlyGIF = message.content != null &&
+                            message.embeds?.size == 1 &&
+                            message.embeds!![0].type == "Website" &&
+                            (message.embeds!![0].special?.type == "GIF" ||
+                                message.embeds!![0].originalURL?.startsWith("https://giphy.com") == true) &&
+                            message.content!!.trim().let { c -> c.startsWith("http://") || c.startsWith("https://") } &&
+                            !message.content!!.trim().contains(' ')
+
                         key(message.content) {
                             message.content?.let {
-                                if (message.content!!.isBlank()) return@let // if only an attachment is sent
+                                if (message.content!!.isBlank() || isOnlyGIF) return@let // if only an attachment or GIF is sent
 
                                 if (Experiments.useKotlinBasedMarkdownRenderer.isEnabled) {
                                     CompositionLocalProvider(
@@ -520,21 +528,65 @@ fun Message(
                             it.forEach { embed ->
                                 when (embed.type) {
                                     "Website", "Text" -> {
-                                        val embedIsEmpty =
-                                            embed.title == null && embed.description == null && embed.iconURL == null && embed.image == null
+                                        val isGIF = embed.type == "Website" && (
+                                            embed.special?.type == "GIF" ||
+                                            embed.originalURL?.startsWith("https://giphy.com") == true
+                                        )
 
-                                        if (embedIsEmpty) {
-                                            // if we do not emit anything, compose will cause an internal error.
-                                            // FIXME if you are doing fixme's anyways then check if this is still an issue
-                                            Box {}
-                                            return@forEach
+                                        // Prefer image URL; for video (mp4), derive GIF URL from giphy page URL
+                                        val gifUrl = if (isGIF) {
+                                            embed.image?.url ?: run {
+                                                val pageUrl = embed.url ?: embed.originalURL
+                                                val giphyId = pageUrl?.substringAfterLast("/")?.substringAfterLast("-")
+                                                if (giphyId != null) "https://media.giphy.com/media/$giphyId/giphy.gif" else embed.video?.url
+                                            }
+                                        } else null
+                                        val gifW = if (isGIF) (embed.image?.width ?: embed.video?.width) else null
+                                        val gifH = if (isGIF) (embed.image?.height ?: embed.video?.height) else null
+                                        if (gifUrl != null) {
+                                            Spacer(modifier = Modifier.height(2.dp))
+                                            BoxWithConstraints(
+                                                modifier = Modifier
+                                                    .clip(MaterialTheme.shapes.medium)
+                                                    .clickable {
+                                                        embed.url?.let {
+                                                            viewUrlInBrowser(context, it)
+                                                        }
+                                                    }
+                                            ) {
+                                                val imgWidth = gifW?.toInt()?.dp ?: maxWidth
+                                                val aspectRatio = if (gifW != null && gifH != null && gifH > 0) {
+                                                    gifW.toFloat() / gifH.toFloat()
+                                                } else null
+
+                                                RemoteImage(
+                                                    url = asJanuaryProxyUrl(gifUrl),
+                                                    contentScale = ContentScale.Fit,
+                                                    modifier = Modifier
+                                                        .width(imgWidth)
+                                                        .then(
+                                                            if (aspectRatio != null) Modifier.aspectRatio(aspectRatio)
+                                                            else Modifier
+                                                        ),
+                                                    description = null
+                                                )
+                                            }
+                                            Spacer(modifier = Modifier.height(2.dp))
+                                        } else {
+                                            val embedIsEmpty =
+                                                embed.title == null && embed.description == null && embed.iconURL == null && embed.image == null
+
+                                            if (embedIsEmpty) {
+                                                Box {}
+                                                return@forEach
+                                            }
+
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Embed(embed = embed, onLinkClick = {
+                                                viewUrlInBrowser(context, it)
+                                            })
+                                            Spacer(modifier = Modifier.height(8.dp))
                                         }
-
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Embed(embed = embed, onLinkClick = {
-                                            viewUrlInBrowser(context, it)
-                                        })
-                                        Spacer(modifier = Modifier.height(8.dp))
                                     }
 
                                     "Image" -> {
