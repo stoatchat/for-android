@@ -193,9 +193,11 @@ class ChatRouterViewModel @Inject constructor(
 
             val hasNotificationPermission =
                 NotificationManagerCompat.from(context).areNotificationsEnabled()
-            // right now we only show this in debug builds so Chucker can show its notification
-            if (!hasNotificationPermission && BuildConfig.DEBUG) {
+            if (!hasNotificationPermission) {
                 showNotificationRationale = true
+            } else {
+                // Already have permission, register FCM token automatically
+                setRegisterForNotifications()
             }
         }
     }
@@ -217,6 +219,11 @@ class ChatRouterViewModel @Inject constructor(
 
     fun setRegisterForNotifications() {
         showNotificationRationale = false
+        val gmsAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance()
+        if (gmsAvailability.isGooglePlayServicesAvailable(context) != com.google.android.gms.common.ConnectionResult.SUCCESS) {
+            Log.w("FCM", "Google Play Services not available, skipping push registration")
+            return
+        }
         FirebaseMessaging.getInstance().token.addOnCompleteListener(
             OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -228,7 +235,11 @@ class ChatRouterViewModel @Inject constructor(
                 val token = task.result
                 viewModelScope.launch {
                     kvStorage.set("fcmToken", token)
-                    subscribePush(auth = token)
+                    try {
+                        subscribePush(auth = token)
+                    } catch (e: Exception) {
+                        Log.e("FCM", "Failed to subscribe push", e)
+                    }
                 }
             }
         )
