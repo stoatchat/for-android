@@ -535,6 +535,13 @@ class ChannelScreenViewModel @Inject constructor(
                         }
                     }
 
+                    // Skip update if ignoreExisting filtered out all messages (e.g. WS reconnect
+                    // fetched the same messages already loaded) — otherwise updateItems([]) wipes the list
+                    if (ignoreExisting && newItems.isEmpty()) {
+                        if (!didInitialChannelFetch) didInitialChannelFetch = true
+                        return@launch
+                    }
+
                     // Place items according to whether above/below/around was specified.
                     // TODO: Aditionally, place LoadTriggers at the beginning and end of the list.
                     val newItemsWithPosition = when {
