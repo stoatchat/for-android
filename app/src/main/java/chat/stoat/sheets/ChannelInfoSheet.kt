@@ -31,11 +31,11 @@ import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.has
-import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.ChannelSheetHeader
+import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.chat.dialogs.InviteDialog
 import kotlinx.coroutines.delay
@@ -197,6 +197,28 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             )
         },
         onClick = {}
+    )
+
+    SheetButton(
+        headlineContent = {
+            Text(
+                text = stringResource(id = R.string.pinned_messages_view),
+            )
+        },
+        leadingContent = {
+            Icon(
+                painter = painterResource(R.drawable.ic_pinboard_24dp),
+                contentDescription = null
+            )
+        },
+        onClick = {
+            scope.launch {
+                onHideSheet()
+            }
+            scope.launch {
+                ActionChannel.send(Action.TopNavigate("channel/${channel.id}/pins"))
+            }
+        }
     )
 
     if (
