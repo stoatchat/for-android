@@ -82,19 +82,20 @@ import chat.stoat.api.api
 import chat.stoat.api.routes.microservices.geo.queryGeo
 import chat.stoat.api.routes.microservices.health.healthCheck
 import chat.stoat.api.routes.onboard.needsOnboarding
-import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
+import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.material.EasingTokens
 import chat.stoat.ndk.NativeLibraries
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
+import chat.stoat.screens.chat.ChannelPinsScreen
 import chat.stoat.screens.chat.ChatRouterScreen
 import chat.stoat.screens.chat.standalone.CatchUpScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
@@ -731,6 +732,11 @@ fun AppEntrypoint(
                     composable("settings/channel/{channelId}/permissions") { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelSettingsPermissions(navController, channelId)
+                    }
+
+                    composable("channel/{channelId}/pins") { backStackEntry ->
+                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+                        ChannelPinsScreen(navController, channelId)
                     }
 
                     composable("about") { AboutScreen(navController) }

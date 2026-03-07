@@ -256,3 +256,83 @@ suspend fun patchChannel(
         StoatAPI.channelCache[channelId] = channel
     }
 }
+
+suspend fun searchChannel(
+    channelId: String,
+    query: String? = null,
+    pinned: Boolean? = null,
+    includeUsers: Boolean? = null,
+    after: String? = null,
+    before: String? = null,
+    limit: Int? = null,
+    sort: String? = null
+): MessagesInChannel {
+    check(
+        sort == null || sort in listOf(
+            "Relevance",
+            "Latest",
+            "Oldest"
+        )
+    ) { "Sort must be one of Relevance, Latest, Oldest; failing that null" }
+    check(limit == null || (limit in 1..100)) { "Limit must be between 1 and 100; failing that null" }
+    check(query == null || pinned == null) { "One of query or pinned must be null" }
+    check(
+        pinned != null || (!query.isNullOrBlank() && query.length <= 64)
+    ) { "Query must not be null when pinned is not null; Query must not be blank when pinned is not null; Query must be less than 65 characters when pinned is not null" }
+
+    val body = mutableMapOf<String, JsonElement>()
+
+    if (query != null) {
+        body["query"] = StoatJson.encodeToJsonElement(String.serializer(), query)
+    }
+    if (pinned != null) {
+        body["pinned"] = StoatJson.encodeToJsonElement(Boolean.serializer(), pinned)
+    }
+    if (includeUsers != null) {
+        body["include_users"] = StoatJson.encodeToJsonElement(Boolean.serializer(), includeUsers)
+    }
+    if (after != null) {
+        body["after"] = StoatJson.encodeToJsonElement(String.serializer(), after)
+    }
+    if (before != null) {
+        body["before"] = StoatJson.encodeToJsonElement(String.serializer(), before)
+    }
+    if (limit != null) {
+        body["limit"] = StoatJson.encodeToJsonElement(Int.serializer(), limit)
+    }
+    if (sort != null) {
+        body["sort"] = StoatJson.encodeToJsonElement(String.serializer(), sort)
+    }
+
+    val response = StoatHttp.post("/channels/$channelId/search".api()) {
+        contentType(ContentType.Application.Json)
+        setBody(
+            StoatJson.encodeToString(
+                MapSerializer(
+                    String.serializer(),
+                    JsonElement.serializer()
+                ),
+                body
+            )
+        )
+    }
+        .bodyAsText()
+
+    if (includeUsers == true) {
+        return StoatJson.decodeFromString(
+            MessagesInChannel.serializer(),
+            response
+        )
+    } else {
+        val messages = StoatJson.decodeFromString(
+            ListSerializer(Message.serializer()),
+            response
+        )
+
+        return MessagesInChannel(
+            messages = messages,
+            users = emptyList(),
+            members = emptyList()
+        )
+    }
+}

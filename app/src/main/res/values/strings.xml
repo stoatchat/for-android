@@ -277,6 +277,8 @@
     <string name="system_message_user_kicked_alt">User kicked</string>
     <string name="system_message_user_left_alt">User left</string>
     <string name="system_message_user_joined_alt">User joined</string>
+    <string name="system_message_message_pinned_alt">Message pinned</string>
+    <string name="system_message_message_unpinned_alt">Message unpinned</string>
     <string name="system_message_text_alt">System message</string>
 
     <string name="system_message_ownership_changed">%1$s transferred ownership to %2$s</string>
@@ -289,6 +291,8 @@
     <string name="system_message_user_kicked">%1$s has been kicked</string>
     <string name="system_message_user_left">%1$s left</string>
     <string name="system_message_user_joined">%1$s joined</string>
+    <string name="system_message_message_pinned">%1$s pinned a message to this channel</string>
+    <string name="system_message_message_unpinned">%1$s unpinned a message from this channel</string>
 
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
@@ -376,6 +380,10 @@
     <string name="invite_dialog_description">Send this link to invite people to this channel.</string>
     <string name="invite_dialog_copy">Copy</string>
     <string name="invite_dialog_close">Close</string>
+
+    <string name="pinned_messages">Pinned Messages</string>
+    <string name="pinned_messages_view">View Pinned Messages</string>
+    <string name="pinned_messages_empty">No pinned messages yet, maybe you should pin one?</string>
 
     <string name="message_context_sheet_actions_copy">Copy</string>
     <string name="message_context_sheet_actions_copy_failed_empty">Message is empty, nothing to copy</string>

@@ -42,6 +42,8 @@ enum class SystemMessageType(val type: String) {
     USER_KICKED("user_kicked"),
     USER_LEFT("user_left"),
     USER_JOINED("user_joined"),
+    MESSAGE_PINNED("message_pinned"),
+    MESSAGE_UNPINNED("message_unpinned"),
     TEXT("text")
 }
 
@@ -172,6 +174,24 @@ fun SystemMessage(message: Message) {
                     )
                 }
 
+                SystemMessageType.MESSAGE_PINNED -> {
+                    RichMarkdown(
+                        stringResource(
+                            R.string.system_message_message_pinned,
+                            message.system!!.by.mention()
+                        )
+                    )
+                }
+
+                SystemMessageType.MESSAGE_UNPINNED -> {
+                    RichMarkdown(
+                        stringResource(
+                            R.string.system_message_message_unpinned,
+                            message.system!!.by.mention()
+                        )
+                    )
+                }
+
                 SystemMessageType.TEXT -> {
                     message.system!!.content?.let { RichMarkdown(it) }
                 }
@@ -277,6 +297,24 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
             )
         }
 
+        SystemMessageType.MESSAGE_PINNED -> {
+            Icon(
+                painter = painterResource(R.drawable.ic_keep_24dp),
+                contentDescription = stringResource(R.string.system_message_message_pinned_alt),
+                tint = LocalContentColor.current,
+                modifier = modifier.size(size)
+            )
+        }
+
+        SystemMessageType.MESSAGE_UNPINNED -> {
+            Icon(
+                painter = painterResource(R.drawable.ic_keep_off_24dp),
+                contentDescription = stringResource(R.string.system_message_message_unpinned_alt),
+                tint = LocalContentColor.current,
+                modifier = modifier.size(size)
+            )
+        }
+
         SystemMessageType.TEXT -> {
             Icon(
                 painter = painterResource(R.drawable.ic_info_24dp),
@@ -302,6 +340,8 @@ private fun shapeForType(type: SystemMessageType): Shape {
         SystemMessageType.USER_KICKED -> MaterialShapes.SoftBurst
         SystemMessageType.USER_LEFT -> MaterialShapes.Cookie4Sided
         SystemMessageType.USER_JOINED -> MaterialShapes.Cookie9Sided
+        SystemMessageType.MESSAGE_PINNED -> MaterialShapes.Clover4Leaf
+        SystemMessageType.MESSAGE_UNPINNED -> MaterialShapes.Clover8Leaf
         SystemMessageType.TEXT -> MaterialShapes.Square
     }.toShape()
 }

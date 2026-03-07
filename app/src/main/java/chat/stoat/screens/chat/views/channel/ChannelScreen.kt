@@ -639,6 +639,18 @@ fun ChannelScreen(
                                 )
                             }
                         }
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                ActionChannel.send(Action.TopNavigate("channel/$channelId/pins"))
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_pinboard_24dp),
+                                contentDescription = stringResource(id = R.string.pinned_messages_view)
+                            )
+                        }
                     }
                 )
             }
@@ -669,7 +681,7 @@ fun ChannelScreen(
                     ) {
                         CircularProgressIndicator(modifier = Modifier.size(48.dp))
                     }
-                } else if (ageGateUnlocked == true) {
+                } else if (ageGateUnlocked) {
                     Column(
                         modifier = Modifier
                             .padding(pv)
