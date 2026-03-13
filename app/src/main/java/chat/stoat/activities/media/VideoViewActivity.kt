@@ -224,7 +224,7 @@ class VideoViewActivity : FragmentActivity() {
                         .setActionTextColor(
                             MaterialColors.getColor(
                                 binding.xpPlayer,
-                                com.google.android.material.R.attr.colorPrimary
+                                androidx.appcompat.R.attr.colorPrimary
                             )
                         )
                         .show()

@@ -156,7 +156,7 @@ class ChangelogBottomSheetFragment(
                             return argbAsCssColour(
                                 MaterialColors.getColor(
                                     binding.wvChangelog,
-                                    com.google.android.material.R.attr.colorPrimary
+                                    androidx.appcompat.R.attr.colorPrimary
                                 )
                             )
                         }

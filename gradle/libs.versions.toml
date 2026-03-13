@@ -3,25 +3,25 @@ compileSdk = "36"
 minSdk = "26"
 targetSdk = "36"
 
-kotlin = "2.2.0"
-kotlin-serialization = "1.6.3"
-ksp = "2.2.0-2.0.2"
-agp = "8.11.1"
-hilt = "2.57"
-google-services = "4.4.2"
+kotlin = "2.3.10"
+kotlin-serialization = "1.10.0"
+ksp = "2.3.5"
+agp = "9.1.0"
+hilt = "2.59.2"
+google-services = "4.4.4"
 sentry = "8.13.2" # This is separate from the gradle plugin version which is defined ad hoc below
 sqldelight = "2.0.1"
-compose-bom = "2025.03.00"
-material3 = "1.4.0-alpha15"
-lifecycle = "2.9.1"
-accompanist = "0.34.0"
-ktor = "3.3.2"
+compose-bom = "2026.03.00"
+material3 = "1.5.0-alpha15"
+lifecycle = "2.10.0"
+accompanist = "0.37.3"
+ktor = "3.4.1"
 glide = "5.0.5"
 aboutlibraries = "11.3.0-rc02"
-media3 = "1.7.1"
+media3 = "1.9.2"
 telephoto = "1.0.0-alpha02"
-haze = "1.6.4"
-chucker = "4.0.0"
+haze = "1.7.2"
+chucker = "4.3.1"
 androidx-test = "1.6.1"
 livekit = "2.21.0"
 livekit-compose = "1.4.0"
@@ -38,7 +38,7 @@ android-core-telecom = { module = "androidx.core:core-telecom", version = "1.0.0
 android-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 android-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.1" }
 android-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
-android-material = { module = "com.google.android.material:material", version = "1.12.0" }
+android-material = { module = "com.google.android.material:material", version = "1.13.0" }
 android-test-core = { module = "androidx.test:runner", version.ref = "androidx-test" }
 android-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 android-datastore = { module = "androidx.datastore:datastore", version = "1.1.7" }
@@ -61,7 +61,6 @@ compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 activity-compose = { module = "androidx.activity:activity-compose", version = "1.10.1" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }

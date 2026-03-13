@@ -24,7 +24,7 @@ object TextViewCompat {
         return when (varName) {
             "--accent" -> MaterialColors.getColor(
                 tv,
-                com.google.android.material.R.attr.colorPrimary
+                androidx.appcompat.R.attr.colorPrimary
             )
 
             "--foreground" -> MaterialColors.getColor(
@@ -34,7 +34,10 @@ object TextViewCompat {
 
             "--background" -> SurfaceColors.SURFACE_0.getColor(tv.context)
 
-            "--error" -> MaterialColors.getColor(tv, com.google.android.material.R.attr.colorError)
+            "--error" -> MaterialColors.getColor(
+                tv,
+                androidx.appcompat.R.attr.colorError
+            )
 
             else -> tv.currentTextColor
         }
