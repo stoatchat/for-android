@@ -296,7 +296,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_brand_family_24dp),
+                                        painter = painterResource(R.drawable.ic_lab_research_24dp),
                                         contentDescription = null,
                                     )
                                 }
