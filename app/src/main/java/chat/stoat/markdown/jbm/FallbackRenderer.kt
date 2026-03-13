@@ -1,5 +1,8 @@
+package chat.stoat.markdown.jbm
+
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
@@ -22,9 +25,6 @@ import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ResourceLocations
 import chat.stoat.core.model.schemas.isInviteUri
-import chat.stoat.markdown.jbm.LocalJBMarkdownTreeState
-import chat.stoat.markdown.jbm.MentionResolver
-import chat.stoat.markdown.jbm.asHexString
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -143,7 +143,7 @@ fun FallbackRenderer(content: String, modifier: Modifier = Modifier) {
                     },
                     "Bridge"
                 )
-                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                setBackgroundColor(Color.TRANSPARENT)
 
                 loadUrl(
                     "$STOAT_WEB_APP/_android_assets/markdown/markdown.html"

@@ -1,6 +1,5 @@
 package chat.stoat.markdown.jbm
 
-import FallbackRenderer
 import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
