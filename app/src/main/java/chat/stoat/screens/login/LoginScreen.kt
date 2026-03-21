@@ -50,10 +50,12 @@ import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.STOAT_WEB_APP
+import chat.stoat.api.STOAT_WEB_APP_DEFAULT
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
 import chat.stoat.api.routes.onboard.needsOnboarding
+import chat.stoat.api.updateStoatWebApp
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.persistence.KVStorage
@@ -73,6 +75,10 @@ class LoginViewModel @Inject constructor(
     private var _password by mutableStateOf("")
     val password: String
         get() = _password
+
+    private var _stoatInstanceUrl by mutableStateOf(STOAT_WEB_APP)
+    val stoatInstanceUrl: String
+        get() = _stoatInstanceUrl
 
     private var _error by mutableStateOf<String?>(null)
     val error: String?
@@ -120,8 +126,7 @@ class LoginViewModel @Inject constructor(
                         kvStorage.set("sessionId", id)
 
                         val onboard = needsOnboarding(token)
-                        if (onboard) {
-                            _navigateTo = "onboarding"
+                        if (onboard) { _navigateTo = "onboarding"
                             return@launch
                         }
 
@@ -147,6 +152,11 @@ class LoginViewModel @Inject constructor(
 
     fun setPassword(password: String) {
         _password = password
+    }
+
+    fun setStoatInstanceUrl(url: String = STOAT_WEB_APP) {
+        _stoatInstanceUrl = url;
+        updateStoatWebApp(url);
     }
 }
 
@@ -222,6 +232,15 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                FormTextField(
+                    value = viewModel.stoatInstanceUrl,
+                    label = "Stoat instance", // FIXME hardcoded string
+                    type = KeyboardType.Uri,
+                    action = ImeAction.Next,
+                    onChange = viewModel::setStoatInstanceUrl,
+                    modifier = Modifier
+                        .padding(vertical = 25.dp)
+                )
                 FormTextField(
                     value = viewModel.email,
                     label = stringResource(R.string.email),

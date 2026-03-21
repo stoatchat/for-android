@@ -56,19 +56,34 @@ import chat.stoat.core.model.schemas.Channel as ChannelSchema
 
 private const val USE_ALPHA_API = false
 
-val STOAT_BASE =
+val STOAT_BASE_DEFAULT =
     if (USE_ALPHA_API) "https://alpha.revolt.chat/api" else "https://api.stoat.chat/0.8"
+
+var STOAT_BASE = STOAT_BASE_DEFAULT
+
 const val STOAT_SUPPORT = "https://support.stoat.chat"
 const val STOAT_MARKETING = "https://stoat.chat"
 val STOAT_FILES =
     if (USE_ALPHA_API) "https://alpha.revolt.chat/autumn" else "https://cdn.stoatusercontent.com"
 val STOAT_PROXY =
     if (USE_ALPHA_API) "https://alpha.revolt.chat/january" else "https://proxy.stoatusercontent.com"
-const val STOAT_WEB_APP = "https://stoat.chat"
+const val STOAT_WEB_APP_DEFAULT = "https://stoat.chat"
+var STOAT_WEB_APP = "https://stoat.chat"
+
+
+
 const val STOAT_INVITES = "https://stt.gg"
-val STOAT_WEBSOCKET =
+val STOAT_WEBSOCKET_DEFAULT =
     if (USE_ALPHA_API) "wss://alpha.revolt.chat/ws" else "wss://events.stoat.chat"
+var STOAT_WEBSOCKET = STOAT_WEBSOCKET_DEFAULT
 const val STOAT_KJBOOK = "https://stoatchat.github.io/for-android"
+
+fun updateStoatWebApp(webApp: String = STOAT_WEB_APP_DEFAULT) {
+    STOAT_WEB_APP = webApp;
+    STOAT_BASE = "$webApp/api"; // FIXME this wont work with default stoatchat instance
+    var wssRoot = webApp.replace("https:", "wss:").replace("http:", "ws:");
+    STOAT_WEBSOCKET = "$wssRoot/ws"; // FIXME this wont work with default stoatchat instance
+}
 
 fun String.api(): String {
     return "$STOAT_BASE$this"
