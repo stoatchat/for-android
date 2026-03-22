@@ -133,6 +133,8 @@ class LoginViewModel @Inject constructor(
                         StoatAPI.loginAs(token)
                         StoatAPI.setSessionId(response.firstUserHints.token)
 
+                        kvStorage.set("stoatInstanceUrl", _stoatInstanceUrl);
+
                         _navigateTo = "home"
                     } catch (e: Error) {
                         _error = e.message ?: "Unknown error"

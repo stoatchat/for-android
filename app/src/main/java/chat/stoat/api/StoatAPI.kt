@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.core.net.toUri
 import chat.stoat.BuildConfig
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI.initialize
@@ -63,8 +64,9 @@ var STOAT_BASE = STOAT_BASE_DEFAULT
 
 const val STOAT_SUPPORT = "https://support.stoat.chat"
 const val STOAT_MARKETING = "https://stoat.chat"
-val STOAT_FILES =
+val STOAT_FILES_DEFAULT =
     if (USE_ALPHA_API) "https://alpha.revolt.chat/autumn" else "https://cdn.stoatusercontent.com"
+var STOAT_FILES = STOAT_FILES_DEFAULT;
 val STOAT_PROXY =
     if (USE_ALPHA_API) "https://alpha.revolt.chat/january" else "https://proxy.stoatusercontent.com"
 const val STOAT_WEB_APP_DEFAULT = "https://stoat.chat"
@@ -79,10 +81,36 @@ var STOAT_WEBSOCKET = STOAT_WEBSOCKET_DEFAULT
 const val STOAT_KJBOOK = "https://stoatchat.github.io/for-android"
 
 fun updateStoatWebApp(webApp: String = STOAT_WEB_APP_DEFAULT) {
-    STOAT_WEB_APP = webApp;
-    STOAT_BASE = "$webApp/api"; // FIXME this wont work with default stoatchat instance
-    var wssRoot = webApp.replace("https:", "wss:").replace("http:", "ws:");
-    STOAT_WEBSOCKET = "$wssRoot/ws"; // FIXME this wont work with default stoatchat instance
+    var sanitisedBaseUrl = webApp.trim();
+
+    if(sanitisedBaseUrl.isBlank()) {
+        sanitisedBaseUrl = STOAT_WEB_APP_DEFAULT;
+    }
+
+    var parsed = sanitisedBaseUrl.toUri();
+
+    val portPart = if (parsed.port == 80 || parsed.port == 443) "" else ":${parsed.port}";
+    val root = "${parsed.scheme}://${parsed.host}${portPart}";
+    val rootWithPort = "${parsed.scheme}://${parsed.host}:${parsed.port}";
+    if(sanitisedBaseUrl.matches(Regex("^$root/+$")) || sanitisedBaseUrl.matches(Regex("^$rootWithPort/+$"))) {
+        // Remove trailing slashes (not sure if it'd actually cause an issue but might as well clean it up)
+        sanitisedBaseUrl = rootWithPort;
+    }
+
+    val isDefaultInstance = sanitisedBaseUrl == STOAT_WEB_APP_DEFAULT;
+
+    if(!isDefaultInstance) {
+        STOAT_WEB_APP = sanitisedBaseUrl;
+        STOAT_BASE = "$sanitisedBaseUrl/api";
+        val wssRoot = sanitisedBaseUrl.replace(Regex("^http(s?):"), "ws$1:");
+        STOAT_WEBSOCKET = "$wssRoot/ws";
+        STOAT_FILES = "$sanitisedBaseUrl/autumn";
+    } else {
+        STOAT_WEB_APP = STOAT_WEB_APP_DEFAULT;
+        STOAT_BASE = STOAT_BASE_DEFAULT;
+        STOAT_WEBSOCKET = STOAT_WEBSOCKET_DEFAULT;
+        STOAT_FILES = STOAT_FILES_DEFAULT;
+    }
 }
 
 fun String.api(): String {

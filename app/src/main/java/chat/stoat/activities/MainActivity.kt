@@ -86,6 +86,7 @@ import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.api.updateStoatWebApp
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.core.model.schemas.HealthNotice
@@ -206,6 +207,11 @@ class MainActivityViewModel @Inject constructor(
             Log.d("MainActivity", "Checking logged in state")
 
             isConnected.emit(hasInternetConnection())
+
+            val stoatInstanceUrl = kvStorage.get("stoatInstanceUrl");
+            if(!stoatInstanceUrl.isNullOrBlank()) {
+                updateStoatWebApp(stoatInstanceUrl);
+            }
 
             Log.d("MainActivity", "Checking if we can reach Stoat")
 
