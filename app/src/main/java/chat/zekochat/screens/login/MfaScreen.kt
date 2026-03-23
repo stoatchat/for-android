@@ -149,7 +149,8 @@ fun MfaScreen(
     LaunchedEffect(viewModel.navigateToHome) {
         if (viewModel.navigateToHome) {
             navController.navigate("chat") {
-                popUpTo("login/greeting") { inclusive = true }
+                // Clear auth flow history while keeping graph/state restoration stable.
+                popUpTo("choose-platform") { inclusive = true }
             }
         }
     }

@@ -134,6 +134,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.request.get
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -147,6 +148,9 @@ class MainActivityViewModel @Inject constructor(
     val nextDestination = MutableStateFlow<String?>(null)
     var isConnected = MutableStateFlow(false)
     val isReady = MutableStateFlow(false)
+    // Controls when we allow the first UI draw.
+    // Authentication/navigation readiness is represented by `isReady`.
+    val isUiReady = MutableStateFlow(false)
     val couldNotLogIn = MutableStateFlow(false)
 
     private fun hasInternetConnection(): Boolean {
@@ -184,11 +188,9 @@ class MainActivityViewModel @Inject constructor(
         isReady.emit(true)
     }
 
-    private fun doPreStartupTasks() {
-        Log.d("MainActivity", "Performing pre-startup tasks")
+    private fun doPostStartupTasks() {
+        Log.d("MainActivity", "Performing post-startup tasks")
         viewModelScope.launch {
-            Log.d("MainActivity", "Hydrating Experiments from KV")
-            Experiments.hydrateWithKv()
             Log.d("MainActivity", "Performing health check")
             doHealthCheck()
             Log.d("MainActivity", "Performing update geo state")
@@ -225,6 +227,8 @@ class MainActivityViewModel @Inject constructor(
     fun checkLoggedInState() {
         viewModelScope.launch {
             Log.d("MainActivity", "Checking logged in state")
+            Log.d("MainActivity", "Hydrating Experiments from KV")
+            Experiments.hydrateWithKv()
 
             isConnected.emit(hasInternetConnection())
 
@@ -339,8 +343,13 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         Log.d("MainActivity", "Starting up")
-        doPreStartupTasks()
+        // Do not block initial rendering on slow network/login checks.
+        isUiReady.value = true
         checkLoggedInState()
+        viewModelScope.launch {
+            isReady.first { it }
+            doPostStartupTasks()
+        }
     }
 }
 
@@ -419,7 +428,7 @@ class MainActivity : AppCompatActivity() {
             object : ViewTreeObserver.OnPreDrawListener {
                 override fun onPreDraw(): Boolean {
                     // Check whether the initial data is ready.
-                    return if (viewModel.isReady.value) {
+                    return if (viewModel.isUiReady.value) {
                         // The content is ready. Start drawing.
                         content.viewTreeObserver.removeOnPreDrawListener(this)
                         true

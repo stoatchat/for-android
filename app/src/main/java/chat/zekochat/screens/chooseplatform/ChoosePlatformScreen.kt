@@ -45,6 +45,22 @@ fun ChoosePlatformScreen(navController: NavController) {
     val apiUrlValue = remember {
         mutableStateOf("")
     }
+    fun continueWithSelectedPlatform() {
+        if (apiUrlValue.value.isNotEmpty()) {
+            when (apiUrlValue.value) {
+                ApplicationPlatform.PEP.baseUrl -> PeptideAPI.setPlatform(
+                    ApplicationPlatform.PEP
+                )
+
+                ApplicationPlatform.REVOLT.baseUrl -> PeptideAPI.setPlatform(
+                    ApplicationPlatform.REVOLT
+                )
+
+                else -> return
+            }
+        }
+        navController.navigate("login/greeting")
+    }
 
     Column(
         modifier = Modifier
@@ -118,6 +134,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                         .size(72.dp)
                         .clickable {
                             apiUrlValue.value = ApplicationPlatform.PEP.baseUrl
+                            continueWithSelectedPlatform()
                         },
                 ) {
                     Box(
@@ -152,6 +169,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                         .size(72.dp)
                         .clickable {
                             apiUrlValue.value = ApplicationPlatform.REVOLT.baseUrl
+                            continueWithSelectedPlatform()
                         },
                 ) {
                     Box(
@@ -199,20 +217,7 @@ fun ChoosePlatformScreen(navController: NavController) {
                 .padding(vertical = 8.dp)
         )
         SquareButton(
-            onClick = {
-                if(apiUrlValue.value.isNotEmpty()){
-                    when(apiUrlValue.value){
-                        ApplicationPlatform.PEP.baseUrl -> PeptideAPI.setPlatform(
-                            ApplicationPlatform.PEP
-                        )
-                        ApplicationPlatform.REVOLT.baseUrl -> PeptideAPI.setPlatform(
-                            ApplicationPlatform.REVOLT
-                        )
-                        else -> return@SquareButton
-                    }
-                }
-                navController.navigate("login/greeting")
-            },
+            onClick = ::continueWithSelectedPlatform,
             modifier = Modifier
                 .padding(top = 32.dp, bottom = 16.dp)
                 .fillMaxWidth()

@@ -3,9 +3,11 @@ package chat.zekochat.screens
 import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +47,13 @@ fun DefaultDestinationScreen(
             navController.popBackStack(navController.graph.startDestinationRoute!!, true)
             navController.navigate(it)
         }
+    }
+
+    if (nextDestination == null) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
     }
 
     Box(Modifier.fillMaxSize())
