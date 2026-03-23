@@ -5,9 +5,15 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import chat.zekochat.api.PeptideAPI
 import chat.zekochat.api.internals.BrushCompat
 import chat.zekochat.api.internals.Roles
@@ -44,16 +50,30 @@ fun MemberListItem(
         colors = TransparentListItemColours,
         modifier = modifier,
         headlineContent = {
-            Text(
-                text = member?.nickname
-                    ?: user?.displayName
-                    ?: user?.username
-                    ?: user?.id
-                    ?: userId,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = LocalTextStyle.current.copy(brush = colour),
-            )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = member?.nickname
+                            ?: user?.displayName
+                            ?: user?.username
+                            ?: user?.id
+                            ?: userId,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = LocalTextStyle.current.copy(brush = colour),
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    if (hasVerifiedVendor(user?.badges)) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                        UserVendorBadge(
+                            badges = user?.badges,
+                            size = 16.dp
+                        )
+                    }
+                }
         },
         supportingContent = {
             user?.status?.text?.let {

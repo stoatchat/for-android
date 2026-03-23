@@ -63,6 +63,8 @@ import chat.zekochat.api.settings.NotificationType
 import chat.zekochat.api.settings.SyncedSettings
 import chat.zekochat.callbacks.Action
 import chat.zekochat.callbacks.ActionChannel
+import chat.zekochat.composables.chat.UserBadgeRow
+import chat.zekochat.composables.chat.UserVendorBadge
 import chat.zekochat.composables.generic.NonIdealState
 import chat.zekochat.composables.generic.SheetButton
 import chat.zekochat.composables.generic.UserAvatar
@@ -193,13 +195,29 @@ fun UserInfoSheet(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
+
                                 resolvedUser!!.username?.let { uname ->
-                                    Text(
-                                        text = "@$uname",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                    ) {
+                                        Text(
+                                            text = "@$uname",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                        UserVendorBadge(
+                                            badges = resolvedUser!!.badges,
+                                            size = 16.dp
+                                        )
+                                    }
+                                }
+
+                                val badgesValue = resolvedUser!!.badges ?: 0L
+                                if (badgesValue > 0L) {
+                                    Spacer(Modifier.height(8.dp))
+                                    UserBadgeRow(badges = badgesValue)
                                 }
                             }
                             if (Experiments.enableServerIdentityOptions.isEnabled) {

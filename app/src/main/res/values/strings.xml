@@ -465,6 +465,16 @@
     <string name="user_badge_reserved_relevant_joke_badge_1" translatable="false">sus</string>
     <string name="user_badge_reserved_relevant_joke_badge_2" translatable="false">It\'s Morbin Time</string>
 
+    <!-- Web badge mapping labels (used as accessibility/tooltips on Android). -->
+    <string name="user_badge_first_100_members" translatable="false">First 100 Members</string>
+    <string name="user_badge_top_contributor" translatable="false">Top Contributor</string>
+    <string name="user_badge_administrator" translatable="false">Administrator</string>
+    <string name="user_badge_trusted_seller" translatable="false">Trusted Seller</string>
+    <string name="user_badge_karen" translatable="false">Karen</string>
+    <string name="user_badge_gump" translatable="false">Gump</string>
+    <string name="user_badge_clown" translatable="false">Clown</string>
+    <string name="user_badge_verified_vendor" translatable="false">Verified Vendor</string>
+
     <string name="add_server_sheet_step_0_title">Add Server</string>
     <string name="add_server_sheet_step_0_description">A server is where the magic happens. Chat with your friends, share memes, build communities, and more.</string>
     <string name="add_server_sheet_step_0_join">Join by invite code or link</string>

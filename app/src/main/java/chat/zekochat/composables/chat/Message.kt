@@ -417,6 +417,14 @@ fun Message(
                                     )
                                 )
 
+                                if (hasVerifiedVendor(author.badges)) {
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    UserVendorBadge(
+                                        badges = author.badges,
+                                        size = 16.dp
+                                    )
+                                }
+
                                 InlineBadges(
                                     bot = author.bot != null && message.masquerade == null,
                                     bridge = message.masquerade != null && author.bot != null,
