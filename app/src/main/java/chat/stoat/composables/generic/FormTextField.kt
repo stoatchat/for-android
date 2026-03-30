@@ -23,7 +23,8 @@ fun FormTextField(
     action: ImeAction = ImeAction.Done,
     supportingText: @Composable (() -> Unit)? = null,
     singleLine: Boolean = true,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    placeholder: @Composable (() -> Unit)? = null,
 ) {
     TextField(
         value = value,
@@ -34,6 +35,7 @@ fun FormTextField(
         label = { Text(label) },
         supportingText = supportingText,
         enabled = enabled,
-        modifier = modifier
+        modifier = modifier,
+        placeholder = placeholder
     )
 }

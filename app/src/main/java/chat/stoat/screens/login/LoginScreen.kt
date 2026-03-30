@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -206,7 +210,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             .fillMaxSize()
             .padding(20.dp)
             .imePadding()
-            .safeDrawingPadding(),
+            .safeDrawingPadding()
+            .verticalScroll(rememberScrollState())
+            .overscroll(rememberOverscrollEffect()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -230,18 +236,22 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
 
             Column(
                 modifier = Modifier
-                    .width(270.dp),
+                    .width(270.dp)
+                    .overscroll(rememberOverscrollEffect())
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 FormTextField(
                     value = viewModel.stoatInstanceUrl,
-                    label = "Stoat instance", // FIXME hardcoded string
+                    label = stringResource(R.string.stoat_instance), // TODO: needs translations
                     type = KeyboardType.Uri,
                     action = ImeAction.Next,
                     onChange = viewModel::setStoatInstanceUrl,
                     modifier = Modifier
-                        .padding(vertical = 25.dp)
+                        .padding(vertical = 25.dp),
+                    placeholder = {Text(text = STOAT_WEB_APP_DEFAULT)},
+                    supportingText = {Text(text = stringResource(R.string.stoat_instance_hint))}
                 )
                 FormTextField(
                     value = viewModel.email,
