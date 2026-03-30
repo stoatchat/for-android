@@ -87,13 +87,19 @@ fun updateStoatWebApp(webApp: String = STOAT_WEB_APP_DEFAULT) {
         sanitisedBaseUrl = STOAT_WEB_APP_DEFAULT;
     }
 
+    if(!sanitisedBaseUrl.matches(Regex("^https?://.+"))) {
+        // Default to https if no scheme provided
+        sanitisedBaseUrl = "https://${sanitisedBaseUrl}";
+    }
+
     var parsed = sanitisedBaseUrl.toUri();
 
     val portPart = if (parsed.port == 80 || parsed.port == 443) "" else ":${parsed.port}";
     val root = "${parsed.scheme}://${parsed.host}${portPart}";
     val rootWithPort = "${parsed.scheme}://${parsed.host}:${parsed.port}";
     if(sanitisedBaseUrl.matches(Regex("^$root/+$")) || sanitisedBaseUrl.matches(Regex("^$rootWithPort/+$"))) {
-        // Remove trailing slashes (not sure if it'd actually cause an issue but might as well clean it up)
+        // Remove trailing slashes
+        // (not sure if it'd actually cause an issue but might as well clean it up)
         sanitisedBaseUrl = rootWithPort;
     }
 

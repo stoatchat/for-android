@@ -76,6 +76,9 @@ import chat.stoat.BuildConfig
 import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.HitRateLimitException
+import chat.stoat.api.STOAT_BASE
+import chat.stoat.api.STOAT_BASE_DEFAULT
+import chat.stoat.api.STOAT_WEB_APP_DEFAULT
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.api
@@ -228,12 +231,28 @@ class MainActivityViewModel @Inject constructor(
                 "We have a session token, checking if it's valid and if we can still reach Stoat"
             )
 
-            val canReachStoat = canReachStoat()
-            val valid = try {
-                StoatAPI.checkSessionToken(token)
-            } catch (e: Throwable) {
-                false
+            var valid = false;
+            var canReachStoat = false;
+            for(attempt in 1..2) {
+                canReachStoat = canReachStoat();
+                if(canReachStoat) {
+                    valid = try {
+                        StoatAPI.checkSessionToken(token)
+                    } catch (e: Throwable) {
+                        false
+                    }
+                } else {
+                    Log.d("MainActivity", "Cannot reach $STOAT_BASE, trying $STOAT_BASE_DEFAULT");
+                    // Fall back to the default instance,
+                    // otherwise the user might get stuck trying to connect to an unreachable instance
+                    updateStoatWebApp(STOAT_WEB_APP_DEFAULT);
+                }
+
+                if(canReachStoat && valid) {
+                    break;
+                }
             }
+
 
             if (canReachStoat && !valid) {
                 Log.d("MainActivity", "Session token is invalid, could not log in")
