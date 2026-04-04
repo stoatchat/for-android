@@ -1,23 +1,31 @@
 package chat.stoat.screens.main
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.screens.chat.views.OverviewScreen
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.HazeMaterials
 
 enum class MainScreenTab {
     Communities,
@@ -28,10 +36,14 @@ enum class MainScreenTab {
 @Composable
 fun MainScreen(navController: NavController) {
     var currentTab by rememberSaveable { mutableStateOf(MainScreenTab.Communities) }
+    val hazeState = remember { HazeState() }
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = Color.Transparent,
+                modifier = Modifier.hazeEffect(state = hazeState, style = HazeMaterials.thin(MaterialTheme.colorScheme.surfaceContainer))
+            ) {
                 NavigationBarItem(
                     selected = currentTab == MainScreenTab.Communities,
                     onClick = { currentTab = MainScreenTab.Communities },
@@ -88,22 +100,28 @@ fun MainScreen(navController: NavController) {
             }
         },
     ) { pv ->
-        Box(Modifier.padding(pv)) {
-            when (currentTab) {
-                MainScreenTab.Communities -> {}
-                MainScreenTab.Conversations -> {
-                    ConversationsScreen(
-                        navController
-                    )
-                }
+        Box(
+            Modifier
+                .fillMaxSize()
+                .hazeSource(state = hazeState)
+        ) {
+            Box(Modifier.padding(pv)) {
+                when (currentTab) {
+                    MainScreenTab.Communities -> {}
+                    MainScreenTab.Conversations -> {
+                        ConversationsScreen(
+                            navController
+                        )
+                    }
 
-                MainScreenTab.Overview -> {
-                    OverviewScreen(
-                        navController,
-                        useDrawer = false,
-                        onDrawerClicked = {},
-                        includePadding = false
-                    )
+                    MainScreenTab.Overview -> {
+                        OverviewScreen(
+                            navController,
+                            useDrawer = false,
+                            onDrawerClicked = {},
+                            includePadding = false
+                        )
+                    }
                 }
             }
         }

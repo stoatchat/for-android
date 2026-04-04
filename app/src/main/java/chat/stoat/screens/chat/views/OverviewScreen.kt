@@ -413,8 +413,8 @@ fun OverviewScreenLink(
         modifier = Modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .then(if (clickable) Modifier.clickable(onClick = onClick) else Modifier)
-            .background(backgroundColour)
-            .padding(vertical = 32.dp)
+            .background(backgroundColour.copy(alpha = 0.8f))
+            .padding(vertical = 24.dp)
             .fillMaxWidth()
     ) {
         CompositionLocalProvider(LocalContentColor provides foregroundColour) {

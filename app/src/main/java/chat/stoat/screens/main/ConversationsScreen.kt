@@ -1,20 +1,25 @@
 package chat.stoat.screens.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -26,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -78,52 +84,95 @@ fun ConversationsScreen(navController: NavController) {
                 }
 
                 if (notesChannel != null) {
-                    ListItem(
-                        headlineContent = {
-                            Text(stringResource(R.string.channel_notes))
-                        },
-                        supportingContent = {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navController.navigate("main/conversation/${notesChannel.id}")
+                            }
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(contentAlignment = Alignment.TopEnd) {
+                            StoatAPI.userCache[StoatAPI.selfId]?.let {
+                                UserAvatar(
+                                    username = it.username.toString(),
+                                    avatar = it.avatar,
+                                    userId = it.id.toString(),
+                                    shape = RoundedCornerShape(LoadedSettings.avatarRadius)
+                                )
+                            }
+                            Badge {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_keep_24dp),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                stringResource(R.string.channel_notes),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
                             if (preview.isNotBlank()) {
                                 Text(
                                     preview,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
-                        },
-                        leadingContent = {
-                            Box(contentAlignment = Alignment.TopEnd) {
-                                StoatAPI.userCache[StoatAPI.selfId]?.let {
-                                    UserAvatar(
-                                        username = it.username.toString(),
-                                        avatar = it.avatar,
-                                        userId = it.id.toString(),
-                                        shape = RoundedCornerShape(LoadedSettings.avatarRadius)
-                                    )
-                                }
-                                Badge {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_keep_24dp),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(12.dp)
-                                    )
-                                }
-                            }
-                        },
-                        modifier = Modifier.clickable {
-                            navController.navigate("main/conversation/${notesChannel.id}")
                         }
-                    )
-                    HorizontalDivider()
+                    }
                 }
             }
-            items(1000) {
-                Text(
-                    "Conversation $it", modifier = Modifier
+            items(100) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .clickable {
                             navController.navigate("main/conversation/${it}")
                         }
-                        .fillMaxWidth())
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(LoadedSettings.avatarRadius.dp * 2)
+                            .clip(RoundedCornerShape(LoadedSettings.avatarRadius))
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = it.toString().take(1),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            "Conversation $it",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            "Last message preview $it",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         }
     }

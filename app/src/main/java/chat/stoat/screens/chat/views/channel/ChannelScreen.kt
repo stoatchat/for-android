@@ -86,6 +86,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -147,6 +148,10 @@ import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.ChannelInfoSheet
 import chat.stoat.sheets.MessageContextSheet
 import chat.stoat.sheets.ReactSheet
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.HazeMaterials
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
@@ -203,6 +208,7 @@ fun ChannelScreen(
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val hazeState = remember { HazeState() }
     val config = LocalConfiguration.current
 
     LaunchedEffect(Unit) {
@@ -524,7 +530,8 @@ fun ChannelScreen(
                 TopAppBar(
                     modifier = Modifier.clickable {
                         channelInfoSheetShown = true
-                    },
+                    }.hazeEffect(state = hazeState, style = HazeMaterials.thin(MaterialTheme.colorScheme.surface)),
+                    colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                     title = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -675,7 +682,7 @@ fun ChannelScreen(
                             .padding(pv)
                     ) {
                         Box(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.weight(1f).hazeSource(state = hazeState),
                             contentAlignment = Alignment.BottomCenter
                         ) {
                             LazyColumn(
@@ -963,7 +970,8 @@ fun ChannelScreen(
 
                         Column(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                .hazeEffect(state = hazeState, style = HazeMaterials.thin(MaterialTheme.colorScheme.surfaceContainer))
+                                .background(Color.Transparent)
                                 .fillMaxWidth(),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally

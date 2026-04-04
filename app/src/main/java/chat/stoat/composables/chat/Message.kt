@@ -254,7 +254,9 @@ fun Message(
 
     Column(modifier.animateContentSize()) {
         if (message.tail == false) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+        } else {
+            Spacer(modifier = Modifier.height(2.dp))
         }
 
         if (authorIsBlocked) {

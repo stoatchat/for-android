@@ -3,9 +3,9 @@ package chat.stoat.ui.theme
 import androidx.compose.ui.graphics.Color
 
 object Colour {
-    val RevoltUltraPink = Color(0xFFFF005C)
+    val RevoltUltraPink = Color(0xFFFF3377)
 
-    val PrimaryLight = Color(0xFFBD0042)
+    val PrimaryLight = Color(0xFFB90041)
     val OnPrimaryLight = Color(0xFFFFFFFF)
     val PrimaryContainerLight = Color(0xFFFFD9DC)
     val OnPrimaryContainerLight = Color(0xFF910031)
@@ -41,10 +41,10 @@ object Colour {
     val SurfaceContainerHighLight = Color(0xFFE4E8F8)
     val SurfaceContainerHighestLight = Color(0xFFDEE2F2)
 
-    val PrimaryDark = Color(0xFFFFB2BA)
-    val OnPrimaryDark = Color(0xFF670020)
-    val PrimaryContainerDark = Color(0xFF910031)
-    val OnPrimaryContainerDark = Color(0xFFFFD9DC)
+    val PrimaryDark = Color(0xFFFFB2BB)
+    val OnPrimaryDark = Color(0xFF67001F)
+    val PrimaryContainerDark = Color(0xFF910030)
+    val OnPrimaryContainerDark = Color(0xFFFFD9DD)
     val SecondaryDark = Color(0xFFFFB3AE)
     val OnSecondaryDark = Color(0xFF68000C)
     val SecondaryContainerDark = Color(0xFF930015)

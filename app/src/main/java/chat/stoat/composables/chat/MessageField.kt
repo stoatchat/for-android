@@ -54,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -260,7 +261,7 @@ fun MessageField(
     }
 
     Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+        modifier = modifier.background(Color.Transparent)
     ) {
         AnimatedVisibility(
             visible = autocompleteSuggestions.isNotEmpty(),
@@ -491,7 +492,9 @@ fun MessageField(
         }
         Row(
             modifier = modifier
-                .background(MaterialTheme.colorScheme.surfaceContainer),
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .clip(MaterialTheme.shapes.extraLarge)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(8.dp))

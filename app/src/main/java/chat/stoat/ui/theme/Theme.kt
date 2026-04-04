@@ -129,11 +129,11 @@ fun getColorScheme(
     val m3Supported = systemSupportsDynamicColors()
 
     val colorScheme = when {
-        m3Supported && requestedTheme == Theme.M3Dynamic && systemInDarkTheme -> dynamicDarkColorScheme(
+        m3Supported && (requestedTheme == Theme.M3Dynamic || requestedTheme == Theme.None) && systemInDarkTheme -> dynamicDarkColorScheme(
             context
         )
 
-        m3Supported && requestedTheme == Theme.M3Dynamic && !systemInDarkTheme -> dynamicLightColorScheme(
+        m3Supported && (requestedTheme == Theme.M3Dynamic || requestedTheme == Theme.None) && !systemInDarkTheme -> dynamicLightColorScheme(
             context
         )
 
