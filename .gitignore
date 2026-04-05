@@ -16,7 +16,6 @@
 .cxx
 local.properties
 revoltbuild.properties
-stoatbuild.properties
 sentry.properties
 /.kotlin/sessions
 app/src/main/assets/embedded
