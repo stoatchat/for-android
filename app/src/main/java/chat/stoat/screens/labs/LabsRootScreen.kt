@@ -13,7 +13,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.screens.labs.ui.mockups.NewLoginExperienceMockup
-import chat.stoat.screens.labs.ui.sandbox.FinalMarkdownSandbox
 import chat.stoat.screens.labs.ui.sandbox.GradientEditorSandbox
 import chat.stoat.screens.labs.ui.sandbox.JBMSandbox
 import chat.stoat.screens.labs.ui.sandbox.NewCardSandboxScreen
@@ -74,9 +73,6 @@ fun LabsRootScreen(topNav: NavController) {
                 }
                 composable("sandboxes/jbm") {
                     JBMSandbox(labsNav)
-                }
-                composable("sandboxes/finalmarkdown") {
-                    FinalMarkdownSandbox(labsNav)
                 }
                 composable("sandboxes/gradienteditor") {
                     GradientEditorSandbox(labsNav)

@@ -1,6 +1,5 @@
 import { resolve } from "jsr:@std/path"
 import { parseArgs } from "jsr:@std/cli/parse-args"
-import { ZipReader, Uint8ArrayReader, Uint8ArrayWriter } from "jsr:@zip-js/zip-js"
 
 const args = parseArgs(Deno.args, {
     boolean: ["yes", "y", "auto-accept"],
@@ -12,11 +11,8 @@ const args = parseArgs(Deno.args, {
 const autoAccept = args.yes || args["auto-accept"]
 
 const outputFolderParent = resolve(Deno.cwd(), "app", "src", "main", "assets")
-const jniLibsFolder = resolve(Deno.cwd(), "app", "src", "main", "jniLibs")
-
 try {
     Deno.statSync(outputFolderParent)
-    Deno.statSync(jniLibsFolder)
 } catch (_) {
     console.error(
         "\x1b[31m" + // red
@@ -333,80 +329,4 @@ for (const dep of deps) {
     console.log(`Downloaded ${dep.file} to ${file}`)
 }
 
-const libsQuery = "https://git.revolt.chat/api/v1/repos/android/final-markdown/releases/latest"
-
-console.log("The script will now query the Revolt version control server for the latest version"
-        + " of the final-markdown native library and download it. If you do not wish to use pre-built"
-        + " libraries, you can build final-markdown yourself from the source code at"
-        + " https://git.revolt.chat/android/final-markdown, and copy the files to the"
-        + " app/src/main/jniLibs folder. Note the files that are downloaded are exactly the same as"
-        + " the ones we use for the app on Google Play, so you can be sure they are safe to use.")
-
-if (!autoAccept) {
-    console.log(`Will now query ${libsQuery} for the latest version of the library and download it.`)
-    if (!confirm("Continue?")) {
-        console.log("Aborted.")
-        Deno.exit(0)
-    }
-} else {
-    console.log(`Will now query ${libsQuery} for the latest version of the library and download it. (auto-accepted)`)
-}
-
-const queryLibsRes = await fetch(libsQuery)
-if (!queryLibsRes.ok) {
-    console.error(`Failed to fetch the latest library version: ${queryLibsRes.status} ${queryLibsRes.statusText}`)
-    Deno.exit(1)
-}
-
-const libsJson = await queryLibsRes.json()
-const zipUrl = libsJson
-    .assets
-    .find((asset: { name: string }) => asset.name === "jniLibs.zip")?.browser_download_url
-
-if (!zipUrl) {
-    console.error("No jniLibs.zip found in the latest release.")
-    Deno.exit(1)
-}
-
-const libsRes = await fetch(zipUrl)
-if (!libsRes.ok) {
-    console.error(`Failed to fetch the jniLibs.zip: ${libsRes.status} ${libsRes.statusText}`)
-    Deno.exit(1)
-}
-const libsData = await libsRes.arrayBuffer()
-
-const libArchitectures = ["arm64-v8a", "armeabi-v7a", "x86", "x86_64"]
-
-const zipFileBytes = new Uint8Array(libsData)
-
-const zipReader = new ZipReader(new Uint8ArrayReader(zipFileBytes))
-
-const entries = await zipReader.getEntries()
-
-const createDirPromises = libArchitectures.map(arch => {
-    const dirPath = resolve(jniLibsFolder, arch)
-    return Deno.mkdir(dirPath, { recursive: true })
-})
-await Promise.all(createDirPromises)
-
-const writeFilePromises = libArchitectures.map(async arch => {
-    const filePathInZip = `${arch}/libfinalmarkdown.so`
-
-    const entry = entries.find(e => e.filename === filePathInZip)
-
-    if (!entry) {
-        throw new Error(`Expected file not found in zip: ${filePathInZip}`)
-    }
-
-    const writer = new Uint8ArrayWriter()
-    const fileData = await entry.getData!(writer)
-
-    const destinationPath = resolve(jniLibsFolder, filePathInZip)
-    return Deno.writeFile(destinationPath, fileData)
-})
-
-await Promise.all(writeFilePromises)
-
-// Close the zip reader
-await zipReader.close()
 

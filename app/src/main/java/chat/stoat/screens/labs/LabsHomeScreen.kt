@@ -28,13 +28,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.stoat.R
-import chat.stoat.ui.theme.FragmentMono
 
 enum class LabsHomeScreenTab {
     Home,
@@ -175,15 +172,6 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                             },
                             modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/jbm")
-                            }
-                        )
-                        HorizontalDivider()
-                        ListItem(
-                            headlineContent = {
-                                Text("Final Markdown")
-                            },
-                            modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/finalmarkdown")
                             }
                         )
                         HorizontalDivider()
