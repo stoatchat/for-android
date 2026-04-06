@@ -492,8 +492,8 @@ fun EmojiPicker(
         LazyVerticalGrid(
             state = gridState,
             columns = GridCells.Fixed(spanCount),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             if (searchResults.isNotEmpty()) {
@@ -589,18 +589,16 @@ fun ColumnScope.PickerItem(
         is EmojiPickerItem.UnicodeEmoji -> {
             Column(
                 modifier = Modifier
-                    .clip(CircleShape)
+                    .aspectRatio(1f)
                     .clickable {
                         onClick(item)
-                    }
-                    .aspectRatio(1f)
-                    .weight(1f),
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = skinToneFactory(item),
-                    style = LocalTextStyle.current.copy(fontSize = 20.sp)
+                    style = LocalTextStyle.current.copy(fontSize = 22.sp)
                 )
             }
         }
@@ -608,13 +606,11 @@ fun ColumnScope.PickerItem(
         is EmojiPickerItem.ServerEmote -> {
             Column(
                 modifier = Modifier
-                    .clip(CircleShape)
+                    .aspectRatio(1f)
                     .combinedClickable(
                         onClick = { onClick(item) },
                         onLongClick = { item.emote.id?.let { onServerEmoteInfo(it) } }
-                    )
-                    .aspectRatio(1f)
-                    .weight(1f),
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -624,7 +620,7 @@ fun ColumnScope.PickerItem(
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(8.dp)
+                        .padding(4.dp)
                 )
             }
         }
