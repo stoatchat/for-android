@@ -33,6 +33,7 @@ import chat.stoat.api.realtime.frames.receivable.MessageUpdateFrame
 import chat.stoat.api.routes.channel.SendMessageReply
 import chat.stoat.api.routes.channel.ackChannel
 import chat.stoat.api.routes.channel.editMessage
+import chat.stoat.api.routes.channel.fetchSingleChannel
 import chat.stoat.api.routes.channel.fetchMessagesFromChannel
 import chat.stoat.api.routes.channel.sendMessage
 import chat.stoat.api.routes.microservices.autumn.FileArgs
@@ -113,10 +114,25 @@ class ChannelScreenViewModel @Inject constructor(
 
     private var loadMessagesJob: Job? = null
 
+    private suspend fun resolveChannel(channelId: String): Channel? {
+        StoatAPI.channelCache[channelId]?.let { return it }
+
+        return try {
+            fetchSingleChannel(channelId).also { fetched ->
+                if (fetched.id != null) {
+                    StoatAPI.channelCache[fetched.id!!] = fetched
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ChannelScreenViewModel", "Failed to resolve channel $channelId", e)
+            null
+        }
+    }
+
     fun switchChannel(id: String) {
         // Reset state
         this.loadMessagesJob?.cancel()
-        this.channel = StoatAPI.channelCache[id]
+        this.channel = null
         this.items = mutableStateListOf(ChannelScreenItem.Loading)
         this.activePane = ChannelScreenActivePane.None
         this.typingUsers = mutableStateListOf()
@@ -126,30 +142,45 @@ class ChannelScreenViewModel @Inject constructor(
         this.denyMessageField = false
         this.denyMessageFieldReasonResource = R.string.typing_blank
         this.editingMessage = null
-        this.ageGateUnlocked = channel?.nsfw != true
-        this.showGeoGate = when {
-            channel?.nsfw == true && GeoStateProvider.geoState?.isAgeRestrictedGeo == true -> true
-            else -> false
-        }
-        viewModelScope.launch {
-            if (ageGateUnlocked != true) {
-                ageGateUnlocked = AgeGateUnlockedStorageProvider.getAgeGateUnlocked()
-            }
-        }
+        this.ageGateUnlocked = null
+        this.showGeoGate = false
 
         viewModelScope.launch {
-            putDraftContent(kvStorage.get("draftContent/$id") ?: "", true)
+            val restoredDraft = kvStorage.get("draftContent/$id") ?: ""
+            draftContent = restoredDraft
+            initialTextFieldValue = restoredDraft
+            initialTextFieldValueDirtyMarker = ULID.makeNext()
         }
         this.draftAttachments = mutableStateListOf()
         this.draftReplyTo = mutableStateListOf()
         this.attachmentUploadProgress = 0f
 
         viewModelScope.launch {
+            val resolvedChannel = resolveChannel(id)
+            this@ChannelScreenViewModel.channel = resolvedChannel
+
+            if (resolvedChannel == null) {
+                updateItems(emptyList())
+                ActionChannel.send(
+                    Action.ChatNavigate(
+                        ChatRouterDestination.NoCurrentChannel(null)
+                    )
+                )
+                return@launch
+            }
+
+            this@ChannelScreenViewModel.ageGateUnlocked = resolvedChannel.nsfw != true
+            this@ChannelScreenViewModel.showGeoGate =
+                resolvedChannel.nsfw == true && GeoStateProvider.geoState?.isAgeRestrictedGeo == true
+
+            if (ageGateUnlocked != true) {
+                ageGateUnlocked = AgeGateUnlockedStorageProvider.getAgeGateUnlocked()
+            }
+
             ensureSelfHasMember()
             denyMessageFieldIfNeeded()
+            loadMessages(50, markLastAsRead = true)
         }
-
-        this.loadMessages(50, markLastAsRead = true)
     }
 
     suspend fun unlockAgeGate() {
@@ -260,8 +291,10 @@ class ChannelScreenViewModel @Inject constructor(
      * and, if [setInitial] is true, updates the text field to say the new [content].
      */
     fun putDraftContent(content: String, setInitial: Boolean = false) {
-        viewModelScope.launch {
-            kvStorage.set("draftContent/${channel?.id}", content)
+        channel?.id?.let { channelId ->
+            viewModelScope.launch {
+                kvStorage.set("draftContent/$channelId", content)
+            }
         }
 
         if (editingMessage == null) {
