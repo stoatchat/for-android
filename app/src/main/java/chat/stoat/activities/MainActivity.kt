@@ -180,6 +180,11 @@ class MainActivityViewModel @Inject constructor(
         isReady.emit(true)
     }
 
+    private suspend fun showLoginError() {
+        couldNotLogIn.emit(true)
+        startWithoutDestination()
+    }
+
     private fun doPreStartupTasks() {
         Log.d("MainActivity", "Performing pre-startup tasks")
         viewModelScope.launch {
@@ -231,7 +236,7 @@ class MainActivityViewModel @Inject constructor(
 
             if (canReachStoat && !valid) {
                 Log.d("MainActivity", "Session token is invalid, could not log in")
-                couldNotLogIn.emit(true)
+                showLoginError()
             } else {
                 try {
                     Log.d("MainActivity", "Session token is valid, checking onboarding state")
@@ -251,7 +256,7 @@ class MainActivityViewModel @Inject constructor(
                     return@launch startWithoutDestination()
                 } catch (e: Exception) {
                     Log.e("MainActivity", "Failed to check onboarding state, could not log in", e)
-                    couldNotLogIn.emit(true)
+                    showLoginError()
                 }
 
                 try {
@@ -265,7 +270,7 @@ class MainActivityViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     Log.e("MainActivity", "Failed to login, could not log in", e)
-                    couldNotLogIn.emit(true)
+                    showLoginError()
                 }
             }
         }
