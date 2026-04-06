@@ -72,6 +72,10 @@ import javax.inject.Inject
 class ChannelScreenViewModel @Inject constructor(
     private val kvStorage: KVStorage,
 ) : ViewModel() {
+    private companion object {
+        const val MAX_REPLY_TARGETS = 5
+    }
+
     var items = mutableStateListOf<ChannelScreenItem>()
     var typingUsers = mutableStateListOf<String>()
 
@@ -282,7 +286,7 @@ class ChannelScreenViewModel @Inject constructor(
     }
 
     suspend fun addReplyTo(messageId: String) {
-        if (draftReplyTo.size >= 5) return
+        if (draftReplyTo.size >= MAX_REPLY_TARGETS) return
         if (draftReplyTo.any { it.id == messageId }) return
 
         val shouldMention = kvStorage.getBoolean("mentionOnReply") ?: false
@@ -337,7 +341,7 @@ class ChannelScreenViewModel @Inject constructor(
         // 2. if the user changes the content while the message is being sent we want to persist
         //    the original content
         val content = MessageProcessor.processOutgoing(draftContent, channel?.server)
-        val replyTo = draftReplyTo.toList()
+        val replyTo = draftReplyTo.distinctBy { it.id }.take(MAX_REPLY_TARGETS)
 
         // First we upload (the next 5) attachments...
         viewModelScope.launch {
@@ -717,13 +721,7 @@ class ChannelScreenViewModel @Inject constructor(
                             m is ChannelScreenItem.RegularMessage && m.message.id == it.messageId
                         } as? ChannelScreenItem.RegularMessage ?: return@onEach
 
-                        val shouldMention = kvStorage.getBoolean("mentionOnReply") ?: false
-                        draftReplyTo.add(
-                            SendMessageReply(
-                                message.message.id ?: return@onEach,
-                                shouldMention
-                            )
-                        )
+                        addReplyTo(message.message.id ?: return@onEach)
                     }
 
                     is UiCallback.EditMessage -> {
@@ -742,13 +740,7 @@ class ChannelScreenViewModel @Inject constructor(
                             m is ChannelScreenItem.RegularMessage && m.message.id == it.messageId
                         } as? ChannelScreenItem.RegularMessage ?: return@onEach
 
-                        val shouldMention = kvStorage.getBoolean("mentionOnReply") ?: false
-                        draftReplyTo.add(
-                            SendMessageReply(
-                                message.message.id ?: return@onEach,
-                                shouldMention
-                            )
-                        )
+                        addReplyTo(message.message.id ?: return@onEach)
                         putDraftContent(it.content, true)
                     }
                 }
