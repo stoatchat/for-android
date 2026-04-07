@@ -152,6 +152,7 @@ class ChatRouterViewModel @Inject constructor(
     @ApplicationContext val context: Context
 ) : ViewModel() {
     var currentDestination by mutableStateOf<ChatRouterDestination>(ChatRouterDestination.default)
+    var pendingScrollToMessageId by mutableStateOf<String?>(null)
     var latestChangelogRead by mutableStateOf(true)
     var latestChangelog by mutableStateOf("")
     var latestChangelogBody by mutableStateOf("")
@@ -419,6 +420,18 @@ fun ChatRouterScreen(
                             return@let
                         }
 
+                        viewModel.setSaveDestination(ChatRouterDestination.Channel(action.channelId))
+                    }
+
+                    is Action.SwitchChannelToMessage -> {
+                        val resolvedChannel = StoatAPI.channelCache[action.channelId]
+
+                        if (resolvedChannel == null) {
+                            showChannelUnavailableAlert = true
+                            return@let
+                        }
+
+                        viewModel.pendingScrollToMessageId = action.messageId
                         viewModel.setSaveDestination(ChatRouterDestination.Channel(action.channelId))
                     }
 
@@ -856,6 +869,8 @@ fun ChatRouterScreen(
                             toggleDrawerLambda()
                         },
                         onEnterVoiceUI = onEnterVoiceUI,
+                        pendingScrollToMessageId = viewModel.pendingScrollToMessageId,
+                        consumePendingScroll = { viewModel.pendingScrollToMessageId = null },
                     )
                 }
             } else {
@@ -908,6 +923,8 @@ fun ChatRouterScreen(
                                 setDrawerGestureEnabled = {
                                     useSidebarGesture = it
                                 },
+                                pendingScrollToMessageId = viewModel.pendingScrollToMessageId,
+                                consumePendingScroll = { viewModel.pendingScrollToMessageId = null },
                                 onEnterVoiceUI = onEnterVoiceUI,
                             )
 
@@ -985,6 +1002,8 @@ fun ChannelNavigator(
     disableBackHandler: Boolean = false,
     onEnterVoiceUI: (String) -> Unit = {},
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
+    pendingScrollToMessageId: String? = null,
+    consumePendingScroll: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
@@ -1013,6 +1032,8 @@ fun ChannelNavigator(
             is ChatRouterDestination.Channel -> {
                 ChannelScreen(
                     channelId = dest.channelId,
+                    pendingScrollToMessageId = pendingScrollToMessageId,
+                    consumePendingScroll = consumePendingScroll,
                     onToggleDrawer = {
                         scope.launch {
                             if (drawerState?.isOpen == true) {

@@ -80,6 +80,7 @@ import chat.stoat.api.internals.isUlid
 import chat.stoat.api.routes.custom.fetchEmoji
 import chat.stoat.core.model.schemas.isInviteUri
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.RemoteImage
@@ -118,6 +119,26 @@ enum class JBMAnnotations(val tag: String, val clickable: Boolean) {
 
 object JBMRegularExpressions {
     val Timestamp = Regex("<t:([0-9]+?)(:[tTDfFR])?>")
+    val InternalLink = Regex("/(?:server/[A-Z0-9]+/)?channel/([A-Z0-9]+)(?:/([A-Z0-9]+))?")
+}
+
+/**
+ * Resolve an internal URL to a pretty display string like "# General > 💬"
+ * Returns null if not an internal URL.
+ */
+fun resolveInternalLinkText(url: String): String? {
+    try {
+        val uri = url.toUri()
+        if (!url.startsWith(STOAT_WEB_APP)) return null
+        val path = uri.path ?: return null
+        val match = JBMRegularExpressions.InternalLink.find(path) ?: return null
+        val channelId = match.groupValues[1]
+        val messageId = match.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() }
+        val channelName = StoatAPI.channelCache[channelId]?.name ?: "unknown"
+        return if (messageId != null) " # $channelName \u203A \uD83D\uDCAC " else " # $channelName "
+    } catch (e: Exception) {
+        return null
+    }
 }
 
 data class JBMColors(
@@ -430,31 +451,56 @@ private fun annotateText(
                         node.children.firstOrNull { it.type == MarkdownElementTypes.LINK_DESTINATION }
                             ?: node.children.firstOrNull { it.type == MarkdownElementTypes.AUTOLINK }
 
+                    val linkUrl = linkDestinationChild?.getTextInNode(sourceText).toString()
+                        .removeSurrounding("<", ">")
+                    val prettyText = resolveInternalLinkText(linkUrl)
+
                     pushStringAnnotation(
                         tag = JBMAnnotations.URL.tag,
-                        annotation = linkDestinationChild?.getTextInNode(sourceText).toString()
-                            .removeSurrounding("<", ">")
+                        annotation = linkUrl
                     )
-                    pushStyle(SpanStyle(color = state.colors.clickable))
-                    linkTextChild?.children
-                        ?.drop(1) // l-bracket
-                        ?.dropLast(1) // r-bracket
-                        ?.forEach {
-                            append(annotateText(state, it))
-                        }
+                    if (prettyText != null) {
+                        pushStyle(
+                            SpanStyle(
+                                color = state.colors.clickable,
+                                background = state.colors.clickableBackground
+                            )
+                        )
+                        append(prettyText)
+                    } else {
+                        pushStyle(SpanStyle(color = state.colors.clickable))
+                        linkTextChild?.children
+                            ?.drop(1) // l-bracket
+                            ?.dropLast(1) // r-bracket
+                            ?.forEach {
+                                append(annotateText(state, it))
+                            }
+                    }
                     pop()
                     pop()
                 }
 
                 GFMTokenTypes.GFM_AUTOLINK,
                 MarkdownTokenTypes.AUTOLINK -> {
+                    val urlText = node.getTextInNode(sourceText).toString()
+                        .removeSurrounding("<", ">")
+                    val prettyText = resolveInternalLinkText(urlText)
                     pushStringAnnotation(
                         tag = JBMAnnotations.URL.tag,
-                        annotation = node.getTextInNode(sourceText).toString()
-                            .removeSurrounding("<", ">")
+                        annotation = urlText
                     )
-                    pushStyle(SpanStyle(color = state.colors.clickable))
-                    append(node.getTextInNode(sourceText))
+                    if (prettyText != null) {
+                        pushStyle(
+                            SpanStyle(
+                                color = state.colors.clickable,
+                                background = state.colors.clickableBackground
+                            )
+                        )
+                        append(prettyText)
+                    } else {
+                        pushStyle(SpanStyle(color = state.colors.clickable))
+                        append(node.getTextInNode(sourceText))
+                    }
                     pop()
                     pop()
                 }
@@ -561,6 +607,23 @@ private fun JBMText(node: ASTNode, modifier: Modifier) {
                                         }
                                     }
                                     return@handler true
+                                }
+                                // Handle internal channel/message links
+                                if (item.startsWith(STOAT_WEB_APP)) {
+                                    val path = uri.path ?: ""
+                                    val channelMatch = Regex("/(?:server/[A-Z0-9]+/)?channel/([A-Z0-9]+)(?:/([A-Z0-9]+))?").find(path)
+                                    if (channelMatch != null) {
+                                        val channelId = channelMatch.groupValues[1]
+                                        val messageId = channelMatch.groupValues.getOrNull(2)?.takeIf { it.isNotEmpty() }
+                                        scope.launch {
+                                            if (messageId != null) {
+                                                ActionChannel.send(Action.SwitchChannelToMessage(channelId, messageId))
+                                            } else {
+                                                ActionChannel.send(Action.SwitchChannel(channelId))
+                                            }
+                                        }
+                                        return@handler true
+                                    }
                                 }
                             } catch (e: Exception) {
                                 // no-op

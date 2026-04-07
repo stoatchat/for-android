@@ -105,6 +105,13 @@ class ChannelScreenViewModel @Inject constructor(
     var ageGateUnlocked by mutableStateOf<Boolean?>(null)
     var showGeoGate by mutableStateOf(false)
 
+    // When true, we're viewing history around a target message (not at latest)
+    var isInMiddleOfHistory by mutableStateOf(false)
+    // The newest message ID in current view (for loading newer messages)
+    var newestLoadedMessageId by mutableStateOf<String?>(null)
+    // Whether we've reached the latest messages when scrolling forward
+    var reachedLatest by mutableStateOf(true)
+
     init {
         viewModelScope.launch {
             keyboardHeight = kvStorage.getInt("keyboardHeight") ?: 900 // reasonable default for now
@@ -113,13 +120,14 @@ class ChannelScreenViewModel @Inject constructor(
 
     private var loadMessagesJob: Job? = null
 
-    fun switchChannel(id: String) {
+    fun switchChannel(id: String, targetMessageId: String? = null) {
         // Reset state
         this.loadMessagesJob?.cancel()
         this.channel = StoatAPI.channelCache[id]
-        this.items = mutableStateListOf(ChannelScreenItem.Loading)
+        this.items.clear()
+        this.items.add(ChannelScreenItem.Loading)
         this.activePane = ChannelScreenActivePane.None
-        this.typingUsers = mutableStateListOf()
+        this.typingUsers.clear()
         this.endOfChannel = false
         this.didInitialChannelFetch = false
         this.ensuredSelfMember = false
@@ -140,8 +148,8 @@ class ChannelScreenViewModel @Inject constructor(
         viewModelScope.launch {
             putDraftContent(kvStorage.get("draftContent/$id") ?: "", true)
         }
-        this.draftAttachments = mutableStateListOf()
-        this.draftReplyTo = mutableStateListOf()
+        this.draftAttachments.clear()
+        this.draftReplyTo.clear()
         this.attachmentUploadProgress = 0f
 
         viewModelScope.launch {
@@ -149,7 +157,44 @@ class ChannelScreenViewModel @Inject constructor(
             denyMessageFieldIfNeeded()
         }
 
+        if (targetMessageId != null) {
+            this.isInMiddleOfHistory = true
+            this.reachedLatest = false
+            this.newestLoadedMessageId = null
+            this.loadMessages(50, around = targetMessageId)
+        } else {
+            this.isInMiddleOfHistory = false
+            this.reachedLatest = true
+            this.newestLoadedMessageId = null
+            this.loadMessages(50, markLastAsRead = true)
+        }
+    }
+
+    fun jumpToMessage(messageId: String) {
+        this.loadMessagesJob?.cancel()
+        this.items.clear()
+        this.items.add(ChannelScreenItem.Loading)
+        this.endOfChannel = false
+        this.isInMiddleOfHistory = true
+        this.reachedLatest = false
+        this.newestLoadedMessageId = null
+        this.loadMessages(50, around = messageId)
+    }
+
+    fun returnToLatest() {
+        this.loadMessagesJob?.cancel()
+        this.items.clear()
+        this.items.add(ChannelScreenItem.Loading)
+        this.endOfChannel = false
+        this.isInMiddleOfHistory = false
+        this.reachedLatest = true
+        this.newestLoadedMessageId = null
         this.loadMessages(50, markLastAsRead = true)
+    }
+
+    fun loadNewerMessages() {
+        val afterId = newestLoadedMessageId ?: return
+        loadMessages(50, after = afterId)
     }
 
     suspend fun unlockAgeGate() {
@@ -435,8 +480,13 @@ class ChannelScreenViewModel @Inject constructor(
                     val messages = arrayListOf<Message>()
 
                     fetchMessagesFromChannel(channelId, amount, true, before, after, around).let {
-                        if (it.messages.isNullOrEmpty() || it.messages!!.size < 50) {
-                            endOfChannel = true
+                        if (around == null && (it.messages.isNullOrEmpty() || it.messages!!.size < amount)) {
+                            if (after != null) {
+                                reachedLatest = true
+                                isInMiddleOfHistory = false
+                            } else {
+                                endOfChannel = true
+                            }
                         }
 
                         it.users?.forEach { user ->
@@ -485,16 +535,45 @@ class ChannelScreenViewModel @Inject constructor(
                         }
                     }
 
+                    // Skip update if ignoreExisting filtered out all messages (e.g. WS reconnect
+                    // fetched the same messages already loaded) — otherwise updateItems([]) wipes the list
+                    if (ignoreExisting && newItems.isEmpty()) {
+                        if (!didInitialChannelFetch) didInitialChannelFetch = true
+                        return@launch
+                    }
+
                     // Place items according to whether above/below/around was specified.
                     // TODO: Aditionally, place LoadTriggers at the beginning and end of the list.
                     val newItemsWithPosition = when {
                         before != null -> items + newItems
                         after != null -> newItems + items
-                        // TODO around, which should place the new items in the middle of the list
+                        around != null -> {
+                            // Sort newest-first for reverseLayout LazyColumn
+                            newItems.sortedByDescending { item ->
+                                when (item) {
+                                    is ChannelScreenItem.RegularMessage -> item.message.id
+                                    is ChannelScreenItem.SystemMessage -> item.message.id
+                                    else -> ""
+                                }
+                            }
+                        }
                         else -> newItems
                     }
 
                     updateItems(newItemsWithPosition)
+
+                    // Track newest loaded message for forward pagination
+                    if (isInMiddleOfHistory) {
+                        newestLoadedMessageId = newItemsWithPosition.firstOrNull {
+                            it is ChannelScreenItem.RegularMessage || it is ChannelScreenItem.SystemMessage
+                        }?.let {
+                            when (it) {
+                                is ChannelScreenItem.RegularMessage -> it.message.id
+                                is ChannelScreenItem.SystemMessage -> it.message.id
+                                else -> null
+                            }
+                        }
+                    }
 
                     if (!didInitialChannelFetch) {
                         didInitialChannelFetch = true
