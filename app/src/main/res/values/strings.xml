@@ -18,7 +18,8 @@
     <string name="login_onboarding_body">Stoat is one of the best ways to stay connected with your friends and community, anywhere, anytime.</string>
 
     <string name="stoat_instance">Stoat host</string>
-    <string name="stoat_instance_hint">This is the base URL of the Stoat instance you\'re logging in to, if you want to connect to self-hosted instances. You can leave this blank to use the official Stoat instance.</string>
+    <string name="stoat_instance_hint">This is the base URL of the Stoat instance you\'re logging in to. If you\'re unsure, leave this field blank to use the official Stoat instance.</string>
+    <string name="login_advanced_options">Advanced options</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
 

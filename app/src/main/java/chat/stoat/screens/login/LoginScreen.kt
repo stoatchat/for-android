@@ -1,5 +1,6 @@
 package chat.stoat.screens.login
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -60,6 +62,7 @@ import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
 import chat.stoat.api.routes.onboard.needsOnboarding
 import chat.stoat.api.updateStoatWebApp
+import chat.stoat.composables.generic.CollapsibleCard
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.persistence.KVStorage
@@ -205,10 +208,12 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
         }
     }
 
+    val configuration = LocalConfiguration.current;
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
             .imePadding()
             .safeDrawingPadding()
             .verticalScroll(rememberScrollState())
@@ -235,24 +240,16 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
             )
 
             Column(
-                modifier = Modifier
-                    .width(270.dp)
+                modifier = (when(configuration.orientation) {
+                        Configuration.ORIENTATION_LANDSCAPE -> Modifier.fillMaxWidth()
+                        else -> Modifier.width(270.dp)
+                    })
                     .overscroll(rememberOverscrollEffect())
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                FormTextField(
-                    value = viewModel.stoatInstanceUrl,
-                    label = stringResource(R.string.stoat_instance), // TODO: needs translations
-                    type = KeyboardType.Uri,
-                    action = ImeAction.Next,
-                    onChange = viewModel::setStoatInstanceUrl,
-                    modifier = Modifier
-                        .padding(vertical = 25.dp),
-                    placeholder = {Text(text = STOAT_WEB_APP_DEFAULT)},
-                    supportingText = {Text(text = stringResource(R.string.stoat_instance_hint))}
-                )
+
                 FormTextField(
                     value = viewModel.email,
                     label = stringResource(R.string.email),
@@ -307,6 +304,23 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     url = "$STOAT_WEB_APP/login/reset",
                     modifier = Modifier.padding(vertical = 7.dp)
                 )
+
+                CollapsibleCard(
+                    header = {Text(text = stringResource(R.string.login_advanced_options))},
+                    modifier = Modifier.width(300.dp)
+                ) {
+                    FormTextField(
+                        value = viewModel.stoatInstanceUrl,
+                        label = stringResource(R.string.stoat_instance), // TODO: needs translations
+                        type = KeyboardType.Uri,
+                        action = ImeAction.Next,
+                        onChange = viewModel::setStoatInstanceUrl,
+                        modifier = Modifier
+                            .padding(vertical = 5.dp),
+                        placeholder = {Text(text = STOAT_WEB_APP_DEFAULT)},
+                        supportingText = {Text(text = stringResource(R.string.stoat_instance_hint))}
+                    )
+                }
 
                 if (viewModel.error != null) {
                     Text(
