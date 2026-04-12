@@ -186,7 +186,7 @@
     <string name="friends_scan_qr_result_sheet_missing_permission_description">You need to grant the camera permission to scan QR codes.</string>
     <string name="friends_scan_qr_result_sheet_success_title">Add friend?</string>
     <string name="friends_add_by_tag">Add with username and tag</string>
-    <string name="friends_add_by_tag_sheet_description">You can add friends by their %1$susername%3$s and %2$stag%3$s. For example, if their username is %1$sjane%3$s and their tag is %2$s1234%3$s, you can add them with %1$sjane%3$s#%2$s1234%3$s.</string>
+    <string name="friends_add_by_tag_sheet_description">You can add friends by their %1$susername%3$s and %2$stag%3$s. For example, if their username is %1$sToast%3$s and their tag is %2$s1234%3$s, you can add them with %1$sToast%3$s#%2$s1234%3$s.</string>
     <string name="friends_add_by_tag_sheet_username">Username</string>
     <string name="friends_add_by_tag_sheet_tag">Tag</string>
     <string name="friends_add_by_tag_sheet_add">Add</string>
