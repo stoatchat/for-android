@@ -23,12 +23,16 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -87,17 +91,17 @@ import chat.stoat.api.internals.UserQR
 import chat.stoat.api.internals.UserQRContents
 import chat.stoat.api.routes.user.friendUser
 import chat.stoat.api.routes.user.unfriendUser
-import chat.stoat.core.model.schemas.AutumnResource
-import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.components.vectorassets.HL_TAG
-import chat.stoat.components.vectorassets.HL_USERNAME
-import chat.stoat.components.vectorassets.RevoltTagIntro
 import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.composables.generic.CountableListHeader
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.composables.vectorassets.HL_TAG
+import chat.stoat.composables.vectorassets.HL_USERNAME
+import chat.stoat.composables.vectorassets.Nametag
+import chat.stoat.core.model.schemas.AutumnResource
+import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.zero
 import chat.stoat.markdown.jbm.asHexString
 import chat.stoat.screens.chat.LocalIsConnected
@@ -153,14 +157,17 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
-                    imageVector = RevoltTagIntro,
+                    imageVector = Nametag,
                     contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth(0.5f)
+                        .width(200.dp)
+                        .padding(vertical = 24.dp)
                 )
                 Text(
                     text = stringResource(R.string.friends_add_by_tag),
@@ -375,7 +382,9 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             text = stringResource(R.string.friends_scan_qr_result_sheet_success_title),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, bottom = 12.dp)
                         )
 
                         UserAvatar(
@@ -419,27 +428,60 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             modifier = Modifier.fillMaxWidth()
                         )
 
-                        Button(
-                            onClick = {
-                                scope.launch {
-                                    contents?.let { userContents ->
-                                        try {
-                                            friendUser("${userContents.username}#${userContents.discriminator}")
-                                            qrResult = null
-                                            contents = null
-                                        } catch (e: Exception) {
-                                            Toast.makeText(
-                                                context,
-                                                e.localizedMessage ?: e.toString(),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(
+                                8.dp,
+                                Alignment.CenterHorizontally
+                            ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp)
+                        ) {
+                            Button(
+                                onClick = {
+                                    scope.launch {
+                                        contents?.let { userContents ->
+                                            try {
+                                                friendUser("${userContents.username}#${userContents.discriminator}")
+                                                qrResult = null
+                                                contents = null
+                                            } catch (e: Exception) {
+                                                Toast.makeText(
+                                                    context,
+                                                    e.localizedMessage ?: e.toString(),
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(R.string.friends_add_by_tag_sheet_add))
+                                },
+                                shapes = ButtonDefaults.shapes(
+                                    shape = CircleShape,
+                                    pressedShape = MaterialTheme.shapes.medium
+                                ),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(stringResource(R.string.friends_add_by_tag_sheet_add))
+                            }
+
+                            Button(
+                                onClick = {
+                                    qrResult = null
+                                    contents = null
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error,
+                                    contentColor = MaterialTheme.colorScheme.onError
+                                ),
+                                shapes = ButtonDefaults.shapes(
+                                    shape = CircleShape,
+                                    pressedShape = MaterialTheme.shapes.medium
+                                ),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(stringResource(R.string.friends_add_by_tag_sheet_do_not_add))
+                            }
                         }
                     }
 

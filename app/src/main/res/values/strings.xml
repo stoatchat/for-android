@@ -190,6 +190,7 @@
     <string name="friends_add_by_tag_sheet_username">Username</string>
     <string name="friends_add_by_tag_sheet_tag">Tag</string>
     <string name="friends_add_by_tag_sheet_add">Add</string>
+    <string name="friends_add_by_tag_sheet_do_not_add">Don\'t add</string>
     <string name="friends_add_by_tag_sheet_paste_from_clipboard">Paste clipboard</string>
     <string name="friends_add_by_tag_sheet_invalid_clipboard">The clipboard does not contain a valid username and tag.</string>
 
