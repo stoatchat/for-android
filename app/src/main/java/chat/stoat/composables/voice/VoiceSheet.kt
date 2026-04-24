@@ -1,8 +1,15 @@
 package chat.stoat.composables.voice
-/*
+
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,8 +31,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +56,9 @@ import io.livekit.android.compose.local.RoomScope
 import io.livekit.android.compose.state.rememberTracks
 import io.livekit.android.compose.ui.VideoTrackView
 import io.livekit.android.room.Room
+import io.livekit.android.util.flow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
@@ -124,6 +137,8 @@ fun VoiceSheet(
         viewModel.getVoiceToken()
     }
 
+    val scope = rememberCoroutineScope()
+
     RoomScope(
         url = viewModel.voiceLkNode,
         token = viewModel.voiceToken,
@@ -132,10 +147,22 @@ fun VoiceSheet(
         connect = true,
     ) {
         val room = RoomLocal.current
-        val trackRefs = rememberTracks()
+        val roomState by room::state.flow.collectAsState()
+        val isMicOn by room.localParticipant::isMicrophoneEnabled.flow.collectAsState()
+        val isCameraOn by room.localParticipant::isCameraEnabled.flow.collectAsState()
+        val isScreenShared by room.localParticipant::isScreenShareEnabled.flow.collectAsState()
+        val activeSpeakers by room::activeSpeakers.flow.collectAsState()
+        val trackRefs by rememberTracks(passedRoom = room)
 
         Column {
-            LazyColumn(modifier = Modifier.animateContentSize()) {
+            LazyColumn(
+                modifier = Modifier.animateContentSize(
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = LinearOutSlowInEasing
+                    )
+                )
+            ) {
                 val voiceStates = StoatAPI.voiceStateCache[viewModel.channelId]
                 items(voiceStates?.participants?.size ?: 0) { index ->
                     val participantState = voiceStates?.participants[index]
@@ -143,56 +170,104 @@ fun VoiceSheet(
                         VoiceParticipant(
                             state = participantState,
                             channelId = viewModel.channelId,
-                            speaking = false
+                            speaking = activeSpeakers.any { it.identity?.value == participantState.id }
                         )
                     }
                 }
                 items(trackRefs.size) { index ->
                     VideoTrackView(
                         trackReference = trackRefs[index],
+                        room = room,
                         modifier = Modifier.fillParentMaxHeight(0.5f)
                     )
                 }
                 item(key = "status") {
-                    AnimatedContent(
-                        room.state
-                    ) { roomState ->
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                8.dp,
-                                Alignment.CenterHorizontally
-                            ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                        ) {
-                            CompositionLocalProvider(
-                                LocalContentColor provides when (roomState) {
-                                    Room.State.CONNECTING, Room.State.RECONNECTING -> MaterialTheme.colorScheme.onSurfaceVariant
-                                    Room.State.CONNECTED -> MaterialTheme.colorScheme.primary
-                                    Room.State.DISCONNECTED -> MaterialTheme.colorScheme.error
-                                }
+                    var showStatus by remember { mutableStateOf(true) }
+                    LaunchedEffect(roomState) {
+                        if (roomState == Room.State.CONNECTED) {
+                            delay(1000)
+                            showStatus = false
+                        } else {
+                            showStatus = true
+                        }
+                    }
+
+                    AnimatedVisibility(
+                        visible = showStatus,
+                        enter = fadeIn(
+                            animationSpec = tween(
+                                durationMillis = 300,
+                                easing = LinearOutSlowInEasing
+                            )
+                        ) +
+                                expandVertically(
+                                    expandFrom = Alignment.Top,
+                                    animationSpec = tween(
+                                        durationMillis = 300,
+                                        easing = LinearOutSlowInEasing
+                                    )
+                                ),
+                        exit = fadeOut(
+                            animationSpec = tween(
+                                durationMillis = 300,
+                                easing = LinearOutSlowInEasing
+                            )
+                        ) +
+                                slideOutVertically(
+                                    targetOffsetY = { it },
+                                    animationSpec = tween(
+                                        durationMillis = 300,
+                                        easing = LinearOutSlowInEasing
+                                    )
+                                ) +
+                                shrinkVertically(
+                                    shrinkTowards = Alignment.Top,
+                                    animationSpec = tween(
+                                        durationMillis = 300,
+                                        easing = LinearOutSlowInEasing
+                                    )
+                                )
+                    ) {
+                        AnimatedContent(
+                            roomState
+                        ) { roomState ->
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    8.dp,
+                                    Alignment.CenterHorizontally
+                                ),
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
                             ) {
-                                Icon(
-                                    painter = painterResource(
-                                        when (roomState) {
-                                            Room.State.CONNECTING -> R.drawable.ic_sprint_24dp
-                                            Room.State.CONNECTED -> R.drawable.ic_wifi_tethering_24dp
-                                            Room.State.DISCONNECTED -> R.drawable.ic_wifi_tethering_error_24dp
-                                            Room.State.RECONNECTING -> R.drawable.ic_sprint_24dp
-                                        }
-                                    ),
-                                    contentDescription = null
-                                )
-                                Text(
-                                    text = when (roomState) {
-                                        Room.State.CONNECTING -> stringResource(R.string.voice_status_connecting)
-                                        Room.State.CONNECTED -> stringResource(R.string.voice_status_connected)
-                                        Room.State.DISCONNECTED -> stringResource(R.string.voice_status_disconnected)
-                                        Room.State.RECONNECTING -> stringResource(R.string.voice_status_reconnecting)
+                                CompositionLocalProvider(
+                                    LocalContentColor provides when (roomState) {
+                                        Room.State.CONNECTING, Room.State.RECONNECTING -> MaterialTheme.colorScheme.onSurfaceVariant
+                                        Room.State.CONNECTED -> MaterialTheme.colorScheme.primary
+                                        Room.State.DISCONNECTED -> MaterialTheme.colorScheme.error
                                     }
-                                )
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            when (roomState) {
+                                                Room.State.CONNECTING -> R.drawable.ic_sprint_24dp
+                                                Room.State.CONNECTED -> R.drawable.ic_wifi_tethering_24dp
+                                                Room.State.DISCONNECTED -> R.drawable.ic_wifi_tethering_error_24dp
+                                                Room.State.RECONNECTING -> R.drawable.ic_sprint_24dp
+                                            }
+                                        ),
+                                        contentDescription = null
+                                    )
+                                    Text(
+                                        text = when (roomState) {
+                                            Room.State.CONNECTING -> stringResource(R.string.voice_status_connecting)
+                                            Room.State.CONNECTED -> stringResource(R.string.voice_status_connected)
+                                            Room.State.DISCONNECTED -> stringResource(R.string.voice_status_disconnected)
+                                            Room.State.RECONNECTING -> stringResource(R.string.voice_status_reconnecting)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -226,10 +301,13 @@ fun VoiceSheet(
             ) {
                 Button(
                     onClick = {
+                        scope.launch {
+                            room.localParticipant.setMicrophoneEnabled(!isMicOn)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        containerColor = if (isMicOn) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = if (isMicOn) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
                     ),
                     shapes = ButtonDefaults.shapes(),
                     modifier = Modifier
@@ -237,17 +315,23 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_mic_off_24dp),
+                        painter = if (isMicOn) painterResource(R.drawable.ic_mic_24dp) else painterResource(
+                            R.drawable.ic_mic_off_24dp
+                        ),
                         contentDescription = "TODO change this string to res"
                     )
                 }
                 Spacer(Modifier.width(4.dp))
                 Button(
                     onClick = {
+                        scope.launch {
+                            room.localParticipant.setCameraEnabled(!isMicOn)
+                        }
                     },
+                    enabled = false,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        containerColor = if (isCameraOn) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = if (isCameraOn) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer,
                     ),
                     shapes = ButtonDefaults.shapes(),
                     modifier = Modifier
@@ -255,14 +339,20 @@ fun VoiceSheet(
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_videocam_off_24dp),
+                        painter = if (isCameraOn) painterResource(R.drawable.ic_videocam_24dp) else painterResource(
+                            R.drawable.ic_videocam_off_24dp
+                        ),
                         contentDescription = "TODO change this string to res"
                     )
                 }
                 Spacer(Modifier.width(4.dp))
                 Button(
                     onClick = {
+                        scope.launch {
+                            room.localParticipant.setScreenShareEnabled(!isScreenShared)
+                        }
                     },
+                    enabled = false,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -280,7 +370,6 @@ fun VoiceSheet(
                 Spacer(Modifier.width(4.dp))
                 Button(
                     onClick = {
-                        room.disconnect()
                         onDisconnect()
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -300,4 +389,4 @@ fun VoiceSheet(
             }
         }
     }
-}*/
+}

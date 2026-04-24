@@ -23,8 +23,8 @@ telephoto = "1.0.0-alpha02"
 haze = "1.7.2"
 chucker = "4.3.1"
 androidx-test = "1.6.1"
-livekit = "2.21.0"
-livekit-compose = "1.4.0"
+livekit = "2.24.1"
+livekit-compose = "2.3.0"
 
 [libraries]
 android-core-ktx = { module = "androidx.core:core-ktx", version = "1.16.0" }
@@ -99,7 +99,7 @@ chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "ch
 chucker-noop = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 square-logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
 livekit-android = { module = "io.livekit:livekit-android", version.ref = "livekit" }
-livekit-android-camerax = { module = "io.livekit:android-camerax", version.ref = "livekit" }
+livekit-android-camerax = { module = "io.livekit:livekit-android-camerax", version.ref = "livekit" }
 livekit-android-compose = { module = "io.livekit:livekit-android-compose-components", version.ref = "livekit-compose" }
 
 [plugins]

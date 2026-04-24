@@ -41,13 +41,13 @@ import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.fetchMember
 import chat.stoat.api.routes.user.addUserIfUnknown
 import chat.stoat.api.routes.user.fetchUser
-import chat.stoat.core.model.schemas.Channel
-import chat.stoat.core.model.schemas.Message
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.callbacks.UiCallback
 import chat.stoat.callbacks.UiCallbacks
+import chat.stoat.core.model.schemas.Channel
+import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.text.MessageProcessor
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.ChatRouterDestination
@@ -75,7 +75,10 @@ class ChannelScreenViewModel @Inject constructor(
     var items = mutableStateListOf<ChannelScreenItem>()
     var typingUsers = mutableStateListOf<String>()
 
-    var channel by mutableStateOf<Channel?>(null)
+    var channelId by mutableStateOf<String?>(null)
+    val channel: Channel?
+        get() = channelId?.let { StoatAPI.channelCache[it] }
+
     var activePane by mutableStateOf<ChannelScreenActivePane>(ChannelScreenActivePane.None)
     var keyboardHeight by mutableIntStateOf(0)
 
@@ -116,7 +119,7 @@ class ChannelScreenViewModel @Inject constructor(
     fun switchChannel(id: String) {
         // Reset state
         this.loadMessagesJob?.cancel()
-        this.channel = StoatAPI.channelCache[id]
+        this.channelId = id
         this.items = mutableStateListOf(ChannelScreenItem.Loading)
         this.activePane = ChannelScreenActivePane.None
         this.typingUsers = mutableStateListOf()

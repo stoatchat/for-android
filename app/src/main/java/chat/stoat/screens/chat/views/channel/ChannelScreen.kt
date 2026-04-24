@@ -952,7 +952,7 @@ fun ChannelScreen(
                                     }
                                 }
 
-                                if (viewModel.channel?.voice != null &&
+                                if ((viewModel.channel?.channelType == ChannelType.VoiceChannel || viewModel.channel?.voice != null) &&
                                     channelPermissions has PermissionBit.Connect &&
                                     Experiments.useVoiceChats2p0.isEnabled
                                 ) {

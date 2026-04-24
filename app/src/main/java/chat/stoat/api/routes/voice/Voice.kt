@@ -11,6 +11,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 
 @Serializable
 data class JoinCallResponse(
@@ -18,10 +20,19 @@ data class JoinCallResponse(
     val url: String,
 )
 
-suspend fun joinCall(channelId: String, nodeName: String): JoinCallResponse {
+suspend fun joinCall(
+    channelId: String,
+    nodeName: String,
+    forceDisconnect: Boolean = true
+): JoinCallResponse {
     val response = StoatHttp.post("/channels/$channelId/join_call".api()) {
         contentType(ContentType.Application.Json)
-        setBody(mapOf("node" to nodeName))
+        setBody(
+            buildJsonObject {
+                put("node", nodeName)
+                put("force_disconnect", forceDisconnect)
+            }
+        )
     }.bodyAsText()
 
     try {

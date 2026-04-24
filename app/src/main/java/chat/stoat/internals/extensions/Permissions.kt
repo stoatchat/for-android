@@ -11,8 +11,10 @@ import chat.stoat.api.internals.Roles
 @Composable
 fun rememberChannelPermissions(channelId: String, key1: Any = Unit): MutableLongState {
     val permissions = rememberSaveable { mutableLongStateOf(0L) }
+    val selfId = StoatAPI.selfId
+    val channel = StoatAPI.channelCache[channelId]
 
-    LaunchedEffect(channelId, key1) {
+    LaunchedEffect(channelId, key1, selfId, channel) {
         if (StoatAPI.selfId == null) return@LaunchedEffect
         if (StoatAPI.userCache[StoatAPI.selfId] == null) return@LaunchedEffect
         if (StoatAPI.channelCache[channelId] == null) return@LaunchedEffect
