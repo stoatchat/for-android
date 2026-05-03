@@ -1,6 +1,5 @@
 package chat.stoat.screens.chat
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -60,7 +59,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.app.NotificationManagerCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -101,12 +99,10 @@ import chat.stoat.sheets.WebHookUserSheet
 import chat.stoat.sheets.spark.SwipeToReplySparkSheet
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.sentry.Sentry
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
 sealed class ChatRouterDestination {
     data object Overview : ChatRouterDestination()
@@ -145,11 +141,9 @@ sealed class ChatRouterDestination {
     }
 }
 
-@HiltViewModel
-@SuppressLint("StaticFieldLeak")
-class ChatRouterViewModel @Inject constructor(
+class ChatRouterViewModel(
     private val kvStorage: KVStorage,
-    @ApplicationContext val context: Context
+    val context: Context
 ) : ViewModel() {
     var currentDestination by mutableStateOf<ChatRouterDestination>(ChatRouterDestination.default)
     var latestChangelogRead by mutableStateOf(true)
@@ -281,7 +275,7 @@ fun ChatRouterScreen(
     disableBackHandler: Boolean,
     onNullifiedUser: () -> Unit,
     onEnterVoiceUI: (String) -> Unit,
-    viewModel: ChatRouterViewModel = hiltViewModel()
+    viewModel: ChatRouterViewModel = koinViewModel()
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()

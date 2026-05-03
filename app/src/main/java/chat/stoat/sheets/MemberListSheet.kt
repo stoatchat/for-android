@@ -1,7 +1,6 @@
 package chat.stoat.sheets
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Application
 import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -29,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.R
@@ -46,11 +44,9 @@ import chat.stoat.composables.generic.SheetHeaderPadding
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.User
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
 val DO_NOT_FETCH_OFFLINE_MEMBERS_SERVERS = listOf(
     "01F7ZSBSFHQ8TA81725KQCSDDP" // Lounge
@@ -62,10 +58,8 @@ sealed class MemberListSheetItem {
     data class CategoryItem(val category: String, val count: Int) : MemberListSheetItem()
 }
 
-@HiltViewModel
-@SuppressLint("StaticFieldLeak")
-class MemberListSheetViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+class MemberListSheetViewModel(
+    private val context: Application
 ) : ViewModel() {
     val fullItemList = mutableStateListOf<MemberListSheetItem>()
 
@@ -207,7 +201,7 @@ class MemberListSheetViewModel @Inject constructor(
 fun MemberListSheet(
     channelId: String,
     serverId: String? = null,
-    viewModel: MemberListSheetViewModel = hiltViewModel()
+    viewModel: MemberListSheetViewModel = koinViewModel()
 ) {
     var showUserInfoSheet by remember { mutableStateOf(false) }
     var userInfoSheetTarget by remember { mutableStateOf("") }

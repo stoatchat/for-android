@@ -6,16 +6,12 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
-import javax.inject.Inject
-import javax.inject.Singleton
 
 val Context.stoatKVStorage: DataStore<Preferences> by preferencesDataStore(name = "revolt_kv")
 
-@Singleton
-class KVStorage @Inject constructor(
-    @ApplicationContext private val mContext: Context
+class KVStorage(
+    private val mContext: Context
 ) {
     private val dataStore = mContext.stoatKVStorage
 

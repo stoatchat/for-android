@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import chat.stoat.BuildConfig
@@ -40,12 +39,10 @@ import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.persistence.KVStorage
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
-@HiltViewModel
-class SettingsScreenViewModel @Inject constructor(
+class SettingsScreenViewModel(
     private val kvStorage: KVStorage
 ) : ViewModel() {
     fun logout() {
@@ -61,7 +58,7 @@ class SettingsScreenViewModel @Inject constructor(
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    viewModel: SettingsScreenViewModel = hiltViewModel()
+    viewModel: SettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

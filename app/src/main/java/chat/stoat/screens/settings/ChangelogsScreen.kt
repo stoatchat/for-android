@@ -1,6 +1,6 @@
 package chat.stoat.screens.settings
 
-import android.content.Context
+import android.app.Application
 import android.text.format.DateUtils
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
@@ -36,7 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -45,16 +44,13 @@ import chat.stoat.internals.ChangelogIndex
 import chat.stoat.internals.Changelogs
 import chat.stoat.persistence.KVStorage
 import chat.stoat.sheets.ChangelogSheet
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
-@HiltViewModel
-class ChangelogsSettingsScreenViewModel @Inject constructor(
+class ChangelogsSettingsScreenViewModel(
     val kvStorage: KVStorage,
-    @ApplicationContext val context: Context
+    val context: Application
 ) : ViewModel() {
     var index by mutableStateOf<ChangelogIndex?>(null)
     var renderedChangelog by mutableStateOf("")
@@ -87,7 +83,7 @@ class ChangelogsSettingsScreenViewModel @Inject constructor(
 @Composable
 fun ChangelogsSettingsScreen(
     navController: NavController,
-    viewModel: ChangelogsSettingsScreenViewModel = hiltViewModel()
+    viewModel: ChangelogsSettingsScreenViewModel = koinViewModel()
 ) {
     LaunchedEffect(Unit) {
         viewModel.populate()

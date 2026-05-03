@@ -43,11 +43,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.documentfile.provider.DocumentFile
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.R
@@ -57,7 +57,6 @@ import chat.stoat.api.routes.channel.sendMessage
 import chat.stoat.api.routes.microservices.autumn.FileArgs
 import chat.stoat.api.routes.microservices.autumn.MAX_ATTACHMENTS_PER_MESSAGE
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
-import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.chat.MessageField
@@ -66,17 +65,15 @@ import chat.stoat.composables.screens.chat.AttachmentManager
 import chat.stoat.composables.screens.chat.drawer.ChannelItem
 import chat.stoat.composables.screens.chat.drawer.ChannelItemIconType
 import chat.stoat.composables.screens.chat.drawer.DMOrGroupItem
+import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.views.channel.ChannelScreenActivePane
 import chat.stoat.ui.theme.StoatTheme
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class ShareTargetActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,8 +160,7 @@ class ShareTargetActivity : ComponentActivity() {
     }
 }
 
-@HiltViewModel
-class ShareTargetScreenViewModel @Inject constructor(
+class ShareTargetScreenViewModel(
     private val kvStorage: KVStorage,
 ) : ViewModel() {
     var apiIsReady by mutableStateOf(false)
@@ -229,15 +225,16 @@ fun ShareTargetScreen(
     text: String?,
     media: List<Uri>?,
     onFinished: () -> Unit = {},
-    viewModel: ShareTargetScreenViewModel = hiltViewModel()
+    viewModel: ShareTargetScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         if (!viewModel.isLoggedIn()) {
             Toast.makeText(
                 context,
-                context.getString(R.string.share_target_login_first),
+                resources.getString(R.string.share_target_login_first),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -412,7 +409,7 @@ fun ShareTargetScreen(
                                 if (selectedChannel == null) {
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.share_target_select_channel),
+                                        resources.getString(R.string.share_target_select_channel),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     return@MessageField

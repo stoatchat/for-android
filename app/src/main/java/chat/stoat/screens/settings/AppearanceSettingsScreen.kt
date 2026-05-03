@@ -1,6 +1,6 @@
 package chat.stoat.screens.settings
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -50,6 +50,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +60,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -82,20 +82,14 @@ import chat.stoat.ui.theme.getFieldByName
 import chat.stoat.ui.theme.overridableColourSchemeFieldNameToResource
 import chat.stoat.ui.theme.overridableColourSchemeFieldNames
 import chat.stoat.ui.theme.systemSupportsDynamicColors
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-@Suppress("StaticFieldLeak")
-class AppearanceSettingsScreenViewModel @Inject constructor(
-    @ApplicationContext val context: Context
-) : ViewModel() {
+class AppearanceSettingsScreenViewModel(val context: Application) : ViewModel() {
     var showColourOverrides by mutableStateOf(false)
     var selectedOverrideName by mutableStateOf<String?>(null)
     var selectedOverrideInitialValue by mutableStateOf<Int?>(null)
@@ -224,7 +218,7 @@ class AppearanceSettingsScreenViewModel @Inject constructor(
 @Composable
 fun AppearanceSettingsScreen(
     navController: NavController,
-    viewModel: AppearanceSettingsScreenViewModel = hiltViewModel()
+    viewModel: AppearanceSettingsScreenViewModel = koinViewModel()
 ) {
     val colourOverridesOpenerArrowRotation by animateFloatAsState(
         if (viewModel.showColourOverrides) {
@@ -249,6 +243,7 @@ fun AppearanceSettingsScreen(
     }
 
     val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
     if (viewModel.overridePickerSheetVisible) {
@@ -404,9 +399,7 @@ fun AppearanceSettingsScreen(
                         ) {
                             Toast.makeText(
                                 context,
-                                context.getString(
-                                    R.string.settings_appearance_theme_m3dynamic_unsupported_toast
-                                ),
+                                resources.getString(R.string.settings_appearance_theme_m3dynamic_unsupported_toast),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -555,7 +548,7 @@ fun AppearanceSettingsScreen(
                             ColourChip(
                                 color = Color(value ?: 0),
                                 text = overridableColourSchemeFieldNameToResource[fieldName]
-                                    ?.let { context.getString(it) }
+                                    ?.let { stringResource(it) }
                                     ?: fieldName,
                                 modifier = Modifier
                                     .fillMaxWidth()

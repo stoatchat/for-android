@@ -7,10 +7,9 @@ kotlin = "2.3.10"
 kotlin-serialization = "1.10.0"
 ksp = "2.3.5"
 agp = "9.1.0"
-hilt = "2.59.2"
 google-services = "4.4.4"
 sentry = "8.13.2" # This is separate from the gradle plugin version which is defined ad hoc below
-sqldelight = "2.0.1"
+sqldelight = "2.3.2"
 compose-bom = "2026.03.00"
 material3 = "1.5.0-alpha15"
 lifecycle = "2.10.0"
@@ -25,6 +24,7 @@ chucker = "4.3.1"
 androidx-test = "1.6.1"
 livekit = "2.24.1"
 livekit-compose = "2.3.0"
+koin = "4.2.1"
 
 [libraries]
 android-core-ktx = { module = "androidx.core:core-ktx", version = "1.16.0" }
@@ -67,10 +67,7 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.9.0" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.9.8" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compose = { module = "com.github.bumptech.glide:compose", version = "1.0.0-beta01" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
@@ -101,6 +98,9 @@ square-logcat = { module = "com.squareup.logcat:logcat", version = "0.1" }
 livekit-android = { module = "io.livekit:livekit-android", version.ref = "livekit" }
 livekit-android-camerax = { module = "io.livekit:livekit-android-camerax", version.ref = "livekit" }
 livekit-android-compose = { module = "io.livekit:livekit-android-compose-components", version.ref = "livekit-compose" }
+koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -109,9 +109,8 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
-sentry-android = { id = "io.sentry.android.gradle", version = "4.12.0" }
+sentry-android = { id = "io.sentry.android.gradle", version = "6.5.0" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

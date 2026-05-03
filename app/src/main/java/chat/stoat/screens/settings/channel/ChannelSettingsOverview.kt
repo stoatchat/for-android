@@ -1,6 +1,6 @@
 package chat.stoat.screens.settings.channel
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -47,7 +47,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -57,18 +56,15 @@ import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.patchChannel
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
-import chat.stoat.core.model.schemas.Channel
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.ListHeader
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import chat.stoat.core.model.schemas.Channel
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-class ChannelSettingsOverviewViewModel @Inject constructor(@ApplicationContext val context: Context) :
+class ChannelSettingsOverviewViewModel(val context: Application) :
     ViewModel() {
     var initialChannel by mutableStateOf<Channel?>(null)
 
@@ -211,7 +207,7 @@ class ChannelSettingsOverviewViewModel @Inject constructor(@ApplicationContext v
 fun ChannelSettingsOverview(
     navController: NavController,
     channelId: String,
-    viewModel: ChannelSettingsOverviewViewModel = hiltViewModel()
+    viewModel: ChannelSettingsOverviewViewModel = koinViewModel()
 ) {
     val currentChannel = StoatAPI.channelCache[channelId]
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

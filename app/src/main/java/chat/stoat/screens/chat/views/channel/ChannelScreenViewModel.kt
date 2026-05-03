@@ -52,7 +52,6 @@ import chat.stoat.internals.text.MessageProcessor
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.settings.providers.AgeGateUnlockedStorageProvider
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -66,10 +65,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaInstant
 import java.time.ZoneId
-import javax.inject.Inject
 
-@HiltViewModel
-class ChannelScreenViewModel @Inject constructor(
+class ChannelScreenViewModel(
     private val kvStorage: KVStorage,
 ) : ViewModel() {
     var items = mutableStateListOf<ChannelScreenItem>()

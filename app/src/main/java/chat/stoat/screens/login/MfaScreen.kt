@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -45,12 +44,10 @@ import chat.stoat.api.routes.account.authenticateWithMfaTotpCode
 import chat.stoat.composables.generic.CollapsibleCard
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.persistence.KVStorage
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.androidx.compose.koinViewModel
 
-@HiltViewModel
-class MfaScreenViewModel @Inject constructor(
+class MfaScreenViewModel(
     private val kvStorage: KVStorage
 ) : ViewModel() {
     private var _totpCode by mutableStateOf("")
@@ -142,7 +139,7 @@ fun MfaScreen(
     navController: NavController,
     allowedAuthTypesCommaSep: String,
     mfaTicket: String,
-    viewModel: MfaScreenViewModel = hiltViewModel()
+    viewModel: MfaScreenViewModel = koinViewModel()
 ) {
     val allowedAuthTypes = allowedAuthTypesCommaSep.split(",")
 

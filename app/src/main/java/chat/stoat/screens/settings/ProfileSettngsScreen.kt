@@ -1,6 +1,6 @@
 package chat.stoat.screens.settings
 
-import android.content.Context
+import android.app.Application
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -52,19 +51,15 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.routes.user.patchSelf
-import chat.stoat.core.model.schemas.Profile
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.RawUserOverview
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import chat.stoat.core.model.schemas.Profile
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-@Suppress("StaticFieldLeak")
-class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val context: Context) :
+class ProfileSettingsScreenViewModel(val context: Application) :
     ViewModel() {
     var isLoading by mutableStateOf(true)
     var pfpModel by mutableStateOf<Any?>(null)
@@ -237,7 +232,7 @@ class ProfileSettingsScreenViewModel @Inject constructor(@ApplicationContext val
 @Composable
 fun ProfileSettingsScreen(
     navController: NavController,
-    viewModel: ProfileSettingsScreenViewModel = hiltViewModel()
+    viewModel: ProfileSettingsScreenViewModel = koinViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 

@@ -104,7 +104,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.documentfile.provider.DocumentFile
-import androidx.hilt.navigation.compose.hiltViewModel
 import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.activities.StoatTweenDp
@@ -153,6 +152,7 @@ import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import kotlin.math.max
 
@@ -198,7 +198,7 @@ fun ChannelScreen(
     drawerIsOpen: Boolean = false,
     backButtonAction: (() -> Unit)? = null,
     useChatUI: Boolean = false,
-    viewModel: ChannelScreenViewModel = hiltViewModel()
+    viewModel: ChannelScreenViewModel = koinViewModel()
 ) {
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()

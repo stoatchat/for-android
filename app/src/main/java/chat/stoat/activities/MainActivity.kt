@@ -1,6 +1,5 @@
 package chat.stoat.activities
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -15,7 +14,6 @@ import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -126,20 +124,15 @@ import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
 import chat.stoat.ui.theme.StoatTheme
 import com.google.android.material.color.DynamicColors
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.request.get
 import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@HiltViewModel
-@SuppressLint("StaticFieldLeak")
-class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel(
     private val kvStorage: KVStorage,
-    @ApplicationContext private val context: Context
+    private val context: Context
 ) : ViewModel() {
     val nextDestination = MutableStateFlow<String?>(null)
     var isConnected = MutableStateFlow(false)
@@ -324,9 +317,8 @@ class MainActivityViewModel @Inject constructor(
     }
 }
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val viewModel by viewModels<MainActivityViewModel>()
+    private val viewModel: MainActivityViewModel by viewModel()
 
     // Fix for SDK >=31, where core-splashscreen accidentally removes dynamic colours
     // See the other one in DefaultDestinationScreen.kt

@@ -1,20 +1,18 @@
 import com.mikepenz.aboutlibraries.plugin.StrictMode
 import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.aboutlibraries)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sentry.android)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.google.services)
-    id("kotlin-kapt")
     id("kotlin-parcelize")
 }
 
@@ -128,9 +126,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         viewBinding = true
         compose = true
@@ -153,6 +148,12 @@ android {
     lint {
         abortOnError = false
         disable += "MissingTranslation"
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
@@ -208,10 +209,6 @@ dependencies {
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
-
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
 
     implementation(libs.glide)
     implementation(libs.glide.compose)
@@ -272,6 +269,10 @@ dependencies {
 
     implementation(libs.square.logcat)
 
+    implementation(libs.koin)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel.navigation)
+
     androidTestImplementation(libs.android.test.core)
     androidTestImplementation(libs.android.test.rules)
     androidTestImplementation(libs.compose.ui.test.junit4)
@@ -283,15 +284,16 @@ aboutLibraries {
     strictMode = StrictMode.FAIL
     allowedLicenses += listOf(
         "Apache-2.0",
-        "OFL",
-        "MIT",
         "ASDKL",
         "BSD-2-Clause",
+        "BSD-3-Clause", "The 3-Clause BSD License",
+        "BSD License",
         "cmark",
         "EPL-1.0",
-        "BSD-3-Clause",
-        "BSD License",
-        "ML Kit Terms of Service"
+        "MIT",
+        "ML Kit Terms of Service",
+        "OFL",
+        "Public Domain"
     )
     configPath = "compliance"
 }
