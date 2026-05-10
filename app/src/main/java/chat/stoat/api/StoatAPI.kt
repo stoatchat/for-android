@@ -11,14 +11,14 @@ import chat.stoat.api.internals.Members
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
 import chat.stoat.api.routes.user.fetchSelf
-import chat.stoat.core.model.util.ChannelVoiceState
-import chat.stoat.core.model.schemas.Emoji
-import chat.stoat.core.model.schemas.Message
-import chat.stoat.core.model.schemas.Server
 import chat.stoat.api.unreads.Unreads
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Emoji
+import chat.stoat.core.model.schemas.Message
+import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.User
+import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.SqlStorage
 import com.chuckerteam.chucker.api.ChuckerCollector
@@ -68,7 +68,6 @@ const val STOAT_WEB_APP = "https://stoat.chat"
 const val STOAT_INVITES = "https://stt.gg"
 val STOAT_WEBSOCKET =
     if (USE_ALPHA_API) "wss://alpha.revolt.chat/ws" else "wss://events.stoat.chat"
-const val STOAT_KJBOOK = "https://stoatchat.github.io/for-android"
 
 fun String.api(): String {
     return "$STOAT_BASE$this"

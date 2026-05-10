@@ -111,7 +111,6 @@ import chat.stoat.screens.register.RegisterGreetingScreen
 import chat.stoat.screens.register.RegisterVerifyScreen
 import chat.stoat.screens.services.DiscoverScreen
 import chat.stoat.screens.settings.AppearanceSettingsScreen
-import chat.stoat.screens.settings.ChangelogsSettingsScreen
 import chat.stoat.screens.settings.ChatSettingsScreen
 import chat.stoat.screens.settings.DebugSettingsScreen
 import chat.stoat.screens.settings.ExperimentsSettingsScreen
@@ -711,7 +710,6 @@ fun AppEntrypoint(
                     composable("settings/chat") { ChatSettingsScreen(navController) }
                     composable("settings/debug") { DebugSettingsScreen(navController) }
                     composable("settings/experiments") { ExperimentsSettingsScreen(navController) }
-                    composable("settings/changelogs") { ChangelogsSettingsScreen(navController) }
                     composable("settings/language") { LanguagePickerSettingsScreen(navController) }
 
                     composable("settings/channel/{channelId}") { backStackEntry ->

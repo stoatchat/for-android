@@ -318,27 +318,6 @@ fun SettingsScreen(
                     ListItem(
                         headlineContent = {
                             Text(
-                                text = stringResource(id = R.string.settings_changelogs)
-                            )
-                        },
-                        leadingContent = {
-                            SettingsIcon {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_wand_shine_24dp),
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                        modifier = Modifier
-                            .testTag("settings_view_changelogs")
-                            .clickable {
-                                navController.navigate("settings/changelogs")
-                            }
-                    )
-
-                    ListItem(
-                        headlineContent = {
-                            Text(
                                 text = stringResource(id = R.string.settings_feedback)
                             )
                         },
@@ -363,7 +342,7 @@ fun SettingsScreen(
                                     InviteActivity::class.java
                                 ).setAction(Intent.ACTION_VIEW)
 
-                                intent.data = "https://rvlt.gg/Testers".toUri()
+                                intent.data = "https://stt.gg/Testers".toUri()
                                 context.startActivity(intent)
                             }
                     )

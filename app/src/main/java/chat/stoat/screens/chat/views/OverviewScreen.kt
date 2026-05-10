@@ -54,6 +54,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -61,10 +62,10 @@ import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.user.fetchSelf
-import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.NonIdealState
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.composables.skeletons.UserOverviewSkeleton
+import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.zero
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.UserCardSheet
@@ -79,6 +80,7 @@ fun OverviewScreen(
     includePadding: Boolean = true
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var user by rememberSaveable { mutableStateOf<User?>(null) }
@@ -329,7 +331,8 @@ fun OverviewScreen(
                         item(key = "changelog") {
                             OverviewScreenLink(
                                 onClick = {
-                                    navController.navigate("settings/changelogs")
+                                    // navController.navigate("settings/changelogs")
+                                    // TODO replace with new changelog
                                 },
                                 backgroundColour = MaterialTheme.colorScheme.errorContainer,
                                 foregroundColour = MaterialTheme.colorScheme.onErrorContainer,
@@ -349,12 +352,13 @@ fun OverviewScreen(
                                 body = { Text(stringResource(R.string.overview_screen_changelog_description)) }
                             )
                         }
+
                         item(key = "feedback") {
                             OverviewScreenLink(
                                 onClick = {
                                     Toast.makeText(
                                         context,
-                                        context.getString(R.string.comingsoon_toast),
+                                        resources.getString(R.string.comingsoon_toast),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     // navController.navigate("feedback")

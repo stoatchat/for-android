@@ -76,7 +76,6 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.DisconnectedNotice
 import chat.stoat.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.stoat.dialogs.NotificationRationaleDialog
-import chat.stoat.internals.Changelogs
 import chat.stoat.internals.extensions.zero
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.dialogs.safety.ReportMessageDialog
@@ -87,7 +86,6 @@ import chat.stoat.screens.chat.views.NoCurrentChannelScreen
 import chat.stoat.screens.chat.views.OverviewScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
 import chat.stoat.sheets.AddServerSheet
-import chat.stoat.sheets.ChangelogSheet
 import chat.stoat.sheets.EarlyAccessSheet
 import chat.stoat.sheets.EmoteInfoSheet
 import chat.stoat.sheets.LinkInfoSheet
@@ -153,24 +151,10 @@ class ChatRouterViewModel(
     var showEarlyAccessSpark by mutableStateOf(false)
     var showSwipeToReplySpark by mutableStateOf(false)
 
-    private val changelogs = Changelogs(context, kvStorage)
-
     init {
         viewModelScope.launch {
             val current = kvStorage.get("currentDestination")
             setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
-
-            try {
-                latestChangelogRead = changelogs.hasSeenCurrent()
-                latestChangelog = changelogs.getLatestChangelogCode()
-                latestChangelogBody =
-                    changelogs.fetchChangelogByVersionCode(latestChangelog.toLong()).rendered
-                if (!latestChangelogRead) {
-                    changelogs.markAsSeen()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 
             val seenEarlyAccess = kvStorage.getBoolean("spark/earlyAccess/dismissed")
             val seenSwipeToReply = kvStorage.getBoolean("spark/swipeToReply/dismissed")
@@ -471,17 +455,6 @@ fun ChatRouterScreen(
         accessibilityManager.addTouchExplorationStateChangeListener { enabled ->
             isTouchExplorationEnabled = enabled
         }
-    }
-
-    if (!viewModel.latestChangelogRead) {
-        ChangelogSheet(
-            versionName = viewModel.latestChangelog,
-            versionIsHistorical = false,
-            renderedContents = viewModel.latestChangelogBody,
-            onDismiss = {
-                viewModel.latestChangelogRead = true
-            }
-        )
     }
 
     if (showPlatformModDMHint) {
