@@ -90,12 +90,9 @@
     <string name="about_tab_version">Version</string>
     <string name="about_tab_details">Details</string>
 
-    <string name="oss_attribution">OSS Attribution</string>
-    <string name="oss_attribution_body">Stoat is built with the help of these awesome open-source projects.</string>
-    <string name="oss_attribution_body_2">We\'re grateful to the developers of these projects for making their work available to the world.</string>
-    <string name="oss_attribution_warning">The list below is automatically generated. It may be incomplete or inaccurate.</string>
-    <string name="oss_attribution_generation_date">Last updated: %1$s</string>
+    <string name="oss_attribution">OSS Licenses</string>
     <string name="oss_attribution_tap_to_view_license">Tap to view license</string>
+    <string name="oss_attribution_open_library_website">Open library website</string>
 
     <string name="comingsoon_toast">Sorry, this feature is not ready yet.</string>
 

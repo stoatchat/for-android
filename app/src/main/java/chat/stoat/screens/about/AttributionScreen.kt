@@ -1,11 +1,8 @@
 package chat.stoat.screens.about
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -30,12 +26,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -47,14 +41,8 @@ import kotlinx.serialization.json.JsonArray
 
 @Serializable
 data class AboutLibraries(
-    val metadata: Metadata,
     val libraries: List<Library>,
     val licenses: Map<String, License>
-)
-
-@Serializable
-data class Metadata(
-    val generated: String
 )
 
 @Serializable
@@ -105,13 +93,13 @@ data class Scm(
 fun AttributionScreen(navController: NavController) {
     var libraries by remember { mutableStateOf<AboutLibraries?>(null) }
 
-    val context = LocalContext.current
+    val resources = LocalResources.current
 
     var licenceSheetOpen by remember { mutableStateOf(false) }
     var licenseSheetTarget by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        context.resources.openRawResource(R.raw.aboutlibraries).use { stream ->
+        resources.openRawResource(R.raw.aboutlibraries).use { stream ->
             val text = stream.bufferedReader().use { it.readText() }
             libraries = Json.decodeFromString(AboutLibraries.serializer(), text)
         }
@@ -181,37 +169,6 @@ fun AttributionScreen(navController: NavController) {
         Box(Modifier.padding(pv)) {
             libraries?.let {
                 LazyColumn {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clip(MaterialTheme.shapes.medium)
-                                .background(MaterialTheme.colorScheme.surfaceContainer)
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.oss_attribution_body)
-                            )
-                            Text(
-                                text = stringResource(R.string.oss_attribution_body_2)
-                            )
-                            Text(
-                                text = stringResource(R.string.oss_attribution_warning),
-                                color = MaterialTheme.colorScheme.error
-                            )
-
-                            Text(
-                                text = stringResource(
-                                    R.string.oss_attribution_generation_date,
-                                    libraries?.metadata?.generated ?: ""
-                                ),
-                                color = LocalContentColor.current.copy(alpha = 0.6f)
-                            )
-                        }
-                    }
-
                     items(
                         items = it.libraries.sortedBy { library -> library.name }
                     ) { library ->
@@ -219,16 +176,6 @@ fun AttributionScreen(navController: NavController) {
                             licenceSheetOpen = true
                             licenseSheetTarget = library.licenses.firstOrNull() ?: ""
                         }
-                    }
-
-                    item(key = "cat") {
-                        Text(
-                            text = "🐈",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            textAlign = TextAlign.Center
-                        )
                     }
                 }
             }

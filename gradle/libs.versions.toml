@@ -16,7 +16,7 @@ lifecycle = "2.10.0"
 accompanist = "0.37.3"
 ktor = "3.4.1"
 glide = "5.0.5"
-aboutlibraries = "11.3.0-rc02"
+aboutlibraries = "15.0.0-a02"
 media3 = "1.9.2"
 telephoto = "1.0.0-alpha02"
 haze = "1.7.2"
@@ -110,6 +110,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
+aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutlibraries" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 sentry-android = { id = "io.sentry.android.gradle", version = "6.5.0" }

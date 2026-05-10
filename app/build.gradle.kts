@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.aboutlibraries)
+    alias(libs.plugins.aboutlibraries.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sentry.android)
     alias(libs.plugins.sqldelight)
@@ -130,6 +131,7 @@ android {
         viewBinding = true
         compose = true
         buildConfig = true
+        resValues = true
     }
     packaging {
         resources {
@@ -279,23 +281,28 @@ dependencies {
 }
 
 aboutLibraries {
-    additionalLicenses += listOf("ofl")
-    includePlatform = true
-    strictMode = StrictMode.FAIL
-    allowedLicenses += listOf(
-        "Apache-2.0",
-        "ASDKL",
-        "BSD-2-Clause",
-        "BSD-3-Clause", "The 3-Clause BSD License",
-        "BSD License",
-        "cmark",
-        "EPL-1.0",
-        "MIT",
-        "ML Kit Terms of Service",
-        "OFL",
-        "Public Domain"
-    )
-    configPath = "compliance"
+    license {
+        strictMode = StrictMode.FAIL
+        allowedLicenses.addAll(
+            "Apache-2.0",
+            "ASDKL",
+            "BSD-2-Clause",
+            "BSD-3-Clause", "The 3-Clause BSD License",
+            "BSD License",
+            "cmark",
+            "EPL-1.0",
+            "MIT",
+            "ML Kit Terms of Service",
+            "OFL",
+            "Public Domain"
+        )
+        additionalLicenses.addAll("ofl")
+    }
+
+    collect {
+        includePlatform = true
+        configPath = file("../compliance")
+    }
 }
 
 sqldelight {
