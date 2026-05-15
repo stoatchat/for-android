@@ -76,6 +76,7 @@ import chat.stoat.StoatApplication
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
+import chat.stoat.api.StoatInstance
 import chat.stoat.api.api
 import chat.stoat.api.routes.microservices.geo.queryGeo
 import chat.stoat.api.routes.microservices.health.healthCheck
@@ -312,8 +313,11 @@ class MainActivityViewModel(
 
     init {
         Log.d("MainActivity", "Starting up")
-        doPreStartupTasks()
-        checkLoggedInState()
+        viewModelScope.launch {
+            StoatInstance.restore(kvStorage)
+            doPreStartupTasks()
+            checkLoggedInState()
+        }
     }
 }
 

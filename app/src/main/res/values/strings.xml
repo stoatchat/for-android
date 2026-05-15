@@ -19,6 +19,8 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="instance_api_url">Instance API URL</string>
+    <string name="instance_api_url_hint">Use the default Stoat API, or enter a self-hosted Revolt API URL.</string>
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
