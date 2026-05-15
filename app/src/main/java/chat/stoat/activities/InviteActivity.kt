@@ -48,16 +48,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.R
 import chat.stoat.api.STOAT_FILES
+import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.routes.invites.fetchInviteByCode
 import chat.stoat.api.routes.invites.joinInviteByCode
+import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.callbacks.ActionChannel
+import chat.stoat.composables.generic.IconPlaceholder
+import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.core.model.schemas.Invite
 import chat.stoat.core.model.schemas.InviteJoined
 import chat.stoat.core.model.util.RsResult
-import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.api.settings.SyncedSettings
-import chat.stoat.composables.generic.IconPlaceholder
-import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.ui.theme.StoatTheme
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -118,6 +120,12 @@ class InviteViewModel : ViewModel() {
         viewModelScope.launch {
             val result = joinInviteByCode(inviteCode)
             setJoinResult(result)
+        }
+    }
+
+    fun navigateToServer(channelId: String) {
+        viewModelScope.launch {
+            ActionChannel.send(chat.stoat.callbacks.Action.SwitchChannel(channelId))
         }
     }
 }
@@ -238,7 +246,12 @@ fun InviteScreen(
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
-                                text = stringResource(id = R.string.invite_message),
+                                text = stringResource(
+                                    id = if (StoatAPI.serverCache.containsKey(
+                                            invite?.serverId
+                                        )
+                                    ) R.string.invite_already_member else R.string.invite_message
+                                ),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -248,12 +261,25 @@ fun InviteScreen(
                             Row {
                                 Button(
                                     onClick = {
-                                        viewModel.joinInvite(inviteCode)
+                                        if (StoatAPI.serverCache.containsKey(invite?.serverId)) {
+                                            invite?.channelId?.let {
+                                                viewModel.navigateToServer(it)
+                                            }
+                                            onFinish()
+                                        } else {
+                                            viewModel.joinInvite(inviteCode)
+                                        }
                                     },
                                     modifier = Modifier
                                         .testTag("accept_invite")
                                 ) {
-                                    Text(text = stringResource(id = R.string.invite_join))
+                                    Text(
+                                        text = stringResource(
+                                            id =
+                                                if (StoatAPI.serverCache.containsKey(invite?.serverId)) R.string.invite_open_server
+                                                else R.string.invite_join
+                                        )
+                                    )
                                 }
 
                                 Spacer(modifier = Modifier.width(8.dp))
