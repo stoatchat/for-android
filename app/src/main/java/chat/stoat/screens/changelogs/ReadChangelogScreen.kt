@@ -149,8 +149,13 @@ fun ReadChangelogScreen(
             )
         }
     ) { pv ->
-        Box(Modifier.padding(pv)) {
-            AnimatedContent(targetState = state.value) { uiState ->
+        Box(Modifier
+            .fillMaxSize()
+            .padding(pv)) {
+            AnimatedContent(
+                targetState = state.value,
+                modifier = Modifier.fillMaxSize()
+            ) { uiState ->
                 when (uiState) {
                     is ReadChangelogScreenUiState.Loading -> Box(
                         Modifier.fillMaxSize(),
@@ -182,6 +187,7 @@ fun ReadChangelogScreen(
                         ProseMarkdown(
                             markdownText = uiState.changelog.markdownContent,
                             modifier = Modifier
+                                .fillMaxSize()
                                 .padding(horizontal = 16.dp)
                                 .verticalScroll(rememberScrollState())
                         )
