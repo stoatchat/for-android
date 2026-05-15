@@ -23,6 +23,12 @@ data class _NotificationSettingsToParse( // quirk
 )
 
 @Serializable
+data class ReleaseNotesSettings(
+    val lastSeenId: String? = null,
+    val lastSeenAt: String? = null
+)
+
+@Serializable
 data class AndroidSpecificSettingsSpecialEmbedSettings(
     /**
      * Whether to embed YouTube videos interactively.

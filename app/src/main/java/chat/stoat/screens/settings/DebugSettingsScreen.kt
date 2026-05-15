@@ -47,6 +47,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.api.routes.push.subscribePush
+import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.KVStorage
@@ -88,7 +89,7 @@ class DebugSettingsScreenViewModel(
 
     fun forgetLatestChangelog() {
         viewModelScope.launch {
-            kvStorage.remove("latestChangelogRead")
+            SyncedSettings.resetReleaseNotes()
         }
     }
 
@@ -276,7 +277,7 @@ fun DebugSettingsScreen(
                 }
 
                 Text(
-                    text = "Changelogs",
+                    text = "Release Notes (Gazette)",
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(bottom = 10.dp)
                 )

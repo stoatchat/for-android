@@ -149,10 +149,10 @@
     <string name="overview_screen_settings_description">Change your look, manage your account, and more</string>
     <string name="overview_screen_share_profile">Share Profile</string>
     <string name="overview_screen_share_profile_description">Take a look at your user card and get a special link to share</string>
-    <string name="overview_screen_changelog">Changelog</string>
-    <string name="overview_screen_changelog_description">Stoat never sleeps, take a look to see what\'s been in the works</string>
-    <string name="overview_screen_feedback">Provide Feedback</string>
-    <string name="overview_screen_feedback_description">Got something to say? We\'re all ears</string>
+    <string name="overview_screen_changelog">What\'s New?</string>
+    <string name="overview_screen_changelog_description">See what we\'ve been working on recently and what\'s coming up next</string>
+    <string name="overview_screen_join_lounge">Join the Stoat server</string>
+    <string name="overview_screen_join_lounge_description">Hang out with other Stoat users, give feedback, and see what\'s happening with Stoat</string>
     <string name="overview_screen_catch_up">Catch Up</string>
     <string name="overview_screen_catch_up_description">See what you\'ve missed while you were away</string>
     <string name="overview_screen_catch_up_none">All caught up</string>
@@ -770,16 +770,14 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Notifications</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Server Ordering</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Stoat for Android</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_release_notes">Release Notes</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (unknown)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Reset %1$s settings</string>
 
     <string name="settings_feedback">Feedback</string>
     <string name="settings_feedback_description">Join the Stoat server to give feedback or suggestions and report bugs.</string>
 
-    <string name="settings_changelogs">Changelogs</string>
-    <string name="settings_changelogs_new_header">What\'s been cooking ✨</string>
-    <string name="settings_changelogs_historical_version_header">Changelog for %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">that version</string>
+    <string name="settings_changelog">What\'s New</string>
 
     <string name="settings_language">Language</string>
     <string name="settings_language_auto">System default</string>
@@ -833,4 +831,8 @@
     <string name="geogate_description">Stoat may block content in certain jurisdictions in response to legislation or legal notices</string>
     <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
     <string name="geogate_acknowledge">Acknowledge</string>
+
+    <string name="changelog_header">What\'s new</string>
+    <string name="changelog_load_error">There was an error loading the changelog.</string>
+    <string name="changelog_retry">Retry</string>
 </resources>

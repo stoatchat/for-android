@@ -318,6 +318,27 @@ fun SettingsScreen(
                     ListItem(
                         headlineContent = {
                             Text(
+                                text = stringResource(id = R.string.settings_changelog)
+                            )
+                        },
+                        leadingContent = {
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_campaign_24dp),
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .testTag("settings_view_changelog")
+                            .clickable {
+                                navController.navigate("changelog/latest")
+                            }
+                    )
+
+                    ListItem(
+                        headlineContent = {
+                            Text(
                                 text = stringResource(id = R.string.settings_feedback)
                             )
                         },

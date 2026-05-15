@@ -123,6 +123,7 @@ fun ChatSettingsScreen(
                                     "ordering" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
                                     "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
                                     "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
+                                    "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
                                     else -> stringResource(
                                         R.string.settings_chat_hint_poorly_formed_settings_keys_key_unknown,
                                         key
@@ -137,7 +138,7 @@ fun ChatSettingsScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             for (key in LoadedSettings.poorlyFormedSettingsKeys.filter {
-                                it in setOf("ordering", "android", "notifications")
+                                it in setOf("ordering", "android", "notifications", "release-notes")
                             }) {
                                 TextButton(
                                     onClick = {
@@ -146,6 +147,7 @@ fun ChatSettingsScreen(
                                                 "ordering" -> SyncedSettings.resetOrdering()
                                                 "android" -> SyncedSettings.resetAndroid()
                                                 "notifications" -> SyncedSettings.resetNotifications()
+                                                "release-notes" -> SyncedSettings.resetReleaseNotes()
                                             }
                                             LoadedSettings.poorlyFormedSettingsKeys -= key
                                         }
@@ -158,6 +160,7 @@ fun ChatSettingsScreen(
                                                 "ordering" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
                                                 "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
                                                 "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
+                                                "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
                                                 else -> key
                                             }
                                         )

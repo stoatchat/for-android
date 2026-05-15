@@ -94,6 +94,7 @@ import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
+import chat.stoat.screens.changelogs.ReadChangelogScreen
 import chat.stoat.screens.chat.ChannelPinsScreen
 import chat.stoat.screens.chat.ChatRouterScreen
 import chat.stoat.screens.chat.standalone.CatchUpScreen
@@ -734,6 +735,8 @@ fun AppEntrypoint(
                     composable("about/oss") { AttributionScreen(navController) }
 
                     composable("labs") { LabsRootScreen(navController) }
+                    
+                    composable("changelog/{id}") { ReadChangelogScreen(navController) }
                 }
             }
 

@@ -1,10 +1,14 @@
 package chat.stoat
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.os.StrictMode
 import chat.stoat.di.appModule
 import chat.stoat.di.viewModelModule
+import coil3.ImageLoader
+import coil3.SingletonImageLoader
+import coil3.request.crossfade
 import com.google.android.material.color.DynamicColors
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
@@ -12,7 +16,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class StoatApplication : Application() {
+class StoatApplication : Application(), SingletonImageLoader.Factory {
     companion object {
         lateinit var instance: StoatApplication
     }
@@ -43,6 +47,12 @@ class StoatApplication : Application() {
                     .build()
             )
         }
+    }
+
+    override fun newImageLoader(context: Context): ImageLoader {
+        return ImageLoader.Builder(context)
+            .crossfade(true)
+            .build()
     }
 
     init {

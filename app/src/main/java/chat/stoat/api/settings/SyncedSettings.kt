@@ -8,6 +8,7 @@ import chat.stoat.api.routes.sync.setKey
 import chat.stoat.core.model.schemas.AndroidSpecificSettings
 import chat.stoat.core.model.schemas.NotificationSettings
 import chat.stoat.core.model.schemas.OrderingSettings
+import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.core.model.schemas._NotificationSettingsToParse
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
@@ -33,6 +34,7 @@ object SyncedSettings {
         )
     )
     private val _notifications = mutableStateOf(NotificationSettings())
+    private val _releaseNotes = mutableStateOf(ReleaseNotesSettings())
 
     val ordering: OrderingSettings
         get() = _ordering.value
@@ -40,11 +42,13 @@ object SyncedSettings {
         get() = _android.value
     val notifications: NotificationSettings
         get() = _notifications.value
+    val releaseNotes: ReleaseNotesSettings
+        get() = _releaseNotes.value
 
     suspend fun fetch(apiToken: String = StoatAPI.sessionToken) {
         try {
             val settings =
-                getKeys("ordering", "android", "notifications", token = apiToken)
+                getKeys("ordering", "android", "notifications", "release-notes", token = apiToken)
 
             settings["ordering"]?.let {
                 try {
@@ -74,6 +78,18 @@ object SyncedSettings {
                 // This is to fix a quirk where the web client sometimes leaves sub-objects in one of the objects
                 // Because it is written in typescript and does what it wants
                 _notifications.value = parseNotificationSettings(it.value)
+            }
+
+            settings["release-notes"]?.let {
+                try {
+                    _releaseNotes.value = StoatJson.decodeFromString(
+                        ReleaseNotesSettings.serializer(),
+                        it.value
+                    )
+                } catch (e: Exception) {
+                    LoadedSettings.poorlyFormedSettingsKeys += "release-notes"
+                    e.printStackTrace()
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -122,6 +138,11 @@ object SyncedSettings {
         setKey("notifications", StoatJson.encodeToString(NotificationSettings.serializer(), value))
     }
 
+    suspend fun updateReleaseNotes(value: ReleaseNotesSettings) {
+        _releaseNotes.value = value
+        setKey("release-notes", StoatJson.encodeToString(ReleaseNotesSettings.serializer(), value))
+    }
+
     suspend fun resetOrdering() {
         val default = OrderingSettings()
         _ordering.value = default
@@ -145,6 +166,15 @@ object SyncedSettings {
         setKey(
             "notifications",
             StoatJson.encodeToString(NotificationSettings.serializer(), default)
+        )
+    }
+
+    suspend fun resetReleaseNotes() {
+        val default = ReleaseNotesSettings()
+        _releaseNotes.value = default
+        setKey(
+            "release-notes",
+            StoatJson.encodeToString(ReleaseNotesSettings.serializer(), default)
         )
     }
 }

@@ -1,5 +1,6 @@
 package chat.stoat.screens.chat
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -70,11 +71,14 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.DirectMessages
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
+import chat.stoat.api.routes.microservices.gazette.getLatestChangelog
 import chat.stoat.api.routes.push.subscribePush
+import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.DisconnectedNotice
 import chat.stoat.composables.screens.chat.drawer.ChannelSideDrawer
+import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.internals.extensions.zero
 import chat.stoat.persistence.KVStorage
@@ -100,6 +104,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.sentry.Sentry
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import logcat.LogPriority
+import logcat.logcat
 import org.koin.androidx.compose.koinViewModel
 
 sealed class ChatRouterDestination {
@@ -139,17 +147,17 @@ sealed class ChatRouterDestination {
     }
 }
 
+@SuppressLint("StaticFieldLeak")
 class ChatRouterViewModel(
     private val kvStorage: KVStorage,
-    val context: Context
+    val context: Context,
 ) : ViewModel() {
     var currentDestination by mutableStateOf<ChatRouterDestination>(ChatRouterDestination.default)
-    var latestChangelogRead by mutableStateOf(true)
-    var latestChangelog by mutableStateOf("")
-    var latestChangelogBody by mutableStateOf("")
     var showNotificationRationale by mutableStateOf(false)
     var showEarlyAccessSpark by mutableStateOf(false)
     var showSwipeToReplySpark by mutableStateOf(false)
+    var showChangelogScreenForId by mutableStateOf<String?>(null)
+    private var changelogCheckDone = false
 
     init {
         viewModelScope.launch {
@@ -244,6 +252,40 @@ class ChatRouterViewModel(
                 setSaveDestination(ChatRouterDestination.Channel(channelId))
             } else {
                 setSaveDestination(ChatRouterDestination.NoCurrentChannel(serverId))
+            }
+        }
+    }
+
+    fun maybeShowChangelog() {
+        if (changelogCheckDone) return
+        changelogCheckDone = true
+
+        viewModelScope.launch {
+            val latestChangelog = runCatching { getLatestChangelog() }
+                .onFailure {
+                    logcat(LogPriority.ERROR) { "Failed to fetch latest changelog: ${it.message}" }
+                }
+                .getOrNull()
+
+            if (latestChangelog != null) {
+                val isInFuture =
+                    runCatching { Instant.parse(latestChangelog.publishedAt) > Clock.System.now() }.getOrNull()
+                        ?: false
+                if (isInFuture) {
+                    logcat(LogPriority.WARN) { "Latest changelog is from the future (${latestChangelog.publishedAt} > ${Clock.System.now()}), not showing it!" }
+                    return@launch
+                }
+
+                val lastSeenChangelog = SyncedSettings.releaseNotes.lastSeenId
+                if (lastSeenChangelog == null || lastSeenChangelog != latestChangelog.id) {
+                    showChangelogScreenForId = latestChangelog.id
+                    SyncedSettings.updateReleaseNotes(
+                        ReleaseNotesSettings(
+                            lastSeenId = latestChangelog.id,
+                            lastSeenAt = Clock.System.now().toString()
+                        )
+                    )
+                }
             }
         }
     }
@@ -356,6 +398,21 @@ fun ChatRouterScreen(
             .collect { selfId ->
                 if (selfId == null) {
                     onNullifiedUser()
+                }
+            }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.maybeShowChangelog()
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { viewModel.showChangelogScreenForId }
+            .distinctUntilChanged()
+            .collect { changelogId ->
+                if (changelogId != null) {
+                    viewModel.showChangelogScreenForId = null
+                    topNav.navigate("changelog/${changelogId}")
                 }
             }
     }
