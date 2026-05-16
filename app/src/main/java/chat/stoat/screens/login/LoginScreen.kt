@@ -50,6 +50,7 @@ import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.StoatInstance
 import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
 import chat.stoat.api.routes.onboard.needsOnboarding
@@ -71,6 +72,10 @@ class LoginViewModel(
     val password: String
         get() = _password
 
+    private var _instanceUrl by mutableStateOf(StoatInstance.apiBase)
+    val instanceUrl: String
+        get() = _instanceUrl
+
     private var _error by mutableStateOf<String?>(null)
     val error: String?
         get() = _error
@@ -83,10 +88,18 @@ class LoginViewModel(
     val mfaResponse: EmailPasswordAssessment?
         get() = _mfaResponse
 
+    init {
+        viewModelScope.launch {
+            _instanceUrl = kvStorage.get(StoatInstance.KV_INSTANCE_API_BASE) ?: StoatInstance.apiBase
+        }
+    }
+
     fun doLogin() {
         _error = null
 
         viewModelScope.launch {
+            StoatInstance.configure(_instanceUrl, kvStorage)
+
             val response = try {
                 negotiateAuthentication(_email, _password)
             } catch (e: Exception) {
@@ -144,6 +157,10 @@ class LoginViewModel(
 
     fun setPassword(password: String) {
         _password = password
+    }
+
+    fun setInstanceUrl(instanceUrl: String) {
+        _instanceUrl = instanceUrl
     }
 }
 
@@ -230,6 +247,18 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                         .semantics {
                             contentType = ContentType.EmailAddress
                         }
+                )
+                FormTextField(
+                    value = viewModel.instanceUrl,
+                    label = stringResource(R.string.instance_api_url),
+                    type = KeyboardType.Uri,
+                    action = ImeAction.Next,
+                    onChange = viewModel::setInstanceUrl,
+                    supportingText = {
+                        Text(text = stringResource(R.string.instance_api_url_hint))
+                    },
+                    modifier = Modifier
+                        .padding(bottom = 25.dp)
                 )
                 SecureTextField(
                     passwordTextFieldState,
