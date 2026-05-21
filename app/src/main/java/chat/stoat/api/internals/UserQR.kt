@@ -1,8 +1,8 @@
 package chat.stoat.api.internals
 
 import androidx.core.net.toUri
-import chat.stoat.api.STOAT_MARKETING
 import chat.stoat.api.StoatCbor
+import chat.stoat.core.model.data.STOAT_MARKETING
 import chat.stoat.core.model.schemas.User
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
@@ -26,7 +26,7 @@ object UserQR {
             StoatCbor.encodeToByteArray(
                 UserQRContents.serializer(),
                 UserQRContents(
-                    format = "rqr\$user\$0",
+                    format = $$"rqr$user$0",
                     avatar = user.avatar?.id
                         ?: "01JDZRBY95P8AY4CFVX16FFVWS", // Sentinel value for missing avatar
                     displayName = user.displayName

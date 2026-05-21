@@ -62,11 +62,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Category
 import chat.stoat.internals.EmojiImpl
 import chat.stoat.internals.EmojiPickerItem

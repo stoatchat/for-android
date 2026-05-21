@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextOverflow
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.solidColor
@@ -16,6 +15,7 @@ import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.extensions.TransparentListItemColours
 
 @Composable

@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.WebViewAssetLoader
 import chat.stoat.activities.InviteActivity
-import chat.stoat.api.STOAT_WEB_APP
+import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.core.model.schemas.isInviteUri
 
 internal fun Color.asHexString(includeAlphaComponent: Boolean = true): String {

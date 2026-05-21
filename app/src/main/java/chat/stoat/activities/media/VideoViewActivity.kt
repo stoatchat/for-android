@@ -19,8 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import chat.stoat.R
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatHttp
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.databinding.ActivityVideoplayerBinding
 import chat.stoat.providers.getAttachmentContentUri

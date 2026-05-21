@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.stoat.R
 import chat.stoat.activities.InviteActivity
-import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.api.routes.server.createServer
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
@@ -62,6 +61,7 @@ import chat.stoat.composables.sheets.SheetSelection
 import chat.stoat.composables.vectorassets.CreateServer
 import chat.stoat.composables.vectorassets.JoinServer
 import chat.stoat.composables.vectorassets.NewServer
+import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.material.EasingTokens
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.ui.theme.FragmentMono

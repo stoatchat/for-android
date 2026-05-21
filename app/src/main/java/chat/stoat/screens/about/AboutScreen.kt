@@ -53,11 +53,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.stoat.BuildConfig
 import chat.stoat.R
-import chat.stoat.api.STOAT_BASE
 import chat.stoat.api.StoatJson
 import chat.stoat.api.routes.misc.Root
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.composables.generic.PrimaryTabs
+import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.internals.Platform
 import kotlinx.coroutines.launch
 import java.net.URI

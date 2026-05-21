@@ -26,13 +26,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.MarkdownTree
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.ndk.AstNode
 import chat.stoat.ndk.Stendal
 

@@ -1,6 +1,6 @@
 package chat.stoat.api.routes.microservices.january
 
-import chat.stoat.api.STOAT_PROXY
+import chat.stoat.core.model.data.STOAT_PROXY
 import java.net.URLEncoder
 
 fun asJanuaryProxyUrl(url: String): String {

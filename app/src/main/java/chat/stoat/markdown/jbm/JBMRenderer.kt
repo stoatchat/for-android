@@ -72,7 +72,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import chat.stoat.R
 import chat.stoat.activities.InviteActivity
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.InstancedBrushCompat
@@ -86,6 +85,7 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.Annotations
 import chat.stoat.composables.utils.detectTapGesturesConditionalConsume
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.ui.theme.FragmentMono
 import chat.stoat.ui.theme.isThemeDark
 import dev.snipme.highlights.Highlights

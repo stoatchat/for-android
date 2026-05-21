@@ -62,7 +62,6 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.activities.media.ImageViewActivity
 import chat.stoat.activities.media.VideoViewActivity
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.MessageFlag
@@ -86,6 +85,7 @@ import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.UserAvatarWidthPlaceholder
 import chat.stoat.composables.markdown.LocalMarkdownTreeConfig
 import chat.stoat.composables.markdown.RichMarkdown
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.text.Gigamoji
 import chat.stoat.internals.text.MessageProcessor
 import chat.stoat.markdown.jbm.JBM

@@ -29,13 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.BuildConfig
 import chat.stoat.R
-import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.Roles
@@ -46,6 +46,7 @@ import chat.stoat.api.settings.Experiments
 import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
 import kotlinx.coroutines.launch
 
@@ -69,6 +70,7 @@ fun MessageContextSheet(
     }
 
     val context = LocalContext.current
+    val resources = LocalResources.current
     val clipboardManager = LocalClipboardManager.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -111,7 +113,7 @@ fun MessageContextSheet(
                                 onHideSheet()
                                 Toast.makeText(
                                     context,
-                                    context.getString(
+                                    resources.getString(
                                         R.string.message_context_sheet_actions_copy_failed_empty
                                     ),
                                     Toast.LENGTH_SHORT
@@ -123,7 +125,7 @@ fun MessageContextSheet(
                         if (Platform.needsShowClipboardNotification()) {
                             Toast.makeText(
                                 context,
-                                context.getString(R.string.copied),
+                                resources.getString(R.string.copied),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -156,7 +158,7 @@ fun MessageContextSheet(
                         if (message.content.isNullOrEmpty()) {
                             Toast.makeText(
                                 context,
-                                context.getString(
+                                resources.getString(
                                     R.string.message_context_sheet_actions_copy_failed_empty
                                 ),
                                 Toast.LENGTH_SHORT
@@ -182,7 +184,7 @@ fun MessageContextSheet(
                         if (Platform.needsShowClipboardNotification()) {
                             Toast.makeText(
                                 context,
-                                context.getString(
+                                resources.getString(
                                     R.string.message_context_sheet_actions_copy_link_copied
                                 ),
                                 Toast.LENGTH_SHORT
@@ -220,7 +222,7 @@ fun MessageContextSheet(
                         if (Platform.needsShowClipboardNotification()) {
                             Toast.makeText(
                                 context,
-                                context.getString(
+                                resources.getString(
                                     R.string.message_context_sheet_actions_copy_id_copied
                                 ),
                                 Toast.LENGTH_SHORT
@@ -412,7 +414,7 @@ fun MessageContextSheet(
             onClick = {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.comingsoon_toast),
+                    resources.getString(R.string.comingsoon_toast),
                     Toast.LENGTH_SHORT
                 ).show()
 

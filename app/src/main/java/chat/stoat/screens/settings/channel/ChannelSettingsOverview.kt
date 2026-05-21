@@ -52,12 +52,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.patchChannel
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch

@@ -23,11 +23,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import chat.stoat.activities.InviteActivity
-import chat.stoat.api.STOAT_INVITES
-import chat.stoat.api.STOAT_WEB_APP
 import chat.stoat.api.StoatJson
 import chat.stoat.api.buildUserAgent
 import chat.stoat.api.internals.ThemeCompat
+import chat.stoat.core.model.data.STOAT_INVITES
+import chat.stoat.core.model.data.STOAT_WEB_APP
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 

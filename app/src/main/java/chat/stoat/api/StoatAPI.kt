@@ -12,6 +12,7 @@ import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
 import chat.stoat.api.routes.user.fetchSelf
 import chat.stoat.api.unreads.Unreads
+import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Emoji
@@ -53,21 +54,6 @@ import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
 import java.net.SocketException
 import chat.stoat.core.model.schemas.Channel as ChannelSchema
-
-private const val USE_ALPHA_API = false
-
-val STOAT_BASE =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/api" else "https://api.stoat.chat/0.8"
-const val STOAT_SUPPORT = "https://support.stoat.chat"
-const val STOAT_MARKETING = "https://stoat.chat"
-val STOAT_FILES =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/autumn" else "https://cdn.stoatusercontent.com"
-val STOAT_PROXY =
-    if (USE_ALPHA_API) "https://alpha.revolt.chat/january" else "https://proxy.stoatusercontent.com"
-const val STOAT_WEB_APP = "https://stoat.chat"
-const val STOAT_INVITES = "https://stt.gg"
-val STOAT_WEBSOCKET =
-    if (USE_ALPHA_API) "wss://alpha.revolt.chat/ws" else "wss://events.stoat.chat"
 
 fun String.api(): String {
     return "$STOAT_BASE$this"

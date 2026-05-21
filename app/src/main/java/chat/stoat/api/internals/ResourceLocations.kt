@@ -1,7 +1,7 @@
 package chat.stoat.api.internals
 
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.api
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 
 object ResourceLocations {

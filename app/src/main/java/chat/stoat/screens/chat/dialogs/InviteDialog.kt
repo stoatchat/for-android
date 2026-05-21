@@ -42,9 +42,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
-import chat.stoat.api.STOAT_INVITES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.createInvite
+import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.internals.Platform
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.Job

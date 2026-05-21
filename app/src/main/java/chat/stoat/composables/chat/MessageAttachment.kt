@@ -33,9 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.media.AudioPlayer
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource

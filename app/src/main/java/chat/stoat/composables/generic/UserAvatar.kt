@@ -23,10 +23,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
-import chat.stoat.api.STOAT_BASE
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.core.model.data.STOAT_BASE
+import chat.stoat.core.model.data.STOAT_FILES
 
 enum class Presence {
     Online,

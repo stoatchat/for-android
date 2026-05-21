@@ -44,9 +44,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.stoat.BuildConfig
 import chat.stoat.R
-import chat.stoat.api.STOAT_MARKETING
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
+import chat.stoat.core.model.data.STOAT_MARKETING
 import com.chuckerteam.chucker.api.Chucker
 
 @OptIn(ExperimentalFoundationApi::class)

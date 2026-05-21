@@ -1,10 +1,10 @@
 package chat.stoat.api.routes.microservices.autumn
 
 import chat.stoat.api.HitRateLimitException
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnError
 import chat.stoat.core.model.schemas.AutumnId
 import io.ktor.client.plugins.onUpload

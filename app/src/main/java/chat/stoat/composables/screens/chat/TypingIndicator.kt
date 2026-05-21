@@ -24,10 +24,10 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.activities.StoatTweenInt
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.model.data.STOAT_FILES
 
 @Composable
 fun StackedUserAvatars(

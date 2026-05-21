@@ -41,11 +41,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.stoat.R
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatHttp
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.providers.getAttachmentContentUri
 import chat.stoat.ui.theme.StoatTheme
 import io.ktor.client.request.get

@@ -46,13 +46,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.R
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.routes.user.patchSelf
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.RawUserOverview
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Profile
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch

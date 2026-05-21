@@ -31,13 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.custom.fetchEmoji
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Platform
 import kotlinx.coroutines.launch
 

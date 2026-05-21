@@ -82,13 +82,13 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.activities.StoatTweenInt
-import chat.stoat.api.STOAT_FILES
 import chat.stoat.api.internals.BrushCompat
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Autocomplete
 import kotlinx.coroutines.launch
 

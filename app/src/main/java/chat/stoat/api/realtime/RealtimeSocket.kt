@@ -3,7 +3,6 @@ package chat.stoat.api.realtime
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import chat.stoat.StoatApplication
-import chat.stoat.api.STOAT_WEBSOCKET
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
@@ -41,13 +40,14 @@ import chat.stoat.api.realtime.frames.sendable.BeginTypingFrame
 import chat.stoat.api.realtime.frames.sendable.EndTypingFrame
 import chat.stoat.api.realtime.frames.sendable.PingFrame
 import chat.stoat.api.routes.server.fetchMember
-import chat.stoat.core.model.schemas.Channel
-import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.core.model.util.ChannelVoiceState
-import chat.stoat.core.model.schemas.Role
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.c2dm.ChannelRegistrator
+import chat.stoat.core.model.data.STOAT_WEBSOCKET
+import chat.stoat.core.model.schemas.Channel
+import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Role
+import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.SqlStorage
 import io.ktor.client.plugins.websocket.ws
