@@ -595,7 +595,7 @@
     <string name="colour_picker_hex_use">Use</string>
     <string name="colour_picker_alpha">Alpha</string>
     <string name="colour_picker_preview">Preview</string>
-    <string name="colour_picker_use_default">Default</string>
+    <string name="colour_picker_use_default">Use Default</string>
     <string name="colour_picker_cancel">Cancel</string>
     <string name="colour_picker_apply">Apply</string>
 

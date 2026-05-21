@@ -23,19 +23,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
@@ -54,11 +52,11 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -264,7 +262,10 @@ vec4 main(vec2 fragCoord) {
 }
 """
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 @Composable
 fun ColumnScope.ColourPickerSheet(
     initialValue: Int,
@@ -303,34 +304,32 @@ fun ColumnScope.ColourPickerSheet(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            SegmentedButton(
-                selected = mode == ColourPickerMode.Sliders,
-                onClick = { mode = ColourPickerMode.Sliders },
-                shape = CircleShape.copy(
-                    topEnd = CornerSize(0),
-                    bottomEnd = CornerSize(0)
-                )
-            ) {
-                Text(stringResource(R.string.colour_picker_mode_sliders))
-            }
-            SegmentedButton(
-                selected = mode == ColourPickerMode.Palette,
-                onClick = { mode = ColourPickerMode.Palette },
-                shape = RectangleShape
-            ) {
-                Text(stringResource(R.string.colour_picker_mode_palette))
-            }
-            SegmentedButton(
-                selected = mode == ColourPickerMode.Hex,
-                onClick = { mode = ColourPickerMode.Hex },
-                shape = CircleShape.copy(
-                    topStart = CornerSize(0),
-                    bottomStart = CornerSize(0)
-                )
-            ) {
-                Text(stringResource(R.string.colour_picker_hex))
-            }
+        val slidersLabel = stringResource(R.string.colour_picker_mode_sliders)
+        val paletteLabel = stringResource(R.string.colour_picker_mode_palette)
+        val hexLabel = stringResource(R.string.colour_picker_hex)
+
+        ButtonGroup(
+            modifier = Modifier.fillMaxWidth(),
+            overflowIndicator = {}
+        ) {
+            toggleableItem(
+                weight = 1f,
+                checked = mode == ColourPickerMode.Sliders,
+                onCheckedChange = { mode = ColourPickerMode.Sliders },
+                label = slidersLabel
+            )
+            toggleableItem(
+                weight = 1f,
+                checked = mode == ColourPickerMode.Palette,
+                onCheckedChange = { mode = ColourPickerMode.Palette },
+                label = paletteLabel
+            )
+            toggleableItem(
+                weight = 1f,
+                checked = mode == ColourPickerMode.Hex,
+                onCheckedChange = { mode = ColourPickerMode.Hex },
+                label = hexLabel
+            )
         }
 
         Spacer(Modifier.height(16.dp))
@@ -672,7 +671,7 @@ fun ColumnScope.ColourPickerSheet(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             TextButton(onClick = onUseDefaultColour, Modifier.fillMaxWidth()) {
-                Icon(Icons.Default.CheckCircle, null)
+                Icon(painter = painterResource(R.drawable.ic_undo_24dp), null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.colour_picker_use_default))
             }
