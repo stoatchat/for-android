@@ -1,5 +1,21 @@
 package chat.stoat.composables.voice
 
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+class VoiceSheetViewModel(private val state: SavedStateHandle) : ViewModel() {}
+
+@Composable
+fun VoiceSheet(
+    channelId: String,
+    onDisconnect: () -> Unit,
+    viewModel: VoiceSheetViewModel = viewModel()
+) {
+}
+
+/*
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -390,3 +406,4 @@ fun VoiceSheet(
         }
     }
 }
+*/
