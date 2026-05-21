@@ -6,6 +6,7 @@
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
+/.idea/markdown.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/deploymentTargetDropDown.xml
@@ -25,3 +26,4 @@ app/src/main/assets/embedded
 /app/src/main/jniLibs/x86/
 /app/src/main/jniLibs/x86_64/
 copilot.data.migration*xml
+*.local.*
