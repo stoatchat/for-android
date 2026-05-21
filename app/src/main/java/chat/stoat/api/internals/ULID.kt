@@ -24,7 +24,7 @@ object ULID {
     )
 
     fun makeSpecial(timestamp: Long, entropy: ByteArray = fetchEntropy()): String {
-        if (timestamp < minTimestamp || timestamp > maxTimestamp) {
+        if (timestamp !in minTimestamp..maxTimestamp) {
             throw IllegalArgumentException("timestamp out of range: $timestamp")
         }
 
