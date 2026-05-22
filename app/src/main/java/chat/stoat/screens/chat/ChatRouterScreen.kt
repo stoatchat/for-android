@@ -276,6 +276,7 @@ class ChatRouterViewModel(
                     return@launch
                 }
 
+                SyncedSettings.awaitFetched()
                 val lastSeenChangelog = SyncedSettings.releaseNotes.lastSeenId
                 if (lastSeenChangelog == null || lastSeenChangelog != latestChangelog.id) {
                     showChangelogScreenForId = latestChangelog.id

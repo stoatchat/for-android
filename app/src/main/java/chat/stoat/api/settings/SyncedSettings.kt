@@ -10,6 +10,7 @@ import chat.stoat.core.model.schemas.NotificationSettings
 import chat.stoat.core.model.schemas.OrderingSettings
 import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.core.model.schemas._NotificationSettingsToParse
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 import logcat.LogPriority
@@ -24,6 +25,10 @@ import logcat.logcat
  */
 
 object SyncedSettings {
+    private val _fetchCompleted = CompletableDeferred<Unit>()
+
+    suspend fun awaitFetched() = _fetchCompleted.await()
+
     private val _ordering = mutableStateOf(OrderingSettings())
     private val _android = mutableStateOf(
         AndroidSpecificSettings(
@@ -93,6 +98,8 @@ object SyncedSettings {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            _fetchCompleted.complete(Unit)
         }
     }
 
