@@ -75,6 +75,7 @@ import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
+import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.api
 import chat.stoat.api.routes.microservices.geo.queryGeo
@@ -353,6 +354,8 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         StoatAPI.hydrateFromPersistentCache()
+
+        intent.getStringExtra("channelId")?.let { NotificationDeepLink.pendingChannelId.value = it }
 
         setContent {
             val windowSizeClass = calculateWindowSizeClass(this)

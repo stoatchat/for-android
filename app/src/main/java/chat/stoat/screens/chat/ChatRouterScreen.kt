@@ -80,6 +80,7 @@ import chat.stoat.composables.chat.DisconnectedNotice
 import chat.stoat.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.dialogs.NotificationRationaleDialog
+import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.internals.extensions.zero
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.dialogs.safety.ReportMessageDialog
@@ -161,8 +162,14 @@ class ChatRouterViewModel(
 
     init {
         viewModelScope.launch {
-            val current = kvStorage.get("currentDestination")
-            setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
+            val pendingChannel = NotificationDeepLink.pendingChannelId.value
+            if (pendingChannel != null) {
+                NotificationDeepLink.pendingChannelId.value = null
+                setSaveDestination(ChatRouterDestination.Channel(pendingChannel))
+            } else {
+                val current = kvStorage.get("currentDestination")
+                setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
+            }
 
             val seenEarlyAccess = kvStorage.getBoolean("spark/earlyAccess/dismissed")
             val seenSwipeToReply = kvStorage.getBoolean("spark/swipeToReply/dismissed")

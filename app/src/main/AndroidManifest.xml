@@ -66,6 +66,10 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".c2dm.ReplyReceiver"
+            android:exported="false" />
+
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"

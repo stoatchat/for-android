@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -17,22 +16,19 @@ import androidx.core.graphics.drawable.IconCompat
 import chat.stoat.BuildConfig
 import chat.stoat.R
 import chat.stoat.activities.MainActivity
-import chat.stoat.api.StoatJson
 import chat.stoat.api.internals.ULID
+import chat.stoat.api.routes.channel.fetchSingleChannel
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.c2dm.ChannelRegistrator.Companion.CHANNEL_ID_GROUP_CONVERSATIONS_MESSAGES
-import chat.stoat.core.model.data.STOAT_BASE
-import chat.stoat.core.model.schemas.Message
-import chat.stoat.core.model.schemas.User
+import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.SqlStorage
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import logcat.LogPriority
+import logcat.logcat
 
 object NotificationID {
     const val NEW_MESSAGE = 0
@@ -47,96 +43,82 @@ class HandlerService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(fcmMessage: RemoteMessage) {
-        /// TEMPORARY CODE, SCHEMA TO BE REPLACED
-        val payloadString = fcmMessage.data["payload"]
-        if (payloadString == null) {
-            Log.e("HandlerService", "No payload in message, abort")
+        val data = fcmMessage.data
+
+        val type = data["type"]
+        if (type != "push.message") {
+            logcat(LogPriority.ERROR) { "Unknown message type: $type, abort" }
             return
         }
 
-        Log.d("HandlerService", payloadString)
-
-        val payload = StoatJson.parseToJsonElement(payloadString).jsonObject
-        val keys = payload.keys.toList().toString()
-        Log.d("HandlerService", "following keys: $keys")
-
-        var authorIcon = payload["icon"]?.jsonPrimitive?.contentOrNull
-        val message = payload["message"]?.jsonObject?.let {
-            StoatJson.decodeFromJsonElement(
-                Message.serializer(),
-                it
-            )
-        } ?: run {
-            Log.e("HandlerService", "No message in payload, abort")
+        val authorId = data["author"] ?: run {
+            logcat(LogPriority.ERROR) { "No author in message, abort" }
             return
         }
 
-        val user = payload["message"]?.jsonObject?.get("user")?.jsonObject?.let {
-            StoatJson.decodeFromJsonElement(
-                User.serializer(),
-                it
-            )
-        } ?: run {
-            Log.e("HandlerService", "No message->user in payload, abort")
+        val body = data["body"] ?: run {
+            logcat(LogPriority.ERROR) { "No body in message, abort" }
             return
         }
 
-        if (authorIcon == null) {
-            authorIcon =
-                "$STOAT_BASE/users/${message.author?.ifBlank { "0".repeat(26) }}/default_avatar"
+        val image = data["image"] ?: run {
+            logcat(LogPriority.WARN) { "No image in message, abort" }
+            return
         }
+
+        val authorName = data["author_name"] ?: run {
+            logcat(LogPriority.ERROR) { "No author name in message, abort" }
+            return
+        }
+
+        val channelId = data["channel"] ?: run {
+            logcat(LogPriority.ERROR) { "No channel in message, abort" }
+            return
+        }
+
+        val messageId = data["message"] ?: run {
+            logcat(LogPriority.ERROR) { "No message ID in message, abort" }
+            return
+        }
+
+        val messageTimestamp = ULID.asTimestamp(messageId)
 
         val db = Database(SqlStorage.driver)
-        val channelName = message.channel?.let {
-            db.channelQueries.findById(it).executeAsOneOrNull()
-        }?.let {
+        val channelName = db.channelQueries.findById(channelId).executeAsOneOrNull()?.let {
             when (it.channelType) {
-                "DirectMessage" -> {
-                    user.displayName ?: user.username
-                }
-
-                "TextChannel" -> {
-                    "#${it.name}"
-                }
-
-                else -> {
-                    it.name ?: getString(R.string.unknown)
-                }
+                "DirectMessage" -> authorName
+                "TextChannel" -> "#${it.name}"
+                else -> it.name ?: authorName
             }
-        } ?: getString(
-            R.string.unknown
-        )
-
-        val messageTimestamp = message.id?.let { ULID.asTimestamp(it) } ?: run {
-            Log.e("HandlerService", "No message id in message, abort")
-            return
+        } ?: runBlocking {
+            runCatching { fetchSingleChannel(channelId) }.getOrNull()?.let {
+                when (it.channelType) {
+                    ChannelType.DirectMessage -> authorName
+                    ChannelType.TextChannel -> "#${it.name}"
+                    else -> it.name ?: authorName
+                }
+            } ?: authorName
         }
 
         val bitmap = Glide.with(this)
             .asBitmap()
-            .load(authorIcon)
+            .load(image)
             .circleCrop()
             .submit()
             .get()
 
-        val author =
-            Person.Builder()
-                .setBot(user.bot != null)
-                .setKey(message.author)
-                .setIcon(IconCompat.createWithBitmap(bitmap))
-                .setName(user.displayName ?: user.username)
-                .build()
+        val author = Person.Builder()
+            .setBot(false)
+            .setKey(authorId)
+            .setIcon(IconCompat.createWithBitmap(bitmap))
+            .setName(authorName)
+            .build()
 
-        if (message.channel == null) {
-            Log.e("HandlerService", "No channel in message, abort")
-            return
-        }
-
-        val shortcutId = "${BuildConfig.APPLICATION_ID}.channel.${message.channel}"
+        val shortcutId = "${BuildConfig.APPLICATION_ID}.channel.$channelId"
 
         val conversationIntent = Intent(this, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
-            putExtra("channelId", message.channel)
+            putExtra("channelId", channelId)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
@@ -156,14 +138,18 @@ class HandlerService : FirebaseMessagingService() {
             build()
         }
 
+        val replyIntent = Intent(this, ReplyReceiver::class.java).apply {
+            putExtra("channelId", channelId)
+        }
+
         val action: NotificationCompat.Action =
             NotificationCompat.Action.Builder(
                 R.drawable.ic_reply_24dp,
                 getString(R.string.message_context_sheet_actions_reply),
-                PendingIntent.getActivity(
+                PendingIntent.getBroadcast(
                     this,
-                    0,
-                    conversationIntent,
+                    channelId.hashCode(),
+                    replyIntent,
                     PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
@@ -172,25 +158,21 @@ class HandlerService : FirebaseMessagingService() {
 
         val contentIntent = PendingIntent.getActivity(
             this,
-            message.channel.hashCode(),
+            channelId.hashCode(),
             conversationIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID_GROUP_CONVERSATIONS_MESSAGES)
-            .setSmallIcon(R.drawable.ic_chat_24dp)
-            .setContentTitle(user.displayName ?: user.username)
-            .setContentText(message.content)
+            .setSmallIcon(R.drawable.ic_stoat_24dp)
+            .setContentTitle(authorName)
+            .setContentText(body)
             .setContentIntent(contentIntent)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setStyle(
                 NotificationCompat.MessagingStyle(author)
                     .setConversationTitle(channelName)
-                    .addMessage(
-                        message.content ?: getString(R.string.reply_message_empty_has_attachments),
-                        messageTimestamp,
-                        author
-                    )
+                    .addMessage(body, messageTimestamp, author)
             )
             .addAction(action)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -203,7 +185,7 @@ class HandlerService : FirebaseMessagingService() {
 
             val bubbleIntent = PendingIntent.getActivity(
                 this,
-                message.channel.hashCode(),
+                channelId.hashCode(),
                 conversationIntent,
                 PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
@@ -228,8 +210,7 @@ class HandlerService : FirebaseMessagingService() {
             ) {
                 return
             }
-            notify(message.channel, NotificationID.NEW_MESSAGE, builder.build())
+            notify(channelId, NotificationID.NEW_MESSAGE, builder.build())
         }
-        /// END TEMPORARY CODE
     }
 }
