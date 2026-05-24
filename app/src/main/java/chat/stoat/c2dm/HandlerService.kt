@@ -84,19 +84,31 @@ class HandlerService : FirebaseMessagingService() {
         val messageTimestamp = ULID.asTimestamp(messageId)
 
         val db = Database(SqlStorage.driver)
-        val channelName = db.channelQueries.findById(channelId).executeAsOneOrNull()?.let {
-            when (it.channelType) {
-                "DirectMessage" -> authorName
-                "TextChannel" -> "#${it.name}"
-                else -> it.name ?: authorName
+
+        fun serverPrefix(serverId: String?): String? {
+            if (serverId == null) return null
+            return db.serverQueries.findById(serverId).executeAsOneOrNull()?.name
+        }
+
+        fun formatChannelName(type: String, name: String?, serverId: String?): String {
+            val base = when (type) {
+                "DirectMessage" -> return authorName
+                "TextChannel" -> "#${name}"
+                else -> name ?: return authorName
             }
+            val prefix = serverPrefix(serverId) ?: return base
+            return "$prefix · $base"
+        }
+
+        val channelName = db.channelQueries.findById(channelId).executeAsOneOrNull()?.let {
+            formatChannelName(it.channelType, it.name, it.server)
         } ?: runBlocking {
             runCatching { fetchSingleChannel(channelId) }.getOrNull()?.let {
-                when (it.channelType) {
-                    ChannelType.DirectMessage -> authorName
-                    ChannelType.TextChannel -> "#${it.name}"
-                    else -> it.name ?: authorName
-                }
+                formatChannelName(
+                    it.channelType?.value ?: "",
+                    it.name,
+                    it.server
+                )
             } ?: authorName
         }
 

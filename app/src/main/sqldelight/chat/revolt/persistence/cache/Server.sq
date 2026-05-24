@@ -32,3 +32,8 @@ delete:
 DELETE
 FROM Server
 WHERE id = ?;
+
+findById:
+SELECT *
+FROM Server
+WHERE id = ?;

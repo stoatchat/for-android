@@ -24,3 +24,7 @@ suspend fun subscribePush(
         contentType(ContentType.Application.Json)
     }
 }
+
+suspend fun unsubscribePush() {
+    StoatHttp.post("/push/unsubscribe".api())
+}

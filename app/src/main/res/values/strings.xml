@@ -775,6 +775,12 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (unknown)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Reset %1$s settings</string>
 
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_push">Push Notifications</string>
+    <string name="settings_notifications_push_description">Receive notifications for new messages, mentions, and other updates, even when you\'re not actively using the app.</string>
+    <string name="settings_notifications_system">System Settings</string>
+    <string name="settings_notifications_system_description">Manage notification permissions and preferences from your device\'s system settings.</string>
+
     <string name="settings_feedback">Feedback</string>
     <string name="settings_feedback_description">Join the Stoat server to give feedback or suggestions and report bugs.</string>
 

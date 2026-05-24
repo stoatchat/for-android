@@ -75,7 +75,6 @@ import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
-import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.api
 import chat.stoat.api.routes.microservices.geo.queryGeo
@@ -85,6 +84,7 @@ import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
@@ -117,6 +117,7 @@ import chat.stoat.screens.settings.ChatSettingsScreen
 import chat.stoat.screens.settings.DebugSettingsScreen
 import chat.stoat.screens.settings.ExperimentsSettingsScreen
 import chat.stoat.screens.settings.LanguagePickerSettingsScreen
+import chat.stoat.screens.settings.NotificationsSettingsScreen
 import chat.stoat.screens.settings.ProfileSettingsScreen
 import chat.stoat.screens.settings.SessionSettingsScreen
 import chat.stoat.screens.settings.SettingsScreen
@@ -712,6 +713,7 @@ fun AppEntrypoint(
                     composable("settings/sessions") { SessionSettingsScreen(navController) }
                     composable("settings/appearance") { AppearanceSettingsScreen(navController) }
                     composable("settings/chat") { ChatSettingsScreen(navController) }
+                    composable("settings/notifications") { NotificationsSettingsScreen(navController) }
                     composable("settings/debug") { DebugSettingsScreen(navController) }
                     composable("settings/experiments") { ExperimentsSettingsScreen(navController) }
                     composable("settings/language") { LanguagePickerSettingsScreen(navController) }
@@ -738,7 +740,7 @@ fun AppEntrypoint(
                     composable("about/oss") { AttributionScreen(navController) }
 
                     composable("labs") { LabsRootScreen(navController) }
-                    
+
                     composable("changelog/{id}") { ReadChangelogScreen(navController) }
                 }
             }

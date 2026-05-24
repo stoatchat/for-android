@@ -211,6 +211,26 @@ fun SettingsScreen(
                                 navController.navigate("settings/chat")
                             }
                     )
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(id = R.string.settings_notifications)
+                            )
+                        },
+                        leadingContent = {
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_notifications_24dp),
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .testTag("settings_view_notifications")
+                            .clickable {
+                                navController.navigate("settings/notifications")
+                            }
+                    )
 
                     ListHeader {
                         Text(stringResource(R.string.settings_category_miscellaneous))
