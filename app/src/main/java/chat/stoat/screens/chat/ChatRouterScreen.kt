@@ -186,8 +186,8 @@ class ChatRouterViewModel(
 
             val hasNotificationPermission =
                 NotificationManagerCompat.from(context).areNotificationsEnabled()
-            // right now we only show this in debug builds so Chucker can show its notification
-            if (!hasNotificationPermission && BuildConfig.DEBUG) {
+            val rejectedPush = kvStorage.getBoolean("pushNotificationsRejected") == true
+            if (!hasNotificationPermission && !rejectedPush) {
                 showNotificationRationale = true
             }
         }
@@ -761,13 +761,13 @@ fun ChatRouterScreen(
             if (isGranted) {
                 viewModel.setRegisterForNotifications()
             } else {
-                viewModel.showNotificationRationale = false
+                viewModel.markNotificationsRejected()
             }
         }
     if (viewModel.showNotificationRationale) {
         NotificationRationaleDialog(
             onDismiss = {
-                viewModel.showNotificationRationale = false
+                viewModel.markNotificationsRejected()
             },
             onSelected = { accepted ->
                 if (accepted) {
