@@ -182,7 +182,7 @@ class HandlerService : FirebaseMessagingService() {
 
         val dbChannel = db.channelQueries.findById(channelId).executeAsOneOrNull()
 
-        val authorBitmap = loadBitmap(image)
+        val authorBitmap = runCatching { loadBitmap(image) }.getOrElse { generateLetterBitmap(authorName) }
         val conversationBitmap: Bitmap = when (dbChannel?.channelType) {
             "TextChannel", "VoiceChannel" -> {
                 val server =
@@ -275,18 +275,24 @@ class HandlerService : FirebaseMessagingService() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val existingStyle = NotificationManagerCompat.from(this)
+            .activeNotifications
+            .firstOrNull { it.tag == channelId && it.id == NotificationID.NEW_MESSAGE }
+            ?.notification
+            ?.let { NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(it) }
+
+        val messagingStyle = (existingStyle ?: NotificationCompat.MessagingStyle(self))
+            .setGroupConversation(dbChannel?.channelType != "DirectMessage")
+            .setConversationTitle(channelName)
+            .addMessage(body, messageTimestamp, author)
+
         val builder = NotificationCompat.Builder(this, CHANNEL_ID_GROUP_CONVERSATIONS_MESSAGES)
             .setSmallIcon(R.drawable.ic_stoat_24dp)
             .setContentTitle(authorName)
             .setContentText(body)
             .setContentIntent(contentIntent)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setStyle(
-                NotificationCompat.MessagingStyle(self)
-                    .setGroupConversation(dbChannel?.channelType != "DirectMessage")
-                    .setConversationTitle(channelName)
-                    .addMessage(body, messageTimestamp, author)
-            )
+            .setStyle(messagingStyle)
             .addAction(replyAction)
             .addAction(markAsReadAction)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
