@@ -73,6 +73,9 @@ import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
 import chat.stoat.api.routes.microservices.gazette.getLatestChangelog
 import chat.stoat.api.routes.push.subscribePush
+import chat.stoat.api.routes.user.fetchSelf
+import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.core.model.schemas.User
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
@@ -162,6 +165,12 @@ class ChatRouterViewModel(
 
     init {
         viewModelScope.launch {
+            runCatching { fetchSelf() }.getOrNull()?.let { user ->
+                kvStorage.set("selfId", user.id ?: "")
+                kvStorage.set("selfName", User.resolveDefaultName(user))
+                kvStorage.set("selfAvatarUrl", user.avatar?.id?.let { "$STOAT_FILES/avatars/$it" } ?: "")
+            }
+
             val pendingChannel = NotificationDeepLink.pendingChannelId.value
             if (pendingChannel != null) {
                 NotificationDeepLink.pendingChannelId.value = null

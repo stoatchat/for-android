@@ -48,6 +48,9 @@ class SettingsScreenViewModel(
     fun logout() {
         runBlocking {
             kvStorage.remove("sessionToken")
+            kvStorage.remove("selfId")
+            kvStorage.remove("selfName")
+            kvStorage.remove("selfAvatarUrl")
             LoadedSettings.reset()
             StoatAPI.logout()
         }

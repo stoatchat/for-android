@@ -70,6 +70,10 @@
             android:name=".c2dm.ReplyReceiver"
             android:exported="false" />
 
+        <receiver
+            android:name=".c2dm.MarkAsReadReceiver"
+            android:exported="false" />
+
         <activity
             android:name=".activities.MainActivity"
             android:exported="true"

@@ -271,6 +271,9 @@ class MainActivityViewModel(
         viewModelScope.launch {
             kvStorage.remove("sessionToken")
             kvStorage.remove("sessionId")
+            kvStorage.remove("selfId")
+            kvStorage.remove("selfName")
+            kvStorage.remove("selfAvatarUrl")
             startWithDestination("login/greeting")
         }
     }
