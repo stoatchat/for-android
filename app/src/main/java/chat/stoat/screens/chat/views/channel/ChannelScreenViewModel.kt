@@ -429,79 +429,78 @@ class ChannelScreenViewModel(
         ignoreExisting: Boolean = false,
         markLastAsRead: Boolean = false
     ) {
-        channel?.id?.let { channelId ->
-            loadMessagesJob = viewModelScope.launch {
-                try {
-                    val messages = arrayListOf<Message>()
+        val currentChannelId = channelId ?: return
+        loadMessagesJob = viewModelScope.launch {
+            try {
+                val messages = arrayListOf<Message>()
 
-                    fetchMessagesFromChannel(channelId, amount, true, before, after, around).let {
-                        if (it.messages.isNullOrEmpty() || it.messages!!.size < 50) {
-                            endOfChannel = true
-                        }
+                fetchMessagesFromChannel(currentChannelId, amount, true, before, after, around).let {
+                    if (it.messages.isNullOrEmpty() || it.messages!!.size < 50) {
+                        endOfChannel = true
+                    }
 
-                        it.users?.forEach { user ->
-                            if (!StoatAPI.userCache.containsKey(user.id)) {
-                                StoatAPI.userCache[user.id!!] = user
-                            }
-                        }
-
-                        it.messages?.forEach { message ->
-                            addUserIfUnknown(message.author ?: return@forEach)
-                            if (!StoatAPI.messageCache.containsKey(message.id)) {
-                                StoatAPI.messageCache[message.id!!] = message
-                            }
-                            messages.add(message)
-                        }
-
-                        it.members?.forEach { member ->
-                            if (!StoatAPI.members.hasMember(member.id!!.server, member.id!!.user)) {
-                                StoatAPI.members.setMember(member.id!!.server, member)
-                            }
-                        }
-
-                        if (markLastAsRead) {
-                            ackMessage(messages.firstOrNull()?.id ?: return@launch)
+                    it.users?.forEach { user ->
+                        if (!StoatAPI.userCache.containsKey(user.id)) {
+                            StoatAPI.userCache[user.id!!] = user
                         }
                     }
 
-                    val newItems = messages.filter {
-                        if (ignoreExisting) {
-                            items.none { m ->
-                                when (m) {
-                                    is ChannelScreenItem.RegularMessage -> m.message.id == it.id
-                                    is ChannelScreenItem.ProspectiveMessage -> m.message.id == it.id
-                                    is ChannelScreenItem.SystemMessage -> m.message.id == it.id
-                                    is ChannelScreenItem.FailedMessage -> m.message.id == it.id
-                                    else -> false
-                                }
-                            }
-                        } else {
-                            true
+                    it.messages?.forEach { message ->
+                        addUserIfUnknown(message.author ?: return@forEach)
+                        if (!StoatAPI.messageCache.containsKey(message.id)) {
+                            StoatAPI.messageCache[message.id!!] = message
                         }
-                    }.map {
-                        when {
-                            it.system != null -> ChannelScreenItem.SystemMessage(it)
-                            else -> ChannelScreenItem.RegularMessage(it)
+                        messages.add(message)
+                    }
+
+                    it.members?.forEach { member ->
+                        if (!StoatAPI.members.hasMember(member.id!!.server, member.id!!.user)) {
+                            StoatAPI.members.setMember(member.id!!.server, member)
                         }
                     }
 
-                    // Place items according to whether above/below/around was specified.
-                    // TODO: Aditionally, place LoadTriggers at the beginning and end of the list.
-                    val newItemsWithPosition = when {
-                        before != null -> items + newItems
-                        after != null -> newItems + items
-                        // TODO around, which should place the new items in the middle of the list
-                        else -> newItems
+                    if (markLastAsRead) {
+                        ackMessage(messages.firstOrNull()?.id ?: return@launch)
                     }
-
-                    updateItems(newItemsWithPosition)
-
-                    if (!didInitialChannelFetch) {
-                        didInitialChannelFetch = true
-                    }
-                } catch (e: Exception) {
-                    Log.e("ChannelScreenViewModel", "Failed to fetch messages", e)
                 }
+
+                val newItems = messages.filter {
+                    if (ignoreExisting) {
+                        items.none { m ->
+                            when (m) {
+                                is ChannelScreenItem.RegularMessage -> m.message.id == it.id
+                                is ChannelScreenItem.ProspectiveMessage -> m.message.id == it.id
+                                is ChannelScreenItem.SystemMessage -> m.message.id == it.id
+                                is ChannelScreenItem.FailedMessage -> m.message.id == it.id
+                                else -> false
+                            }
+                        }
+                    } else {
+                        true
+                    }
+                }.map {
+                    when {
+                        it.system != null -> ChannelScreenItem.SystemMessage(it)
+                        else -> ChannelScreenItem.RegularMessage(it)
+                    }
+                }
+
+                // Place items according to whether above/below/around was specified.
+                // TODO: Aditionally, place LoadTriggers at the beginning and end of the list.
+                val newItemsWithPosition = when {
+                    before != null -> items + newItems
+                    after != null -> newItems + items
+                    // TODO around, which should place the new items in the middle of the list
+                    else -> newItems
+                }
+
+                updateItems(newItemsWithPosition)
+
+                if (!didInitialChannelFetch) {
+                    didInitialChannelFetch = true
+                }
+            } catch (e: Exception) {
+                Log.e("ChannelScreenViewModel", "Failed to fetch messages", e)
             }
         }
     }
