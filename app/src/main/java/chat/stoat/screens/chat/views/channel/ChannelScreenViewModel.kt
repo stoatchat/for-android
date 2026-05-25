@@ -101,6 +101,7 @@ class ChannelScreenViewModel(
     var denyMessageFieldReasonResource by mutableIntStateOf(R.string.typing_blank)
 
     var editingMessage by mutableStateOf<String?>(null)
+    var isSending by mutableStateOf(false)
 
     var ageGateUnlocked by mutableStateOf<Boolean?>(null)
     var showGeoGate by mutableStateOf(false)
@@ -126,6 +127,7 @@ class ChannelScreenViewModel(
         this.denyMessageField = false
         this.denyMessageFieldReasonResource = R.string.typing_blank
         this.editingMessage = null
+        this.isSending = false
         this.ageGateUnlocked = channel?.nsfw != true
         this.showGeoGate = when {
             channel?.nsfw == true && GeoStateProvider.geoState?.isAgeRestrictedGeo == true -> true
@@ -324,10 +326,14 @@ class ChannelScreenViewModel(
     }
 
     fun sendPendingMessage() {
+        if (isSending) return
+
         if (editingMessage != null) {
             viewModelScope.launch {
+                isSending = true
                 applyMessageEdit()
                 editingMessage = null
+                isSending = false
             }
             return
         }
@@ -341,6 +347,7 @@ class ChannelScreenViewModel(
 
         // First we upload (the next 5) attachments...
         viewModelScope.launch {
+            isSending = true
             val attachmentIds = arrayListOf<String>()
             val takenAttachments =
                 this@ChannelScreenViewModel.draftAttachments.take(MAX_ATTACHMENTS_PER_MESSAGE)
@@ -362,6 +369,7 @@ class ChannelScreenViewModel(
                 } catch (e: Exception) {
                     Log.e("ChannelScreenViewModel", "Failed to upload attachment", e)
                     attachmentUploadProgress = 0f
+                    isSending = false
                     // TODO show error message
                     return@launch
                 }
@@ -408,6 +416,8 @@ class ChannelScreenViewModel(
             } catch (e: Exception) {
                 Log.e("ChannelScreenViewModel", "Failed to send message", e)
                 updateItems(listOf(ChannelScreenItem.FailedMessage(prospectiveMessage)) + items.filter { it !is ChannelScreenItem.ProspectiveMessage })
+            } finally {
+                isSending = false
             }
         }
     }
@@ -434,7 +444,14 @@ class ChannelScreenViewModel(
             try {
                 val messages = arrayListOf<Message>()
 
-                fetchMessagesFromChannel(currentChannelId, amount, true, before, after, around).let {
+                fetchMessagesFromChannel(
+                    currentChannelId,
+                    amount,
+                    true,
+                    before,
+                    after,
+                    around
+                ).let {
                     if (it.messages.isNullOrEmpty() || it.messages!!.size < 50) {
                         endOfChannel = true
                     }
