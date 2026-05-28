@@ -87,8 +87,10 @@
     <string name="about">About</string>
     <string name="about_full_name">Stoat for Android</string>
     <string name="about_brought_to_you_by">Brought to you with ❤️ by the Stoat team.</string>
-    <string name="about_tab_version">Version</string>
-    <string name="about_tab_details">Details</string>
+    <string name="about_section_debug_information">Debug Information</string>
+    <string name="about_section_debug_information_description">If you\'re experiencing issues with the app, this information may be helpful to include when contacting support or submitting a bug report.</string>
+    <string name="about_section_debug_information_copy_as_json">Copy as JSON</string>
+    <string name="about_section_oss_licenses">Open Source Licenses</string>
 
     <string name="oss_attribution">OSS Licenses</string>
     <string name="oss_attribution_tap_to_view_license">Tap to view license</string>
