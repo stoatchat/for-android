@@ -10,7 +10,7 @@
         "jdkDistro": "oracle"
       }
     },
-    "postCreateCommand": "chmod +x gradlew && deno run -A scripts/download_deps.ts --yes && cp revoltbuild.properties.example revoltbuild.properties && cp sentry.properties.example sentry.properties && cp app/google-services.json.example app/google-services.json && git submodule update --init --recursive",
+    "postCreateCommand": "chmod +x gradlew && deno run -A scripts/download_deps.ts --yes && cp stoatbuild.properties.example stoatbuild.properties && cp sentry.properties.example sentry.properties && cp app/google-services.json.example app/google-services.json && git submodule update --init --recursive",
     "customizations": {
       "vscode": {
         "extensions": [
@@ -19,5 +19,14 @@
           "kotlin.kotlin"
         ]
       }
+    },
+    "runArgs": [
+      "--memory=32gb",
+      "--cpus=8"
+    ],
+    "hostRequirements": {
+      "cpus": 8,
+      "memory": "32gb",
+      "storage": "64gb"
     }
   }
