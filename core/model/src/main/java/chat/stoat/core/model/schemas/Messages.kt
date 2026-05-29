@@ -62,6 +62,7 @@ data class Embed(
     val title: String? = null,
     val description: String? = null,
     val image: Image? = null,
+    val video: Video? = null,
 
     @SerialName("icon_url")
     val iconURL: String? = null,
@@ -81,6 +82,13 @@ data class Image(
     val width: Long? = null,
     val height: Long? = null,
     val size: String? = null
+)
+
+@Serializable
+data class Video(
+    val url: String? = null,
+    val width: Long? = null,
+    val height: Long? = null
 )
 
 @Serializable
