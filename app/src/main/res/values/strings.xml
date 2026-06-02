@@ -692,6 +692,40 @@
     <string name="settings_category_miscellaneous">Miscellaneous</string>
     <string name="settings_category_last" translatable="false">Stoat v%1$s</string>
 
+    <string name="settings_account">Login &amp; Security</string>
+    <string name="settings_account_email">Email</string>
+    <string name="settings_account_email_loading_error">Failed to load email</string>
+    <string name="settings_account_email_edit_alt">Change email</string>
+    <string name="settings_account_email_edit_title">Change your email</string>
+    <string name="settings_account_email_edit_current">Your current email is %1$s.</string>
+    <string name="settings_account_email_edit_message">Please enter your new email address and your current account password.</string>
+    <string name="settings_account_email_edit_new_email">New email address</string>
+    <string name="settings_account_email_edit_password">Current password</string>
+    <string name="settings_account_email_edit_confirm">Change</string>
+    <string name="settings_account_email_edit_cancel">Keep current</string>
+    <string name="settings_account_email_confirm_email">One more thing</string>
+    <string name="settings_account_email_confirm_email_message">We just emailed you to confirm your new email address. Please click the link in that email to complete the change, and then you\'ll be all set.</string>
+    <string name="settings_account_email_confirm_email_open_mail_app">Open mail app</string>
+    <string name="settings_account_email_confirm_email_dismiss">Got it</string>
+    <string name="settings_account_password">Password</string>
+    <string name="settings_account_password_edit_alt">Change password</string>
+    <string name="settings_account_password_edit_title">Change your password</string>
+    <string name="settings_account_password_edit_message">Please enter your current password and your new password.</string>
+    <string name="settings_account_password_edit_message_hint">Good passwords are at least 10 characters long and include a mix of letters, numbers, and symbols.</string>
+    <string name="settings_account_password_edit_new_password">New password</string>
+    <string name="settings_account_password_edit_current_password">Current password</string>
+    <string name="settings_account_password_edit_confirm">Change</string>
+    <string name="settings_account_password_edit_cancel">Keep current</string>
+    <string name="settings_account_password_change_success">Your password has been changed.</string>
+    <string name="settings_account_mfa">Two-Factor Authentication</string>
+    <string name="settings_account_mfa_warning">You don\'t have any 2FA methods set up. You should set up 2FA to add an extra layer of security to your account.</string>
+    <string name="settings_account_mfa_totp">Authenticator App</string>
+    <string name="settings_account_mfa_totp_upsell">Protect your account with an 6-digit code from apps like Google Authenticator or Authy.</string>
+    <string name="settings_account_mfa_totp_manage_alt">Manage Authenticator App</string>
+
+    <string name="settings_mfa">Two-Factor Authentication</string>
+    <string name="settings_mfa_totp">Authenticator App</string>
+
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_profile_picture">Profile picture</string>
     <string name="settings_profile_custom_background">Custom background</string>

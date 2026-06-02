@@ -109,6 +109,27 @@ fun SettingsScreen(
                     ListItem(
                         headlineContent = {
                             Text(
+                                text = stringResource(id = R.string.settings_account)
+                            )
+                        },
+                        leadingContent = {
+                            SettingsIcon {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_lock_24dp),
+                                    contentDescription = null,
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .testTag("settings_view_account")
+                            .clickable {
+                                navController.navigate("settings/account")
+                            }
+                    )
+
+                    ListItem(
+                        headlineContent = {
+                            Text(
                                 text = stringResource(id = R.string.settings_profile)
                             )
                         },

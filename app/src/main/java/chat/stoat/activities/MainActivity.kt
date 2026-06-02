@@ -112,11 +112,13 @@ import chat.stoat.screens.register.RegisterDetailsScreen
 import chat.stoat.screens.register.RegisterGreetingScreen
 import chat.stoat.screens.register.RegisterVerifyScreen
 import chat.stoat.screens.services.DiscoverScreen
+import chat.stoat.screens.settings.AccountSettingsScreen
 import chat.stoat.screens.settings.AppearanceSettingsScreen
 import chat.stoat.screens.settings.ChatSettingsScreen
 import chat.stoat.screens.settings.DebugSettingsScreen
 import chat.stoat.screens.settings.ExperimentsSettingsScreen
 import chat.stoat.screens.settings.LanguagePickerSettingsScreen
+import chat.stoat.screens.settings.MfaSettingsScreen
 import chat.stoat.screens.settings.NotificationsSettingsScreen
 import chat.stoat.screens.settings.ProfileSettingsScreen
 import chat.stoat.screens.settings.SessionSettingsScreen
@@ -712,6 +714,8 @@ fun AppEntrypoint(
                     composable("discover") { DiscoverScreen(navController) }
 
                     composable("settings") { SettingsScreen(navController) }
+                    composable("settings/account") { AccountSettingsScreen(navController) }
+                    composable("settings/account/mfa") { MfaSettingsScreen(navController) }
                     composable("settings/profile") { ProfileSettingsScreen(navController) }
                     composable("settings/sessions") { SessionSettingsScreen(navController) }
                     composable("settings/appearance") { AppearanceSettingsScreen(navController) }
