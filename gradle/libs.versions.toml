@@ -109,6 +109,7 @@ multiplatform-markdown-coil3 = { module = "com.mikepenz:multiplatform-markdown-r
 multiplatform-markdown-code = { module = "com.mikepenz:multiplatform-markdown-renderer-code", version.ref = "multiplatform-markdown" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+ratex-android = { module = "io.github.erweixin:ratex-android", version = "0.1.11" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

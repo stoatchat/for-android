@@ -283,6 +283,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
+    implementation(libs.ratex.android)
+
     androidTestImplementation(libs.android.test.core)
     androidTestImplementation(libs.android.test.rules)
     androidTestImplementation(libs.compose.ui.test.junit4)
