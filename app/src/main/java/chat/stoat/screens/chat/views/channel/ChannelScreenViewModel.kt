@@ -49,14 +49,19 @@ import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.text.MessageProcessor
+import chat.stoat.composables.markdown.prose.easyLineBreaks
+import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.settings.providers.AgeGateUnlockedStorageProvider
+import com.mikepenz.markdown.model.State
+import com.mikepenz.markdown.model.parseMarkdownFlow
 import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -257,6 +262,69 @@ class ChannelScreenViewModel(
         }
     }
 
+    private suspend fun parseAst(content: String?): State? =
+        content?.takeIf { it.isNotBlank() }?.let { c ->
+            val prepared = injectMassMentionMarkers(easyLineBreaks(c))
+            parseMarkdownFlow(prepared, flavour = StoatMarkdownFlavour(prepared))
+                .first { it !is State.Loading }
+        }
+
+    // Replaces @everyone/@online with <@EVERYONE>/<@ONLINE> outside code blocks and inline code spans.
+    private fun injectMassMentionMarkers(content: String): String {
+        val sb = StringBuilder(content.length)
+        var i = 0
+        var inFence = false
+        var inCodeSpan = false
+
+        while (i < content.length) {
+            val ch = content[i]
+
+            if (!inCodeSpan && (ch == '`' || ch == '~')) {
+                val lineStart = sb.lastIndexOf('\n') + 1
+                val atLineStart = sb.length == lineStart || sb.substring(lineStart).isBlank()
+                if (atLineStart) {
+                    var run = 0
+                    while (i + run < content.length && content[i + run] == ch) run++
+                    if (run >= 3) {
+                        inFence = !inFence
+                        sb.append(content, i, i + run)
+                        i += run
+                        continue
+                    }
+                }
+            }
+
+            if (!inFence && ch == '`') {
+                inCodeSpan = !inCodeSpan
+                sb.append(ch)
+                i++
+                continue
+            }
+
+            if (!inFence && !inCodeSpan && ch == '@') {
+                when {
+                    content.startsWith("everyone", i + 1) &&
+                        (i + 9 >= content.length || !content[i + 9].isLetterOrDigit()) -> {
+                        sb.append("<@EVERYONE>")
+                        i += 9
+                        continue
+                    }
+                    content.startsWith("online", i + 1) &&
+                        (i + 7 >= content.length || !content[i + 7].isLetterOrDigit()) -> {
+                        sb.append("<@ONLINE>")
+                        i += 7
+                        continue
+                    }
+                }
+            }
+
+            sb.append(ch)
+            i++
+        }
+
+        return sb.toString()
+    }
+
     /**
      * Puts the draft content in the KV storage, the in-memory state of the message content,
      * and, if [setInitial] is true, updates the text field to say the new [content].
@@ -395,7 +463,10 @@ class ChannelScreenViewModel(
                 } ?: false
             )
 
-            updateItems(listOf(ChannelScreenItem.ProspectiveMessage(prospectiveMessage)) + items)
+            val ast = parseAst(content)
+            updateItems(
+                listOf(ChannelScreenItem.ProspectiveMessage(prospectiveMessage, ast)) + items
+            )
 
             kvStorage.remove("draftContent/${channel?.id}")
             putDraftContent("", true)
@@ -415,7 +486,13 @@ class ChannelScreenViewModel(
                 )
             } catch (e: Exception) {
                 Log.e("ChannelScreenViewModel", "Failed to send message", e)
-                updateItems(listOf(ChannelScreenItem.FailedMessage(prospectiveMessage)) + items.filter { it !is ChannelScreenItem.ProspectiveMessage })
+                updateItems(
+                    listOf(
+                        ChannelScreenItem.FailedMessage(
+                            prospectiveMessage,
+                            ast
+                        )
+                    ) + items.filter { it !is ChannelScreenItem.ProspectiveMessage })
             } finally {
                 isSending = false
             }
@@ -495,11 +572,17 @@ class ChannelScreenViewModel(
                     } else {
                         true
                     }
-                }.map {
-                    when {
-                        it.system != null -> ChannelScreenItem.SystemMessage(it)
-                        else -> ChannelScreenItem.RegularMessage(it)
+                }.let { filtered ->
+                    val result = mutableListOf<ChannelScreenItem>()
+                    for (msg in filtered) {
+                        result.add(
+                            when {
+                                msg.system != null -> ChannelScreenItem.SystemMessage(msg)
+                                else -> ChannelScreenItem.RegularMessage(msg, parseAst(msg.content))
+                            }
+                        )
                     }
+                    result
                 }
 
                 // Place items according to whether above/below/around was specified.
@@ -553,7 +636,7 @@ class ChannelScreenViewModel(
                         if (didInitialChannelFetch) { // this check is so that we don't end up with a message that arrives at the same time as the initial fetch in front of the loading indicator
                             val newItem = when {
                                 it.system != null -> ChannelScreenItem.SystemMessage(it)
-                                else -> ChannelScreenItem.RegularMessage(it)
+                                else -> ChannelScreenItem.RegularMessage(it, parseAst(it.content))
                             }
                             updateItems(listOf(newItem) + items.filter { m ->
                                 if (m is ChannelScreenItem.ProspectiveMessage) {
@@ -601,9 +684,10 @@ class ChannelScreenViewModel(
                         updateItems(
                             items.map { m ->
                                 if (m is ChannelScreenItem.RegularMessage && m.message.id == it.id) {
-                                    ChannelScreenItem.RegularMessage(
-                                        m.message.mergeWithPartial(messageFrame)
-                                    )
+                                    val merged = m.message.mergeWithPartial(messageFrame)
+                                    val ast =
+                                        if (messageFrame.content != null) parseAst(merged.content) else m.mdAst
+                                    ChannelScreenItem.RegularMessage(merged, ast)
                                 } else {
                                     m
                                 }
@@ -624,7 +708,7 @@ class ChannelScreenViewModel(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
-                                        ChannelScreenItem.RegularMessage(m)
+                                        ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
                                     } ?: return@map currentMsg
                                 } else {
                                     currentMsg
@@ -648,7 +732,7 @@ class ChannelScreenViewModel(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
-                                        ChannelScreenItem.RegularMessage(m)
+                                        ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
                                     } ?: return@map currentMsg
                                 } else {
                                     currentMsg
@@ -672,7 +756,7 @@ class ChannelScreenViewModel(
                             items.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
-                                        ChannelScreenItem.RegularMessage(m)
+                                        ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
                                     } ?: return@map currentMsg
                                 } else {
                                     currentMsg
@@ -870,15 +954,15 @@ class ChannelScreenViewModel(
             groupedItems.add(
                 when (m) {
                     is ChannelScreenItem.RegularMessage -> ChannelScreenItem.RegularMessage(
-                        m.message.copy(
-                            tail = tail
-                        )
+                        m.message.copy(tail = tail), m.mdAst
+                    )
+
+                    is ChannelScreenItem.ProspectiveMessage -> ChannelScreenItem.ProspectiveMessage(
+                        m.message.copy(tail = tail), m.mdAst
                     )
 
                     is ChannelScreenItem.SystemMessage -> ChannelScreenItem.SystemMessage(
-                        m.message.copy(
-                            tail = tail
-                        )
+                        m.message.copy(tail = tail)
                     )
 
                     else -> m

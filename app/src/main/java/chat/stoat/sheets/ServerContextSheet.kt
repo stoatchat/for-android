@@ -44,7 +44,7 @@ import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.composables.generic.SheetButton
-import chat.stoat.composables.markdown.RichMarkdown
+import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.ServerOverview
 import chat.stoat.composables.sheets.SheetSelection
 import chat.stoat.core.model.data.STOAT_WEB_APP
@@ -159,14 +159,13 @@ fun ServerContextSheet(
             ServerOverview(server)
 
             SelectionContainer {
-                RichMarkdown(
-                    input = if (server.description?.isBlank() == false) {
+                ChatMarkdown(
+                    content = if (server.description?.isBlank() == false) {
                         server.description!!
                     } else {
-                        stringResource(
-                            R.string.server_context_sheet_description_empty
-                        )
-                    }
+                        stringResource(R.string.server_context_sheet_description_empty)
+                    },
+                    serverId = serverId,
                 )
             }
 

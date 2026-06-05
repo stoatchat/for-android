@@ -30,31 +30,7 @@ sealed class UserCardsVariates {
     data class Restricted(val predicate: () -> Boolean) : UserCardsVariates()
 }
 
-@FeatureFlag("MassMentions")
-sealed class MassMentionsVariates {
-    @Treatment(
-        "Enable mass mentions and role mentions for all users"
-    )
-    object Enabled : MassMentionsVariates()
 
-    @Treatment(
-        "Disable mass mentions and role mentions for all users"
-    )
-    object Disabled : MassMentionsVariates()
-}
-
-@FeatureFlag("FinalMarkdown")
-sealed class FinalMarkdownVariates {
-    @Treatment(
-        "Enable the new FinalMarkdown library for all users"
-    )
-    object Enabled : FinalMarkdownVariates()
-
-    @Treatment(
-        "Disable the new FinalMarkdown library for all users"
-    )
-    object Disabled : FinalMarkdownVariates()
-}
 
 object FeatureFlags {
     @FeatureFlag("LabsAccessControl")
@@ -82,23 +58,4 @@ object FeatureFlags {
             is UserCardsVariates.Restricted -> (userCards as UserCardsVariates.Restricted).predicate()
         }
 
-    @FeatureFlag("MassMentions")
-    var massMentions by mutableStateOf<MassMentionsVariates>(
-        MassMentionsVariates.Disabled
-    )
-    val massMentionsGranted: Boolean
-        get() = when (massMentions) {
-            is MassMentionsVariates.Enabled -> true
-            is MassMentionsVariates.Disabled -> false
-        }
-
-    @FeatureFlag("FinalMarkdown")
-    var finalMarkdown by mutableStateOf<FinalMarkdownVariates>(
-        FinalMarkdownVariates.Disabled
-    )
-    val finalMarkdownGranted: Boolean
-        get() = when (finalMarkdown) {
-            is FinalMarkdownVariates.Enabled -> true
-            is FinalMarkdownVariates.Disabled -> false
-        }
 }

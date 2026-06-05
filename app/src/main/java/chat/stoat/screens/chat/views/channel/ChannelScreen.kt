@@ -90,6 +90,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -122,7 +123,6 @@ import chat.stoat.composables.chat.DateDivider
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.chat.MessageField
 import chat.stoat.composables.chat.SystemMessage
-import chat.stoat.composables.chat.UnsupportedMessage
 import chat.stoat.composables.emoji.EmojiPicker
 import chat.stoat.composables.generic.GroupIcon
 import chat.stoat.composables.generic.PresenceBadge
@@ -146,6 +146,7 @@ import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.ChannelInfoSheet
 import chat.stoat.sheets.MessageContextSheet
 import chat.stoat.sheets.ReactSheet
+import com.mikepenz.markdown.model.State
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
@@ -157,14 +158,12 @@ import java.io.File
 import kotlin.math.max
 
 sealed class ChannelScreenItem {
-    data class RegularMessage(val message: Message) : ChannelScreenItem()
-    data class ProspectiveMessage(val message: Message) : ChannelScreenItem()
-    data class FailedMessage(val message: Message) : ChannelScreenItem()
+    data class RegularMessage(val message: Message, val mdAst: State?) : ChannelScreenItem()
+    data class ProspectiveMessage(val message: Message, val mdAst: State?) : ChannelScreenItem()
+    data class FailedMessage(val message: Message, val mdAst: State?) : ChannelScreenItem()
     data class SystemMessage(val message: Message) : ChannelScreenItem()
     data class DateDivider(val instant: Instant) : ChannelScreenItem()
-    data class LoadTrigger(val after: String?, val before: String?) :
-        ChannelScreenItem()
-
+    data class LoadTrigger(val after: String?, val before: String?) : ChannelScreenItem()
     data object Loading : ChannelScreenItem()
 }
 
@@ -203,6 +202,7 @@ fun ChannelScreen(
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val config = LocalConfiguration.current
 
     LaunchedEffect(Unit) {
@@ -351,7 +351,7 @@ fun ChannelScreen(
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                context.getString(
+                resources.getString(
                     R.string.file_picker_chip_camera_failed
                 ),
                 Toast.LENGTH_SHORT
@@ -367,7 +367,7 @@ fun ChannelScreen(
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                context.getString(
+                resources.getString(
                     R.string.file_picker_chip_camera_none_installed
                 ),
                 Toast.LENGTH_SHORT
@@ -727,14 +727,6 @@ fun ChannelScreen(
                                     }
                                     when (val item = viewModel.items[index]) {
                                         is ChannelScreenItem.RegularMessage -> {
-                                            if (item.message.content?.replace("\\s".toRegex(), "")
-                                                    ?.contains(">>>>>>>") == true
-                                            ) {
-                                                // FIXME Dirty hack to prevent a crash caused by malicious messages.
-                                                UnsupportedMessage()
-                                                return@items
-                                            }
-
                                             RegularMessage(
                                                 item.message,
                                                 viewModel.channel,
@@ -757,7 +749,8 @@ fun ChannelScreen(
                                                 },
                                                 putTextAtCursorPosition = viewModel::putAtCursorPosition,
                                                 replyToMessage = viewModel::addReplyTo,
-                                                scope = scope
+                                                scope = scope,
+                                                mdAst = item.mdAst
                                             )
                                         }
 
@@ -772,7 +765,8 @@ fun ChannelScreen(
                                                     onNameClick = {},
                                                     canReply = false,
                                                     onReply = {},
-                                                    onAddReaction = {}
+                                                    onAddReaction = {},
+                                                    mdAst = item.mdAst,
                                                 )
                                             }
                                         }
@@ -787,7 +781,8 @@ fun ChannelScreen(
                                                         onNameClick = {},
                                                         canReply = false,
                                                         onReply = {},
-                                                        onAddReaction = {}
+                                                        onAddReaction = {},
+                                                        mdAst = item.mdAst,
                                                     )
                                                     Row {
                                                         UserAvatarWidthPlaceholder()

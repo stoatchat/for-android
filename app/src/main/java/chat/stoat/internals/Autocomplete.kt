@@ -4,7 +4,6 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.has
-import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.composables.chat.AutocompleteSuggestion
 import chat.stoat.core.model.schemas.ChannelType
 
@@ -51,6 +50,7 @@ object Autocomplete {
         val member = serverId?.let { StoatAPI.members.getMember(serverId, StoatAPI.selfId ?: "") }
         val massMentionSuggestions = listOf("everyone", "online")
             .filter { it.startsWith(query, ignoreCase = true) }
+        val hereIsOnlineMnemonic = if (query == "here") listOf("online") else emptyList()
 
         val selfPermissions = StoatAPI.channelCache[channelId]?.let { ch ->
             Roles.permissionFor(
@@ -119,7 +119,7 @@ object Autocomplete {
                 if (query.length < 2) return emptyList()
 
                 val roles =
-                    if (selfPermissions has PermissionBit.MentionRoles && FeatureFlags.massMentionsGranted) StoatAPI.serverCache[serverId]?.roles
+                    if (selfPermissions has PermissionBit.MentionRoles) StoatAPI.serverCache[serverId]?.roles
                         ?: emptyMap() else emptyMap()
                 val byNickname = StoatAPI.members.filterNamesFor(serverId, query)
                     .map { m -> m to StoatAPI.userCache[m.id?.user] }.filter { (_, u) ->
@@ -174,7 +174,7 @@ object Autocomplete {
             }
 
             null -> emptyList()
-        } + if (selfPermissions has PermissionBit.MentionEveryone && FeatureFlags.massMentionsGranted) massMentionSuggestions.map { mention ->
+        } + if (selfPermissions has PermissionBit.MentionEveryone) (massMentionSuggestions + hereIsOnlineMnemonic).map { mention ->
             AutocompleteSuggestion.MassMention(mention)
         } else listOf()
     }

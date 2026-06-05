@@ -28,13 +28,14 @@ import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.microservices.january.asJanuaryProxyUrl
 import chat.stoat.composables.chat.specialembeds.SpecialEmbedSwitch
 import chat.stoat.composables.generic.RemoteImage
-import chat.stoat.composables.markdown.RichMarkdown
+import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.schemas.Embed
 import chat.stoat.core.model.schemas.Embed as EmbedSchema
 
 @Composable
 fun RegularEmbed(
     embed: EmbedSchema,
+    serverId: String? = null,
     modifier: Modifier = Modifier,
     onLinkClick: (String) -> Unit = {}
 ) {
@@ -98,8 +99,9 @@ fun RegularEmbed(
 
                 // Description
                 embed.description?.let {
-                    RichMarkdown(
-                        input = it,
+                    ChatMarkdown(
+                        content = it,
+                        serverId = serverId,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
@@ -144,10 +146,10 @@ fun RegularEmbed(
 }
 
 @Composable
-fun Embed(embed: Embed, modifier: Modifier = Modifier, onLinkClick: (String) -> Unit) {
+fun Embed(embed: Embed, serverId: String? = null, modifier: Modifier = Modifier, onLinkClick: (String) -> Unit) {
     Column {
         when (embed.type) {
-            else -> RegularEmbed(embed = embed, modifier = modifier, onLinkClick = onLinkClick)
+            else -> RegularEmbed(embed = embed, serverId = serverId, modifier = modifier, onLinkClick = onLinkClick)
         }
     }
 }

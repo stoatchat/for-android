@@ -35,7 +35,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -73,8 +72,6 @@ import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.channel.unreact
 import chat.stoat.api.routes.microservices.january.asJanuaryProxyUrl
-import chat.stoat.core.model.schemas.AutumnResource
-import chat.stoat.core.model.schemas.User
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.MessageReplyStyle
@@ -83,15 +80,15 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.UserAvatarWidthPlaceholder
-import chat.stoat.composables.markdown.LocalMarkdownTreeConfig
-import chat.stoat.composables.markdown.RichMarkdown
+import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.core.model.schemas.AutumnResource
+import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.text.Gigamoji
+import chat.stoat.internals.text.GigamojiState
 import chat.stoat.internals.text.MessageProcessor
-import chat.stoat.markdown.jbm.JBM
-import chat.stoat.markdown.jbm.JBMRenderer
-import chat.stoat.markdown.jbm.LocalJBMarkdownTreeState
 import chat.stoat.persistence.KVStorage
+import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.launch
 import chat.stoat.core.model.schemas.Message as MessageSchema
 
@@ -198,7 +195,7 @@ fun formatLongAsTime(time: Long): String {
 }
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
-@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class, JBM::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun Message(
     message: MessageSchema,
@@ -210,7 +207,8 @@ fun Message(
     onAddReaction: () -> Unit = {},
     fromWebhook: Boolean = false,
     webhookName: String? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    mdAst: State? = null
 ) {
     val author = StoatAPI.userCache[message.author] ?: return CircularProgressIndicator()
     val context = LocalContext.current
@@ -442,36 +440,25 @@ fun Message(
                             message.content?.let {
                                 if (message.content!!.isBlank()) return@let // if only an attachment is sent
 
-                                if (Experiments.useKotlinBasedMarkdownRenderer.isEnabled) {
-                                    CompositionLocalProvider(
-                                        LocalJBMarkdownTreeState provides LocalJBMarkdownTreeState.current.copy(
-                                            currentServer = StoatAPI.channelCache[message.channel]?.server,
-                                            fontSizeMultiplier = Gigamoji.useGigamojiForMessage(
-                                                message.content!!
-                                            )
-                                                .let {
-                                                    if (it) 2f else 1f
-                                                }
-                                        )
-                                    ) {
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        JBMRenderer(message.content!!)
-                                    }
+                                val gigamoji = Gigamoji.useGigamojiForMessage(message.content!!)
+                                val fontSizeMultiplier = when (gigamoji) {
+                                    GigamojiState.Single -> 5f
+                                    GigamojiState.Multiple -> 2f
+                                    GigamojiState.None -> 1f
+                                }
+                                Spacer(modifier = Modifier.height(2.dp))
+                                if (mdAst != null) {
+                                    ChatMarkdown(
+                                        mdAst,
+                                        serverId = StoatAPI.channelCache[message.channel]?.server,
+                                        fontSizeMultiplier = fontSizeMultiplier,
+                                    )
                                 } else {
-                                    CompositionLocalProvider(
-                                        LocalMarkdownTreeConfig provides LocalMarkdownTreeConfig.current.copy(
-                                            currentServer = StoatAPI.channelCache[message.channel]?.server,
-                                            fontSizeMultiplier = Gigamoji.useGigamojiForMessage(
-                                                message.content!!
-                                            )
-                                                .let {
-                                                    if (it) 2f else 1f
-                                                }
-                                        )
-                                    ) {
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        RichMarkdown(input = message.content!!)
-                                    }
+                                    ChatMarkdown(
+                                        content = message.content!!,
+                                        serverId = StoatAPI.channelCache[message.channel]?.server,
+                                        fontSizeMultiplier = fontSizeMultiplier,
+                                    )
                                 }
                             }
                         }
@@ -531,7 +518,7 @@ fun Message(
                                         }
 
                                         Spacer(modifier = Modifier.height(8.dp))
-                                        Embed(embed = embed, onLinkClick = {
+                                        Embed(embed = embed, serverId = StoatAPI.channelCache[message.channel]?.server, onLinkClick = {
                                             viewUrlInBrowser(context, it)
                                         })
                                         Spacer(modifier = Modifier.height(8.dp))

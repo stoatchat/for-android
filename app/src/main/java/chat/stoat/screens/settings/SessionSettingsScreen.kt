@@ -53,7 +53,7 @@ import chat.stoat.api.routes.auth.logoutAllSessions
 import chat.stoat.api.routes.auth.logoutSessionById
 import chat.stoat.core.model.schemas.Session
 import chat.stoat.composables.generic.ListHeader
-import chat.stoat.composables.markdown.RichMarkdown
+import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.composables.settings.sessions.SessionItem
 import kotlinx.coroutines.launch
 
@@ -199,7 +199,7 @@ fun SessionSettingsScreen(
                             }
                         } ?: run {
                             item(key = "noCurrentSession") {
-                                RichMarkdown(
+                                UIMarkdown(
                                     input = stringResource(id = R.string.settings_sessions_this_device_unavailable),
                                     modifier = Modifier
                                         .fillMaxWidth()

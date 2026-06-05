@@ -26,10 +26,8 @@ class ExperimentInstance(default: Boolean) {
  *  - All experiments can be disabled at once with a single toggle.
  */
 object Experiments {
-    val useKotlinBasedMarkdownRenderer = ExperimentInstance(false)
     val usePolar = ExperimentInstance(false)
     val enableServerIdentityOptions = ExperimentInstance(false)
-    val useFinalMarkdownRenderer = ExperimentInstance(false)
     val useVoiceChats2p0 = ExperimentInstance(false)
 
     suspend fun hydrateWithKv() {
@@ -41,26 +39,14 @@ object Experiments {
             LoadedSettings.experimentsEnabled = kvStorage.getBoolean("experimentsEnabled") == true
         }
 
-        useKotlinBasedMarkdownRenderer.setEnabled(
-            kvStorage.getBoolean("exp/useKotlinBasedMarkdownRenderer") == true
-        )
         usePolar.setEnabled(
             kvStorage.getBoolean("exp/usePolar") == true
         )
         enableServerIdentityOptions.setEnabled(
             kvStorage.getBoolean("exp/enableServerIdentityOptions") == true
         )
-        useFinalMarkdownRenderer.setEnabled(
-            kvStorage.getBoolean("exp/useFinalMarkdownRenderer") == true
-        )
         useVoiceChats2p0.setEnabled(
             kvStorage.getBoolean("exp/useVoiceChats2p0") == true
         )
-
-        if (useFinalMarkdownRenderer.isEnabled && useKotlinBasedMarkdownRenderer.isEnabled) {
-            // if jbm and fm are enabled, fm takes precedence. this should not be possible in practice
-            useKotlinBasedMarkdownRenderer.setEnabled(false)
-            kvStorage.set("exp/useKotlinBasedMarkdownRenderer", false)
-        }
     }
 }

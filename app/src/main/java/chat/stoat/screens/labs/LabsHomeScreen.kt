@@ -168,15 +168,6 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         HorizontalDivider()
                         ListItem(
                             headlineContent = {
-                                Text("JB Markdown")
-                            },
-                            modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/jbm")
-                            }
-                        )
-                        HorizontalDivider()
-                        ListItem(
-                            headlineContent = {
                                 Text("Gradient Editor")
                             },
                             modifier = Modifier.clickable {

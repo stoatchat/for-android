@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.DeviceFontFamilyName
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -55,7 +56,9 @@ private val InterDisplay = FontFamily(
 )
 val FragmentMono = FontFamily(
     Font(R.font.fragmentmono_regular, FontWeight.Normal),
-    Font(R.font.fragmentmono_italic, FontWeight.Normal, FontStyle.Italic)
+    Font(R.font.fragmentmono_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(DeviceFontFamilyName("monospace"), FontWeight.Normal, FontStyle.Normal),
+    Font(DeviceFontFamilyName("monospace"), FontWeight.Normal, FontStyle.Italic)
 )
 
 @OptIn(ExperimentalTextApi::class)

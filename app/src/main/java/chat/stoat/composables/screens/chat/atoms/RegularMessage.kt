@@ -32,7 +32,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -43,14 +47,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
-import chat.stoat.core.model.schemas.Channel
-import chat.stoat.core.model.schemas.Message
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.MessageReplyStyle
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.Message
+import chat.stoat.core.model.schemas.Channel
+import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.supportSwipeReply
+import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -70,11 +75,13 @@ fun RegularMessage(
     showReactBottomSheet: () -> Unit,
     putTextAtCursorPosition: (String) -> Unit,
     replyToMessage: suspend (String) -> Unit,
-    scope: CoroutineScope = rememberCoroutineScope()
+    scope: CoroutineScope = rememberCoroutineScope(),
+    mdAst: State? = null
 ) {
     val haptic = LocalHapticFeedback.current
 
-    var offsetX by remember { mutableFloatStateOf(0f) }
+    val offsetXState = remember { mutableFloatStateOf(0f) }
+    var offsetX by offsetXState
     val animOffsetX by animateFloatAsState(
         when {
             drawerIsOpen -> 0f
@@ -83,8 +90,28 @@ fun RegularMessage(
         },
         label = "X offset of message for Swipe to Reply"
     )
-    var markGestureInvalid by remember { mutableStateOf(false) }
+    val markGestureInvalidState = remember { mutableStateOf(false) }
+    var markGestureInvalid by markGestureInvalidState
     var hapticFeedbackPerformed by remember { mutableStateOf(false) }
+
+    // Invalidate swipe-to-reply only when a child (e.g. a code block) actually consumed a
+    // horizontal scroll, i.e. it had content to scroll. Non-scrollable code blocks produce
+    // consumed.x == 0 and will not block the swipe gesture.
+    val nestedScrollConnection = remember(offsetXState, markGestureInvalidState) {
+        object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                if (consumed.x != 0f) {
+                    offsetXState.floatValue = 0f
+                    markGestureInvalidState.value = true
+                }
+                return Offset.Zero
+            }
+        }
+    }
     var messageHeight by remember { mutableIntStateOf(0) }
 
     val canReleaseToSend = remember(offsetX) { offsetX <= SWIPE_TO_REPLY_THRESHOLD }
@@ -182,10 +209,12 @@ fun RegularMessage(
             },
             fromWebhook = message.webhook != null,
             webhookName = message.webhook?.name,
+            mdAst = mdAst,
             modifier = Modifier
                 .offset(
                     x = with(LocalDensity.current) { animOffsetX.toDp() }
                 )
+                .nestedScroll(nestedScrollConnection)
                 .then(
                     if (LoadedSettings.messageReplyStyle == MessageReplyStyle.SwipeFromEnd)
                         Modifier.supportSwipeReply(

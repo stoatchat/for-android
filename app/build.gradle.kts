@@ -278,6 +278,7 @@ dependencies {
     implementation(libs.multiplatform.markdown.android)
     implementation(libs.multiplatform.markdown.m3)
     implementation(libs.multiplatform.markdown.coil3)
+    implementation(libs.multiplatform.markdown.code)
 
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)

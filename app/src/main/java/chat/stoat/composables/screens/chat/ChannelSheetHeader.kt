@@ -14,11 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,10 +26,8 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
-import chat.stoat.composables.markdown.MarkdownTree
+import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.data.STOAT_FILES
-import chat.stoat.ndk.AstNode
-import chat.stoat.ndk.Stendal
 
 @Composable
 fun ChannelSheetHeader(
@@ -42,16 +35,9 @@ fun ChannelSheetHeader(
     channelIcon: AutumnResource? = null,
     channelType: ChannelType,
     channelDescription: String? = null,
+    serverId: String? = null,
     dmPartner: User? = null
 ) {
-    var renderedChannelDescription by remember { mutableStateOf<AstNode?>(null) }
-
-    LaunchedEffect(channelDescription) {
-        if (channelDescription != null) {
-            renderedChannelDescription = Stendal.render(channelDescription)
-        }
-    }
-
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -102,9 +88,9 @@ fun ChannelSheetHeader(
                 overflow = TextOverflow.Ellipsis
             )
 
-            if (renderedChannelDescription != null && channelDescription?.isNotBlank() == true) {
+            if (!channelDescription.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
-                MarkdownTree(node = renderedChannelDescription!!)
+                ChatMarkdown(channelDescription, serverId = serverId)
             }
         }
     }

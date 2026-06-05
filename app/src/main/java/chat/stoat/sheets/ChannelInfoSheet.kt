@@ -109,6 +109,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             channelIcon = channel.icon,
             channelType = channel.channelType ?: ChannelType.TextChannel,
             channelDescription = channel.description,
+            serverId = channel.server,
             dmPartner = partner
         )
         HorizontalDivider()

@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import chat.stoat.BuildConfig
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
@@ -42,7 +41,6 @@ import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.has
 import chat.stoat.api.routes.channel.deleteMessage
 import chat.stoat.api.routes.channel.react
-import chat.stoat.api.settings.Experiments
 import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.generic.SheetButton
@@ -77,9 +75,6 @@ fun MessageContextSheet(
     var showShareSheet by remember { mutableStateOf(false) }
     var showReactSheet by remember { mutableStateOf(false) }
     var showDeleteMessageConfirmation by remember { mutableStateOf(false) }
-    var showInspectASTSheet by remember { mutableStateOf(false) }
-    val showInspectASTSheetButton =
-        BuildConfig.DEBUG || (message.content != null && Experiments.useKotlinBasedMarkdownRenderer.isEnabled)
 
     if (showShareSheet) {
         val shareSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -309,19 +304,6 @@ fun MessageContextSheet(
         )
     }
 
-    if (showInspectASTSheet) {
-        val inspectASTSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-        ModalBottomSheet(
-            sheetState = inspectASTSheetState,
-            onDismissRequest = {
-                showInspectASTSheet = false
-            }
-        ) {
-            JBMDebuggerSheet(message.content ?: "")
-        }
-    }
-
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -423,26 +405,6 @@ fun MessageContextSheet(
                 }
             }
         )
-
-        if (showInspectASTSheetButton) {
-            SheetButton(
-                leadingContent = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_account_tree_24dp),
-                        contentDescription = null
-                    )
-                },
-                headlineContent = {
-                    Text(
-                        text = "Inspect AST"
-                    )
-                },
-                onClick = {
-                    showInspectASTSheet = true
-                },
-                special = true
-            )
-        }
 
         SheetButton(
             leadingContent = {

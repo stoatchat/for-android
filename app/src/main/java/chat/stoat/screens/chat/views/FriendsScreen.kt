@@ -65,6 +65,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
@@ -103,7 +104,6 @@ import chat.stoat.composables.vectorassets.Nametag
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.zero
-import chat.stoat.markdown.jbm.asHexString
 import chat.stoat.screens.chat.LocalIsConnected
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
@@ -179,8 +179,8 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     text = AnnotatedString.fromHtml(
                         stringResource(
                             R.string.friends_add_by_tag_sheet_description,
-                            "<font color=\"${Color(HL_USERNAME).asHexString(false)}\">",
-                            "<font color=\"${Color(HL_TAG).asHexString(false)}\">",
+                            "<font color=\"${Color(HL_USERNAME).toArgb().let { "#%02x%02x%02x".format(it shr 16 and 0xff, it shr 8 and 0xff, it and 0xff) }}\">",
+                            "<font color=\"${Color(HL_TAG).toArgb().let { "#%02x%02x%02x".format(it shr 16 and 0xff, it shr 8 and 0xff, it and 0xff) }}\">",
                             "</font>",
                         )
                     ),
