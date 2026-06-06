@@ -106,22 +106,46 @@ class EmojiImpl {
             val category =
                 UnicodeEmojiSection.entries.find { it.googleName == group.group } ?: continue
             list.add(EmojiPickerItem.Section(Category.UnicodeEmojiCategory(category)))
-            list.addAll(
-                group.emoji.map { emoji ->
-                    EmojiPickerItem.UnicodeEmoji(
-                        emoji.base.joinToString("") { String(Character.toChars(it.toInt())) },
-                        emoji.alternates.any { alternate ->
-                            alternate.any { codepoint ->
-                                codepoint in 0x1F3FB..0x1F3FF
-                            }
-                        },
-                        emoji.alternates
-                    )
-                }
-            )
+            list.addAll(group.emoji.flatMap { emoji -> emojiToPickerItems(emoji) })
         }
 
         return list
+    }
+
+    private fun emojiToPickerItems(emoji: Emoji): List<EmojiPickerItem.UnicodeEmoji> {
+        val items = mutableListOf<EmojiPickerItem.UnicodeEmoji>()
+
+        items.add(
+            EmojiPickerItem.UnicodeEmoji(
+                emoji.base.joinToString("") { String(Character.toChars(it.toInt())) },
+                emoji.alternates.any { alternate ->
+                    alternate.any { codepoint -> codepoint in 0x1F3FB..0x1F3FF }
+                },
+                emoji.alternates
+            )
+        )
+
+        // Non-skintone alternates (like gender variants) as separate picker items.
+        // Technically this breaks the Google metadata's assumption of 9 items per row.
+        // So far, this has not caused issues.
+        val nonSkintoneAlts = emoji.alternates.filter { alt ->
+            alt.none { cp -> cp in 0x1F3FB..0x1F3FF } && alt != emoji.base
+        }
+        for (nonSkintoneAlt in nonSkintoneAlts) {
+            val skintoneVariants = emoji.alternates.filter { alt ->
+                alt.any { cp -> cp in 0x1F3FB..0x1F3FF } &&
+                        alt.filter { cp -> cp !in 0x1F3FB..0x1F3FF } == nonSkintoneAlt
+            }
+            items.add(
+                EmojiPickerItem.UnicodeEmoji(
+                    nonSkintoneAlt.joinToString("") { String(Character.toChars(it.toInt())) },
+                    skintoneVariants.isNotEmpty(),
+                    skintoneVariants
+                )
+            )
+        }
+
+        return items
     }
 
     /**
@@ -183,15 +207,12 @@ class EmojiImpl {
     ): String {
         if (!item.hasSkinTones || skinType == FitzpatrickSkinTone.None) return item.character
 
-        // HACK: We simply find the modifier version from metadata that
-        // contains the skin tone modifier codepoint.
-        val modifier = item.alternates.maxByOrNull { alternate ->
-            // HACK HACK: We find the alternate with the most frequency of our skin tone modifier.
-            // This is because some emoji have multiple skin tone modifier and we are taking the
-            // easy way here by only allowing a single skin tone change. This is not ideal.
-            // Users are encouraged to use the system emoji keyboard to get the full range of
-            // skin tone modifiers.
-            alternate.count { it == skinType.modifierCodepoint?.toLong() }
+        val targetModifier = skinType.modifierCodepoint!!.toLong()
+        // Pick the alternate that carries exactly one Fitzpatrick modifier and it is the target.
+        // This avoids selecting multi-skintone combo alternates (e.g. 🫱🏻‍🫲🏼) when the user
+        // only wants the simple single-tone variant (e.g. 🤝🏼).
+        val modifier = item.alternates.firstOrNull { alternate ->
+            alternate.count { it in 0x1F3FB..0x1F3FF } == 1 && targetModifier in alternate
         }
 
         return modifier?.joinToString("") { String(Character.toChars(it.toInt())) }
@@ -228,19 +249,7 @@ class EmojiImpl {
                 val category =
                     UnicodeEmojiSection.entries.find { it.googleName == group.group } ?: continue
                 list.add(EmojiPickerItem.Section(Category.UnicodeEmojiCategory(category)))
-                list.addAll(
-                    matchingEmoji.map { emoji ->
-                        EmojiPickerItem.UnicodeEmoji(
-                            emoji.base.joinToString("") { String(Character.toChars(it.toInt())) },
-                            emoji.alternates.any { alternate ->
-                                alternate.any { codepoint ->
-                                    codepoint in 0x1F3FB..0x1F3FF
-                                }
-                            },
-                            emoji.alternates
-                        )
-                    }
-                )
+                list.addAll(matchingEmoji.flatMap { emoji -> emojiToPickerItems(emoji) })
             }
         }
 
