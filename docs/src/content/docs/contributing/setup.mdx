@@ -11,7 +11,7 @@ If you want to compile the app yourself, you can follow these guidelines. You ma
 :::danger
 It may be tempting to skip some of these steps, but make sure you follow them to ensure that your development environment is set up correctly.
 
-Note: If you are doing this in Github Codespaces, steps 1-10 will be done for you. Also note that while small codespace instances can build this app, it's recommend to use 8-core or above for best results.
+Note: If you are doing this in Github Codespaces, steps 1-9 will be done for you. Also note that while small codespace instances can build this app, it's recommend to use 8-core or above for best results.
 :::
 
 import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
@@ -80,47 +80,21 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
 
     </Tabs>
 
-3.  Download [Deno](https://deno.com).
-
-    _Please see the [Deno Runtime Manual](https://docs.deno.com/runtime/getting_started/installation/) for installation guidance._
-
-4.  Clone the repository.
+3.  Clone the repository.
 
     ```sh
-    git clone --recursive https://github.com/stoatchat/for-android.git
+    git clone https://github.com/stoatchat/for-android.git
     ```
 
-    Specify `--recursive` to ensure that submodules are cloned as well.
+4.  Open the project in Android Studio.
 
-5.  Open the project in Android Studio.
-
-6.  Install the required dependencies.
+5.  Install the required dependencies.
 
     -   Android SDK, latest version
-    -   Android NDK, latest version
 
     You can install these from the SDK Manager in Android Studio.
 
-7.  Download required additional, embedded dependencies using the provided script.
-
-    ```sh
-    deno run -A scripts/download_deps.ts
-    ```
-
-    :::tip
-    You can run this script with the `-y` flag to skip confirmation
-    prompts.
-    :::
-
-    :::note
-    This script will query the Stoat version control server for the latest version of the
-    final-markdown native library and download it. If you do not wish to use pre-built libraries,
-    you can build final-markdown yourself from the source code at https://git.revolt.chat/android/final-markdown,
-    and copy the files to the `app/src/main/jniLibs` folder. Note the files that are downloaded are
-    exactly the same as the ones we use for the app on Google Play, so you can be sure they are safe to use.
-    :::
-
-8.  Copy the `stoatbuild.properties.example` file to `stoatbuild.properties` and fill in the required values.
+6.  Copy the `stoatbuild.properties.example` file to `stoatbuild.properties` and fill in the required values.
 
     ```sh
     cp stoatbuild.properties.example stoatbuild.properties
@@ -135,7 +109,7 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
     | `build.debug.app_name`   | The name of the app in debug builds, arbitrary |
     | `build.flavour_id`       | Leave as `ZZUU`                                |
 
-9.  Copy the `sentry.properties.example` file to `sentry.properties` and fill in the required values.
+7.  Copy the `sentry.properties.example` file to `sentry.properties` and fill in the required values.
 
     ```sh
     cp sentry.properties.example sentry.properties
@@ -152,7 +126,7 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
 
     You can get these values from the Sentry dashboard.
 
-10. Copy the `google-services.json.example` file within the `app` directory to `google-services.json`.
+8.  Copy the `google-services.json.example` file within the `app` directory to `google-services.json`.
 
     Firebase services are integrated into the project, so we need a `google-services.json` file for the build to succeed. For development purposes, use the provided example file:
 
@@ -164,7 +138,7 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
     This is a mock configuration file for development purposes only. In a production environment, you would use a real Firebase project configuration.
     :::
 
-11. Build the project.
+9.  Build the project.
 
     You can build the project by clicking on the 'Run' button in Android Studio.  
     If asked, build the `:app` module.
@@ -172,6 +146,6 @@ import { Tabs, TabItem, Steps } from "@astrojs/starlight/components"
     If building within Github Codespaces, you can build a fresh debug apk by running `./gradlew assembledebug --no-daemon` from the root of the project. 
     Upon completion, the apk will be within `app/build/outputs/apk/debug/`
 
-12. **You're all set!** You can now start contributing to Stoat for Android.
+10. **You're all set!** You can now start contributing to Stoat for Android.
 
 </Steps>

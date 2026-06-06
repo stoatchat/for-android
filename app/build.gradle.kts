@@ -70,13 +70,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        externalNativeBuild {
-            cmake {
-                arguments += listOf("-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON")
-                cppFlags("")
-            }
-        }
     }
 
     buildTypes {
@@ -140,12 +133,6 @@ android {
     }
     androidResources {
         generateLocaleConfig = true
-    }
-    externalNativeBuild {
-        cmake {
-            path(file("src/main/cpp/CMakeLists.txt"))
-            version = "3.22.1"
-        }
     }
     lint {
         abortOnError = false
@@ -299,7 +286,6 @@ aboutLibraries {
             "BSD-2-Clause",
             "BSD-3-Clause", "The 3-Clause BSD License",
             "BSD License",
-            "cmark",
             "EPL-1.0",
             "MIT",
             "ML Kit Terms of Service",

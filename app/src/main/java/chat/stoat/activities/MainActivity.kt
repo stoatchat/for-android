@@ -90,7 +90,6 @@ import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.material.EasingTokens
-import chat.stoat.ndk.NativeLibraries
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
@@ -422,11 +421,6 @@ class MainActivity : AppCompatActivity() {
         data?.add(messaging)
     }
 
-    companion object {
-        init {
-            NativeLibraries.init()
-        }
-    }
 }
 
 val StoatTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)

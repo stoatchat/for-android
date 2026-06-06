@@ -1,16 +1,13 @@
 {
     "image": "mcr.microsoft.com/devcontainers/universal:2",
     "features": {
-      "ghcr.io/devcontainers-community/features/deno:1": {},
-      "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {
-          "extra_packages": "ndk;28.1.13356709"
-      },
+      "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {},
       "ghcr.io/devcontainers/features/java:1": {
         "version": "21",
         "jdkDistro": "oracle"
       }
     },
-    "postCreateCommand": "chmod +x gradlew && deno run -A scripts/download_deps.ts --yes && cp revoltbuild.properties.example revoltbuild.properties && cp sentry.properties.example sentry.properties && cp app/google-services.json.example app/google-services.json && git submodule update --init --recursive",
+    "postCreateCommand": "chmod +x gradlew && cp revoltbuild.properties.example revoltbuild.properties && cp sentry.properties.example sentry.properties && cp app/google-services.json.example app/google-services.json",
     "customizations": {
       "vscode": {
         "extensions": [

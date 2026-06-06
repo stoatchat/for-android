@@ -1,3 +1,0 @@
-[submodule "app/src/main/cpp/external/cmark"]
-	path = app/src/main/cpp/external/cmark
-	url = https://github.com/commonmark/cmark
