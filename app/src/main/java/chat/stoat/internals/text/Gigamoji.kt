@@ -26,6 +26,7 @@ object Gigamoji {
                 Character.isWhitespace(codepoint) -> lastWasZwj = false
                 codepoint == 0x200D -> lastWasZwj = true
                 codepoint == 0xFE0F || codepoint == 0xFE0E || codepoint == 0x20E3 -> Unit
+                codepoint in PUA_MIN..PUA_MAX -> Unit
                 codepoint in 0x1F3FB..0x1F3FF -> lastWasZwj = false
                 MessageProcessor.emoji.codepointIsEmoji(codepoint) -> {
                     if (!lastWasZwj) count++

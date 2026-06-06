@@ -49,6 +49,7 @@ import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.text.MessageProcessor
+import chat.stoat.internals.text.stripPUAChars
 import chat.stoat.composables.markdown.prose.easyLineBreaks
 import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.persistence.KVStorage
@@ -264,7 +265,7 @@ class ChannelScreenViewModel(
 
     private suspend fun parseAst(content: String?): State? =
         content?.takeIf { it.isNotBlank() }?.let { c ->
-            val prepared = injectMassMentionMarkers(easyLineBreaks(c))
+            val prepared = injectMassMentionMarkers(easyLineBreaks(c.stripPUAChars()))
             parseMarkdownFlow(prepared, flavour = StoatMarkdownFlavour(prepared))
                 .first { it !is State.Loading }
         }

@@ -87,6 +87,7 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.text.Gigamoji
 import chat.stoat.internals.text.GigamojiState
 import chat.stoat.internals.text.MessageProcessor
+import chat.stoat.internals.text.stripPUAChars
 import chat.stoat.persistence.KVStorage
 import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.launch
@@ -438,9 +439,10 @@ fun Message(
 
                         key(message.content) {
                             message.content?.let {
-                                if (message.content!!.isBlank()) return@let // if only an attachment is sent
+                                val content = it.stripPUAChars()
+                                if (content.isBlank()) return@let // if only an attachment is sent
 
-                                val gigamoji = Gigamoji.useGigamojiForMessage(message.content!!)
+                                val gigamoji = Gigamoji.useGigamojiForMessage(content)
                                 val fontSizeMultiplier = when (gigamoji) {
                                     GigamojiState.Single -> 5f
                                     GigamojiState.Multiple -> 2f
@@ -455,7 +457,7 @@ fun Message(
                                     )
                                 } else {
                                     ChatMarkdown(
-                                        content = message.content!!,
+                                        content = content,
                                         serverId = StoatAPI.channelCache[message.channel]?.server,
                                         fontSizeMultiplier = fontSizeMultiplier,
                                     )
