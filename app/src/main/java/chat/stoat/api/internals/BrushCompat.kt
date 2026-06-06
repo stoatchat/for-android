@@ -13,19 +13,6 @@ import chat.stoat.api.internals.colour.CSSColours
 
 fun Brush.Companion.solidColor(colour: Color) = SolidColor(colour)
 
-// Some colours that are not present in Android's built-in list.
-// not exhaustive, but covers most of the ones I've seen in the wild
-// for the sake of all of us, please just use hex codes
-// reference: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
-val ADDITIONAL_WEB_COLOURS = mapOf(
-    "orange" to Color(0xFFFFA500),
-    "rebeccapurple" to Color(0xFF663399),
-    "transparent" to Color.Transparent,
-    "inherit" to Color.Unspecified,
-    "initial" to Color.Unspecified,
-    "unset" to Color.Unspecified
-)
-
 object BrushCompat {
     @Composable
     private fun parseLinearGradient(gradient: String): Brush {
