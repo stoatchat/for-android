@@ -8,6 +8,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +20,15 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.internals.PermissionBit
+import chat.stoat.api.internals.has
+import chat.stoat.callbacks.Action
+import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.SheetButton
-
+import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.Platform
+import chat.stoat.internals.extensions.rememberChannelPermissions
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,6 +47,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
+    val permissions by rememberChannelPermissions(channelId)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -95,6 +103,34 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             }
         }
     )
+
+    if (
+        (permissions has PermissionBit.ManageChannel)
+        && (channel.channelType != ChannelType.SavedMessages && channel.channelType != ChannelType.DirectMessage)
+    ) {
+        SheetButton(
+            headlineContent = {
+                Text(
+                    text = stringResource(id = R.string.channel_context_sheet_actions_edit_channel),
+                )
+            },
+            leadingContent = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_edit_24dp),
+                    contentDescription = null
+                )
+            },
+            onClick = {
+                coroutineScope.launch {
+                    onHideSheet()
+                }
+                coroutineScope.launch {
+                    delay(100) // wait for the sheet to close or at least start closing
+                    ActionChannel.send(Action.TopNavigate("settings/channel/$channelId"))
+                }
+            }
+        )
+    }
 
 
 }

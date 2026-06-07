@@ -410,6 +410,7 @@
     <string name="channel_context_sheet_actions_copy_id">Copy ID</string>
     <string name="channel_context_sheet_actions_copy_id_copied">Copied channel ID to clipboard</string>
     <string name="channel_context_sheet_actions_mark_read">Mark as read</string>
+    <string name="channel_context_sheet_actions_edit_channel">Edit Channel</string>
 
     <string name="server_context_sheet_description_empty">There hasn\'t been a description set for this server yet.</string>
 
