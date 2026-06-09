@@ -4,6 +4,12 @@ import android.app.Application
 import android.os.Looper
 import android.util.Log
 import chat.zekochat.api.PeptideHttp
+import chat.zekochat.api.routes.googlesheets.ServerDataRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import chat.zekochat.api.realtime.DisconnectionState
 import chat.zekochat.api.realtime.RealtimeSocket
 import chat.zekochat.persistence.KVStorage
@@ -25,6 +31,27 @@ class PeptideApplication : Application() {
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
         installNetworkUncaughtExceptionHandler()
         PeptideHttp // Trigger initialization
+        // Background prefetch for discover servers: only fetch if cache older than 10 minutes.
+        try {
+            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+            scope.launch {
+                try {
+                    val repo = ServerDataRepository()
+                    val lastTs = try { repo.getLastFetchTs() } catch (_: Exception) { null }
+                    val now = System.currentTimeMillis()
+                    val STALE_MS = 10 * 60 * 1000L // 10 minutes
+                    if (lastTs == null || (now - lastTs >= STALE_MS)) {
+                        val csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRY41D-NgTE6bC3kTN3dRpisI-DoeHG8Eg7n31xb1CdydWjOLaphqYckkTiaG9oIQSWP92h3NE-7cpF/pub?gid=0&single=true&output=csv"
+                        // Collect first emission to trigger repository fetch and cache save.
+                        repo.getServers(csvUrl).first()
+                    }
+                } catch (_: Exception) {
+                    // best-effort prefetch; ignore failures
+                }
+            }
+        } catch (_: Exception) {
+            // ignore
+        }
     }
 
     /**

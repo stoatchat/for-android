@@ -56,20 +56,55 @@ class DiscoverServersListViewModel @Inject constructor(
      */
     fun loadServers() {
         updateState { it.copy(isLoading = true, error = null) }
-        
+
+        val STALE_MS = 10 * 60 * 1000L // 10 minutes
+        val csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRY41D-NgTE6bC3kTN3dRpisI-DoeHG8Eg7n31xb1CdydWjOLaphqYckkTiaG9oIQSWP92h3NE-7cpF/pub?gid=0&single=true&output=csv"
+
         viewModelScope.launch {
+            var cached: List<ServerData>? = null
+
             try {
-                val csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRY41D-NgTE6bC3kTN3dRpisI-DoeHG8Eg7n31xb1CdydWjOLaphqYckkTiaG9oIQSWP92h3NE-7cpF/pub?gid=0&single=true&output=csv"
-                serverDataRepository.getServers(csvUrl).collect { servers ->
-                    updateState { it.copy(servers = servers, isLoading = false) }
+                cached = serverDataRepository.getCachedServers()
+            } catch (_: Exception) {
+                cached = null
+            }
+
+            if (cached != null && cached.isNotEmpty()) {
+                updateState { it.copy(servers = cached, isLoading = false) }
+            }
+
+            // Decide whether to refresh
+            val lastTs = try { serverDataRepository.getLastFetchTs() } catch (_: Exception) { null }
+            val now = System.currentTimeMillis()
+            val shouldRefresh = lastTs == null || (now - lastTs >= STALE_MS)
+
+            if (cached == null) {
+                // No cache -> block until first network result (preserve existing behavior)
+                try {
+                    serverDataRepository.getServers(csvUrl).collect { servers ->
+                        updateState { it.copy(servers = servers, isLoading = false) }
+                    }
+                } catch (e: Exception) {
+                    updateState {
+                        it.copy(
+                            error = e.message ?: "Unknown error occurred",
+                            isLoading = false
+                        )
+                    }
                 }
-            } catch (e: Exception) {
-                updateState { 
-                    it.copy(
-                        error = e.message ?: "Unknown error occurred",
-                        isLoading = false
-                    )
+            } else if (shouldRefresh) {
+                // Cache present but stale -> refresh in background and update when done
+                viewModelScope.launch {
+                    try {
+                        serverDataRepository.getServers(csvUrl).collect { servers ->
+                            updateState { it.copy(servers = servers, isLoading = false) }
+                        }
+                    } catch (_: Exception) {
+                        // keep showing cached data
+                    }
                 }
+            } else {
+                // Cache present and fresh -> nothing to do
             }
         }
     }

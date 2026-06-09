@@ -1,7 +1,9 @@
 package chat.zekochat.api.routes.googlesheets
 
+import chat.zekochat.PeptideApplication
 import chat.zekochat.api.PeptideHttp
 import chat.zekochat.api.PeptideJson
+import chat.zekochat.persistence.KVStorage
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.Dispatchers
@@ -9,12 +11,48 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
 
 /**
  * Repository for fetching server data. Tries the Public Servers API first,
  * falls back to Google Sheets CSV parsing on any failure.
  */
 class ServerDataRepository {
+
+    private val CACHE_KEY = "discover/servers_cache"
+    private val CACHE_TS_KEY = "discover/servers_cache_ts"
+
+    // Read cached servers from KVStorage (DataStore). Returns null on parse error or missing
+    suspend fun getCachedServers(): List<ServerData>? {
+        try {
+            val kv = KVStorage(PeptideApplication.instance)
+            val json = kv.get(CACHE_KEY) ?: return null
+            return PeptideJson.decodeFromString(ListSerializer(ServerData.serializer()), json)
+        } catch (_: Exception) {
+            return null
+        }
+    }
+
+    // Save servers list and update timestamp
+    suspend fun saveServersToCache(servers: List<ServerData>) {
+        try {
+            val kv = KVStorage(PeptideApplication.instance)
+            val json = PeptideJson.encodeToString(ListSerializer(ServerData.serializer()), servers)
+            kv.set(CACHE_KEY, json)
+            kv.set(CACHE_TS_KEY, System.currentTimeMillis().toString())
+        } catch (_: Exception) {
+            // best-effort cache; ignore failures
+        }
+    }
+
+    suspend fun getLastFetchTs(): Long? {
+        try {
+            val kv = KVStorage(PeptideApplication.instance)
+            return kv.get(CACHE_TS_KEY)?.toLongOrNull()
+        } catch (_: Exception) {
+            return null
+        }
+    }
 
     /**
      * Fetches server data from the public API first, falling back to Google Sheets.
@@ -42,6 +80,11 @@ class ServerDataRepository {
                     )
                 }
 
+                // Update cache (best-effort) then emit
+                try {
+                    saveServersToCache(mapped)
+                } catch (_: Exception) {}
+
                 emit(mapped)
                 return@flow
             }
@@ -68,7 +111,12 @@ class ServerDataRepository {
             )
         }
 
-        emit(servers.sortedBy { it.sortOrder ?: Int.MAX_VALUE })
+        val sorted = servers.sortedBy { it.sortOrder ?: Int.MAX_VALUE }
+        try {
+            saveServersToCache(sorted)
+        } catch (_: Exception) {}
+
+        emit(sorted)
     }.flowOn(Dispatchers.IO)
 
 }
