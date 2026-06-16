@@ -65,7 +65,7 @@ fun UserButtons(
             onClick = {
                 scope.launch {
                     try {
-                        friendUser("${user.username}#${user.discriminator}")
+                        friendUser("${user.username}#${user.discriminator}", user.id)
                     } catch (e: Exception) {
                         // Button did nothing, but not an error
                         if (e.message == "NoEffect") return@launch
@@ -92,7 +92,7 @@ fun UserButtons(
                         onClick = {
                             scope.launch {
                                 try {
-                                    friendUser("${user.username}#${user.discriminator}")
+                                    friendUser("${user.username}#${user.discriminator}", user.id)
                                 } catch (e: Exception) {
                                     if (e.message == "NoEffect") return@launch
                                     logcat(LogPriority.ERROR) { e.asLog() }
