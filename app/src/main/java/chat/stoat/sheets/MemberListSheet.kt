@@ -11,8 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -197,7 +198,10 @@ class MemberListSheetViewModel(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 @Composable
 fun MemberListSheet(
     channelId: String,
@@ -286,7 +290,7 @@ fun MemberListSheet(
                     .fillMaxWidth()
                     .height(200.dp)
             ) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                LoadingIndicator(modifier = Modifier.align(Alignment.Center))
             }
 
             return@Column
@@ -313,8 +317,10 @@ fun MemberListSheet(
                     }
 
                     is MemberListSheetItem.MemberItem -> {
-                        val isFirst = index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
-                        val isLast = index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
+                        val isFirst =
+                            index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
+                        val isLast =
+                            index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
                         item(key = item.member.id!!.user) {
                             MemberListItem(
                                 user = StoatAPI.userCache[item.member.id!!.user],
@@ -340,8 +346,10 @@ fun MemberListSheet(
                     }
 
                     is MemberListSheetItem.UserItem -> {
-                        val isFirst = index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
-                        val isLast = index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
+                        val isFirst =
+                            index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
+                        val isLast =
+                            index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
                         item(key = item.user.id!!) {
                             MemberListItem(
                                 user = item.user,
