@@ -255,13 +255,13 @@ fun ChatMarkdown(
 
                 GFMElementTypes.INLINE_MATH -> {
                     val latex = child.getTextInNode(content).toString().removeSurrounding("$")
-                    appendInlineContent("math:i:$latex", latex)
+                    if (latex.isNotEmpty()) appendInlineContent("math:i:$latex", latex)
                     true
                 }
 
                 GFMElementTypes.BLOCK_MATH -> {
                     val latex = child.getTextInNode(content).toString().removeSurrounding("$$").trim()
-                    appendInlineContent("math:b:$latex", latex)
+                    if (latex.isNotEmpty()) appendInlineContent("math:b:$latex", latex)
                     true
                 }
 
