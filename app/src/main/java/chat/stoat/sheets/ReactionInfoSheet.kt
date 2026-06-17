@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -218,9 +218,9 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier.padding(
                         top = 16.dp,
-                        start = 16.dp,
-                        end = 16.dp,
-                        bottom = 4.dp
+                        start = 24.dp,
+                        end = 24.dp,
+                        bottom = 16.dp
                     ),
                 ) {
                     Row(
@@ -308,15 +308,14 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                             )
                         }
                     }
-
-                    HorizontalDivider()
                 }
             }
         }
 
         val reactionsForEmoji =
             reactions?.get(reactionEmoji[selectedReactionIndex]) ?: emptyList()
-        items(items = reactionsForEmoji) { reaction ->
+        itemsIndexed(items = reactionsForEmoji) { index, reaction ->
+            val isLast = index == reactionsForEmoji.size - 1
             val userOrNull = StoatAPI.userCache[reaction]
             val user = userOrNull ?: User.getPlaceholder(reaction)
             val member = if (channel.server != null && user.id != null) {
@@ -340,7 +339,13 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                 user = user,
                 serverId = channel.server,
                 userId = reaction,
+                first = index == 0,
+                last = isLast,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
+            if (!isLast) {
+                Spacer(modifier = Modifier.height(2.dp))
+            }
         }
 
         item("bottom") {

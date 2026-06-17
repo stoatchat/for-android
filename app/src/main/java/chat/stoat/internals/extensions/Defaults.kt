@@ -7,6 +7,6 @@ import androidx.compose.ui.graphics.Color
 
 val TransparentListItemColours: ListItemColors
     @Composable
-    get() = ListItemDefaults.colors().copy(
+    get() = ListItemDefaults.colors(
         containerColor = Color.Transparent
     )

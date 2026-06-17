@@ -4,11 +4,12 @@ import android.app.Application
 import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -311,47 +312,58 @@ fun MemberListSheet(
                         )
                     }
 
-                    is MemberListSheetItem.MemberItem -> item(key = item.member.id!!.user) {
-                        MemberListItem(
-                            user = StoatAPI.userCache[item.member.id!!.user],
-                            member = item.member,
-                            serverId = serverId,
-                            userId = item.member.id!!.user,
-                            modifier = Modifier
-                                .combinedClickable(
-                                    onClick = {
-                                        userInfoSheetTarget = item.member.id!!.user
-                                        showUserInfoSheet = true
-                                    },
-                                    onClickLabel = stringResource(R.string.user_info_sheet_open),
-                                    onLongClick = {
-                                        memberContextSheetTarget = item.member.id!!.user
-                                        showMemberContextSheet = true
-                                    },
-                                    onLongClickLabel = stringResource(R.string.member_context_sheet_open)
-                                )
-                        )
+                    is MemberListSheetItem.MemberItem -> {
+                        val isFirst = index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
+                        val isLast = index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
+                        item(key = item.member.id!!.user) {
+                            MemberListItem(
+                                user = StoatAPI.userCache[item.member.id!!.user],
+                                member = item.member,
+                                serverId = serverId,
+                                userId = item.member.id!!.user,
+                                first = isFirst,
+                                last = isLast,
+                                onClick = {
+                                    userInfoSheetTarget = item.member.id!!.user
+                                    showUserInfoSheet = true
+                                },
+                                onLongClick = {
+                                    memberContextSheetTarget = item.member.id!!.user
+                                    showMemberContextSheet = true
+                                },
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            )
+                            if (!isLast) {
+                                Spacer(modifier = Modifier.height(2.dp))
+                            }
+                        }
                     }
 
-                    is MemberListSheetItem.UserItem -> item(key = item.user.id!!) {
-                        MemberListItem(
-                            user = item.user,
-                            member = null,
-                            serverId = serverId,
-                            userId = item.user.id!!,
-                            modifier = Modifier.combinedClickable(
+                    is MemberListSheetItem.UserItem -> {
+                        val isFirst = index == 0 || viewModel.fullItemList[index - 1] is MemberListSheetItem.CategoryItem
+                        val isLast = index == viewModel.fullItemList.size - 1 || viewModel.fullItemList[index + 1] is MemberListSheetItem.CategoryItem
+                        item(key = item.user.id!!) {
+                            MemberListItem(
+                                user = item.user,
+                                member = null,
+                                serverId = serverId,
+                                userId = item.user.id!!,
+                                first = isFirst,
+                                last = isLast,
                                 onClick = {
                                     userInfoSheetTarget = item.user.id!!
                                     showUserInfoSheet = true
                                 },
-                                onClickLabel = stringResource(R.string.user_info_sheet_open),
                                 onLongClick = {
                                     memberContextSheetTarget = item.user.id!!
                                     showMemberContextSheet = true
                                 },
-                                onLongClickLabel = stringResource(R.string.member_context_sheet_open)
+                                modifier = Modifier.padding(horizontal = 16.dp)
                             )
-                        )
+                            if (!isLast) {
+                                Spacer(modifier = Modifier.height(2.dp))
+                            }
+                        }
                     }
                 }
             }

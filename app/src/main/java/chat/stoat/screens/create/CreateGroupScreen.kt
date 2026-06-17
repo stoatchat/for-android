@@ -3,10 +3,11 @@ package chat.stoat.screens.create
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -192,13 +193,16 @@ fun CreateGroupScreen(
                     val friend = StoatAPI.userCache[viewModel.friendsFilteredBySearch[index]]
                         ?: return@items
                     val isMember = viewModel.groupMembers.contains(friend.id)
+                    val isLast = index == viewModel.friendsFilteredBySearch.size - 1
 
                     MemberListItem(
                         member = null,
                         user = friend,
                         serverId = null,
                         userId = friend.id!!,
-                        modifier = Modifier.clickable {
+                        first = index == 0,
+                        last = isLast,
+                        onClick = {
                             if (isMember) {
                                 viewModel.groupMembers.remove(friend.id)
                             } else {
@@ -207,6 +211,7 @@ fun CreateGroupScreen(
                                 }
                             }
                         },
+                        modifier = Modifier.padding(horizontal = 16.dp),
                         trailingContent = {
                             Checkbox(
                                 checked = isMember,
@@ -215,6 +220,9 @@ fun CreateGroupScreen(
                             )
                         }
                     )
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
             }
         }

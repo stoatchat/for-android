@@ -7,7 +7,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -179,8 +178,24 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     text = AnnotatedString.fromHtml(
                         stringResource(
                             R.string.friends_add_by_tag_sheet_description,
-                            "<font color=\"${Color(HL_USERNAME).toArgb().let { "#%02x%02x%02x".format(it shr 16 and 0xff, it shr 8 and 0xff, it and 0xff) }}\">",
-                            "<font color=\"${Color(HL_TAG).toArgb().let { "#%02x%02x%02x".format(it shr 16 and 0xff, it shr 8 and 0xff, it and 0xff) }}\">",
+                            "<font color=\"${
+                                Color(HL_USERNAME).toArgb().let {
+                                    "#%02x%02x%02x".format(
+                                        it shr 16 and 0xff,
+                                        it shr 8 and 0xff,
+                                        it and 0xff
+                                    )
+                                }
+                            }\">",
+                            "<font color=\"${
+                                Color(HL_TAG).toArgb().let {
+                                    "#%02x%02x%02x".format(
+                                        it shr 16 and 0xff,
+                                        it shr 8 and 0xff,
+                                        it and 0xff
+                                    )
+                                }
+                            }\">",
                             "</font>",
                         )
                     ),
@@ -601,19 +616,28 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     val item = FriendRequests.getIncoming().getOrNull(it)
                     if (item == null) return@items
 
+                    val isLast = it == FriendRequests.getIncoming().size - 1
+
                     MemberListItem(
                         member = null,
                         user = item,
                         serverId = null,
                         userId = item.id ?: "",
-                        modifier = Modifier.clickable {
+                        first = it == 0,
+                        last = isLast,
+                        onClick = {
                             scope.launch {
                                 item.id?.let { userId ->
                                     ActionChannel.send(Action.OpenUserSheet(userId, null))
                                 }
                             }
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
+
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
 
                 stickyHeader(key = "outgoing") {
@@ -627,19 +651,28 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     val item = FriendRequests.getOutgoing().getOrNull(it)
                     if (item == null) return@items
 
+                    val isLast = it == FriendRequests.getOutgoing().size - 1
+
                     MemberListItem(
                         member = null,
                         user = item,
                         serverId = null,
                         userId = item.id ?: "",
-                        modifier = Modifier.clickable {
+                        first = it == 0,
+                        last = isLast,
+                        onClick = {
                             scope.launch {
                                 item.id?.let { userId ->
                                     ActionChannel.send(Action.OpenUserSheet(userId, null))
                                 }
                             }
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
+
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
 
                 stickyHeader(key = "online") {
@@ -653,19 +686,28 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     val item = FriendRequests.getOnlineFriends().getOrNull(it)
                     if (item == null) return@items
 
+                    val isLast = it == FriendRequests.getOnlineFriends().size - 1
+
                     MemberListItem(
                         member = null,
                         user = item,
                         serverId = null,
                         userId = item.id ?: "",
-                        modifier = Modifier.clickable {
+                        first = it == 0,
+                        last = isLast,
+                        onClick = {
                             scope.launch {
                                 item.id?.let { userId ->
                                     ActionChannel.send(Action.OpenUserSheet(userId, null))
                                 }
                             }
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
+
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
 
                 stickyHeader(key = "not_online") {
@@ -679,19 +721,28 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     val item = FriendRequests.getFriends(true).getOrNull(it)
                     if (item == null) return@items
 
+                    val isLast = it == FriendRequests.getFriends(true).size - 1
+
                     MemberListItem(
                         member = null,
                         user = item,
                         serverId = null,
                         userId = item.id ?: "",
-                        modifier = Modifier.clickable {
+                        first = it == 0,
+                        last = isLast,
+                        onClick = {
                             scope.launch {
                                 item.id?.let { userId ->
                                     ActionChannel.send(Action.OpenUserSheet(userId, null))
                                 }
                             }
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
+
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
 
                 stickyHeader(key = "blocked") {
@@ -706,19 +757,28 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     val item = FriendRequests.getBlocked().getOrNull(it)
                     if (item == null) return@items
 
+                    val isLast = it == FriendRequests.getBlocked().size - 1
+
                     MemberListItem(
                         member = null,
                         user = item,
                         serverId = null,
                         userId = item.id ?: "",
-                        modifier = Modifier.clickable {
+                        first = it == 0,
+                        last = isLast,
+                        onClick = {
                             scope.launch {
                                 item.id?.let { userId ->
                                     ActionChannel.send(Action.OpenUserSheet(userId, null))
                                 }
                             }
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
+
+                    if (!isLast) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                    }
                 }
             }
 
