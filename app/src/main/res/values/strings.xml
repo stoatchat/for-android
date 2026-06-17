@@ -385,6 +385,15 @@
     <string name="pinned_messages_view">View Pinned Messages</string>
     <string name="pinned_messages_empty">No pinned messages yet, maybe you should pin one?</string>
 
+    <string name="channel_search">Search Messages</string>
+    <string name="channel_search_hint">Search messages</string>
+    <string name="channel_search_prompt">Type to search for messages in this channel.</string>
+    <string name="channel_search_empty">No messages found for “%1$s”.</string>
+    <string name="channel_search_clear">Clear search</string>
+    <string name="channel_search_sort_relevance">Relevance</string>
+    <string name="channel_search_sort_latest">Latest</string>
+    <string name="channel_search_sort_oldest">Oldest</string>
+
     <string name="message_context_sheet_actions_copy">Copy</string>
     <string name="message_context_sheet_actions_copy_failed_empty">Message is empty, nothing to copy</string>
     <string name="message_context_sheet_actions_reply">Reply</string>

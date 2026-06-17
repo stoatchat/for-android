@@ -96,6 +96,7 @@ import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
 import chat.stoat.screens.changelogs.ReadChangelogScreen
 import chat.stoat.screens.chat.ChannelPinsScreen
+import chat.stoat.screens.chat.ChannelSearchScreen
 import chat.stoat.screens.chat.ChatRouterScreen
 import chat.stoat.screens.chat.standalone.CatchUpScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
@@ -735,6 +736,11 @@ fun AppEntrypoint(
                     composable("channel/{channelId}/pins") { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelPinsScreen(navController, channelId)
+                    }
+
+                    composable("channel/{channelId}/search") { backStackEntry ->
+                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+                        ChannelSearchScreen(navController, channelId)
                     }
 
                     composable("about") { AboutScreen(navController) }

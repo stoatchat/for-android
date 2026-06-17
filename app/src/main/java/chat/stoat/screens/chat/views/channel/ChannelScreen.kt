@@ -639,6 +639,20 @@ fun ChannelScreen(
                                 )
                             }
                         }
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                ActionChannel.send(
+                                    Action.TopNavigate("channel/$channelId/search")
+                                )
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_search_24dp),
+                                contentDescription = stringResource(id = R.string.channel_search)
+                            )
+                        }
                     }
                 )
             }
