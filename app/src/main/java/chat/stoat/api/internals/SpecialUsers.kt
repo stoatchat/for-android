@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.graphics.SolidColor
 import org.intellij.lang.annotations.Language
 import androidx.compose.ui.graphics.Brush as AndroidBrush
 
@@ -49,9 +48,6 @@ object SpecialUsers {
                 end = Offset.Infinite
             )
         ), // jen
-        "01FN54E7AD80NVTXF3VPF789NV" to TeamMemberFlair.Brush(
-            SolidColor(Color(0xfff34848))
-        ), // jack
         "01FDVES092RQR3YTY4JBGA0VCA" to TeamMemberFlair.Brush(
             AndroidBrush.verticalGradient(
                 listOf(
