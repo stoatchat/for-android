@@ -24,6 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import chat.stoat.R
 import chat.stoat.composables.chat.VideoPlayButton
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.model.data.STOAT_PROXY
 import chat.stoat.core.model.schemas.Special
 import org.intellij.lang.annotations.Language
 
@@ -60,7 +61,7 @@ private const val YOUTUBE_EMBED_TEMPLATE = """
         frame.setAttribute("height", window.innerHeight)
         frame.setAttribute("frameborder", 0)
         frame.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share")
-        frame.setAttribute("referrerpolicy", "no-referrer")
+        frame.setAttribute("referrerpolicy", "strict-origin-when-cross-origin")
         frame.setAttribute("allowfullscreen", "allowfullscreen")
         frame.setAttribute("title", "YouTube video player")
         document.body.appendChild(frame)
@@ -92,7 +93,7 @@ fun YouTubeEmbed(special: Special, modifier: Modifier = Modifier) {
         },
         update = {
             it.loadDataWithBaseURL(
-                null,
+                STOAT_PROXY,
                 YOUTUBE_EMBED_TEMPLATE
                     .replace("{{videoId}}", special.id!!)
                     .replace("{{useTimestamp}}", (special.timestamp != null).toString())
