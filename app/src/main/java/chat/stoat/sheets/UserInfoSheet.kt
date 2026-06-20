@@ -190,7 +190,8 @@ fun UserInfoSheet(
                                         RoleListEntry(
                                             label = role.name ?: "null",
                                             brush = role.colour?.let { BrushCompat.parseColour(it) }
-                                                ?: Brush.solidColor(LocalContentColor.current)
+                                                ?: Brush.solidColor(LocalContentColor.current),
+                                            icon = role.icon
                                         )
                                     }
                                 }
@@ -205,8 +206,9 @@ fun UserInfoSheet(
                                 role?.let {
                                     RoleListEntry(
                                         label = role.name ?: "null",
-                                        brush = role.colour?.let { BrushCompat.parseColour(it) }
-                                            ?: Brush.solidColor(LocalContentColor.current)
+                                        brush = role.colour?.let { c -> BrushCompat.parseColour(c) }
+                                            ?: Brush.solidColor(LocalContentColor.current),
+                                        icon = role.icon
                                     )
                                 }
                             }
