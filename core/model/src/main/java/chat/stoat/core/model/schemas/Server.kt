@@ -74,7 +74,8 @@ data class Role(
     val permissions: PermissionDescription? = null,
     val colour: String? = null,
     val hoist: Boolean? = null,
-    val rank: Double? = null
+    val rank: Double? = null,
+    val icon: AutumnResource? = null
 ) {
     fun mergeWithPartial(other: Role): Role {
         return Role(

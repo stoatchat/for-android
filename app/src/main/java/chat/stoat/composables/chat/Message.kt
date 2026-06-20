@@ -5,7 +5,6 @@ import android.content.Intent
 import android.icu.text.DateFormat
 import android.net.Uri
 import android.text.format.DateUtils
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
@@ -109,6 +108,17 @@ fun authorColour(message: MessageSchema): Brush {
         highestRole.colour?.let { BrushCompat.parseColour(it) }
             ?: defaultColour
     }
+}
+
+@Composable
+fun authorRoleIcon(message: MessageSchema): AutumnResource? {
+    val serverId = StoatAPI.channelCache[message.channel]?.server ?: return null
+
+    val highestRole = message.author?.let {
+        Roles.resolveHighestRole(serverId, it)
+    } ?: return null
+
+    return highestRole.icon
 }
 
 @Composable
@@ -321,9 +331,6 @@ fun Message(
                             } == true),
                         ) {
                             // TODO Add jump to message
-                            if (replyMessage == null) {
-                                Toast.makeText(context, "lmao prankd", Toast.LENGTH_SHORT).show()
-                            }
                         }
                     }
                 }
@@ -398,6 +405,19 @@ fun Message(
                                         else Modifier
                                     )
                                 )
+
+                                val roleIcon = authorRoleIcon(message)
+                                if (roleIcon != null) {
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    RemoteImage(
+                                        url = "$STOAT_FILES/icons/${roleIcon.id}",
+                                        contentScale = ContentScale.Fit,
+                                        description = null,
+                                        modifier = Modifier
+                                            .size(16.dp)
+                                    )
+                                }
 
                                 InlineBadges(
                                     bot = author.bot != null && message.masquerade == null,
@@ -520,9 +540,12 @@ fun Message(
                                         }
 
                                         Spacer(modifier = Modifier.height(8.dp))
-                                        Embed(embed = embed, serverId = StoatAPI.channelCache[message.channel]?.server, onLinkClick = {
-                                            viewUrlInBrowser(context, it)
-                                        })
+                                        Embed(
+                                            embed = embed,
+                                            serverId = StoatAPI.channelCache[message.channel]?.server,
+                                            onLinkClick = {
+                                                viewUrlInBrowser(context, it)
+                                            })
                                         Spacer(modifier = Modifier.height(8.dp))
                                     }
 

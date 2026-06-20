@@ -2,6 +2,7 @@ package chat.stoat.composables.generic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
@@ -39,23 +40,29 @@ fun ListHeader(
 fun CountableListHeader(
     text: String,
     count: Int,
+    icon: @Composable (() -> Unit)? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.surface
 ) {
     ListHeader(backgroundColor = backgroundColor) {
-        Text(
-            text = AnnotatedString.Builder().apply {
-                append(text)
+        Row {
+            if (icon != null) {
+                icon()
+            }
+            Text(
+                text = AnnotatedString.Builder().apply {
+                    append(text)
 
-                pushStyle(
-                    SpanStyle(
-                        fontWeight = FontWeight.Medium,
-                        fontSize = LocalTextStyle.current.fontSize * 0.8,
-                        color = LocalContentColor.current.copy(alpha = 0.6f)
+                    pushStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Medium,
+                            fontSize = LocalTextStyle.current.fontSize * 0.8,
+                            color = LocalContentColor.current.copy(alpha = 0.6f)
+                        )
                     )
-                )
-                append("—$count")
-                pop()
-            }.toAnnotatedString()
-        )
+                    append("—$count")
+                    pop()
+                }.toAnnotatedString()
+            )
+        }
     }
 }

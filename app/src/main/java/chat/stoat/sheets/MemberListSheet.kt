@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -42,8 +44,11 @@ import chat.stoat.api.routes.server.fetchMembers
 import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.composables.generic.CountableListHeader
 import chat.stoat.composables.generic.Presence
+import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.SheetHeaderPadding
 import chat.stoat.composables.generic.presenceFromStatus
+import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.User
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -57,7 +62,11 @@ val DO_NOT_FETCH_OFFLINE_MEMBERS_SERVERS = listOf(
 sealed class MemberListSheetItem {
     data class MemberItem(val member: Member) : MemberListSheetItem()
     data class UserItem(val user: User) : MemberListSheetItem()
-    data class CategoryItem(val category: String, val count: Int) : MemberListSheetItem()
+    data class CategoryItem(
+        val category: String,
+        val count: Int,
+        val icon: AutumnResource? = null
+    ) : MemberListSheetItem()
 }
 
 class MemberListSheetViewModel(
@@ -116,7 +125,13 @@ class MemberListSheetViewModel(
             // Hoisted roles
             Roles.inOrder(serverId) { it.hoist == true }.forEach { role ->
                 val members = categories[role.name] ?: return@forEach
-                fullItemList.add(MemberListSheetItem.CategoryItem(role.name ?: "", members.size))
+                fullItemList.add(
+                    MemberListSheetItem.CategoryItem(
+                        role.name ?: "",
+                        members.size,
+                        role.icon
+                    )
+                )
                 members.forEach { member ->
                     fullItemList.add(MemberListSheetItem.MemberItem(member))
                 }
@@ -312,6 +327,17 @@ fun MemberListSheet(
                         CountableListHeader(
                             text = item.category,
                             count = item.count,
+                            icon = {
+                                if (item.icon == null) return@CountableListHeader
+                                RemoteImage(
+                                    url = "$STOAT_FILES/icons/${item.icon.id}",
+                                    contentScale = ContentScale.Fit,
+                                    description = null,
+                                    modifier = Modifier
+                                        .padding(end = 8.dp)
+                                        .size(16.dp)
+                                )
+                            },
                             backgroundColor = MaterialTheme.colorScheme.surfaceContainerLow
                         )
                     }

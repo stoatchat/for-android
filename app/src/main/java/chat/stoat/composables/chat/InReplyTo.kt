@@ -13,12 +13,12 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -28,9 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.internals.SpecialUsers
 import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.channel.fetchSingleMessage
+import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 import java.util.concurrent.CancellationException
 
@@ -52,6 +55,7 @@ fun InReplyTo(
     val contentColor = LocalContentColor.current
     val usernameColor =
         message?.let { authorColour(it) } ?: Brush.solidColor(contentColor)
+    val roleIcon = message?.let { authorRoleIcon(it) }
 
     val serverId = remember(channelId) { StoatAPI.channelCache[channelId]?.server }
 
@@ -107,11 +111,26 @@ fun InReplyTo(
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
 
+                if (roleIcon != null) {
+                    RemoteImage(
+                        url = "$STOAT_FILES/icons/${roleIcon.id}",
+                        contentScale = ContentScale.Fit,
+                        description = null,
+                        modifier = Modifier
+                            .size(12.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+
                 InlineBadges(
                     bot = message.masquerade == null && author?.bot != null,
                     bridge = message.masquerade != null && author?.bot != null,
+                    platformModeration = author?.id == SpecialUsers.PLATFORM_MODERATION_USER,
+                    teamMember = author?.id in SpecialUsers.TEAM_MEMBER_FLAIRS.keys,
+                    webhook = message.webhook != null,
                     colour = contentColor.copy(alpha = 0.5f),
-                    modifier = Modifier.size(8.dp),
+                    modifier = Modifier.size(12.dp),
                     followingIfAny = {
                         Spacer(modifier = Modifier.width(4.dp))
                     }
