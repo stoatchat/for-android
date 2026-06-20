@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.composables.chat.viewUrlInBrowser
+import chat.stoat.core.model.data.STOAT_SUPPORT
 
 @Composable
 fun WebHookUserSheet(modifier: Modifier = Modifier) {
@@ -65,7 +66,7 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
-                viewUrlInBrowser(context, "https://support.stoat.chat/kb/server-management/integrations-and-bots/webhooks")
+                viewUrlInBrowser(context, "$STOAT_SUPPORT/kb/server-management/integrations-and-bots/webhooks")
             },
             modifier = Modifier
                 .fillMaxWidth()
