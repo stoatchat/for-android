@@ -76,7 +76,6 @@ import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownAnnotator
 import com.mikepenz.markdown.model.markdownInlineContent
 import com.mikepenz.markdown.model.rememberMarkdownState
-import java.util.concurrent.ConcurrentHashMap
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
 import io.ratex.RaTeXEngine
@@ -90,10 +89,18 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.parser.MarkdownParser
+import java.util.concurrent.ConcurrentHashMap
 
 private data class MathEntry(val key: String, val latex: String, val displayMode: Boolean)
 
 private val mathSizeCache = ConcurrentHashMap<Triple<String, Boolean, Float>, Size>()
+
+// Hard-cap ratex blocks size so adversarial expressions can't crash the layout engine
+private const val MAX_MATH_DIMENSION_PX = 4096f
+private fun Size.clampForLayout(): Size = Size(
+    width.coerceIn(0f, MAX_MATH_DIMENSION_PX),
+    height.coerceIn(0f, MAX_MATH_DIMENSION_PX),
+)
 
 private fun collectMathEntries(node: ASTNode, content: String): List<MathEntry> {
     val entries = mutableListOf<MathEntry>()
@@ -103,10 +110,12 @@ private fun collectMathEntries(node: ASTNode, content: String): List<MathEntry> 
                 val latex = child.getTextInNode(content).toString().removeSurrounding("$")
                 entries += MathEntry("math:i:$latex", latex, false)
             }
+
             GFMElementTypes.BLOCK_MATH -> {
                 val latex = child.getTextInNode(content).toString().removeSurrounding("$$").trim()
                 entries += MathEntry("math:b:$latex", latex, true)
             }
+
             else -> entries += collectMathEntries(child, content)
         }
     }
@@ -117,7 +126,9 @@ private fun collectEmoteUlids(node: ASTNode, content: String): List<String> {
     val ulids = mutableListOf<String>()
     node.children.forEach { child ->
         when (child.type) {
-            CUSTOM_EMOTE_ELEMENT_TYPE -> ulids += child.getTextInNode(content).toString().removeSurrounding(":")
+            CUSTOM_EMOTE_ELEMENT_TYPE -> ulids += child.getTextInNode(content).toString()
+                .removeSurrounding(":")
+
             else -> ulids += collectEmoteUlids(child, content)
         }
     }
@@ -212,11 +223,16 @@ fun ChatMarkdown(
     var mathSizes by remember(mathEntries, fontSizePx) {
         mutableStateOf(buildMap {
             mathEntries.forEach { entry ->
-                mathSizeCache[Triple(entry.latex, entry.displayMode, fontSizePx)]?.let { put(entry.key, it) }
+                mathSizeCache[Triple(
+                    entry.latex,
+                    entry.displayMode,
+                    fontSizePx
+                )]?.let { put(entry.key, it) }
             }
         })
     }
-    val uncachedEntries = mathEntries.filter { mathSizeCache[Triple(it.latex, it.displayMode, fontSizePx)] == null }
+    val uncachedEntries =
+        mathEntries.filter { mathSizeCache[Triple(it.latex, it.displayMode, fontSizePx)] == null }
     LaunchedEffect(mathEntries, fontSizePx) {
         if (uncachedEntries.isEmpty()) return@LaunchedEffect
         withContext(Dispatchers.IO) { RaTeXFontLoader.ensureLoaded(context) }
@@ -224,12 +240,14 @@ fun ChatMarkdown(
             buildMap {
                 uncachedEntries.forEach { entry ->
                     try {
-                        val dl = RaTeXEngine.parseBlocking(entry.latex, entry.displayMode, onSurfaceArgb)
+                        val dl =
+                            RaTeXEngine.parseBlocking(entry.latex, entry.displayMode, onSurfaceArgb)
                         val r = RaTeXRenderer(dl, fontSizePx) { RaTeXFontLoader.getTypeface(it) }
-                        val size = Size(r.widthPx, r.totalHeightPx)
+                        val size = Size(r.widthPx, r.totalHeightPx).clampForLayout()
                         mathSizeCache[Triple(entry.latex, entry.displayMode, fontSizePx)] = size
                         put(entry.key, size)
-                    } catch (_: Exception) { }
+                    } catch (_: Exception) {
+                    }
                 }
             }
         }
@@ -260,7 +278,8 @@ fun ChatMarkdown(
                 }
 
                 GFMElementTypes.BLOCK_MATH -> {
-                    val latex = child.getTextInNode(content).toString().removeSurrounding("$$").trim()
+                    val latex =
+                        child.getTextInNode(content).toString().removeSurrounding("$$").trim()
                     if (latex.isNotEmpty()) appendInlineContent("math:b:$latex", latex)
                     true
                 }
@@ -457,61 +476,70 @@ fun ChatMarkdown(
                         } else {
                             fontSize * 4f to fontSize * 1.5f
                         }
-                        put(entry.key, InlineTextContent(
-                            Placeholder(
-                                width = widthSp,
-                                height = heightSp,
-                                placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
-                            )
-                        ) { latex ->
-                            val foreground = LocalContentColor.current
-                            AndroidView(
-                                factory = { ctx -> RaTeXView(ctx) },
-                                update = { view ->
-                                    view.displayMode = entry.displayMode
-                                    view.latex = latex
-                                    view.fontSize = with(density) { fontSize.toPx().toDp().value }
-                                    view.color = foreground.toArgb()
-                                },
-                                modifier = Modifier.fillMaxSize(),
-                            )
-                        })
+                        put(
+                            entry.key, InlineTextContent(
+                                Placeholder(
+                                    width = widthSp,
+                                    height = heightSp,
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                                )
+                            ) { latex ->
+                                val foreground = LocalContentColor.current
+                                AndroidView(
+                                    factory = { ctx -> RaTeXView(ctx) },
+                                    update = { view ->
+                                        view.displayMode = entry.displayMode
+                                        view.latex = latex
+                                        view.fontSize =
+                                            with(density) { fontSize.toPx().toDp().value }
+                                        view.color = foreground.toArgb()
+                                    },
+                                    modifier = Modifier.fillMaxSize(),
+                                )
+                            })
                     }
                     emoteUlids.forEach { ulid ->
-                        put("emote:$ulid", InlineTextContent(
-                            Placeholder(
-                                width = fontSize * 1.5f,
-                                height = fontSize * 1.5f,
-                                placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
-                            )
-                        ) { _ ->
-                            val emote = StoatAPI.emojiCache[ulid]
-                            if (emote == null) {
-                                LaunchedEffect(ulid) {
-                                    try {
-                                        StoatAPI.emojiCache[ulid] = fetchEmoji(ulid)
-                                    } catch (_: Exception) {
+                        put(
+                            "emote:$ulid", InlineTextContent(
+                                Placeholder(
+                                    width = fontSize * 1.5f,
+                                    height = fontSize * 1.5f,
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                                )
+                            ) { _ ->
+                                val emote = StoatAPI.emojiCache[ulid]
+                                if (emote == null) {
+                                    LaunchedEffect(ulid) {
+                                        try {
+                                            StoatAPI.emojiCache[ulid] = fetchEmoji(ulid)
+                                        } catch (_: Exception) {
+                                        }
+                                    }
+                                } else {
+                                    with(LocalDensity.current) {
+                                        RemoteImage(
+                                            url = "$STOAT_FILES/emojis/$ulid",
+                                            description = emote.name,
+                                            contentScale = ContentScale.Fit,
+                                            modifier = Modifier
+                                                .width((fontSize * 1.5f).toDp())
+                                                .height((fontSize * 1.5f).toDp())
+                                                .clickable(
+                                                    interactionSource = remember { MutableInteractionSource() },
+                                                    indication = null,
+                                                ) {
+                                                    scope.launch {
+                                                        ActionChannel.send(
+                                                            Action.EmoteInfo(
+                                                                ulid
+                                                            )
+                                                        )
+                                                    }
+                                                },
+                                        )
                                     }
                                 }
-                            } else {
-                                with(LocalDensity.current) {
-                                    RemoteImage(
-                                        url = "$STOAT_FILES/emojis/$ulid",
-                                        description = emote.name,
-                                        contentScale = ContentScale.Fit,
-                                        modifier = Modifier
-                                            .width((fontSize * 1.5f).toDp())
-                                            .height((fontSize * 1.5f).toDp())
-                                            .clickable(
-                                                interactionSource = remember { MutableInteractionSource() },
-                                                indication = null,
-                                            ) {
-                                                scope.launch { ActionChannel.send(Action.EmoteInfo(ulid)) }
-                                            },
-                                    )
-                                }
-                            }
-                        })
+                            })
                     }
                 }
             ),
