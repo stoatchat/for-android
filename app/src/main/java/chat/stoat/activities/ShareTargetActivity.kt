@@ -1,5 +1,7 @@
 package chat.stoat.activities
 
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -148,15 +150,38 @@ class ShareTargetActivity : ComponentActivity() {
             }
         }
 
+        val nonNullMedia = media.filterNotNull()
+        val safeMedia = nonNullMedia.filter { isAcceptableShareUri(this, it) }
+        if (nonNullMedia.isNotEmpty() && safeMedia.isEmpty()) {
+            Toast.makeText(
+                this,
+                getString(R.string.share_target_invalid_intent),
+                Toast.LENGTH_SHORT
+            ).show()
+
+            finish()
+            return
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             ShareTargetScreen(
                 text = text,
-                media = media.filterNotNull(),
+                media = safeMedia,
                 onFinished = { finish() }
             )
         }
+    }
+
+    private fun isAcceptableShareUri(context: Context, uri: Uri): Boolean {
+        if (!ContentResolver.SCHEME_CONTENT.equals(uri.scheme, ignoreCase = true)) {
+            return false
+        }
+
+        val authority = uri.authority ?: return false
+        val pkg = context.packageName
+        return authority != pkg && authority != "$pkg.fileprovider"
     }
 }
 
