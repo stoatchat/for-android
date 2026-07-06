@@ -84,6 +84,23 @@
     <string name="mfa_password_header">Enter your password</string>
     <string name="mfa_password_lead">Enter your password to continue.</string>
 
+    <string name="mfa_prompt_title">Verify it\'s you</string>
+    <string name="mfa_prompt_lead">For your security, confirm this action with one of your verification methods.</string>
+    <string name="mfa_prompt_confirm">Confirm</string>
+    <string name="mfa_prompt_load_error_title">Something went wrong</string>
+    <string name="mfa_prompt_load_error_description">Your verification methods couldn\'t be loaded.</string>
+    <string name="mfa_prompt_retry">Retry</string>
+    <string name="mfa_prompt_no_methods_title">No methods available</string>
+    <string name="mfa_prompt_no_methods_description">This account doesn\'t have any verification methods that can authorise this action.</string>
+    <string name="mfa_prompt_close">Close</string>
+    <string name="mfa_method_password">Password</string>
+    <string name="mfa_method_totp">Authenticator app</string>
+    <string name="mfa_method_recovery">Recovery code</string>
+    <string name="mfa_error_invalid_credentials">Incorrect password. Please try again.</string>
+    <string name="mfa_error_invalid_token">That code wasn\'t accepted. It may be incorrect or expired. Please try again.</string>
+    <string name="mfa_error_disallowed_method">This verification method isn\'t allowed for this action.</string>
+    <string name="mfa_error_generic">Something went wrong (%1$s).</string>
+
     <string name="about">About</string>
     <string name="about_full_name">Stoat for Android</string>
     <string name="about_brought_to_you_by">Brought to you with ❤️ by the Stoat team.</string>
@@ -733,7 +750,38 @@
     <string name="settings_account_mfa_totp_manage_alt">Manage Authenticator App</string>
 
     <string name="settings_mfa">Two-Factor Authentication</string>
+    <string name="settings_mfa_status">Two-factor authentication is</string>
+    <string name="settings_mfa_status_enabled">enabled</string>
+    <string name="settings_mfa_status_not_set_up">not set up</string>
+    <string name="settings_mfa_status_not_set_up_description">You don\'t have any 2FA methods set up. You should set up 2FA to add an extra layer of security to your account.</string>
     <string name="settings_mfa_totp">Authenticator App</string>
+    <string name="settings_mfa_disable_totp">Disable Authenticator App</string>
+    <string name="settings_mfa_disable_totp_description">Disabling your Authenticator App will remove it as a 2FA method for your account. You will no longer be able to use it to log in.</string>
+    <string name="settings_mfa_disable_totp_cta">Disable</string>
+    <string name="settings_mfa_enable_totp_description">Protect your account with 6-digit codes from apps like Google Authenticator, Aegis, or Authy.</string>
+    <string name="settings_mfa_enable_totp_cta">Set up</string>
+    <string name="settings_mfa_totp_setup_title">Set up your authenticator app</string>
+    <string name="settings_mfa_totp_setup_scan">Scan this QR code with your authenticator app.</string>
+    <string name="settings_mfa_totp_setup_manual">Or enter this key manually:</string>
+    <string name="settings_mfa_totp_setup_copy_secret">Copy key</string>
+    <string name="settings_mfa_totp_setup_code_lead">Then enter the 6-digit code the app shows:</string>
+    <string name="settings_mfa_totp_setup_code_label">6-digit code</string>
+    <string name="settings_mfa_totp_setup_verify">Verify and enable</string>
+    <string name="settings_mfa_totp_enabled_snackbar">Authenticator app enabled</string>
+    <string name="settings_mfa_totp_disabled_snackbar">Authenticator app disabled</string>
+    <string name="settings_mfa_recovery">Recovery Codes</string>
+    <string name="settings_mfa_recovery_description_active">Recovery codes let you regain access to your account if you lose your other 2FA methods. Keep them somewhere safe.</string>
+    <string name="settings_mfa_recovery_description_inactive">You don\'t have recovery codes yet. Generate them so you can regain access to your account if you lose your authenticator.</string>
+    <string name="settings_mfa_recovery_view_cta">View codes</string>
+    <string name="settings_mfa_recovery_regenerate_cta">Regenerate</string>
+    <string name="settings_mfa_recovery_generate_cta">Generate codes</string>
+    <string name="settings_mfa_recovery_dialog_title">Your recovery codes</string>
+    <string name="settings_mfa_recovery_dialog_hint">Each code can be used once. Store them somewhere safe — anyone with these codes can access your account.</string>
+    <string name="settings_mfa_recovery_copy">Copy all</string>
+    <string name="settings_mfa_recovery_dialog_done">Done</string>
+    <string name="settings_mfa_security_keys">Security Keys</string>
+    <string name="settings_mfa_security_keys_web_manage_description">You have security keys enabled on your account. You can view, add, and remove security keys your security keys from your account settings in a web browser.</string>
+    <string name="settings_mfa_security_keys_web_manage_cta">Open browser</string>
 
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_profile_picture">Profile picture</string>

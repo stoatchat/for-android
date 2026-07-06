@@ -9,6 +9,7 @@ import chat.stoat.screens.login.MfaScreenViewModel
 import chat.stoat.screens.settings.AccountSettingsScreenViewModel
 import chat.stoat.screens.settings.AppearanceSettingsScreenViewModel
 import chat.stoat.screens.settings.DebugSettingsScreenViewModel
+import chat.stoat.screens.settings.MfaSettingsScreenViewModel
 import chat.stoat.screens.settings.NotificationsSettingsScreenViewModel
 import chat.stoat.screens.settings.ProfileSettingsScreenViewModel
 import chat.stoat.screens.settings.SettingsScreenViewModel
@@ -34,4 +35,5 @@ val viewModelModule = module {
     viewModel { AppearanceSettingsScreenViewModel(androidApplication()) }
     viewModel { ChannelSettingsOverviewViewModel(androidApplication()) }
     viewModel { AccountSettingsScreenViewModel(androidApplication()) }
+    viewModel { MfaSettingsScreenViewModel(androidApplication()) }
 }

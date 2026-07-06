@@ -10,6 +10,7 @@ import chat.stoat.api.StoatAPI.initialize
 import chat.stoat.api.internals.Members
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
+import chat.stoat.api.routes.account.MFA_TICKET_HEADER_NAME
 import chat.stoat.api.routes.user.fetchSelf
 import chat.stoat.api.unreads.Unreads
 import chat.stoat.core.model.data.STOAT_BASE
@@ -106,7 +107,7 @@ val StoatHttp = HttpClient(OkHttp) {
     val chuckerInterceptor = ChuckerInterceptor.Builder(StoatApplication.instance)
         .collector(chuckerCollector)
         .maxContentLength(250_000L)
-        .redactHeaders(StoatAPI.TOKEN_HEADER_NAME)
+        .redactHeaders(StoatAPI.TOKEN_HEADER_NAME, MFA_TICKET_HEADER_NAME)
         .alwaysReadResponseBody(true)
         .createShortcut(false)
         .build()

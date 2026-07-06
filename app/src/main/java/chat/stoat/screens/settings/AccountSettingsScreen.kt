@@ -435,7 +435,7 @@ fun AccountSettingsScreen(
                             }
                             Spacer(modifier = Modifier.width(16.dp))
                             Switch(
-                                checked = viewModel.mfaState?.totpMfa == true,
+                                checked = viewModel.mfaState?.totpMfa == true || viewModel.mfaState?.securityKeyMfa == true,
                                 onCheckedChange = null
                             )
                         }

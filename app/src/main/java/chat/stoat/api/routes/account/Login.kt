@@ -13,9 +13,17 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.descriptors.PolymorphicKind
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 @Serializable
 data class LoginNegotiation(
@@ -51,17 +59,49 @@ data class LoginMfaAmendmentRecoveryCode(
     val friendlyName: String
 )
 
+/**
+ * To add a new MFA method, add a variant here plus its branch in [MfaResponseSerializer]
+ * then describe the UI in [chat.stoat.composables.mfa.MfaMethod].
+ */
+@Serializable(with = MfaResponseSerializer::class)
+sealed interface MfaResponse
+
+@Serializable
+data class MfaResponsePassword(
+    val password: String
+) : MfaResponse
+
 @Serializable
 data class MfaResponseRecoveryCode(
     @SerialName("recovery_code")
     val recoveryCode: String
-)
+) : MfaResponse
 
 @Serializable
 data class MfaResponseTotpCode(
     @SerialName("totp_code")
     val totpCode: String
-)
+) : MfaResponse
+
+object MfaResponseSerializer : KSerializer<MfaResponse> {
+    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+    override val descriptor: SerialDescriptor =
+        buildSerialDescriptor("MfaResponse", PolymorphicKind.SEALED)
+
+    override fun serialize(encoder: Encoder, value: MfaResponse) = when (value) {
+        is MfaResponsePassword ->
+            encoder.encodeSerializableValue(MfaResponsePassword.serializer(), value)
+
+        is MfaResponseRecoveryCode ->
+            encoder.encodeSerializableValue(MfaResponseRecoveryCode.serializer(), value)
+
+        is MfaResponseTotpCode ->
+            encoder.encodeSerializableValue(MfaResponseTotpCode.serializer(), value)
+    }
+
+    override fun deserialize(decoder: Decoder): MfaResponse =
+        throw UnsupportedOperationException("MfaResponse is only ever sent to the API")
+}
 
 @Serializable
 data class MfaLoginSpec(
