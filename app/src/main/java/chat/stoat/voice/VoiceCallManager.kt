@@ -8,6 +8,7 @@ import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
+import chat.stoat.api.routes.misc.LiveKitNode
 import chat.stoat.api.routes.misc.Root
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.api.routes.voice.JoinCallResponse
@@ -15,20 +16,30 @@ import chat.stoat.api.routes.voice.joinCall
 import chat.stoat.composables.voice.VoiceSound
 import chat.stoat.composables.voice.VoiceSoundPlayer
 import chat.stoat.services.OngoingCallService
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.request.get
+import io.ktor.http.isSuccess
 import io.livekit.android.LiveKit
 import io.livekit.android.events.RoomEvent
 import io.livekit.android.room.Room
 import io.livekit.android.room.track.RemoteAudioTrack
 import io.livekit.android.room.track.Track
 import io.livekit.android.util.flow
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Owns the lifecycle of the current voice call.
@@ -59,6 +70,8 @@ object VoiceCallManager {
         requestedChannelId = channelId
         isSheetVisible = true
     }
+
+    private val probeClient by lazy { HttpClient(OkHttp) }
 
     private var micWasOnBeforeDeafen = false
     private var soundPlayer: VoiceSoundPlayer? = null
@@ -241,6 +254,41 @@ object VoiceCallManager {
         }
     }
 
+    private suspend fun fastestNode(nodes: List<LiveKitNode>): LiveKitNode? =
+        withTimeoutOrNull(5.seconds) {
+            try {
+                coroutineScope {
+                    val winner = CompletableDeferred<LiveKitNode>()
+                    val probes = nodes.map { node ->
+                        launch {
+                            try {
+                                val probeUrl = node.publicUrl
+                                    .replaceFirst("wss://", "https://")
+                                    .replaceFirst("ws://", "http://")
+                                if (probeClient.get(probeUrl).status.isSuccess()) {
+                                    winner.complete(node)
+                                }
+                            } catch (_: Exception) {
+                            }
+                        }
+                    }
+                    launch {
+                        probes.joinAll()
+                        winner.completeExceptionally(
+                            IllegalStateException("No LiveKit node reachable")
+                        )
+                    }
+                    try {
+                        winner.await()
+                    } finally {
+                        coroutineContext.cancelChildren()
+                    }
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
+
     private suspend fun fetchVoiceToken(channelId: String): JoinCallResponse? {
         val root: Root
         try {
@@ -267,7 +315,13 @@ object VoiceCallManager {
             return null
         }
 
-        val node = lk.nodes.random()
+        val node = fastestNode(lk.nodes)
+        if (node == null) {
+            logcat(LogPriority.ERROR) { "No LiveKit node responded to probing!" }
+            errorResource = R.string.voice_error_no_nodes
+            return null
+        }
+
         return try {
             joinCall(channelId, node.name)
         } catch (e: Exception) {
