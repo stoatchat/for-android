@@ -28,7 +28,6 @@ class ExperimentInstance(default: Boolean) {
 object Experiments {
     val usePolar = ExperimentInstance(false)
     val enableServerIdentityOptions = ExperimentInstance(false)
-    val useVoiceChats2p0 = ExperimentInstance(false)
 
     suspend fun hydrateWithKv() {
         val kvStorage = KVStorage(StoatApplication.instance)
@@ -44,9 +43,6 @@ object Experiments {
         )
         enableServerIdentityOptions.setEnabled(
             kvStorage.getBoolean("exp/enableServerIdentityOptions") == true
-        )
-        useVoiceChats2p0.setEnabled(
-            kvStorage.getBoolean("exp/useVoiceChats2p0") == true
         )
     }
 }

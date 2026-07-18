@@ -116,7 +116,6 @@ import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.has
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.microservices.autumn.FileArgs
-import chat.stoat.api.settings.Experiments
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.DateDivider
@@ -648,8 +647,7 @@ fun ChannelScreen(
                         if (isDmLike &&
                             viewModel.channel?.voice == null &&
                             StoatAPI.voiceStateCache[channelId]?.participants.isNullOrEmpty() &&
-                            channelPermissions has PermissionBit.Connect &&
-                            Experiments.useVoiceChats2p0.isEnabled
+                            channelPermissions has PermissionBit.Connect
                         ) {
                             IconButton(onClick = {
                                 scope.launch {
@@ -994,8 +992,7 @@ fun ChannelScreen(
                                 if ((viewModel.channel?.channelType == ChannelType.VoiceChannel ||
                                             viewModel.channel?.voice != null ||
                                             isDmLikeWithOngoingCall) &&
-                                    channelPermissions has PermissionBit.Connect &&
-                                    Experiments.useVoiceChats2p0.isEnabled
+                                    channelPermissions has PermissionBit.Connect
                                 ) {
                                     JoinVoiceChannelButton(channelId)
                                 }

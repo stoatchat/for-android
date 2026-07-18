@@ -26,7 +26,6 @@ import chat.stoat.BuildConfig
 import chat.stoat.StoatApplication
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.persistence.KVStorage
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.settings.dsl.SubcategoryContentInsets
@@ -40,7 +39,6 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
             usePolarChecked.value = Experiments.usePolar.isEnabled
             enableServerIdentityOptionsChecked.value =
                 Experiments.enableServerIdentityOptions.isEnabled
-            useVoiceChats2p0.value = Experiments.useVoiceChats2p0.isEnabled
         }
     }
 
@@ -89,15 +87,6 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
         }
     }
 
-    val useVoiceChats2p0 = mutableStateOf(false)
-
-    fun setUseVoiceChats2p0(value: Boolean) {
-        viewModelScope.launch {
-            kv.set("exp/useVoiceChats2p0", value)
-            Experiments.useVoiceChats2p0.setEnabled(value)
-            useVoiceChats2p0.value = value
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -180,22 +169,6 @@ fun ExperimentsSettingsScreen(
                 )
             },
             modifier = Modifier.clickable { viewModel.setEnableServerIdentityOptionsChecked(!viewModel.enableServerIdentityOptionsChecked.value) }
-        )
-
-        ListItem(
-            headlineContent = {
-                Text("Voice Chats 2.0")
-            },
-            supportingContent = {
-                UIMarkdown("Enable voice chats support.\n‼️ **Not available in this build!** ‼️")
-            },
-            trailingContent = {
-                Switch(
-                    checked = viewModel.useVoiceChats2p0.value,
-                    onCheckedChange = null
-                )
-            },
-            modifier = Modifier.clickable { viewModel.setUseVoiceChats2p0(!viewModel.useVoiceChats2p0.value) }
         )
 
         Subcategory(
