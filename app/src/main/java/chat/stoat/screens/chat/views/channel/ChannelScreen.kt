@@ -124,6 +124,7 @@ import chat.stoat.composables.chat.Message
 import chat.stoat.composables.chat.MessageField
 import chat.stoat.composables.chat.SystemMessage
 import chat.stoat.composables.emoji.EmojiPicker
+import chat.stoat.composables.voice.VoiceCallBanner
 import chat.stoat.composables.generic.GroupIcon
 import chat.stoat.composables.generic.PresenceBadge
 import chat.stoat.composables.generic.UserAvatar
@@ -641,6 +642,28 @@ fun ChannelScreen(
                         }
                     },
                     actions = {
+                        val isDmLike =
+                            viewModel.channel?.channelType == ChannelType.DirectMessage ||
+                                    viewModel.channel?.channelType == ChannelType.Group
+                        if (isDmLike &&
+                            viewModel.channel?.voice == null &&
+                            StoatAPI.voiceStateCache[channelId]?.participants.isNullOrEmpty() &&
+                            channelPermissions has PermissionBit.Connect &&
+                            Experiments.useVoiceChats2p0.isEnabled
+                        ) {
+                            IconButton(onClick = {
+                                scope.launch {
+                                    ActionChannel.send(
+                                        Action.OpenVoiceChannelOverlay(channelId)
+                                    )
+                                }
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_call_24dp__fill),
+                                    contentDescription = stringResource(id = R.string.voice_start_call)
+                                )
+                            }
+                        }
                         IconButton(onClick = {
                             scope.launch {
                                 ActionChannel.send(
@@ -655,6 +678,7 @@ fun ChannelScreen(
                         }
                     }
                 )
+                VoiceCallBanner()
             }
         }
     ) { pv ->
@@ -961,7 +985,15 @@ fun ChannelScreen(
                                     }
                                 }
 
-                                if ((viewModel.channel?.channelType == ChannelType.VoiceChannel || viewModel.channel?.voice != null) &&
+                                val isDmLikeWithOngoingCall =
+                                    (viewModel.channel?.channelType == ChannelType.DirectMessage ||
+                                            viewModel.channel?.channelType == ChannelType.Group) &&
+                                            StoatAPI.voiceStateCache[channelId]
+                                                ?.participants
+                                                ?.isNotEmpty() == true
+                                if ((viewModel.channel?.channelType == ChannelType.VoiceChannel ||
+                                            viewModel.channel?.voice != null ||
+                                            isDmLikeWithOngoingCall) &&
                                     channelPermissions has PermissionBit.Connect &&
                                     Experiments.useVoiceChats2p0.isEnabled
                                 ) {

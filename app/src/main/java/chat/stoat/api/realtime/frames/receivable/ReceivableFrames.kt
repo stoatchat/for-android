@@ -271,6 +271,7 @@ data class VoiceChannelMoveFrame(
 data class UserVoiceStateUpdateFrame(
     val type: String = "UserVoiceStateUpdate",
     val id: String,
+    @SerialName("channel_id") val channelId: String,
     val data: PartialUserVoiceState
 )
 

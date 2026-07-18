@@ -21,6 +21,9 @@ class ChannelRegistrator(val context: Context) {
 
         const val CHANNEL_ID_GROUP_SOCIAL = "chat.stoat.c2dm.social"
         const val CHANNEL_ID_GROUP_SOCIAL_FRIENDREQUESTS = "chat.stoat.c2dm.social.friendrequests"
+
+        const val CHANNEL_ID_GROUP_VOICE = "chat.stoat.voice"
+        const val CHANNEL_ID_GROUP_VOICE_ONGOING = "chat.stoat.voice.ongoing"
     }
 
     private val notificationManager =
@@ -37,6 +40,12 @@ class ChannelRegistrator(val context: Context) {
             NotificationChannelGroup(
                 CHANNEL_ID_GROUP_SOCIAL,
                 context.getString(R.string.notification_channel_group_social)
+            )
+        )
+        notificationManager.createNotificationChannelGroup(
+            NotificationChannelGroup(
+                CHANNEL_ID_GROUP_VOICE,
+                context.getString(R.string.notification_channel_group_voice)
             )
         )
     }
@@ -62,6 +71,19 @@ class ChannelRegistrator(val context: Context) {
                 group = CHANNEL_ID_GROUP_CONVERSATIONS
                 description =
                     context.getString(R.string.notification_channel_messages_description)
+            }
+        )
+        notificationManager.createNotificationChannel(
+            NotificationChannel(
+                CHANNEL_ID_GROUP_VOICE_ONGOING,
+                context.getString(R.string.notification_channel_ongoing_call),
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                group = CHANNEL_ID_GROUP_VOICE
+                description =
+                    context.getString(R.string.notification_channel_ongoing_call_description)
+                setSound(null, null)
+                enableVibration(false)
             }
         )
     }

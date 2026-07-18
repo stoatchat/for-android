@@ -57,8 +57,11 @@ import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.SerializationException
+import logcat.LogPriority
+import logcat.asLog
 import logcat.logcat
 
 enum class DisconnectionState {
@@ -120,10 +123,18 @@ object RealtimeSocket {
             incoming.consumeEach { frame ->
                 if (frame is Frame.Text) {
                     val frameString = frame.readText()
-                    val frameType =
-                        StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
+                    try {
+                        val frameType =
+                            StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
 
-                    handleFrame(frameType, frameString)
+                        handleFrame(frameType, frameString)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        logcat(LogPriority.ERROR) {
+                            "Failed to handle frame: $frameString\n" + e.asLog()
+                        }
+                    }
                 }
             }
         }
@@ -886,10 +897,10 @@ object RealtimeSocket {
                 val userVoiceStateUpdateFrame =
                     StoatJson.decodeFromString(UserVoiceStateUpdateFrame.serializer(), rawFrame)
 
-                logcat { "Received user voice state update frame for user ${userVoiceStateUpdateFrame.id} in channel ${userVoiceStateUpdateFrame.id}." }
+                logcat { "Received user voice state update frame for user ${userVoiceStateUpdateFrame.id} in channel ${userVoiceStateUpdateFrame.channelId}." }
 
                 val existingChannelState =
-                    StoatAPI.voiceStateCache[userVoiceStateUpdateFrame.id] ?: return
+                    StoatAPI.voiceStateCache[userVoiceStateUpdateFrame.channelId] ?: return
 
                 val newParticipants = existingChannelState.participants.map {
                     if (it.id == userVoiceStateUpdateFrame.id) {
@@ -899,8 +910,8 @@ object RealtimeSocket {
                     }
                 }
 
-                StoatAPI.voiceStateCache[userVoiceStateUpdateFrame.id] =
-                    ChannelVoiceState(userVoiceStateUpdateFrame.id, newParticipants)
+                StoatAPI.voiceStateCache[userVoiceStateUpdateFrame.channelId] =
+                    ChannelVoiceState(userVoiceStateUpdateFrame.channelId, newParticipants)
             }
 
             "UserMoveVoiceChannel" -> {

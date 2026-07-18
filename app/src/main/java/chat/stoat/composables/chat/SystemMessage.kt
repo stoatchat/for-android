@@ -45,6 +45,7 @@ enum class SystemMessageType(val type: String) {
     USER_JOINED("user_joined"),
     MESSAGE_PINNED("message_pinned"),
     MESSAGE_UNPINNED("message_unpinned"),
+    CALL_STARTED("call_started"),
     TEXT("text")
 }
 
@@ -206,6 +207,16 @@ fun SystemMessage(message: Message) {
                     )
                 }
 
+                SystemMessageType.CALL_STARTED -> {
+                    ChatMarkdown(
+                        stringResource(
+                            R.string.system_message_call_started,
+                            message.system!!.by.mention()
+                        ),
+                        serverId = serverId
+                    )
+                }
+
                 SystemMessageType.TEXT -> {
                     message.system!!.content?.let { ChatMarkdown(it) }
                 }
@@ -329,6 +340,15 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
             )
         }
 
+        SystemMessageType.CALL_STARTED -> {
+            Icon(
+                painter = painterResource(R.drawable.ic_call_24dp__fill),
+                contentDescription = stringResource(R.string.system_message_call_started_alt),
+                tint = LocalContentColor.current,
+                modifier = modifier.size(size)
+            )
+        }
+
         SystemMessageType.TEXT -> {
             Icon(
                 painter = painterResource(R.drawable.ic_info_24dp),
@@ -356,6 +376,7 @@ private fun shapeForType(type: SystemMessageType): Shape {
         SystemMessageType.USER_JOINED -> MaterialShapes.Cookie9Sided
         SystemMessageType.MESSAGE_PINNED -> MaterialShapes.Clover4Leaf
         SystemMessageType.MESSAGE_UNPINNED -> MaterialShapes.Clover8Leaf
+        SystemMessageType.CALL_STARTED -> MaterialShapes.Fan
         SystemMessageType.TEXT -> MaterialShapes.Square
     }.toShape()
 }

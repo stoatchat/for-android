@@ -296,6 +296,7 @@
     <string name="system_message_user_joined_alt">User joined</string>
     <string name="system_message_message_pinned_alt">Message pinned</string>
     <string name="system_message_message_unpinned_alt">Message unpinned</string>
+    <string name="system_message_call_started_alt">Call started</string>
     <string name="system_message_text_alt">System message</string>
 
     <string name="system_message_ownership_changed">%1$s transferred ownership to %2$s</string>
@@ -310,6 +311,7 @@
     <string name="system_message_user_joined">%1$s joined</string>
     <string name="system_message_message_pinned">%1$s pinned a message to this channel</string>
     <string name="system_message_message_unpinned">%1$s unpinned a message from this channel</string>
+    <string name="system_message_call_started">%1$s started a call</string>
 
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
@@ -677,10 +679,28 @@
 
     <string name="voice_action_disconnect">Disconnect</string>
 
+    <string name="voice_action_mute">Mute</string>
+    <string name="voice_action_unmute">Unmute</string>
+    <string name="voice_action_deafen">Deafen</string>
+    <string name="voice_action_undeafen">Undeafen</string>
+    <string name="voice_action_video">Video</string>
+    <string name="voice_action_screen_share">Share screen</string>
+    <string name="voice_action_flip_camera">Flip camera</string>
+
+    <string name="voice_audio_output">Audio output</string>
+    <string name="voice_audio_output_speaker">Speaker</string>
+    <string name="voice_audio_output_earpiece">Earpiece</string>
+    <string name="voice_audio_output_wired_headset">Wired headset</string>
+
     <string name="voice_status_connecting">Connecting…</string>
     <string name="voice_status_reconnecting">Reconnecting…</string>
     <string name="voice_status_connected">Connected</string>
     <string name="voice_status_disconnected">No connection</string>
+
+    <string name="voice_notification_ongoing_call">Connected to voice</string>
+    <string name="voice_banner_tap_to_return">Tap to return to the call</string>
+    <string name="voice_start_call">Start a call</string>
+    <string name="voice_notification_fallback_channel_name">Voice channel</string>
 
     <string name="spark_notifications_rationale">Stay in the loop</string>
     <string name="spark_notifications_rationale_description">Enable notifications to be kept up to date with messages and mentions.</string>
@@ -921,6 +941,9 @@
     <string name="notification_channel_friend_requests_description">Incoming friend requests, as well as accepted requests you\'ve sent.</string>
     <string name="notification_channel_messages">Messages</string>
     <string name="notification_channel_messages_description">Unread messages from your conversations and channels.</string>
+    <string name="notification_channel_group_voice">Voice</string>
+    <string name="notification_channel_ongoing_call">Ongoing calls</string>
+    <string name="notification_channel_ongoing_call_description">Shown persistently while you are connected to a voice channel.</string>
 
     <string name="keyboard_shortcut_messaging">Messaging</string>
     <string name="keyboard_shortcut_messaging_new_line">New Line</string>

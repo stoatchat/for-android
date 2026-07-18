@@ -88,6 +88,7 @@ import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
+import chat.stoat.voice.VoiceCallManager
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.material.EasingTokens
 import chat.stoat.persistence.KVStorage
@@ -448,8 +449,9 @@ fun AppEntrypoint(
     onRetryConnection: () -> Unit,
     onUpdateNextDestination: (String) -> Unit = {}
 ) {
-    var showVoiceUI by rememberSaveable { mutableStateOf(false) }
-    var voiceChannelId by rememberSaveable { mutableStateOf<String?>(null) }
+    val showVoiceUI = VoiceCallManager.isSheetVisible
+    val hideVoiceUI = { VoiceCallManager.isSheetVisible = false }
+    val disconnectVoice = { VoiceCallManager.leave() }
 
     val chatUIScale by animateFloatAsState(
         if (showVoiceUI) 0.8f else 1.0f,
@@ -467,7 +469,7 @@ fun AppEntrypoint(
     )
 
     BackHandler(showVoiceUI) {
-        showVoiceUI = false
+        hideVoiceUI()
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -636,8 +638,7 @@ fun AppEntrypoint(
                                 navController.navigate("default")
                             },
                             onEnterVoiceUI = { channelId ->
-                                showVoiceUI = true
-                                voiceChannelId = channelId
+                                VoiceCallManager.openSheet(channelId)
                             },
                         )
                     }
@@ -760,7 +761,7 @@ fun AppEntrypoint(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }
                         ) {
-                            showVoiceUI = false
+                            hideVoiceUI()
                         }
                 )
             }
@@ -793,17 +794,14 @@ fun AppEntrypoint(
                             .padding(8.dp)
                     ) {
                         VoicePermissionSwitch(
-                            onCancel = {
-                                showVoiceUI = false
-                            }
+                            onCancel = disconnectVoice
                         ) {
-                            voiceChannelId?.let {
+                            VoiceCallManager.requestedChannelId?.let { channelId ->
+                                LaunchedEffect(channelId) {
+                                    VoiceCallManager.join(channelId)
+                                }
                                 VoiceSheet(
-                                    it,
-                                    onDisconnect = {
-                                        showVoiceUI = false
-                                        voiceChannelId = null
-                                    }
+                                    onDisconnect = disconnectVoice
                                 )
                             }
                         }

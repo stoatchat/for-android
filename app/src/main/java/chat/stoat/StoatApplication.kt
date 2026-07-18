@@ -10,6 +10,8 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
 import com.google.android.material.color.DynamicColors
+import io.livekit.android.LiveKit
+import io.livekit.android.util.LoggingLevel
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import org.koin.android.ext.koin.androidContext
@@ -24,6 +26,10 @@ class StoatApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
+
+        if (BuildConfig.DEBUG) {
+            LiveKit.loggingLevel = LoggingLevel.DEBUG
+        }
 
         startKoin {
             androidContext(this@StoatApplication)
