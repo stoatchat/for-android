@@ -210,12 +210,14 @@ fun formatLongAsTime(time: Long): String {
 @Composable
 fun Message(
     message: MessageSchema,
+    onClick: () -> Unit = {},
     onMessageContextMenu: () -> Unit = {},
     onAvatarClick: () -> Unit = {},
     onNameClick: (() -> Unit)? = null,
     canReply: Boolean = false,
     onReply: () -> Unit = {},
     onAddReaction: () -> Unit = {},
+    onJumpToMessage: (String) -> Unit = {},
     fromWebhook: Boolean = false,
     webhookName: String? = null,
     modifier: Modifier = Modifier,
@@ -270,7 +272,7 @@ fun Message(
             Row(
                 modifier = Modifier
                     .combinedClickable(
-                        onClick = {},
+                        onClick = onClick,
                         onDoubleClick = {},
                         onLongClick = {
                             onMessageContextMenu()
@@ -329,16 +331,15 @@ fun Message(
                                     replyMessage.author
                                 )
                             } == true),
-                        ) {
-                            // TODO Add jump to message
-                        }
+                            onMessageClick = onJumpToMessage,
+                        )
                     }
                 }
 
                 Row(
                     modifier = Modifier
                         .combinedClickable(
-                            onClick = {},
+                            onClick = onClick,
                             onDoubleClick = {
                                 if (canReply && LoadedSettings.messageReplyStyle == MessageReplyStyle.DoubleTap) {
                                     onReply()

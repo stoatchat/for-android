@@ -6,6 +6,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="share">Share</string>
+    <string name="_new">New</string>
+    <string name="retry">Retry</string>
     <string name="lets_go">Let\'s go</string>
     <string name="loading">Fetching some info, hang in there…</string>
     <string name="rate_limit_toast">Hold your horses! You\'re doing that too often in a short amount of time.</string>
@@ -278,6 +280,7 @@
 
     <string name="message_blocked">Blocked message</string>
     <string name="message_failed_to_send">Failed to send, long press for options</string>
+    <string name="message_jump_failed">Couldn’t load that message</string>
 
     <string name="message_not_supported">Message cannot be displayed.</string>
     <string name="message_not_supported_with_context">Message cannot be displayed (%1$s).</string>

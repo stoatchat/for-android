@@ -1,6 +1,7 @@
 package chat.stoat.composables.chat
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,7 +55,10 @@ fun String?.mention(): String {
 }
 
 @Composable
-fun SystemMessage(message: Message) {
+fun SystemMessage(
+    message: Message,
+    onClick: (() -> Unit)? = null,
+) {
     if (message.system == null) return
     val serverId = StoatAPI.channelCache[message.channel]?.server
 
@@ -75,6 +79,7 @@ fun SystemMessage(message: Message) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
                 .padding(horizontal = 10.dp, vertical = 4.dp)
                 .fillMaxWidth()
         ) {

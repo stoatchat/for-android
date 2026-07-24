@@ -63,6 +63,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
@@ -98,6 +99,8 @@ import chat.stoat.screens.about.AttributionScreen
 import chat.stoat.screens.changelogs.ReadChangelogScreen
 import chat.stoat.screens.chat.ChannelPinsScreen
 import chat.stoat.screens.chat.ChannelSearchScreen
+import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
+import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
 import chat.stoat.screens.chat.ChatRouterScreen
 import chat.stoat.screens.chat.standalone.CatchUpScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
@@ -426,6 +429,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 val StoatTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)
+val StoatTweenSize: FiniteAnimationSpec<IntSize> = tween(400, easing = EaseInOutExpo)
 val StoatTweenFloat: FiniteAnimationSpec<Float> = tween(400, easing = EaseInOutExpo)
 val StoatTweenDp: FiniteAnimationSpec<Dp> = tween(400, easing = EaseInOutExpo)
 val StoatTweenColour: FiniteAnimationSpec<Color> = tween(400, easing = EaseInOutExpo)
@@ -691,6 +695,14 @@ fun AppEntrypoint(
                         }
                     ) { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+                        val requestedMessageId =
+                            backStackEntry.savedStateHandle.get<String>(
+                                CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+                            )?.takeIf {
+                                backStackEntry.savedStateHandle.get<String>(
+                                    CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
+                                ) == channelId
+                            }
                         ChannelScreen(
                             channelId = channelId,
                             onToggleDrawer = {},
@@ -699,7 +711,16 @@ fun AppEntrypoint(
                             backButtonAction = {
                                 navController.popBackStack()
                             },
-                            useChatUI = true
+                            useChatUI = true,
+                            requestedMessageId = requestedMessageId,
+                            onRequestedMessageConsumed = {
+                                backStackEntry.savedStateHandle.remove<String>(
+                                    CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
+                                )
+                                backStackEntry.savedStateHandle.remove<String>(
+                                    CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+                                )
+                            },
                         )
                     }
 

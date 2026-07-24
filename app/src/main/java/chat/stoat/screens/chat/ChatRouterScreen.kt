@@ -65,6 +65,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import chat.stoat.BuildConfig
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
@@ -1028,6 +1029,7 @@ fun ChannelNavigator(
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
+    val currentTopEntry by topNav.currentBackStackEntryAsState()
 
     BackHandler(useDrawer && !disableBackHandler) {
         toggleDrawer()
@@ -1052,6 +1054,15 @@ fun ChannelNavigator(
             }
 
             is ChatRouterDestination.Channel -> {
+                val requestedChannelId =
+                    currentTopEntry?.savedStateHandle?.get<String>(
+                        CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
+                    )
+                val requestedMessageId =
+                    currentTopEntry?.savedStateHandle?.get<String>(
+                        CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+                    )?.takeIf { requestedChannelId == dest.channelId }
+
                 ChannelScreen(
                     channelId = dest.channelId,
                     onToggleDrawer = {
@@ -1067,6 +1078,15 @@ fun ChannelNavigator(
                     drawerGestureEnabled = drawerGestureEnabled,
                     setDrawerGestureEnabled = setDrawerGestureEnabled,
                     drawerIsOpen = drawerState?.isOpen == true,
+                    requestedMessageId = requestedMessageId,
+                    onRequestedMessageConsumed = {
+                        currentTopEntry?.savedStateHandle?.remove<String>(
+                            CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
+                        )
+                        currentTopEntry?.savedStateHandle?.remove<String>(
+                            CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+                        )
+                    },
                 )
             }
 

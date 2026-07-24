@@ -1,8 +1,10 @@
 package chat.stoat.composables.screens.chat
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.activities.StoatTweenInt
+import chat.stoat.activities.StoatTweenSize
 import chat.stoat.api.StoatAPI
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.UserAvatar
@@ -77,10 +81,16 @@ fun TypingIndicator(users: List<String>, serverId: String?) {
         enter = slideInVertically(
             animationSpec = StoatTweenInt,
             initialOffsetY = { it }
+        ) + expandVertically(
+            animationSpec = StoatTweenSize,
+            expandFrom = Alignment.Bottom,
         ) + fadeIn(animationSpec = StoatTweenFloat),
         exit = slideOutVertically(
             animationSpec = StoatTweenInt,
             targetOffsetY = { it }
+        ) + shrinkVertically(
+            animationSpec = StoatTweenSize,
+            shrinkTowards = Alignment.Bottom,
         ) + fadeOut(animationSpec = StoatTweenFloat)
     ) {
         Row(

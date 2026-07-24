@@ -274,7 +274,9 @@ dependencies {
 
     androidTestImplementation(libs.android.test.core)
     androidTestImplementation(libs.android.test.rules)
+    androidTestImplementation(libs.android.test.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    testImplementation(libs.junit4)
 }
 
 aboutLibraries {

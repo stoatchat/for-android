@@ -21,7 +21,9 @@ media3 = "1.9.2"
 telephoto = "1.0.0-alpha02"
 haze = "1.7.2"
 chucker = "4.3.1"
-androidx-test = "1.6.1"
+androidx-test = "1.7.0"
+espresso = "3.7.0"
+junit4 = "4.13.2"
 livekit = "2.26.1"
 livekit-compose = "2.4.0"
 koin = "4.2.1"
@@ -43,6 +45,7 @@ android-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1"
 android-material = { module = "com.google.android.material:material", version = "1.13.0" }
 android-test-core = { module = "androidx.test:runner", version.ref = "androidx-test" }
 android-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
+android-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 android-datastore = { module = "androidx.datastore:datastore", version = "1.1.7" }
 android-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.7" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
@@ -60,6 +63,7 @@ compose-material-icons-core = { module = "androidx.compose.material:material-ico
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+junit4 = { module = "junit:junit", version.ref = "junit4" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 activity-compose = { module = "androidx.activity:activity-compose", version = "1.10.1" }

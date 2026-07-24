@@ -58,6 +58,8 @@ import kotlinx.coroutines.launch
 
 private const val MAX_QUERY_LENGTH = 64
 private const val SEARCH_DEBOUNCE_MS = 350L
+const val CHANNEL_MESSAGE_JUMP_CHANNEL_KEY = "channelMessageJumpChannel"
+const val CHANNEL_MESSAGE_JUMP_MESSAGE_KEY = "channelMessageJumpMessage"
 
 enum class SearchSort(val apiValue: String, val label: Int) {
     RELEVANCE("Relevance", R.string.channel_search_sort_relevance),
@@ -209,7 +211,17 @@ fun ChannelSearchScreen(
                 containerColor = MaterialTheme.colorScheme.background
             )
         ) {
-            SearchResults(channelId = channelId, viewModel = viewModel)
+            SearchResults(
+                channelId = channelId,
+                viewModel = viewModel,
+                onMessageSelected = { messageId ->
+                    navController.previousBackStackEntry?.savedStateHandle?.apply {
+                        set(CHANNEL_MESSAGE_JUMP_CHANNEL_KEY, channelId)
+                        set(CHANNEL_MESSAGE_JUMP_MESSAGE_KEY, messageId)
+                    }
+                    navController.popBackStack()
+                },
+            )
         }
     }
 }
@@ -218,7 +230,8 @@ fun ChannelSearchScreen(
 @Composable
 private fun SearchResults(
     channelId: String,
-    viewModel: ChannelSearchScreenViewModel
+    viewModel: ChannelSearchScreenViewModel,
+    onMessageSelected: (String) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxHeight()) {
         if (viewModel.hasSearched) {
@@ -275,10 +288,17 @@ private fun SearchResults(
                         key = { i -> viewModel.results[i].id ?: i }
                     ) { i ->
                         val message = viewModel.results[i].copy(tail = false)
+                        val onClick = {
+                            message.id?.let(onMessageSelected)
+                            Unit
+                        }
                         if (message.system != null) {
-                            SystemMessage(message)
+                            SystemMessage(message, onClick = onClick)
                         } else {
-                            chat.stoat.composables.chat.Message(message = message)
+                            chat.stoat.composables.chat.Message(
+                                message = message,
+                                onClick = onClick,
+                            )
                         }
                     }
                 }

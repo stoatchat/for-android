@@ -75,6 +75,7 @@ fun RegularMessage(
     showReactBottomSheet: () -> Unit,
     putTextAtCursorPosition: (String) -> Unit,
     replyToMessage: suspend (String) -> Unit,
+    jumpToMessage: (String) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope(),
     mdAst: State? = null
 ) {
@@ -207,6 +208,7 @@ fun RegularMessage(
                     showReactBottomSheet()
                 }
             },
+            onJumpToMessage = jumpToMessage,
             fromWebhook = message.webhook != null,
             webhookName = message.webhook?.name,
             mdAst = mdAst,
