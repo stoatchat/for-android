@@ -177,19 +177,44 @@ fun ChannelPinsScreen(
                         }
                     }
                 } else {
-                    LazyColumn(contentPadding = WindowInsets.navigationBars.asPaddingValues()) {
-                        items(
-                            viewModel.pinnedMessages.size,
-                            key = { i -> viewModel.pinnedMessages[i].id ?: i }) { i ->
-                            val message = viewModel.pinnedMessages[i].copy(tail = false)
-                            if (message.system != null) {
-                                SystemMessage(message)
-                            } else {
-                                chat.stoat.composables.chat.Message(message = message)
+                    PinnedMessageList(
+                        messages = viewModel.pinnedMessages,
+                        onMessageSelected = { messageId ->
+                            navController.previousBackStackEntry?.savedStateHandle?.apply {
+                                set(CHANNEL_MESSAGE_JUMP_CHANNEL_KEY, channelId)
+                                set(CHANNEL_MESSAGE_JUMP_MESSAGE_KEY, messageId)
                             }
+                            navController.popBackStack()
                         }
-                    }
+                    )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+internal fun PinnedMessageList(
+    messages: List<Message>,
+    onMessageSelected: (String) -> Unit,
+) {
+    LazyColumn(contentPadding = WindowInsets.navigationBars.asPaddingValues()) {
+        items(
+            messages.size,
+            key = { index -> messages[index].id ?: index },
+        ) { index ->
+            val message = messages[index].copy(tail = false)
+            val onClick = {
+                message.id?.let(onMessageSelected)
+                Unit
+            }
+            if (message.system != null) {
+                SystemMessage(message, onClick = onClick)
+            } else {
+                chat.stoat.composables.chat.Message(
+                    message = message,
+                    onClick = onClick,
+                )
             }
         }
     }
