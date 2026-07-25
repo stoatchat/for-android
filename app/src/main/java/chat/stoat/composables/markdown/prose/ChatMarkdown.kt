@@ -58,6 +58,8 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.isInviteUri
 import chat.stoat.internals.resolveTimestamp
+import chat.stoat.internals.toNavigationAction
+import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.markdown.CHANNEL_MENTION_ELEMENT_TYPE
 import chat.stoat.markdown.CUSTOM_EMOTE_ELEMENT_TYPE
 import chat.stoat.markdown.MASS_MENTION_ELEMENT_TYPE
@@ -399,6 +401,13 @@ fun ChatMarkdown(
                     else -> {
                         try {
                             val parsed = uri.toUri()
+                            val stoatLink = parsed.toStoatWebLinkOrNull()
+                            if (stoatLink != null) {
+                                scope.launch {
+                                    ActionChannel.send(stoatLink.toNavigationAction())
+                                }
+                                return
+                            }
                             if (parsed.isInviteUri()) {
                                 context.startActivity(
                                     Intent(context, InviteActivity::class.java)

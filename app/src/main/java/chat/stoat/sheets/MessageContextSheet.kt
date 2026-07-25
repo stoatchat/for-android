@@ -169,11 +169,13 @@ fun MessageContextSheet(
                             return@SheetButton
                         }
 
-                        val server = StoatAPI.serverCache.values.find { server ->
-                            server.channels?.contains(message.channel) ?: false
+                        val serverId = StoatAPI.channelCache[message.channel]?.server
+                        val messagePath = if (serverId != null) {
+                            "/server/$serverId/channel/${message.channel}/${message.id}"
+                        } else {
+                            "/channel/${message.channel}/${message.id}"
                         }
-                        val messageLink =
-                            "$STOAT_WEB_APP/server/${server?.id}/channel/${message.channel}/${message.id}"
+                        val messageLink = "$STOAT_WEB_APP$messagePath"
 
                         clipboardManager.setText(AnnotatedString(messageLink))
                         if (Platform.needsShowClipboardNotification()) {

@@ -85,6 +85,7 @@ import chat.stoat.composables.screens.chat.drawer.ChannelSideDrawer
 import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.c2dm.NotificationDeepLink
+import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.zero
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.dialogs.safety.ReportMessageDialog
@@ -162,6 +163,8 @@ class ChatRouterViewModel(
     var showEarlyAccessSpark by mutableStateOf(false)
     var showSwipeToReplySpark by mutableStateOf(false)
     var showChangelogScreenForId by mutableStateOf<String?>(null)
+    var pendingMessageJump by mutableStateOf<ChannelMessageJump?>(null)
+        private set
     private var changelogCheckDone = false
 
     init {
@@ -172,10 +175,9 @@ class ChatRouterViewModel(
                 kvStorage.set("selfAvatarUrl", user.avatar?.id?.let { "$STOAT_FILES/avatars/$it" } ?: "")
             }
 
-            val pendingChannel = NotificationDeepLink.pendingChannelId.value
-            if (pendingChannel != null) {
-                NotificationDeepLink.pendingChannelId.value = null
-                setSaveDestination(ChatRouterDestination.Channel(pendingChannel))
+            val pendingNavigation = NotificationDeepLink.pendingNavigation.value
+            if (pendingNavigation != null) {
+                consumePendingNavigation(pendingNavigation)
             } else {
                 val current = kvStorage.get("currentDestination")
                 setSaveDestination(ChatRouterDestination.fromString(current ?: ""))
@@ -200,7 +202,35 @@ class ChatRouterViewModel(
             if (!hasNotificationPermission && !rejectedPush) {
                 showNotificationRationale = true
             }
+
+            NotificationDeepLink.pendingNavigation.collect { navigation ->
+                if (navigation != null) consumePendingNavigation(navigation)
+            }
         }
+    }
+
+    private fun consumePendingNavigation(navigation: StoatWebLink) {
+        if (NotificationDeepLink.pendingNavigation.value == navigation) {
+            NotificationDeepLink.pendingNavigation.value = null
+        }
+
+        when (navigation) {
+            is StoatWebLink.Server -> navigateToServer(navigation.serverId)
+            is StoatWebLink.Channel ->
+                setSaveDestination(ChatRouterDestination.Channel(navigation.channelId))
+
+            is StoatWebLink.Message ->
+                requestMessageJump(navigation.channelId, navigation.messageId)
+        }
+    }
+
+    fun requestMessageJump(channelId: String, messageId: String) {
+        pendingMessageJump = ChannelMessageJump(channelId, messageId)
+        setSaveDestination(ChatRouterDestination.Channel(channelId))
+    }
+
+    fun consumeMessageJump(request: ChannelMessageJump) {
+        if (pendingMessageJump == request) pendingMessageJump = null
     }
 
     fun setSaveDestination(destination: ChatRouterDestination) {
@@ -464,6 +494,10 @@ fun ChatRouterScreen(
                         showUserContextSheet = true
                     }
 
+                    is Action.SwitchServer -> {
+                        viewModel.navigateToServer(action.serverId)
+                    }
+
                     is Action.SwitchChannel -> {
                         val resolvedChannel = StoatAPI.channelCache[action.channelId]
 
@@ -473,6 +507,20 @@ fun ChatRouterScreen(
                         }
 
                         viewModel.setSaveDestination(ChatRouterDestination.Channel(action.channelId))
+                    }
+
+                    is Action.JumpToMessage -> {
+                        val resolvedChannel = StoatAPI.channelCache[action.channelId]
+
+                        if (resolvedChannel == null) {
+                            showChannelUnavailableAlert = true
+                            return@let
+                        }
+
+                        viewModel.requestMessageJump(
+                            channelId = action.channelId,
+                            messageId = action.messageId,
+                        )
                     }
 
                     is Action.LinkInfo -> {
@@ -892,6 +940,8 @@ fun ChatRouterScreen(
                     ChannelNavigator(
                         dest = viewModel.currentDestination,
                         topNav = topNav,
+                        messageJump = viewModel.pendingMessageJump,
+                        onMessageJumpConsumed = viewModel::consumeMessageJump,
                         useDrawer = false,
                         disableBackHandler = disableBackHandler,
                         toggleDrawer = {
@@ -940,6 +990,8 @@ fun ChatRouterScreen(
                             ChannelNavigator(
                                 dest = viewModel.currentDestination,
                                 topNav = topNav,
+                                messageJump = viewModel.pendingMessageJump,
+                                onMessageJumpConsumed = viewModel::consumeMessageJump,
                                 useDrawer = true,
                                 disableBackHandler = disableBackHandler,
                                 toggleDrawer = {
@@ -1020,6 +1072,8 @@ fun Sidebar(
 fun ChannelNavigator(
     dest: ChatRouterDestination,
     topNav: NavController,
+    messageJump: ChannelMessageJump? = null,
+    onMessageJumpConsumed: (ChannelMessageJump) -> Unit = {},
     useDrawer: Boolean,
     toggleDrawer: () -> Unit,
     drawerState: DrawerState? = null,
@@ -1054,6 +1108,9 @@ fun ChannelNavigator(
             }
 
             is ChatRouterDestination.Channel -> {
+                val routedMessageJump = messageJump?.takeIf {
+                    it.channelId == dest.channelId
+                }
                 val requestedChannelId =
                     currentTopEntry?.savedStateHandle?.get<String>(
                         CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
@@ -1062,6 +1119,8 @@ fun ChannelNavigator(
                     currentTopEntry?.savedStateHandle?.get<String>(
                         CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
                     )?.takeIf { requestedChannelId == dest.channelId }
+                val effectiveRequestedMessageId =
+                    routedMessageJump?.messageId ?: requestedMessageId
 
                 ChannelScreen(
                     channelId = dest.channelId,
@@ -1078,8 +1137,9 @@ fun ChannelNavigator(
                     drawerGestureEnabled = drawerGestureEnabled,
                     setDrawerGestureEnabled = setDrawerGestureEnabled,
                     drawerIsOpen = drawerState?.isOpen == true,
-                    requestedMessageId = requestedMessageId,
+                    requestedMessageId = effectiveRequestedMessageId,
                     onRequestedMessageConsumed = {
+                        routedMessageJump?.let(onMessageJumpConsumed)
                         currentTopEntry?.savedStateHandle?.remove<String>(
                             CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
                         )

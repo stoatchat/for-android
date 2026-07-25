@@ -61,6 +61,11 @@ private const val SEARCH_DEBOUNCE_MS = 350L
 const val CHANNEL_MESSAGE_JUMP_CHANNEL_KEY = "channelMessageJumpChannel"
 const val CHANNEL_MESSAGE_JUMP_MESSAGE_KEY = "channelMessageJumpMessage"
 
+data class ChannelMessageJump(
+    val channelId: String,
+    val messageId: String,
+)
+
 enum class SearchSort(val apiValue: String, val label: Int) {
     RELEVANCE("Relevance", R.string.channel_search_sort_relevance),
     LATEST("Latest", R.string.channel_search_sort_latest),
