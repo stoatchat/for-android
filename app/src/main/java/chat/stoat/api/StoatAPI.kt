@@ -1,7 +1,5 @@
 package chat.stoat.api
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import chat.stoat.BuildConfig
@@ -38,22 +36,29 @@ import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import io.sentry.Sentry
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 import java.net.SocketException
+import kotlin.time.Duration.Companion.seconds
 import chat.stoat.core.model.schemas.Channel as ChannelSchema
 
 fun String.api(): String {
@@ -132,10 +137,13 @@ val StoatHttp = HttpClient(OkHttp) {
     }
 }
 
-val mainHandler = Handler(Looper.getMainLooper())
-
 object StoatAPI {
     const val TOKEN_HEADER_NAME = "x-session-token"
+    private const val WS_EVENT_BUFFER_CAPACITY =
+        128 // arbitrary -- should be adjusted if too much gets dropped...
+    private val INITIAL_RECONNECT_DELAY = 1.seconds
+    private val MAX_RECONNECT_DELAY = 30.seconds
+    private val PING_INTERVAL = 30.seconds // Same interval as the web clients (/revolt.js)
 
     val userCache = mutableStateMapOf<String, User>()
     val serverCache = mutableStateMapOf<String, Server>()
@@ -159,10 +167,11 @@ object StoatAPI {
     val realtimeContext = newSingleThreadContext("RealtimeContext")
     val wsFrameChannel = MutableSharedFlow<Any>(
         replay = 0,
-        extraBufferCapacity = Int.MAX_VALUE,
+        extraBufferCapacity = WS_EVENT_BUFFER_CAPACITY,
     )
 
     private var socketCoroutine: Job? = null
+    private var pingCoroutine: Job? = null
 
     private var openForLocalHydration = true
 
@@ -183,28 +192,36 @@ object StoatAPI {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun connectWS() {
+        socketCoroutine?.cancelAndJoin()
+        RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
+        val token = sessionToken
         socketCoroutine = CoroutineScope(Dispatchers.IO).launch {
-            try {
-                withContext(realtimeContext) {
-                    try {
-                        RealtimeSocket.connect(sessionToken)
-                    } catch (e: SocketException) {
-                        Log.d("RevoltAPI", "Socket closed, probably no big deal /// " + e.message)
-                        RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
-                    } catch (e: Exception) {
-                        Log.e("RevoltAPI", "WebSocket error", e)
-                        RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
-                    }
-                }
-            } catch (e: Exception) {
+            var reconnectDelay = INITIAL_RECONNECT_DELAY
+            while (isActive && sessionToken == token) {
                 try {
-                    if (e is InterruptedException) {
-                        Log.d("RevoltAPI", "Socket interrupted")
-                    } else {
-                        Log.e("RevoltAPI", "WebSocket error", e)
+                    withContext(realtimeContext) {
+                        RealtimeSocket.connect(token)
                     }
-                    RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
+                    reconnectDelay = INITIAL_RECONNECT_DELAY
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: SocketException) {
+                    logcat { "WebSocket closed: ${e.message}" }
                 } catch (e: Exception) {
+                    logcat(LogPriority.ERROR) { "WebSocket error:\n${e.asLog()}" }
+                }
+
+                if (!isActive || sessionToken != token) break
+
+                try {
+                    RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
+                    delay(reconnectDelay)
+                    reconnectDelay =
+                        (reconnectDelay * 2).coerceAtMost(MAX_RECONNECT_DELAY)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
                     Sentry.captureMessage("Error in socket error handling: $e")
                 }
             }
@@ -214,17 +231,20 @@ object StoatAPI {
     private suspend fun startSocketOps() {
         connectWS()
 
-        // Send a ping every roughly 30 seconds else the socket dies
-        // Same interval as the web clients (/revolt.js)
-        // Note: This will run even if the socket is closed (sendPing will just exit early)
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                runBlocking {
+        // Send a ping every roughly PING_INTERVAL else the socket dies
+        pingCoroutine?.cancel()
+        pingCoroutine = CoroutineScope(Dispatchers.IO).launch {
+            while (isActive) {
+                delay(PING_INTERVAL)
+                try {
                     RealtimeSocket.sendPing()
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR) { "Failed to ping WebSocket:\n${e.asLog()}" }
                 }
-                mainHandler.postDelayed(this, 30 * 1000)
             }
-        })
+        }
     }
 
     suspend fun initialize() {
@@ -259,7 +279,7 @@ object StoatAPI {
         unreads.clear()
 
         socketCoroutine?.cancel()
-        mainHandler.removeCallbacksAndMessages(null)
+        pingCoroutine?.cancel()
 
         clearPersistentCache()
     }

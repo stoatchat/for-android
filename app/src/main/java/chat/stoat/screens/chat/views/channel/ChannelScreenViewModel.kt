@@ -40,7 +40,6 @@ import chat.stoat.api.routes.microservices.autumn.MAX_ATTACHMENTS_PER_MESSAGE
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.fetchMember
 import chat.stoat.api.routes.user.addUserIfUnknown
-import chat.stoat.api.routes.user.fetchUser
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
@@ -63,6 +62,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -75,12 +75,18 @@ import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 import java.time.ZoneId
+import kotlin.time.Duration.Companion.seconds
 
 class ChannelScreenViewModel(
     private val kvStorage: KVStorage,
 ) : ViewModel() {
+    companion object {
+        private val TYPING_INDICATOR_TIMEOUT = 10.seconds
+    }
+
     var items = mutableStateListOf<ChannelScreenItem>()
     var typingUsers = mutableStateListOf<String>()
+    private val typingExpiryJobs = mutableMapOf<String, Job>()
 
     var channelId by mutableStateOf<String?>(null)
     val channel: Channel?
@@ -137,6 +143,9 @@ class ChannelScreenViewModel(
         viewModelScope.launch {
             keyboardHeight = kvStorage.getInt("keyboardHeight") ?: 900 // reasonable default for now
         }
+        viewModelScope.launch {
+            listenToWsEvents()
+        }
     }
 
     private var loadMessagesJob: Job? = null
@@ -145,6 +154,9 @@ class ChannelScreenViewModel(
     fun switchChannel(id: String) {
         // Reset state
         this.loadMessagesJob?.cancel()
+        this.stopTypingJob?.cancel()
+        stopTyping(channelId)
+        clearAllTypingUsers()
         requestSequence++
         this.channelId = id
         this.items = mutableStateListOf(ChannelScreenItem.Loading)
@@ -212,6 +224,31 @@ class ChannelScreenViewModel(
         }
     }
 
+    private fun refreshTypingUser(userId: String) {
+        if (userId == StoatAPI.selfId) return
+
+        if (!typingUsers.contains(userId)) {
+            typingUsers.add(userId)
+        }
+        typingExpiryJobs.remove(userId)?.cancel()
+        typingExpiryJobs[userId] = viewModelScope.launch {
+            delay(TYPING_INDICATOR_TIMEOUT)
+            typingUsers.remove(userId)
+            typingExpiryJobs.remove(userId)
+        }
+    }
+
+    private fun clearTypingUser(userId: String) {
+        typingExpiryJobs.remove(userId)?.cancel()
+        typingUsers.remove(userId)
+    }
+
+    private fun clearAllTypingUsers() {
+        typingExpiryJobs.values.forEach(Job::cancel)
+        typingExpiryJobs.clear()
+        typingUsers.clear()
+    }
+
     private suspend fun denyMessageFieldIfNeeded() {
         if (channel == null) return
 
@@ -258,16 +295,19 @@ class ChannelScreenViewModel(
 
     private fun startTyping() {
         if (editingMessage != null) return
+        val targetChannelId = channel?.id ?: return
         if (lastSentBeginTyping != null) {
             val diff = Clock.System.now() - lastSentBeginTyping!!
             if (diff.inWholeSeconds < 1) return
         }
 
         viewModelScope.launch {
-            withContext(StoatAPI.realtimeContext) {
-                channel?.id?.let {
-                    RealtimeSocket.beginTyping(it)
-                }
+            try {
+                RealtimeSocket.beginTyping(targetChannelId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Failed to begin typing:\n${e.asLog()}" }
             }
         }
 
@@ -278,18 +318,24 @@ class ChannelScreenViewModel(
 
     private fun queueStopTyping() {
         stopTypingJob = viewModelScope.launch {
-            delay(5000)
+            delay(5.seconds)
+            stopTypingJob = null
             stopTyping()
         }
     }
 
-    private fun stopTyping() {
+    private fun stopTyping(targetChannelId: String? = channel?.id) {
+        lastSentBeginTyping = null
         if (editingMessage != null) return
+        if (targetChannelId == null) return
+
         viewModelScope.launch {
-            withContext(StoatAPI.realtimeContext) {
-                channel?.id?.let {
-                    RealtimeSocket.endTyping(it)
-                }
+            try {
+                RealtimeSocket.endTyping(targetChannelId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Failed to end typing:\n${e.asLog()}" }
             }
         }
     }
@@ -373,6 +419,7 @@ class ChannelScreenViewModel(
                 stopTypingJob?.cancel()
                 queueStopTyping()
             } else {
+                stopTypingJob?.cancel()
                 stopTyping()
             }
         }
@@ -785,12 +832,74 @@ class ChannelScreenViewModel(
         ackChannel(channel?.id ?: return, messageId)
     }
 
-    suspend fun listenToWsEvents() {
-        withContext(StoatAPI.realtimeContext) {
-            StoatAPI.wsFrameChannel.onEach {
+    private fun hydrateIncomingMessage(message: MessageFrame, expectedChannelId: String) {
+        val userId = message.author
+        val serverId = channel?.server
+
+        if (userId != null) {
+            viewModelScope.launch {
+                try {
+                    addUserIfUnknown(userId)
+                    if (serverId != null && !StoatAPI.members.hasMember(serverId, userId)) {
+                        fetchMember(serverId, userId)
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR) {
+                        "Failed to hydrate message author:\n${e.asLog()}"
+                    }
+                }
+            }
+        }
+
+        val messageId = message.id
+        if (messageId != null) {
+            viewModelScope.launch {
+                try {
+                    ackChannel(expectedChannelId, messageId)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR) { "Failed to ack message:\n${e.asLog()}" }
+                }
+            }
+        }
+
+        if (messageId != null && message.system == null && !message.content.isNullOrBlank()) {
+            viewModelScope.launch {
+                val ast = try {
+                    withContext(Dispatchers.Default) { parseAst(message.content) }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    logcat(LogPriority.ERROR) {
+                        "Failed to parse incoming message:\n${e.asLog()}"
+                    }
+                    return@launch
+                }
+                if (channelId != expectedChannelId) return@launch
+
+                val index = items.indexOfFirst { item ->
+                    item is ChannelScreenItem.RegularMessage && item.message.id == messageId
+                }
+                val current = items.getOrNull(index) as? ChannelScreenItem.RegularMessage
+                    ?: return@launch
+                if (current.message.content == message.content) {
+                    items[index] = current.copy(mdAst = ast)
+                }
+            }
+        }
+    }
+
+    private suspend fun listenToWsEvents() {
+        StoatAPI.wsFrameChannel.onEach {
+            try {
                 when (it) {
                     is MessageFrame -> {
                         if (it.channel != channel?.id) return@onEach
+                        it.author?.let(::clearTypingUser)
+
                         // If we already have the message we are just catching up on the WebSocket connection. Skip
                         if (items.any { m -> (m is ChannelScreenItem.RegularMessage && m.message.id == it.id) || (m is ChannelScreenItem.SystemMessage && m.message.id == it.id) }) return@onEach
                         it.id?.let { messageId -> StoatAPI.messageCache[messageId] = it }
@@ -800,25 +909,10 @@ class ChannelScreenViewModel(
                             return@onEach
                         }
 
-                        it.author?.let { userId ->
-                            if (StoatAPI.userCache[userId] == null) {
-                                StoatAPI.userCache[userId] = fetchUser(userId)
-                            }
-                        }
-                        channel?.server?.let { serverId ->
-                            try {
-                                it.author?.let { userId ->
-                                    fetchMember(serverId, userId)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("ChannelScreenViewModel", "Failed to fetch member", e)
-                            }
-                        }
-
                         if (didInitialChannelFetch) { // this check is so that we don't end up with a message that arrives at the same time as the initial fetch in front of the loading indicator
                             val newItem = when {
                                 it.system != null -> ChannelScreenItem.SystemMessage(it)
-                                else -> ChannelScreenItem.RegularMessage(it, parseAst(it.content))
+                                else -> ChannelScreenItem.RegularMessage(it, null)
                             }
                             updateItems(listOf(newItem) + items.filter { m ->
                                 if (m is ChannelScreenItem.ProspectiveMessage) {
@@ -829,7 +923,7 @@ class ChannelScreenViewModel(
                             })
                         }
 
-                        it.id?.let { mid -> ackMessage(mid) }
+                        hydrateIncomingMessage(it, channel?.id ?: return@onEach)
                     }
 
                     is MessageDeleteFrame -> {
@@ -949,18 +1043,26 @@ class ChannelScreenViewModel(
 
                     is ChannelStartTypingFrame -> {
                         if (it.id != channel?.id) return@onEach
-                        if (typingUsers.contains(it.user)) return@onEach
                         if (it.user == StoatAPI.selfId) return@onEach
 
-                        addUserIfUnknown(it.user)
-                        typingUsers.add(it.user)
+                        refreshTypingUser(it.user)
+                        viewModelScope.launch {
+                            try {
+                                addUserIfUnknown(it.user)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                logcat(LogPriority.ERROR) {
+                                    "Failed to hydrate typing user:\n${e.asLog()}"
+                                }
+                            }
+                        }
                     }
 
                     is ChannelStopTypingFrame -> {
                         if (it.id != channel?.id) return@onEach
-                        if (!typingUsers.contains(it.user)) return@onEach
 
-                        typingUsers.remove(it.user)
+                        clearTypingUser(it.user)
                     }
 
                     is ChannelDeleteFrame -> {
@@ -982,14 +1084,15 @@ class ChannelScreenViewModel(
                         } else {
                             loadLatest(markLastAsRead = true)
                         }
-                        typingUsers.clear()
-                        listenToWsEvents()
+                        clearAllTypingUsers()
                     }
                 }
-            }.catch {
-                Log.e("ChannelScreen", "Failed to receive WS frame", it)
-            }.launchIn(this)
-        }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                logcat(LogPriority.ERROR) { "Failed to receive WS frame:\n${e.asLog()}" }
+            }
+        }.collect()
     }
 
     suspend fun listenToUiCallbacks() {

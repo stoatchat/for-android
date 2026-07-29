@@ -97,45 +97,54 @@ object RealtimeSocket {
 
         socket?.close(CloseReason(CloseReason.Codes.NORMAL, "Reconnecting to websocket."))
 
-        StoatHttp.ws(STOAT_WEBSOCKET) {
-            socket = this
+        var activeSocket: WebSocketSession? = null
+        try {
+            StoatHttp.ws(STOAT_WEBSOCKET) {
+                activeSocket = this
+                socket = this
 
-            Log.d("RealtimeSocket", "Connected to websocket.")
-            updateDisconnectionState(DisconnectionState.Connected)
-            pushReconnectEvent()
+                logcat { "Connected to websocket." }
+                updateDisconnectionState(DisconnectionState.Connected)
+                pushReconnectEvent()
 
-            // Send authorization frame
-            val authFrame = AuthorizationFrame("Authenticate", token)
-            val authFrameString =
-                StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame)
+                // Send authorization frame
+                val authFrame = AuthorizationFrame("Authenticate", token)
+                val authFrameString =
+                    StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame)
 
-            Log.d(
-                "RealtimeSocket",
-                "Sending authorization frame: ${
-                    authFrameString.replace(
-                        token,
-                        "X".repeat(token.length)
-                    )
-                }"
-            )
-            send(StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame))
+                logcat {
+                    "Sending authorization frame: ${
+                        authFrameString.replace(
+                            token,
+                            "X".repeat(token.length)
+                        )
+                    }"
+                }
+                send(StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame))
 
-            incoming.consumeEach { frame ->
-                if (frame is Frame.Text) {
-                    val frameString = frame.readText()
-                    try {
-                        val frameType =
-                            StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
+                incoming.consumeEach { frame ->
+                    if (frame is Frame.Text) {
+                        val frameString = frame.readText()
+                        try {
+                            val frameType =
+                                StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
 
-                        handleFrame(frameType, frameString)
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Exception) {
-                        logcat(LogPriority.ERROR) {
-                            "Failed to handle frame: $frameString\n" + e.asLog()
+                            handleFrame(frameType, frameString)
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            logcat(LogPriority.ERROR) {
+                                "Failed to handle frame: $frameString\n" + e.asLog()
+                            }
                         }
                     }
                 }
+            }
+        } finally {
+            if (activeSocket == null || socket === activeSocket) {
+                socket = null
+                updateDisconnectionState(DisconnectionState.Disconnected)
+                logcat { "WebSocket disconnected." }
             }
         }
     }

@@ -229,10 +229,6 @@ fun ChannelScreen(
     val resources = LocalResources.current
     val config = LocalConfiguration.current
 
-    LaunchedEffect(Unit) {
-        viewModel.listenToWsEvents()
-    }
-
     DisposableEffect(Unit) {
         val job = scope.launch { viewModel.listenToUiCallbacks() }
 
