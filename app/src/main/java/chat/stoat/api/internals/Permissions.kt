@@ -48,9 +48,10 @@ enum class PermissionBit(val value: Long) {
     // * Channel permissions cont.
     MentionEveryone(1L shl 37),
     MentionRoles(1L shl 38),
+    BypassSlowmode(1L shl 39),
 
     // * Misc. permissions
-    // % Bits 38 to 52: free area
+    // % Bits 40 to 52: free area
     // % Bits 53 to 64: do not use
 
     // * Grant all permissions

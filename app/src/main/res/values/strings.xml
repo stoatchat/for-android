@@ -121,6 +121,7 @@
     <string name="typing_one">%1$s is typing…</string>
     <string name="typing_many">%1$s are typing…</string>
     <string name="typing_several">Several people are typing</string>
+    <string name="slowmode_immune">Immune</string>
 
     <string name="send_alt">Send</string>
     <string name="pick_emoji_alt">Pick emoji</string>

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import chat.stoat.BuildConfig
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI.initialize
+import chat.stoat.api.internals.ActiveSlowmode
 import chat.stoat.api.internals.Members
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
@@ -151,6 +152,7 @@ object StoatAPI {
     val emojiCache = mutableStateMapOf<String, Emoji>()
     val messageCache = mutableStateMapOf<String, Message>()
     val voiceStateCache = mutableStateMapOf<String, ChannelVoiceState>()
+    val userSlowmodeCache = mutableStateMapOf<String, ActiveSlowmode>()
 
     val members = Members()
 
@@ -274,6 +276,7 @@ object StoatAPI {
         channelCache.clear()
         emojiCache.clear()
         messageCache.clear()
+        userSlowmodeCache.clear()
 
         members.clear()
         unreads.clear()

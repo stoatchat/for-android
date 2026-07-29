@@ -152,6 +152,7 @@ fun MessageField(
     channelName: String,
     modifier: Modifier = Modifier,
     forceSendButton: Boolean = false,
+    sendEnabled: Boolean = true,
     canAttach: Boolean = true,
     disabled: Boolean = false,
     failedValidation: Boolean = false,
@@ -548,7 +549,9 @@ fun MessageField(
                                         !it.isAltPressed &&
                                         it.isCtrlPressed &&
                                         !it.isMetaPressed -> {
-                                    onSendMessage()
+                                    if (sendEnabled) {
+                                        onSendMessage()
+                                    }
                                     return@onKeyEvent true
                                 }
 
@@ -624,12 +627,16 @@ fun MessageField(
                         editMode -> painterResource(R.drawable.ic_edit_24dp)
                         else -> painterResource(R.drawable.ic_send_24dp)
                     },
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = if (sendEnabled) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    },
                     contentDescription = stringResource(id = R.string.send_alt),
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .clip(CircleShape)
-                        .clickable { onSendMessage() }
+                        .clickable(enabled = sendEnabled) { onSendMessage() }
                         .size(32.dp)
                         .padding(4.dp)
                         .testTag("send_message")
