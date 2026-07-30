@@ -56,6 +56,17 @@ object SpecialUsers {
                 )
             )
         ), // tom
+        "01G6A2YMHED2TFTEMNKKMKFGH0" to TeamMemberFlair.Brush(
+            AndroidBrush.linearGradient(
+                listOf(
+                    Color(0xFFE23672),
+                    Color(0xFFFFAD20),
+                    Color(0xFF58A551)
+                ),
+                start = Offset.Zero,
+                end = Offset.Infinite
+            )
+        ), // vale
         "01EX2NCWQ0CHS3QJF0FEQS1GR4" to TeamMemberFlair.AGSLShader(
             INSERT_SHADER,
             AndroidBrush.linearGradient(
