@@ -520,22 +520,40 @@ fun ChannelScreen(
                     val visibleItemsBeforeJump = lazyListState.layoutInfo.visibleItemsInfo
                     val targetIsVisible = visibleItemsBeforeJump
                         .any { it.key == request.messageId }
+                    val targetWasAboveViewport =
+                        visibleItemsBeforeJump.isNotEmpty() &&
+                                lazyItemIndex > visibleItemsBeforeJump.maxOf { it.index }
                     if (!targetIsVisible) {
                         // Off-screen lazy items must be measured before exact centering
                         // so we snap the target into the viewport, then animate the centering distance
                         lazyListState.scrollToItem(lazyItemIndex)
                     }
-                    val target = checkNotNull(
+                    var target = checkNotNull(
                         snapshotFlow {
                             lazyListState.layoutInfo.visibleItemsInfo
                                 .firstOrNull { it.key == request.messageId }
                         }.first { it != null }
                     )
-                    val viewportCenter =
+                    var viewportCenter =
                         (lazyListState.layoutInfo.viewportStartOffset +
                                 lazyListState.layoutInfo.viewportEndOffset) / 2
-                    val targetCenter = target.offset + target.size / 2
-                    val centerOffset = (targetCenter - viewportCenter).toFloat()
+                    var targetCenter = target.offset + target.size / 2
+                    var centerOffset = (targetCenter - viewportCenter).toFloat()
+                    if (request.animated && !targetIsVisible && targetWasAboveViewport) {
+                        // scrollToItem anchors at the bottom in this reversed list. Here we mirror
+                        // an older target to the top so its centering animation comes from the same
+                        // side of the viewport where the message was located.
+                        lazyListState.scrollBy(centerOffset * 2)
+                        target = checkNotNull(
+                            lazyListState.layoutInfo.visibleItemsInfo
+                                .firstOrNull { it.key == request.messageId }
+                        )
+                        viewportCenter =
+                            (lazyListState.layoutInfo.viewportStartOffset +
+                                    lazyListState.layoutInfo.viewportEndOffset) / 2
+                        targetCenter = target.offset + target.size / 2
+                        centerOffset = (targetCenter - viewportCenter).toFloat()
+                    }
                     if (request.animated) {
                         lazyListState.animateScrollBy(
                             value = centerOffset,

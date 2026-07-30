@@ -154,6 +154,64 @@ class ChannelHistoryScrollTest {
         }
     }
 
+    @Test
+    fun reversedListCanCenterAnOlderItemFromTheTopEdge() {
+        val messages = (0 until 100).map { "message-$it" }
+        lateinit var state: LazyListState
+
+        composeRule.setContent {
+            state = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(240.dp),
+                state = state,
+                reverseLayout = true,
+            ) {
+                items(messages, key = { it }) { message ->
+                    Text(
+                        text = message,
+                        modifier = Modifier.height(48.dp),
+                    )
+                }
+            }
+        }
+
+        composeRule.runOnIdle {
+            runBlocking {
+                state.scrollToItem(20)
+            }
+        }
+        composeRule.runOnIdle {
+            runBlocking {
+                state.scrollToItem(40)
+            }
+
+            val viewportCenter =
+                (state.layoutInfo.viewportStartOffset + state.layoutInfo.viewportEndOffset) / 2
+            val targetCenter = state.itemCenter("message-40")
+            runBlocking {
+                state.scrollBy((targetCenter - viewportCenter) * 2f)
+            }
+        }
+        composeRule.runOnIdle {
+            val viewportCenter =
+                (state.layoutInfo.viewportStartOffset + state.layoutInfo.viewportEndOffset) / 2
+            assertTrue(state.itemCenter("message-40") > viewportCenter)
+
+            runBlocking {
+                state.scrollBy(
+                    (state.itemCenter("message-40") - viewportCenter).toFloat()
+                )
+            }
+        }
+        composeRule.runOnIdle {
+            val viewportCenter =
+                (state.layoutInfo.viewportStartOffset + state.layoutInfo.viewportEndOffset) / 2
+            assertEquals(viewportCenter, state.itemCenter("message-40"))
+        }
+    }
+
     private fun LazyListState.currentAnchor(): Pair<Any, Int> {
         val firstVisibleItem = layoutInfo.visibleItemsInfo
             .first { it.index == firstVisibleItemIndex }
