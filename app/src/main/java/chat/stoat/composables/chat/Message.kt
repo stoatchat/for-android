@@ -156,6 +156,22 @@ fun authorName(message: MessageSchema): String {
         ?: stringResource(R.string.unknown)
 }
 
+fun authorPronouns(message: MessageSchema, author: User): String? {
+    val serverId = StoatAPI.channelCache[message.channel]?.server
+        ?: return author.pronouns
+
+    val memberPronouns = message.author
+        ?.let { StoatAPI.members.getMember(serverId, it) }
+        ?.pronouns
+
+    return memberPronouns ?: author.pronouns
+}
+
+internal fun messageTimestampText(pronouns: String?, timestamp: String): String {
+    val visiblePronouns = pronouns?.trim()?.takeIf { it.isNotEmpty() }
+    return visiblePronouns?.let { "$it · $timestamp" } ?: timestamp
+}
+
 @Composable
 fun authorAvatarUrl(message: MessageSchema): String? {
     if (message.masquerade?.avatar != null) {
@@ -449,7 +465,10 @@ fun Message(
                                 Spacer(modifier = Modifier.width(5.dp))
 
                                 Text(
-                                    text = formatLongAsTime(ULID.asTimestamp(message.id!!)),
+                                    text = messageTimestampText(
+                                        pronouns = authorPronouns(message, author),
+                                        timestamp = formatLongAsTime(ULID.asTimestamp(message.id!!))
+                                    ),
                                     fontSize = 12.sp,
                                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
                                     maxLines = 1,

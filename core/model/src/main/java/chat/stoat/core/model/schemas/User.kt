@@ -14,6 +14,7 @@ data class User(
     val discriminator: String? = null,
     @SerialName("display_name")
     val displayName: String? = null,
+    val pronouns: String? = null,
     val avatar: AutumnResource? = null,
     val relations: List<Relation>? = null,
     val badges: Long? = null,
@@ -31,6 +32,7 @@ data class User(
             username = partial.username ?: username,
             discriminator = partial.discriminator ?: discriminator,
             displayName = partial.displayName ?: displayName,
+            pronouns = partial.pronouns ?: pronouns,
             avatar = partial.avatar ?: avatar,
             relations = partial.relations ?: relations,
             badges = partial.badges ?: badges,
@@ -50,6 +52,7 @@ data class User(
             username = "Unknown User",
             discriminator = "0000",
             displayName = null,
+            pronouns = null,
             avatar = null,
             badges = 0,
             status = null,

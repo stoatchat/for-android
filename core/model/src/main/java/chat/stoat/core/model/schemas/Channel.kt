@@ -35,6 +35,7 @@ data class Member(
     val avatar: AutumnResource? = null,
     val roles: List<String>? = null,
     val nickname: String? = null,
+    val pronouns: String? = null,
 
     val timeout: String? = null
 ) {
@@ -45,6 +46,7 @@ data class Member(
             avatar = other.avatar ?: avatar,
             roles = other.roles ?: roles,
             nickname = other.nickname ?: nickname,
+            pronouns = other.pronouns ?: pronouns,
             timeout = other.timeout ?: timeout
         )
     }

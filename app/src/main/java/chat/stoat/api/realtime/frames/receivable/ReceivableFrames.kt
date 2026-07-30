@@ -233,7 +233,7 @@ data class UserUpdateFrame(
     val type: String = "UserUpdate",
     val id: String,
     val data: User,
-    val clear: List<String>? = null // "ProfileContent", "ProfileBackground", "StatusText" or "Avatar"
+    val clear: List<String>? = null
 )
 
 @Serializable

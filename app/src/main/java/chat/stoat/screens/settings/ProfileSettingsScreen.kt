@@ -69,11 +69,18 @@ class ProfileSettingsScreenViewModel(val context: Application) :
     var uploadProgress by mutableFloatStateOf(0f)
     var uploadError by mutableStateOf<String?>(null)
     var bioError by mutableStateOf<String?>(null)
+    var currentPronouns by mutableStateOf<String?>(null)
+    var pendingPronouns by mutableStateOf("")
+    var pronounsError by mutableStateOf<String?>(null)
 
     init {
         StoatAPI.selfId?.let { self ->
-            StoatAPI.userCache[self]?.avatar?.id?.let {
-                pfpModel = "$STOAT_FILES/avatars/${it}"
+            StoatAPI.userCache[self]?.let { user ->
+                user.avatar?.id?.let {
+                    pfpModel = "$STOAT_FILES/avatars/${it}"
+                }
+                currentPronouns = user.pronouns
+                pendingPronouns = user.pronouns.orEmpty()
             }
             viewModelScope.launch {
                 currentProfile = fetchUserProfile(self)
@@ -223,6 +230,26 @@ class ProfileSettingsScreenViewModel(val context: Application) :
                 }
             } catch (e: Exception) {
                 bioError = e.message
+            }
+        }
+    }
+
+    fun savePronouns() {
+        pronounsError = null
+        val normalizedPronouns = pendingPronouns.trim()
+
+        viewModelScope.launch {
+            try {
+                if (normalizedPronouns.isEmpty()) {
+                    patchSelf(remove = listOf("Pronouns"))
+                } else {
+                    patchSelf(pronouns = normalizedPronouns)
+                }
+
+                currentPronouns = normalizedPronouns.ifEmpty { null }
+                pendingPronouns = normalizedPronouns
+            } catch (e: Exception) {
+                pronounsError = e.message
             }
         }
     }
@@ -380,6 +407,62 @@ fun ProfileSettingsScreen(
                         modifier = Modifier
                             .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 20.dp)
                     ) {
+                        OutlinedTextField(
+                            value = viewModel.pendingPronouns,
+                            onValueChange = { value ->
+                                if (value.length <= 24) {
+                                    viewModel.pendingPronouns = value
+                                }
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.settings_profile_pronouns),
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
+                            },
+                            isError = viewModel.pronounsError != null,
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+
+                        AnimatedVisibility(visible = viewModel.pronounsError != null) {
+                            Spacer(Modifier.height(8.dp))
+
+                            Text(
+                                text = viewModel.pronounsError ?: "",
+                                style = MaterialTheme.typography.labelLarge.copy(
+                                    color = MaterialTheme.colorScheme.error
+                                ),
+                                modifier = Modifier
+                                    .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 0.dp)
+                            )
+                        }
+
+                        Spacer(Modifier.height(8.dp))
+
+                        TextButton(
+                            onClick = {
+                                viewModel.savePronouns()
+                            },
+                            enabled = viewModel.pendingPronouns.trim().ifEmpty { null } !=
+                                viewModel.currentPronouns,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_check_24dp),
+                                contentDescription = null
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(
+                                text = stringResource(id = R.string.settings_profile_save),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+
+                        Spacer(Modifier.height(16.dp))
+
                         OutlinedTextField(
                             value = viewModel.pendingProfile?.content ?: "",
                             onValueChange = { value ->

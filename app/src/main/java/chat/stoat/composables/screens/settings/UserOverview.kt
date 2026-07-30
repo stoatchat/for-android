@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
@@ -113,6 +115,9 @@ fun RawUserOverview(
             )
     ) {
         val background = backgroundUrl ?: profile?.background
+        val contentColour = if (background != null) Color.White else LocalContentColor.current
+        val pronouns = user.pronouns?.trim()?.takeIf { it.isNotEmpty() }
+
         if (background != null) {
             RemoteImage(
                 url = backgroundUrl
@@ -179,8 +184,26 @@ fun RawUserOverview(
                     append("#${user.discriminator}")
                     pop()
                 }.toAnnotatedString(),
-                color = if (profile?.background != null) Color.White else LocalContentColor.current
+                color = contentColour,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f)
             )
+
+            pronouns?.let {
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = it,
+                    color = contentColour,
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .widthIn(max = 140.dp)
+                )
+            }
         }
     }
 }

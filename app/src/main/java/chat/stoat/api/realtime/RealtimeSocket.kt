@@ -478,15 +478,17 @@ object RealtimeSocket {
                 val existing = StoatAPI.userCache[userUpdateFrame.id]
                     ?: return // if we don't have the user no point in updating it
 
-                if (userUpdateFrame.clear != null) {
-                    if (userUpdateFrame.clear.contains("Avatar")) {
-                        StoatAPI.userCache[userUpdateFrame.id] =
-                            existing.copy(avatar = null)
+                var updated = existing.mergeWithPartial(userUpdateFrame.data)
+
+                userUpdateFrame.clear?.forEach {
+                    updated = when (it) {
+                        "Avatar" -> updated.copy(avatar = null)
+                        "Pronouns" -> updated.copy(pronouns = null)
+                        else -> updated
                     }
                 }
 
-                StoatAPI.userCache[userUpdateFrame.id] =
-                    existing.mergeWithPartial(userUpdateFrame.data)
+                StoatAPI.userCache[userUpdateFrame.id] = updated
             }
 
             "UserRelationship" -> {
@@ -756,6 +758,7 @@ object RealtimeSocket {
                     when (it) {
                         "Avatar" -> updated = updated.copy(avatar = null)
                         "Nickname" -> updated = updated.copy(nickname = null)
+                        "Pronouns" -> updated = updated.copy(pronouns = null)
                         else -> Log.e("RealtimeSocket", "Unknown server member clear field: $it")
                     }
                 }

@@ -810,6 +810,7 @@
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_profile_picture">Profile picture</string>
     <string name="settings_profile_custom_background">Custom background</string>
+    <string name="settings_profile_pronouns">Pronouns</string>
     <string name="settings_profile_save">Save</string>
 
     <string name="settings_sessions">Sessions</string>
