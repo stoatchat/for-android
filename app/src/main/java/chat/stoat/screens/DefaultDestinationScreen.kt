@@ -10,10 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import chat.stoat.StoatApplication
 import chat.stoat.api.internals.getComponentActivity
 import chat.stoat.composables.screens.splash.DisconnectedScreen
-import com.google.android.material.color.DynamicColors
 
 @Composable
 fun DefaultDestinationScreen(
@@ -35,11 +33,9 @@ fun DefaultDestinationScreen(
 
     LaunchedEffect(nextDestination) {
         nextDestination?.let {
-            // Fix for SDK >=31, where core-splashscreen accidentally removes dynamic colours
+            // The window can lose its transparent status bar before we leave this destination
             // See the other one in MainActivity.kt
             val activity = context.getComponentActivity() as Activity
-            DynamicColors.applyToActivityIfAvailable(activity)
-            DynamicColors.applyToActivitiesIfAvailable(StoatApplication.instance)
             activity.window.statusBarColor = Color.Transparent.toArgb()
 
             navController.popBackStack(navController.graph.startDestinationRoute!!, true)

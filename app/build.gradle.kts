@@ -215,7 +215,6 @@ dependencies {
     implementation(libs.android.palette)
     implementation(libs.android.core.telecom)
     implementation(libs.android.core.splashscreen)
-    implementation(libs.android.constraintlayout)
     implementation(libs.android.constraintlayout.compose)
     implementation(libs.android.appcompat)
     implementation(libs.android.material)

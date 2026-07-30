@@ -49,10 +49,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -74,7 +71,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.stoat.BuildConfig
 import chat.stoat.R
-import chat.stoat.StoatApplication
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
@@ -90,20 +86,19 @@ import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
+import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.toStoatWebLinkOrNull
-import chat.stoat.voice.VoiceCallManager
-import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.material.EasingTokens
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
 import chat.stoat.screens.changelogs.ReadChangelogScreen
-import chat.stoat.screens.chat.ChannelPinsScreen
-import chat.stoat.screens.chat.ChannelSearchScreen
 import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
 import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+import chat.stoat.screens.chat.ChannelPinsScreen
+import chat.stoat.screens.chat.ChannelSearchScreen
 import chat.stoat.screens.chat.ChatRouterScreen
 import chat.stoat.screens.chat.standalone.CatchUpScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
@@ -134,7 +129,7 @@ import chat.stoat.screens.settings.channel.ChannelSettingsHome
 import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
 import chat.stoat.ui.theme.StoatTheme
-import com.google.android.material.color.DynamicColors
+import chat.stoat.voice.VoiceCallManager
 import io.ktor.client.request.get
 import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -334,22 +329,18 @@ class MainActivityViewModel(
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainActivityViewModel by viewModel()
 
-    // Fix for SDK >=31, where core-splashscreen accidentally removes dynamic colours
+    // The window can lose its transparent status bar after the activity is re-shown
     // See the other one in DefaultDestinationScreen.kt
     override fun onResume() {
         super.onResume()
-        DynamicColors.applyToActivityIfAvailable(this)
-        DynamicColors.applyToActivitiesIfAvailable(StoatApplication.instance)
-        @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
+        @Suppress("DEPRECATION") // no Compose-side equivalent for this window flag
         window.statusBarColor = Color.Transparent.toArgb()
     }
 
     // Same as above for configuration changes (rotation, dark mode, etc.)
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig)
-        DynamicColors.applyToActivityIfAvailable(this)
-        DynamicColors.applyToActivitiesIfAvailable(StoatApplication.instance)
-        @Suppress("DEPRECATION") // We are fixing a bug in the splash screen
+        @Suppress("DEPRECATION") // no Compose-side equivalent for this window flag
         window.statusBarColor = Color.Transparent.toArgb()
     }
 

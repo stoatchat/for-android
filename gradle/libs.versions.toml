@@ -39,7 +39,6 @@ android-webkit = { module = "androidx.webkit:webkit", version = "1.14.0" }
 android-palette = { module = "androidx.palette:palette-ktx", version = "1.0.0" }
 android-core-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.2.0-beta02" }
 android-core-telecom = { module = "androidx.core:core-telecom", version = "1.0.0" }
-android-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 android-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.1.1" }
 android-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
 android-material = { module = "com.google.android.material:material", version = "1.13.0" }
