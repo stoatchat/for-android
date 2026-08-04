@@ -24,14 +24,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.internals.ULID
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.schemas.Message
+import kotlinx.datetime.Instant
 
 enum class SystemMessageType(val type: String) {
     CHANNEL_OWNERSHIP_CHANGED("channel_ownership_changed"),
@@ -213,11 +216,23 @@ fun SystemMessage(
                 }
 
                 SystemMessageType.CALL_STARTED -> {
+                    val callDuration = callDurationMillis(
+                        messageId = message.id,
+                        finishedAt = message.system!!.finishedAt
+                    )
                     ChatMarkdown(
-                        stringResource(
-                            R.string.system_message_call_started,
-                            message.system!!.by.mention()
-                        ),
+                        if (callDuration != null) {
+                            stringResource(
+                                R.string.system_message_call_started_with_finished_at,
+                                message.system!!.by.mention(),
+                                formatCallDuration(callDuration)
+                            )
+                        } else {
+                            stringResource(
+                                R.string.system_message_call_started,
+                                message.system!!.by.mention()
+                            )
+                        },
                         serverId = serverId
                     )
                 }
@@ -227,6 +242,112 @@ fun SystemMessage(
                 }
             }
         }
+    }
+}
+
+internal fun callDurationMillis(messageId: String?, finishedAt: String?): Long? {
+    if (messageId == null || finishedAt == null) return null
+
+    return runCatching {
+        val duration = Math.subtractExact(
+            Instant.parse(finishedAt).toEpochMilliseconds(),
+            ULID.asTimestamp(messageId)
+        )
+        duration.takeIf { it >= 0 }
+    }.getOrNull()
+}
+
+internal enum class CallDurationUnit {
+    FEW_SECONDS,
+    MINUTES,
+    HOURS,
+    DAYS,
+    MONTHS,
+    YEARS,
+}
+
+internal data class CallDuration(
+    val unit: CallDurationUnit,
+    val quantity: Int = 0,
+)
+
+internal fun humanizeCallDuration(durationMillis: Long): CallDuration {
+    val seconds = durationMillis.coerceAtLeast(0) / MILLIS_PER_SECOND
+    return when {
+        seconds < SECONDS_PER_MINUTE -> CallDuration(CallDurationUnit.FEW_SECONDS)
+        seconds < SECONDS_PER_HOUR -> CallDuration(
+            CallDurationUnit.MINUTES,
+            (seconds / SECONDS_PER_MINUTE).asQuantity()
+        )
+
+        seconds < SECONDS_PER_DAY -> CallDuration(
+            CallDurationUnit.HOURS,
+            (seconds / SECONDS_PER_HOUR).asQuantity()
+        )
+
+        seconds < SECONDS_PER_MONTH -> CallDuration(
+            CallDurationUnit.DAYS,
+            (seconds / SECONDS_PER_DAY).asQuantity()
+        )
+
+        seconds < SECONDS_PER_YEAR -> CallDuration(
+            CallDurationUnit.MONTHS,
+            (seconds / SECONDS_PER_MONTH).asQuantity()
+        )
+
+        else -> CallDuration(
+            CallDurationUnit.YEARS,
+            (seconds / SECONDS_PER_YEAR).asQuantity()
+        )
+    }
+}
+
+private const val MILLIS_PER_SECOND = 1_000L
+private const val SECONDS_PER_MINUTE = 60L
+private const val SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE
+private const val SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
+private const val SECONDS_PER_MONTH = 30 * SECONDS_PER_DAY
+private const val SECONDS_PER_YEAR = 365 * SECONDS_PER_DAY
+
+private fun Long.asQuantity(): Int = coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+
+@Composable
+private fun formatCallDuration(durationMillis: Long): String {
+    val duration = humanizeCallDuration(durationMillis)
+    return when (duration.unit) {
+        CallDurationUnit.FEW_SECONDS -> stringResource(
+            R.string.system_message_call_duration_few_seconds
+        )
+
+        CallDurationUnit.MINUTES -> pluralStringResource(
+            R.plurals.system_message_call_duration_minutes,
+            duration.quantity,
+            duration.quantity
+        )
+
+        CallDurationUnit.HOURS -> pluralStringResource(
+            R.plurals.system_message_call_duration_hours,
+            duration.quantity,
+            duration.quantity
+        )
+
+        CallDurationUnit.DAYS -> pluralStringResource(
+            R.plurals.system_message_call_duration_days,
+            duration.quantity,
+            duration.quantity
+        )
+
+        CallDurationUnit.MONTHS -> pluralStringResource(
+            R.plurals.system_message_call_duration_months,
+            duration.quantity,
+            duration.quantity
+        )
+
+        CallDurationUnit.YEARS -> pluralStringResource(
+            R.plurals.system_message_call_duration_years,
+            duration.quantity,
+            duration.quantity
+        )
     }
 }
 

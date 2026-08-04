@@ -111,7 +111,8 @@ data class SystemInfo(
     val by: String? = null,
     val from: String? = null,
     val to: String? = null,
-    val content: String? = null
+    val content: String? = null,
+    @SerialName("finished_at") val finishedAt: String? = null,
 )
 
 @Serializable
