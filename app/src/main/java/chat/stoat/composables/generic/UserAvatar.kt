@@ -108,7 +108,7 @@ fun PresenceBadge(presence: Presence, size: Dp = 16.dp) {
 
 private val PresenceCutoutPadding = 2.dp
 
-private fun Modifier.presenceCutout(diameter: Dp): Modifier =
+internal fun Modifier.bottomEndCircleCutout(diameter: Dp): Modifier =
     graphicsLayer {
         compositingStrategy = CompositingStrategy.Offscreen
     }.drawWithCache {
@@ -161,7 +161,7 @@ fun UserAvatar(
                     .size(size)
                     .then(
                         if (presence != null) {
-                            Modifier.presenceCutout(presenceSize)
+                            Modifier.bottomEndCircleCutout(presenceSize)
                         } else {
                             Modifier
                         }
@@ -188,7 +188,7 @@ fun UserAvatar(
                     .size(size)
                     .then(
                         if (presence != null) {
-                            Modifier.presenceCutout(presenceSize)
+                            Modifier.bottomEndCircleCutout(presenceSize)
                         } else {
                             Modifier
                         }

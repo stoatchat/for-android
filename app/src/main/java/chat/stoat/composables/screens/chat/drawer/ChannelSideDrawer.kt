@@ -90,6 +90,7 @@ import chat.stoat.composables.generic.GroupIcon
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.composables.generic.bottomEndCircleCutout
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.core.model.data.STOAT_FILES
@@ -110,6 +111,9 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+
+private val ServerVoiceBadgeSize = 16.dp
+private val ServerVoiceBadgeIconSize = 12.dp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -336,6 +340,15 @@ fun ChannelSideDrawer(
                 val serverHasUnread =
                     serverInList.id?.let { srvId -> StoatAPI.unreads.serverHasUnread(srvId) }
                         ?: false
+                val voiceParticipants = serverInList.channels.orEmpty().flatMap { channelId ->
+                    StoatAPI.voiceStateCache[channelId]?.participants.orEmpty()
+                }
+                val hasScreenShare = voiceParticipants.any { it.screensharing }
+                val voiceBadgeIcon = when {
+                    hasScreenShare -> R.drawable.ic_screen_share_24dp
+                    voiceParticipants.isNotEmpty() -> R.drawable.ic_volume_up_24dp
+                    else -> null
+                }
                 val leftIndicatorHeight = animateDpAsState(
                     targetValue = if (serverInList.id == currentServer) 32.dp
                     else if (serverHasUnread) 8.dp
@@ -364,32 +377,60 @@ fun ChannelSideDrawer(
                     Box(
                         Modifier
                             .padding(8.dp)
+                            .size(48.dp),
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        val icon = serverInList.icon?.id?.let { iconId ->
+                            "$STOAT_FILES/icons/$iconId"
+                        }
+                        val iconModifier = Modifier
+                            .size(48.dp)
                             .clip(CircleShape)
+                            .then(
+                                if (voiceBadgeIcon != null) {
+                                    Modifier.bottomEndCircleCutout(ServerVoiceBadgeSize)
+                                } else {
+                                    Modifier
+                                }
+                            )
                             .clickable {
                                 serverInList.id?.let { srvId -> navigateToServer(srvId) }
                                 scope.launch {
                                     drawerState?.close()
                                 }
-                            }) {
-                        val icon = serverInList.icon?.id?.let { iconId ->
-                            "$STOAT_FILES/icons/$iconId"
-                        }
+                            }
                         if (icon != null) {
                             RemoteImage(
                                 url = icon,
                                 allowAnimation = false,
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape),
+                                modifier = iconModifier,
                                 description = serverInList.name ?: stringResource(R.string.unknown)
                             )
                         } else {
                             IconPlaceholder(
                                 name = serverInList.name ?: stringResource(R.string.unknown),
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
+                                modifier = iconModifier
                             )
+                        }
+
+                        if (voiceBadgeIcon != null) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.size(ServerVoiceBadgeSize)
+                            ) {
+                                Icon(
+                                    painter = painterResource(voiceBadgeIcon),
+                                    contentDescription = stringResource(
+                                        if (hasScreenShare) {
+                                            R.string.voice_screen_sharing
+                                        } else {
+                                            R.string.voice_notification_ongoing_call
+                                        }
+                                    ),
+                                    tint = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.size(ServerVoiceBadgeIconSize)
+                                )
+                            }
                         }
                     }
 
