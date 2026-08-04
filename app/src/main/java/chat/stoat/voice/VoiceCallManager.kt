@@ -21,9 +21,12 @@ import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.get
 import io.ktor.http.isSuccess
 import io.livekit.android.LiveKit
+import io.livekit.android.RoomOptions
 import io.livekit.android.events.RoomEvent
 import io.livekit.android.room.Room
+import io.livekit.android.room.track.LocalVideoTrackOptions
 import io.livekit.android.room.track.RemoteAudioTrack
+import io.livekit.android.room.track.ScreenSharePresets
 import io.livekit.android.room.track.Track
 import io.livekit.android.util.flow
 import kotlinx.coroutines.CompletableDeferred
@@ -95,7 +98,15 @@ object VoiceCallManager {
         hasPlayedLeaveSound = false
         soundPlayer = VoiceSoundPlayer(context)
 
-        val newRoom = LiveKit.create(context.applicationContext)
+        val newRoom = LiveKit.create(
+            context.applicationContext,
+            RoomOptions(
+                screenShareTrackCaptureDefaults = LocalVideoTrackOptions(
+                    isScreencast = true,
+                    captureParams = ScreenSharePresets.H720_FPS30.capture
+                )
+            )
+        )
         room = newRoom
 
         sessionJob = scope.launch {
