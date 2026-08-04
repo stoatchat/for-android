@@ -9,7 +9,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class MessagesInChannel(
@@ -78,7 +77,7 @@ data class Channel(
     @SerialName("default_permissions")
     val defaultPermissions: PermissionDescription? = null,
     val nsfw: Boolean? = null,
-    val voice: JsonElement? = null,
+    val voice: VoiceInformation? = null,
     val slowmode: Long? = null,
     val type: String? = null // this is _only_ used for websocket events!
 ) {
@@ -105,6 +104,12 @@ data class Channel(
         )
     }
 }
+
+@Serializable
+data class VoiceInformation(
+    @SerialName("max_users")
+    val maxUsers: Int? = null
+)
 
 @Serializable
 data class ChannelSlowmode(

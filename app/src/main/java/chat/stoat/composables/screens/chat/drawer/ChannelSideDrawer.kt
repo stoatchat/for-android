@@ -103,6 +103,7 @@ import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.ChannelContextSheet
+import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -957,15 +958,28 @@ fun ChannelItem(
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
                 if (hasUnread && !isCurrent) {
-                    Spacer(Modifier.weight(1f))
                     Box(
                         Modifier
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.primary)
                             .requiredSize(8.dp)
+                    )
+                }
+                channel.voice?.maxUsers?.let { maxUsers ->
+                    val participantCount = channel.id
+                        ?.let { StoatAPI.voiceStateCache[it]?.participants?.size }
+                        ?: 0
+                    Text(
+                        text = "$participantCount/$maxUsers",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontFamily = FragmentMono
+                        ),
+                        color = LocalContentColor.current.copy(alpha = 0.7f),
+                        maxLines = 1
                     )
                 }
             }
