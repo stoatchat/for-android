@@ -18,26 +18,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import chat.stoat.core.model.schemas.AutumnResource
-import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.core.model.schemas.User
+import chat.stoat.R
+import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.core.model.schemas.Channel
+import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.User
 
 @Composable
 fun ChannelSheetHeader(
-    channelName: String,
-    channelIcon: AutumnResource? = null,
-    channelType: ChannelType,
-    channelDescription: String? = null,
-    serverId: String? = null,
+    channel: Channel,
     dmPartner: User? = null
 ) {
+    val channelType = channel.channelType ?: ChannelType.TextChannel
+    val channelIcon = channel.icon
+    val channelDescription = channel.description
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -73,7 +75,7 @@ fun ChannelSheetHeader(
                 )
             } else {
                 CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onPrimaryContainer) {
-                    ChannelIcon(channelType = channelType)
+                    ChannelIcon(channel = channel)
                 }
             }
         }
@@ -82,7 +84,9 @@ fun ChannelSheetHeader(
 
         Column {
             Text(
-                text = channelName,
+                text = channel.name
+                    ?: ChannelUtils.resolveName(channel)
+                    ?: stringResource(R.string.unknown),
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -90,7 +94,7 @@ fun ChannelSheetHeader(
 
             if (!channelDescription.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(8.dp))
-                ChatMarkdown(channelDescription, serverId = serverId)
+                ChatMarkdown(channelDescription, serverId = channel.server)
             }
         }
     }

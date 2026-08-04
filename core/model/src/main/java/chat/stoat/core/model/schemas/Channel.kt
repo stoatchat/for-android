@@ -99,6 +99,7 @@ data class Channel(
             rolePermissions = partial.rolePermissions ?: rolePermissions,
             defaultPermissions = partial.defaultPermissions ?: defaultPermissions,
             nsfw = partial.nsfw ?: nsfw,
+            voice = partial.voice ?: voice,
             slowmode = partial.slowmode ?: slowmode,
             type = partial.type ?: type
         )

@@ -703,7 +703,7 @@ fun ChannelScreen(
 
                                     else -> {
                                         ChannelIcon(
-                                            channelType = it.channelType ?: ChannelType.TextChannel,
+                                            channel = it,
                                             modifier = Modifier
                                                 .size(24.dp)
                                                 .alpha(0.8f)

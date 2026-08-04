@@ -925,6 +925,10 @@ fun ChannelItem(
                             )
                         }
 
+                        channel.channelType == ChannelType.TextChannel && channel.voice != null -> {
+                            ChannelIcon(channel = channel)
+                        }
+
                         else -> ChannelIcon(iconType.type)
                     }
                 }

@@ -103,13 +103,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 4.dp),
     ) {
         ChannelSheetHeader(
-            channelName = channel.name
-                ?: ChannelUtils.resolveName(channel)
-                ?: stringResource(id = R.string.unknown),
-            channelIcon = channel.icon,
-            channelType = channel.channelType ?: ChannelType.TextChannel,
-            channelDescription = channel.description,
-            serverId = channel.server,
+            channel = channel,
             dmPartner = partner
         )
         HorizontalDivider()

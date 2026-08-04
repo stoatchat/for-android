@@ -61,9 +61,9 @@ fun ChannelHeader(
             )
         }
 
-        channel.channelType?.let {
+        if (channel.channelType != null) {
             ChannelIcon(
-                channelType = it,
+                channel = channel,
                 modifier = Modifier.alpha(0.6f)
             )
         }

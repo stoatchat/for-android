@@ -9,23 +9,47 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import chat.stoat.R
+import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
 
 @Composable
+fun ChannelIcon(channel: Channel, modifier: Modifier = Modifier) {
+    ChannelIcon(
+        channelType = channel.channelType ?: ChannelType.TextChannel,
+        hasVoice = channel.channelType == ChannelType.TextChannel && channel.voice != null,
+        modifier = modifier
+    )
+}
+
+@Composable
 fun ChannelIcon(channelType: ChannelType, modifier: Modifier = Modifier) {
+    ChannelIcon(
+        channelType = channelType,
+        hasVoice = channelType == ChannelType.VoiceChannel,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun ChannelIcon(
+    channelType: ChannelType,
+    hasVoice: Boolean,
+    modifier: Modifier,
+) {
+    if (hasVoice || channelType == ChannelType.VoiceChannel) {
+        Icon(
+            painter = painterResource(R.drawable.ic_volume_up_24dp),
+            contentDescription = stringResource(R.string.channel_voice),
+            modifier = modifier
+        )
+        return
+    }
+
     when (channelType) {
         ChannelType.TextChannel -> {
             Icon(
                 painter = painterResource(R.drawable.ic_grid_3x3_24dp),
                 contentDescription = stringResource(R.string.channel_text),
-                modifier = modifier
-            )
-        }
-
-        ChannelType.VoiceChannel -> {
-            Icon(
-                painter = painterResource(R.drawable.ic_volume_up_24dp),
-                contentDescription = stringResource(R.string.channel_voice),
                 modifier = modifier
             )
         }

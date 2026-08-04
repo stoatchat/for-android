@@ -400,9 +400,9 @@ fun MessageField(
                                 },
                                 label = { Text("#${item.channel.name}") },
                                 icon = {
-                                    item.channel.channelType?.let { type ->
+                                    if (item.channel.channelType != null) {
                                         ChannelIcon(
-                                            channelType = type,
+                                            channel = item.channel,
                                             modifier = Modifier.size(SuggestionChipDefaults.IconSize)
                                         )
                                     }
