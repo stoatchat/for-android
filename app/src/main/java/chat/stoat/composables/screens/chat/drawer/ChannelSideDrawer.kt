@@ -1,5 +1,6 @@
 package chat.stoat.composables.screens.chat.drawer
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -81,6 +82,7 @@ import chat.stoat.api.internals.CategorisedChannelList
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.internals.DirectMessages
 import chat.stoat.api.internals.FriendRequests
+import chat.stoat.api.routes.user.addUserIfUnknown
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.NotificationSettingsProvider
 import chat.stoat.api.settings.SyncedSettings
@@ -97,10 +99,16 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.has
+import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.ChannelContextSheet
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -824,6 +832,7 @@ fun ColumnScope.ServerChannelListRenderer(
                             channelOrCat.channel.id!!,
                             serverId
                         ),
+                        showVoiceParticipants = true,
                         onOpenChannelContextSheet = onOpenChannelContextSheet
                     )
                 }
@@ -863,6 +872,7 @@ fun ChannelItem(
     hasUnread: Boolean = false,
     isMuted: Boolean = false,
     appendServerName: Boolean = false,
+    showVoiceParticipants: Boolean = false,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
     onOpenChannelContextSheet: (String) -> Unit
 ) {
@@ -877,86 +887,204 @@ fun ChannelItem(
             }
         }
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .clip(
-                    CircleShape
-                )
-                .combinedClickable(
-                    onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
-                    onLongClick = {
-                        channel.id?.let { chId ->
-                            onOpenChannelContextSheet(chId)
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .clip(
+                        CircleShape
+                    )
+                    .combinedClickable(
+                        onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
+                        onLongClick = {
+                            channel.id?.let { chId ->
+                                onOpenChannelContextSheet(chId)
+                            }
+                        },
+                        onClick = {
+                            channel.id?.let { chId ->
+                                onDestinationChanged(ChatRouterDestination.Channel(chId))
+                            }
                         }
+                    )
+                    .then(
+                        if (isCurrent) {
+                            Modifier.background(MaterialTheme.colorScheme.secondaryContainer)
+                        } else {
+                            Modifier
+                        }
+                    )
+                    .then(
+                        if (isMuted) {
+                            Modifier.alpha(0.5f)
+                        } else {
+                            Modifier
+                        }
+                    )
+                    .padding(16.dp)
+                    .fillMaxWidth()) {
+                when (iconType) {
+                    is ChannelItemIconType.Channel -> {
+                        when {
+                            GeoStateProvider.geoState?.isAgeRestrictedGeo == true &&
+                                    channel.nsfw == true -> {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_grid_3x3_off_24dp),
+                                    contentDescription = stringResource(R.string.geogate_channel_icon_alt),
+                                )
+                            }
+
+                            channel.channelType == ChannelType.TextChannel && channel.voice != null -> {
+                                ChannelIcon(channel = channel)
+                            }
+
+                            else -> ChannelIcon(iconType.type)
+                        }
+                    }
+
+                    is ChannelItemIconType.Painter -> {
+                        Icon(painter = iconType.painter, contentDescription = null)
+                    }
+                }
+                Text(
+                    text = (ChannelUtils.resolveName(channel) ?: stringResource(R.string.unknown))
+                            + if (appendServerName && channel.server != null) {
+                        " (${StoatAPI.serverCache[channel.server]?.name ?: stringResource(R.string.unknown)})"
+                    } else {
+                        ""
                     },
-                    onClick = {
-                        channel.id?.let { chId ->
-                            onDestinationChanged(ChatRouterDestination.Channel(chId))
-                        }
-                    }
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                .then(
-                    if (isCurrent) {
-                        Modifier.background(MaterialTheme.colorScheme.secondaryContainer)
-                    } else {
+                if (hasUnread && !isCurrent) {
+                    Spacer(Modifier.weight(1f))
+                    Box(
                         Modifier
-                    }
-                )
-                .then(
-                    if (isMuted) {
-                        Modifier.alpha(0.5f)
-                    } else {
-                        Modifier
-                    }
-                )
-                .padding(16.dp)
-                .fillMaxWidth()) {
-            when (iconType) {
-                is ChannelItemIconType.Channel -> {
-                    when {
-                        GeoStateProvider.geoState?.isAgeRestrictedGeo == true &&
-                                channel.nsfw == true -> {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_grid_3x3_off_24dp),
-                                contentDescription = stringResource(R.string.geogate_channel_icon_alt),
-                            )
-                        }
-
-                        channel.channelType == ChannelType.TextChannel && channel.voice != null -> {
-                            ChannelIcon(channel = channel)
-                        }
-
-                        else -> ChannelIcon(iconType.type)
-                    }
-                }
-
-                is ChannelItemIconType.Painter -> {
-                    Icon(painter = iconType.painter, contentDescription = null)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .requiredSize(8.dp)
+                    )
                 }
             }
-            Text(
-                text = (ChannelUtils.resolveName(channel) ?: stringResource(R.string.unknown))
-                        + if (appendServerName && channel.server != null) {
-                    " (${StoatAPI.serverCache[channel.server]?.name ?: stringResource(R.string.unknown)})"
-                } else {
-                    ""
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+
+            if (showVoiceParticipants &&
+                channel.channelType == ChannelType.TextChannel &&
+                channel.voice != null
+            ) {
+                VoiceChannelParticipantPreview(
+                    channel = channel,
+                    modifier = if (isMuted) Modifier.alpha(0.5f) else Modifier
+                )
+            }
+        }
+    }
+}
+
+private const val MAX_VISIBLE_VOICE_PARTICIPANTS = 5
+
+@Composable
+private fun VoiceChannelParticipantPreview(
+    channel: Channel,
+    modifier: Modifier = Modifier,
+) {
+    val channelId = channel.id ?: return
+    val participants = StoatAPI.voiceStateCache[channelId]?.participants.orEmpty()
+    val participantIds = participants.map { it.id }.distinct()
+
+    LaunchedEffect(participantIds) {
+        supervisorScope {
+            participantIds
+                .filter { StoatAPI.userCache[it] == null }
+                .forEach { userId ->
+                    launch {
+                        try {
+                            addUserIfUnknown(userId)
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Exception) {
+                            logcat(LogPriority.ERROR) {
+                                "Failed to fetch voice participant $userId\n" +
+                                        e.asLog()
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    AnimatedVisibility(
+        visible = participants.isNotEmpty(),
+        modifier = modifier
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 56.dp, top = 4.dp, end = 24.dp, bottom = 8.dp)
+        ) {
+            participants.take(MAX_VISIBLE_VOICE_PARTICIPANTS).forEach { participant ->
+                VoiceChannelParticipantRow(
+                    state = participant,
+                    channel = channel
+                )
+            }
+
+            val hiddenParticipantCount =
+                (participants.size - MAX_VISIBLE_VOICE_PARTICIPANTS).coerceAtLeast(0)
+            if (hiddenParticipantCount > 0) {
+                Text(
+                    text = stringResource(
+                        R.string.channel_voice_participants_more,
+                        hiddenParticipantCount
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = LocalContentColor.current.copy(alpha = 0.7f),
+                    modifier = Modifier.padding(start = 28.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun VoiceChannelParticipantRow(
+    state: UserVoiceState,
+    channel: Channel,
+) {
+    val user = StoatAPI.userCache[state.id]
+    val displayName = channel.server
+        ?.let { StoatAPI.members.getMember(it, state.id)?.nickname }
+        ?: user?.let(User::resolveDefaultName)
+        ?: stringResource(R.string.unknown)
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        UserAvatar(
+            username = displayName,
+            userId = state.id,
+            avatar = user?.avatar,
+            size = 20.dp
+        )
+        Text(
+            text = displayName,
+            style = MaterialTheme.typography.bodySmall,
+            color = LocalContentColor.current.copy(alpha = 0.8f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f, fill = false)
+        )
+        if (state.screensharing) {
+            Icon(
+                painter = painterResource(R.drawable.ic_screen_share_24dp),
+                contentDescription = stringResource(R.string.voice_screen_sharing),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp)
             )
-            if (hasUnread && !isCurrent) {
-                Spacer(Modifier.weight(1f))
-                Box(
-                    Modifier
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .requiredSize(8.dp)
-                )
-            }
         }
     }
 }

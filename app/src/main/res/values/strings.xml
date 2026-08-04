@@ -701,6 +701,7 @@
     <string name="voice_muted">Muted</string>
     <string name="voice_deafened">Deafened</string>
     <string name="voice_screen_sharing">Sharing their screen</string>
+    <string name="channel_voice_participants_more">and %1$d more</string>
     <string name="voice_camera_on">Camera on</string>
 
     <string name="voice_action_disconnect">Disconnect</string>
