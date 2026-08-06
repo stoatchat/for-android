@@ -9,6 +9,7 @@ import chat.stoat.api.internals.ActiveSlowmode
 import chat.stoat.api.internals.Members
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
+import chat.stoat.api.realtime.shouldReconnectOnForeground
 import chat.stoat.api.routes.account.MFA_TICKET_HEADER_NAME
 import chat.stoat.api.routes.user.fetchSelf
 import chat.stoat.api.unreads.Unreads
@@ -38,18 +39,25 @@ import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
 import io.sentry.Sentry
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -59,6 +67,8 @@ import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 import java.net.SocketException
+import java.net.SocketTimeoutException
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import chat.stoat.core.model.schemas.Channel as ChannelSchema
 
@@ -145,6 +155,7 @@ object StoatAPI {
     private val INITIAL_RECONNECT_DELAY = 1.seconds
     private val MAX_RECONNECT_DELAY = 30.seconds
     private val PING_INTERVAL = 30.seconds // Same interval as the web clients (/revolt.js)
+    private val CONNECTION_READY_TIMEOUT = 20.seconds
 
     val userCache = mutableStateMapOf<String, User>()
     val serverCache = mutableStateMapOf<String, Server>()
@@ -174,6 +185,9 @@ object StoatAPI {
 
     private var socketCoroutine: Job? = null
     private var pingCoroutine: Job? = null
+    private var reconnectRequestJob: Job? = null
+    private val socketRestartMutex = Mutex()
+    private val socketScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private var openForLocalHydration = true
 
@@ -192,41 +206,92 @@ object StoatAPI {
         unreads.sync()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun connectWS() {
-        socketCoroutine?.cancelAndJoin()
-        RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
-        val token = sessionToken
-        socketCoroutine = CoroutineScope(Dispatchers.IO).launch {
-            var reconnectDelay = INITIAL_RECONNECT_DELAY
-            while (isActive && sessionToken == token) {
-                try {
-                    withContext(realtimeContext) {
-                        RealtimeSocket.connect(token)
+        socketRestartMutex.withLock {
+            socketCoroutine?.cancelAndJoin()
+            val token = sessionToken
+            if (token.isEmpty()) {
+                RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
+                return@withLock
+            }
+
+            RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
+            socketCoroutine = socketScope.launch {
+                var reconnectDelay = INITIAL_RECONNECT_DELAY
+                while (isActive && sessionToken == token) {
+                    try {
+                        connectOnce(token)
+                        reconnectDelay = INITIAL_RECONNECT_DELAY
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: SocketException) {
+                        logcat { "WebSocket closed: ${e.message}" }
+                    } catch (e: Exception) {
+                        logcat(LogPriority.ERROR) { "WebSocket error:\n${e.asLog()}" }
                     }
-                    reconnectDelay = INITIAL_RECONNECT_DELAY
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: SocketException) {
-                    logcat { "WebSocket closed: ${e.message}" }
-                } catch (e: Exception) {
-                    logcat(LogPriority.ERROR) { "WebSocket error:\n${e.asLog()}" }
-                }
 
-                if (!isActive || sessionToken != token) break
+                    if (!isActive || sessionToken != token) break
 
-                try {
-                    RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
-                    delay(reconnectDelay)
-                    reconnectDelay =
-                        (reconnectDelay * 2).coerceAtMost(MAX_RECONNECT_DELAY)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
-                    Sentry.captureMessage("Error in socket error handling: $e")
+                    try {
+                        RealtimeSocket.updateDisconnectionState(DisconnectionState.Reconnecting)
+                        delay(reconnectDelay)
+                        reconnectDelay =
+                            (reconnectDelay * 2).coerceAtMost(MAX_RECONNECT_DELAY)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        RealtimeSocket.updateDisconnectionState(DisconnectionState.Disconnected)
+                        Sentry.captureMessage("Error in socket error handling: $e")
+                    }
                 }
             }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun connectOnce(token: String) = coroutineScope {
+        val connectionReady = CompletableDeferred<Unit>()
+        val connection = async(realtimeContext) {
+            RealtimeSocket.connect(token) {
+                connectionReady.complete(Unit)
+            }
+        }
+
+        try {
+            try {
+                withTimeout(CONNECTION_READY_TIMEOUT) {
+                    connectionReady.await()
+                }
+            } catch (_: TimeoutCancellationException) {
+                throw SocketTimeoutException(
+                    "WebSocket did not authenticate within $CONNECTION_READY_TIMEOUT."
+                )
+            }
+            connection.await()
+        } finally {
+            connection.cancelAndJoin()
+        }
+    }
+
+    @Synchronized
+    fun requestReconnect(reason: String) {
+        if (sessionToken.isEmpty() || reconnectRequestJob?.isActive == true) return
+
+        reconnectRequestJob = socketScope.launch {
+            logcat { "Restarting realtime connection: $reason" }
+            connectWS()
+        }
+    }
+
+    fun onAppForegrounded(backgroundDuration: Duration) {
+        if (
+            shouldReconnectOnForeground(
+                state = RealtimeSocket.disconnectionState,
+                backgroundDuration = backgroundDuration,
+                connectionIsStale = RealtimeSocket.isConnectionStale(),
+            )
+        ) {
+            requestReconnect("app foregrounded after $backgroundDuration")
         }
     }
 
@@ -235,10 +300,14 @@ object StoatAPI {
 
         // Send a ping every roughly PING_INTERVAL else the socket dies
         pingCoroutine?.cancel()
-        pingCoroutine = CoroutineScope(Dispatchers.IO).launch {
+        pingCoroutine = socketScope.launch {
             while (isActive) {
                 delay(PING_INTERVAL)
                 try {
+                    if (RealtimeSocket.isConnectionStale()) {
+                        requestReconnect("no server frames received recently")
+                        continue
+                    }
                     RealtimeSocket.sendPing()
                 } catch (e: CancellationException) {
                     throw e
@@ -283,6 +352,7 @@ object StoatAPI {
 
         socketCoroutine?.cancel()
         pingCoroutine?.cancel()
+        reconnectRequestJob?.cancel()
 
         clearPersistentCache()
     }

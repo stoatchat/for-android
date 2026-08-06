@@ -81,6 +81,9 @@ object RealtimeSocket {
     val database = Database(SqlStorage.driver)
     var socket: WebSocketSession? = null
 
+    @Volatile
+    private var lastFrameAtElapsedRealtime: Long? = null
+
     private val channelRegistrator: ChannelRegistrator
         get() = ChannelRegistrator(StoatApplication.instance)
 
@@ -92,7 +95,7 @@ object RealtimeSocket {
         _disconnectionState.value = state
     }
 
-    suspend fun connect(token: String) {
+    suspend fun connect(token: String, onReady: () -> Unit) {
         if (disconnectionState == DisconnectionState.Connected) {
             Log.d("RealtimeSocket", "Already connected to websocket. Refusing to connect again.")
             return
@@ -106,9 +109,7 @@ object RealtimeSocket {
                 activeSocket = this
                 socket = this
 
-                logcat { "Connected to websocket." }
-                updateDisconnectionState(DisconnectionState.Connected)
-                pushReconnectEvent()
+                logcat { "Connected to websocket transport." }
 
                 // Send authorization frame
                 val authFrame = AuthorizationFrame("Authenticate", token)
@@ -125,12 +126,22 @@ object RealtimeSocket {
                 }
                 send(StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame))
 
+                var connectionReady = false
                 incoming.consumeEach { frame ->
                     if (frame is Frame.Text) {
+                        lastFrameAtElapsedRealtime = SystemClock.elapsedRealtime()
                         val frameString = frame.readText()
                         try {
                             val frameType =
                                 StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
+
+                            if (!connectionReady && isConnectionReadyFrame(frameType, frameString)) {
+                                connectionReady = true
+                                updateDisconnectionState(DisconnectionState.Connected)
+                                pushReconnectEvent()
+                                onReady()
+                                logcat { "WebSocket authenticated." }
+                            }
 
                             handleFrame(frameType, frameString)
                         } catch (e: CancellationException) {
@@ -146,9 +157,26 @@ object RealtimeSocket {
         } finally {
             if (activeSocket == null || socket === activeSocket) {
                 socket = null
+                lastFrameAtElapsedRealtime = null
                 updateDisconnectionState(DisconnectionState.Disconnected)
                 logcat { "WebSocket disconnected." }
             }
+        }
+    }
+
+    fun isConnectionStale(nowElapsedRealtime: Long = SystemClock.elapsedRealtime()): Boolean {
+        if (disconnectionState != DisconnectionState.Connected) return false
+        val lastFrameAt = lastFrameAtElapsedRealtime ?: return true
+        return nowElapsedRealtime - lastFrameAt > STALE_CONNECTION_THRESHOLD.inWholeMilliseconds
+    }
+
+    private fun isConnectionReadyFrame(type: String, rawFrame: String): Boolean {
+        if (type == "Authenticated" || type == "Ready") return true
+        if (type != "Bulk") return false
+
+        return StoatJson.decodeFromString(BulkFrame.serializer(), rawFrame).v.any { frame ->
+            val frameType = StoatJson.decodeFromString(AnyFrame.serializer(), frame.toString()).type
+            frameType == "Authenticated" || frameType == "Ready"
         }
     }
 
