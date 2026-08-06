@@ -1,6 +1,5 @@
 package chat.stoat.api.internals
 
-import android.util.Log
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -13,98 +12,179 @@ import chat.stoat.api.internals.colour.CSSColours
 
 fun Brush.Companion.solidColor(colour: Color) = SolidColor(colour)
 
+private const val MAX_COLOUR_LENGTH = 4096
+private const val MAX_GRADIENT_STOPS = 64
+
+internal data class GradientStop(
+    val colour: String,
+    val position: Float?
+)
+
+internal fun parseGradientStop(part: String): GradientStop {
+    val trimmedPart = part.trim()
+    var openParenthesesCount = 0
+
+    for (index in trimmedPart.indices) {
+        when (trimmedPart[index]) {
+            '(' -> openParenthesesCount++
+            ')' -> openParenthesesCount--
+            else -> {
+                if (trimmedPart[index].isWhitespace() && openParenthesesCount == 0) {
+                    val colour = trimmedPart.substring(0, index).trim()
+                    val positionText = trimmedPart.substring(index).trim()
+                    val position = positionText
+                        .removeSuffix("%")
+                        .toFloatOrNull()
+                        ?.takeIf(Float::isFinite)
+                        ?.div(100f)
+
+                    return GradientStop(colour, position)
+                }
+            }
+        }
+    }
+
+    return GradientStop(trimmedPart, null)
+}
+
+internal fun parseGradientParts(gradient: String): List<String>? {
+    if (gradient.length > MAX_COLOUR_LENGTH) return null
+
+    val parts = mutableListOf<String>()
+    var startIndex = 0
+    var openParenthesesCount = 0
+
+    for (index in gradient.indices) {
+        when (gradient[index]) {
+            '(' -> openParenthesesCount++
+            ')' -> {
+                if (openParenthesesCount == 0) return null
+                openParenthesesCount--
+            }
+
+            ',' -> {
+                if (openParenthesesCount == 0) {
+                    val part = gradient.substring(startIndex, index).trim()
+                    if (part.isEmpty() || parts.size == MAX_GRADIENT_STOPS) return null
+                    parts.add(part)
+                    startIndex = index + 1
+                }
+            }
+        }
+    }
+
+    if (openParenthesesCount != 0) return null
+
+    val lastPart = gradient.substring(startIndex).trim()
+    if (lastPart.isEmpty() || parts.size == MAX_GRADIENT_STOPS) return null
+    parts.add(lastPart)
+
+    return parts
+}
+
+internal fun <T> normalizeGradientStops(stops: List<Pair<Float?, T>>): List<Pair<Float, T>> {
+    if (stops.isEmpty()) return emptyList()
+
+    var previousPosition = 0f
+    return stops.mapIndexed { index, (position, value) ->
+        val defaultPosition = index.toFloat() / (stops.size - 1).coerceAtLeast(1)
+        val safePosition = position
+            ?.takeIf(Float::isFinite)
+            ?.coerceIn(0f, 1f)
+            ?: defaultPosition
+        val orderedPosition = safePosition.coerceAtLeast(previousPosition)
+        previousPosition = orderedPosition
+        orderedPosition to value
+    }
+}
+
+internal fun parseCssFunctionColour(colourString: String): Color? {
+    val cleanedString = colourString.trim()
+    if (cleanedString.length > MAX_COLOUR_LENGTH) return null
+
+    val hasAlpha = cleanedString.startsWith("rgba(")
+    if ((!hasAlpha && !cleanedString.startsWith("rgb(")) || !cleanedString.endsWith(")")) {
+        return null
+    }
+
+    val colourParts = cleanedString.substringAfter('(')
+        .dropLast(1)
+        .split(',')
+        .map(String::trim)
+    if (colourParts.size != if (hasAlpha) 4 else 3) return null
+
+    val channels = colourParts.take(3).map { channel ->
+        channel.toIntOrNull()?.coerceIn(0, 255) ?: return null
+    }
+    val alpha = if (hasAlpha) {
+        val alphaText = colourParts[3]
+        val alphaValue = alphaText.removeSuffix("%").toFloatOrNull()
+            ?.takeIf(Float::isFinite)
+            ?: return null
+        val normalizedAlpha = if (alphaText.endsWith('%') || alphaValue > 1f) {
+            alphaValue / 100f
+        } else {
+            alphaValue
+        }
+        normalizedAlpha.coerceIn(0f, 1f)
+    } else {
+        1f
+    }
+
+    return Color(
+        red = channels[0] / 255f,
+        green = channels[1] / 255f,
+        blue = channels[2] / 255f,
+        alpha = alpha
+    )
+}
+
 object BrushCompat {
     @Composable
     private fun parseLinearGradient(gradient: String): Brush {
-        val stops = mutableListOf<Pair<Float, Color>>()
+        val stops = mutableListOf<Pair<Float?, Color>>()
+        val parts = parseGradientParts(gradient)
+            ?: return Brush.solidColor(LocalContentColor.current)
 
-        val parts = mutableListOf<String>()
-        var startIndex = 0
-        var openParenthesesCount = 0
-
-        for (i in gradient.indices) {
-            when (gradient[i]) {
-                '(' -> openParenthesesCount++
-                ')' -> openParenthesesCount--
-                ',' -> {
-                    if (openParenthesesCount == 0) {
-                        val part = gradient.substring(startIndex, i).trim()
-                        parts.add(part)
-                        startIndex = i + 1
-                    }
+        val colourParts = parts.filterNot {
+            it.startsWith("to ") || it.removeSuffix("deg").toFloatOrNull()?.isFinite() == true
+        }
+        colourParts.forEach { part ->
+            val gradientStop = parseGradientStop(part)
+            val colourPart = gradientStop.colour
+            val colour = when {
+                colourPart.startsWith("var(") -> {
+                    parseVarToColour(
+                        colourPart.substringAfter("var(").substringBeforeLast(")")
+                    )
                 }
+
+                else -> parseFunctionColour(colourPart) ?: parseColourName(colourPart)
             }
+
+            stops.add(gradientStop.position to colour)
         }
 
-        val lastPart = gradient.substring(startIndex).trim()
-        if (lastPart.isNotEmpty()) {
-            parts.add(lastPart)
-        }
-
-        parts.forEachIndexed { index, part ->
-            if (part.startsWith("to") || part.endsWith("deg")) {
-                // we don't support any other direction / blocked on compose supporting them
-                // TODO could probably emulate this by swapping the values around
-            } else {
-                val splitPart = part.split(" ")
-
-                val colourPart = splitPart[0]
-                val colour = when {
-                    colourPart.startsWith("var(") -> {
-                        parseVarToColour(
-                            colourPart.substringAfter("var(").substringBeforeLast(")")
-                        )
-                    }
-
-                    else -> parseFunctionColour(colourPart) ?: parseColourName(colourPart)
-                }
-
-                val stop = if (splitPart.size == 2) {
-                    splitPart[1].removeSuffix("%").toFloat() / 100f
-                } else {
-                    index.toFloat() / (parts.size - 1)
-                }
-
-                stops.add(stop to colour)
-            }
+        if (stops.size < 2) {
+            return Brush.solidColor(stops.firstOrNull()?.second ?: LocalContentColor.current)
         }
 
         return linearGradient(
-            colorStops = stops.toTypedArray()
+            colorStops = normalizeGradientStops(stops).toTypedArray()
         )
     }
 
     @Composable
     private fun parseRadialGradient(gradient: String): Brush {
-        val stops = mutableListOf<Pair<Float, Color>>()
-
-        val parts = mutableListOf<String>()
-        var startIndex = 0
-        var openParenthesesCount = 0
-
-        // Split the gradient string into individual components
-        for (i in gradient.indices) {
-            when (gradient[i]) {
-                '(' -> openParenthesesCount++
-                ')' -> openParenthesesCount--
-                ',' -> {
-                    if (openParenthesesCount == 0) {
-                        val part = gradient.substring(startIndex, i).trim()
-                        parts.add(part)
-                        startIndex = i + 1
-                    }
-                }
-            }
-        }
-        val lastPart = gradient.substring(startIndex).trim()
-        if (lastPart.isNotEmpty()) {
-            parts.add(lastPart)
-        }
+        val stops = mutableListOf<Pair<Float?, Color>>()
+        val parts = parseGradientParts(gradient)
+            ?: return Brush.solidColor(LocalContentColor.current)
 
         // Parse color stops
-        parts.drop(1).forEachIndexed { index, part ->
-            val splitPart = part.split(" ")
-            val colorPart = splitPart[0]
+        val colourParts = parts.drop(1)
+        colourParts.forEach { part ->
+            val gradientStop = parseGradientStop(part)
+            val colorPart = gradientStop.colour
             val color = when {
                 colorPart.startsWith("var(") -> {
                     parseVarToColour(
@@ -115,61 +195,20 @@ object BrushCompat {
                 else -> parseFunctionColour(colorPart) ?: parseColourName(colorPart)
             }
 
-            val stop = if (splitPart.size == 2) {
-                splitPart[1].removeSuffix("%").toFloat() / 100f
-            } else {
-                index.toFloat() / (parts.size - 2)
-            }
+            stops.add(gradientStop.position to color)
+        }
 
-            stops.add(stop to color)
+        if (stops.size < 2) {
+            return Brush.solidColor(stops.firstOrNull()?.second ?: LocalContentColor.current)
         }
 
         return Brush.radialGradient(
-            colorStops = stops.toTypedArray()
+            colorStops = normalizeGradientStops(stops).toTypedArray()
         )
     }
 
     fun parseFunctionColour(colourString: String): Color? {
-        val cleanedString = colourString.trim()
-
-        return try {
-            if (cleanedString.startsWith("rgb(")) {
-                parseRGBColour(cleanedString)
-            } else if (cleanedString.startsWith("rgba(")) {
-                parseRGBAColour(cleanedString)
-            } else {
-                throw IllegalArgumentException("Invalid colour format: $colourString")
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    private fun parseRGBColour(rgbString: String): Color {
-        val colourParts = rgbString.removePrefix("rgb(")
-            .removeSuffix(")")
-            .split(",")
-            .map { it.trim().toInt() }
-
-        val red = colourParts[0] / 255.0f
-        val green = colourParts[1] / 255.0f
-        val blue = colourParts[2] / 255.0f
-
-        return Color(red, green, blue)
-    }
-
-    private fun parseRGBAColour(rgbaString: String): Color {
-        val colourParts = rgbaString.removePrefix("rgba(")
-            .removeSuffix(")")
-            .split(",")
-            .map { it.trim() }
-
-        val red = colourParts[0].toInt() / 255.0f
-        val green = colourParts[1].toInt() / 255.0f
-        val blue = colourParts[2].toInt() / 255.0f
-        val alpha = colourParts[3].removeSuffix("%").toFloat() / 100.0f
-
-        return Color(red, green, blue, alpha)
+        return parseCssFunctionColour(colourString)
     }
 
     @Composable
@@ -191,50 +230,52 @@ object BrushCompat {
     @Composable
     private fun parseColourName(colour: String): Color {
         return try {
-            val cssColour = CSSColours[colour]
+            val cssColour = CSSColours[colour.lowercase()]
             if (cssColour != null) {
                 return cssColour
             }
 
             Color(colour.toColorInt())
-        } catch (e: IllegalArgumentException) {
-            Log.d(
-                "BrushCompat",
-                "Failed to parse colour $colour, falling back to LocalContentColor.current"
-            )
+        } catch (e: RuntimeException) {
             LocalContentColor.current
         }
     }
 
     @Composable
     fun parseColour(colour: String): Brush {
-        if (colour.isEmpty()) {
+        val cleanedColour = colour.trim()
+        if (cleanedColour.isEmpty()) {
             return Brush.solidColor(Color.Unspecified)
+        }
+        if (cleanedColour.length > MAX_COLOUR_LENGTH) {
+            return Brush.solidColor(LocalContentColor.current)
         }
 
         when {
-            colour.startsWith("var(") -> {
-                Log.d(
-                    "BrushCompat",
-                    "Parsing variable $colour"
-                )
+            cleanedColour.startsWith("var(") && cleanedColour.endsWith(")") -> {
                 return parseVar(
-                    colour.substringAfter("var(").substringBeforeLast(")")
+                    cleanedColour.substringAfter("var(").substringBeforeLast(")")
                 )
             }
 
-            colour.startsWith("linear-gradient(") || colour.startsWith("repeating-linear-gradient(") -> {
+            (
+                cleanedColour.startsWith("linear-gradient(") ||
+                    cleanedColour.startsWith("repeating-linear-gradient(")
+                ) && cleanedColour.endsWith(")") -> {
                 return parseLinearGradient(
-                    colour
+                    cleanedColour
                         .substringAfter("repeating-")
                         .substringAfter("linear-gradient(")
                         .substringBeforeLast(")")
                 )
             }
 
-            colour.startsWith("radial-gradient(") || colour.startsWith("repeating-radial-gradient(") -> {
+            (
+                cleanedColour.startsWith("radial-gradient(") ||
+                    cleanedColour.startsWith("repeating-radial-gradient(")
+                ) && cleanedColour.endsWith(")") -> {
                 return parseRadialGradient(
-                    colour
+                    cleanedColour
                         .substringAfter("repeating-")
                         .substringAfter("radial-gradient(")
                         .substringBeforeLast(")")
@@ -243,7 +284,7 @@ object BrushCompat {
 
 
             else -> {
-                return Brush.solidColor(parseColourName(colour))
+                return Brush.solidColor(parseColourName(cleanedColour))
             }
         }
     }
@@ -261,94 +302,46 @@ class InstancedBrushCompat(
     val errorColour: Color
 ) {
     private fun parseLinearGradient(gradient: String): Brush {
-        val stops = mutableListOf<Pair<Float, Color>>()
+        val stops = mutableListOf<Pair<Float?, Color>>()
+        val parts = parseGradientParts(gradient) ?: return Brush.solidColor(defaultColour)
 
-        val parts = mutableListOf<String>()
-        var startIndex = 0
-        var openParenthesesCount = 0
-
-        for (i in gradient.indices) {
-            when (gradient[i]) {
-                '(' -> openParenthesesCount++
-                ')' -> openParenthesesCount--
-                ',' -> {
-                    if (openParenthesesCount == 0) {
-                        val part = gradient.substring(startIndex, i).trim()
-                        parts.add(part)
-                        startIndex = i + 1
-                    }
+        val colourParts = parts.filterNot {
+            it.startsWith("to ") || it.removeSuffix("deg").toFloatOrNull()?.isFinite() == true
+        }
+        colourParts.forEach { part ->
+            val gradientStop = parseGradientStop(part)
+            val colourPart = gradientStop.colour
+            val colour = when {
+                colourPart.startsWith("var(") -> {
+                    parseVarToColour(
+                        colourPart.substringAfter("var(").substringBeforeLast(")")
+                    )
                 }
+
+                else -> parseFunctionColour(colourPart) ?: parseColourName(colourPart)
             }
+
+            stops.add(gradientStop.position to colour)
         }
 
-        val lastPart = gradient.substring(startIndex).trim()
-        if (lastPart.isNotEmpty()) {
-            parts.add(lastPart)
-        }
-
-        parts.forEachIndexed { index, part ->
-            if (part.startsWith("to") || part.endsWith("deg")) {
-                // we don't support any other direction / blocked on compose supporting them
-                // TODO could probably emulate this by swapping the values around
-            } else {
-                val splitPart = part.split(" ")
-
-                val colourPart = splitPart[0]
-                val colour = when {
-                    colourPart.startsWith("var(") -> {
-                        parseVarToColour(
-                            colourPart.substringAfter("var(").substringBeforeLast(")")
-                        )
-                    }
-
-                    else -> parseFunctionColour(colourPart) ?: parseColourName(colourPart)
-                }
-
-                val stop = if (splitPart.size == 2) {
-                    splitPart[1].removeSuffix("%").toFloat() / 100f
-                } else {
-                    index.toFloat() / (parts.size - 1)
-                }
-
-                stops.add(stop to colour)
-            }
+        if (stops.size < 2) {
+            return Brush.solidColor(stops.firstOrNull()?.second ?: defaultColour)
         }
 
         return linearGradient(
-            colorStops = stops.toTypedArray()
+            colorStops = normalizeGradientStops(stops).toTypedArray()
         )
     }
 
     private fun parseRadialGradient(gradient: String): Brush {
-        val stops = mutableListOf<Pair<Float, Color>>()
-
-        val parts = mutableListOf<String>()
-        var startIndex = 0
-        var openParenthesesCount = 0
-
-        // Split the gradient string into individual components
-        for (i in gradient.indices) {
-            when (gradient[i]) {
-                '(' -> openParenthesesCount++
-                ')' -> openParenthesesCount--
-                ',' -> {
-                    if (openParenthesesCount == 0) {
-                        val part = gradient.substring(startIndex, i).trim()
-                        parts.add(part)
-                        startIndex = i + 1
-                    }
-                }
-            }
-        }
-        val lastPart = gradient.substring(startIndex).trim()
-        if (lastPart.isNotEmpty()) {
-            parts.add(lastPart)
-        }
+        val stops = mutableListOf<Pair<Float?, Color>>()
+        val parts = parseGradientParts(gradient) ?: return Brush.solidColor(defaultColour)
 
         // Parse color stops
-        parts.drop(1).forEachIndexed { index, part ->
-            val splitPart = part.split(" ")
-            val colorPart = splitPart[0]
+        val colourParts = parts.drop(1)
+        colourParts.forEach { part ->
+            val gradientStop = parseGradientStop(part)
+            val colorPart = gradientStop.colour
             val color = when {
                 colorPart.startsWith("var(") -> {
                     parseVarToColour(
@@ -359,61 +352,20 @@ class InstancedBrushCompat(
                 else -> parseFunctionColour(colorPart) ?: parseColourName(colorPart)
             }
 
-            val stop = if (splitPart.size == 2) {
-                splitPart[1].removeSuffix("%").toFloat() / 100f
-            } else {
-                index.toFloat() / (parts.size - 2)
-            }
+            stops.add(gradientStop.position to color)
+        }
 
-            stops.add(stop to color)
+        if (stops.size < 2) {
+            return Brush.solidColor(stops.firstOrNull()?.second ?: defaultColour)
         }
 
         return Brush.radialGradient(
-            colorStops = stops.toTypedArray()
+            colorStops = normalizeGradientStops(stops).toTypedArray()
         )
     }
 
     fun parseFunctionColour(colourString: String): Color? {
-        val cleanedString = colourString.trim()
-
-        return try {
-            if (cleanedString.startsWith("rgb(")) {
-                parseRGBColour(cleanedString)
-            } else if (cleanedString.startsWith("rgba(")) {
-                parseRGBAColour(cleanedString)
-            } else {
-                throw IllegalArgumentException("Invalid colour format: $colourString")
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    private fun parseRGBColour(rgbString: String): Color {
-        val colourParts = rgbString.removePrefix("rgb(")
-            .removeSuffix(")")
-            .split(",")
-            .map { it.trim().toInt() }
-
-        val red = colourParts[0] / 255.0f
-        val green = colourParts[1] / 255.0f
-        val blue = colourParts[2] / 255.0f
-
-        return Color(red, green, blue)
-    }
-
-    private fun parseRGBAColour(rgbaString: String): Color {
-        val colourParts = rgbaString.removePrefix("rgba(")
-            .removeSuffix(")")
-            .split(",")
-            .map { it.trim() }
-
-        val red = colourParts[0].toInt() / 255.0f
-        val green = colourParts[1].toInt() / 255.0f
-        val blue = colourParts[2].toInt() / 255.0f
-        val alpha = colourParts[3].removeSuffix("%").toFloat() / 100.0f
-
-        return Color(red, green, blue, alpha)
+        return parseCssFunctionColour(colourString)
     }
 
     private fun parseVarToColour(varName: String): Color {
@@ -432,49 +384,51 @@ class InstancedBrushCompat(
 
     private fun parseColourName(colour: String): Color {
         return try {
-            val cssColour = CSSColours[colour]
+            val cssColour = CSSColours[colour.lowercase()]
             if (cssColour != null) {
                 return cssColour
             }
 
             Color(colour.toColorInt())
-        } catch (e: IllegalArgumentException) {
-            Log.d(
-                "BrushCompat",
-                "Failed to parse colour $colour, falling back to LocalContentColor.current"
-            )
+        } catch (e: RuntimeException) {
             defaultColour
         }
     }
 
     fun parseColour(colour: String): Brush {
-        if (colour.isEmpty()) {
+        val cleanedColour = colour.trim()
+        if (cleanedColour.isEmpty()) {
             return Brush.solidColor(Color.Unspecified)
+        }
+        if (cleanedColour.length > MAX_COLOUR_LENGTH) {
+            return Brush.solidColor(defaultColour)
         }
 
         when {
-            colour.startsWith("var(") -> {
-                Log.d(
-                    "BrushCompat",
-                    "Parsing variable $colour"
-                )
+            cleanedColour.startsWith("var(") && cleanedColour.endsWith(")") -> {
                 return parseVar(
-                    colour.substringAfter("var(").substringBeforeLast(")")
+                    cleanedColour.substringAfter("var(").substringBeforeLast(")")
                 )
             }
 
-            colour.startsWith("linear-gradient(") || colour.startsWith("repeating-linear-gradient(") -> {
+            (
+                cleanedColour.startsWith("linear-gradient(") ||
+                    cleanedColour.startsWith("repeating-linear-gradient(")
+                ) && cleanedColour.endsWith(")") -> {
                 return parseLinearGradient(
-                    colour
+                    cleanedColour
                         .substringAfter("repeating-")
                         .substringAfter("linear-gradient(")
                         .substringBeforeLast(")")
                 )
             }
 
-            colour.startsWith("radial-gradient(") || colour.startsWith("repeating-radial-gradient(") -> {
+            (
+                cleanedColour.startsWith("radial-gradient(") ||
+                    cleanedColour.startsWith("repeating-radial-gradient(")
+                ) && cleanedColour.endsWith(")") -> {
                 return parseRadialGradient(
-                    colour
+                    cleanedColour
                         .substringAfter("repeating-")
                         .substringAfter("radial-gradient(")
                         .substringBeforeLast(")")
@@ -483,7 +437,7 @@ class InstancedBrushCompat(
 
 
             else -> {
-                return Brush.solidColor(parseColourName(colour))
+                return Brush.solidColor(parseColourName(cleanedColour))
             }
         }
     }
