@@ -986,4 +986,20 @@
     <string name="changelog_header">What\'s new</string>
     <string name="changelog_load_error">There was an error loading the changelog.</string>
     <string name="changelog_retry">Retry</string>
+
+    <string name="server_settings">Server Settings</string>
+    <string name="server_settings_overview">Overview</string>
+    <string name="server_settings_category_customisation">Customisation</string>
+    <string name="server_settings_emojis">Emojis</string>
+    <string name="server_settings_category_user_management">User Management</string>
+    <string name="server_settings_members">Members</string>
+    <string name="server_settings_roles">Roles</string>
+    <string name="server_settings_invites">Invites</string>
+    <string name="server_settings_bans">Bans</string>
+    <string name="server_settings_delete">Delete Server</string>
+    <string name="server_settings_delete_confirm">Delete %1$s?</string>
+    <string name="server_settings_delete_confirm_description">Once it\'s deleted, there\'s no going back.</string>
+    <string name="server_settings_delete_confirm_yes">Delete</string>
+    <string name="server_settings_delete_cancel">Cancel</string>
+    <string name="server_settings_delete_error">There was an error deleting the server.</string>
 </resources>

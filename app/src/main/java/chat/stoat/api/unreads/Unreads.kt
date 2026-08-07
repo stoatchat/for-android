@@ -99,6 +99,10 @@ class Unreads {
         return channels.values.toList()
     }
 
+    fun removeChannels(channelIds: Collection<String>) {
+        channelIds.forEach(channels::remove)
+    }
+
     /**
      * Returns true if there are any unreads in any of the channels that are not muted.
      * **SLOW:** Run in a background coroutine.

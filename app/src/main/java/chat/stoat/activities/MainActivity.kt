@@ -128,6 +128,7 @@ import chat.stoat.screens.settings.SettingsScreen
 import chat.stoat.screens.settings.channel.ChannelSettingsHome
 import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
+import chat.stoat.screens.settings.server.ServerSettingsHome
 import chat.stoat.ui.theme.StoatTheme
 import chat.stoat.voice.VoiceCallManager
 import io.ktor.client.request.get
@@ -769,6 +770,11 @@ fun AppEntrypoint(
                     composable("settings/channel/{channelId}/permissions") { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelSettingsPermissions(navController, channelId)
+                    }
+
+                    composable("settings/server/{serverId}") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        ServerSettingsHome(navController, serverId)
                     }
 
                     composable("channel/{channelId}/pins") { backStackEntry ->

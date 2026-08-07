@@ -26,6 +26,10 @@ class Members {
         memberCache[serverId]?.remove(userId)
     }
 
+    fun removeServer(serverId: String) {
+        memberCache.remove(serverId)
+    }
+
     fun clear() {
         memberCache.clear()
     }

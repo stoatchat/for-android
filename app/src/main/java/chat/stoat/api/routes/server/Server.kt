@@ -15,6 +15,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 
@@ -90,8 +91,17 @@ suspend fun fetchMember(serverId: String, userId: String, pure: Boolean = false)
 }
 
 suspend fun leaveOrDeleteServer(serverId: String, leaveSilently: Boolean = false) {
-    StoatHttp.delete("/servers/$serverId".api()) {
+    val response = StoatHttp.delete("/servers/$serverId".api()) {
         parameter("leave_silently", leaveSilently)
+    }
+
+    if (!response.status.isSuccess()) {
+        val responseContent = response.bodyAsText()
+        val errorType = runCatching {
+            StoatJson.decodeFromString(StoatAPIError.serializer(), responseContent).type
+        }.getOrNull()
+
+        throw Exception(errorType ?: "Request failed (${response.status.value})")
     }
 }
 

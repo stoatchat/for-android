@@ -672,20 +672,59 @@ object RealtimeSocket {
 
                 StoatAPI.serverCache[serverCreateFrame.id] = serverCreateFrame.server
 
-                serverCreateFrame.channels.forEach { channel ->
-                    if (channel.id == null) return@forEach
-                    StoatAPI.channelCache[channel.id!!] = channel
-                }
+                val serverOwner = serverCreateFrame.server.owner
+                val serverName = serverCreateFrame.server.name
+                val canPersistServer = serverOwner != null && serverName != null
 
-                if (serverCreateFrame.server.owner != null && serverCreateFrame.server.name != null) {
+                if (canPersistServer) {
                     database.serverQueries.upsert(
                         serverCreateFrame.id,
-                        serverCreateFrame.server.owner!!,
-                        serverCreateFrame.server.name!!,
+                        serverOwner,
+                        serverName,
                         serverCreateFrame.server.description,
                         serverCreateFrame.server.icon?.id,
                         serverCreateFrame.server.banner?.id,
                         serverCreateFrame.server.flags
+                    )
+                }
+
+                serverCreateFrame.channels.forEach { channel ->
+                    val channelId = channel.id ?: return@forEach
+                    StoatAPI.channelCache[channelId] = channel
+
+                    if (canPersistServer) {
+                        database.channelQueries.upsert(
+                            channelId,
+                            channel.channelType?.value ?: ChannelType.TextChannel.value,
+                            channel.user,
+                            channel.name,
+                            channel.owner,
+                            channel.description,
+                            if (channel.channelType == ChannelType.DirectMessage) {
+                                channel.recipients?.firstOrNull { it != StoatAPI.selfId }
+                            } else {
+                                null
+                            },
+                            channel.icon?.id,
+                            channel.lastMessageID,
+                            if (channel.active == true) 1L else 0L,
+                            if (channel.nsfw == true) 1L else 0L,
+                            channel.server,
+                        )
+                    }
+                }
+
+                serverCreateFrame.emojis.forEach { emoji ->
+                    emoji.id?.let { StoatAPI.emojiCache[it] = emoji }
+                }
+                serverCreateFrame.voiceStates.forEach { voiceState ->
+                    StoatAPI.voiceStateCache[voiceState.id] = voiceState
+                }
+
+                if (!canPersistServer) {
+                    Log.e(
+                        "RealtimeSocket",
+                        "Server ${serverCreateFrame.id} was missing required fields and could not be persisted."
                     )
                 }
             }
@@ -762,8 +801,28 @@ object RealtimeSocket {
                     "Received server delete frame for ${serverDeleteFrame.id}."
                 )
 
+                val deletedChannelIds = (
+                    StoatAPI.serverCache[serverDeleteFrame.id]?.channels.orEmpty() +
+                        StoatAPI.channelCache
+                            .filterValues { it.server == serverDeleteFrame.id }
+                            .keys
+                    ).distinct()
+
+                deletedChannelIds.forEach { channelId ->
+                    StoatAPI.channelCache.remove(channelId)
+                    StoatAPI.userSlowmodeCache.remove(channelId)
+                    database.channelQueries.delete(channelId)
+                }
+                StoatAPI.unreads.removeChannels(deletedChannelIds)
+                StoatAPI.members.removeServer(serverDeleteFrame.id)
+                StoatAPI.emojiCache.keys
+                    .filter { emojiId ->
+                        StoatAPI.emojiCache[emojiId]?.parent?.id == serverDeleteFrame.id
+                    }
+                    .forEach(StoatAPI.emojiCache::remove)
                 StoatAPI.serverCache.remove(serverDeleteFrame.id)
                 database.serverQueries.delete(serverDeleteFrame.id)
+                StoatAPI.wsFrameChannel.emit(serverDeleteFrame)
             }
 
             "ServerMemberUpdate" -> {

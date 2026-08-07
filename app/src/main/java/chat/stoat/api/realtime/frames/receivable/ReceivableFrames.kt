@@ -171,7 +171,9 @@ data class ServerCreateFrame(
     val type: String = "ServerCreate",
     val id: String,
     val server: Server,
-    val channels: List<Channel>
+    val channels: List<Channel>,
+    val emojis: List<Emoji> = emptyList(),
+    @SerialName("voice_states") val voiceStates: List<ChannelVoiceState> = emptyList(),
 )
 
 @Serializable

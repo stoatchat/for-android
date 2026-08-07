@@ -390,7 +390,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SettingsListItem(
+fun SettingsListItem(
     first: Boolean = false,
     last: Boolean = false,
     headlineContent: @Composable () -> Unit,

@@ -70,6 +70,7 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.DirectMessages
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
+import chat.stoat.api.realtime.frames.receivable.ServerDeleteFrame
 import chat.stoat.api.routes.microservices.gazette.getLatestChangelog
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.routes.user.fetchSelf
@@ -107,6 +108,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.sentry.Sentry
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -443,6 +445,16 @@ fun ChatRouterScreen(
 
     LaunchedEffect(Unit) {
         viewModel.maybeShowChangelog()
+    }
+
+    LaunchedEffect(currentServer) {
+        StoatAPI.wsFrameChannel
+            .filterIsInstance<ServerDeleteFrame>()
+            .collect { frame ->
+                if (frame.id == currentServer) {
+                    viewModel.setSaveDestination(ChatRouterDestination.Overview)
+                }
+            }
     }
 
     LaunchedEffect(Unit) {
