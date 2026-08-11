@@ -1,6 +1,5 @@
 package chat.stoat.composables.screens.chat.drawer
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -527,7 +526,7 @@ fun ChannelSideDrawer(
             ) {
                 if (server?.banner != null) {
                     RemoteImage(
-                        url = "$STOAT_FILES/banners/${server.banner!!.id}",
+                        url = "$STOAT_FILES/banners/${server.banner!!.id}/original",
                         description = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
