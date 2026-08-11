@@ -1002,4 +1002,25 @@
     <string name="server_settings_delete_confirm_yes">Delete</string>
     <string name="server_settings_delete_cancel">Cancel</string>
     <string name="server_settings_delete_error">There was an error deleting the server.</string>
+
+    <string name="server_settings_overview_server_icon">Server Icon</string>
+    <string name="server_settings_overview_server_banner">Server Banner</string>
+    <string name="server_settings_overview_server_name">Server Name</string>
+    <string name="server_settings_overview_server_description">Server Description</string>
+    <string name="server_settings_overview_description_hint">This server is about…</string>
+    <string name="server_settings_overview_system_messages">System message channels</string>
+    <string name="server_settings_overview_user_joined">User Joined</string>
+    <string name="server_settings_overview_user_left">User Left</string>
+    <string name="server_settings_overview_user_kicked">User Kicked</string>
+    <string name="server_settings_overview_user_banned">User Banned</string>
+    <string name="server_settings_overview_disabled">Disabled</string>
+    <string name="server_settings_overview_save">Save</string>
+    <string name="server_settings_overview_saved">Server settings saved.</string>
+    <string name="server_settings_overview_discard_title">Discard unsaved changes?</string>
+    <string name="server_settings_overview_discard_description">Your changes to this server will be lost.</string>
+    <string name="server_settings_overview_discard">Discard</string>
+    <string name="server_settings_overview_keep_editing">Keep editing</string>
+    <string name="server_settings_overview_update_error">There was an error updating the server.</string>
+    <string name="server_settings_overview_webp_unsupported">WebP is not supported.</string>
+    <string name="server_settings_overview_file_error">The selected image could not be read.</string>
 </resources>

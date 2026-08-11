@@ -175,7 +175,11 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = server.name ?: stringResource(R.string.server_settings),
                 options = overviewOptions,
-                onDelete = { showDeleteConfirmation = true },
+                onOptionSelected = { option ->
+                    if (option == ServerSettingsOption.Overview) {
+                        navController.navigate("settings/server/$serverId/overview")
+                    }
+                },
             )
         }
 
@@ -183,7 +187,7 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(R.string.server_settings_category_customisation),
                 options = customisationOptions,
-                onDelete = { showDeleteConfirmation = true },
+                onOptionSelected = {},
             )
         }
 
@@ -191,7 +195,7 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(R.string.server_settings_category_user_management),
                 options = userManagementOptions,
-                onDelete = { showDeleteConfirmation = true },
+                onOptionSelected = {},
             )
         }
 
@@ -201,7 +205,7 @@ fun ServerSettingsHome(
                 option = ServerSettingsOption.DeleteServer,
                 first = true,
                 last = true,
-                onDelete = { showDeleteConfirmation = true },
+                onClick = { showDeleteConfirmation = true },
             )
             Spacer(Modifier.height(16.dp))
         }
@@ -212,7 +216,7 @@ fun ServerSettingsHome(
 private fun ServerSettingsSection(
     title: String,
     options: List<ServerSettingsOption>,
-    onDelete: () -> Unit,
+    onOptionSelected: (ServerSettingsOption) -> Unit,
 ) {
     ListHeader { Text(title) }
     options.forEachIndexed { index, option ->
@@ -220,7 +224,7 @@ private fun ServerSettingsSection(
             option = option,
             first = index == 0,
             last = index == options.lastIndex,
-            onDelete = onDelete,
+            onClick = { onOptionSelected(option) },
         )
         if (index != options.lastIndex) {
             Spacer(Modifier.height(2.dp))
@@ -233,10 +237,9 @@ private fun ServerSettingsOptionRow(
     option: ServerSettingsOption,
     first: Boolean,
     last: Boolean,
-    onDelete: () -> Unit,
+    onClick: () -> Unit,
 ) {
     val dangerous = option == ServerSettingsOption.DeleteServer
-    val onClick = if (dangerous) onDelete else ({})
 
     SettingsListItem(
         first = first,

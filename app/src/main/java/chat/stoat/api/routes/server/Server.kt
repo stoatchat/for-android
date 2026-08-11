@@ -6,18 +6,28 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
 import chat.stoat.core.model.schemas.Member
+import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerWithChannelObjects
 import chat.stoat.core.model.schemas.User
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.patch
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 data class FetchMembersResponse(
@@ -103,6 +113,56 @@ suspend fun leaveOrDeleteServer(serverId: String, leaveSilently: Boolean = false
 
         throw Exception(errorType ?: "Request failed (${response.status.value})")
     }
+}
+
+suspend fun patchServer(
+    serverId: String,
+    name: String? = null,
+    description: String? = null,
+    icon: String? = null,
+    banner: String? = null,
+    systemMessages: Map<String, String>? = null,
+    remove: List<String> = emptyList(),
+): Server {
+    val body = mutableMapOf<String, JsonElement>()
+
+    name?.let { body["name"] = JsonPrimitive(it) }
+    description?.let { body["description"] = JsonPrimitive(it) }
+    icon?.let { body["icon"] = JsonPrimitive(it) }
+    banner?.let { body["banner"] = JsonPrimitive(it) }
+    systemMessages?.let { messages ->
+        body["system_messages"] = JsonObject(
+            messages.mapValues { (_, channelId) -> JsonPrimitive(channelId) }
+        )
+    }
+    if (remove.isNotEmpty()) {
+        body["remove"] = StoatJson.encodeToJsonElement(
+            ListSerializer(String.serializer()),
+            remove,
+        )
+    }
+
+    val response = StoatHttp.patch("/servers/$serverId".api()) {
+        contentType(ContentType.Application.Json)
+        setBody(
+            StoatJson.encodeToString(
+                MapSerializer(String.serializer(), JsonElement.serializer()),
+                body,
+            )
+        )
+    }
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        val errorType = runCatching {
+            StoatJson.decodeFromString(StoatAPIError.serializer(), responseContent).type
+        }.getOrNull()
+        throw Exception(errorType ?: "Request failed (${response.status.value})")
+    }
+
+    val server = StoatJson.decodeFromString(Server.serializer(), responseContent)
+    StoatAPI.serverCache[serverId] = server
+    return server
 }
 
 @Serializable

@@ -55,7 +55,8 @@ fun InlineMediaPicker(
                 mimeType = mimeType,
                 circular = true,
                 useAvatarCircularity = useAvatarCircularity,
-                onPick = onPick
+                onPick = onPick,
+                enabled = enabled,
             )
 
             if (canRemove) {
@@ -80,7 +81,8 @@ fun InlineMediaPicker(
                 currentModel = currentModel,
                 mimeType = mimeType,
                 circular = false,
-                onPick = onPick
+                onPick = onPick,
+                enabled = enabled,
             )
 
             if (canRemove) {

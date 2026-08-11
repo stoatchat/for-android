@@ -88,6 +88,8 @@ interface SettingsPageScope {
 fun SettingsPage(
     navController: NavController?,
     title: @Composable () -> Unit,
+    onNavigateBack: (() -> Unit)? = null,
+    floatingActionButton: @Composable () -> Unit = {},
     content: @Composable SettingsPageScope.() -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -103,7 +105,7 @@ fun SettingsPage(
                 navigationIcon = {
                     navController?.let {
                         IconButton(onClick = {
-                            navController.popBackStack()
+                            onNavigateBack?.invoke() ?: navController.popBackStack()
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_arrow_back_24dp),
@@ -117,6 +119,7 @@ fun SettingsPage(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
+        floatingActionButton = floatingActionButton,
     ) { pv ->
         Column(
             Modifier

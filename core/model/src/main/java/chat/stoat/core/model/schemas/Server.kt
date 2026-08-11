@@ -62,9 +62,13 @@ data class Category(
 
 @Serializable
 data class SystemMessages(
+    @SerialName("user_joined")
     val userJoined: String? = null,
+    @SerialName("user_left")
     val userLeft: String? = null,
+    @SerialName("user_kicked")
     val userKicked: String? = null,
+    @SerialName("user_banned")
     val userBanned: String? = null
 )
 
