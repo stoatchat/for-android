@@ -187,7 +187,11 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(R.string.server_settings_category_customisation),
                 options = customisationOptions,
-                onOptionSelected = {},
+                onOptionSelected = { option ->
+                    if (option == ServerSettingsOption.Emojis) {
+                        navController.navigate("settings/server/$serverId/emojis")
+                    }
+                },
             )
         }
 

@@ -103,6 +103,7 @@ data class Emoji(
     @SerialName("_id")
     val id: String? = null,
     val parent: EmojiParent? = null,
+    @SerialName("creator_id")
     val creatorID: String? = null,
     val name: String? = null,
     val animated: Boolean? = null,

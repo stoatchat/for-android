@@ -25,6 +25,25 @@ data class Features(
     val january: AutumnJanuaryFeature,
     val voso: LegacyVoiceFeature? = null,
     val livekit: LiveKitFeature? = null,
+    val limits: LimitsConfig? = null,
+)
+
+@Serializable
+data class LimitsConfig(
+    val global: GlobalLimits,
+    @SerialName("new_user") val newUser: UserLimits? = null,
+    @SerialName("default") val defaultUser: UserLimits? = null,
+)
+
+@Serializable
+data class GlobalLimits(
+    @SerialName("server_emoji") val serverEmoji: Int,
+)
+
+@Serializable
+data class UserLimits(
+    @SerialName("file_upload_size_limits")
+    val fileUploadSizeLimits: Map<String, Long> = emptyMap(),
 )
 
 @Serializable

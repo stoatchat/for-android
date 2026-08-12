@@ -90,6 +90,7 @@ fun SettingsPage(
     title: @Composable () -> Unit,
     onNavigateBack: (() -> Unit)? = null,
     floatingActionButton: @Composable () -> Unit = {},
+    scrollable: Boolean = true,
     content: @Composable SettingsPageScope.() -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -126,7 +127,13 @@ fun SettingsPage(
                 .padding(pv)
                 .imePadding()
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .then(
+                    if (scrollable) {
+                        Modifier.verticalScroll(rememberScrollState())
+                    } else {
+                        Modifier
+                    }
+                )
         ) {
             content(
                 object : SettingsPageScope {

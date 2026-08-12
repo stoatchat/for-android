@@ -1023,4 +1023,30 @@
     <string name="server_settings_overview_update_error">There was an error updating the server.</string>
     <string name="server_settings_overview_webp_unsupported">WebP is not supported.</string>
     <string name="server_settings_overview_file_error">The selected image could not be read.</string>
+
+    <string name="server_settings_emojis_create_title">Create emoji</string>
+    <string name="server_settings_emojis_add">Add emoji</string>
+    <string name="server_settings_emojis_name">Emoji Name</string>
+    <string name="server_settings_emojis_saved_as">Will be saved as: %1$s</string>
+    <string name="server_settings_emojis_create">Create</string>
+    <string name="server_settings_emojis_delete">Delete</string>
+    <string name="server_settings_emojis_delete_title">Delete emoji?</string>
+    <string name="server_settings_emojis_delete_description">Delete :%1$s:? This cannot be undone.</string>
+    <string name="server_settings_emojis_created_by">Created by %1$s</string>
+    <string name="server_settings_emojis_choose_image">Choose image</string>
+    <string name="server_settings_emojis_selected_image">Selected emoji image</string>
+    <string name="server_settings_emojis_image_help">Static images are resized to fit within 128×128. Animated GIFs must be under %1$s.</string>
+    <string name="server_settings_emojis_slots_remaining">%1$d emoji slots remaining</string>
+    <string name="server_settings_emojis_usage">%1$d of %2$d emoji slots used</string>
+    <string name="server_settings_emojis_count">%1$d server emojis</string>
+    <string name="server_settings_emojis_empty">This server does not have any custom emojis yet.</string>
+    <string name="server_settings_emojis_created">Emoji created.</string>
+    <string name="server_settings_emojis_deleted">Emoji deleted.</string>
+    <string name="server_settings_emojis_create_error">There was an error creating the emoji.</string>
+    <string name="server_settings_emojis_delete_error">There was an error deleting the emoji.</string>
+    <string name="server_settings_emojis_limit_error">This server has reached its emoji limit.</string>
+    <string name="server_settings_emojis_file_error">The selected image could not be read.</string>
+    <string name="server_settings_emojis_processing_error">The selected image could not be resized.</string>
+    <string name="server_settings_emojis_animated_too_large">Animated emojis must be smaller than %1$s.</string>
+    <string name="server_settings_emojis_image_description">Emoji %1$s</string>
 </resources>

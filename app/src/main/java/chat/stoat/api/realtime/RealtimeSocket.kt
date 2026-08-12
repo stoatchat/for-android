@@ -15,6 +15,7 @@ import chat.stoat.api.realtime.frames.receivable.ChannelDeleteFrame
 import chat.stoat.api.realtime.frames.receivable.ChannelStartTypingFrame
 import chat.stoat.api.realtime.frames.receivable.ChannelStopTypingFrame
 import chat.stoat.api.realtime.frames.receivable.ChannelUpdateFrame
+import chat.stoat.api.realtime.frames.receivable.EmojiDeleteFrame
 import chat.stoat.api.realtime.frames.receivable.MessageAppendFrame
 import chat.stoat.api.realtime.frames.receivable.MessageDeleteFrame
 import chat.stoat.api.realtime.frames.receivable.MessageFrame
@@ -49,6 +50,7 @@ import chat.stoat.c2dm.ChannelRegistrator
 import chat.stoat.core.model.data.STOAT_WEBSOCKET
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
@@ -727,6 +729,19 @@ object RealtimeSocket {
                         "Server ${serverCreateFrame.id} was missing required fields and could not be persisted."
                     )
                 }
+            }
+
+            "EmojiCreate" -> {
+                val emoji = StoatJson.decodeFromString(Emoji.serializer(), rawFrame)
+                emoji.id?.let { StoatAPI.emojiCache[it] = emoji }
+                StoatAPI.wsFrameChannel.emit(emoji)
+            }
+
+            "EmojiDelete" -> {
+                val emojiDeleteFrame =
+                    StoatJson.decodeFromString(EmojiDeleteFrame.serializer(), rawFrame)
+                StoatAPI.emojiCache.remove(emojiDeleteFrame.id)
+                StoatAPI.wsFrameChannel.emit(emojiDeleteFrame)
             }
 
             "ChannelStartTyping" -> {

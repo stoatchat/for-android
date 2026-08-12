@@ -5,6 +5,7 @@ import chat.stoat.api.StoatAPIError
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
+import chat.stoat.api.apiError
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerWithChannelObjects
@@ -107,11 +108,7 @@ suspend fun leaveOrDeleteServer(serverId: String, leaveSilently: Boolean = false
 
     if (!response.status.isSuccess()) {
         val responseContent = response.bodyAsText()
-        val errorType = runCatching {
-            StoatJson.decodeFromString(StoatAPIError.serializer(), responseContent).type
-        }.getOrNull()
-
-        throw Exception(errorType ?: "Request failed (${response.status.value})")
+        throw Exception(apiError(responseContent, response.status.value))
     }
 }
 
@@ -154,10 +151,7 @@ suspend fun patchServer(
     val responseContent = response.bodyAsText()
 
     if (!response.status.isSuccess()) {
-        val errorType = runCatching {
-            StoatJson.decodeFromString(StoatAPIError.serializer(), responseContent).type
-        }.getOrNull()
-        throw Exception(errorType ?: "Request failed (${response.status.value})")
+        throw Exception(apiError(responseContent, response.status.value))
     }
 
     val server = StoatJson.decodeFromString(Server.serializer(), responseContent)

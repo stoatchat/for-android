@@ -453,9 +453,6 @@ object StoatAPI {
 }
 
 @Serializable
-data class StoatAPIError(val type: String)
-
-@Serializable
 data class RateLimitResponse(@SerialName("retry_after") val retryAfter: Int) {
     fun toException(): HitRateLimitException {
         return HitRateLimitException(retryAfter)
