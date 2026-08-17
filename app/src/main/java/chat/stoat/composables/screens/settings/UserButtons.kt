@@ -12,6 +12,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +43,9 @@ import chat.stoat.api.routes.user.unfriendUser
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.core.model.schemas.User
+import chat.stoat.dialogs.MemberModerationAction
+import chat.stoat.dialogs.MemberModerationDialog
+import chat.stoat.dialogs.memberModerationPermissions
 import chat.stoat.internals.Platform
 import kotlinx.coroutines.launch
 import logcat.LogPriority
@@ -51,6 +55,7 @@ import logcat.logcat
 @Composable
 fun UserButtons(
     user: User,
+    serverId: String? = null,
     dismissSheet: suspend () -> Unit
 ) {
     val scope = rememberCoroutineScope()
@@ -59,6 +64,21 @@ fun UserButtons(
 
     var botEasterEgg by remember { mutableStateOf(false) }
     var menuOpen by remember { mutableStateOf(false) }
+    var moderationAction by remember { mutableStateOf<MemberModerationAction?>(null) }
+
+    val moderationPermissions = serverId?.let {
+        memberModerationPermissions(it, user.id)
+    }
+
+    if (serverId != null && moderationAction != null) {
+        MemberModerationDialog(
+            action = moderationAction!!,
+            serverId = serverId,
+            user = user,
+            dismissUserSheet = dismissSheet,
+            onDismiss = { moderationAction = null },
+        )
+    }
 
     if (user.id == null) return Row {
         Button(
@@ -326,6 +346,55 @@ fun UserButtons(
                             }
                         }
                     )
+
+                    if (moderationPermissions?.any == true) {
+                        HorizontalDivider()
+
+                        if (moderationPermissions.canTimeout) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = stringResource(R.string.member_moderation_timeout),
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                },
+                                onClick = {
+                                    menuOpen = false
+                                    moderationAction = MemberModerationAction.Timeout
+                                },
+                            )
+                        }
+
+                        if (moderationPermissions.canKick) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = stringResource(R.string.member_moderation_kick),
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                },
+                                onClick = {
+                                    menuOpen = false
+                                    moderationAction = MemberModerationAction.Kick
+                                },
+                            )
+                        }
+
+                        if (moderationPermissions.canBan) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = stringResource(R.string.member_moderation_ban),
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                },
+                                onClick = {
+                                    menuOpen = false
+                                    moderationAction = MemberModerationAction.Ban
+                                },
+                            )
+                        }
+                    }
                 }
 
                 IconButton(

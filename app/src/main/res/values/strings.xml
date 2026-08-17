@@ -1024,6 +1024,33 @@
     <string name="server_settings_overview_webp_unsupported">WebP is not supported.</string>
     <string name="server_settings_overview_file_error">The selected image could not be read.</string>
 
+    <string name="member_moderation_timeout">Timeout</string>
+    <string name="member_moderation_kick">Kick</string>
+    <string name="member_moderation_ban">Ban</string>
+    <string name="member_moderation_timeout_member">Timeout member</string>
+    <string name="member_moderation_timeout_description">Temporarily prevent %1$s from interacting in this server.</string>
+    <string name="member_moderation_timeout_length">Timeout length</string>
+    <string name="member_moderation_remove_timeout">Remove current timeout</string>
+    <string name="member_moderation_kick_member">Kick member</string>
+    <string name="member_moderation_kick_description">Remove %1$s from this server? They can rejoin with another invite.</string>
+    <string name="member_moderation_ban_member">Ban member</string>
+    <string name="member_moderation_ban_description">Ban %1$s from this server? They will not be able to join again, unless they are unbanned.</string>
+    <string name="member_moderation_reason">Reason (optional)</string>
+    <string name="member_moderation_delete_history">Delete message history</string>
+    <string name="member_moderation_none">None</string>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
     <string name="server_settings_emojis_create_title">Create emoji</string>
     <string name="server_settings_emojis_add">Add emoji</string>
     <string name="server_settings_emojis_name">Emoji Name</string>

@@ -22,6 +22,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -34,6 +35,19 @@ import kotlinx.serialization.json.JsonPrimitive
 data class FetchMembersResponse(
     val members: List<Member>,
     val users: List<User>
+)
+
+@Serializable
+private data class BanMemberBody(
+    val reason: String? = null,
+    @SerialName("delete_message_seconds")
+    val deleteMessageSeconds: Long = 0,
+)
+
+@Serializable
+private data class EditMemberBody(
+    val timeout: String? = null,
+    val remove: List<String> = emptyList(),
 )
 
 suspend fun ackServer(serverId: String) {
@@ -99,6 +113,61 @@ suspend fun fetchMember(serverId: String, userId: String, pure: Boolean = false)
     }
 
     return member
+}
+
+suspend fun kickMember(serverId: String, userId: String) {
+    val response = StoatHttp.delete("/servers/$serverId/members/$userId".api())
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
+
+    StoatAPI.members.removeMember(serverId, userId)
+}
+
+suspend fun banMember(
+    serverId: String,
+    userId: String,
+    reason: String?,
+    deleteMessageSeconds: Long,
+) {
+    val body = BanMemberBody(
+        reason = reason?.trim()?.takeIf(String::isNotEmpty),
+        deleteMessageSeconds = deleteMessageSeconds,
+    )
+    val response = StoatHttp.put("/servers/$serverId/bans/$userId".api()) {
+        contentType(ContentType.Application.Json)
+        setBody(StoatJson.encodeToString(BanMemberBody.serializer(), body))
+    }
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
+
+    StoatAPI.members.removeMember(serverId, userId)
+}
+
+suspend fun setMemberTimeout(serverId: String, userId: String, timeout: String?): Member {
+    val body = if (timeout == null) {
+        EditMemberBody(remove = listOf("Timeout"))
+    } else {
+        EditMemberBody(timeout = timeout)
+    }
+    val response = StoatHttp.patch("/servers/$serverId/members/$userId".api()) {
+        contentType(ContentType.Application.Json)
+        setBody(StoatJson.encodeToString(EditMemberBody.serializer(), body))
+    }
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
+
+    return StoatJson.decodeFromString(Member.serializer(), responseContent).also {
+        StoatAPI.members.setMember(serverId, it)
+    }
 }
 
 suspend fun leaveOrDeleteServer(serverId: String, leaveSilently: Boolean = false) {
