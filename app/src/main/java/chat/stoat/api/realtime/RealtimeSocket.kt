@@ -513,6 +513,7 @@ object RealtimeSocket {
                 userUpdateFrame.clear?.forEach {
                     updated = when (it) {
                         "Avatar" -> updated.copy(avatar = null)
+                        "DisplayName" -> updated.copy(displayName = null)
                         "Pronouns" -> updated.copy(pronouns = null)
                         else -> updated
                     }

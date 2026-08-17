@@ -45,6 +45,7 @@ suspend fun fetchSelf(): User {
 
 suspend fun patchSelf(
     status: Status? = null,
+    displayName: String? = null,
     pronouns: String? = null,
     avatar: String? = null,
     background: String? = null,
@@ -56,6 +57,10 @@ suspend fun patchSelf(
 
     if (status != null) {
         body["status"] = StoatJson.encodeToJsonElement(Status.serializer(), status)
+    }
+
+    if (displayName != null) {
+        body["display_name"] = StoatJson.encodeToJsonElement(String.serializer(), displayName)
     }
 
     if (pronouns != null) {
@@ -110,6 +115,10 @@ suspend fun patchSelf(
     val currentUser = StoatAPI.userCache[StoatAPI.selfId] ?: fetchSelf()
     val newUserKeys = StoatJson.decodeFromString(User.serializer(), response)
     var mergedUser = currentUser.mergeWithPartial(newUserKeys)
+
+    if ("DisplayName" in remove.orEmpty()) {
+        mergedUser = mergedUser.copy(displayName = null)
+    }
 
     if ("Pronouns" in remove.orEmpty()) {
         mergedUser = mergedUser.copy(pronouns = null)
