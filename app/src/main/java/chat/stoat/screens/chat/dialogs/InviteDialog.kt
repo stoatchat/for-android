@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +48,7 @@ import chat.stoat.api.routes.channel.createInvite
 import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.internals.Platform
 import chat.stoat.ui.theme.FragmentMono
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -87,6 +89,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
     var swapInviteJob by remember { mutableStateOf<Job?>(null) }
@@ -97,7 +100,8 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
             swapInviteJob?.cancel()
             isActual = true
             inviteCode = invite.id
-        } catch (e: Error) {
+        } catch (error: Throwable) {
+            if (error is CancellationException) throw error
             isActual = true
             inviteCode = "error"
         }
@@ -210,7 +214,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                     if (Platform.needsShowClipboardNotification()) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.copied),
+                            resources.getString(R.string.copied),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

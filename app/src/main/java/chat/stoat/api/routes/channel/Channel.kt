@@ -5,10 +5,12 @@ import chat.stoat.api.StoatAPIError
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
+import chat.stoat.api.apiError
 import chat.stoat.api.internals.ULID
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.core.model.schemas.MessagesInChannel
+import chat.stoat.core.model.schemas.ServerInvite
 import chat.stoat.core.model.schemas.User
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -21,7 +23,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.serialization.SerialName
+import io.ktor.http.isSuccess
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -84,16 +86,6 @@ data class SendMessageBody(
 @kotlinx.serialization.Serializable
 data class EditMessageBody(
     val content: String?
-)
-
-@kotlinx.serialization.Serializable
-data class CreateInviteResponse(
-    val type: String,
-    @SerialName("_id")
-    val id: String,
-    val server: String,
-    val creator: String,
-    val channel: String,
 )
 
 suspend fun sendMessage(
@@ -168,14 +160,15 @@ suspend fun fetchGroupParticipants(channelId: String): List<User> {
     )
 }
 
-suspend fun createInvite(channelId: String): CreateInviteResponse {
+suspend fun createInvite(channelId: String): ServerInvite {
     val response = StoatHttp.post("/channels/$channelId/invites".api())
-        .bodyAsText()
+    val responseContent = response.bodyAsText()
 
-    val error = StoatJson.decodeFromString(StoatAPIError.serializer(), response)
-    if (error.type != "Server") throw Error(error.type)
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
 
-    return StoatJson.decodeFromString(CreateInviteResponse.serializer(), response)
+    return StoatJson.decodeFromString(ServerInvite.serializer(), responseContent)
 }
 
 suspend fun fetchSingleMessage(channelId: String, messageId: String): Message {

@@ -50,6 +50,16 @@ data class InviteJoined(
     val server: Server? = null
 )
 
+@Serializable
+data class ServerInvite(
+    val type: String,
+    @SerialName("_id")
+    val id: String,
+    val server: String,
+    val creator: String,
+    val channel: String,
+)
+
 fun Uri.isInviteUri(): Boolean {
     val firstPathSegmentIsInvite = this.pathSegments.firstOrNull() == "invite"
     val isStoatChat = this.host == STOAT_WEB_APP.toUri().host

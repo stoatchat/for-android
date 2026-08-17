@@ -199,7 +199,11 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(R.string.server_settings_category_user_management),
                 options = userManagementOptions,
-                onOptionSelected = {},
+                onOptionSelected = { option ->
+                    if (option == ServerSettingsOption.Invites) {
+                        navController.navigate("settings/server/$serverId/invites")
+                    }
+                },
             )
         }
 

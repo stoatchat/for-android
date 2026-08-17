@@ -15,6 +15,7 @@ import chat.stoat.screens.settings.ProfileSettingsScreenViewModel
 import chat.stoat.screens.settings.SettingsScreenViewModel
 import chat.stoat.screens.settings.channel.ChannelSettingsOverviewViewModel
 import chat.stoat.screens.settings.server.ServerSettingsEmojisViewModel
+import chat.stoat.screens.settings.server.ServerSettingsInvitesViewModel
 import chat.stoat.screens.settings.server.ServerSettingsOverviewViewModel
 import chat.stoat.sheets.MemberListSheetViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -38,6 +39,7 @@ val viewModelModule = module {
     viewModel { ChannelSettingsOverviewViewModel(androidApplication()) }
     viewModel { ServerSettingsOverviewViewModel(androidApplication()) }
     viewModel { ServerSettingsEmojisViewModel(androidApplication()) }
+    viewModel { ServerSettingsInvitesViewModel(androidApplication()) }
     viewModel { AccountSettingsScreenViewModel(androidApplication()) }
     viewModel { MfaSettingsScreenViewModel(androidApplication()) }
 }

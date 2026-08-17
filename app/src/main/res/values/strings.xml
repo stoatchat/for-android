@@ -1049,4 +1049,29 @@
     <string name="server_settings_emojis_processing_error">The selected image could not be resized.</string>
     <string name="server_settings_emojis_animated_too_large">Animated emojis must be smaller than %1$s.</string>
     <string name="server_settings_emojis_image_description">Emoji %1$s</string>
+
+    <string name="server_settings_invites_add">Create invite</string>
+    <string name="server_settings_invites_create_title">Create invite</string>
+    <string name="server_settings_invites_choose_channel">Choose the text channel new members will open when they join.</string>
+    <string name="server_settings_invites_created_description">Your invite is ready to share.</string>
+    <string name="server_settings_invites_copy">Copy invite link</string>
+    <string name="server_settings_invites_deleted">Invite deleted.</string>
+    <string name="server_settings_invites_delete">Delete invite</string>
+    <string name="server_settings_invites_delete_title">Delete invite?</string>
+    <string name="server_settings_invites_delete_description">Delete invite %1$s? Anyone with this link will no longer be able to join, unless they have another invite.</string>
+    <string name="server_settings_invites_delete_yes_delete">Delete</string>
+    <string name="server_settings_invites_delete_no_keep">Keep</string>
+    <string name="server_settings_invites_created_by_in_channel">Created by %1$s for %2$s</string>
+    <string name="server_settings_invites_unknown_user">Unknown user</string>
+    <string name="server_settings_invites_unknown_channel">Unknown channel</string>
+    <string name="server_settings_invites_empty">This server does not have any active invites yet.</string>
+    <string name="server_settings_invites_no_channels">Create a text channel before creating an invite.</string>
+    <string name="server_settings_invites_retry">Retry</string>
+    <string name="server_settings_invites_load_error">There was an error loading the invites.</string>
+    <string name="server_settings_invites_create_error">There was an error creating the invite.</string>
+    <string name="server_settings_invites_delete_error">There was an error deleting the invite.</string>
+    <plurals name="server_settings_invites_count">
+        <item quantity="one">%1$d active invite</item>
+        <item quantity="other">%1$d active invites</item>
+    </plurals>
 </resources>

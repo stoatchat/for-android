@@ -130,6 +130,7 @@ import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
 import chat.stoat.screens.settings.server.ServerSettingsEmojis
 import chat.stoat.screens.settings.server.ServerSettingsHome
+import chat.stoat.screens.settings.server.ServerSettingsInvites
 import chat.stoat.screens.settings.server.ServerSettingsOverview
 import chat.stoat.ui.theme.StoatTheme
 import chat.stoat.voice.VoiceCallManager
@@ -785,6 +786,10 @@ fun AppEntrypoint(
                     composable("settings/server/{serverId}/emojis") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
                         ServerSettingsEmojis(navController, serverId)
+                    }
+                    composable("settings/server/{serverId}/invites") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        ServerSettingsInvites(navController, serverId)
                     }
 
                     composable("channel/{channelId}/pins") { backStackEntry ->
