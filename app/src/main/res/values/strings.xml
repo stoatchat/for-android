@@ -635,6 +635,11 @@
     <string name="media_viewer_share_url">Share URL</string>
     <string name="media_viewer_share_audio">Share audio</string>
     <string name="media_viewer_share_video">Share video</string>
+    <string name="media_viewer_fullscreen">Enter fullscreen</string>
+    <string name="media_viewer_exit_fullscreen">Exit fullscreen</string>
+    <string name="media_viewer_seek_back">Seek backward</string>
+    <string name="media_viewer_seek_forward">Seek forward</string>
+    <string name="media_viewer_playback_error">Couldn\'t play this video</string>
     <string name="media_viewer_share_image">Share image</string>
 
     <string name="colour_picker_mode_sliders">Sliders</string>

@@ -138,7 +138,7 @@ fun VideoPlayButton() {
     )
 
     Icon(
-        painter = painterResource(R.drawable.ic_play_arrow_24dp),
+        painter = painterResource(R.drawable.ic_play_arrow_24dp__fill),
         contentDescription = stringResource(id = R.string.media_viewer_play),
         modifier = Modifier
             .width(32.dp)

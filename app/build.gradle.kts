@@ -230,6 +230,7 @@ dependencies {
     implementation(libs.media3.exoplayer.hls)
     implementation(libs.media3.okhttp)
     implementation(libs.media3.ui)
+    implementation(libs.media3.ui.compose.material3)
 
     implementation(libs.zoomable.image)
     implementation(libs.zoomable.image.glide)
