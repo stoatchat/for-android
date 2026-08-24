@@ -1,5 +1,11 @@
 package chat.stoat.composables.screens.chat
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -16,6 +22,13 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
+import chat.stoat.activities.StoatTweenFloat
+import chat.stoat.activities.StoatTweenSize
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.routes.channel.SendMessageReply
@@ -34,6 +49,16 @@ import chat.stoat.composables.chat.authorColour
 import chat.stoat.composables.chat.authorName
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.schemas.Message
+
+private class AnimatedReply(
+    reply: SendMessageReply,
+    initiallyVisible: Boolean,
+) {
+    var reply by mutableStateOf(reply)
+    val visibility = MutableTransitionState(initiallyVisible).apply {
+        targetState = true
+    }
+}
 
 @Composable
 fun replyContentText(message: Message): String {
@@ -45,14 +70,25 @@ fun replyContentText(message: Message): String {
 }
 
 @Composable
-fun ManageableReply(reply: SendMessageReply, onToggleMention: () -> Unit, onRemove: () -> Unit) {
+fun ManageableReply(
+    reply: SendMessageReply,
+    onToggleMention: () -> Unit,
+    onRemove: () -> Unit,
+    embedded: Boolean = false,
+) {
     val replyMessage = StoatAPI.messageCache[reply.id] ?: return onRemove()
     val replyAuthor = StoatAPI.userCache[replyMessage.author] ?: return onRemove()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .then(
+                if (embedded) {
+                    Modifier
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+                }
+            )
             .horizontalScroll(rememberScrollState())
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -131,15 +167,77 @@ fun ManageableReply(reply: SendMessageReply, onToggleMention: () -> Unit, onRemo
 fun ReplyManager(
     replies: List<SendMessageReply>,
     onToggleMention: (SendMessageReply) -> Unit,
-    onRemove: (SendMessageReply) -> Unit
+    onRemove: (SendMessageReply) -> Unit,
+    embedded: Boolean = false,
 ) {
+    val replySnapshot = replies.toList()
+    val animatedReplies = remember {
+        mutableStateListOf<AnimatedReply>().apply {
+            replySnapshot.forEach { reply ->
+                add(AnimatedReply(reply, initiallyVisible = true))
+            }
+        }
+    }
+
+    LaunchedEffect(replySnapshot) {
+        val currentReplies = replySnapshot.associateBy { it.id }
+
+        animatedReplies.forEach { animatedReply ->
+            val currentReply = currentReplies[animatedReply.reply.id]
+            if (currentReply == null) {
+                animatedReply.visibility.targetState = false
+            } else {
+                animatedReply.reply = currentReply
+                animatedReply.visibility.targetState = true
+            }
+        }
+
+        replySnapshot.forEach { reply ->
+            if (animatedReplies.none { it.reply.id == reply.id }) {
+                animatedReplies.add(AnimatedReply(reply, initiallyVisible = false))
+            }
+        }
+    }
+
+    val currentReplyIds = replySnapshot.mapTo(mutableSetOf()) { it.id }
+
     Column {
-        replies.forEach { reply ->
-            ManageableReply(
-                reply = reply,
-                onToggleMention = { onToggleMention(reply) },
-                onRemove = { onRemove(reply) }
-            )
+        animatedReplies.forEach { animatedReply ->
+            key(animatedReply.reply.id) {
+                AnimatedVisibility(
+                    visibleState = animatedReply.visibility,
+                    enter = expandVertically(
+                        animationSpec = StoatTweenSize,
+                        expandFrom = Alignment.Bottom,
+                    ) + fadeIn(animationSpec = StoatTweenFloat),
+                    exit = shrinkVertically(
+                        animationSpec = StoatTweenSize,
+                        shrinkTowards = Alignment.Bottom,
+                    ) + fadeOut(animationSpec = StoatTweenFloat),
+                ) {
+                    val reply = animatedReply.reply
+                    ManageableReply(
+                        reply = reply,
+                        onToggleMention = { onToggleMention(reply) },
+                        onRemove = { onRemove(reply) },
+                        embedded = embedded,
+                    )
+                }
+
+                LaunchedEffect(
+                    animatedReply.visibility.isIdle,
+                    animatedReply.visibility.currentState,
+                    currentReplyIds,
+                ) {
+                    if (
+                        animatedReply.visibility.isIdle &&
+                        !animatedReply.visibility.currentState &&
+                        animatedReply.reply.id !in currentReplyIds
+                    ) {
+                        animatedReplies.remove(animatedReply)
+                    }
+                }
+            }
         }
     }
 }

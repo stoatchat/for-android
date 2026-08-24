@@ -865,6 +865,8 @@
     <string name="settings_appearance_typeface">Font</string>
     <string name="settings_appearance_typeface_default">Default</string>
     <string name="settings_appearance_typeface_google_sans_flex" translatable="false">Google Sans Flex</string>
+    <string name="settings_appearance_visual_effects">Visual Effects</string>
+    <string name="settings_appearance_message_composer_blur">Blur effects in chat</string>
 
     <string name="settings_appearance_avatar_shape">Profile Picture Shape</string>
     <string name="settings_appearance_avatar_shape_description">Choose the rounding grade for profile pictures, including in chat and profiles. This applies to all users.</string>

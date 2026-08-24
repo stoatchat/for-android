@@ -70,6 +70,11 @@ data class AndroidSpecificSettings(
      */
     var avatarRadius: Int? = null,
     /**
+     * Whether to use blur effects behind the chat message composer.
+     * Boolean.
+     */
+    var messageComposerBlurEnabled: Boolean? = null,
+    /**
      * Controls preferences for special embeds.
      * Object; See [AndroidSpecificSettingsSpecialEmbedSettings] for format.
      */

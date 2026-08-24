@@ -157,7 +157,8 @@ fun AttachmentManager(
     onRemove: (FileArgs) -> Unit,
     onToggleSpoiler: (FileArgs) -> Unit,
     canRemove: Boolean = true,
-    canPreview: Boolean = true
+    canPreview: Boolean = true,
+    embedded: Boolean = false,
 ) {
     var showPreviewSheet by remember { mutableStateOf(false) }
     var previewingAttachment by remember { mutableStateOf<FileArgs?>(null) }
@@ -204,7 +205,13 @@ fun AttachmentManager(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .then(
+                if (embedded) {
+                    Modifier
+                } else {
+                    Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+                }
+            )
     ) {
         Row(
             modifier = Modifier

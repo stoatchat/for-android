@@ -26,6 +26,7 @@ object LoadedSettings {
     var theme by mutableStateOf(getDefaultTheme())
     var messageReplyStyle by mutableStateOf(MessageReplyStyle.SwipeFromEnd)
     var avatarRadius by mutableIntStateOf(50)
+    var messageComposerBlurEnabled by mutableStateOf(true)
     var experimentsEnabled by mutableStateOf(false)
     var specialEmbedSettings by mutableStateOf(SpecialEmbedSettings())
     var poorlyFormedSettingsKeys by mutableStateOf(emptySet<String>())
@@ -39,6 +40,7 @@ object LoadedSettings {
             settings.android.messageReplyStyle?.let { MessageReplyStyle.valueOf(it) }
                 ?: MessageReplyStyle.SwipeFromEnd
         this.avatarRadius = settings.android.avatarRadius ?: 50
+        this.messageComposerBlurEnabled = settings.android.messageComposerBlurEnabled ?: true
         this.specialEmbedSettings = settings.android.specialEmbedSettings ?: SpecialEmbedSettings()
         this.font = settings.android.font?.let {
             try {
@@ -53,6 +55,7 @@ object LoadedSettings {
         theme = getDefaultTheme()
         messageReplyStyle = MessageReplyStyle.SwipeFromEnd
         avatarRadius = 50
+        messageComposerBlurEnabled = true
         specialEmbedSettings = SpecialEmbedSettings()
         poorlyFormedSettingsKeys = emptySet()
         font = getDefaultFont()

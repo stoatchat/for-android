@@ -29,9 +29,11 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ToggleButton
@@ -113,6 +115,15 @@ class AppearanceSettingsScreenViewModel(val context: Application) : ViewModel() 
         LoadedSettings.avatarRadius = radius
         viewModelScope.launch {
             SyncedSettings.updateAndroid(SyncedSettings.android.copy(avatarRadius = radius))
+        }
+    }
+
+    fun saveMessageComposerBlurEnabled(enabled: Boolean) {
+        LoadedSettings.messageComposerBlurEnabled = enabled
+        viewModelScope.launch {
+            SyncedSettings.updateAndroid(
+                SyncedSettings.android.copy(messageComposerBlurEnabled = enabled)
+            )
         }
     }
 
@@ -405,6 +416,27 @@ fun AppearanceSettingsScreen(
                         }
                     }
                 }
+
+                ListHeader {
+                    Text(stringResource(R.string.settings_appearance_visual_effects))
+                }
+
+                ListItem(
+                    headlineContent = {
+                        Text(stringResource(R.string.settings_appearance_message_composer_blur))
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = LoadedSettings.messageComposerBlurEnabled,
+                            onCheckedChange = null
+                        )
+                    },
+                    modifier = Modifier.clickable {
+                        viewModel.saveMessageComposerBlurEnabled(
+                            !LoadedSettings.messageComposerBlurEnabled
+                        )
+                    }
+                )
 
                 ListHeader {
                     Text(stringResource(R.string.settings_appearance_typeface))

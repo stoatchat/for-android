@@ -19,15 +19,15 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.EaseOutExpo
+import androidx.compose.animation.core.animateInt
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,11 +56,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
@@ -70,6 +70,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
@@ -93,6 +94,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -103,8 +105,11 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -119,6 +124,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
@@ -126,15 +132,14 @@ import androidx.compose.ui.zIndex
 import androidx.documentfile.provider.DocumentFile
 import chat.stoat.R
 import chat.stoat.StoatApplication
-import chat.stoat.activities.StoatTweenDp
 import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.activities.StoatTweenInt
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.has
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.microservices.autumn.FileArgs
+import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.DateDivider
@@ -169,6 +174,13 @@ import com.mikepenz.markdown.model.State
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
+import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
+import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -208,7 +220,7 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalMaterial3ExpressiveApi::class
+    ExperimentalMaterial3ExpressiveApi::class, ExperimentalHazeMaterialsApi::class
 )
 @Composable
 fun ChannelScreen(
@@ -285,6 +297,7 @@ fun ChannelScreen(
     // <editor-fold desc="Keyboard height handling">
     val imeTarget = WindowInsets.imeAnimationTarget.getBottom(LocalDensity.current)
     val navigationBarsInset = WindowInsets.navigationBars.getBottom(LocalDensity.current)
+    val navigationBarHeight = with(LocalDensity.current) { navigationBarsInset.toDp() }
     val imeCurrentInset = WindowInsets.ime.getBottom(LocalDensity.current)
     var imeInTransition by remember { mutableStateOf(false) }
 
@@ -294,6 +307,27 @@ fun ChannelScreen(
         targetValue = if (viewModel.activePane == ChannelScreenActivePane.None && !imeInTransition) navigationBarsInset else viewModel.keyboardHeight,
         label = "keyboardHeight"
     )
+    val keyboardOnlyInset = max(imeCurrentInset - navigationBarsInset, 0)
+    val keyboardToPaneHandoff =
+        viewModel.activePane != ChannelScreenActivePane.None &&
+                imeCurrentInset > navigationBarsInset
+    val paneToKeyboardHandoff =
+        viewModel.activePane == ChannelScreenActivePane.None && imeInTransition
+    val composerBottomSpacerHeight = when {
+        // keep the outgoing keyboard's full footprint until the pane has taken its place
+        keyboardToPaneHandoff -> max(viewModel.keyboardHeight, imeCurrentInset)
+
+        // the composer is already above a pane, so hold that position until the IME catches up
+        paneToKeyboardHandoff -> max(
+            viewModel.keyboardHeight - navigationBarsInset,
+            keyboardOnlyInset
+        )
+
+        viewModel.activePane == ChannelScreenActivePane.None ->
+            max(fallbackKeyboardHeight - navigationBarsInset, 0)
+
+        else -> fallbackKeyboardHeight
+    }
 
     val notEnoughSpaceForPanes by remember {
         derivedStateOf {
@@ -447,7 +481,48 @@ fun ChannelScreen(
     // </editor-fold>
     // <editor-fold desc="UI elements">
     val lazyListState = rememberLazyListState()
+    val messageComposerBlurEnabled = LoadedSettings.messageComposerBlurEnabled
+    val messageComposerHazeState = rememberHazeState(
+        blurEnabled = messageComposerBlurEnabled
+    )
     val snackbarHostState = remember { SnackbarHostState() }
+    var messageComposerHeightPx by remember { mutableIntStateOf(0) }
+    var messageComposerVisualHeightPx by remember { mutableIntStateOf(0) }
+    var messageFieldHeightPx by remember { mutableIntStateOf(0) }
+    val messageComposerHeight = with(LocalDensity.current) {
+        messageComposerHeightPx.toDp()
+    }
+    val messageComposerBottomContentHeight = with(LocalDensity.current) {
+        (messageComposerHeightPx - messageComposerVisualHeightPx).coerceAtLeast(0).toDp()
+    }
+    val messageComposerBackgroundColor = MaterialTheme.colorScheme.background
+    val messageComposerNavigationInsetPx =
+        if (viewModel.activePane == ChannelScreenActivePane.None) navigationBarsInset else 0
+    val messageFieldGradientEndY =
+        (messageFieldHeightPx + messageComposerNavigationInsetPx).coerceAtLeast(1).toFloat()
+    val messageFieldBackgroundHeight = with(LocalDensity.current) {
+        (messageFieldHeightPx + messageComposerNavigationInsetPx).coerceAtLeast(0).toDp()
+    }
+    val typingIndicatorHeightPx = (
+            messageComposerVisualHeightPx -
+                    messageFieldHeightPx -
+                    messageComposerNavigationInsetPx
+            ).coerceAtLeast(0)
+    val scrollDownAnimationOffsetPx = with(LocalDensity.current) {
+        typingIndicatorHeightPx + 72.dp.roundToPx()
+    }
+    val messageListBottomInset = with(LocalDensity.current) {
+        (messageComposerHeightPx - typingIndicatorHeightPx).coerceAtLeast(0).toDp()
+    }
+    val messageComposerBackgroundGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color.Transparent,
+            messageComposerBackgroundColor.copy(alpha = 0.8f),
+            messageComposerBackgroundColor
+        ),
+        startY = 0f,
+        endY = messageFieldGradientEndY
+    )
     var disableScroll by remember { mutableStateOf(false) }
     var highlightedMessageId by remember { mutableStateOf<String?>(null) }
     val showBottomAnchor = !viewModel.canLoadNewer && !viewModel.isJumpLoading
@@ -456,6 +531,19 @@ fun ChannelScreen(
         derivedStateOf {
             !viewModel.canLoadNewer && lazyListState.firstVisibleItemIndex <= 6
         }
+    }
+    val showScrollDown = !isScrolledToBottom.value
+    val scrollDownTransition = updateTransition(
+        targetState = showScrollDown,
+        label = "ScrollDownFAB"
+    )
+    val scrollDownOffsetY by scrollDownTransition.animateInt(
+        transitionSpec = {
+            tween(durationMillis = 400, easing = EaseOutExpo)
+        },
+        label = "ScrollDownFABOffset"
+    ) { visible ->
+        if (visible) 0 else scrollDownAnimationOffsetPx
     }
 
     val isNearOlderEdge = remember(lazyListState) {
@@ -469,12 +557,6 @@ fun ChannelScreen(
             lastVisibleItemIndex > (totalItemsNumber - buffer)
         }
     }
-
-    val scrollDownFABPadding by animateDpAsState(
-        if (viewModel.typingUsers.isNotEmpty() || slowmodeEnabled) 25.dp else 0.dp,
-        animationSpec = StoatTweenDp,
-        label = "ScrollDownFABPadding"
-    )
 
     LaunchedEffect(lazyListState) {
         snapshotFlow {
@@ -855,19 +937,32 @@ fun ChannelScreen(
                         CircularProgressIndicator(modifier = Modifier.size(48.dp))
                     }
                 } else if (ageGateUnlocked) {
-                    Column(
+                    Box(
                         modifier = Modifier
+                            .fillMaxSize()
                             .padding(pv)
                     ) {
                         Box(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.BottomCenter
                         ) {
                             LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .then(
+                                        if (messageComposerBlurEnabled) {
+                                            Modifier.hazeSource(messageComposerHazeState)
+                                        } else {
+                                            Modifier
+                                        }
+                                    ),
                                 state = lazyListState,
                                 userScrollEnabled = !disableScroll,
                                 reverseLayout = true,
-                                contentPadding = PaddingValues(top = 16.dp, bottom = 32.dp)
+                                contentPadding = PaddingValues(
+                                    top = 16.dp,
+                                    bottom = messageListBottomInset + 32.dp
+                                )
                             ) {
                                 if (showBottomAnchor) {
                                     // Hack - Too bad!
@@ -1056,87 +1151,14 @@ fun ChannelScreen(
                                 LoadingIndicator()
                             }
 
-                            Column(
+                            SnackbarHost(
+                                hostState = snackbarHostState,
                                 modifier = Modifier
                                     .align(Alignment.BottomCenter)
+                                    .padding(bottom = messageComposerHeight)
                                     .fillMaxWidth()
                                     .zIndex(1f)
-                            ) {
-                                SnackbarHost(
-                                    hostState = snackbarHostState,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                                TypingIndicator(
-                                    users = viewModel.typingUsers,
-                                    serverId = viewModel.channel?.server,
-                                    slowmodeSeconds = slowmodeSeconds,
-                                    slowmodeRemainingSeconds = slowmodeRemainingSeconds,
-                                    slowmodeImmune = slowmodeImmune,
-                                )
-                            }
-
-                            androidx.compose.animation.AnimatedVisibility(
-                                !isScrolledToBottom.value,
-                                enter = slideInVertically(
-                                    animationSpec = StoatTweenInt,
-                                    initialOffsetY = { it }
-                                ) + fadeIn(animationSpec = StoatTweenFloat),
-                                exit = slideOutVertically(
-                                    animationSpec = StoatTweenInt,
-                                    targetOffsetY = { it }
-                                ) + fadeOut(animationSpec = StoatTweenFloat)
-                            ) {
-                                BadgedBox(
-                                    modifier = Modifier
-                                        .padding(bottom = scrollDownFABPadding)
-                                        .align(Alignment.BottomCenter)
-                                        .padding(16.dp),
-                                    badge = {
-                                        androidx.compose.animation.AnimatedVisibility(
-                                            visible = viewModel.hasUnseenNewMessages,
-                                            modifier = Modifier.offset(x = (-4).dp, y = 0.dp),
-                                            enter = scaleIn(
-                                                animationSpec = StoatTweenFloat,
-                                                initialScale = 0.5f,
-                                            ) + fadeIn(animationSpec = StoatTweenFloat),
-                                            exit = scaleOut(
-                                                animationSpec = StoatTweenFloat,
-                                                targetScale = 0.5f,
-                                            ) + fadeOut(animationSpec = StoatTweenFloat),
-                                        ) {
-                                            Badge(
-                                                containerColor = MaterialTheme.colorScheme.primary
-                                            ) {
-                                                Text(stringResource(R.string._new))
-                                            }
-                                        }
-                                    }
-                                ) {
-                                    SmallFloatingActionButton(
-                                        onClick = {
-                                            if (
-                                                viewModel.canLoadNewer ||
-                                                viewModel.hasUnseenNewMessages
-                                            ) {
-                                                viewModel.loadLatest(requestScrollToBottom = true)
-                                            } else {
-                                                scope.launch {
-                                                    lazyListState.animateScrollToItem(0)
-                                                }
-                                            }
-                                        },
-                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_south_24dp),
-                                            contentDescription = stringResource(
-                                                R.string.scroll_to_bottom
-                                            )
-                                        )
-                                    }
-                                }
-                            }
+                            )
 
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -1228,202 +1250,400 @@ fun ChannelScreen(
                             }
                         }
 
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = messageComposerBottomContentHeight)
+                                .fillMaxWidth()
+                                .height(messageFieldBackgroundHeight)
+                                .zIndex(1f)
+                                .then(
+                                    if (messageComposerBlurEnabled) {
+                                        Modifier.hazeEffect(messageComposerHazeState) {
+                                            backgroundColor = messageComposerBackgroundColor
+                                            progressive = HazeProgressive.verticalGradient(
+                                                startY = 0f,
+                                                startIntensity = 0f,
+                                                endY = messageFieldGradientEndY,
+                                                endIntensity = 1f
+                                            )
+                                            blurRadius = 28.dp
+                                            tints = listOf(
+                                                HazeTint(messageComposerBackgroundGradient)
+                                            )
+                                            fallbackTint =
+                                                HazeTint(messageComposerBackgroundGradient)
+                                        }
+                                    } else {
+                                        Modifier.background(messageComposerBackgroundGradient)
+                                    }
+                                )
+                        )
+
+                        if (
+                            scrollDownTransition.currentState ||
+                            scrollDownTransition.targetState
+                        ) {
+                            BadgedBox(
+                                modifier = Modifier
+                                    .padding(bottom = messageComposerHeight)
+                                    .align(Alignment.BottomCenter)
+                                    .zIndex(2f)
+                                    .offset { IntOffset(0, scrollDownOffsetY) }
+                                    .padding(16.dp),
+                                badge = {
+                                    androidx.compose.animation.AnimatedVisibility(
+                                        visible = viewModel.hasUnseenNewMessages,
+                                        modifier = Modifier.offset(x = (-4).dp, y = 0.dp),
+                                        enter = scaleIn(
+                                            animationSpec = StoatTweenFloat,
+                                            initialScale = 0.5f,
+                                        ) + fadeIn(animationSpec = StoatTweenFloat),
+                                        exit = scaleOut(
+                                            animationSpec = StoatTweenFloat,
+                                            targetScale = 0.5f,
+                                        ) + fadeOut(animationSpec = StoatTweenFloat),
+                                    ) {
+                                        Badge(
+                                            containerColor = MaterialTheme.colorScheme.primary
+                                        ) {
+                                            Text(stringResource(R.string._new))
+                                        }
+                                    }
+                                }
+                            ) {
+                                SmallFloatingActionButton(
+                                    onClick = {
+                                        if (
+                                            viewModel.canLoadNewer ||
+                                            viewModel.hasUnseenNewMessages
+                                        ) {
+                                            viewModel.loadLatest(requestScrollToBottom = true)
+                                        } else {
+                                            scope.launch {
+                                                lazyListState.animateScrollToItem(0)
+                                            }
+                                        }
+                                    },
+                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_south_24dp),
+                                        contentDescription = stringResource(
+                                            R.string.scroll_to_bottom
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
                         Column(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceContainer)
-                                .fillMaxWidth(),
+                                .align(Alignment.BottomCenter)
+                                .fillMaxWidth()
+                                .onSizeChanged { messageComposerHeightPx = it.height }
+                                .zIndex(3f),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            AnimatedContent(
-                                targetState = viewModel.denyMessageField,
-                                label = "denyMessageField"
-                            ) { deny ->
-                                if (!deny) {
-                                    Column {
-                                        AnimatedVisibility(
-                                            visible = viewModel.draftReplyTo.isNotEmpty() && !viewModel.denyMessageField
-                                        ) {
-                                            ReplyManager(
-                                                replies = viewModel.draftReplyTo,
-                                                onToggleMention = {
-                                                    scope.launch { viewModel.toggleMentionOnReply(it.id) }
-                                                },
-                                                onRemove = {
-                                                    viewModel.draftReplyTo.remove(it)
-                                                }
-                                            )
-                                        }
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .onSizeChanged {
+                                        messageComposerVisualHeightPx = it.height
+                                    },
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                TypingIndicator(
+                                    users = viewModel.typingUsers,
+                                    serverId = viewModel.channel?.server,
+                                    slowmodeSeconds = slowmodeSeconds,
+                                    slowmodeRemainingSeconds = slowmodeRemainingSeconds,
+                                    slowmodeImmune = slowmodeImmune,
+                                    hazeState = messageComposerHazeState.takeIf {
+                                        messageComposerBlurEnabled
+                                    },
+                                )
 
-                                        AnimatedVisibility(
-                                            visible = viewModel.draftAttachments.isNotEmpty() && !viewModel.denyMessageField
-                                        ) {
-                                            AttachmentManager(
-                                                attachments = viewModel.draftAttachments,
-                                                uploading = viewModel.attachmentUploadProgress > 0,
-                                                uploadProgress = viewModel.attachmentUploadProgress,
-                                                canRemove = true,
-                                                canPreview = true,
-                                                onRemove = {
-                                                    viewModel.draftAttachments.remove(it)
-                                                },
-                                                onToggleSpoiler = {
-                                                    val index = viewModel.draftAttachments
-                                                        .indexOfFirst { a -> a.pickerIdentifier == it.pickerIdentifier }
-
-                                                    if (index != -1) {
-                                                        val attachment =
-                                                            viewModel.draftAttachments[index]
-                                                        viewModel.draftAttachments[index] =
-                                                            attachment.copy(
-                                                                spoiler = !attachment.spoiler
-                                                            )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    AnimatedContent(
+                                        targetState = viewModel.denyMessageField,
+                                        modifier = Modifier.onSizeChanged {
+                                            messageFieldHeightPx = it.height
+                                        },
+                                        label = "denyMessageField"
+                                    ) { deny ->
+                                        if (!deny) {
+                                            Column(modifier = Modifier.fillMaxWidth()) {
+                                                MessageField(
+                                                    initialValue = viewModel.initialTextFieldValue,
+                                                    initialValueDirtyMarker = viewModel.initialTextFieldValueDirtyMarker,
+                                                    onValueChange = viewModel::putDraftContent,
+                                                    onAddAttachment = {
+                                                        if (viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        } else {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.AttachmentPicker
+                                                        }
+                                                    },
+                                                    onCommitAttachment = {
+                                                        processFileUri(it, null)
+                                                    },
+                                                    onPickEmoji = {
+                                                        if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        } else {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.EmojiPicker
+                                                        }
+                                                    },
+                                                    onSendMessage = viewModel::sendPendingMessage,
+                                                    channelType = viewModel.channel?.channelType
+                                                        ?: ChannelType.TextChannel,
+                                                    channelName = viewModel.channel?.let { channel ->
+                                                        ChannelUtils.resolveName(channel)
                                                     }
-                                                }
-                                            )
-                                        }
-
-                                        AnimatedVisibility(visible = viewModel.editingMessage != null) {
-                                            Row(Modifier.padding(start = 24.dp, top = 8.dp)) {
-                                                AssistChip(
-                                                    onClick = {
+                                                        ?: stringResource(R.string.unknown),
+                                                    containerModifier =
+                                                        if (messageComposerBlurEnabled) {
+                                                            Modifier.hazeEffect(
+                                                                state = messageComposerHazeState,
+                                                                style = HazeMaterials.regular(
+                                                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                                                                )
+                                                            ) {
+                                                                blurRadius = 28.dp
+                                                            }
+                                                        } else {
+                                                            Modifier
+                                                        },
+                                                    onFocusChange = { isFocused ->
+                                                        if (isFocused && viewModel.activePane != ChannelScreenActivePane.None) {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                            imeInTransition = true
+                                                        }
+                                                    },
+                                                    forceSendButton = viewModel.draftAttachments.isNotEmpty(),
+                                                    canAttach = (channelPermissions has PermissionBit.UploadFiles) && viewModel.editingMessage == null,
+                                                    serverId = viewModel.channel?.server,
+                                                    channelId = channelId,
+                                                    failedValidation = viewModel.draftContent.length > 2000,
+                                                    valueIsBlank = viewModel.draftContent.isBlank(),
+                                                    editMode = viewModel.editingMessage != null,
+                                                    sendEnabled =
+                                                        viewModel.editingMessage != null || !slowmodeActive,
+                                                    cancelEdit = {
                                                         viewModel.editingMessage = null
                                                         viewModel.putDraftContent("", true)
                                                     },
-                                                    label = {
-                                                        Text(stringResource(R.string.message_field_editing_message))
-                                                    },
-                                                    leadingIcon = {
-                                                        Icon(
-                                                            painter = painterResource(R.drawable.ic_edit_24dp),
-                                                            contentDescription = null
+                                                    contentBeforeInput = {
+                                                        val isEditing =
+                                                            viewModel.editingMessage != null
+                                                        val hasReplyContext =
+                                                            !isEditing && viewModel.draftReplyTo.isNotEmpty()
+
+                                                        AnimatedVisibility(visible = isEditing) {
+                                                            Row(
+                                                                modifier = Modifier
+                                                                    .fillMaxWidth()
+                                                                    .padding(
+                                                                        start = 16.dp,
+                                                                        top = 8.dp,
+                                                                        end = 8.dp,
+                                                                        bottom = 4.dp
+                                                                    ),
+                                                                verticalAlignment = Alignment.CenterVertically
+                                                            ) {
+                                                                Icon(
+                                                                    painter = painterResource(R.drawable.ic_edit_24dp),
+                                                                    contentDescription = null,
+                                                                    modifier = Modifier.size(20.dp)
+                                                                )
+                                                                Spacer(Modifier.width(8.dp))
+                                                                Text(
+                                                                    stringResource(R.string.message_field_editing_message),
+                                                                    modifier = Modifier.weight(1f),
+                                                                    style = MaterialTheme.typography.labelLarge
+                                                                )
+                                                                Icon(
+                                                                    painter = painterResource(R.drawable.ic_close_24dp),
+                                                                    contentDescription = stringResource(
+                                                                        R.string.message_field_editing_message_cancel_alt
+                                                                    ),
+                                                                    tint = MaterialTheme.colorScheme.onSurface.copy(
+                                                                        alpha = 0.8f
+                                                                    ),
+                                                                    modifier = Modifier
+                                                                        .clip(MaterialTheme.shapes.small)
+                                                                        .clickable {
+                                                                            viewModel.editingMessage =
+                                                                                null
+                                                                            viewModel.putDraftContent(
+                                                                                "",
+                                                                                true
+                                                                            )
+                                                                        }
+                                                                        .padding(4.dp)
+                                                                        .size(20.dp)
+                                                                )
+                                                            }
+                                                        }
+
+                                                        ReplyManager(
+                                                            replies = if (isEditing) {
+                                                                emptyList()
+                                                            } else {
+                                                                viewModel.draftReplyTo
+                                                            },
+                                                            onToggleMention = {
+                                                                scope.launch {
+                                                                    viewModel.toggleMentionOnReply(
+                                                                        it.id
+                                                                    )
+                                                                }
+                                                            },
+                                                            onRemove = {
+                                                                viewModel.draftReplyTo.remove(it)
+                                                            },
+                                                            embedded = true,
                                                         )
+
+                                                        AnimatedVisibility(
+                                                            visible = viewModel.draftAttachments.isNotEmpty()
+                                                        ) {
+                                                            Column {
+                                                                if (isEditing || hasReplyContext) {
+                                                                    HorizontalDivider(
+                                                                        color = MaterialTheme.colorScheme.outlineVariant.copy(
+                                                                            alpha = 0.5f
+                                                                        )
+                                                                    )
+                                                                }
+                                                                AttachmentManager(
+                                                                    attachments = viewModel.draftAttachments,
+                                                                    uploading = viewModel.attachmentUploadProgress > 0,
+                                                                    uploadProgress = viewModel.attachmentUploadProgress,
+                                                                    canRemove = true,
+                                                                    canPreview = true,
+                                                                    onRemove = {
+                                                                        viewModel.draftAttachments.remove(
+                                                                            it
+                                                                        )
+                                                                    },
+                                                                    onToggleSpoiler = {
+                                                                        val index =
+                                                                            viewModel.draftAttachments
+                                                                                .indexOfFirst { attachment ->
+                                                                                    attachment.pickerIdentifier ==
+                                                                                            it.pickerIdentifier
+                                                                                }
+
+                                                                        if (index != -1) {
+                                                                            val attachment =
+                                                                                viewModel.draftAttachments[index]
+                                                                            viewModel.draftAttachments[index] =
+                                                                                attachment.copy(
+                                                                                    spoiler = !attachment.spoiler
+                                                                                )
+                                                                        }
+                                                                    },
+                                                                    embedded = true,
+                                                                )
+                                                            }
+                                                        }
+
+                                                        if (isEditing || hasReplyContext ||
+                                                            viewModel.draftAttachments.isNotEmpty()
+                                                        ) {
+                                                            HorizontalDivider(
+                                                                color = MaterialTheme.colorScheme.outlineVariant.copy(
+                                                                    alpha = 0.5f
+                                                                )
+                                                            )
+                                                        }
                                                     },
-                                                    trailingIcon = {
-                                                        Icon(
-                                                            painter = painterResource(R.drawable.ic_close_24dp),
-                                                            contentDescription = stringResource(R.string.message_field_editing_message_cancel_alt),
-                                                            tint = MaterialTheme.colorScheme.onSurface,
-                                                            modifier = Modifier.alpha(0.8f)
-                                                        )
+                                                )
+
+                                                DropdownMenu(
+                                                    expanded = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker && notEnoughSpaceForPanes,
+                                                    onDismissRequest = {
+                                                        viewModel.activePane =
+                                                            ChannelScreenActivePane.None
                                                     }
+                                                ) {
+                                                    DropdownMenuItem(
+                                                        leadingIcon = {
+                                                            Icon(
+                                                                painter = painterResource(R.drawable.ic_attach_file_24dp),
+                                                                contentDescription = null // Provided by text below
+                                                            )
+                                                        },
+                                                        text = { Text(stringResource(R.string.file_picker_chip_documents)) },
+                                                        onClick = {
+                                                            openDocumentPickerCallback()
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+                                                    )
+                                                    DropdownMenuItem(
+                                                        leadingIcon = {
+                                                            Icon(
+                                                                painter = painterResource(R.drawable.ic_camera_24dp),
+                                                                contentDescription = null // Provided by text below
+                                                            )
+                                                        },
+                                                        text = { Text(stringResource(R.string.file_picker_chip_camera)) },
+                                                        onClick = {
+                                                            openCameraCallback()
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+                                                    )
+                                                    DropdownMenuItem(
+                                                        leadingIcon = {
+                                                            Icon(
+                                                                painter = painterResource(R.drawable.ic_photo_library_24dp),
+                                                                contentDescription = null // Provided by text below
+                                                            )
+                                                        },
+                                                        text = { Text(stringResource(R.string.file_picker_chip_photo_picker)) },
+                                                        onClick = {
+                                                            openPhotoPickerCallback()
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            Box(
+                                                modifier = Modifier
+                                                    .padding(horizontal = 32.dp, vertical = 16.dp)
+                                            ) {
+                                                Text(
+                                                    stringResource(viewModel.denyMessageFieldReasonResource),
+                                                    color = MaterialTheme.colorScheme.error,
+                                                    style = MaterialTheme.typography.bodyMedium,
+                                                    textAlign = TextAlign.Center
                                                 )
                                             }
                                         }
-
-                                        MessageField(
-                                            initialValue = viewModel.initialTextFieldValue,
-                                            initialValueDirtyMarker = viewModel.initialTextFieldValueDirtyMarker,
-                                            onValueChange = viewModel::putDraftContent,
-                                            onAddAttachment = {
-                                                if (viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                } else {
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.AttachmentPicker
-                                                }
-                                            },
-                                            onCommitAttachment = {
-                                                processFileUri(it, null)
-                                            },
-                                            onPickEmoji = {
-                                                if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                } else {
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.EmojiPicker
-                                                }
-                                            },
-                                            onSendMessage = viewModel::sendPendingMessage,
-                                            channelType = viewModel.channel?.channelType
-                                                ?: ChannelType.TextChannel,
-                                            channelName = viewModel.channel?.let { channel ->
-                                                ChannelUtils.resolveName(channel)
-                                            }
-                                                ?: stringResource(R.string.unknown),
-                                            onFocusChange = { isFocused ->
-                                                if (isFocused && viewModel.activePane != ChannelScreenActivePane.None) {
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                    imeInTransition = true
-                                                }
-                                            },
-                                            forceSendButton = viewModel.draftAttachments.isNotEmpty(),
-                                            canAttach = (channelPermissions has PermissionBit.UploadFiles) && viewModel.editingMessage == null,
-                                            serverId = viewModel.channel?.server,
-                                            channelId = channelId,
-                                            failedValidation = viewModel.draftContent.length > 2000,
-                                            valueIsBlank = viewModel.draftContent.isBlank(),
-                                            sendEnabled =
-                                                viewModel.editingMessage != null || !slowmodeActive,
-                                            cancelEdit = {
-                                                viewModel.editingMessage = null
-                                                viewModel.putDraftContent("", true)
-                                            }
-                                        )
-
-                                        DropdownMenu(
-                                            expanded = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker && notEnoughSpaceForPanes,
-                                            onDismissRequest = {
-                                                viewModel.activePane = ChannelScreenActivePane.None
-                                            }
-                                        ) {
-                                            DropdownMenuItem(
-                                                leadingIcon = {
-                                                    Icon(
-                                                        painter = painterResource(R.drawable.ic_attach_file_24dp),
-                                                        contentDescription = null // Provided by text below
-                                                    )
-                                                },
-                                                text = { Text(stringResource(R.string.file_picker_chip_documents)) },
-                                                onClick = {
-                                                    openDocumentPickerCallback()
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                leadingIcon = {
-                                                    Icon(
-                                                        painter = painterResource(R.drawable.ic_camera_24dp),
-                                                        contentDescription = null // Provided by text below
-                                                    )
-                                                },
-                                                text = { Text(stringResource(R.string.file_picker_chip_camera)) },
-                                                onClick = {
-                                                    openCameraCallback()
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                }
-                                            )
-                                            DropdownMenuItem(
-                                                leadingIcon = {
-                                                    Icon(
-                                                        painter = painterResource(R.drawable.ic_photo_library_24dp),
-                                                        contentDescription = null // Provided by text below
-                                                    )
-                                                },
-                                                text = { Text(stringResource(R.string.file_picker_chip_photo_picker)) },
-                                                onClick = {
-                                                    openPhotoPickerCallback()
-                                                    viewModel.activePane =
-                                                        ChannelScreenActivePane.None
-                                                }
-                                            )
-                                        }
                                     }
-                                } else {
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(horizontal = 32.dp, vertical = 16.dp)
-                                    ) {
-                                        Text(
-                                            stringResource(viewModel.denyMessageFieldReasonResource),
-                                            color = MaterialTheme.colorScheme.error,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            textAlign = TextAlign.Center
+
+                                    if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                        Spacer(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .height(navigationBarHeight)
                                         )
                                     }
                                 }
@@ -1432,15 +1652,25 @@ fun ChannelScreen(
                             if (viewModel.activePane == ChannelScreenActivePane.None && !imeInTransition) {
                                 Spacer(
                                     Modifier
-                                        .imePadding()
-                                        .navigationBarsPadding()
-                                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                                        .fillMaxWidth()
+                                        .height(with(LocalDensity.current) {
+                                            keyboardOnlyInset.toDp()
+                                        })
                                 )
                             } else {
                                 if (!notEnoughSpaceForPanes) {
                                     Box(
                                         Modifier
-                                            .heightIn(min = pxAsDp(fallbackKeyboardHeight))
+                                            .heightIn(min = pxAsDp(composerBottomSpacerHeight))
+                                            .then(
+                                                if (viewModel.activePane != ChannelScreenActivePane.None) {
+                                                    Modifier.background(
+                                                        MaterialTheme.colorScheme.background
+                                                    )
+                                                } else {
+                                                    Modifier
+                                                }
+                                            )
                                     ) {
                                         Box(
                                             Modifier.then(
@@ -1449,14 +1679,14 @@ fun ChannelScreen(
                                                         pxAsDp(
                                                             max(
                                                                 imeCurrentInset * 2,
-                                                                fallbackKeyboardHeight
+                                                                composerBottomSpacerHeight
                                                             )
                                                         )
                                                     )
                                                 } else {
                                                     Modifier.requiredHeight(
                                                         pxAsDp(
-                                                            fallbackKeyboardHeight
+                                                            composerBottomSpacerHeight
                                                         )
                                                     )
                                                 }
@@ -1472,7 +1702,7 @@ fun ChannelScreen(
                                                     Column(
                                                         modifier = Modifier
                                                             .fillMaxWidth()
-                                                            .background(MaterialTheme.colorScheme.surfaceContainer)
+                                                            .background(MaterialTheme.colorScheme.background)
                                                             .padding(4.dp)
                                                             .navigationBarsPadding()
                                                     ) {
@@ -1521,7 +1751,17 @@ fun ChannelScreen(
                                                 }
                                             }
                                         }
-                                        Box(Modifier.imePadding())
+                                        Box(
+                                            Modifier.then(
+                                                if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                                    Modifier.height(with(LocalDensity.current) {
+                                                        keyboardOnlyInset.toDp()
+                                                    })
+                                                } else {
+                                                    Modifier.imePadding()
+                                                }
+                                            )
+                                        )
                                     }
                                 } else {
                                     if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
@@ -1534,7 +1774,7 @@ fun ChannelScreen(
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .height(600.dp)
-                                                .background(MaterialTheme.colorScheme.surfaceContainer)
+                                                .background(MaterialTheme.colorScheme.background)
                                                 .padding(4.dp)
                                                 .navigationBarsPadding()
                                         ) {
@@ -1554,8 +1794,18 @@ fun ChannelScreen(
                                     }
                                     Box(
                                         Modifier
-                                            .imePadding()
-                                            .navigationBarsPadding()
+                                            .fillMaxWidth()
+                                            .then(
+                                                if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                                    Modifier.height(with(LocalDensity.current) {
+                                                        keyboardOnlyInset.toDp()
+                                                    })
+                                                } else {
+                                                    Modifier
+                                                        .imePadding()
+                                                        .navigationBarsPadding()
+                                                }
+                                            )
                                     )
                                 }
                             }

@@ -2,12 +2,10 @@ package chat.stoat.composables.chat
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,10 +15,12 @@ import androidx.compose.foundation.content.contentReceiver
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
@@ -54,6 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -80,15 +82,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
-import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.activities.StoatTweenInt
+import chat.stoat.activities.StoatTweenDp
 import chat.stoat.api.internals.BrushCompat
-import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.core.model.schemas.Member
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Member
 import chat.stoat.internals.Autocomplete
 import kotlinx.coroutines.launch
 
@@ -151,6 +152,7 @@ fun MessageField(
     channelType: ChannelType,
     channelName: String,
     modifier: Modifier = Modifier,
+    containerModifier: Modifier = Modifier,
     forceSendButton: Boolean = false,
     sendEnabled: Boolean = true,
     canAttach: Boolean = true,
@@ -163,6 +165,7 @@ fun MessageField(
     initialValueDirtyMarker: Any = Unit,
     cancelEdit: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit = {},
+    contentBeforeInput: @Composable ColumnScope.() -> Unit = {},
 ) {
     val placeholderResource = when (channelType) {
         ChannelType.DirectMessage -> R.string.message_field_placeholder_dm
@@ -174,6 +177,22 @@ fun MessageField(
 
     val sendButtonVisible =
         (!valueIsBlank || forceSendButton) && !disabled && !failedValidation
+    val sendButtonTransition = updateTransition(
+        targetState = sendButtonVisible,
+        label = "SendButton",
+    )
+    val sendButtonSlotWidth by sendButtonTransition.animateDp(
+        transitionSpec = { StoatTweenDp },
+        label = "SendButtonSlotWidth",
+    ) { visible ->
+        if (visible) 48.dp else 0.dp
+    }
+    val sendButtonOffsetX by sendButtonTransition.animateDp(
+        transitionSpec = { StoatTweenDp },
+        label = "SendButtonOffsetX",
+    ) { visible ->
+        if (visible) 0.dp else 48.dp
+    }
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -194,7 +213,7 @@ fun MessageField(
         }
     }
 
-    var textFieldState = rememberTextFieldState(
+    val textFieldState = rememberTextFieldState(
         initialText = initialValue,
         initialSelection = selection.asTextRange()
     )
@@ -260,9 +279,7 @@ fun MessageField(
         }
     }
 
-    Column(
-        modifier = modifier.background(MaterialTheme.colorScheme.surfaceContainer)
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         AnimatedVisibility(
             visible = autocompleteSuggestions.isNotEmpty(),
             enter = expandIn(initialSize = { full ->
@@ -490,157 +507,160 @@ fun MessageField(
                 }
             }
         }
-        Row(
-            modifier = modifier
-                .background(MaterialTheme.colorScheme.surfaceContainer),
-            verticalAlignment = Alignment.CenterVertically
+        val messageFieldShape = RoundedCornerShape(28.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .shadow(4.dp, messageFieldShape, clip = false)
+                .clip(messageFieldShape)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                .then(containerModifier),
         ) {
-            Spacer(modifier = Modifier.width(8.dp))
+            contentBeforeInput()
 
-            // Note: There is an assumption that editing a message implies canAttach = false and editMode = true
-            AnimatedVisibility(canAttach) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                Spacer(modifier = Modifier.width(8.dp))
+
+                // Note: There is an assumption that editing a message implies canAttach = false and editMode = true
+                AnimatedVisibility(canAttach) {
+                    Icon(
+                        Icons.Default.Add,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                        contentDescription = stringResource(id = R.string.add_attachment_alt),
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(32.dp)
+                            .clickable {
+                                if (!editMode) {
+                                    // hide keyboard because it's annoying
+                                    focusManager.clearFocus()
+                                    onAddAttachment()
+                                }
+                            }
+                            .padding(4.dp)
+                            .testTag("add_attachment")
+                    )
+                }
+
+                BasicTextField(
+                    state = textFieldState,
+                    textStyle = LocalTextStyle.current.copy(
+                        color = if (failedValidation) {
+                            MaterialTheme.colorScheme.error
+                        } else LocalContentColor.current
+                    ),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.None,
+                        showKeyboardOnFocus = false
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(max = 128.dp)
+                        .verticalScroll(rememberScrollState())
+                        .onFocusChanged {
+                            onFocusChange(it.isFocused)
+                        }
+                        .focusRequester(focusRequester)
+                        .contentReceiver(receiveContentListener)
+                        .onKeyEvent {
+                            if (it.type == KeyEventType.KeyUp) {
+                                when (it.key) {
+                                    Key.Enter if !it.isShiftPressed &&
+                                            !it.isAltPressed &&
+                                            it.isCtrlPressed &&
+                                            !it.isMetaPressed -> {
+                                        if (sendEnabled) {
+                                            onSendMessage()
+                                        }
+                                        return@onKeyEvent true
+                                    }
+
+                                    Key.Escape if !it.isShiftPressed &&
+                                            !it.isAltPressed &&
+                                            !it.isCtrlPressed &&
+                                            !it.isMetaPressed -> {
+                                        cancelEdit()
+                                        return@onKeyEvent true
+                                    }
+                                }
+                            }
+
+                            return@onKeyEvent false
+                        },
+                    decorator = { innerTextField ->
+                        Box(Modifier.padding(horizontal = 16.dp, vertical = 18.dp)) {
+                            if (textFieldState.text.isEmptyOrOnlyNewlines()) {
+                                Text(
+                                    stringResource(placeholderResource, channelName),
+                                    style = LocalTextStyle.current.copy(
+                                        color = LocalContentColor.current.copy(alpha = 0.5f)
+                                    ),
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                )
+
                 Icon(
-                    Icons.Default.Add,
+                    painter = painterResource(R.drawable.ic_mood_24dp),
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    contentDescription = stringResource(id = R.string.add_attachment_alt),
+                    contentDescription = stringResource(id = R.string.pick_emoji_alt),
                     modifier = Modifier
                         .clip(CircleShape)
                         .size(32.dp)
                         .clickable {
-                            if (!editMode) {
-                                // hide keyboard because it's annoying
-                                focusManager.clearFocus()
-                                onAddAttachment()
-                            }
+                            focusManager.clearFocus()
+                            onPickEmoji()
                         }
                         .padding(4.dp)
-                        .testTag("add_attachment")
+                        .testTag("pick_emoji")
                 )
-            }
 
-            BasicTextField(
-                state = textFieldState,
-                textStyle = LocalTextStyle.current.copy(
-                    color = if (failedValidation) {
-                        MaterialTheme.colorScheme.error
-                    } else LocalContentColor.current
-                ),
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    capitalization = KeyboardCapitalization.Sentences,
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.None,
-                    showKeyboardOnFocus = false
-                ),
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(max = 128.dp)
-                    .verticalScroll(rememberScrollState())
-                    .onFocusChanged {
-                        onFocusChange(it.isFocused)
-                    }
-                    .focusRequester(focusRequester)
-                    .contentReceiver(receiveContentListener)
-                    .onKeyEvent {
-                        if (it.type == KeyEventType.KeyUp) {
-                            when {
-                                it.key == Key.Enter &&
-                                        !it.isShiftPressed &&
-                                        !it.isAltPressed &&
-                                        it.isCtrlPressed &&
-                                        !it.isMetaPressed -> {
-                                    if (sendEnabled) {
-                                        onSendMessage()
-                                    }
-                                    return@onKeyEvent true
-                                }
-
-                                it.key == Key.Escape &&
-                                        !it.isShiftPressed &&
-                                        !it.isAltPressed &&
-                                        !it.isCtrlPressed &&
-                                        !it.isMetaPressed -> {
-                                    cancelEdit()
-                                    return@onKeyEvent true
-                                }
-                            }
-                        }
-
-                        return@onKeyEvent false
-                    },
-                decorator = { innerTextField ->
-                    Box(Modifier.padding(horizontal = 16.dp, vertical = 18.dp)) {
-                        if (textFieldState.text.isEmptyOrOnlyNewlines()) {
-                            Text(
-                                stringResource(placeholderResource, channelName),
-                                style = LocalTextStyle.current.copy(
-                                    color = LocalContentColor.current.copy(alpha = 0.5f)
-                                ),
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
-                        }
-                        innerTextField()
-                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(sendButtonSlotWidth))
                 }
-            )
 
-            Icon(
-                painter = painterResource(R.drawable.ic_mood_24dp),
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                contentDescription = stringResource(id = R.string.pick_emoji_alt),
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(32.dp)
-                    .clickable {
-                        focusManager.clearFocus()
-                        onPickEmoji()
-                    }
-                    .padding(4.dp)
-                    .testTag("pick_emoji")
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            AnimatedVisibility(
-                sendButtonVisible,
-                enter = expandIn(initialSize = { full ->
-                    IntSize(
-                        0,
-                        full.height
+                if (
+                    sendButtonTransition.currentState ||
+                    sendButtonTransition.targetState
+                ) {
+                    Icon(
+                        painter = when {
+                            editMode -> painterResource(R.drawable.ic_edit_24dp)
+                            else -> painterResource(R.drawable.ic_send_24dp)
+                        },
+                        tint = if (sendEnabled) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.38f)
+                        },
+                        contentDescription = stringResource(id = R.string.send_alt),
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .offset(x = sendButtonOffsetX)
+                            .padding(end = 8.dp)
+                            .size(width = 40.dp, height = 32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .clickable(
+                                enabled = sendEnabled && sendButtonTransition.targetState
+                            ) {
+                                onSendMessage()
+                            }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .testTag("send_message")
                     )
-                }) + slideInHorizontally(
-                    animationSpec = StoatTweenInt,
-                    initialOffsetX = { -it }
-                ) + fadeIn(animationSpec = StoatTweenFloat),
-                exit = shrinkOut(targetSize = { full ->
-                    IntSize(
-                        0,
-                        full.height
-                    )
-                }) + slideOutHorizontally(
-                    animationSpec = StoatTweenInt,
-                    targetOffsetX = { it }
-                ) + fadeOut(animationSpec = StoatTweenFloat)
-            ) {
-                Icon(
-                    painter = when {
-                        editMode -> painterResource(R.drawable.ic_edit_24dp)
-                        else -> painterResource(R.drawable.ic_send_24dp)
-                    },
-                    tint = if (sendEnabled) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-                    },
-                    contentDescription = stringResource(id = R.string.send_alt),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clip(CircleShape)
-                        .clickable(enabled = sendEnabled) { onSendMessage() }
-                        .size(32.dp)
-                        .padding(4.dp)
-                        .testTag("send_message")
-                )
+                }
             }
         }
     }

@@ -15,20 +15,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,6 +55,10 @@ import chat.stoat.api.internals.formatCompactDuration
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
 
 @Composable
 fun StackedUserAvatars(
@@ -83,6 +92,7 @@ fun StackedUserAvatars(
     }
 }
 
+@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 fun TypingIndicator(
     users: List<String>,
@@ -90,9 +100,23 @@ fun TypingIndicator(
     slowmodeSeconds: Long? = null,
     slowmodeRemainingSeconds: Long = 0,
     slowmodeImmune: Boolean = false,
+    hazeState: HazeState? = null,
 ) {
     val slowmodeEnabled = slowmodeSeconds != null && slowmodeSeconds > 0
     val slowmodeActive = !slowmodeImmune && slowmodeRemainingSeconds > 0
+    var lastTypingUsers by remember { mutableStateOf(emptyList<String>()) }
+    var lastSlowmodeSeconds by remember { mutableLongStateOf(0L) }
+    val displayedTypingUsers = users.ifEmpty { lastTypingUsers }
+    val displayedSlowmodeSeconds = slowmodeSeconds?.takeIf { it > 0 }
+        ?: lastSlowmodeSeconds
+    SideEffect {
+        if (users.isNotEmpty()) {
+            lastTypingUsers = users.toList()
+        }
+        if (slowmodeSeconds != null && slowmodeSeconds > 0) {
+            lastSlowmodeSeconds = slowmodeSeconds
+        }
+    }
     val idleSlowmodeColor = LocalContentColor.current
     val slowmodeColor by animateColorAsState(
         targetValue = if (slowmodeActive) {
@@ -103,9 +127,28 @@ fun TypingIndicator(
         animationSpec = StoatTweenColour,
         label = "Slowmode color",
     )
+    val pillShape = RoundedCornerShape(16.dp)
+    val pillContainerColor = MaterialTheme.colorScheme.surfaceContainer
+    val pillHazeStyle = hazeState?.let {
+        HazeMaterials.thin(containerColor = pillContainerColor)
+    }
 
-    fun typingMessageResource(): Int {
-        return when (users.size) {
+    fun Modifier.pillBackground(): Modifier =
+        clip(pillShape).then(
+            if (hazeState != null && pillHazeStyle != null) {
+                Modifier.hazeEffect(
+                    state = hazeState,
+                    style = pillHazeStyle
+                ) {
+                    blurRadius = 20.dp
+                }
+            } else {
+                Modifier.background(pillContainerColor.copy(alpha = 0.9f))
+            }
+        )
+
+    fun typingMessageResource(userCount: Int): Int {
+        return when (userCount) {
             0 -> R.string.typing_blank
             1 -> R.string.typing_one
             in 2..4 -> R.string.typing_many
@@ -115,80 +158,110 @@ fun TypingIndicator(
 
     AnimatedVisibility(
         visible = users.isNotEmpty() || slowmodeEnabled,
-        enter = slideInVertically(
-            animationSpec = StoatTweenInt,
-            initialOffsetY = { it }
-        ) + expandVertically(
+        enter = expandVertically(
             animationSpec = StoatTweenSize,
             expandFrom = Alignment.Bottom,
-        ) + fadeIn(animationSpec = StoatTweenFloat),
-        exit = slideOutVertically(
-            animationSpec = StoatTweenInt,
-            targetOffsetY = { it }
-        ) + shrinkVertically(
+        ),
+        exit = shrinkVertically(
             animationSpec = StoatTweenSize,
             shrinkTowards = Alignment.Bottom,
-        ) + fadeOut(animationSpec = StoatTweenFloat)
+        )
     ) {
         Row(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+                .padding(start = 8.dp, top = 4.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (users.isNotEmpty()) {
-                StackedUserAvatars(users = users, serverId = serverId)
-
-                Text(
-                    text = stringResource(
-                        id = typingMessageResource(),
-                        users.joinToString { userId ->
-                            StoatAPI.userCache[userId]?.let { u ->
-                                val maybeMember =
-                                    serverId?.let { StoatAPI.members.getMember(serverId, userId) }
-
-                                maybeMember?.nickname ?: User.resolveDefaultName(u)
-                            } ?: userId
-                        }
-                    ),
-                    modifier = Modifier.weight(1f),
-                    fontSize = 12.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            } else {
-                Spacer(Modifier.weight(1f))
-            }
-
-            if (slowmodeEnabled) {
-                if (users.isNotEmpty()) {
-                    Spacer(Modifier.width(8.dp))
-                }
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                androidx.compose.animation.AnimatedVisibility(
+                    visible = users.isNotEmpty(),
+                    enter = slideInVertically(
+                        animationSpec = StoatTweenInt,
+                        initialOffsetY = { it },
+                    ) + fadeIn(animationSpec = StoatTweenFloat),
+                    exit = slideOutVertically(
+                        animationSpec = StoatTweenInt,
+                        targetOffsetY = { it },
+                    ) + fadeOut(animationSpec = StoatTweenFloat),
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_timer_24dp),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = slowmodeColor,
-                    )
-                    if (slowmodeImmune) {
+                    Row(
+                        modifier = Modifier
+                            .pillBackground()
+                            .padding(vertical = 6.dp, horizontal = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        StackedUserAvatars(
+                            users = displayedTypingUsers,
+                            serverId = serverId
+                        )
+
                         Text(
-                            text = stringResource(R.string.slowmode_immune),
-                            color = slowmodeColor,
+                            text = stringResource(
+                                id = typingMessageResource(displayedTypingUsers.size),
+                                displayedTypingUsers.joinToString { userId ->
+                                    StoatAPI.userCache[userId]?.let { u ->
+                                        val maybeMember = serverId?.let {
+                                            StoatAPI.members.getMember(serverId, userId)
+                                        }
+
+                                        maybeMember?.nickname ?: User.resolveDefaultName(u)
+                                    } ?: userId
+                                }
+                            ),
+                            modifier = Modifier.weight(1f, fill = false),
                             fontSize = 12.sp,
                             maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
-                    } else {
-                        AnimatedSlowmodeDuration(
-                            seconds = slowmodeRemainingSeconds.takeIf { it > 0 }
-                                ?: checkNotNull(slowmodeSeconds),
-                            color = slowmodeColor,
+                    }
+                }
+            }
+
+            AnimatedVisibility(
+                visible = slowmodeEnabled,
+                enter = slideInVertically(
+                    animationSpec = StoatTweenInt,
+                    initialOffsetY = { it },
+                ) + fadeIn(animationSpec = StoatTweenFloat),
+                exit = slideOutVertically(
+                    animationSpec = StoatTweenInt,
+                    targetOffsetY = { it },
+                ) + fadeOut(animationSpec = StoatTweenFloat),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .pillBackground()
+                        .padding(vertical = 6.dp, horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_timer_24dp),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                            tint = slowmodeColor,
                         )
+                        if (slowmodeImmune) {
+                            Text(
+                                text = stringResource(R.string.slowmode_immune),
+                                color = slowmodeColor,
+                                fontSize = 12.sp,
+                                maxLines = 1,
+                            )
+                        } else {
+                            AnimatedSlowmodeDuration(
+                                seconds = slowmodeRemainingSeconds.takeIf { it > 0 }
+                                    ?: displayedSlowmodeSeconds,
+                                color = slowmodeColor,
+                            )
+                        }
                     }
                 }
             }
