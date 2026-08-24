@@ -12,8 +12,8 @@ import chat.stoat.core.model.schemas.ServerWithChannelObjects
 import chat.stoat.core.model.schemas.User
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import io.ktor.client.request.patch
 import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -21,8 +21,8 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -46,6 +46,9 @@ private data class BanMemberBody(
 
 @Serializable
 private data class EditMemberBody(
+    val nickname: String? = null,
+    val pronouns: String? = null,
+    val avatar: String? = null,
     val timeout: String? = null,
     val remove: List<String> = emptyList(),
 )
@@ -150,11 +153,48 @@ suspend fun banMember(
 }
 
 suspend fun setMemberTimeout(serverId: String, userId: String, timeout: String?): Member {
-    val body = if (timeout == null) {
-        EditMemberBody(remove = listOf("Timeout"))
-    } else {
-        EditMemberBody(timeout = timeout)
-    }
+    return patchMember(
+        serverId = serverId,
+        userId = userId,
+        timeout = timeout,
+        remove = if (timeout == null) listOf("Timeout") else emptyList(),
+    )
+}
+
+suspend fun patchMemberIdentity(
+    serverId: String,
+    userId: String,
+    nickname: String? = null,
+    pronouns: String? = null,
+    avatar: String? = null,
+    remove: List<String> = emptyList(),
+): Member {
+    return patchMember(
+        serverId = serverId,
+        userId = userId,
+        nickname = nickname,
+        pronouns = pronouns,
+        avatar = avatar,
+        remove = remove,
+    )
+}
+
+private suspend fun patchMember(
+    serverId: String,
+    userId: String,
+    nickname: String? = null,
+    pronouns: String? = null,
+    avatar: String? = null,
+    timeout: String? = null,
+    remove: List<String> = emptyList(),
+): Member {
+    val body = EditMemberBody(
+        nickname = nickname,
+        pronouns = pronouns,
+        avatar = avatar,
+        timeout = timeout,
+        remove = remove,
+    )
     val response = StoatHttp.patch("/servers/$serverId/members/$userId".api()) {
         contentType(ContentType.Application.Json)
         setBody(StoatJson.encodeToString(EditMemberBody.serializer(), body))

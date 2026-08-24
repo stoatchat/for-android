@@ -56,10 +56,14 @@ fun SelfUserOverview() {
 }
 
 @Composable
-fun UserOverview(user: User, internalPadding: Boolean = true) {
+fun UserOverview(
+    user: User,
+    internalPadding: Boolean = true,
+    pfpUrl: String? = null,
+) {
     var profile by remember { mutableStateOf<Profile?>(null) }
 
-    LaunchedEffect(user) {
+    LaunchedEffect(user.id) {
         try {
             if (profile == null) {
                 profile = fetchUserProfile(user.id ?: ULID.makeSpecial(0))
@@ -69,7 +73,12 @@ fun UserOverview(user: User, internalPadding: Boolean = true) {
         }
     }
 
-    RawUserOverview(user, profile, internalPadding = internalPadding)
+    RawUserOverview(
+        user = user,
+        profile = profile,
+        pfpUrl = pfpUrl,
+        internalPadding = internalPadding,
+    )
 }
 
 @Composable
@@ -83,7 +92,7 @@ fun RawUserOverview(
     val context = LocalContext.current
     var teamMemberFlair by remember { mutableStateOf<Brush?>(null) }
 
-    LaunchedEffect(user) {
+    LaunchedEffect(user.id) {
         runBlocking(Dispatchers.IO) {
             user.id?.let {
                 teamMemberFlair = SpecialUsers.teamFlairAsBrush(

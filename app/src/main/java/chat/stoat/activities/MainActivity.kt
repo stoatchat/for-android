@@ -128,6 +128,7 @@ import chat.stoat.screens.settings.SettingsScreen
 import chat.stoat.screens.settings.channel.ChannelSettingsHome
 import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
+import chat.stoat.screens.settings.server.ServerIdentitySettingsScreen
 import chat.stoat.screens.settings.server.ServerSettingsEmojis
 import chat.stoat.screens.settings.server.ServerSettingsHome
 import chat.stoat.screens.settings.server.ServerSettingsInvites
@@ -778,6 +779,17 @@ fun AppEntrypoint(
                     composable("settings/server/{serverId}") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
                         ServerSettingsHome(navController, serverId)
+                    }
+                    composable("settings/server/{serverId}/identity") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        StoatAPI.selfId?.let { selfId ->
+                            ServerIdentitySettingsScreen(navController, serverId, selfId)
+                        }
+                    }
+                    composable("settings/server/{serverId}/identity/{userId}") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                        ServerIdentitySettingsScreen(navController, serverId, userId)
                     }
                     composable("settings/server/{serverId}/overview") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""

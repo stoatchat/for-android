@@ -43,7 +43,7 @@ import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.ServerOverview
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
-import chat.stoat.screens.settings.server.availableServerSettingsOptions
+import chat.stoat.internals.server.availableServerSettingsOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -227,6 +227,29 @@ fun ServerContextSheet(
                     onHideSheet()
                 }
             }
+        )
+
+        SheetButton(
+            leadingContent = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_id_card_24dp),
+                    contentDescription = null,
+                )
+            },
+            headlineContent = {
+                Text(stringResource(R.string.server_identity))
+            },
+            onClick = {
+                coroutineScope.launch {
+                    onHideSheet()
+                }
+                coroutineScope.launch {
+                    delay(100.milliseconds)
+                    ActionChannel.send(
+                        Action.TopNavigate("settings/server/$serverId/identity")
+                    )
+                }
+            },
         )
 
         if (serverSettingsOptions.isNotEmpty()) {

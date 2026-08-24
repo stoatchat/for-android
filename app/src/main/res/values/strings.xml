@@ -995,6 +995,38 @@
     <string name="changelog_load_error">There was an error loading the changelog.</string>
     <string name="changelog_retry">Retry</string>
 
+    <string name="server_identity">Server identity</string>
+    <string name="server_identity_edit_member">Edit server identity</string>
+    <string name="server_identity_title">Identity in %1$s</string>
+    <string name="server_identity_member_title">Edit %1$s in %2$s</string>
+    <string name="server_identity_preview_description">This is how you\'ll appear in this server.</string>
+    <string name="server_identity_preview_description_member">This is how this member appears in the server.</string>
+    <string name="server_identity_avatar">Server avatar</string>
+    <string name="server_identity_avatar_inherited">Using your account avatar</string>
+    <string name="server_identity_avatar_inherited_member">Using their account avatar</string>
+    <string name="server_identity_avatar_custom">Your custom avatar for this server</string>
+    <string name="server_identity_avatar_custom_member">Their custom avatar for this server</string>
+    <string name="server_identity_nickname">Nickname</string>
+    <string name="server_identity_nickname_placeholder">Use your display name</string>
+    <string name="server_identity_nickname_placeholder_member">Use their display name</string>
+    <string name="server_identity_pronouns">Pronouns</string>
+    <string name="server_identity_pronouns_placeholder">Optional</string>
+    <string name="server_identity_permission_nickname">You don\'t have permission to change your nickname in this server.</string>
+    <string name="server_identity_permission_nickname_member">You don\'t have permission to change this member\'s nickname.</string>
+    <string name="server_identity_permission_avatar">You don\'t have permission to change your avatar in this server.</string>
+    <string name="server_identity_permission_avatar_member">You don\'t have permission to remove this member\'s server avatar.</string>
+    <string name="server_identity_permission_pronouns">Only members can change their own server pronouns.</string>
+    <string name="server_identity_save">Save identity</string>
+    <string name="server_identity_saved">Server identity saved.</string>
+    <string name="server_identity_update_error">There was an error updating the server identity.</string>
+    <string name="server_identity_load_error">There was an error loading the server identity.</string>
+    <string name="server_identity_retry">Retry</string>
+    <string name="server_identity_file_error">The selected image could not be read.</string>
+    <string name="server_identity_discard_title">Discard identity changes?</string>
+    <string name="server_identity_discard_description">Your unsaved identity changes will be lost.</string>
+    <string name="server_identity_discard">Discard</string>
+    <string name="server_identity_keep_editing">Keep editing</string>
+
     <string name="server_settings">Server Settings</string>
     <string name="server_settings_overview">Overview</string>
     <string name="server_settings_category_customisation">Customisation</string>
@@ -1029,7 +1061,6 @@
     <string name="server_settings_overview_discard">Discard</string>
     <string name="server_settings_overview_keep_editing">Keep editing</string>
     <string name="server_settings_overview_update_error">There was an error updating the server.</string>
-    <string name="server_settings_overview_webp_unsupported">WebP is not supported.</string>
     <string name="server_settings_overview_file_error">The selected image could not be read.</string>
 
     <string name="member_moderation_timeout">Timeout</string>

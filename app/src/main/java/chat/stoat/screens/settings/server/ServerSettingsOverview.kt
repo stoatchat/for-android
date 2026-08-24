@@ -275,11 +275,6 @@ class ServerSettingsOverviewViewModel(
 
         val uri = current as? Uri ?: return null
         val mime = context.contentResolver.getType(uri) ?: "image/*"
-        if (mime.endsWith("webp", ignoreCase = true)) {
-            throw IllegalArgumentException(
-                context.getString(R.string.server_settings_overview_webp_unsupported)
-            )
-        }
 
         val file = withContext(Dispatchers.IO) {
             File.createTempFile("stoat-$tag-", null, context.cacheDir).also { temporaryFile ->

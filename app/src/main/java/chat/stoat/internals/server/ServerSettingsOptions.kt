@@ -1,4 +1,4 @@
-package chat.stoat.screens.settings.server
+package chat.stoat.internals.server
 
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission

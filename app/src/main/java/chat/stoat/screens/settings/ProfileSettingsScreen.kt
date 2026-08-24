@@ -120,11 +120,6 @@ class ProfileSettingsScreenViewModel(val context: Application) :
 
         val mime = context.contentResolver.getType(uri)
 
-        if (mime?.endsWith("webp") == true) {
-            uploadError = "WebP is not supported"
-            return
-        }
-
         viewModelScope.launch {
             try {
                 val id = uploadToAutumn(
@@ -170,11 +165,6 @@ class ProfileSettingsScreenViewModel(val context: Application) :
         }
 
         val mime = context.contentResolver.getType(uri)
-
-        if (mime?.endsWith("webp") == true) {
-            uploadError = "WebP is not supported"
-            return
-        }
 
         viewModelScope.launch {
             try {

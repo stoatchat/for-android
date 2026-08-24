@@ -134,11 +134,6 @@ class ChannelSettingsOverviewViewModel(val context: Application) :
 
         val mime = context.contentResolver.getType(uri)
 
-        if (mime?.endsWith("webp") == true) {
-            uploadError = "WebP is not supported"
-            return
-        }
-
         viewModelScope.launch {
             iconIsUploading = true
             try {

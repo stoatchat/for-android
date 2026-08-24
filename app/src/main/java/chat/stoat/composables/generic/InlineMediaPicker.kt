@@ -43,7 +43,8 @@ fun InlineMediaPicker(
     onPick: (Uri) -> Unit,
     canRemove: Boolean = true,
     onRemove: () -> Unit = {},
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    removeEnabled: Boolean = enabled,
 ) {
     if (circular) {
         Row(
@@ -66,7 +67,7 @@ fun InlineMediaPicker(
                     onClick = {
                         onRemove()
                     },
-                    enabled = (currentModel != null) && enabled
+                    enabled = (currentModel != null) && removeEnabled
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_close_24dp),
@@ -92,7 +93,7 @@ fun InlineMediaPicker(
                     onClick = {
                         onRemove()
                     },
-                    enabled = (currentModel != null) && enabled,
+                    enabled = (currentModel != null) && removeEnabled,
                     modifier = Modifier.width(480.dp)
                 ) {
                     Icon(
@@ -151,8 +152,8 @@ fun InlineMediaPickerMediaPicker(
                     .clip(MaterialTheme.shapes.large)
                     .width(480.dp)
                     .height(140.dp)
-            }.clickable {
-                if (enabled) documentsUiLauncher.launch(mimeType)
+            }.clickable(enabled = enabled) {
+                documentsUiLauncher.launch(mimeType)
             },
             transition = CrossFade,
         )
@@ -175,8 +176,8 @@ fun InlineMediaPickerMediaPicker(
                     .width(480.dp)
                     .height(140.dp)
             }
-                .clickable {
-                    if (enabled) documentsUiLauncher.launch(mimeType)
+                .clickable(enabled = enabled) {
+                    documentsUiLauncher.launch(mimeType)
                 }
                 .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f)),
             contentAlignment = Alignment.Center

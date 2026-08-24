@@ -38,6 +38,8 @@ import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.internals.server.ServerSettingsOption
+import chat.stoat.internals.server.availableServerSettingsOptions
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
