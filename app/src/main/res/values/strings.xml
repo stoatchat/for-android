@@ -1140,4 +1140,22 @@
         <item quantity="one">%1$d active invite</item>
         <item quantity="other">%1$d active invites</item>
     </plurals>
+
+    <string name="server_settings_bans_empty_title">No banned members</string>
+    <string name="server_settings_bans_empty_description">Members banned from this server will appear here.</string>
+    <string name="server_settings_bans_no_reason">No reason provided</string>
+    <string name="server_settings_bans_details_title">Ban details</string>
+    <string name="server_settings_bans_reason">Reason</string>
+    <string name="server_settings_bans_banned_by">Banned by %1$s</string>
+    <string name="server_settings_bans_retry">Retry</string>
+    <string name="server_settings_bans_load_error">There was an error loading the bans.</string>
+    <string name="server_settings_bans_unban">Unban</string>
+    <string name="server_settings_bans_unban_title">Unban %1$s?</string>
+    <string name="server_settings_bans_unban_description">%1$s will be able to join this server again with an invite.</string>
+    <string name="server_settings_bans_unbanned">Member unbanned.</string>
+    <string name="server_settings_bans_unban_error">There was an error unbanning this member.</string>
+    <plurals name="server_settings_bans_count">
+        <item quantity="one">%1$d banned member</item>
+        <item quantity="other">%1$d banned members</item>
+    </plurals>
 </resources>

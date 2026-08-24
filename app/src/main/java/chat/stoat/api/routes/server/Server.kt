@@ -6,6 +6,7 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
 import chat.stoat.api.apiError
+import chat.stoat.core.model.schemas.BanListResult
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerWithChannelObjects
@@ -150,6 +151,25 @@ suspend fun banMember(
     }
 
     StoatAPI.members.removeMember(serverId, userId)
+}
+
+suspend fun fetchServerBans(serverId: String): BanListResult {
+    val response = StoatHttp.get("/servers/$serverId/bans".api())
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
+
+    return StoatJson.decodeFromString(BanListResult.serializer(), responseContent)
+}
+
+suspend fun unbanMember(serverId: String, userId: String) {
+    val response = StoatHttp.delete("/servers/$serverId/bans/$userId".api())
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(response.bodyAsText(), response.status.value))
+    }
 }
 
 suspend fun setMemberTimeout(serverId: String, userId: String, timeout: String?): Member {

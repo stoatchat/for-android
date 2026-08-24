@@ -202,8 +202,14 @@ fun ServerSettingsHome(
                 title = stringResource(R.string.server_settings_category_user_management),
                 options = userManagementOptions,
                 onOptionSelected = { option ->
-                    if (option == ServerSettingsOption.Invites) {
-                        navController.navigate("settings/server/$serverId/invites")
+                    when (option) {
+                        ServerSettingsOption.Invites ->
+                            navController.navigate("settings/server/$serverId/invites")
+
+                        ServerSettingsOption.Bans ->
+                            navController.navigate("settings/server/$serverId/bans")
+
+                        else -> Unit
                     }
                 },
             )
