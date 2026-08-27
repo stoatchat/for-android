@@ -79,6 +79,7 @@ import chat.stoat.api.routes.microservices.geo.queryGeo
 import chat.stoat.api.routes.microservices.health.healthCheck
 import chat.stoat.api.routes.onboard.needsOnboarding
 import chat.stoat.api.settings.Experiments
+import chat.stoat.api.settings.InstanceManager
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
@@ -183,6 +184,8 @@ class MainActivityViewModel(
     private fun doPreStartupTasks() {
         Log.d("MainActivity", "Performing pre-startup tasks")
         viewModelScope.launch {
+            Log.d("MainActivity", "Hydrating custom instance from KV")
+            InstanceManager.hydrate()
             Log.d("MainActivity", "Hydrating Experiments from KV")
             Experiments.hydrateWithKv()
             Log.d("MainActivity", "Performing health check")
@@ -204,6 +207,8 @@ class MainActivityViewModel(
     fun checkLoggedInState() {
         viewModelScope.launch {
             Log.d("MainActivity", "Checking logged in state")
+
+            InstanceManager.hydrate()
 
             isConnected.emit(hasInternetConnection())
 

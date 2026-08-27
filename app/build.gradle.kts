@@ -72,8 +72,18 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(buildproperty("signing.store_file")!!)
+            storePassword = buildproperty("signing.store_password")
+            keyAlias = buildproperty("signing.key_alias")
+            keyPassword = buildproperty("signing.key_password")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

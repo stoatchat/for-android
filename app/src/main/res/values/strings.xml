@@ -19,6 +19,12 @@
     <string name="login_onboarding_heading">Find your community, connect with the world.</string>
     <string name="login_onboarding_body">Stoat is one of the best ways to stay connected with your friends and community, anywhere, anytime.</string>
 
+    <string name="login_custom_instance">Custom server</string>
+    <string name="login_custom_instance_body">Connect to your own self-hosted Stoat/Revolt server instead of the default instance.</string>
+    <string name="login_custom_instance_url_label">Server URL</string>
+    <string name="login_custom_instance_connect">Connect</string>
+    <string name="login_custom_instance_reset">Use default</string>
+
     <string name="email">Email</string>
     <string name="password">Password</string>
 
