@@ -87,7 +87,8 @@ data class Role(
             permissions = other.permissions ?: permissions,
             colour = other.colour ?: colour,
             hoist = other.hoist ?: hoist,
-            rank = other.rank ?: rank
+            rank = other.rank ?: rank,
+            icon = other.icon ?: icon,
         )
     }
 }

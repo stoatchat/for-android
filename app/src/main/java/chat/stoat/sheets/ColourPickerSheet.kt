@@ -9,17 +9,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -263,8 +260,7 @@ vec4 main(vec2 fragCoord) {
 """
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalMaterial3ExpressiveApi::class
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
 fun ColumnScope.ColourPickerSheet(
@@ -578,22 +574,19 @@ fun ColumnScope.ColourPickerSheet(
                 }
 
                 ColourPickerMode.Palette -> {
-                    BoxWithConstraints {
-                        val boxMaxWidth = this.maxWidth
-
-                        FlowRow(
-                            maxItemsInEachRow = 11,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            for (colour in palette) {
-                                Box(
-                                    Modifier
-                                        .clip(CircleShape)
-                                        .clickable { color = colour }
-                                        .size((boxMaxWidth - 80.dp) / 11)
-                                        .background(colour)
-                                )
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        palette.chunked(11).forEach { row ->
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                row.forEach { colour ->
+                                    Box(
+                                        Modifier
+                                            .weight(1f)
+                                            .aspectRatio(1f)
+                                            .clip(CircleShape)
+                                            .clickable { color = colour }
+                                            .background(colour)
+                                    )
+                                }
                             }
                         }
                     }

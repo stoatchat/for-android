@@ -134,6 +134,8 @@ import chat.stoat.screens.settings.server.ServerSettingsEmojis
 import chat.stoat.screens.settings.server.ServerSettingsHome
 import chat.stoat.screens.settings.server.ServerSettingsInvites
 import chat.stoat.screens.settings.server.ServerSettingsOverview
+import chat.stoat.screens.settings.server.ServerSettingsRoleEditor
+import chat.stoat.screens.settings.server.ServerSettingsRoles
 import chat.stoat.ui.theme.StoatTheme
 import chat.stoat.voice.VoiceCallManager
 import io.ktor.client.request.get
@@ -807,6 +809,15 @@ fun AppEntrypoint(
                     composable("settings/server/{serverId}/bans") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
                         ServerSettingsBans(navController, serverId)
+                    }
+                    composable("settings/server/{serverId}/roles") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        ServerSettingsRoles(navController, serverId)
+                    }
+                    composable("settings/server/{serverId}/roles/{roleId}") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        val roleId = backStackEntry.arguments?.getString("roleId") ?: ""
+                        ServerSettingsRoleEditor(navController, serverId, roleId)
                     }
 
                     composable("channel/{channelId}/pins") { backStackEntry ->

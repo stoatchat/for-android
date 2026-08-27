@@ -71,7 +71,7 @@ val LightColorScheme = lightColorScheme(
     onTertiaryFixedVariant = Colour.OnTertiaryFixedVariant,
 )
 
-private val DefaultColorScheme = darkColorScheme(
+val DarkColorScheme = darkColorScheme(
     primary = Colour.PrimaryDark,
     onPrimary = Colour.OnPrimaryDark,
     primaryContainer = Colour.PrimaryContainerDark,
@@ -122,7 +122,7 @@ private val DefaultColorScheme = darkColorScheme(
     onTertiaryFixedVariant = Colour.OnTertiaryFixedVariant,
 )
 
-val AmoledColorScheme = DefaultColorScheme.copy(
+val AmoledColorScheme = DarkColorScheme.copy(
     background = Color(0xff000000),
     onBackground = Color(0xffffffff),
     surfaceVariant = Color(0xff131313),
@@ -163,12 +163,12 @@ fun getColorScheme(
             context
         )
 
-        requestedTheme == Theme.Default -> DefaultColorScheme
+        requestedTheme == Theme.Default -> DarkColorScheme
         requestedTheme == Theme.Light -> LightColorScheme
         requestedTheme == Theme.Amoled -> AmoledColorScheme
-        requestedTheme == Theme.None && systemInDarkTheme -> DefaultColorScheme
+        requestedTheme == Theme.None && systemInDarkTheme -> DarkColorScheme
         requestedTheme == Theme.None && !systemInDarkTheme -> LightColorScheme
-        else -> DefaultColorScheme
+        else -> DarkColorScheme
     }.copy()
 
     val colorSchemeIsDark = when {

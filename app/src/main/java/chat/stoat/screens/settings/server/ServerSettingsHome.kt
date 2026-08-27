@@ -209,6 +209,9 @@ fun ServerSettingsHome(
                         ServerSettingsOption.Bans ->
                             navController.navigate("settings/server/$serverId/bans")
 
+                        ServerSettingsOption.Roles ->
+                            navController.navigate("settings/server/$serverId/roles")
+
                         else -> Unit
                     }
                 },

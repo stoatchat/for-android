@@ -935,7 +935,14 @@ object RealtimeSocket {
                         "RealtimeSocket",
                         "Updating existing role ${serverRoleUpdateFrame.roleId} in server ${serverRoleUpdateFrame.id}."
                     )
-                    val updatedRole = existingRole.mergeWithPartial(serverRoleUpdateFrame.data)
+                    var updatedRole = existingRole.mergeWithPartial(serverRoleUpdateFrame.data)
+                    serverRoleUpdateFrame.clear.orEmpty().forEach { field ->
+                        updatedRole = when (field) {
+                            "Colour" -> updatedRole.copy(colour = null)
+                            "Icon" -> updatedRole.copy(icon = null)
+                            else -> updatedRole
+                        }
+                    }
                     val newServer = server.copy(
                         roles = server.roles!!.plus(
                             Pair(serverRoleUpdateFrame.roleId, updatedRole)
