@@ -156,7 +156,6 @@
     <string name="settings_category_miscellaneous">杂项</string>
     <string name="settings_appearance_theme">主题</string>
     <string name="settings_appearance_theme_none">系统</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">明亮</string>
     <string name="settings_appearance_theme_amoled">纯黑</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You（不支持）</string>
@@ -208,9 +207,6 @@
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_feedback">反馈</string>
     <string name="about_brought_to_you_by">由 Revolt 团队用 ❤️ 为您呈现。</string>
-    <string name="about_tab_version">版本</string>
-    <string name="about_tab_details">详情</string>
-    <string name="oss_attribution_warning">下面的列表是自动生成的。可能会不完整或不准确。</string>
     <string name="oss_attribution_tap_to_view_license">点击查看许可证</string>
     <string name="pick_emoji_alt">选择表情</string>
     <string name="emoji_category_people">人物与身体</string>
@@ -298,14 +294,7 @@
     <string name="system_message_channel_description_changed">%1$s 更改了频道简介</string>
     <string name="server_context_sheet_description_empty">此服务器还没有设置简介。</string>
     <string name="server_context_sheet_actions_leave_silently">悄悄离开</string>
-    <string name="oss_attribution_body">Revolt 的诞生离不开这些优秀开源项目的帮助。</string>
-    <string name="oss_attribution_body_2">我们非常感谢这些项目的开发者将他们的工作成果奉献给全世界。</string>
-    <string name="oss_attribution_generation_date">最后更新：%1$s</string>
     <string name="system_message_text_alt">系统消息</string>
-    <string name="settings_changelogs">更新日志</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">相应版本</string>
-    <string name="settings_changelogs_historical_version_header">%1$s 的更新日志</string>
-    <string name="settings_changelogs_new_header">新版本 ✨</string>
     <string name="file_picker_chip_documents">文件</string>
     <string name="file_picker_chip_camera">相机</string>
     <string name="inline_media_picker_current_description">当前选择的媒体文件</string>
@@ -541,8 +530,6 @@
     <string name="overview_screen_share_profile_description">查看您的用户卡片并获取特殊的分享链接</string>
     <string name="overview_screen_changelog">更新记录</string>
     <string name="overview_screen_changelog_description">Revolt 从未停歇，看看我们更新了什么</string>
-    <string name="overview_screen_feedback">提供反馈</string>
-    <string name="overview_screen_feedback_description">想表达看法？我们在倾听</string>
     <string name="user_info_sheet_webhook">您发现了一个 Webhook！</string>
     <string name="user_info_sheet_webhook_learn_more">了解更多</string>
     <string name="overview_screen_title">您自己</string>

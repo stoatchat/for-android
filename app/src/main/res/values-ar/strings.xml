@@ -50,10 +50,7 @@
     <string name="about">عن</string>
     <string name="about_full_name">Revolt علي Android</string>
     <string name="about_brought_to_you_by">مقدم إليك ب❤️ من قبل فريق Revolt.</string>
-    <string name="about_tab_version">إصدار</string>
-    <string name="about_tab_details">معلومات تفصيلية</string>
     <string name="oss_attribution">إسناد البرامج مفتوحة المصدر</string>
-    <string name="oss_attribution_body">Revolt مبنيآ بمساعدة هذه البرامج المفتوحة المصدر الرائعة.</string>
     <string name="register_email">البريد الإلكتروني</string>
     <string name="register_email_verification_hint">سنرسل إليك بريد إلكتروني للتعريف لنعرّف حسابك.</string>
     <string name="register_password_rules">ثمانية فأكثر، كلمات المرور الشائعة سيئة. الرموز والأرقام مُستحسنة.</string>
@@ -62,9 +59,6 @@
     <string name="onboarding_changeable">لكن إذا غيرت رأيك،ولديك القدرة علي تغيير اسم المستخدم الخاص بك في أي وقت في إعدادات المستخدم الخاصة بك.</string>
     <string name="mfa_interstitial_lead">إن 2FA (المصادقة الثنائية) مفعلة كي تحافظ علي أمان حسابك.</string>
     <string name="mfa_totp_lead">أدخل الرقم المكون من ستة أرقام من تطبيق المصادقة الخاص بك.</string>
-    <string name="oss_attribution_body_2">نحن شاكرون المطورون لهؤلاء المشاريع لجعل عملهم متاحاً للعالم.</string>
-    <string name="oss_attribution_warning">القائمة أدناه مكونة تلقائياً. قد تكون غير كاملة أو خاطئة.</string>
-    <string name="oss_attribution_generation_date">آخر تحديث: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">أنقر لكي تظهر الترخيص</string>
     <string name="typing_one">%1$s يكتب…</string>
     <string name="typing_many">%1$s يكتبون…</string>
@@ -236,9 +230,7 @@
     <string name="file_picker_chip_documents">الملفات</string>
     <string name="status_text_error_other">حدث خطأ أثناء تحديث نص الحالة الخاص بك. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
     <string name="emoji_picker_close_skin_tone_menu">أغلق قائمة لون البشرة</string>
-    <string name="overview_screen_feedback">تقديم الملاحظات</string>
     <string name="overview_screen_changelog_description">ريفولت لا تنام أبدًا، ألق نظرة لترى ما يجري</string>
-    <string name="overview_screen_feedback_description">هل لديك ما تقوله؟ نحن جميعا آذان صاغية</string>
     <string name="status_focus">مركّز</string>
     <string name="status_text_none">ما أخبارك؟</string>
     <string name="status_text">نص الحالة</string>
@@ -427,7 +419,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys">تلميح</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">ريفولت للأندرويد</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (مجهول)</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">ذلك الاصدار</string>
     <string name="channel_settings">اعدادات القناة</string>
     <string name="channel_settings_overview_update_info_error_fallback">حدث خطأ بينما يتم تحديث القناة</string>
     <string name="channel_settings_overview_info">معلومات عن القناة</string>
@@ -466,7 +457,6 @@
     <string name="settings_sessions_other_sessions">الجلسات النشطه الاخرى</string>
     <string name="settings_sessions_first_seen">او ظهور %1$s</string>
     <string name="settings_appearance">المظهر</string>
-    <string name="settings_appearance_theme_revolt">ريفولت</string>
     <string name="settings_appearance_theme_amoled">اسود طبيعي</string>
     <string name="settings_appearance_colour_overrides_primary">اساسي</string>
     <string name="settings_appearance_colour_overrides_secondary">ثانوي</string>

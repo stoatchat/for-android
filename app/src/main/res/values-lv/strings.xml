@@ -36,8 +36,6 @@
     <string name="mfa_password_header">Ievadiet savu paroli</string>
     <string name="about">Par</string>
     <string name="about_brought_to_you_by">Ar ❤️ jums atnesa Revolt komanda.</string>
-    <string name="about_tab_version">Versija</string>
-    <string name="about_tab_details">Sīkāka informācija</string>
     <string name="oss_attribution">OSS attiecinājums</string>
     <string name="attachment_preview_remove">Noņemt</string>
     <string name="emoji_category_smileys">Smaidiņi un emocijas</string>
@@ -71,9 +69,6 @@
     <string name="mfa_recovery_header">Ievadiet atkopšanas kodu</string>
     <string name="mfa_password_lead">Lai turpinātu, ievadiet savu paroli.</string>
     <string name="about_full_name">Revolt operētājsistēmā Android</string>
-    <string name="oss_attribution_body">Revolt tiek veidots, izmantojot šos lieliskos atvērtā pirmkoda projektus.</string>
-    <string name="oss_attribution_body_2">Mēs esam pateicīgi šo projektu izstrādātājiem par to, ka viņu darbs ir pieejams pasaulei.</string>
-    <string name="oss_attribution_warning">Tālāk esošais saraksts tiek ģenerēts automātiski. Tas var būt nepilnīgs vai neprecīzs.</string>
     <string name="register_heading">Laipni lūdzam Revolt</string>
     <string name="register_instructions">Tā ir kā vieta, kur pavadīt laiku, sanākt kopā un runāt par lietām. Labākā daļa, tas ir internetā.</string>
     <string name="register_data">Pie mums jūsu dati ir drošībā. Mēs to nepārdodam un neizmantojam, lai rādītu jums reklāmas.</string>
@@ -90,7 +85,6 @@
     <string name="badge_team_member_alt">Revolt komandas dalībnieks</string>
     <string name="password_forgot_heading">Aizmirsāt paroli\?</string>
     <string name="password_forgot_instructions">Ievadiet savu e-pastu, un mēs jums nosūtīsim norādījumus par paroles atiestatīšanu.</string>
-    <string name="oss_attribution_generation_date">Pēdējo reizi atjaunināts: %1$s</string>
     <string name="comingsoon_toast">Diemžēl šī funkcija vēl nav gatava.</string>
     <string name="typing_many">%1$s raksta…</string>
     <string name="send_alt">Sūtīt</string>
@@ -232,8 +226,6 @@
     <string name="overview_screen_settings_description">Pamaini savu izskatu, maini konta iestatījumus, un vēl</string>
     <string name="overview_screen_share_profile">Dalīties ar profilu</string>
     <string name="overview_screen_changelog">Izmaiņas</string>
-    <string name="overview_screen_feedback">Dalieties ar domām</string>
-    <string name="overview_screen_feedback_description">Ir kas sakāms\? Mēs uzklausīsim</string>
     <string name="invite_dialog_copy">Kopēt</string>
     <string name="invite_dialog_close">Aizvērt</string>
     <string name="message_context_sheet_actions_reply">Atbildēt</string>

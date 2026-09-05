@@ -9,7 +9,6 @@
     <string name="onboarding_welcome">歡迎！</string>
     <string name="onboarding_others">其他人將能透過這個名字找到、辨識並提及您。</string>
     <string name="mfa_interstitial_header">還有件事</string>
-    <string name="about_tab_version">版本</string>
     <string name="typing_one">%1$s 正在打字中…</string>
     <string name="next">下一頁 →</string>
     <string name="cancel">取消</string>
@@ -51,10 +50,6 @@
     <string name="about">關於</string>
     <string name="about_full_name">Revolt Android版</string>
     <string name="about_brought_to_you_by">由 Revolt 團隊用❤️為您獻上。</string>
-    <string name="about_tab_details">詳細</string>
-    <string name="oss_attribution_body_2">我們感謝這些專案的開發者向全世界展示他們的成果。</string>
-    <string name="oss_attribution_warning">以下清單是自動產生。它可能不完整或不準確。</string>
-    <string name="oss_attribution_generation_date">最後更新: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">點擊以查看條款</string>
     <string name="typing_many">%1$s 正在打字中…</string>
     <string name="remove_reply_alt">移除回覆</string>
@@ -75,7 +70,6 @@
     <string name="rate_limit_toast">稍安勿躁！您在短時間內太頻繁操作了。</string>
     <string name="service_health_alert_actions_dismiss">忽略</string>
     <string name="could_not_log_in_heading">登入時出現問題</string>
-    <string name="oss_attribution_body">Revolt 是在這些出色的開源專案的幫助下建立。</string>
     <string name="community_guidelines">社群條款</string>
     <string name="verify_then_choose_username">請先驗證您的電子郵件，然後我們將會繼續設定您的使用者名稱。</string>
     <string name="mfa_totp_lead">輸入驗證器應用程式中的六位數驗證碼。</string>

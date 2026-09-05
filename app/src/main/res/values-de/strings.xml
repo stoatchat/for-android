@@ -195,7 +195,6 @@
     <string name="settings_category_miscellaneous">Verschiedenes</string>
     <string name="settings_appearance">Erscheinungsbild</string>
     <string name="settings_appearance_theme">Thema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Hell</string>
     <string name="settings_appearance_theme_amoled">Pures Schwarz</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -209,10 +208,6 @@
     <string name="login_onboarding_heading">Finde deine Community und verbinde dich mit der Welt.</string>
     <string name="message_field_decoration_trusted_moderation_bot">Verifizierter Moderationsbot</string>
     <string name="message_field_denied_generic">Du kannst in diesem Kanal keine Nachrichten senden.</string>
-    <string name="oss_attribution_body_2">Wir sind den Entwickler:innen dieser Projekte dafür dankbar, dass sie ihre Arbeit der Welt verfügbar machen.</string>
-    <string name="oss_attribution_warning">Die untere Liste ist automatisch generiert. Sie könnte unvollständig oder inakkurat sein.</string>
-    <string name="oss_attribution_generation_date">Zuletzt aktualisiert: %1$s</string>
-    <string name="oss_attribution_body">Revolt wird durch diese fantastischen Open-Source-Projekte ermöglicht.</string>
     <string name="system_message_ownership_changed_alt">Besitzer:in geändert</string>
     <string name="message_field_denied_platform_moderation">Das ist ein vertrauenswürdiger Kanal für Hinweise von unserem Moderationsteam. Du kannst hier keine Nachrichten senden.</string>
     <string name="system_message_user_joined_alt">Nutzer:in ist beigetreten</string>
@@ -231,8 +226,6 @@
     <string name="settings_sessions_log_out_other_description">Dieses Gerät wird angemeldet bleiben.</string>
     <string name="about_full_name">Revolt für Android</string>
     <string name="about_brought_to_you_by">Mit ❤️ vom Revolt-Team gemacht.</string>
-    <string name="about_tab_version">Version</string>
-    <string name="about_tab_details">Details</string>
     <string name="oss_attribution_tap_to_view_license">Tippe, um die Lizenz anzuschauen</string>
     <string name="pick_emoji_alt">Emoji auswählen</string>
     <string name="emoji_category_smileys">Smileys und Emotionen</string>
@@ -367,10 +360,6 @@
     <string name="settings_appearance_colour_overrides_export">Exportieren</string>
     <string name="settings_appearance_colour_overrides_import">Importieren</string>
     <string name="settings_appearance_colour_overrides_import_error">Diese Datei ist keine gültige Farbüberschreibungsdatei.</string>
-    <string name="settings_changelogs">Änderungsprotokolle</string>
-    <string name="settings_changelogs_new_header">Was es Neues gibt✨</string>
-    <string name="settings_changelogs_historical_version_header">Änderungsprotokoll für %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">diese Version</string>
     <string name="discover_alt">Entdecken</string>
     <string name="discover">Entdecke Revolt</string>
     <string name="report_server_heading">Sag uns, was mit diesem Server nicht stimmt</string>
@@ -529,8 +518,6 @@
     <string name="overview_screen_share_profile">Profil teilen</string>
     <string name="overview_screen_share_profile_description">Werfe ein Blick auf deine Profilkarte und erhalte einen speziellen Link zum Teilen.</string>
     <string name="overview_screen_changelog">Änderungsprotokoll</string>
-    <string name="overview_screen_feedback">Feedback geben</string>
-    <string name="overview_screen_feedback_description">Hast du etwas zu sagen? Wir sind ganz Ohr</string>
     <string name="user_info_sheet_category_status">Status</string>
     <string name="show_password">Passwort anzeigen</string>
     <string name="hide_password">Passwort verbergen</string>

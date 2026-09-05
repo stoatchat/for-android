@@ -13,7 +13,7 @@
     <string name="register_instructions">Takılmak, bir araya gelmek ve bir şeyler hakkında konuşmak için bir yer gibi. En iyi tarafı, internette olması.</string>
     <string name="comingsoon_toast">Üzgünüz, bu özellik henüz hazır değil.</string>
     <string name="report_user">Bu kullanıcıyı raporlamak için zaman ayırdığınız için teşekkür ederiz. Raporunuz, kullanıcıyla veya sunucunun moderatörleriyle paylaşılmayacaktır.</string>
-    <string name="login_onboarding_body">Revolt, arkadaşlarınız ve topluluğunuzla her yerde, her zaman bağlantıda kalmanın en iyi yollarından biridir.</string>
+    <string name="login_onboarding_body">Stoat, arkadaşlarınız ve topluluğunuzla her yerde, her zaman bağlantıda kalmanın en iyi yollarından biridir.</string>
     <string name="onboarding_others">Diğerleri sizi bu isimle bulacak, tanıyacak ve anacaktır.</string>
     <string name="channel_text">Metin Kanalı</string>
     <string name="token_invalid_toast">Çıkış yaptın. Lütfen tekrar giriş yap.</string>
@@ -38,7 +38,7 @@
     <string name="resend">Tekrar Gönder</string>
     <string name="send_email">E-posta gönder</string>
     <string name="password_forgot_heading">Şifreni mi unuttun\?</string>
-    <string name="register_heading">Revolt\'a Hoş Geldin</string>
+    <string name="register_heading">Stoat\'a Hoş Geldin</string>
     <string name="register_email">E-posta</string>
     <string name="register_password">Şifre</string>
     <string name="check_mail">Mailini kontrol et!</string>
@@ -194,7 +194,6 @@
     <string name="settings_appearance">Görünüm</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistem</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Aydınlık</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Materyal You (desteklenmeyen)</string>
@@ -207,27 +206,21 @@
     <string name="reply_message_empty_has_attachments">Ek dosyalar gönder</string>
     <string name="settings_appearance_theme_amoled">Saf Siyah</string>
     <string name="direct_messages">Direkt Mesajlar</string>
-    <string name="about_tab_version">Sürüm</string>
     <string name="emoji_category_food">Yiyecek &amp; İçecek</string>
     <string name="emoji_category_travel">Seyahat &amp; Yerler</string>
     <string name="emoji_category_activities">Aktiviteler</string>
     <string name="emoji_category_objects">Nesneler</string>
     <string name="emoji_category_flags">Bayraklar</string>
-    <string name="about_tab_details">Detaylar</string>
-    <string name="oss_attribution_generation_date">Son güncelleme: %1$s</string>
     <string name="pick_emoji_alt">Emoji seç</string>
     <string name="emoji_category_animals">Hayvanlar &amp; Doğa</string>
     <string name="emoji_category_symbols">Semboller</string>
     <string name="home_join_jenvolt">Jenvolt\'a Katıl</string>
-    <string name="about_full_name">Android\'te Revolt</string>
-    <string name="oss_attribution_body_2">Bu projelerin geliştiricilerine, projelerini dünyaya sundukları için minnettarız.</string>
+    <string name="about_full_name">Android\'te Stoat</string>
     <string name="emoji_category_people">İnsanlar &amp; Haller</string>
     <string name="friends">Arkadaşlar</string>
     <string name="friends_incoming_requests">Gelen İstekler</string>
     <string name="friends_outgoing_requests">Giden İstekler</string>
     <string name="status_offline">Aktif Değil</string>
-    <string name="oss_attribution_body">Revolt bu harika açık kaynaklı projelerin yardımı ile oluşturuldu.</string>
-    <string name="oss_attribution_warning">Aşağıdaki liste otomatik olarak oluşturulmuştur. Eksik veya hatalı bilgi içeriyor olabilir.</string>
     <string name="oss_attribution_tap_to_view_license">Lisansı görüntülemek için dokunun</string>
     <string name="emoji_category_smileys">Yüzler &amp; Duygular</string>
     <string name="badge_team_member_alt">Revolt ekip üyesi</string>
@@ -241,7 +234,7 @@
     <string name="status_online">Aktif</string>
     <string name="invite_dialog_description">Bu linki insanlara gönder ve onları bu kanala davet et.</string>
     <string name="message_context_sheet_actions_delete_confirmation_yes">Sil</string>
-    <string name="about_brought_to_you_by">Revolt ekibi tarafından ❤️ ile geliştirildi.</string>
+    <string name="about_brought_to_you_by">Stoat ekibi tarafından ❤️ ile geliştirildi.</string>
     <string name="status_invisible">Görünmez</string>
     <string name="status_focus">Odak</string>
     <string name="status_dnd">Rahatsız Etme</string>
@@ -365,7 +358,6 @@
     <string name="user_badge_developer">Geliştirici</string>
     <string name="invite_dialog_header">%1$s\'ye davet et</string>
     <string name="message_context_sheet_actions_delete_confirmation_body">Sonsuza dek yok olacak (uzun bir süre!)</string>
-    <string name="settings_changelogs">Değişiklikler</string>
     <string name="channel_settings_overview_info">Kanal Bilgisi</string>
     <string name="settings_sessions_first_seen">İlk görülme %1$s</string>
     <string name="settings_sessions_log_out_other_description">Bu cihazın oturumu açık kalacaktır.</string>
@@ -379,7 +371,6 @@
     <string name="channel_settings_overview_nsfw_undo_confirm_yes">NSFW olarak işaretlemeyi kaldırın</string>
     <string name="channel_settings_overview_nsfw_confirm_yes">NSFW olarak işaretle</string>
     <string name="channel_settings">Kanal Ayarları</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">bu versiyon</string>
     <string name="share_target_search_channels">Kanalları ara</string>
     <string name="share_target_login_first">Lütfen Revolt\'ta paylaşmadan önce oturum açın.</string>
     <string name="share_target_heading">Revolt\'ta paylaş</string>
@@ -417,7 +408,6 @@
     <string name="settings_appearance_colour_overrides_primary_container">Birincil Kapsayıcı</string>
     <string name="settings_chat">Sohbet</string>
     <string name="settings_feedback_description">Geri bildirim veya önerilerde bulunmak ve hataları bildirmek için Revolt sunucusuna katılın.</string>
-    <string name="settings_changelogs_new_header">Ne pişiriyor ✨</string>
     <string name="channel_settings_permissions">İzinler</string>
     <string name="share_target_attachment_too_large">Bu ek, Revolt için çok büyük (maks. $1$s).</string>
     <string name="channel_settings_delete">Kanalı Sil</string>
@@ -479,7 +469,6 @@
     <string name="settings_appearance_colour_overrides_on_primary_container">Birincil Kapsayıcıda</string>
     <string name="settings_appearance_colour_overrides_inverse_primary">Ters Birincil</string>
     <string name="settings_appearance_colour_overrides_secondary">İkincil</string>
-    <string name="settings_changelogs_historical_version_header">%1$s için değişiklikler</string>
     <string name="colour_picker_hex">Hex</string>
     <string name="settings_appearance_avatar_shape">Profil Resmi Şekli</string>
     <string name="notification_channel_group_conversations">Konuşmalar</string>
@@ -532,8 +521,6 @@
     <string name="overview_screen_share_profile_description">Kullanıcı kartına bir göz at ve paylaşmak için özel bir bağlantı edin</string>
     <string name="overview_screen_changelog">Değişiklik Günlüğü</string>
     <string name="overview_screen_changelog_description">Revolt asla uyumaz, nelerin yapıldığını görmek için bir göz at</string>
-    <string name="overview_screen_feedback">Geri bildirim sağlayın</string>
-    <string name="overview_screen_feedback_description">Söyleyecek bir şeyin mi var\? Hepimizin kulakları sende</string>
     <string name="overview_screen_title">Genel bakış</string>
     <string name="overview_screen_error">Genel bakışınız yüklenemedi</string>
     <string name="status_text_placeholder">Ne yaptığınızı dünyaya anlatın</string>
@@ -633,4 +620,20 @@
     <string name="attachment_spoiler">Spoiler</string>
     <string name="attachment_preview_spoiler">Spoiler olarak işaretle</string>
     <string name="attachment_preview_spoiler_description">Bu ek sadece tıklandığında görüntülenecektir.</string>
+    <string name="_new">Yeni</string>
+    <string name="retry">Yeniden dene</string>
+    <string name="mfa_prompt_confirm">Onayla</string>
+    <string name="mfa_prompt_load_error_title">Bir şeyler ters gitti</string>
+    <string name="mfa_prompt_load_error_description">Doğrulama yöntemleriniz yüklenemedi.</string>
+    <string name="mfa_prompt_close">Kapat</string>
+    <string name="mfa_method_password">Şifre</string>
+    <string name="mfa_method_totp">Yetkilendirme uygulaması</string>
+    <string name="mfa_method_recovery">Kurtarma kodları</string>
+    <string name="mfa_error_invalid_token">Kod kabul edilmedi. Yanlış veya süresi dolmuş olabilir. Lütfen tekrar deneyin.</string>
+    <string name="mfa_error_disallowed_method">Bu işlem için bu doğrulama yöntemine izin verilmiyor.</string>
+    <string name="mfa_error_generic">Bir şeyler ters gitti (%1$s).</string>
+    <string name="about_section_debug_information">Hata Ayıklama Bilgisi</string>
+    <string name="mfa_prompt_lead">Güvenliğiniz için, doğrulama yöntemlerinden bir tanesi ile bu işlemi onaylayın.</string>
+    <string name="mfa_prompt_title">Sen olduğunu doğrula</string>
+    <string name="mfa_error_invalid_credentials">Şifre yanlış. Lütfen tekrar deneyiniz.</string>
 </resources>
