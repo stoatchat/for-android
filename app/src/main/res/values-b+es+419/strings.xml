@@ -202,14 +202,10 @@
     <string name="media_viewer_share_video">Compartir video</string>
     <string name="media_viewer_share_image">Compartir imagen</string>
     <string name="settings_category_miscellaneous">Otros</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (obsoleto)</string>
     <string name="settings_feedback">Comentarios</string>
     <string name="direct_messages">Mensajes Directos</string>
-    <string name="oss_attribution_body_2">Agradecemos a los desarrolladores de estos proyectos por poner a disponibilidad del mundo su trabajo.</string>
-    <string name="oss_attribution_warning">La siguiente lista fue generada automáticamente. Puede ser imprecisa o estar incompleta.</string>
-    <string name="oss_attribution_body">Revolt está hecho con la ayuda de estos maravillosos proyectos de código abierto.</string>
     <string name="about_full_name">Revolt en Android</string>
     <string name="status_focus">Concentrado</string>
     <string name="status_invisible">Invisible</string>
@@ -276,8 +272,6 @@
     <string name="report_reason_content_scams_fraud">Estafas o fraude</string>
     <string name="user_info_sheet_bio_not_found">La biografía de este usuario no se pudo obtener. Por favor, verifica que comparten un servidor o son amigos.</string>
     <string name="about_brought_to_you_by">Presentado con ❤️ por el equipo de Revolt.</string>
-    <string name="about_tab_version">Versión</string>
-    <string name="about_tab_details">Detalles</string>
     <string name="pick_emoji_alt">Elegir emoji</string>
     <string name="emoji_category_people">Gente y Cuerpo</string>
     <string name="emoji_category_smileys">Sonrisas y Emoticonos</string>
@@ -316,7 +310,6 @@
     <string name="system_message_user_banned_alt">Usuario baneado</string>
     <string name="system_message_user_kicked_alt">Usuario expulsado</string>
     <string name="system_message_user_joined_alt">El usuario se unió</string>
-    <string name="oss_attribution_generation_date">Última actualización: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Toque aquí para ver la licencia</string>
     <string name="system_message_channel_renamed_alt">Canal renombrado</string>
     <string name="system_message_text_alt">Mensaje del sistema</string>
@@ -446,8 +439,6 @@
     <string name="overview_screen_share_profile_description">Echa un vistazo a tu tarjeta de usuario y obtén un link especial para compartir</string>
     <string name="overview_screen_changelog">Registro de cambios</string>
     <string name="overview_screen_changelog_description">Revolt nunca duerme, mira lo que se está trabajando</string>
-    <string name="overview_screen_feedback">Dar retroalimentación</string>
-    <string name="overview_screen_feedback_description">¿Tienes algo que decir? Somos todo oídos</string>
     <string name="user_card_tap_to_copy">Toca para copiar</string>
     <string name="user_card_error_sharing">Un error ocurrió al compartir tu tarjeta de usuario.</string>
     <string name="user_card_data_point_display_name">%1$d.Nombre</string>
@@ -573,10 +564,6 @@
     <string name="settings_chat_interactive_embeds_description">Las incrustaciones interactivas te permiten interactuar con algunos tipos de links directamente dentro del chat. Por ejemplo, puedes reproducir videos de YouTube o previsualizar álbumes de Apple Music.</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
     <string name="settings_feedback_description">Únete al servidor de Revolt para dar comentarios o sugerencias e informar errores.</string>
-    <string name="settings_changelogs">Registros de cambios</string>
-    <string name="settings_changelogs_new_header">Qué se ha estado cocinando ✨</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">esa versión</string>
-    <string name="settings_changelogs_historical_version_header">Registro de cambios de %1$s</string>
     <string name="channel_settings">Ajustes del Canal</string>
     <string name="settings_language_auto">Predeterminado (Sistema)</string>
     <string name="channel_settings_header">#%1$s</string>

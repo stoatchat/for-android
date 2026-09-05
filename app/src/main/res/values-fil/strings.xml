@@ -106,7 +106,6 @@
     <string name="login_heading">I-log in na kita</string>
     <string name="register_email">Email</string>
     <string name="message_context_sheet_actions_reply">Mag-reply</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings">Mga Opsyon</string>
     <string name="channel_info_sheet_description">Description ng Channel</string>
     <string name="channel_info_sheet_options">Mga Opsyon</string>
@@ -211,16 +210,10 @@
     <string name="home_join_jenvolt">Sumali sa Jenvolt</string>
     <string name="settings_appearance_colour_overrides_on_background">On Background</string>
     <string name="system_message_user_removed_alt">Tinanggal ang user</string>
-    <string name="oss_attribution_body_2">Nagpapasalamat kami sa mga nag-develop ng mga proyektong ito sa paggawa ng kanilang mga gawa available sa buong mundo.</string>
-    <string name="oss_attribution_body">Ang Revolt ay binuo sa tulong ng mga kahanga-hangang open-source na proyektong ito.</string>
     <string name="system_message_user_left_alt">Umalis ang user</string>
     <string name="system_message_user_joined_alt">Sumali ang user</string>
     <string name="about_full_name">Revolt para sa Android</string>
     <string name="about_brought_to_you_by">Ibinahagi sa iyo na may ❤️ ng koponan ng Revolt.</string>
-    <string name="about_tab_version">Bersyon</string>
-    <string name="about_tab_details">Mga detalye</string>
-    <string name="oss_attribution_warning">Ang listahan sa ibaba ay awtomatikong nabuo. Maaaring ito ay hindi kumpleto o hindi tumpak.</string>
-    <string name="oss_attribution_generation_date">Huling in-update: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">I-tap para itignan ang lisensya</string>
     <string name="pick_emoji_alt">Pumili ng emoji</string>
     <string name="emoji_category_smileys">Mga Smiley at Karamdaman</string>
@@ -347,10 +340,6 @@
     <string name="settings_appearance_colour_overrides_export">I-export</string>
     <string name="settings_appearance_colour_overrides_import">Mag-import</string>
     <string name="settings_appearance_colour_overrides_import_error">Hindi ito isang wastong color override file.</string>
-    <string name="settings_changelogs">Mga Pagbabago</string>
-    <string name="settings_changelogs_new_header">Ano ang niluluto ✨</string>
-    <string name="settings_changelogs_historical_version_header">Mga pagbabago sa %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">iyang bersyon</string>
     <string name="home_join_jenvolt_description">Ang Jenvolt ay isang developer-run na espasyo para sa lahat ng bagay na Android app at higit pa. Pupunta dito ang Support at pagpuna. Baka masubukan mo ang mga bagong feature! 👀</string>
     <string name="message_field_denied_no_permission">Wala kang permiso para magpadala ng mga mensahe sa channel na ito.</string>
     <string name="system_message_channel_icon_changed">Pinalitan ni %1$s ang channel icon</string>
@@ -558,8 +547,6 @@
     <string name="overview_screen_share_profile_description">Tignan ang iyong user card at magkaroon ng espesyal na link na ibabahagi</string>
     <string name="overview_screen_changelog">Log ng mga binago</string>
     <string name="overview_screen_changelog_description">Hindi natutulog ang Revolt, tingnan kung ano mga ginagawa</string>
-    <string name="overview_screen_feedback">Magbigay ng Puna</string>
-    <string name="overview_screen_feedback_description">May gustong sabihin? Kami ay nakikinig</string>
     <string name="user_card_tap_to_copy">I-tap para kopyahin</string>
     <string name="user_card_data_point_username">%1$d.Username</string>
     <string name="user_card_data_point_display_name">%1$d.Pangalan</string>

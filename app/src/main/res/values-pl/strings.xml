@@ -175,7 +175,6 @@
     <string name="settings_appearance">Wygląd</string>
     <string name="settings_appearance_theme">Motyw</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Jasny</string>
     <string name="settings_appearance_theme_amoled">Czysta czerń</string>
     <string name="settings_appearance_theme_m3dynamic">Twój Materiał</string>
@@ -208,7 +207,6 @@
     <string name="report_reason_user_impersonation">Podszywanie się</string>
     <string name="report_reason_additional_hint">Wszelkie dodatkowe informacje, które mogą nam pomóc w dochodzeniu. Opcjonalne.</string>
     <string name="about_full_name">Revolt na Android</string>
-    <string name="oss_attribution_generation_date">Ostatnia aktualizacja: %1$s</string>
     <string name="emoji_category_activities">Aktywność</string>
     <string name="home_join_jenvolt_description">Jenvolt to przestrzeń zarządzana przez deweloperów dla wszystkich aplikacji na Androida i nie tylko. Wsparcie i opinie można znaleźć tutaj. Może będziesz mógł wypróbować nowe funkcje! 👀</string>
     <string name="message_field_denied_no_permission">Nie masz uprawnień do wysyłania wiadomości na tym kanale.</string>
@@ -224,12 +222,7 @@
     <string name="server_context_sheet_actions_leave">Opuść</string>
     <string name="server_context_sheet_actions_leave_confirm_eyebrow">Dopóki nie zostaniesz ponownie zaproszony, nie będziesz mógł ponownie dołączyć.</string>
     <string name="user_info_sheet_bio_not_found">Nie można pobrać biografii tego użytkownika. Sprawdź, czy dzielicie serwer lub jesteście znajomymi.</string>
-    <string name="oss_attribution_body">Revolt jest zbudowany przy pomocy tych niesamowitych projektów open-source.</string>
-    <string name="oss_attribution_body_2">Jesteśmy wdzięczni twórcom tych projektów za udostępnienie ich pracy światu.</string>
-    <string name="oss_attribution_warning">Poniższa lista jest generowana automatycznie. Może być niekompletna lub niedokładna.</string>
     <string name="about_brought_to_you_by">Dostarczone z ❤️ przez zespół Revolt.</string>
-    <string name="about_tab_version">Wersja</string>
-    <string name="about_tab_details">Szczegóły</string>
     <string name="oss_attribution_tap_to_view_license">Dotknij, aby wyświetlić licencję</string>
     <string name="pick_emoji_alt">Wybierz emotke</string>
     <string name="emoji_category_smileys">Uśmieszki i Emocje</string>
@@ -365,12 +358,8 @@
     <string name="settings_appearance_colour_overrides_scrim">Krata</string>
     <string name="settings_appearance_colour_overrides_export">Eksportuj</string>
     <string name="settings_appearance_colour_overrides_import">Importuj</string>
-    <string name="settings_changelogs">Dziennik zmian</string>
-    <string name="settings_changelogs_historical_version_header">Dziennik zmian dla %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">ta wersja</string>
     <string name="settings_appearance_colour_overrides_surface_variant">Wariant powierzchniowy</string>
     <string name="settings_appearance_colour_overrides_import_error">Ten plik nie jest prawidłowym plikiem zastępującym kolor.</string>
-    <string name="settings_changelogs_new_header">Co tam słychać ✨</string>
     <string name="discover_alt">Odkrywaj</string>
     <string name="discover">Odkrywaj Revolt</string>
     <string name="report_user_heading">Powiedz, co jest nie tak z tym użytkownikiem</string>
@@ -550,8 +539,6 @@
     <string name="overview_screen_share_profile_description">Spójrz na swoją kartę użytkownika i uzyskaj specjalny link do udostępnienia</string>
     <string name="overview_screen_changelog">Dziennik zmian</string>
     <string name="overview_screen_changelog_description">Revolt nigdy nie śpi, spójrz, aby zobaczyć, co jest w przygotowaniu</string>
-    <string name="overview_screen_feedback">Przekazywanie opinii</string>
-    <string name="overview_screen_feedback_description">Masz coś do powiedzenia\? Zamieniamy się w słuch</string>
     <string name="user_info_sheet_webhook">Webhook został znaleziony!</string>
     <string name="user_info_sheet_webhook_learn_more">Dowiedz się więcej</string>
     <string name="user_info_sheet_webhook_body">Webhooki to zautomatyzowane transmisje z innych usług w Internecie. Nie można z nimi rozmawiać, ale nadal można zobaczyć, co mają do powiedzenia.</string>

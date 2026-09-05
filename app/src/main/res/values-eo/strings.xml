@@ -57,13 +57,8 @@
     <string name="mfa_password_header">Enigu vian pasvorton</string>
     <string name="mfa_password_lead">Enigu vian pasvorton por daŭrigi.</string>
     <string name="about_brought_to_you_by">Alportis al vi kun ❤️ de la Revolt teamo.</string>
-    <string name="oss_attribution_body">Revolt estas konstruita per la helpo de ĉi tiuj mirindaj malfermitkodaj projektoj.</string>
     <string name="about_full_name">Revolt en Android</string>
-    <string name="about_tab_version">Versio</string>
-    <string name="about_tab_details">Detaloj</string>
     <string name="oss_attribution">Atribuo de OSS</string>
-    <string name="oss_attribution_body_2">Ni dankas la programistojn de ĉi tiuj projektoj por disponigi ilian laboron al la mondo.</string>
-    <string name="oss_attribution_warning">La suba listo estas aŭtomate kreita. Ĝi povas esti nekompleta aŭ malpreciza.</string>
     <string name="pick_emoji_alt">Elekti emoĝion</string>
     <string name="emoji_category_smileys">Mienetoj kaj Emocioj</string>
     <string name="create_group">Krei novan grupon</string>
@@ -90,7 +85,6 @@
     <string name="typing_one">%1$s tajpas…</string>
     <string name="typing_many">%1$s tajpas…</string>
     <string name="typing_several">Pluraj homoj tajpas</string>
-    <string name="oss_attribution_generation_date">Lasta ĝisdatigo : %1$s</string>
     <string name="comingsoon_toast">Pardonu, tiu trajto ankoraŭ ne pretas.</string>
     <string name="add_attachment_alt">Aldoni kunsendaĵon</string>
     <string name="emoji_category_people">Persono kaj Korpo</string>
@@ -277,7 +271,5 @@
     <string name="overview_screen_changelog">Ŝanĝregistro</string>
     <string name="overview_screen_share_profile_description">Rigardu vian uzantkarton kaj ricevu specialan ligilon por dissendi</string>
     <string name="overview_screen_changelog_description">Revolt neniam dormas, rigardu kio estas en procezo</string>
-    <string name="overview_screen_feedback">Donu komenton</string>
-    <string name="overview_screen_feedback_description">Ĉu vi volas diri ion? Ni tute aŭdas</string>
     <string name="user_card_tap_to_copy">Tuŝi por kopii</string>
 </resources>
