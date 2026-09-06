@@ -2,6 +2,8 @@ package chat.stoat.api.routes.user
 
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIError
+import chat.stoat.api.HitRateLimitException
+import chat.stoat.api.RateLimitResponse
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
@@ -13,6 +15,7 @@ import io.ktor.client.request.patch
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.ListSerializer
@@ -106,14 +109,25 @@ suspend fun patchSelf(
             )
         )
     }
-        .bodyAsText()
+    val responseContent = response.bodyAsText()
+
+    if (response.status == HttpStatusCode.TooManyRequests) {
+        val retryAfter = runCatching {
+            StoatJson.decodeFromString(
+                RateLimitResponse.serializer(),
+                responseContent,
+            ).retryAfter
+        }.getOrNull()
+            ?: response.headers["X-RateLimit-Reset-After"]?.toIntOrNull()
+        throw retryAfter?.let(::HitRateLimitException) ?: HitRateLimitException()
+    }
 
     if (StoatAPI.selfId == null) {
         throw Error("Self ID is null")
     }
 
     val currentUser = StoatAPI.userCache[StoatAPI.selfId] ?: fetchSelf()
-    val newUserKeys = StoatJson.decodeFromString(User.serializer(), response)
+    val newUserKeys = StoatJson.decodeFromString(User.serializer(), responseContent)
     var mergedUser = currentUser.mergeWithPartial(newUserKeys)
 
     if ("DisplayName" in remove.orEmpty()) {

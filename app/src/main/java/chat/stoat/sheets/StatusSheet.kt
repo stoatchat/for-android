@@ -1,6 +1,5 @@
 package chat.stoat.sheets
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,32 +28,40 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
+import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.user.patchSelf
-import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.generic.asApiName
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.composables.settings.profile.StatusPicker
+import chat.stoat.core.model.schemas.User
 import kotlinx.coroutines.launch
+import logcat.LogPriority
+import logcat.asLog
+import logcat.logcat
+
+private data class StatusRateLimit(val retryAfterMilliseconds: Int?)
 
 @Composable
 fun StatusTextEditDialog(
     selfUser: User,
     initialStatus: String,
+    onRateLimited: (Int?) -> Unit,
     onDismiss: () -> Unit
 ) {
     val fieldState = rememberTextFieldState(initialStatus)
     var errorText by remember { mutableStateOf<String?>(null) }
     var isConfirmEnabled by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(fieldState.text) {
@@ -103,7 +110,7 @@ fun StatusTextEditDialog(
                 onClick = {
                     errorText = null
                     if (fieldState.text.length > 128) {
-                        errorText = context.getString(R.string.status_text_error_too_long, 128)
+                        errorText = resources.getString(R.string.status_text_error_too_long, 128)
                     } else {
                         if (fieldState.text == initialStatus) {
                             onDismiss()
@@ -117,9 +124,17 @@ fun StatusTextEditDialog(
                                 try {
                                     patchSelf(remove = listOf("StatusText"))
                                     onDismiss()
+                                } catch (e: HitRateLimitException) {
+                                    logcat {
+                                        "Rate limited while removing status text"
+                                    }
+                                    onRateLimited(e.retryAfterMilliseconds)
                                 } catch (e: Exception) {
-                                    Log.e("StatusTextEditDialog", "Failed to remove status text", e)
-                                    errorText = context.getString(R.string.status_text_error_other)
+                                    logcat(LogPriority.ERROR) {
+                                        "Failed to remove status text\n${e.asLog()}"
+                                    }
+                                    errorText =
+                                        resources.getString(R.string.status_text_error_other)
                                 }
                             }
                         } else {
@@ -131,9 +146,17 @@ fun StatusTextEditDialog(
                                         )
                                     )
                                     onDismiss()
+                                } catch (e: HitRateLimitException) {
+                                    logcat {
+                                        "Rate limited while updating status text\n${e.asLog()}"
+                                    }
+                                    onRateLimited(e.retryAfterMilliseconds)
                                 } catch (e: Exception) {
-                                    Log.e("StatusTextEditDialog", "Failed to update status text", e)
-                                    errorText = context.getString(R.string.status_text_error_other)
+                                    logcat {
+                                        "Failed to update status text\n${e.asLog()}"
+                                    }
+                                    errorText =
+                                        resources.getString(R.string.status_text_error_other)
                                 }
                             }
                         }
@@ -164,11 +187,41 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     var showStatusEditDialog by remember { mutableStateOf(false) }
+    var rateLimit by remember { mutableStateOf<StatusRateLimit?>(null) }
+
+    rateLimit?.let { limit ->
+        val waitTime = limit.retryAfterMilliseconds?.let { milliseconds ->
+            val seconds = ((milliseconds.coerceAtLeast(0) + 999) / 1_000).coerceAtLeast(1)
+            pluralStringResource(R.plurals.status_rate_limited_seconds, seconds, seconds)
+        }
+        AlertDialog(
+            onDismissRequest = { rateLimit = null },
+            title = { Text(stringResource(R.string.status_rate_limited_title)) },
+            text = {
+                Text(
+                    if (waitTime != null) {
+                        stringResource(R.string.status_rate_limited_description, waitTime)
+                    } else {
+                        stringResource(R.string.status_rate_limited_description_unknown)
+                    }
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { rateLimit = null }) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+        )
+    }
 
     if (showStatusEditDialog) {
         StatusTextEditDialog(
             selfUser = selfUser,
             initialStatus = selfUser.status?.text ?: "",
+            onRateLimited = {
+                showStatusEditDialog = false
+                rateLimit = StatusRateLimit(it)
+            },
             onDismiss = { showStatusEditDialog = false }
         )
     }
@@ -186,9 +239,16 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
         StatusPicker(
             currentStatus = presenceFromStatus(selfUser.status?.presence, selfUser.online ?: false),
             onStatusChange = {
-                onBeforeNavigation()
                 scope.launch {
-                    patchSelf(status = selfUser.status?.copy(presence = it.asApiName()))
+                    try {
+                        patchSelf(status = selfUser.status?.copy(presence = it.asApiName()))
+                        onBeforeNavigation()
+                    } catch (e: HitRateLimitException) {
+                        logcat { "Rate limited while updating presence\n${e.asLog()}" }
+                        rateLimit = StatusRateLimit(e.retryAfterMilliseconds)
+                    } catch (e: Exception) {
+                        logcat { "Failed to update presence\n${e.asLog()}" }
+                    }
                 }
             }
         )

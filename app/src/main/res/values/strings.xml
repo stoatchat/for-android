@@ -368,6 +368,13 @@
     <string name="status_text_placeholder">Tell the world what you\'re up to</string>
     <string name="status_text_error_too_long">Status text is too long. Try to keep it under %1$d characters.</string>
     <string name="status_text_error_other">An error occurred while updating your status text. Please try again later.</string>
+    <string name="status_rate_limited_title">Not so fast</string>
+    <string name="status_rate_limited_description">You’ve changed your status a few times in a short period. Give it a moment: you can set it again in about %1$s.</string>
+    <string name="status_rate_limited_description_unknown">You’ve changed your status a few times in a short period. Give it a moment, then try again.</string>
+    <plurals name="status_rate_limited_seconds">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
+    </plurals>
 
     <string name="no_connection">No connection</string>
     <string name="no_connection_message">You are not connected to the internet. Please check your connection and try again.</string>

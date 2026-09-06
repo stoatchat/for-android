@@ -462,4 +462,6 @@ data class RateLimitResponse(@SerialName("retry_after") val retryAfter: Int) {
 internal const val NO_RETRY_AFTER = Int.MIN_VALUE
 
 class HitRateLimitException(retryAfter: Int = NO_RETRY_AFTER) :
-    Exception(if (retryAfter == NO_RETRY_AFTER) "Hit rate limit" else "Hit rate limit, retry after ${retryAfter}ms")
+    Exception(if (retryAfter == NO_RETRY_AFTER) "Hit rate limit" else "Hit rate limit, retry after ${retryAfter}ms") {
+    val retryAfterMilliseconds = retryAfter.takeUnless { it == NO_RETRY_AFTER }
+}
