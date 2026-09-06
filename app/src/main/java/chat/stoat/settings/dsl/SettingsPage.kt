@@ -41,6 +41,7 @@ interface SettingsPageScope {
         message: String,
         actionLabel: String? = null,
         onAction: (() -> Unit)? = null,
+        dismissCurrent: Boolean = false,
     )
 
     @Composable
@@ -147,8 +148,10 @@ fun SettingsPage(
                         message: String,
                         actionLabel: String?,
                         onAction: (() -> Unit)?,
+                        dismissCurrent: Boolean,
                     ) {
                         scope.launch {
+                            if (dismissCurrent) snackbarHostState.currentSnackbarData?.dismiss()
                             val result = snackbarHostState.showSnackbar(
                                 message = message,
                                 actionLabel = actionLabel,

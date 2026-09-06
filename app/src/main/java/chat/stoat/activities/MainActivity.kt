@@ -130,6 +130,7 @@ import chat.stoat.screens.settings.channel.ChannelSettingsOverview
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
 import chat.stoat.screens.settings.server.ServerIdentitySettingsScreen
 import chat.stoat.screens.settings.server.ServerSettingsBans
+import chat.stoat.screens.settings.server.ServerSettingsChannels
 import chat.stoat.screens.settings.server.ServerSettingsEmojis
 import chat.stoat.screens.settings.server.ServerSettingsHome
 import chat.stoat.screens.settings.server.ServerSettingsInvites
@@ -809,6 +810,10 @@ fun AppEntrypoint(
                     composable("settings/server/{serverId}/bans") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
                         ServerSettingsBans(navController, serverId)
+                    }
+                    composable("settings/server/{serverId}/channels") { backStackEntry ->
+                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
+                        ServerSettingsChannels(navController, serverId)
                     }
                     composable("settings/server/{serverId}/roles") { backStackEntry ->
                         val serverId = backStackEntry.arguments?.getString("serverId") ?: ""

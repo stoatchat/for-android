@@ -162,7 +162,9 @@ fun ServerSettingsHome(
             return@SettingsPage
         }
 
-        val overviewOptions = options.filter { it == ServerSettingsOption.Overview }
+        val overviewOptions = options.filter {
+            it == ServerSettingsOption.Overview || it == ServerSettingsOption.Channels
+        }
         val customisationOptions = options.filter { it == ServerSettingsOption.Emojis }
         val userManagementOptions = options.filter {
             it in listOf(
@@ -178,8 +180,14 @@ fun ServerSettingsHome(
                 title = server.name ?: stringResource(R.string.server_settings),
                 options = overviewOptions,
                 onOptionSelected = { option ->
-                    if (option == ServerSettingsOption.Overview) {
-                        navController.navigate("settings/server/$serverId/overview")
+                    when (option) {
+                        ServerSettingsOption.Overview ->
+                            navController.navigate("settings/server/$serverId/overview")
+
+                        ServerSettingsOption.Channels ->
+                            navController.navigate("settings/server/$serverId/channels")
+
+                        else -> Unit
                     }
                 },
             )
@@ -288,6 +296,7 @@ private fun ServerSettingsOptionRow(
 private val ServerSettingsOption.stringResource: Int
     @StringRes get() = when (this) {
         ServerSettingsOption.Overview -> R.string.server_settings_overview
+        ServerSettingsOption.Channels -> R.string.server_settings_channels
         ServerSettingsOption.Emojis -> R.string.server_settings_emojis
         ServerSettingsOption.Members -> R.string.server_settings_members
         ServerSettingsOption.Roles -> R.string.server_settings_roles
@@ -299,6 +308,7 @@ private val ServerSettingsOption.stringResource: Int
 private val ServerSettingsOption.iconResource: Int
     @DrawableRes get() = when (this) {
         ServerSettingsOption.Overview -> R.drawable.ic_info_24dp
+        ServerSettingsOption.Channels -> R.drawable.ic_grid_3x3_24dp
         ServerSettingsOption.Emojis -> R.drawable.ic_mood_24dp
         ServerSettingsOption.Members -> R.drawable.ic_group_24dp
         ServerSettingsOption.Roles -> R.drawable.ic_flag_24dp

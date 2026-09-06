@@ -1029,6 +1029,7 @@
 
     <string name="server_settings">Server Settings</string>
     <string name="server_settings_overview">Overview</string>
+    <string name="server_settings_channels">Channels</string>
     <string name="server_settings_category_customisation">Customisation</string>
     <string name="server_settings_emojis">Emojis</string>
     <string name="server_settings_category_user_management">User Management</string>
@@ -1042,6 +1043,49 @@
     <string name="server_settings_delete_confirm_yes">Delete</string>
     <string name="server_settings_delete_cancel">Cancel</string>
     <string name="server_settings_delete_error">There was an error deleting the server.</string>
+
+    <string name="server_settings_channels_add_title">Add to server</string>
+    <string name="server_settings_channels_create_channel">Create channel</string>
+    <string name="server_settings_channels_create_channel_description">Start a new text or voice channel.</string>
+    <string name="server_settings_channels_create_category">Create category</string>
+    <string name="server_settings_channels_create_category_description">Group related channels together.</string>
+    <string name="server_settings_channels_create">Create</string>
+    <string name="server_settings_channels_channel_name">Channel name</string>
+    <string name="server_settings_channels_category_name">Category name</string>
+    <string name="server_settings_channels_category">Category</string>
+    <string name="server_settings_channels_new_text_channel">New text channel</string>
+    <string name="server_settings_channels_new_voice_channel">New voice channel</string>
+    <string name="server_settings_channels_text_description">Share messages, media, and files.</string>
+    <string name="server_settings_channels_voice_description">Talk together in a voice channel.</string>
+    <string name="server_settings_channels_text_channel">Text channel</string>
+    <string name="server_settings_channels_voice_channel">Voice channel</string>
+    <string name="server_settings_channels_uncategorised">Uncategorised</string>
+    <string name="server_settings_channels_category_actions">Category actions</string>
+    <string name="server_settings_channels_rename_category">Rename category</string>
+    <string name="server_settings_channels_rename">Rename</string>
+    <string name="server_settings_channels_delete_category">Delete category</string>
+    <string name="server_settings_channels_delete_category_title">Delete %1$s?</string>
+    <string name="server_settings_channels_delete_category_description">The category will be removed. Its channels will become uncategorised.</string>
+    <string name="server_settings_channels_delete">Delete</string>
+    <string name="server_settings_channels_reorder_channel">Reorder channel</string>
+    <string name="server_settings_channels_reorder_category">Reorder category</string>
+    <string name="server_settings_channels_move_channel_up">Move channel up</string>
+    <string name="server_settings_channels_move_channel_down">Move channel down</string>
+    <string name="server_settings_channels_move_category_up">Move category up</string>
+    <string name="server_settings_channels_move_category_down">Move category down</string>
+    <string name="server_settings_channels_reordered">Channel layout saved.</string>
+    <string name="server_settings_channels_undo">Undo</string>
+    <string name="server_settings_channels_create_error">There was an error creating the channel.</string>
+    <string name="server_settings_channels_update_error">There was an error updating the channel layout.</string>
+    <string name="server_settings_channels_reorder_error">There was an error saving the channel order.</string>
+    <plurals name="server_settings_channels_count">
+        <item quantity="one">%1$d server channel</item>
+        <item quantity="other">%1$d server channels</item>
+    </plurals>
+    <plurals name="server_settings_channels_category_count">
+        <item quantity="one">%1$d channel</item>
+        <item quantity="other">%1$d channels</item>
+    </plurals>
 
     <string name="server_settings_overview_server_icon">Server Icon</string>
     <string name="server_settings_overview_server_banner">Server Banner</string>

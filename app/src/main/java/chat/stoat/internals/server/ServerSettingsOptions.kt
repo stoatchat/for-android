@@ -5,6 +5,7 @@ import chat.stoat.api.internals.hasPermission
 
 enum class ServerSettingsOption {
     Overview,
+    Channels,
     Emojis,
     Members,
     Roles,
@@ -21,6 +22,10 @@ fun availableServerSettingsOptions(
 
     if (has(PermissionBit.ManageServer)) {
         add(ServerSettingsOption.Overview)
+    }
+
+    if (has(PermissionBit.ManageChannel)) {
+        add(ServerSettingsOption.Channels)
     }
 
     if (has(PermissionBit.ManageCustomisation)) {

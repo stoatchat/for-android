@@ -586,6 +586,15 @@ object RealtimeSocket {
                 )
 
                 StoatAPI.channelCache[channelCreateFrame.id!!] = channelCreateFrame
+                channelCreateFrame.server?.let { serverId ->
+                    StoatAPI.serverCache[serverId]?.let { server ->
+                        if (channelCreateFrame.id !in server.channels.orEmpty()) {
+                            StoatAPI.serverCache[serverId] = server.copy(
+                                channels = server.channels.orEmpty() + channelCreateFrame.id!!,
+                            )
+                        }
+                    }
+                }
                 database.channelQueries.upsert(
                     channelCreateFrame.id!!,
                     channelCreateFrame.channelType?.value ?: ChannelType.TextChannel.value,
@@ -786,6 +795,7 @@ object RealtimeSocket {
                         "Icon" -> updated = updated.copy(icon = null)
                         "Banner" -> updated = updated.copy(banner = null)
                         "Description" -> updated = updated.copy(description = null)
+                        "Categories" -> updated = updated.copy(categories = null)
                         else -> Log.e("RealtimeSocket", "Unknown server clear field: $it")
                     }
                 }

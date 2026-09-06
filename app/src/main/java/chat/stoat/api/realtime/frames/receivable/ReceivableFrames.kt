@@ -181,7 +181,7 @@ data class ServerUpdateFrame(
     val type: String = "ServerUpdate",
     val id: String,
     val data: Server,
-    val clear: List<String>? = null // "Icon", "Banner" or "Description"
+    val clear: List<String>? = null // "Icon", "Banner", "Description" or "Categories"
 )
 
 @Serializable

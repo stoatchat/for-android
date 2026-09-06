@@ -7,6 +7,9 @@ import chat.stoat.api.StoatJson
 import chat.stoat.api.api
 import chat.stoat.api.apiError
 import chat.stoat.core.model.schemas.BanListResult
+import chat.stoat.core.model.schemas.Category
+import chat.stoat.core.model.schemas.Channel
+import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerWithChannelObjects
@@ -247,6 +250,7 @@ suspend fun patchServer(
     description: String? = null,
     icon: String? = null,
     banner: String? = null,
+    categories: List<Category>? = null,
     systemMessages: Map<String, String>? = null,
     remove: List<String> = emptyList(),
 ): Server {
@@ -256,6 +260,12 @@ suspend fun patchServer(
     description?.let { body["description"] = JsonPrimitive(it) }
     icon?.let { body["icon"] = JsonPrimitive(it) }
     banner?.let { body["banner"] = JsonPrimitive(it) }
+    categories?.let {
+        body["categories"] = StoatJson.encodeToJsonElement(
+            ListSerializer(Category.serializer()),
+            it,
+        )
+    }
     systemMessages?.let { messages ->
         body["system_messages"] = JsonObject(
             messages.mapValues { (_, channelId) -> JsonPrimitive(channelId) }
@@ -286,6 +296,46 @@ suspend fun patchServer(
     val server = StoatJson.decodeFromString(Server.serializer(), responseContent)
     StoatAPI.serverCache[serverId] = server
     return server
+}
+
+@Serializable
+private data class CreateServerChannelBody(
+    val name: String,
+    val type: String,
+)
+
+suspend fun createServerChannel(
+    serverId: String,
+    name: String,
+    channelType: ChannelType,
+): Channel {
+    require(channelType == ChannelType.TextChannel || channelType == ChannelType.VoiceChannel)
+    val body = CreateServerChannelBody(
+        name = name,
+        type = if (channelType == ChannelType.VoiceChannel) "Voice" else "Text",
+    )
+    val response = StoatHttp.post("/servers/$serverId/channels".api()) {
+        contentType(ContentType.Application.Json)
+        setBody(StoatJson.encodeToString(CreateServerChannelBody.serializer(), body))
+    }
+    val responseContent = response.bodyAsText()
+
+    if (!response.status.isSuccess()) {
+        throw Exception(apiError(responseContent, response.status.value))
+    }
+
+    return StoatJson.decodeFromString(Channel.serializer(), responseContent).also { channel ->
+        channel.id?.let { channelId ->
+            StoatAPI.channelCache[channelId] = channel
+            StoatAPI.serverCache[serverId]?.let { server ->
+                if (channelId !in server.channels.orEmpty()) {
+                    StoatAPI.serverCache[serverId] = server.copy(
+                        channels = server.channels.orEmpty() + channelId,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Serializable
