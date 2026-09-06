@@ -279,7 +279,18 @@ fun MessageField(
         }
     }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    val messageFieldShape = RoundedCornerShape(28.dp)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .shadow(4.dp, messageFieldShape, clip = false)
+            .clip(messageFieldShape)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+            .then(containerModifier),
+    ) {
+        contentBeforeInput()
+
         AnimatedVisibility(
             visible = autocompleteSuggestions.isNotEmpty(),
             enter = expandIn(initialSize = { full ->
@@ -507,18 +518,9 @@ fun MessageField(
                 }
             }
         }
-        val messageFieldShape = RoundedCornerShape(28.dp)
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .shadow(4.dp, messageFieldShape, clip = false)
-                .clip(messageFieldShape)
-                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                .then(containerModifier),
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            contentBeforeInput()
-
             Box(modifier = Modifier.fillMaxWidth()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
