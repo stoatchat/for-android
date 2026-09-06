@@ -74,6 +74,7 @@ import chat.stoat.api.realtime.frames.receivable.ServerDeleteFrame
 import chat.stoat.api.routes.microservices.gazette.getLatestChangelog
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.routes.user.fetchSelf
+import chat.stoat.api.settings.Experiments
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 import chat.stoat.api.settings.SyncedSettings
@@ -102,6 +103,7 @@ import chat.stoat.sheets.ReactionInfoSheet
 import chat.stoat.sheets.ServerContextSheet
 import chat.stoat.sheets.StatusSheet
 import chat.stoat.sheets.UserInfoSheet
+import chat.stoat.sheets.UserInfoSheet2
 import chat.stoat.sheets.WebHookUserSheet
 import chat.stoat.sheets.spark.SwipeToReplySparkSheet
 import com.google.android.gms.tasks.OnCompleteListener
@@ -679,14 +681,23 @@ fun ChatRouterScreen(
                 showUserContextSheet = false
             }
         ) {
-            UserInfoSheet(
-                userId = userContextSheetTarget,
-                serverId = userContextSheetServer,
-                dismissSheet = {
-                    userContextSheetState.hide()
-                    showUserContextSheet = false
-                }
-            )
+            val dismissUserSheet: suspend () -> Unit = {
+                userContextSheetState.hide()
+                showUserContextSheet = false
+            }
+            if (Experiments.showUserSheet2.isEnabled) {
+                UserInfoSheet2(
+                    userId = userContextSheetTarget,
+                    serverId = userContextSheetServer,
+                    dismissSheet = dismissUserSheet,
+                )
+            } else {
+                UserInfoSheet(
+                    userId = userContextSheetTarget,
+                    serverId = userContextSheetServer,
+                    dismissSheet = dismissUserSheet,
+                )
+            }
         }
     }
 

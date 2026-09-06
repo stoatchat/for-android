@@ -41,6 +41,7 @@ import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.channel.fetchGroupParticipants
 import chat.stoat.api.routes.server.fetchMembers
+import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.composables.generic.CountableListHeader
 import chat.stoat.composables.generic.Presence
@@ -248,14 +249,23 @@ fun MemberListSheet(
                 showUserInfoSheet = false
             }
         ) {
-            UserInfoSheet(
-                userId = userInfoSheetTarget,
-                serverId = serverId,
-                dismissSheet = {
-                    userContextSheetState.hide()
-                    showUserInfoSheet = false
-                }
-            )
+            val dismissUserSheet: suspend () -> Unit = {
+                userContextSheetState.hide()
+                showUserInfoSheet = false
+            }
+            if (Experiments.showUserSheet2.isEnabled) {
+                UserInfoSheet2(
+                    userId = userInfoSheetTarget,
+                    serverId = serverId,
+                    dismissSheet = dismissUserSheet,
+                )
+            } else {
+                UserInfoSheet(
+                    userId = userInfoSheetTarget,
+                    serverId = serverId,
+                    dismissSheet = dismissUserSheet,
+                )
+            }
         }
     }
 

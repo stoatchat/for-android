@@ -39,6 +39,7 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
             usePolarChecked.value = Experiments.usePolar.isEnabled
             enableServerIdentityOptionsChecked.value =
                 Experiments.enableServerIdentityOptions.isEnabled
+            showUserSheet2Checked.value = Experiments.showUserSheet2.isEnabled
         }
     }
 
@@ -87,6 +88,15 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
         }
     }
 
+    val showUserSheet2Checked = mutableStateOf(false)
+
+    fun setShowUserSheet2Checked(value: Boolean) {
+        viewModelScope.launch {
+            kv.set("exp/showUserSheet2", value)
+            Experiments.showUserSheet2.setEnabled(value)
+            showUserSheet2Checked.value = value
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -169,6 +179,22 @@ fun ExperimentsSettingsScreen(
                 )
             },
             modifier = Modifier.clickable { viewModel.setEnableServerIdentityOptionsChecked(!viewModel.enableServerIdentityOptionsChecked.value) }
+        )
+
+        ListItem(
+            headlineContent = {
+                Text("UserInfoSheet2")
+            },
+            supportingContent = {
+                Text("New user sheet")
+            },
+            trailingContent = {
+                Switch(
+                    checked = viewModel.showUserSheet2Checked.value,
+                    onCheckedChange = null
+                )
+            },
+            modifier = Modifier.clickable { viewModel.setShowUserSheet2Checked(!viewModel.showUserSheet2Checked.value) }
         )
 
         Subcategory(

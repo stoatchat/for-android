@@ -28,6 +28,7 @@ class ExperimentInstance(default: Boolean) {
 object Experiments {
     val usePolar = ExperimentInstance(false)
     val enableServerIdentityOptions = ExperimentInstance(false)
+    val showUserSheet2 = ExperimentInstance(false)
 
     suspend fun hydrateWithKv() {
         val kvStorage = KVStorage(StoatApplication.instance)
@@ -43,6 +44,9 @@ object Experiments {
         )
         enableServerIdentityOptions.setEnabled(
             kvStorage.getBoolean("exp/enableServerIdentityOptions") == true
+        )
+        showUserSheet2.setEnabled(
+            kvStorage.getBoolean("exp/showUserSheet2") == true
         )
     }
 }
