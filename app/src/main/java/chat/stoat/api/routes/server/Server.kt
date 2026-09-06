@@ -1,5 +1,7 @@
 package chat.stoat.api.routes.server
 
+import chat.stoat.api.HitRateLimitException
+import chat.stoat.api.RateLimitResponse
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.StoatHttp
@@ -23,6 +25,7 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.SerialName
@@ -53,6 +56,7 @@ private data class EditMemberBody(
     val nickname: String? = null,
     val pronouns: String? = null,
     val avatar: String? = null,
+    val roles: List<String>? = null,
     val timeout: String? = null,
     val remove: List<String> = emptyList(),
 )
@@ -202,12 +206,13 @@ suspend fun patchMemberIdentity(
     )
 }
 
-private suspend fun patchMember(
+suspend fun patchMember(
     serverId: String,
     userId: String,
     nickname: String? = null,
     pronouns: String? = null,
     avatar: String? = null,
+    roles: List<String>? = null,
     timeout: String? = null,
     remove: List<String> = emptyList(),
 ): Member {
@@ -215,6 +220,7 @@ private suspend fun patchMember(
         nickname = nickname,
         pronouns = pronouns,
         avatar = avatar,
+        roles = roles,
         timeout = timeout,
         remove = remove,
     )
@@ -223,6 +229,17 @@ private suspend fun patchMember(
         setBody(StoatJson.encodeToString(EditMemberBody.serializer(), body))
     }
     val responseContent = response.bodyAsText()
+
+    if (response.status == HttpStatusCode.TooManyRequests) {
+        val retryAfter = runCatching {
+            StoatJson.decodeFromString(
+                RateLimitResponse.serializer(),
+                responseContent,
+            ).retryAfter
+        }.getOrNull()
+            ?: response.headers["X-RateLimit-Reset-After"]?.toIntOrNull()
+        throw retryAfter?.let(::HitRateLimitException) ?: HitRateLimitException()
+    }
 
     if (!response.status.isSuccess()) {
         throw Exception(apiError(responseContent, response.status.value))

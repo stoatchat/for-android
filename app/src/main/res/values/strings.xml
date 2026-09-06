@@ -497,6 +497,7 @@
     <string name="user_info_sheet_bio_empty">This user hasn\'t set a bio yet.</string>
     <string name="user_info_sheet_bio_not_found">This user\'s bio could not be fetched. Please verify you share a server or are friends.</string>
     <string name="user_info_sheet_category_roles">Roles</string>
+    <string name="user_info_sheet_role_update_failed">Could not update this member\'s roles.</string>
     <string name="user_info_sheet_category_joined">Joined</string>
     <string name="user_info_sheet_category_joined_stoat" translatable="false">Stoat</string>
     <string name="user_info_sheet_category_badges">Badges</string>
