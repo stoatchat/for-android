@@ -7,6 +7,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,10 +37,12 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
@@ -64,16 +68,21 @@ import chat.stoat.markdown.CHANNEL_MENTION_ELEMENT_TYPE
 import chat.stoat.markdown.CUSTOM_EMOTE_ELEMENT_TYPE
 import chat.stoat.markdown.MASS_MENTION_ELEMENT_TYPE
 import chat.stoat.markdown.ROLE_MENTION_ELEMENT_TYPE
+import chat.stoat.markdown.SPOILER_DELIMITER_TOKEN_TYPE
+import chat.stoat.markdown.SPOILER_ELEMENT_TYPE
 import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.markdown.TIMESTAMP_ELEMENT_TYPE
 import chat.stoat.markdown.USER_MENTION_ELEMENT_TYPE
 import chat.stoat.ui.theme.FragmentMono
 import chat.stoat.ui.theme.isThemeDark
+import com.mikepenz.markdown.annotator.DefaultAnnotatorSettings
+import com.mikepenz.markdown.annotator.buildMarkdownAnnotatedString
 import com.mikepenz.markdown.compose.components.markdownComponents
 import com.mikepenz.markdown.compose.elements.MarkdownHighlightedCodeBlock
 import com.mikepenz.markdown.compose.elements.MarkdownHighlightedCodeFence
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownTypography
+import com.mikepenz.markdown.model.MarkdownAnnotator
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.markdownAnnotator
 import com.mikepenz.markdown.model.markdownInlineContent
@@ -87,6 +96,7 @@ import io.ratex.RaTeXView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
@@ -94,6 +104,8 @@ import org.intellij.markdown.parser.MarkdownParser
 import java.util.concurrent.ConcurrentHashMap
 
 private data class MathEntry(val key: String, val latex: String, val displayMode: Boolean)
+
+private const val CONCEALED_INLINE_PREFIX = "concealed:"
 
 private val mathSizeCache = ConcurrentHashMap<Triple<String, Boolean, Float>, Size>()
 
@@ -211,7 +223,9 @@ fun ChatMarkdown(
     val scope = rememberCoroutineScope()
     val primaryColor = MaterialTheme.colorScheme.primary
     val surfaceVariantColor = MaterialTheme.colorScheme.surfaceVariant
+    val spoilerColor = MaterialTheme.colorScheme.surfaceContainerHigh
     val onSurfaceArgb = MaterialTheme.colorScheme.onSurface.toArgb()
+    val revealedSpoilers = remember(state) { mutableStateMapOf<Int, Boolean>() }
     val mathEntries = remember(state) {
         (state as? State.Success)?.let {
             collectMathEntries(it.node, it.content).distinctBy { e -> e.key }
@@ -263,26 +277,111 @@ fun ChatMarkdown(
             )
         )
     }
-    val annotator = remember(serverId, mentionLinkStyle, surfaceVariantColor) {
-        markdownAnnotator { content, child ->
+    val textLinkStyle = remember(primaryColor) {
+        TextLinkStyles(
+            SpanStyle(
+                color = primaryColor,
+                textDecoration = TextDecoration.Underline,
+            )
+        )
+    }
+    val codeSpanStyle = remember(fontSize, surfaceVariantColor) {
+        SpanStyle(
+            background = surfaceVariantColor,
+            fontFamily = FragmentMono,
+            fontSize = fontSize,
+        )
+    }
+    val annotator = remember(
+        serverId,
+        mentionLinkStyle,
+        surfaceVariantColor,
+        textLinkStyle,
+        codeSpanStyle,
+        revealedSpoilers,
+    ) {
+        var concealedSpoilerDepth = 0
+        lateinit var spoilerAwareAnnotator: MarkdownAnnotator
+        spoilerAwareAnnotator = markdownAnnotator { content, child ->
             when (child.type) {
+                SPOILER_ELEMENT_TYPE -> {
+                    val spoilerId = child.startOffset
+                    val revealed = revealedSpoilers[spoilerId] == true
+                    if (revealed) {
+                        buildMarkdownAnnotatedString(
+                            content = content,
+                            children = child.children.drop(1).dropLast(1),
+                            annotatorSettings = DefaultAnnotatorSettings(
+                                linkTextSpanStyle = textLinkStyle,
+                                codeSpanStyle = codeSpanStyle,
+                                annotator = spoilerAwareAnnotator,
+                            ),
+                        )
+                    } else {
+                        val concealedContent = buildAnnotatedString {
+                            concealedSpoilerDepth++
+                            try {
+                                buildMarkdownAnnotatedString(
+                                    content = content,
+                                    children = child.children.drop(1).dropLast(1),
+                                    annotatorSettings = DefaultAnnotatorSettings(
+                                        linkTextSpanStyle = textLinkStyle,
+                                        codeSpanStyle = codeSpanStyle,
+                                        annotator = spoilerAwareAnnotator,
+                                    ),
+                                )
+                            } finally {
+                                concealedSpoilerDepth--
+                            }
+                        }.flatMapAnnotations { annotation ->
+                            if (annotation.item is LinkAnnotation) emptyList()
+                            else listOf(annotation)
+                        }
+                        withLink(
+                            LinkAnnotation.Clickable(
+                                tag = "$SPOILER_LINK_TAG_PREFIX$spoilerId",
+                                linkInteractionListener = LinkInteractionListener {
+                                    revealedSpoilers[spoilerId] = true
+                                },
+                            )
+                        ) {
+                            append(concealedContent)
+                        }
+                    }
+                    true
+                }
+
+                SPOILER_DELIMITER_TOKEN_TYPE -> {
+                    append(child.getTextInNode(content))
+                    true
+                }
+
                 CUSTOM_EMOTE_ELEMENT_TYPE -> {
                     val ulid = child.getTextInNode(content).toString().removeSurrounding(":")
                     val name = StoatAPI.emojiCache[ulid]?.name ?: ":$ulid:"
-                    appendInlineContent("emote:$ulid", name)
+                    val prefix = if (concealedSpoilerDepth > 0) CONCEALED_INLINE_PREFIX else ""
+                    appendInlineContent("${prefix}emote:$ulid", name)
                     true
                 }
 
                 GFMElementTypes.INLINE_MATH -> {
                     val latex = child.getTextInNode(content).toString().removeSurrounding("$")
-                    if (latex.isNotEmpty()) appendInlineContent("math:i:$latex", latex)
+                    if (latex.isNotEmpty()) {
+                        val prefix =
+                            if (concealedSpoilerDepth > 0) CONCEALED_INLINE_PREFIX else ""
+                        appendInlineContent("${prefix}math:i:$latex", latex)
+                    }
                     true
                 }
 
                 GFMElementTypes.BLOCK_MATH -> {
                     val latex =
                         child.getTextInNode(content).toString().removeSurrounding("$$").trim()
-                    if (latex.isNotEmpty()) appendInlineContent("math:b:$latex", latex)
+                    if (latex.isNotEmpty()) {
+                        val prefix =
+                            if (concealedSpoilerDepth > 0) CONCEALED_INLINE_PREFIX else ""
+                        appendInlineContent("${prefix}math:b:$latex", latex)
+                    }
                     true
                 }
 
@@ -370,6 +469,7 @@ fun ChatMarkdown(
                 else -> false
             }
         }
+        spoilerAwareAnnotator
     }
     val resources = LocalResources.current
     val toolbarColor = MaterialTheme.colorScheme.surfaceContainer.toArgb()
@@ -467,12 +567,7 @@ fun ChatMarkdown(
                     fontFamily = FragmentMono,
                     fontSize = MaterialTheme.typography.bodyLarge.fontSize * fontSizeMultiplier
                 ),
-                textLink = TextLinkStyles(
-                    SpanStyle(
-                        color = primaryColor,
-                        textDecoration = TextDecoration.Underline
-                    )
-                ),
+                textLink = textLinkStyle,
             ),
             inlineContent = markdownInlineContent(
                 buildMap {
@@ -506,15 +601,26 @@ fun ChatMarkdown(
                                     modifier = Modifier.fillMaxSize(),
                                 )
                             })
-                    }
-                    emoteUlids.forEach { ulid ->
                         put(
-                            "emote:$ulid", InlineTextContent(
+                            "$CONCEALED_INLINE_PREFIX${entry.key}",
+                            InlineTextContent(
                                 Placeholder(
-                                    width = fontSize * 1.5f,
-                                    height = fontSize * 1.5f,
+                                    width = widthSp,
+                                    height = heightSp,
                                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
                                 )
+                            ) { Box(Modifier.fillMaxSize()) },
+                        )
+                    }
+                    emoteUlids.forEach { ulid ->
+                        val placeholder = Placeholder(
+                            width = fontSize * 1.5f,
+                            height = fontSize * 1.5f,
+                            placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
+                        )
+                        put(
+                            "emote:$ulid", InlineTextContent(
+                                placeholder
                             ) { _ ->
                                 val emote = StoatAPI.emojiCache[ulid]
                                 if (emote == null) {
@@ -549,10 +655,110 @@ fun ChatMarkdown(
                                     }
                                 }
                             })
+                        put(
+                            "${CONCEALED_INLINE_PREFIX}emote:$ulid",
+                            InlineTextContent(placeholder) { Box(Modifier.fillMaxSize()) },
+                        )
                     }
                 }
             ),
             components = markdownComponents(
+                text = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.text,
+                        spoilerColor = spoilerColor,
+                    )
+                },
+                paragraph = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.paragraph,
+                        spoilerColor = spoilerColor,
+                    )
+                },
+                heading1 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h1,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                heading2 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h2,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                heading3 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h3,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                heading4 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h4,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                heading5 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h5,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                heading6 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h6,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.ATX_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                setextHeading1 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h1,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.SETEXT_CONTENT,
+                        isHeading = true,
+                    )
+                },
+                setextHeading2 = {
+                    SpoilerMarkdownText(
+                        content = it.content,
+                        node = it.node,
+                        style = it.typography.h2,
+                        spoilerColor = spoilerColor,
+                        contentChildType = MarkdownTokenTypes.SETEXT_CONTENT,
+                        isHeading = true,
+                    )
+                },
                 image = {},
                 inlineImage = {},
                 codeBlock = {
