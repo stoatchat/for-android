@@ -46,6 +46,8 @@ import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import kotlinx.coroutines.launch
 
+private const val MEMBERS_PANEL_ACCESSIBLE = false
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsHome(
@@ -172,7 +174,7 @@ fun ServerSettingsHome(
                 ServerSettingsOption.Roles,
                 ServerSettingsOption.Invites,
                 ServerSettingsOption.Bans,
-            )
+            ) && (it != ServerSettingsOption.Members || MEMBERS_PANEL_ACCESSIBLE)
         }
 
         if (overviewOptions.isNotEmpty()) {
