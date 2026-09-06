@@ -127,6 +127,7 @@ import chat.stoat.screens.settings.SessionSettingsScreen
 import chat.stoat.screens.settings.SettingsScreen
 import chat.stoat.screens.settings.channel.ChannelSettingsHome
 import chat.stoat.screens.settings.channel.ChannelSettingsOverview
+import chat.stoat.screens.settings.channel.ChannelSettingsPermissionEditor
 import chat.stoat.screens.settings.channel.ChannelSettingsPermissions
 import chat.stoat.screens.settings.server.ServerIdentitySettingsScreen
 import chat.stoat.screens.settings.server.ServerSettingsBans
@@ -778,6 +779,13 @@ fun AppEntrypoint(
                     composable("settings/channel/{channelId}/permissions") { backStackEntry ->
                         val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
                         ChannelSettingsPermissions(navController, channelId)
+                    }
+                    composable(
+                        "settings/channel/{channelId}/permissions/{roleId}"
+                    ) { backStackEntry ->
+                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
+                        val roleId = backStackEntry.arguments?.getString("roleId") ?: ""
+                        ChannelSettingsPermissionEditor(navController, channelId, roleId)
                     }
 
                     composable("settings/server/{serverId}") { backStackEntry ->

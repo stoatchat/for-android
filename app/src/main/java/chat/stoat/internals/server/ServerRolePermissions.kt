@@ -46,14 +46,17 @@ fun serverRoleCapabilities(server: Server, permissions: Long): ServerRoleCapabil
 fun canManageServerRole(server: Server, role: Role): Boolean {
     if (server.owner == StoatAPI.selfId) return true
 
-    val ownTopRank = StoatAPI.selfId
+    val member = StoatAPI.selfId
         ?.let { StoatAPI.members.getMember(server.id.orEmpty(), it) }
-        ?.roles
+        ?: return true
+    val ownTopRank = member
+        .roles
         .orEmpty()
         .mapNotNull { server.roles?.get(it)?.rank }
         .minOrNull()
+        ?: Double.MAX_VALUE
 
-    return ownTopRank == null || (role.rank ?: Double.MAX_VALUE) > ownTopRank
+    return (role.rank ?: Double.MAX_VALUE) > ownTopRank
 }
 
 fun PermissionDescription.overrideFor(bit: PermissionBit): PermissionOverrideValue = when {
@@ -275,3 +278,33 @@ val ServerPermissionGroups = listOf(
         ),
     ),
 )
+
+private val ChannelPermissionBits = setOf(
+    PermissionBit.ManageChannel,
+    PermissionBit.ManagePermissions,
+    PermissionBit.ViewChannel,
+    PermissionBit.ReadMessageHistory,
+    PermissionBit.SendMessage,
+    PermissionBit.ManageMessages,
+    PermissionBit.ManageWebhooks,
+    PermissionBit.InviteOthers,
+    PermissionBit.SendEmbeds,
+    PermissionBit.UploadFiles,
+    PermissionBit.Masquerade,
+    PermissionBit.React,
+    PermissionBit.BypassSlowmode,
+    PermissionBit.Connect,
+    PermissionBit.Speak,
+    PermissionBit.Video,
+    PermissionBit.MuteMembers,
+    PermissionBit.DeafenMembers,
+    PermissionBit.MoveMembers,
+    PermissionBit.Listen,
+    PermissionBit.MentionEveryone,
+    PermissionBit.MentionRoles,
+)
+
+val ChannelPermissionGroups = ServerPermissionGroups.mapNotNull { group ->
+    group.copy(permissions = group.permissions.filter { it.bit in ChannelPermissionBits })
+        .takeIf { it.permissions.isNotEmpty() }
+}

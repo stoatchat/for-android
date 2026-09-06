@@ -223,6 +223,13 @@ data class ServerRoleUpdateFrame(
 )
 
 @Serializable
+data class ServerRoleRanksUpdateFrame(
+    val type: String = "ServerRoleRanksUpdate",
+    val id: String,
+    val ranks: List<String>,
+)
+
+@Serializable
 data class ServerRoleDeleteFrame(
     val type: String = "ServerRoleDelete",
     val id: String,

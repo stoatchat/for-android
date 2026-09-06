@@ -29,6 +29,7 @@ import chat.stoat.api.realtime.frames.receivable.ServerMemberJoinFrame
 import chat.stoat.api.realtime.frames.receivable.ServerMemberLeaveFrame
 import chat.stoat.api.realtime.frames.receivable.ServerMemberUpdateFrame
 import chat.stoat.api.realtime.frames.receivable.ServerRoleDeleteFrame
+import chat.stoat.api.realtime.frames.receivable.ServerRoleRanksUpdateFrame
 import chat.stoat.api.realtime.frames.receivable.ServerRoleUpdateFrame
 import chat.stoat.api.realtime.frames.receivable.ServerUpdateFrame
 import chat.stoat.api.realtime.frames.receivable.UserMoveVoiceChannelFrame
@@ -137,7 +138,11 @@ object RealtimeSocket {
                             val frameType =
                                 StoatJson.decodeFromString(AnyFrame.serializer(), frameString).type
 
-                            if (!connectionReady && isConnectionReadyFrame(frameType, frameString)) {
+                            if (!connectionReady && isConnectionReadyFrame(
+                                    frameType,
+                                    frameString
+                                )
+                            ) {
                                 connectionReady = true
                                 updateDisconnectionState(DisconnectionState.Connected)
                                 pushReconnectEvent()
@@ -828,11 +833,11 @@ object RealtimeSocket {
                 )
 
                 val deletedChannelIds = (
-                    StoatAPI.serverCache[serverDeleteFrame.id]?.channels.orEmpty() +
-                        StoatAPI.channelCache
-                            .filterValues { it.server == serverDeleteFrame.id }
-                            .keys
-                    ).distinct()
+                        StoatAPI.serverCache[serverDeleteFrame.id]?.channels.orEmpty() +
+                                StoatAPI.channelCache
+                                    .filterValues { it.server == serverDeleteFrame.id }
+                                    .keys
+                        ).distinct()
 
                 deletedChannelIds.forEach { channelId ->
                     StoatAPI.channelCache.remove(channelId)
@@ -960,6 +965,27 @@ object RealtimeSocket {
                     )
                     StoatAPI.serverCache[serverRoleUpdateFrame.id] = newServer
                 }
+            }
+
+            "ServerRoleRanksUpdate" -> {
+                val serverRoleRanksUpdateFrame =
+                    StoatJson.decodeFromString(ServerRoleRanksUpdateFrame.serializer(), rawFrame)
+                logcat { "Received server role ranks update frame for ${serverRoleRanksUpdateFrame.id}." }
+
+                val server = StoatAPI.serverCache[serverRoleRanksUpdateFrame.id]
+                if (server == null) {
+                    logcat { "Server ${serverRoleRanksUpdateFrame.id} not found in cache. Ignoring role ranks update." }
+                    return
+                }
+
+                val ranksByRoleId = serverRoleRanksUpdateFrame.ranks
+                    .withIndex()
+                    .associate { (rank, roleId) -> roleId to rank.toDouble() }
+                StoatAPI.serverCache[serverRoleRanksUpdateFrame.id] = server.copy(
+                    roles = server.roles.orEmpty().mapValues { (roleId, role) ->
+                        ranksByRoleId[roleId]?.let { role.copy(rank = it) } ?: role
+                    }
+                )
             }
 
             "ServerRoleDelete" -> {

@@ -36,7 +36,13 @@ data class Member(
     val nickname: String? = null,
     val pronouns: String? = null,
 
-    val timeout: String? = null
+    val timeout: String? = null,
+
+    @SerialName("can_publish")
+    val canPublish: Boolean? = null,
+
+    @SerialName("can_receive")
+    val canReceive: Boolean? = null,
 ) {
     fun mergeWithPartial(other: Member): Member {
         return Member(
@@ -46,7 +52,9 @@ data class Member(
             roles = other.roles ?: roles,
             nickname = other.nickname ?: nickname,
             pronouns = other.pronouns ?: pronouns,
-            timeout = other.timeout ?: timeout
+            timeout = other.timeout ?: timeout,
+            canPublish = other.canPublish ?: canPublish,
+            canReceive = other.canReceive ?: canReceive,
         )
     }
 

@@ -10,6 +10,7 @@ import chat.stoat.api.internals.ULID
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.core.model.schemas.MessagesInChannel
+import chat.stoat.core.model.schemas.PermissionDescription
 import chat.stoat.core.model.schemas.ServerInvite
 import chat.stoat.core.model.schemas.User
 import io.ktor.client.request.delete
@@ -25,6 +26,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
@@ -86,6 +88,17 @@ data class SendMessageBody(
 @kotlinx.serialization.Serializable
 data class EditMessageBody(
     val content: String?
+)
+
+@Serializable
+private data class ChannelPermissionOverrideBody(
+    val allow: Long,
+    val deny: Long,
+)
+
+@Serializable
+private data class SetChannelPermissionsBody(
+    val permissions: ChannelPermissionOverrideBody,
 )
 
 suspend fun sendMessage(
@@ -184,6 +197,45 @@ suspend fun fetchSingleMessage(channelId: String, messageId: String): Message {
 suspend fun leaveDeleteOrCloseChannel(channelId: String, leaveSilently: Boolean = false) {
     StoatHttp.delete("/channels/$channelId".api()) {
         parameter("leave_silently", leaveSilently)
+    }
+}
+
+suspend fun setChannelRolePermissions(
+    channelId: String,
+    roleId: String,
+    permissions: PermissionDescription,
+): Channel = setChannelPermissions(
+    channelId = channelId,
+    path = "/channels/$channelId/permissions/$roleId",
+    permissions = permissions,
+)
+
+suspend fun setDefaultChannelPermissions(
+    channelId: String,
+    permissions: PermissionDescription,
+): Channel = setChannelPermissions(
+    channelId = channelId,
+    path = "/channels/$channelId/permissions/default",
+    permissions = permissions,
+)
+
+private suspend fun setChannelPermissions(
+    channelId: String,
+    path: String,
+    permissions: PermissionDescription,
+): Channel {
+    val body = SetChannelPermissionsBody(
+        ChannelPermissionOverrideBody(permissions.a, permissions.d)
+    )
+    val response = StoatHttp.put(path.api()) {
+        contentType(ContentType.Application.Json)
+        setBody(StoatJson.encodeToString(SetChannelPermissionsBody.serializer(), body))
+    }
+    val content = response.bodyAsText()
+    if (!response.status.isSuccess()) throw Exception(apiError(content, response.status.value))
+
+    return StoatJson.decodeFromString(Channel.serializer(), content).also {
+        StoatAPI.channelCache[channelId] = it
     }
 }
 

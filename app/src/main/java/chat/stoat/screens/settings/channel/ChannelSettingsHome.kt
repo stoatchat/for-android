@@ -3,7 +3,9 @@ package chat.stoat.screens.settings.channel
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,7 +16,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,6 +36,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
@@ -42,9 +44,9 @@ import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.channel.leaveDeleteOrCloseChannel
 import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.settings.SettingsIcon
+import chat.stoat.screens.settings.SettingsListItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,13 +122,20 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
     ) { pv ->
         Box(Modifier.padding(pv)) {
             channel?.let {
+                val canManageChannel = permissions.hasPermission(PermissionBit.ManageChannel)
+                val showPermissions = permissions.hasPermission(PermissionBit.ManageRole)
+                val showDelete = canManageChannel &&
+                        channel.channelType != ChannelType.DirectMessage &&
+                        channel.channelType != ChannelType.Group
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    if (permissions.hasPermission(PermissionBit.ManageChannel)) {
-                        ListItem(
+                    if (canManageChannel) {
+                        SettingsListItem(
+                            first = true,
+                            last = !showPermissions && !showDelete,
                             headlineContent = {
                                 Text(
                                     text = stringResource(id = R.string.channel_settings_overview)
@@ -148,9 +157,11 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         )
                     }
 
-                    // TODO Implement permissions UI and remove the predicate check
-                    if (permissions.hasPermission(PermissionBit.ManageRole) && FeatureFlags.labsAccessControlGranted) {
-                        ListItem(
+                    if (showPermissions) {
+                        if (canManageChannel) Spacer(Modifier.height(2.dp))
+                        SettingsListItem(
+                            first = !canManageChannel,
+                            last = !showDelete,
                             headlineContent = {
                                 Text(
                                     text = stringResource(id = R.string.channel_settings_permissions)
@@ -172,8 +183,10 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         )
                     }
 
-                    if (permissions.hasPermission(PermissionBit.ManageChannel) && channel.channelType != ChannelType.DirectMessage && channel.channelType != ChannelType.Group) {
-                        ListItem(
+                    if (showDelete) {
+                        Spacer(Modifier.height(2.dp))
+                        SettingsListItem(
+                            last = true,
                             headlineContent = {
                                 CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
                                     Text(

@@ -958,6 +958,17 @@
     <string name="channel_settings_overview_nsfw_undo_confirm_no">Keep as is</string>
     <string name="channel_settings_overview_save">Save</string>
     <string name="channel_settings_permissions">Permissions</string>
+    <string name="channel_settings_permissions_description">Choose a role to configure its permissions in this channel.</string>
+    <string name="channel_settings_permissions_everyone_description">Permissions available without any role</string>
+    <string name="channel_settings_permissions_role_description">Choose whether this channel allows, inherits, or denies each permission.</string>
+    <string name="channel_settings_permissions_permission">You need permission to manage permissions to change these values.</string>
+    <string name="channel_settings_permissions_save">Save permissions</string>
+    <string name="channel_settings_permissions_saved">Channel permissions saved.</string>
+    <string name="channel_settings_permissions_update_error">There was an error updating channel permissions.</string>
+    <string name="channel_settings_permissions_discard_title">Discard permission changes?</string>
+    <string name="channel_settings_permissions_discard_description">Your unsaved channel permission changes will be lost.</string>
+    <string name="channel_settings_permissions_not_applied">Permissions not applied</string>
+    <string name="channel_settings_permissions_not_applied_description">You cannot apply this permission override, because you would lose the following permissions in this channel:</string>
     <string name="channel_settings_delete">Delete Channel</string>
     <string name="channel_settings_delete_confirm">Are you sure you want to delete this channel?</string>
     <string name="channel_settings_delete_confirm_description">All messages and settings for this channel will be gone forever (a long time!)</string>

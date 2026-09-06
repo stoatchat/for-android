@@ -14,6 +14,7 @@ import chat.stoat.screens.settings.NotificationsSettingsScreenViewModel
 import chat.stoat.screens.settings.ProfileSettingsScreenViewModel
 import chat.stoat.screens.settings.SettingsScreenViewModel
 import chat.stoat.screens.settings.channel.ChannelSettingsOverviewViewModel
+import chat.stoat.screens.settings.channel.ChannelSettingsPermissionsViewModel
 import chat.stoat.screens.settings.server.ServerIdentitySettingsViewModel
 import chat.stoat.screens.settings.server.ServerSettingsBansViewModel
 import chat.stoat.screens.settings.server.ServerSettingsChannelsViewModel
@@ -42,6 +43,7 @@ val viewModelModule = module {
     viewModel { ProfileSettingsScreenViewModel(androidApplication()) }
     viewModel { AppearanceSettingsScreenViewModel(androidApplication()) }
     viewModel { ChannelSettingsOverviewViewModel(androidApplication()) }
+    viewModel { ChannelSettingsPermissionsViewModel(androidApplication()) }
     viewModel { ServerSettingsOverviewViewModel(androidApplication()) }
     viewModel { ServerIdentitySettingsViewModel(androidApplication()) }
     viewModel { ServerSettingsBansViewModel(androidApplication()) }
