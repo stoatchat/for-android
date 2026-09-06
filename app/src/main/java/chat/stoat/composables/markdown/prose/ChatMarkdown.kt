@@ -4,6 +4,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -46,7 +47,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import chat.stoat.R
@@ -92,7 +92,6 @@ import dev.snipme.highlights.model.SyntaxThemes
 import io.ratex.RaTeXEngine
 import io.ratex.RaTeXFontLoader
 import io.ratex.RaTeXRenderer
-import io.ratex.RaTeXView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -104,6 +103,7 @@ import org.intellij.markdown.parser.MarkdownParser
 import java.util.concurrent.ConcurrentHashMap
 
 private data class MathEntry(val key: String, val latex: String, val displayMode: Boolean)
+private data class RenderedMath(val renderer: RaTeXRenderer, val size: Size)
 
 private const val CONCEALED_INLINE_PREFIX = "concealed:"
 
@@ -247,27 +247,33 @@ fun ChatMarkdown(
             }
         })
     }
-    val uncachedEntries =
-        mathEntries.filter { mathSizeCache[Triple(it.latex, it.displayMode, fontSizePx)] == null }
-    LaunchedEffect(mathEntries, fontSizePx) {
-        if (uncachedEntries.isEmpty()) return@LaunchedEffect
+    // RaTeXView permanently cancels its render scope when detached. Lazy list items can be
+    // reattached, so retain the renderer as Compose state and draw it without an embedded View.
+    var renderedMath by remember(mathEntries, fontSizePx, onSurfaceArgb) {
+        mutableStateOf<Map<String, RenderedMath>>(emptyMap())
+    }
+    LaunchedEffect(mathEntries, fontSizePx, onSurfaceArgb) {
+        if (mathEntries.isEmpty()) return@LaunchedEffect
         withContext(Dispatchers.IO) { RaTeXFontLoader.ensureLoaded(context) }
-        val newSizes = withContext(Dispatchers.Default) {
+        val newRenders = withContext(Dispatchers.Default) {
             buildMap {
-                uncachedEntries.forEach { entry ->
+                mathEntries.forEach { entry ->
                     try {
                         val dl =
                             RaTeXEngine.parseBlocking(entry.latex, entry.displayMode, onSurfaceArgb)
                         val r = RaTeXRenderer(dl, fontSizePx) { RaTeXFontLoader.getTypeface(it) }
                         val size = Size(r.widthPx, r.totalHeightPx).clampForLayout()
                         mathSizeCache[Triple(entry.latex, entry.displayMode, fontSizePx)] = size
-                        put(entry.key, size)
+                        put(entry.key, RenderedMath(r, size))
                     } catch (_: Exception) {
                     }
                 }
             }
         }
-        if (newSizes.isNotEmpty()) mathSizes = mathSizes + newSizes
+        if (newRenders.isNotEmpty()) {
+            renderedMath = newRenders
+            mathSizes = mathSizes + newRenders.mapValues { it.value.size }
+        }
     }
     val mentionLinkStyle = remember(primaryColor) {
         TextLinkStyles(
@@ -587,19 +593,12 @@ fun ChatMarkdown(
                                     height = heightSp,
                                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
                                 )
-                            ) { latex ->
-                                val foreground = LocalContentColor.current
-                                AndroidView(
-                                    factory = { ctx -> RaTeXView(ctx) },
-                                    update = { view ->
-                                        view.displayMode = entry.displayMode
-                                        view.latex = latex
-                                        view.fontSize =
-                                            with(density) { fontSize.toPx().toDp().value }
-                                        view.color = foreground.toArgb()
-                                    },
-                                    modifier = Modifier.fillMaxSize(),
-                                )
+                            ) {
+                                Canvas(Modifier.fillMaxSize()) {
+                                    renderedMath[entry.key]?.renderer?.draw(
+                                        drawContext.canvas.nativeCanvas
+                                    )
+                                }
                             })
                         put(
                             "$CONCEALED_INLINE_PREFIX${entry.key}",
