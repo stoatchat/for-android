@@ -83,6 +83,7 @@ import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.server.createServerChannel
 import chat.stoat.api.routes.server.patchServer
 import chat.stoat.composables.screens.chat.ChannelIcon
+import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberServerPermissions
@@ -686,6 +687,9 @@ fun ServerSettingsChannels(
             return@SettingsPage
         }
 
+        val hasChannelLayoutItems = displayedSections.any { section ->
+            section.id != UncategorisedChannelSectionId || section.channelIds.isNotEmpty()
+        }
         LazyColumn(
             state = lazyListState,
             modifier = Modifier.fillMaxSize()
@@ -712,7 +716,19 @@ fun ServerSettingsChannels(
                 }
             }
 
-            itemsIndexed(entries, key = { _, entry -> entry.key }) { index, entry ->
+            if (!hasChannelLayoutItems) {
+                item(key = "empty") {
+                    ServerSettingsEmptyState(
+                        icon = R.drawable.ic_grid_3x3_24dp,
+                        title = R.string.server_settings_channels_empty_title,
+                        description = R.string.server_settings_channels_empty_description,
+                    )
+                }
+            }
+            itemsIndexed(
+                items = if (hasChannelLayoutItems) entries else emptyList(),
+                key = { _, entry -> entry.key },
+            ) { index, entry ->
                 val lazyItemScope = this
                 ReorderableItem(
                     state = when (entry) {
@@ -720,8 +736,9 @@ fun ServerSettingsChannels(
                         is ServerChannelListEntry.Channel -> channelReorderableState
                     },
                     key = entry.key,
-                    enabled = !viewModel.busy && (entry !is ServerChannelListEntry.Section ||
-                            entry.sectionId != UncategorisedChannelSectionId)
+                    enabled = !viewModel.busy &&
+                            (entry !is ServerChannelListEntry.Section ||
+                                    entry.sectionId != UncategorisedChannelSectionId)
                 ) { isDragging ->
                     val dragHandleModifier = Modifier.draggableHandle(
                         onDragStarted = {

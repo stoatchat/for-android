@@ -26,7 +26,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +44,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -61,6 +59,7 @@ import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.server.fetchServerBans
 import chat.stoat.api.routes.server.unbanMember
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.model.schemas.BanListResult
 import chat.stoat.core.model.schemas.BannedUser
 import chat.stoat.core.model.schemas.ServerBan
@@ -308,7 +307,13 @@ private fun BanList(
                 BanLoadError(message = loadError, onRetry = onRetry)
             }
         } else if (entries.isEmpty()) {
-            item(key = "empty") { EmptyBanList() }
+            item(key = "empty") {
+                ServerSettingsEmptyState(
+                    icon = R.drawable.ic_gavel_24dp,
+                    title = R.string.server_settings_bans_empty_title,
+                    description = R.string.server_settings_bans_empty_description,
+                )
+            }
         } else {
             if (loading) {
                 item(key = "refreshing") {
@@ -486,33 +491,6 @@ private fun BanDetailsSheet(
         ) {
             Text(stringResource(R.string.ok))
         }
-    }
-}
-
-@Composable
-private fun EmptyBanList() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 64.dp),
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_gavel_24dp),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(48.dp),
-        )
-        Text(
-            text = stringResource(R.string.server_settings_bans_empty_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.server_settings_bans_empty_description),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
     }
 }
 

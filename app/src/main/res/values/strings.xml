@@ -1089,6 +1089,8 @@
     <string name="server_settings_channels_create_error">There was an error creating the channel.</string>
     <string name="server_settings_channels_update_error">There was an error updating the channel layout.</string>
     <string name="server_settings_channels_reorder_error">There was an error saving the channel order.</string>
+    <string name="server_settings_channels_empty_title">No channels</string>
+    <string name="server_settings_channels_empty_description">Channels created for this server will appear here.</string>
     <plurals name="server_settings_channels_count">
         <item quantity="one">%1$d server channel</item>
         <item quantity="other">%1$d server channels</item>
@@ -1160,6 +1162,7 @@
     <string name="server_settings_emojis_slots_remaining">%1$d emoji slots remaining</string>
     <string name="server_settings_emojis_usage">%1$d of %2$d emoji slots used</string>
     <string name="server_settings_emojis_count">%1$d server emojis</string>
+    <string name="server_settings_emojis_empty_title">No custom emojis</string>
     <string name="server_settings_emojis_empty">This server does not have any custom emojis yet.</string>
     <string name="server_settings_emojis_created">Emoji created.</string>
     <string name="server_settings_emojis_deleted">Emoji deleted.</string>
@@ -1185,6 +1188,7 @@
     <string name="server_settings_invites_created_by_in_channel">Created by %1$s for %2$s</string>
     <string name="server_settings_invites_unknown_user">Unknown user</string>
     <string name="server_settings_invites_unknown_channel">Unknown channel</string>
+    <string name="server_settings_invites_empty_title">No active invites</string>
     <string name="server_settings_invites_empty">This server does not have any active invites yet.</string>
     <string name="server_settings_invites_no_channels">Create a text channel before creating an invite.</string>
     <string name="server_settings_invites_retry">Retry</string>
@@ -1227,6 +1231,8 @@
     <string name="server_settings_roles_undo">Undo</string>
     <string name="server_settings_roles_create_error">There was an error creating the role.</string>
     <string name="server_settings_roles_reorder_error">There was an error changing the role order.</string>
+    <string name="server_settings_roles_empty_title">No server roles</string>
+    <string name="server_settings_roles_empty_description">Roles created for this server will appear here.</string>
     <plurals name="server_settings_roles_count">
         <item quantity="one">%1$d server role</item>
         <item quantity="other">%1$d server roles</item>

@@ -66,6 +66,7 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.createServerRole
 import chat.stoat.api.routes.server.reorderServerRoles
 import chat.stoat.composables.server.RoleColourIndicator
+import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.internals.extensions.rememberServerPermissions
@@ -343,6 +344,16 @@ fun ServerSettingsRoles(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 )
+            }
+
+            if (displayedEntries.isEmpty()) {
+                item(key = "empty") {
+                    ServerSettingsEmptyState(
+                        icon = R.drawable.ic_flag_24dp,
+                        title = R.string.server_settings_roles_empty_title,
+                        description = R.string.server_settings_roles_empty_description,
+                    )
+                }
             }
 
             itemsIndexed(displayedEntries, key = { _, entry -> entry.id }) { index, entry ->

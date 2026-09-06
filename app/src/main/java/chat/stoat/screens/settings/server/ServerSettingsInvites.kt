@@ -70,6 +70,7 @@ import chat.stoat.api.routes.invites.deleteInvite
 import chat.stoat.api.routes.invites.fetchServerInvites
 import chat.stoat.api.routes.user.fetchUser
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
@@ -471,13 +472,10 @@ private fun InviteList(
             }
         } else if (invites.isEmpty()) {
             item(key = "empty") {
-                Text(
-                    text = stringResource(R.string.server_settings_invites_empty),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp, vertical = 64.dp),
+                ServerSettingsEmptyState(
+                    icon = R.drawable.ic_link_24dp,
+                    title = R.string.server_settings_invites_empty_title,
+                    description = R.string.server_settings_invites_empty,
                 )
             }
         } else {

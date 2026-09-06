@@ -72,6 +72,7 @@ import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User
@@ -579,13 +580,10 @@ private fun EmojiList(
 
         if (emojis.isEmpty()) {
             item(key = "empty") {
-                Text(
-                    text = stringResource(R.string.server_settings_emojis_empty),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp, vertical = 64.dp),
+                ServerSettingsEmptyState(
+                    icon = R.drawable.ic_mood_24dp,
+                    title = R.string.server_settings_emojis_empty_title,
+                    description = R.string.server_settings_emojis_empty,
                 )
             }
         } else {
