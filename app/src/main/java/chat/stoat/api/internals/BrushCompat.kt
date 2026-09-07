@@ -82,6 +82,37 @@ internal fun parseGradientParts(gradient: String): List<String>? {
     return parts
 }
 
+private val RADIAL_GRADIENT_DESCRIPTOR_TOKENS = setOf(
+    "at",
+    "circle",
+    "ellipse",
+    "closest-corner",
+    "closest-side",
+    "farthest-corner",
+    "farthest-side"
+)
+private val RADIAL_GRADIENT_SIZE_TOKEN = Regex(
+    "[+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:%|[a-z]+)",
+    RegexOption.IGNORE_CASE
+)
+
+internal fun radialGradientColourParts(parts: List<String>): List<String> {
+    val firstToken = parts.firstOrNull()
+        ?.lowercase()
+        ?.split(Regex("\\s+"))
+        ?.firstOrNull()
+        ?: return parts
+
+    val hasDescriptor = firstToken in RADIAL_GRADIENT_DESCRIPTOR_TOKENS ||
+        RADIAL_GRADIENT_SIZE_TOKEN.matches(firstToken)
+
+    return if (hasDescriptor) {
+        parts.drop(1)
+    } else {
+        parts
+    }
+}
+
 internal fun <T> normalizeGradientStops(stops: List<Pair<Float?, T>>): List<Pair<Float, T>> {
     if (stops.isEmpty()) return emptyList()
 
@@ -180,8 +211,7 @@ object BrushCompat {
         val parts = parseGradientParts(gradient)
             ?: return Brush.solidColor(LocalContentColor.current)
 
-        // Parse color stops
-        val colourParts = parts.drop(1)
+        val colourParts = radialGradientColourParts(parts)
         colourParts.forEach { part ->
             val gradientStop = parseGradientStop(part)
             val colorPart = gradientStop.colour
@@ -337,8 +367,7 @@ class InstancedBrushCompat(
         val stops = mutableListOf<Pair<Float?, Color>>()
         val parts = parseGradientParts(gradient) ?: return Brush.solidColor(defaultColour)
 
-        // Parse color stops
-        val colourParts = parts.drop(1)
+        val colourParts = radialGradientColourParts(parts)
         colourParts.forEach { part ->
             val gradientStop = parseGradientStop(part)
             val colorPart = gradientStop.colour
