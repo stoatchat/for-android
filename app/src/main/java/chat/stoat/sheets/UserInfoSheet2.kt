@@ -21,7 +21,9 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -44,7 +46,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +59,7 @@ import chat.stoat.api.internals.ULID
 import chat.stoat.api.internals.has
 import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.server.patchMember
+import chat.stoat.api.routes.user.fetchUser
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.FeatureFlags
@@ -68,6 +70,7 @@ import chat.stoat.composables.generic.NonIdealState
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.RawUserOverview
+import chat.stoat.composables.screens.settings.RawUserOverview2
 import chat.stoat.composables.screens.settings.UserButtons
 import chat.stoat.composables.sheets.SheetTile
 import chat.stoat.core.model.schemas.Profile
@@ -92,7 +95,7 @@ private fun canAssignRolesToMember(serverId: String, targetUserId: String): Bool
     return targetRank > selfRank
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun UserInfoSheet2(
     userId: String,
@@ -113,6 +116,20 @@ fun UserInfoSheet2(
     var updatingRoleId by remember(serverId, userId) { mutableStateOf<String?>(null) }
     val rateLimitMessage = stringResource(R.string.rate_limit_toast)
     val roleUpdateError = stringResource(R.string.user_info_sheet_role_update_failed)
+    var userFetchFinished by remember(userId) { mutableStateOf(user != null) }
+
+    LaunchedEffect(userId) {
+        if (StoatAPI.userCache[userId] == null) {
+            try {
+                fetchUser(userId)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                error.printStackTrace()
+            }
+        }
+        userFetchFinished = true
+    }
 
     fun updateRole(roleId: String, assigned: Boolean) {
         val currentServerId = serverId ?: return
@@ -147,43 +164,54 @@ fun UserInfoSheet2(
         }
     }
 
-    var profile by remember { mutableStateOf<Profile?>(null) }
-    var profileNotFound by remember { mutableStateOf(false) }
-
-    LaunchedEffect(user) {
-        try {
-            user?.id?.let { fetchUserProfile(it) }?.let { profile = it }
-        } catch (e: Exception) {
-            if (e.message == "NotFound") {
-                profileNotFound = true
+    if (user == null) {
+        if (userFetchFinished) {
+            NonIdealState(
+                icon = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_error_24dp),
+                        contentDescription = null,
+                        modifier = Modifier.size(it)
+                    )
+                },
+                title = {
+                    Text(
+                        text = stringResource(R.string.user_info_sheet_user_not_found)
+                    )
+                },
+                description = {
+                    Text(
+                        text = stringResource(R.string.user_info_sheet_user_not_found_description)
+                    )
+                }
+            )
+            Spacer(Modifier.height(20.dp))
+        } else {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) {
+                LoadingIndicator()
             }
-            e.printStackTrace()
         }
+        return
     }
 
-    if (user == null) {
-        // TODO fetch user in this scenario
-        NonIdealState(
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_error_24dp),
-                    contentDescription = null,
-                    modifier = Modifier.size(it)
-                )
-            },
-            title = {
-                Text(
-                    text = stringResource(R.string.user_info_sheet_user_not_found)
-                )
-            },
-            description = {
-                Text(
-                    text = stringResource(R.string.user_info_sheet_user_not_found_description)
-                )
-            }
-        )
-        Spacer(Modifier.height(20.dp))
-        return
+    var profile by remember(userId) { mutableStateOf<Profile?>(null) }
+    var profileLoading by remember(userId) { mutableStateOf(true) }
+
+    LaunchedEffect(userId) {
+        try {
+            profile = fetchUserProfile(userId)
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Exception) {
+            error.printStackTrace()
+        } finally {
+            profileLoading = false
+        }
     }
 
     var showUserCard by remember { mutableStateOf(false) }
@@ -228,7 +256,7 @@ fun UserInfoSheet2(
         }
         item(key = "overview", span = StaggeredGridItemSpan.FullLine) {
             Box {
-                RawUserOverview(user, profile, internalPadding = false)
+                RawUserOverview2(user, profile)
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopEnd)

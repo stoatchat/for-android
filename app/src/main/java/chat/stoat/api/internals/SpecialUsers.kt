@@ -49,7 +49,7 @@ object SpecialUsers {
             )
         ), // jen
         "01FDVES092RQR3YTY4JBGA0VCA" to TeamMemberFlair.Brush(
-            AndroidBrush.verticalGradient(
+            AndroidBrush.horizontalGradient(
                 listOf(
                     Color(0xFFBB4681),
                     Color(0xFF9CA87F)
@@ -79,7 +79,7 @@ object SpecialUsers {
             )
         ), // insert
         "01FD58YK5W7QRV5H3D64KTQYX3" to TeamMemberFlair.Brush(
-            AndroidBrush.verticalGradient(
+            AndroidBrush.horizontalGradient(
                 listOf(
                     Color(0xFF980000),
                     Color(0xFF1000AF)
