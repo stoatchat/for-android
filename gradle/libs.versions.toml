@@ -1,7 +1,7 @@
 [versions]
-compileSdk = "36"
+compileSdk = "37"
 minSdk = "26"
-targetSdk = "36"
+targetSdk = "37"
 
 kotlin = "2.3.10"
 kotlin-serialization = "1.10.0"
