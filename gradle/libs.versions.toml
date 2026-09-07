@@ -5,8 +5,8 @@ targetSdk = "37"
 
 kotlin = "2.3.10"
 kotlin-serialization = "1.10.0"
-ksp = "2.3.5"
-agp = "9.1.0"
+ksp = "2.3.6"
+agp = "9.3.2"
 google-services = "4.4.4"
 sentry = "8.13.2" # This is separate from the gradle plugin version which is defined ad hoc below
 sqldelight = "2.3.2"
