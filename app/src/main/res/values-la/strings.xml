@@ -55,12 +55,7 @@
     <string name="mfa_password_lead">Inscribe tesseram tuam ut pergat.</string>
     <string name="about">De</string>
     <string name="about_full_name">Revolt in Android</string>
-    <string name="about_tab_version">Versio</string>
-    <string name="about_tab_details">Singula</string>
     <string name="oss_attribution">Attributio OSS</string>
-    <string name="oss_attribution_body">Revolt auctum est auxilio horum mirabilium proiectorum open-source.</string>
-    <string name="oss_attribution_warning">Index infra automatice generatur. Potest esse incompletus vel inexactus.</string>
-    <string name="oss_attribution_generation_date">Ultima update: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Tange ad licentiam spectandam</string>
     <string name="comingsoon_toast">Ignosce, haec facultas nondum parata est.</string>
     <string name="typing_one">%1$s scribit…</string>
@@ -98,8 +93,6 @@
     <string name="overview_screen_share_profile">Communica Profilum</string>
     <string name="overview_screen_changelog">Index Mutationum</string>
     <string name="overview_screen_changelog_description">Revolt numquam dormit, specta ut videas quid in operibus sit</string>
-    <string name="overview_screen_feedback">Praebe Responsa</string>
-    <string name="overview_screen_feedback_description">Aliquid dicere vis? Totum auribus sumus</string>
     <string name="user_card_tap_to_copy">Tange ut copiares</string>
     <string name="user_card_data_point_display_name">%1$d.Nomen</string>
     <string name="user_card_data_point_username">%1$d.Nomen usoris</string>
@@ -175,7 +168,6 @@
     <string name="back">← Redi</string>
     <string name="rate_limit_toast">Ibi mitescere! Accipe tempus tuum cum eo.</string>
     <string name="mfa_recovery_lead">Inscribe unum ex codicibus recuperationis tuis.</string>
-    <string name="oss_attribution_body_2">Gratias agimus d(e) prosecutatoribus horum proiectorum quod opus suum mundo praebuerunt.</string>
     <string name="too_many_replies">Nunc tantum %1$d nuntios respondere potes.</string>
     <string name="home_join_jenvolt_description">Jenvolt est elit cursus spatium ad omnia Android app et plus. Support, feedback go here. Forsitan novas lineas experiri licebit! 👀</string>
     <string name="no_channels_body">Nullae sunt viae in hoc servo. Ne etiam via ad salutationes. Quam iniurium!</string>
@@ -518,7 +510,6 @@
     <string name="settings_appearance">Aspectus</string>
     <string name="settings_appearance_theme">Thema</string>
     <string name="settings_appearance_theme_none">Systema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Lux</string>
     <string name="settings_appearance_theme_amoled">Niger purus</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -570,10 +561,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (ignotum)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Restituere configurationes %1$s</string>
     <string name="settings_feedback">Sententia</string>
-    <string name="settings_changelogs">Index mutationum</string>
-    <string name="settings_changelogs_new_header">Quid coquit? ✨</string>
-    <string name="settings_changelogs_historical_version_header">Index Mutationum pro %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">illa versio</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_language_auto">Systema Praedefinitum</string>
     <string name="channel_settings">Configurationes Canalis</string>

@@ -182,7 +182,6 @@
     <string name="settings_appearance">Utseende</string>
     <string name="settings_appearance_theme">Drakt</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Lys</string>
     <string name="settings_appearance_theme_amoled">Helt Svart</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -216,11 +215,6 @@
     <string name="service_health_alert_actions_default">Lær mer</string>
     <string name="could_not_log_in_body">Du kan ha logget ut fra en annen enhet, eller internettforbindelsen din kan være nede.</string>
     <string name="could_not_log_in_cta_logout">Logg ut</string>
-    <string name="about_tab_version">Versjon</string>
-    <string name="about_tab_details">Detaljer</string>
-    <string name="oss_attribution_body_2">Vi er takknemlige overfor utviklerne av disse prosjektene for å ha gjort arbeidet sitt tilgjengelig for verden.</string>
-    <string name="oss_attribution_warning">Listen nedenfor er automatisk generert. Den kan være ufullstendig eller unøyaktig.</string>
-    <string name="oss_attribution_generation_date">Sist oppdatert: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Trykk for å se lisens</string>
     <string name="pick_emoji_alt">Velg emoji</string>
     <string name="badge_webhook_alt">Webhook</string>
@@ -303,8 +297,6 @@
     <string name="channel_age_gate_dob_year">År</string>
     <string name="channel_age_gate_dob_proceed">Fortsett</string>
     <string name="overview_screen_changelog">Endringslogg</string>
-    <string name="overview_screen_feedback">Gi tilbakemelding</string>
-    <string name="overview_screen_feedback_description">Har du noe å si? Vi er lutter øre</string>
     <string name="user_card_tap_to_copy">Trykk for å kopiere</string>
     <string name="friends">Venner</string>
     <string name="friends_incoming_requests">Innkommende forespørsler</string>
@@ -525,10 +517,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Serverrekkefølge</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt for Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (ukjent)</string>
-    <string name="settings_changelogs">Endringslogger</string>
-    <string name="settings_changelogs_new_header">Hva har skjedd ✨</string>
-    <string name="settings_changelogs_historical_version_header">Endringslogg for %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">den versjonen</string>
     <string name="settings_language">Språk</string>
     <string name="settings_language_auto">Systemstandard</string>
     <string name="channel_settings">Kanalinnstillinger</string>

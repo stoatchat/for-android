@@ -168,7 +168,6 @@
     <string name="settings_category_miscellaneous">Különféleségek</string>
     <string name="settings_appearance_theme">Színséma</string>
     <string name="settings_appearance_theme_none">Rendszer</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Világos</string>
     <string name="settings_appearance_theme_amoled">Tisztán fekete</string>
     <string name="settings_feedback">Visszajelzés</string>
@@ -214,15 +213,9 @@
     <string name="user_info_sheet_cancel_request">Visszavonom a jelölést</string>
     <string name="settings_profile_custom_background">Egyéni háttér</string>
     <string name="settings_appearance_colour_overrides_on_primary">Aktív elsődleges</string>
-    <string name="oss_attribution_body">A Revoltot ezeknek a remek, nyílt foráskódú projekteknek köszönhetően készítettük el.</string>
-    <string name="oss_attribution_body_2">Hálásak vagyunk a fejlesztőiknek, hogy elérhetővé tették munkájukat a világ számára.</string>
-    <string name="oss_attribution_warning">Az alábbi listát automatikusan hozták létre, ezért hiányos vagy pontatlan lehet.</string>
-    <string name="oss_attribution_generation_date">Legutóbb frissítve: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Koppints a licenchez</string>
     <string name="about_full_name">Androidos Revolt</string>
     <string name="about_brought_to_you_by">❤️-tel készítette el Neked a Revolt csapata.</string>
-    <string name="about_tab_version">Verzió</string>
-    <string name="about_tab_details">Részletek</string>
     <string name="pick_emoji_alt">Válassz emodzsit</string>
     <string name="emoji_category_people">Emberek és részei</string>
     <string name="emoji_category_food">Étel és ital</string>
@@ -356,10 +349,6 @@
     <string name="settings_appearance_colour_overrides_scrim">Kiemelés</string>
     <string name="settings_appearance_colour_overrides_export">Exportál</string>
     <string name="settings_appearance_colour_overrides_import">Importál</string>
-    <string name="settings_changelogs">Változások</string>
-    <string name="settings_changelogs_new_header">Mi készül ✨</string>
-    <string name="settings_changelogs_historical_version_header">%1$s változásai</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">az a verzió</string>
     <string name="home_join_jenvolt_description">A Jenvolt a fejlesztők által vitt, androidos appal és minden mással kapcsolatos hely. Itt kérhetsz segítséget és jelezhetsz vissza nekünk. Lehet, új feature-öket is kipróbálhatsz majd! 👀</string>
     <string name="message_field_denied_platform_moderation">Ez egy bizalmas csatorna, ahonnan a moderáló csapatunk küld értesítéseket. Ide nem tudsz üzenetet írni.</string>
     <string name="status_focus_explainer">Nem kapsz értesítéseket az üzenetekről, viszont az @említésekről szólóakat megkapod.</string>
@@ -514,8 +503,6 @@
     <string name="overview_screen_share_profile">Profil Megosztása</string>
     <string name="overview_screen_changelog">Változásnapló</string>
     <string name="overview_screen_changelog_description">A Revolt sohasem alszik. Tekintsd meg min dolgoztunk mostanában</string>
-    <string name="overview_screen_feedback">Adj visszajelzést</string>
-    <string name="overview_screen_feedback_description">Esetleg van mondanivalód? Szívesen meghallgatnánk</string>
     <string name="user_card_tap_to_copy">Koppints a másoláshoz</string>
     <string name="user_card_data_point_display_name">%1$d.Név</string>
     <string name="user_card_data_point_username">%1$d.Felhasználónév</string>
