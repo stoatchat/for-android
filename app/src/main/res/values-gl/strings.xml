@@ -37,7 +37,6 @@
     <string name="mfa_type_otp">Usa un contrasinal de un só uso</string>
     <string name="mfa_recovery_lead">Escribe un dos teus códigos de recuperación.</string>
     <string name="mfa_password_header">Escribe o teu contrasinal</string>
-    <string name="oss_attribution_body_2">Dámoslle as grazas aos desenvolvedores destes proxectos por poñer o seu traballo a disposición de todo o mundo.</string>
     <string name="show_password">Mostrar o contrasinal</string>
     <string name="hide_password">Ocultar o contrasinal</string>
     <string name="register_password_rules">Mínimo oito caracteres. Evita os contrasinais comúns. Recomendámoste usar símbolos e números.</string>
@@ -64,12 +63,7 @@
     <string name="mfa_password_lead">Escribe o teu contrasinal para continuar.</string>
     <string name="about_full_name">Revolt en Android</string>
     <string name="about">Sobre nós</string>
-    <string name="about_tab_version">Versión</string>
-    <string name="about_tab_details">Detalles</string>
     <string name="oss_attribution">Atribución de código aberto</string>
-    <string name="oss_attribution_body">Revolt está feito coa axuda destes marabillosos proxectos de código aberto.</string>
-    <string name="oss_attribution_warning">A lista de embaixo xerouse automaticamente. Pode estar incompleta ou ter erros.</string>
-    <string name="oss_attribution_generation_date">Última actualización: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Toca para ver a licenza</string>
     <string name="comingsoon_toast">Sentímolo, esta función aínda non está lista.</string>
     <string name="typing_one">%1$s está escribindo…</string>

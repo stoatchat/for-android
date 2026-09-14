@@ -10,7 +10,6 @@
     <string name="mfa_type_recovery">از یک کد بازیابی استفاده کنید</string>
     <string name="mfa_recovery_lead">یکی از کدهای بازیابی خود را وارد کنید.</string>
     <string name="about_brought_to_you_by">با ❤️ توسط تیم ریولت برای شما آورده شده است.</string>
-    <string name="oss_attribution_body_2">ما از توسعه دهندگان این پروژه ها به خاطر در دسترس قرار دادن کار خود در جهان سپاسگزاریم.</string>
     <string name="typing_many">%1$s در حال تایپ…</string>
     <string name="remove_attachment_alt">حذف پیوست</string>
     <string name="home_join_jenvolt_description">جنولت فضایی است که توسط توسعه‌دهندگان برای همه برنامه‌های اندروید و موارد دیگر اجرا می‌شود. پشتیبانی، بازخورد به اینجا بروید. شاید بتوانید ویژگی های جدید را امتحان کنید! 👀</string>
@@ -63,11 +62,6 @@
     <string name="mfa_password_lead">برای ادامه رمز عبور خود را وارد کنید.</string>
     <string name="about">درباره</string>
     <string name="about_full_name">ریولت‏ در اندروید</string>
-    <string name="about_tab_version">نسخه</string>
-    <string name="about_tab_details">جزئیات</string>
-    <string name="oss_attribution_body">ریولت با کمک این پروژه های متن باز عالی ساخته شده است.</string>
-    <string name="oss_attribution_warning">لیست زیر به طور خودکار ایجاد می شود. ممکن است ناقص یا نادرست باشد.</string>
-    <string name="oss_attribution_generation_date">آخرین به روز رسانی: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">برای مشاهده مجوز ضربه بزنید</string>
     <string name="comingsoon_toast">با عرض پوزش، این ویژگی هنوز آماده نیست.</string>
     <string name="typing_one">%1$s در حال تایپ است…</string>
@@ -175,7 +169,6 @@
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_colour_overrides_on_background">در پس زمینه</string>
     <string name="settings_chat_interactive_embeds_description">نشان های تعاملی به شما این امکان را می‌دهند که با برخی از انواع پیوندها مستقیماً در داخل چت تعامل داشته باشید. برای مثال، می‌توانید ویدیوهای YouTube را پخش کنید یا آلبوم‌ها را از Apple Music پیش‌نمایش کنید.</string>
-    <string name="settings_changelogs_new_header">چه چیزی در حال پختن بود ✨</string>
     <string name="settings_appearance_avatar_shape_description">درجه گرد را برای تصاویر نمایه، از جمله در چت و نمایه ها انتخاب کنید. این برای همه کاربران صدق می کند.</string>
     <string name="channel_settings_overview">نمای کلی</string>
     <string name="channel_settings_overview_description">توضیحات کانال</string>
@@ -457,7 +450,6 @@
     <string name="settings_sessions_log_out_other">از سایر نشست ها خارج شوید</string>
     <string name="settings_sessions_log_out_other_description">این دستگاه وارد خواهد ماند.</string>
     <string name="settings_appearance_theme">تم</string>
-    <string name="settings_appearance_theme_revolt">ریولت</string>
     <string name="settings_appearance_theme_light">روشن</string>
     <string name="settings_appearance_theme_amoled">مشکی خالص</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (پشتیبانی نشده)</string>
@@ -491,9 +483,6 @@
     <string name="settings_chat_interactive_embeds_apple_music">اپل موزیک</string>
     <string name="settings_feedback">بازخورد</string>
     <string name="settings_feedback_description">برای ارائه بازخورد یا پیشنهادات و گزارش اشکالات به سرور ریولت بپیوندید.</string>
-    <string name="settings_changelogs">تغییرات ها</string>
-    <string name="settings_changelogs_historical_version_header">تغییر برای %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">آن نسخه</string>
     <string name="channel_settings">تنظیمات کانال</string>
     <string name="channel_settings_header">#%1$s</string>
     <string name="channel_settings_overview_update_info_error_fallback">هنگام به روز رسانی کانال خطایی روی داد.</string>
@@ -537,8 +526,6 @@
     <string name="overview_screen_share_profile">اشتراک پروفایل</string>
     <string name="overview_screen_changelog">تغییرات</string>
     <string name="overview_screen_changelog_description">ریولت هرگز نمی خوابد، نگاهی بیندازید تا ببینید چه چیزی در کار بوده است</string>
-    <string name="overview_screen_feedback">ارائه بازخورد</string>
-    <string name="overview_screen_feedback_description">چیزی برای گفتن دارید؟ ما همه گوش هستیم</string>
     <string name="user_info_sheet_webhook_learn_more">بیشتر بدانید</string>
     <string name="hide_password">پنهان کردن رمز عبور</string>
     <string name="show_password">نمایش رمز عبور</string>
