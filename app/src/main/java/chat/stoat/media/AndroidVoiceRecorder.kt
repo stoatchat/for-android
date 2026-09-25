@@ -153,8 +153,8 @@ class AndroidVoiceRecorder(private val context: Context) : VoiceRecorder {
             }
 
             val durationMillis = readDurationMillis(finalizedFile) ?: elapsedDuration
-            val waveform = synchronized(amplitudeSamplesLock) {
-                buildWaveform(amplitudeSamples.toList())
+            val amplitudes = synchronized(amplitudeSamplesLock) {
+                amplitudeSamples.toList()
             }
 
             return Recording(
@@ -162,7 +162,8 @@ class AndroidVoiceRecorder(private val context: Context) : VoiceRecorder {
                 mimeType = format.mimeType,
                 fileExtension = format.fileExtension,
                 durationMillis = durationMillis,
-                waveform = waveform,
+                waveform = buildWaveform(amplitudes),
+                isSilent = (amplitudes.maxOrNull() ?: 0) < VoiceRecorder.SILENCE_AMPLITUDE_THRESHOLD,
             )
         } finally {
             file.delete()

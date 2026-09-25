@@ -20,6 +20,7 @@ data class Recording(
     val fileExtension: String,
     val durationMillis: Long,
     val waveform: List<Int>,
+    val isSilent: Boolean,
 ) {
     fun toMessageContent(): String = buildJsonObject {
         put("x", "chat.stoat.VoiceMessage")
@@ -56,7 +57,7 @@ internal fun parseVoiceMessageMetadata(content: String?): VoiceMessageMetadata? 
         duration.isString ||
         durationMillis == null ||
         durationMillis !in VoiceRecorder.MIN_DURATION_MILLIS..
-            VoiceRecorder.MAX_DURATION_MILLIS.toLong()
+        VoiceRecorder.MAX_DURATION_MILLIS.toLong()
     ) {
         return null
     }
@@ -81,6 +82,7 @@ interface VoiceRecorder {
         const val POST_ROLL_DURATION_MILLIS = 300L
         const val MAX_DURATION_MILLIS = 60_000 * 15 // 15 minutes
         const val WAVEFORM_SAMPLE_COUNT = 64
+        const val SILENCE_AMPLITUDE_THRESHOLD = 1_000
     }
 }
 

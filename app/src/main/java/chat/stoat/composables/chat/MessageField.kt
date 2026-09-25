@@ -91,6 +91,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isAltPressed
@@ -192,35 +193,40 @@ private fun VoiceRecordingStatus(
             style = MaterialTheme.typography.bodyMedium
         )
         Spacer(modifier = Modifier.weight(1f))
-        AnimatedContent(
-            targetState = when {
-                isFinishing -> 2
-                isCancelArmed -> 1
-                else -> 0
-            },
-            transitionSpec = {
-                fadeIn(tween(150)) togetherWith fadeOut(tween(100))
-            },
-            label = "VoiceRecordingInstruction"
-        ) { instructionState ->
-            Text(
-                text = stringResource(
-                    when (instructionState) {
-                        2 -> R.string.voice_message_finishing
-                        1 -> R.string.voice_message_release_to_cancel
-                        else -> R.string.voice_message_slide_to_cancel
-                    }
-                ),
-                color = if (instructionState == 1) {
-                    MaterialTheme.colorScheme.error
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .offset(x = (-24 * cancelProgress).dp)
-                    .alpha(1f - (cancelProgress * 0.25f))
-            )
+        val instruction = when {
+            isFinishing -> R.string.voice_message_finishing
+            isCancelArmed -> R.string.voice_message_release_to_cancel
+            else -> R.string.voice_message_slide_to_cancel
+        }
+        Box(
+            contentAlignment = Alignment.CenterEnd,
+            modifier = Modifier.graphicsLayer {
+                translationX = -24.dp.toPx() * cancelProgress
+                alpha = 1f - (cancelProgress * 0.25f)
+            }
+        ) {
+            listOf(
+                R.string.voice_message_slide_to_cancel,
+                R.string.voice_message_release_to_cancel,
+                R.string.voice_message_finishing,
+            ).forEach { label ->
+                val labelAlpha by animateFloatAsState(
+                    targetValue = if (label == instruction) 1f else 0f,
+                    animationSpec = tween(if (label == instruction) 150 else 100),
+                    label = "VoiceRecordingInstructionAlpha"
+                )
+                Text(
+                    text = stringResource(label),
+                    color = if (label == R.string.voice_message_release_to_cancel) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    maxLines = 1,
+                    modifier = Modifier.graphicsLayer { alpha = labelAlpha }
+                )
+            }
         }
     }
 }
@@ -363,7 +369,15 @@ fun MessageField(
             recording != null &&
             recording.durationMillis >= VoiceRecorder.MIN_DURATION_MILLIS
         ) {
-            pendingVoiceMessage = recording
+            if (recording.isSilent) {
+                Toast.makeText(
+                    context,
+                    R.string.voice_message_silent,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                pendingVoiceMessage = recording
+            }
         }
     }
 

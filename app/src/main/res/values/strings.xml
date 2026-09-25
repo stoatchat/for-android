@@ -133,6 +133,7 @@
     <string name="voice_message_temp_review_title">LGTM?</string>
     <string name="voice_message_temp_review_description">Recorded %1$s of audio, send it?</string>
     <string name="voice_message_discard">Don’t send</string>
+    <string name="voice_message_silent">No audio was picked up. Check your microphone and try again.</string>
     <string name="voice_message_recording_failed">Couldn’t record the voice message.</string>
     <string name="voice_message_microphone_permission_denied">Microphone permission is needed to record a voice message.</string>
     <string name="remove_attachment_alt">Remove attachment</string>
