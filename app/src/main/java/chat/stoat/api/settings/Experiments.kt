@@ -5,12 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import chat.stoat.BuildConfig
 import chat.stoat.StoatApplication
+import chat.stoat.api.StoatAPI
+import chat.stoat.core.model.schemas.UserBadges
+import chat.stoat.core.model.schemas.has
 import chat.stoat.persistence.KVStorage
 
-class ExperimentInstance(default: Boolean) {
+class ExperimentInstance(
+    default: Boolean,
+    private val availability: () -> Boolean = { true }
+) {
     private var _isEnabled by mutableStateOf(default)
+    val isAvailable: Boolean
+        get() = availability()
     val isEnabled: Boolean
-        get() = LoadedSettings.experimentsEnabled && _isEnabled
+        get() = LoadedSettings.experimentsEnabled && isAvailable && _isEnabled
 
     fun setEnabled(enabled: Boolean) {
         _isEnabled = enabled
@@ -29,6 +37,9 @@ object Experiments {
     val usePolar = ExperimentInstance(false)
     val enableServerIdentityOptions = ExperimentInstance(false)
     val showUserSheet2 = ExperimentInstance(false)
+    val voiceMessages = ExperimentInstance(false) {
+        StoatAPI.selfId?.let { StoatAPI.userCache[it] }?.badges.has(UserBadges.Developer)
+    }
 
     suspend fun hydrateWithKv() {
         val kvStorage = KVStorage(StoatApplication.instance)
@@ -47,6 +58,9 @@ object Experiments {
         )
         showUserSheet2.setEnabled(
             kvStorage.getBoolean("exp/showUserSheet2") == true
+        )
+        voiceMessages.setEnabled(
+            kvStorage.getBoolean("exp/voiceMessages") == true
         )
     }
 }

@@ -1,17 +1,40 @@
 package chat.stoat.composables.chat
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.SystemClock
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.ReceiveContentListener
 import androidx.compose.foundation.content.consume
 import androidx.compose.foundation.content.contentReceiver
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +60,7 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -44,21 +68,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -69,7 +100,9 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -81,9 +114,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenDp
 import chat.stoat.api.internals.BrushCompat
+import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
@@ -91,7 +126,15 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.internals.Autocomplete
+import chat.stoat.media.AndroidVoiceRecorder
+import chat.stoat.media.Recording
+import chat.stoat.media.VoiceRecorder
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
 fun Pair<Int, Int>.asTextRange(): TextRange {
     return TextRange(this.first, this.second)
@@ -108,6 +151,78 @@ private fun TextFieldState.lastWord(): String? {
 
 private fun CharSequence.lastWordStartsAt(): Int {
     return this.lastIndexOf(" ")
+}
+
+@Composable
+private fun VoiceRecordingStatus(
+    elapsedMillis: Long,
+    isFinishing: Boolean,
+    cancelProgress: Float,
+    isCancelArmed: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val pulseTransition = rememberInfiniteTransition(label = "VoiceRecordingPulse")
+    val pulseAlpha by pulseTransition.animateFloat(
+        initialValue = 0.4f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 700),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "VoiceRecordingPulseAlpha"
+    )
+    val totalSeconds = elapsedMillis / 1_000
+    val duration = "%d:%02d".format(totalSeconds / 60, totalSeconds % 60)
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .alpha(pulseAlpha)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.error)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = duration,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        AnimatedContent(
+            targetState = when {
+                isFinishing -> 2
+                isCancelArmed -> 1
+                else -> 0
+            },
+            transitionSpec = {
+                fadeIn(tween(150)) togetherWith fadeOut(tween(100))
+            },
+            label = "VoiceRecordingInstruction"
+        ) { instructionState ->
+            Text(
+                text = stringResource(
+                    when (instructionState) {
+                        2 -> R.string.voice_message_finishing
+                        1 -> R.string.voice_message_release_to_cancel
+                        else -> R.string.voice_message_slide_to_cancel
+                    }
+                ),
+                color = if (instructionState == 1) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .offset(x = (-24 * cancelProgress).dp)
+                    .alpha(1f - (cancelProgress * 0.25f))
+            )
+        }
+    }
 }
 
 sealed class AutocompleteSuggestion {
@@ -165,8 +280,93 @@ fun MessageField(
     initialValueDirtyMarker: Any = Unit,
     cancelEdit: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit = {},
+    onSendVoiceMessage: ((Recording) -> Boolean)? = null,
     contentBeforeInput: @Composable ColumnScope.() -> Unit = {},
 ) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val voiceRecorder = remember(context) {
+        AndroidVoiceRecorder(context.applicationContext)
+    }
+    var isRecordingVoiceMessage by remember { mutableStateOf(false) }
+    var isFinishingVoiceMessage by remember { mutableStateOf(false) }
+    var pendingVoiceMessage by remember { mutableStateOf<Recording?>(null) }
+    var voiceRecordingStartedAtMillis by remember { mutableLongStateOf(0L) }
+    var voiceRecordingElapsedMillis by remember { mutableLongStateOf(0L) }
+    var voiceRecordingCancelProgress by remember { mutableFloatStateOf(0f) }
+    var isVoiceRecordingCancelArmed by remember { mutableStateOf(false) }
+    val currentSendEnabled by rememberUpdatedState(sendEnabled)
+    val currentDisabled by rememberUpdatedState(disabled)
+
+    val startVoiceRecording: () -> Boolean = {
+        try {
+            voiceRecorder.start()
+            voiceRecordingStartedAtMillis = SystemClock.elapsedRealtime()
+            voiceRecordingElapsedMillis = 0L
+            voiceRecordingCancelProgress = 0f
+            isVoiceRecordingCancelArmed = false
+            isRecordingVoiceMessage = true
+            true
+        } catch (_: Exception) {
+            Toast.makeText(
+                context,
+                R.string.voice_message_recording_failed,
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        }
+    }
+    val requestMicrophonePermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (!granted) {
+            Toast.makeText(
+                context,
+                R.string.voice_message_microphone_permission_denied,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    suspend fun finishVoiceRecording(cancelled: Boolean, heldDurationMillis: Long) {
+        val recording = try {
+            withContext(NonCancellable) {
+                if (
+                    !cancelled &&
+                    heldDurationMillis >= VoiceRecorder.MIN_DURATION_MILLIS
+                ) {
+                    delay(VoiceRecorder.POST_ROLL_DURATION_MILLIS.milliseconds)
+                }
+                voiceRecorder.finish()
+            }
+        } finally {
+            isRecordingVoiceMessage = false
+            isFinishingVoiceMessage = false
+            voiceRecordingCancelProgress = 0f
+            isVoiceRecordingCancelArmed = false
+        }
+
+        if (cancelled) {
+            return
+        }
+
+        if (
+            heldDurationMillis >= VoiceRecorder.MIN_DURATION_MILLIS &&
+            recording == null
+        ) {
+            Toast.makeText(
+                context,
+                R.string.voice_message_recording_failed,
+                Toast.LENGTH_SHORT
+            ).show()
+        } else if (
+            recording != null &&
+            recording.durationMillis >= VoiceRecorder.MIN_DURATION_MILLIS
+        ) {
+            pendingVoiceMessage = recording
+        }
+    }
+
     val placeholderResource = when (channelType) {
         ChannelType.DirectMessage -> R.string.message_field_placeholder_dm
         ChannelType.Group -> R.string.message_field_placeholder_group
@@ -193,6 +393,39 @@ fun MessageField(
     ) { visible ->
         if (visible) 0.dp else 48.dp
     }
+    val voiceMicContainerColor by animateColorAsState(
+        targetValue = if (isRecordingVoiceMessage) {
+            MaterialTheme.colorScheme.errorContainer
+        } else {
+            Color.Transparent
+        },
+        animationSpec = tween(140),
+        label = "VoiceMicContainerColor"
+    )
+    val voiceMicContentColor by animateColorAsState(
+        targetValue = if (isRecordingVoiceMessage) {
+            MaterialTheme.colorScheme.onErrorContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+        },
+        animationSpec = tween(140),
+        label = "VoiceMicContentColor"
+    )
+    val voiceAuxiliaryContentColor by animateColorAsState(
+        targetValue = MaterialTheme.colorScheme.onSurface.copy(
+            alpha = if (isRecordingVoiceMessage) 0.24f else 0.5f
+        ),
+        animationSpec = tween(140),
+        label = "VoiceAuxiliaryContentColor"
+    )
+    val voiceMicScale by animateFloatAsState(
+        targetValue = if (isRecordingVoiceMessage) 1.08f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioNoBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "VoiceMicScale"
+    )
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -221,8 +454,6 @@ fun MessageField(
     LaunchedEffect(initialValue, initialValueDirtyMarker) {
         textFieldState.setTextAndPlaceCursorAtEnd(initialValue)
     }
-
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(textFieldState.text) {
         onValueChange(textFieldState.text.toString())
@@ -277,6 +508,50 @@ fun MessageField(
         } else {
             focusManager.clearFocus()
         }
+    }
+
+    LaunchedEffect(isRecordingVoiceMessage) {
+        while (isRecordingVoiceMessage) {
+            voiceRecordingElapsedMillis =
+                SystemClock.elapsedRealtime() - voiceRecordingStartedAtMillis
+            delay(100.milliseconds)
+        }
+    }
+
+    pendingVoiceMessage?.let { recording ->
+        AlertDialog(
+            onDismissRequest = {
+                pendingVoiceMessage = null
+            },
+            title = {
+                Text(stringResource(R.string.voice_message_temp_review_title))
+            },
+            text = {
+                val totalSeconds = recording.durationMillis / 1_000
+                val duration = "%d:%02d".format(totalSeconds / 60, totalSeconds % 60)
+                Text(stringResource(R.string.voice_message_temp_review_description, duration))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (onSendVoiceMessage?.invoke(recording) != false) {
+                            pendingVoiceMessage = null
+                        }
+                    }
+                ) {
+                    Text(stringResource(R.string.send_alt))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        pendingVoiceMessage = null
+                    }
+                ) {
+                    Text(stringResource(R.string.voice_message_discard))
+                }
+            }
+        )
     }
 
     val messageFieldShape = RoundedCornerShape(28.dp)
@@ -526,107 +801,235 @@ fun MessageField(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                // Note: There is an assumption that editing a message implies canAttach = false and editMode = true
-                AnimatedVisibility(canAttach) {
+                    // Note: There is an assumption that editing a message implies canAttach = false and editMode = true
+                    AnimatedVisibility(canAttach) {
+                        Icon(
+                            Icons.Default.Add,
+                            tint = voiceAuxiliaryContentColor,
+                            contentDescription = stringResource(id = R.string.add_attachment_alt),
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(32.dp)
+                                .clickable(enabled = !isRecordingVoiceMessage) {
+                                    if (!editMode) {
+                                        // hide keyboard because it's annoying
+                                        focusManager.clearFocus()
+                                        onAddAttachment()
+                                    }
+                                }
+                                .padding(4.dp)
+                                .testTag("add_attachment")
+                        )
+                    }
+
+                    BasicTextField(
+                        state = textFieldState,
+                        textStyle = LocalTextStyle.current.copy(
+                            color = if (failedValidation) {
+                                MaterialTheme.colorScheme.error
+                            } else LocalContentColor.current
+                        ),
+                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.None,
+                            showKeyboardOnFocus = false
+                        ),
+                        readOnly = isRecordingVoiceMessage,
+                        modifier = Modifier
+                            .weight(1f)
+                            .heightIn(max = 128.dp)
+                            .verticalScroll(rememberScrollState())
+                            .onFocusChanged {
+                                onFocusChange(it.isFocused)
+                            }
+                            .focusRequester(focusRequester)
+                            .contentReceiver(receiveContentListener)
+                            .onKeyEvent {
+                                if (it.type == KeyEventType.KeyUp) {
+                                    when (it.key) {
+                                        Key.Enter if !it.isShiftPressed &&
+                                                !it.isAltPressed &&
+                                                it.isCtrlPressed &&
+                                                !it.isMetaPressed -> {
+                                            if (sendEnabled) {
+                                                onSendMessage()
+                                            }
+                                            return@onKeyEvent true
+                                        }
+
+                                        Key.Escape if !it.isShiftPressed &&
+                                                !it.isAltPressed &&
+                                                !it.isCtrlPressed &&
+                                                !it.isMetaPressed -> {
+                                            cancelEdit()
+                                            return@onKeyEvent true
+                                        }
+                                    }
+                                }
+
+                                return@onKeyEvent false
+                            },
+                        decorator = { innerTextField ->
+                            Box(Modifier.padding(horizontal = 16.dp, vertical = 18.dp)) {
+                                innerTextField()
+                                AnimatedContent(
+                                    targetState = isRecordingVoiceMessage,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.CenterStart,
+                                    transitionSpec = {
+                                        (fadeIn(tween(160)) + scaleIn(
+                                            initialScale = 0.97f,
+                                            animationSpec = spring(
+                                                dampingRatio = Spring.DampingRatioNoBouncy,
+                                                stiffness = Spring.StiffnessMedium
+                                            )
+                                        )).togetherWith(
+                                            fadeOut(tween(100)) + scaleOut(
+                                                targetScale = 0.97f,
+                                                animationSpec = tween(100)
+                                            )
+                                        )
+                                    },
+                                    label = "VoiceRecordingContent"
+                                ) { recording ->
+                                    if (recording) {
+                                        VoiceRecordingStatus(
+                                            elapsedMillis = voiceRecordingElapsedMillis,
+                                            isFinishing = isFinishingVoiceMessage,
+                                            cancelProgress = voiceRecordingCancelProgress,
+                                            isCancelArmed = isVoiceRecordingCancelArmed,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    } else if (textFieldState.text.isEmptyOrOnlyNewlines()) {
+                                        Text(
+                                            stringResource(placeholderResource, channelName),
+                                            style = LocalTextStyle.current.copy(
+                                                color = LocalContentColor.current.copy(alpha = 0.5f)
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    )
+
                     Icon(
-                        Icons.Default.Add,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        contentDescription = stringResource(id = R.string.add_attachment_alt),
+                        painter = painterResource(R.drawable.ic_mood_24dp),
+                        tint = voiceAuxiliaryContentColor,
+                        contentDescription = stringResource(id = R.string.pick_emoji_alt),
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(32.dp)
-                            .clickable {
-                                if (!editMode) {
-                                    // hide keyboard because it's annoying
-                                    focusManager.clearFocus()
-                                    onAddAttachment()
-                                }
+                            .clickable(enabled = !isRecordingVoiceMessage) {
+                                focusManager.clearFocus()
+                                onPickEmoji()
                             }
                             .padding(4.dp)
-                            .testTag("add_attachment")
+                            .testTag("pick_emoji")
                     )
-                }
 
-                BasicTextField(
-                    state = textFieldState,
-                    textStyle = LocalTextStyle.current.copy(
-                        color = if (failedValidation) {
-                            MaterialTheme.colorScheme.error
-                        } else LocalContentColor.current
-                    ),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        capitalization = KeyboardCapitalization.Sentences,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.None,
-                        showKeyboardOnFocus = false
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .heightIn(max = 128.dp)
-                        .verticalScroll(rememberScrollState())
-                        .onFocusChanged {
-                            onFocusChange(it.isFocused)
-                        }
-                        .focusRequester(focusRequester)
-                        .contentReceiver(receiveContentListener)
-                        .onKeyEvent {
-                            if (it.type == KeyEventType.KeyUp) {
-                                when (it.key) {
-                                    Key.Enter if !it.isShiftPressed &&
-                                            !it.isAltPressed &&
-                                            it.isCtrlPressed &&
-                                            !it.isMetaPressed -> {
-                                        if (sendEnabled) {
-                                            onSendMessage()
+                    AnimatedVisibility(
+                        visible = Experiments.voiceMessages.isEnabled &&
+                                onSendVoiceMessage != null &&
+                                canAttach &&
+                                !editMode &&
+                                valueIsBlank &&
+                                !forceSendButton
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .size(32.dp)
+                                .scale(voiceMicScale)
+                                .clip(CircleShape)
+                                .background(voiceMicContainerColor)
+                                .pointerInput(Unit) {
+                                    coroutineScope {
+                                        val gestureScope = this
+                                        val cancelDistancePx = 96.dp.toPx()
+
+                                        awaitEachGesture {
+                                            val down = awaitFirstDown(requireUnconsumed = false)
+
+                                            if (
+                                                !currentSendEnabled ||
+                                                currentDisabled ||
+                                                isFinishingVoiceMessage
+                                            ) {
+                                                return@awaitEachGesture
+                                            }
+
+                                            if (
+                                                ContextCompat.checkSelfPermission(
+                                                    context,
+                                                    Manifest.permission.RECORD_AUDIO
+                                                ) != PackageManager.PERMISSION_GRANTED
+                                            ) {
+                                                requestMicrophonePermission.launch(
+                                                    Manifest.permission.RECORD_AUDIO
+                                                )
+                                                return@awaitEachGesture
+                                            }
+
+                                            if (!startVoiceRecording()) {
+                                                return@awaitEachGesture
+                                            }
+                                            down.consume()
+                                            focusManager.clearFocus()
+                                            val recordingStartedAtMillis =
+                                                voiceRecordingStartedAtMillis
+
+                                            var endedNormally = false
+                                            var cancelArmed = false
+                                            try {
+                                                while (true) {
+                                                    val event = awaitPointerEvent()
+                                                    val change = event.changes.firstOrNull {
+                                                        it.id == down.id
+                                                    } ?: break
+                                                    val cancelProgress = (
+                                                            (down.position.x - change.position.x) /
+                                                                    cancelDistancePx
+                                                            ).coerceIn(0f, 1f)
+                                                    cancelArmed = cancelProgress >= 1f
+                                                    voiceRecordingCancelProgress = cancelProgress
+                                                    isVoiceRecordingCancelArmed = cancelArmed
+                                                    change.consume()
+
+                                                    if (!change.pressed) {
+                                                        endedNormally = true
+                                                        break
+                                                    }
+                                                }
+                                            } finally {
+                                                val heldDurationMillis =
+                                                    SystemClock.elapsedRealtime() -
+                                                            recordingStartedAtMillis
+                                                isFinishingVoiceMessage = true
+                                                gestureScope.launch(NonCancellable) {
+                                                    finishVoiceRecording(
+                                                        cancelled = !endedNormally || cancelArmed,
+                                                        heldDurationMillis = heldDurationMillis
+                                                    )
+                                                }
+                                            }
                                         }
-                                        return@onKeyEvent true
-                                    }
-
-                                    Key.Escape if !it.isShiftPressed &&
-                                            !it.isAltPressed &&
-                                            !it.isCtrlPressed &&
-                                            !it.isMetaPressed -> {
-                                        cancelEdit()
-                                        return@onKeyEvent true
                                     }
                                 }
-                            }
-
-                            return@onKeyEvent false
-                        },
-                    decorator = { innerTextField ->
-                        Box(Modifier.padding(horizontal = 16.dp, vertical = 18.dp)) {
-                            if (textFieldState.text.isEmptyOrOnlyNewlines()) {
-                                Text(
-                                    stringResource(placeholderResource, channelName),
-                                    style = LocalTextStyle.current.copy(
-                                        color = LocalContentColor.current.copy(alpha = 0.5f)
-                                    ),
-                                    modifier = Modifier.align(Alignment.CenterStart)
-                                )
-                            }
-                            innerTextField()
+                                .testTag("voice_message")
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_mic_24dp),
+                                tint = voiceMicContentColor,
+                                contentDescription = stringResource(R.string.voice_message_start_recording),
+                                modifier = Modifier.size(24.dp)
+                            )
                         }
                     }
-                )
-
-                Icon(
-                    painter = painterResource(R.drawable.ic_mood_24dp),
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                    contentDescription = stringResource(id = R.string.pick_emoji_alt),
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(32.dp)
-                        .clickable {
-                            focusManager.clearFocus()
-                            onPickEmoji()
-                        }
-                        .padding(4.dp)
-                        .testTag("pick_emoji")
-                )
 
                     Spacer(modifier = Modifier.width(8.dp))
                     Spacer(modifier = Modifier.width(sendButtonSlotWidth))

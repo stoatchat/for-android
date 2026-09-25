@@ -474,6 +474,22 @@ class ChannelScreenViewModel(
     }
 
     fun sendPendingMessage() {
+        sendMessageInternal(contentOverride = null, attachmentsOverride = null)
+    }
+
+    /**
+     * Sends [attachment] with [content] without touching the draft attachments.
+     */
+    fun sendAttachmentMessage(content: String, attachment: FileArgs): Boolean {
+        if (isSending || editingMessage != null) return false
+        sendMessageInternal(contentOverride = content, attachmentsOverride = listOf(attachment))
+        return true
+    }
+
+    private fun sendMessageInternal(
+        contentOverride: String?,
+        attachmentsOverride: List<FileArgs>?,
+    ) {
         if (isSending) return
 
         if (editingMessage != null) {
@@ -490,7 +506,8 @@ class ChannelScreenViewModel(
         // 1. they will be cleared
         // 2. if the user changes the content while the message is being sent we want to persist
         //    the original content
-        val content = MessageProcessor.processOutgoing(draftContent, channel?.server)
+        val content = contentOverride
+            ?: MessageProcessor.processOutgoing(draftContent, channel?.server)
         val replyTo = draftReplyTo.toList()
         val returnToLatestBeforeRenderingSend = canLoadNewer
 
@@ -516,8 +533,8 @@ class ChannelScreenViewModel(
             }
 
             val attachmentIds = arrayListOf<String>()
-            val takenAttachments =
-                this@ChannelScreenViewModel.draftAttachments.take(MAX_ATTACHMENTS_PER_MESSAGE)
+            val takenAttachments = attachmentsOverride
+                ?: this@ChannelScreenViewModel.draftAttachments.take(MAX_ATTACHMENTS_PER_MESSAGE)
             val totalTaken = takenAttachments.size
 
             takenAttachments.forEachIndexed { index, it ->
@@ -572,7 +589,9 @@ class ChannelScreenViewModel(
             draftReplyTo.clear()
             attachmentUploadProgress = 0f
 
-            this@ChannelScreenViewModel.draftAttachments.removeAll(takenAttachments)
+            if (attachmentsOverride == null) {
+                this@ChannelScreenViewModel.draftAttachments.removeAll(takenAttachments)
+            }
 
             try {
                 sendMessage(

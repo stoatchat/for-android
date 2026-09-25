@@ -126,6 +126,15 @@
     <string name="send_alt">Send</string>
     <string name="pick_emoji_alt">Pick emoji</string>
     <string name="add_attachment_alt">Add attachment</string>
+    <string name="voice_message_start_recording">Record a voice message</string>
+    <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="voice_message_release_to_cancel">Release to cancel</string>
+    <string name="voice_message_finishing">Finishing…</string>
+    <string name="voice_message_temp_review_title">LGTM?</string>
+    <string name="voice_message_temp_review_description">Recorded %1$s of audio, send it?</string>
+    <string name="voice_message_discard">Don’t send</string>
+    <string name="voice_message_recording_failed">Couldn’t record the voice message.</string>
+    <string name="voice_message_microphone_permission_denied">Microphone permission is needed to record a voice message.</string>
     <string name="remove_attachment_alt">Remove attachment</string>
     <string name="remove_reply_alt">Remove reply</string>
     <string name="reply_mention_on">\@ on</string>

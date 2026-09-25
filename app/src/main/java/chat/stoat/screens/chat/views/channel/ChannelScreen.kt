@@ -142,6 +142,7 @@ import chat.stoat.api.routes.microservices.autumn.FileArgs
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
+import chat.stoat.composables.LocalSnackbarHostState
 import chat.stoat.composables.chat.DateDivider
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.chat.MessageField
@@ -911,13 +912,14 @@ fun ChannelScreen(
             }
         }
     ) { pv ->
-        if (viewModel.showGeoGate) {
-            ChannelScreenGeoGate { onToggleDrawer() }
-        } else {
-            Crossfade(
-                targetState = viewModel.ageGateUnlocked,
-                label = "ageGateUnlocked"
-            ) { ageGateUnlocked ->
+        CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
+            if (viewModel.showGeoGate) {
+                ChannelScreenGeoGate { onToggleDrawer() }
+            } else {
+                Crossfade(
+                    targetState = viewModel.ageGateUnlocked,
+                    label = "ageGateUnlocked"
+                ) { ageGateUnlocked ->
                 if (ageGateUnlocked == false) {
                     ChannelScreenAgeGate(
                         onAccept = {
@@ -1405,7 +1407,33 @@ fun ChannelScreen(
                                                                 ChannelScreenActivePane.EmojiPicker
                                                         }
                                                     },
-                                                    onSendMessage = viewModel::sendPendingMessage,
+                                                    onSendMessage = {
+                                                        viewModel.sendPendingMessage()
+                                                    },
+                                                    onSendVoiceMessage = { recording ->
+                                                        val filename =
+                                                            "voice-message-${System.currentTimeMillis()}.${recording.fileExtension}"
+                                                        val file = File.createTempFile(
+                                                            "voice_message_",
+                                                            ".${recording.fileExtension}",
+                                                            context.cacheDir
+                                                        ).apply {
+                                                            writeBytes(recording.bytes)
+                                                        }
+
+                                                        val started = viewModel.sendAttachmentMessage(
+                                                            content = recording.toMessageContent(),
+                                                            attachment = FileArgs(
+                                                                file = file,
+                                                                filename = filename,
+                                                                contentType = recording.mimeType
+                                                            )
+                                                        )
+                                                        if (!started) {
+                                                            file.delete()
+                                                        }
+                                                        started
+                                                    },
                                                     channelType = viewModel.channel?.channelType
                                                         ?: ChannelType.TextChannel,
                                                     channelName = viewModel.channel?.let { channel ->
@@ -1811,6 +1839,7 @@ fun ChannelScreen(
                             }
                         }
                     }
+                }
                 }
             }
         }

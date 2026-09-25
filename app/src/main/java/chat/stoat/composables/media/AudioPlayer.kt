@@ -10,21 +10,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,60 +31,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import chat.stoat.R
 import chat.stoat.api.StoatHttp
+import chat.stoat.composables.LocalSnackbarHostState
+import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
 import io.ktor.client.request.get
-import io.ktor.client.statement.readBytes
-import kotlinx.coroutines.delay
+import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-@androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-fun AudioPlayer(url: String, filename: String, contentType: String) {
+fun AudioPlayer(
+    url: String,
+    filename: String,
+    contentType: String,
+) {
     val context = LocalContext.current
+    val resources = LocalResources.current
+    val snackbarHostState = LocalSnackbarHostState.current
 
     val showMenu = remember { mutableStateOf(false) }
-
-    val currentTime = remember { mutableLongStateOf(0L) }
-    val isPlaying = remember { mutableStateOf(false) }
-    val isLoading = remember { mutableStateOf(false) }
+    val playback = rememberAudioPlaybackState(url)
+    val player = playback.player
 
     val coroutineScope = rememberCoroutineScope()
 
     val activityLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {}
-
-    val player = remember {
-        ExoPlayer.Builder(context).build().apply {
-            setMediaItem(MediaItem.fromUri(url))
-            prepare()
-            addListener(object : Player.Listener {
-                override fun onIsPlayingChanged(playing: Boolean) {
-                    super.onIsPlayingChanged(playing)
-                    isPlaying.value = playing
-                }
-
-                override fun onIsLoadingChanged(loading: Boolean) {
-                    super.onIsLoadingChanged(loading)
-                    isLoading.value = loading
-                }
-            })
-        }
-    }
-
-    fun seekTo(position: Long) {
-        player.seekTo(position)
-        currentTime.longValue = position
-    }
 
     fun formatTime(time: Long): String {
         val seconds = time / 1000
@@ -124,7 +103,7 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                 )
             }?.let { uri ->
                 context.contentResolver.openOutputStream(uri).use { stream ->
-                    val audio = StoatHttp.get(url).readBytes()
+                    val audio = StoatHttp.get(url).readRawBytes()
                     stream?.write(audio)
 
                     context.applicationContext.let {
@@ -138,11 +117,12 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
                         )
                     }
 
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.media_viewer_saved),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val message = resources.getString(R.string.media_viewer_saved)
+                    if (snackbarHostState != null) {
+                        snackbarHostState.showSnackbar(message)
+                    } else {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -162,33 +142,10 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
         }
     }
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            if (currentTime.longValue != player.currentPosition && player.isPlaying) {
-                currentTime.longValue = player.currentPosition
-            }
-
-            if (player.currentPosition == player.duration) {
-                player.seekTo(0)
-                player.pause()
-            }
-
-            if (player.duration < 0) {
-                currentTime.longValue = 0
-            }
-
-            delay(100)
-        }
-    }
-
-    DisposableEffect(player) {
-        onDispose {
-            player.release()
-        }
-    }
-
     Column(
         modifier = Modifier
+            .fillMaxWidth()
+            .blockSwipeReplyOnHorizontalDrag()
             .clip(MaterialTheme.shapes.medium)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(8.dp)
@@ -206,7 +163,7 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = formatTime(currentTime.longValue),
+                text = formatTime(playback.currentTime.longValue),
                 fontWeight = FontWeight.Medium,
                 style = LocalTextStyle.current.copy(fontFeatureSettings = "tnum")
             )
@@ -220,24 +177,18 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {
-                if (isPlaying.value) {
-                    player.pause()
+            IconButton(onClick = playback::togglePlayback) {
+                if (playback.isLoading.value && player.playWhenReady) {
+                    LoadingIndicator()
                 } else {
-                    player.play()
-                }
-            }) {
-                if (isLoading.value) {
-                    CircularProgressIndicator()
-                } else {
-                    if (isPlaying.value) {
+                    if (playback.isPlaying.value) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_pause_24dp),
+                            painter = painterResource(R.drawable.ic_pause_24dp__fill),
                             contentDescription = stringResource(R.string.media_viewer_pause)
                         )
                     } else {
                         Icon(
-                            painter = painterResource(R.drawable.ic_play_arrow_24dp),
+                            painter = painterResource(R.drawable.ic_play_arrow_24dp__fill),
                             contentDescription = stringResource(R.string.media_viewer_play)
                         )
                     }
@@ -247,7 +198,7 @@ fun AudioPlayer(url: String, filename: String, contentType: String) {
             if (player.duration >= 0) {
                 Slider(
                     value = player.currentPosition.toFloat(),
-                    onValueChange = { seekTo(it.toLong()) },
+                    onValueChange = { playback.seekTo(it.toLong()) },
                     valueRange = 0f..player.duration.toFloat(),
                     modifier = Modifier.weight(1f)
                 )

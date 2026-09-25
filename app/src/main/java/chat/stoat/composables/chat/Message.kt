@@ -84,12 +84,15 @@ import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.User
+import chat.stoat.core.model.schemas.UserBadges
+import chat.stoat.core.model.schemas.has as hasUserBadge
 import chat.stoat.internals.text.Gigamoji
 import chat.stoat.internals.text.GigamojiState
 import chat.stoat.internals.text.MessageProcessor
 import chat.stoat.internals.text.stripPUAChars
 import chat.stoat.internals.toNavigationAction
 import chat.stoat.internals.toStoatWebLinkOrNull
+import chat.stoat.media.parseVoiceMessageMetadata
 import chat.stoat.persistence.KVStorage
 import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.launch
@@ -244,6 +247,15 @@ fun Message(
 ) {
     val author = StoatAPI.userCache[message.author] ?: return CircularProgressIndicator()
     val context = LocalContext.current
+    val voiceMessageMetadata = remember(author.badges, message.content, message.attachments) {
+        if (!author.badges.hasUserBadge(UserBadges.Developer)) {
+            return@remember null
+        }
+        val attachment = message.attachments?.singleOrNull()
+        parseVoiceMessageMetadata(message.content).takeIf {
+            attachment?.isValidVoiceMessageAttachment() == true
+        }
+    }
 
     val scope = rememberCoroutineScope()
     val openMessageLinkOrBrowser: (String) -> Unit = { url ->
@@ -491,7 +503,7 @@ fun Message(
                         }
 
                         key(message.content) {
-                            message.content?.let {
+                            message.content?.takeIf { voiceMessageMetadata == null }?.let {
                                 val content = it.stripPUAChars()
                                 if (content.isBlank()) return@let // if only an attachment is sent
 
@@ -521,7 +533,12 @@ fun Message(
                         message.attachments?.let {
                             it.forEach { attachment ->
                                 Spacer(modifier = Modifier.height(2.dp))
-                                MessageAttachment(attachment) {
+                                MessageAttachment(
+                                    attachment = attachment,
+                                    waveform = voiceMessageMetadata?.waveform,
+                                    waveformDurationMillis =
+                                        voiceMessageMetadata?.durationMillis,
+                                ) {
                                     when (attachment.metadata?.type) {
                                         "Image" -> {
                                             attachmentView.launch(
@@ -688,5 +705,27 @@ fun Message(
                 }
             }
         }
+    }
+}
+
+private fun AutumnResource.isValidVoiceMessageAttachment(): Boolean {
+    if (
+        id.isNullOrBlank() ||
+        deleted == true
+    ) {
+        return false
+    }
+
+    val filename = filename ?: return false
+    val extension = filename.substringAfterLast('.', missingDelimiterValue = "").lowercase()
+    val mimeType = contentType
+        ?.substringBefore(';')
+        ?.trim()
+        ?.lowercase()
+
+    return when (mimeType) {
+        "audio/mp4" -> extension == "m4a"
+        "audio/ogg", "audio/opus", "application/ogg" -> extension == "ogg"
+        else -> false
     }
 }
