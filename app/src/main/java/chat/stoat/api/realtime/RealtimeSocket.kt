@@ -45,6 +45,7 @@ import chat.stoat.api.realtime.frames.sendable.BeginTypingFrame
 import chat.stoat.api.realtime.frames.sendable.EndTypingFrame
 import chat.stoat.api.realtime.frames.sendable.PingFrame
 import chat.stoat.api.routes.server.fetchMember
+import chat.stoat.api.routes.sync.SyncedSetting
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.c2dm.ChannelRegistrator
@@ -66,6 +67,10 @@ import io.ktor.websocket.send
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
@@ -1103,6 +1108,22 @@ object RealtimeSocket {
 
                 // Send message to UI to handle the move
                 StoatAPI.wsFrameChannel.emit(userMoveVoiceChannelFrame)
+            }
+
+            "UserSettingsUpdate" -> {
+                val update = StoatJson.parseToJsonElement(rawFrame).jsonObject["update"]
+                    ?.jsonObject
+                    ?: return
+                SyncedSettings.applyRemoteUpdate(
+                    update.mapNotNull { (key, value) ->
+                        val (timestamp, data) = value.jsonArray.takeIf { it.size == 2 }
+                            ?: return@mapNotNull null
+                        key to SyncedSetting(
+                            timestamp = timestamp.jsonPrimitive.long,
+                            value = data.jsonPrimitive.content
+                        )
+                    }.toMap()
+                )
             }
 
             "Authenticated" -> {

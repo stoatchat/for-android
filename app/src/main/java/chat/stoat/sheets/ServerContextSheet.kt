@@ -17,6 +17,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,10 +37,12 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.leaveOrDeleteServer
+import chat.stoat.api.settings.ServerFolders
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.markdown.prose.ChatMarkdown
+import chat.stoat.composables.screens.chat.drawer.parseFolderColour
 import chat.stoat.composables.screens.settings.ServerOverview
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
@@ -79,6 +82,9 @@ fun ServerContextSheet(
     }.orEmpty()
 
     var showLeaveConfirmation by remember { mutableStateOf(false) }
+    var showFolderPicker by remember { mutableStateOf(false) }
+    val currentFolder = ServerFolders.folderOf(serverId)
+    val newFolderName = stringResource(R.string.server_folder_default_name)
     var leaveSilently by remember { mutableStateOf(false) }
 
     if (showLeaveConfirmation) {
@@ -152,6 +158,55 @@ fun ServerContextSheet(
                 }
             }
         )
+    }
+
+    if (showFolderPicker) {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            ServerFolders.folders.forEach { folder ->
+                SheetButton(
+                    leadingContent = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_folder_24dp),
+                            contentDescription = null,
+                            tint = folder.colour?.let(::parseFolderColour)
+                                ?: LocalContentColor.current
+                        )
+                    },
+                    headlineContent = {
+                        Text(
+                            folder.name.ifEmpty {
+                                stringResource(R.string.server_folder_unnamed)
+                            }
+                        )
+                    },
+                    onClick = {
+                        coroutineScope.launch {
+                            onHideSheet()
+                            ServerFolders.addServer(folder.id, serverId)
+                        }
+                    }
+                )
+            }
+
+            SheetButton(
+                leadingContent = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_create_new_folder_24dp),
+                        contentDescription = null
+                    )
+                },
+                headlineContent = {
+                    Text(stringResource(R.string.server_context_sheet_actions_new_folder))
+                },
+                onClick = {
+                    coroutineScope.launch {
+                        onHideSheet()
+                        ServerFolders.create(newFolderName, listOf(serverId))
+                    }
+                }
+            )
+        }
+        return
     }
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -228,6 +283,48 @@ fun ServerContextSheet(
                 }
             }
         )
+
+        SheetButton(
+            leadingContent = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_folder_24dp),
+                    contentDescription = null
+                )
+            },
+            headlineContent = {
+                Text(stringResource(R.string.server_context_sheet_actions_add_to_folder))
+            },
+            onClick = {
+                if (ServerFolders.folders.isEmpty()) {
+                    coroutineScope.launch {
+                        onHideSheet()
+                        ServerFolders.create(newFolderName, listOf(serverId))
+                    }
+                } else {
+                    showFolderPicker = true
+                }
+            }
+        )
+
+        if (currentFolder != null) {
+            SheetButton(
+                leadingContent = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_folder_off_24dp),
+                        contentDescription = null
+                    )
+                },
+                headlineContent = {
+                    Text(stringResource(R.string.server_context_sheet_actions_remove_from_folder))
+                },
+                onClick = {
+                    coroutineScope.launch {
+                        onHideSheet()
+                        ServerFolders.removeServer(serverId)
+                    }
+                }
+            )
+        }
 
         SheetButton(
             leadingContent = {

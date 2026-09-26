@@ -665,7 +665,7 @@ fun ChatRouterScreen(
                     showServerContextSheet = false
                 },
                 onReportServer = {
-                    reportServerTarget = currentServer ?: ""
+                    reportServerTarget = serverContextSheetTarget
                     showReportServer = true
                 }
             )

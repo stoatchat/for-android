@@ -34,7 +34,11 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.rememberOverscrollEffect
+import androidx.compose.foundation.withoutVisualEffect
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.DrawerState
@@ -50,6 +54,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,7 +70,10 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -74,6 +82,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
@@ -84,18 +93,20 @@ import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.routes.user.addUserIfUnknown
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.NotificationSettingsProvider
+import chat.stoat.api.settings.ServerFolders
+import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.api.settings.resolveServerSidebar
 import chat.stoat.composables.generic.GroupIcon
-import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
-import chat.stoat.composables.generic.bottomEndCircleCutout
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Category
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.has
@@ -103,6 +114,10 @@ import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.sheets.ChannelContextSheet
+import chat.stoat.sheets.ColourPickerSheet
+import chat.stoat.sheets.ServerFolderSheet
+import chat.stoat.sheets.colourPickerString
+import chat.stoat.sheets.colourPickerValue
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -110,9 +125,6 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
-
-private val ServerVoiceBadgeSize = 16.dp
-private val ServerVoiceBadgeIconSize = 12.dp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -180,20 +192,92 @@ fun ChannelSideDrawer(
         )
     )
 
-    // - Take the list of servers and filter them by the ones that are in the ordering.
-    // - Sort the servers that are in the ordering using the ordering.
-    // - Add the servers that aren't in the ordering to the end of the list.
-    // - Sort the servers that aren't in the ordering by their ID (creation order).
-    val serverList = ((StoatAPI.serverCache.values.filter {
-        SyncedSettings.ordering.servers.contains(
-            it.id
-        )
+    val sidebarEntries = resolveServerSidebar(
+        servers = StoatAPI.serverCache.filterValues { it.id != null },
+        ordering = SyncedSettings.ordering,
+        folders = SyncedSettings.serverFolders.folders,
+    )
+
+    val railRows = remember(sidebarEntries) { sidebarEntries.toRailRows() }
+    val railListState = rememberLazyListState()
+    val railDragState = remember(railListState) { RailDragState(railListState, stickyHeaderKey = "self") }
+    SideEffect { railDragState.rows = railRows }
+    val haptics = LocalHapticFeedback.current
+    val folderGroupLayout = remember { FolderGroupLayout() }
+    val railOverscroll = rememberOverscrollEffect()
+    val defaultFolderGroupColour = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+    val folderGroupStyles = sidebarEntries
+        .filterIsInstance<ServerSidebarEntry.Folder>()
+        .associate { entry ->
+            entry.id to FolderGroupStyle(
+                colour = entry.folder.colour?.let(::parseFolderColour)?.copy(alpha = 0.18f)
+                    ?: defaultFolderGroupColour,
+                lastMemberKey = entry.servers.last().id!!
+            )
+        }
+    val newFolderName = stringResource(R.string.server_folder_default_name)
+
+    val scope = rememberCoroutineScope()
+    var serverFolderSheetTarget by remember { mutableStateOf<String?>(null) }
+    var serverFolderColourTarget by remember { mutableStateOf<String?>(null) }
+
+    serverFolderSheetTarget?.let { folderId ->
+        val serverFolderSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            sheetState = serverFolderSheetState,
+            onDismissRequest = {
+                serverFolderSheetTarget = null
+            }
+        ) {
+            ServerFolderSheet(
+                folderId = folderId,
+                onHideSheet = {
+                    serverFolderSheetState.hide()
+                    serverFolderSheetTarget = null
+                },
+                onChangeColour = {
+                    serverFolderSheetState.hide()
+                    serverFolderSheetTarget = null
+                    serverFolderColourTarget = folderId
+                }
+            )
+        }
     }
-        .sortedBy { SyncedSettings.ordering.servers.indexOf(it.id) }) + (StoatAPI.serverCache.values.filter {
-        !SyncedSettings.ordering.servers.contains(
-            it.id
-        )
-    }.sortedBy { it.id }))
+
+    serverFolderColourTarget?.let { folderId ->
+        val colourSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val folder = ServerFolders.folders.firstOrNull { it.id == folderId }
+        val hideColourSheet: () -> Unit = {
+            scope.launch {
+                colourSheetState.hide()
+                serverFolderColourTarget = null
+            }
+        }
+
+        ModalBottomSheet(
+            sheetState = colourSheetState,
+            onDismissRequest = {
+                serverFolderColourTarget = null
+            }
+        ) {
+            ColourPickerSheet(
+                initialValue = colourPickerValue(
+                    folder?.colour,
+                    MaterialTheme.colorScheme.primary.toArgb()
+                ),
+                onColourSelected = { colour ->
+                    folder?.let { ServerFolders.edit(it.id, it.name, colourPickerString(colour)) }
+                    hideColourSheet()
+                },
+                onUseDefaultColour = {
+                    folder?.let { ServerFolders.edit(it.id, it.name, null) }
+                    hideColourSheet()
+                },
+                onDismiss = hideColourSheet
+            )
+        }
+    }
 
     var channelContextSheetTarget by remember { mutableStateOf<String?>(null) }
 
@@ -216,291 +300,275 @@ fun ChannelSideDrawer(
         }
     }
 
-    val scope = rememberCoroutineScope()
-
     Row(modifier.fillMaxSize()) {
-        LazyColumn(
-            Modifier.width(64.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-            )
+        Box(
+            Modifier
+                .width(64.dp)
+                .fillMaxHeight()
+                .zIndex(1f)
+                .overscroll(railOverscroll)
+                .folderGroupBackgrounds(folderGroupLayout, folderGroupStyles)
         ) {
-            stickyHeader(key = "self") {
-                Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                    AnimatedVisibility(LocalIsConnected.current) {
-                        Spacer(
-                            Modifier
-                                .height(
-                                    WindowInsets.statusBars.asPaddingValues()
-                                        .calculateTopPadding()
-                                )
-                        )
+            LazyColumn(
+                state = railListState,
+                overscrollEffect = railOverscroll?.withoutVisualEffect(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .onSizeChanged {
+                        railDragState.railWidthPx = it.width.toFloat()
+                        railDragState.railHeightPx = it.height.toFloat()
                     }
-                    UserAvatar(
-                        username = StoatAPI.userCache[StoatAPI.selfId]?.let {
-                            User.resolveDefaultName(
-                                it
+                    .railDragGestures(
+                        state = railDragState,
+                        haptics = haptics,
+                        onLongPress = { row ->
+                            when (row) {
+                                is RailRow.ServerRow -> onShowServerContextSheet(row.key)
+                                is RailRow.FolderRow -> serverFolderSheetTarget = row.key
+                            }
+                        },
+                        onDrop = { key, intent ->
+                            when (intent) {
+                                is RailIntent.Fold -> ServerFolders.fold(
+                                    entries = sidebarEntries,
+                                    target = intent.target,
+                                    incoming = key,
+                                    newFolderName = newFolderName
+                                )
+
+                                is RailIntent.Move -> ServerFolders.move(
+                                    entries = sidebarEntries,
+                                    moved = key,
+                                    before = intent.before,
+                                    parent = intent.parent
+                                )
+                            }
+                        }
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = PaddingValues(
+                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                )
+            ) {
+                stickyHeader(key = "self") {
+                    Column(
+                        Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(bottom = RailItemGap)
+                    ) {
+                        AnimatedVisibility(LocalIsConnected.current) {
+                            Spacer(
+                                Modifier
+                                    .height(
+                                        WindowInsets.statusBars.asPaddingValues()
+                                            .calculateTopPadding()
+                                    )
                             )
                         }
-                            ?: "",
-                        presence = presenceFromStatus(
-                            StoatAPI.userCache[StoatAPI.selfId]?.status?.presence,
-                            StoatAPI.userCache[StoatAPI.selfId]?.online ?: false
-                        ),
-                        userId = StoatAPI.selfId ?: "",
-                        avatar = StoatAPI.userCache[StoatAPI.selfId]?.avatar,
-                        size = 48.dp,
-                        presenceSize = 16.dp,
-                        onClick = {
-                            onDestinationChanged(ChatRouterDestination.defaultForDMList)
-                        },
-                        onLongClick = onLongPressAvatar,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    )
-                }
-            }
-
-            items(
-                DirectMessages.unreadDMs().size,
-                key = { DirectMessages.unreadDMs()[it].id ?: it }
-            ) {
-                val dm = DirectMessages.unreadDMs()[it]
-                when (dm.channelType) {
-                    ChannelType.Group -> GroupIcon(
-                        name = dm.name ?: "?",
-                        size = 48.dp,
-                        onClick = {
-                            dm.id?.let { id ->
-                                onDestinationChanged(ChatRouterDestination.Channel(id))
-                            }
-                        },
-                        icon = dm.icon,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .size(48.dp)
-                    )
-
-                    else -> {
-                        val partner =
-                            if (dm.channelType == ChannelType.DirectMessage) {
-                                StoatAPI.userCache[
-                                    ChannelUtils.resolveDMPartner(
-                                        dm
-                                    )
-                                ]
-                            } else {
-                                null
-                            }
-
                         UserAvatar(
-                            username = partner?.let { p ->
+                            username = StoatAPI.userCache[StoatAPI.selfId]?.let {
                                 User.resolveDefaultName(
-                                    p
+                                    it
                                 )
-                            } ?: dm.name ?: "?",
+                            }
+                                ?: "",
                             presence = presenceFromStatus(
-                                partner?.status?.presence,
-                                partner?.online ?: false
+                                StoatAPI.userCache[StoatAPI.selfId]?.status?.presence,
+                                StoatAPI.userCache[StoatAPI.selfId]?.online ?: false
                             ),
-                            userId = partner?.id ?: dm.id ?: "",
-                            avatar = partner?.avatar ?: dm.icon,
+                            userId = StoatAPI.selfId ?: "",
+                            avatar = StoatAPI.userCache[StoatAPI.selfId]?.avatar,
                             size = 48.dp,
                             presenceSize = 16.dp,
                             onClick = {
-                                dm.id?.let { id ->
-                                    onDestinationChanged(ChatRouterDestination.Channel(id))
-                                }
+                                onDestinationChanged(ChatRouterDestination.defaultForDMList)
                             },
+                            onLongClick = onLongPressAvatar,
                             modifier = Modifier
                                 .padding(8.dp)
                                 .size(48.dp)
                         )
                     }
                 }
-            }
 
-            item(key = "divider") {
-                HorizontalDivider(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                )
-            }
+                items(
+                    DirectMessages.unreadDMs().size,
+                    key = { DirectMessages.unreadDMs()[it].id ?: it }
+                ) {
+                    val dm = DirectMessages.unreadDMs()[it]
+                    when (dm.channelType) {
+                        ChannelType.Group -> GroupIcon(
+                            name = dm.name ?: "?",
+                            size = 48.dp,
+                            onClick = {
+                                dm.id?.let { id ->
+                                    onDestinationChanged(ChatRouterDestination.Channel(id))
+                                }
+                            },
+                            icon = dm.icon,
+                            modifier = Modifier
+                                .padding(bottom = RailItemGap)
+                                .padding(8.dp)
+                                .size(48.dp)
+                        )
 
-            items(
-                serverList.size,
-                key = { serverList[it].id ?: it }
-            ) {
-                val serverInList = serverList[it]
-                val serverHasUnread =
-                    serverInList.id?.let { srvId -> StoatAPI.unreads.serverHasUnread(srvId) }
-                        ?: false
-                val voiceParticipants = serverInList.channels.orEmpty().flatMap { channelId ->
-                    StoatAPI.voiceStateCache[channelId]?.participants.orEmpty()
-                }
-                val hasScreenShare = voiceParticipants.any { it.screensharing }
-                val voiceBadgeIcon = when {
-                    hasScreenShare -> R.drawable.ic_screen_share_24dp
-                    voiceParticipants.isNotEmpty() -> R.drawable.ic_volume_up_24dp
-                    else -> null
-                }
-                val leftIndicatorHeight = animateDpAsState(
-                    targetValue = if (serverInList.id == currentServer) 32.dp
-                    else if (serverHasUnread) 8.dp
-                    else 0.dp,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    ), label = "Left indicator width"
-                )
-                val leftIndicatorColour = animateColorAsState(
-                    targetValue =
-                        if (serverInList.id == currentServer)
-                            MaterialTheme.colorScheme.primary
-                        else if (serverHasUnread)
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        else
-                            Color.Transparent,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    ),
-                    label = "Left indicator colour"
-                )
-
-                Box(Modifier.fillMaxWidth()) {
-                    Box(
-                        Modifier
-                            .padding(8.dp)
-                            .size(48.dp),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        val icon = serverInList.icon?.id?.let { iconId ->
-                            "$STOAT_FILES/icons/$iconId"
-                        }
-                        val iconModifier = Modifier
-                            .size(48.dp)
-                            .clip(CircleShape)
-                            .then(
-                                if (voiceBadgeIcon != null) {
-                                    Modifier.bottomEndCircleCutout(ServerVoiceBadgeSize)
+                        else -> {
+                            val partner =
+                                if (dm.channelType == ChannelType.DirectMessage) {
+                                    StoatAPI.userCache[
+                                        ChannelUtils.resolveDMPartner(
+                                            dm
+                                        )
+                                    ]
                                 } else {
-                                    Modifier
+                                    null
                                 }
-                            )
-                            .clickable {
-                                serverInList.id?.let { srvId -> navigateToServer(srvId) }
-                                scope.launch {
-                                    drawerState?.close()
-                                }
-                            }
-                        if (icon != null) {
-                            RemoteImage(
-                                url = icon,
-                                allowAnimation = false,
-                                modifier = iconModifier,
-                                description = serverInList.name ?: stringResource(R.string.unknown)
-                            )
-                        } else {
-                            IconPlaceholder(
-                                name = serverInList.name ?: stringResource(R.string.unknown),
-                                modifier = iconModifier
-                            )
-                        }
 
-                        if (voiceBadgeIcon != null) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.size(ServerVoiceBadgeSize)
-                            ) {
-                                Icon(
-                                    painter = painterResource(voiceBadgeIcon),
-                                    contentDescription = stringResource(
-                                        if (hasScreenShare) {
-                                            R.string.voice_screen_sharing
-                                        } else {
-                                            R.string.voice_notification_ongoing_call
-                                        }
-                                    ),
-                                    tint = MaterialTheme.colorScheme.onSurface,
-                                    modifier = Modifier.size(ServerVoiceBadgeIconSize)
-                                )
-                            }
+                            UserAvatar(
+                                username = partner?.let { p ->
+                                    User.resolveDefaultName(
+                                        p
+                                    )
+                                } ?: dm.name ?: "?",
+                                presence = presenceFromStatus(
+                                    partner?.status?.presence,
+                                    partner?.online ?: false
+                                ),
+                                userId = partner?.id ?: dm.id ?: "",
+                                avatar = partner?.avatar ?: dm.icon,
+                                size = 48.dp,
+                                presenceSize = 16.dp,
+                                onClick = {
+                                    dm.id?.let { id ->
+                                        onDestinationChanged(ChatRouterDestination.Channel(id))
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(bottom = RailItemGap)
+                                    .padding(8.dp)
+                                    .size(48.dp)
+                            )
                         }
                     }
+                }
 
-                    Box(
+                item(key = "divider") {
+                    HorizontalDivider(
                         Modifier
-                            .height(leftIndicatorHeight.value)
-                            .width(8.dp)
-                            .offset(x = (-4).dp)
-                            .clip(CircleShape)
-                            .background(leftIndicatorColour.value)
-                            .align(Alignment.CenterStart)
+                            .padding(bottom = RailItemGap)
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
                     )
                 }
-            }
 
-            item(key = "add_server") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            onShowAddServerSheet()
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add_24dp),
-                        contentDescription = stringResource(R.string.server_plus_alt)
-                    )
-                }
-            }
+                items(railRows, key = { it.key }) { row ->
+                    val foldTarget = (railDragState.intent as? RailIntent.Fold)?.target == row.key
+                    val rowModifier = Modifier
+                        .animateItem()
+                        .alpha(if (railDragState.held == row.key) 0.35f else 1f)
 
-            item(key = "discover") {
-                Box(
-                    Modifier
-                        .padding(8.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            topNav.navigate("discover")
-                        }
-                        .size(48.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_explore_24dp),
-                        contentDescription = stringResource(R.string.discover_alt)
-                    )
-                }
-            }
-
-            if (showSettingsIcon) {
-                item(key = "settings") {
-                    Box(
-                        Modifier
-                            .padding(8.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                onOpenSettings()
+                    when (row) {
+                        is RailRow.ServerRow -> ServerRailIcon(
+                            server = row.server,
+                            selected = row.key == currentServer,
+                            foldTarget = foldTarget,
+                            onClick = {
+                                navigateToServer(row.key)
                                 scope.launch {
                                     drawerState?.close()
                                 }
+                            },
+                            onLongClick = { onShowServerContextSheet(row.key) },
+                            modifier = rowModifier
+                                .then(
+                                    row.parent?.let {
+                                        Modifier.folderGroupMember(folderGroupLayout, row.key, it)
+                                    } ?: Modifier
+                                )
+                                .padding(bottom = RailItemGap)
+                        )
+
+                        is RailRow.FolderRow -> FolderRailHeader(
+                            entry = row.entry,
+                            currentServer = currentServer,
+                            foldTarget = foldTarget,
+                            onToggle = { ServerFolders.toggle(row.key) },
+                            onLongClick = { serverFolderSheetTarget = row.key },
+                            modifier = rowModifier
+                                .folderGroupMember(folderGroupLayout, row.key, row.key)
+                                .padding(bottom = RailItemGap)
+                        )
+                    }
+                }
+
+                item(key = "add_server") {
+                    Box(
+                        Modifier
+                            .padding(bottom = RailItemGap)
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                onShowAddServerSheet()
                             }
                             .size(48.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_settings_24dp),
-                            contentDescription = stringResource(R.string.settings)
+                            painter = painterResource(R.drawable.ic_add_24dp),
+                            contentDescription = stringResource(R.string.server_plus_alt)
                         )
                     }
+                }
+
+                item(key = "discover") {
+                    Box(
+                        Modifier
+                            .padding(bottom = RailItemGap)
+                            .padding(8.dp)
+                            .clip(CircleShape)
+                            .clickable {
+                                topNav.navigate("discover")
+                            }
+                            .size(48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_explore_24dp),
+                            contentDescription = stringResource(R.string.discover_alt)
+                        )
+                    }
+                }
+
+                if (showSettingsIcon) {
+                    item(key = "settings") {
+                        Box(
+                            Modifier
+                                .padding(bottom = RailItemGap)
+                                .padding(8.dp)
+                                .clip(CircleShape)
+                                .clickable {
+                                    onOpenSettings()
+                                    scope.launch {
+                                        drawerState?.close()
+                                    }
+                                }
+                                .size(48.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_settings_24dp),
+                                contentDescription = stringResource(R.string.settings)
+                            )
+                        }
+                    }
+                }
+            }
+
+            RailDragAutoScroll(railDragState, railListState)
+            RailDragOverlay(railDragState, railListState) { row ->
+                when (row) {
+                    is RailRow.ServerRow -> ServerIconImage(row.server, Modifier.size(48.dp))
+                    is RailRow.FolderRow -> FolderIcon(row.entry)
                 }
             }
         }

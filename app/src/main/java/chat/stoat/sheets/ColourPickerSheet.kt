@@ -56,7 +56,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import chat.stoat.R
+import chat.stoat.api.internals.BrushCompat
+import chat.stoat.api.internals.colour.CSSColours
 import chat.stoat.internals.TailwindColourScheme
 import org.intellij.lang.annotations.Language
 
@@ -691,4 +694,23 @@ fun ColumnScope.ColourPickerSheet(
     }
 
 
+}
+
+fun colourPickerValue(colour: String?, fallback: Int): Int {
+    val value = colour?.trim()?.takeIf(String::isNotEmpty) ?: return fallback
+    BrushCompat.parseFunctionColour(value)?.let { return it.toArgb() }
+    CSSColours[value.lowercase()]?.let { return it.toArgb() }
+    return runCatching { value.toColorInt() }.getOrDefault(fallback)
+}
+
+fun colourPickerString(colour: Int): String {
+    val alpha = colour ushr 24 and 0xff
+    val red = colour ushr 16 and 0xff
+    val green = colour ushr 8 and 0xff
+    val blue = colour and 0xff
+    return if (alpha == 0xff) {
+        "#%02x%02x%02x".format(red, green, blue)
+    } else {
+        "rgba($red, $green, $blue, ${alpha / 255f})"
+    }
 }

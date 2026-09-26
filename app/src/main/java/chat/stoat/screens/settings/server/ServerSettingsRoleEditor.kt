@@ -62,7 +62,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -71,7 +70,6 @@ import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
 import chat.stoat.api.internals.BrushCompat
-import chat.stoat.api.internals.colour.CSSColours
 import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.deleteServerRole
@@ -97,6 +95,8 @@ import chat.stoat.internals.server.withOverride
 import chat.stoat.internals.server.withPermission
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.sheets.ColourPickerSheet
+import chat.stoat.sheets.colourPickerString
+import chat.stoat.sheets.colourPickerValue
 import chat.stoat.ui.theme.DarkColorScheme
 import chat.stoat.ui.theme.LightColorScheme
 import com.bumptech.glide.integration.compose.CrossFade
@@ -367,25 +367,6 @@ class ServerSettingsRoleEditorViewModel(
         } finally {
             withContext(Dispatchers.IO) { file.delete() }
         }
-    }
-}
-
-private fun roleColourPickerValue(colour: String?, fallback: Int): Int {
-    val value = colour?.trim()?.takeIf(String::isNotEmpty) ?: return fallback
-    BrushCompat.parseFunctionColour(value)?.let { return it.toArgb() }
-    CSSColours[value.lowercase()]?.let { return it.toArgb() }
-    return runCatching { value.toColorInt() }.getOrDefault(fallback)
-}
-
-private fun roleColourString(colour: Int): String {
-    val alpha = colour ushr 24 and 0xff
-    val red = colour ushr 16 and 0xff
-    val green = colour ushr 8 and 0xff
-    val blue = colour and 0xff
-    return if (alpha == 0xff) {
-        "#%02x%02x%02x".format(red, green, blue)
-    } else {
-        "rgba($red, $green, $blue, ${alpha / 255f})"
     }
 }
 
@@ -774,12 +755,12 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
             onDismissRequest = { showColourPicker = false },
         ) {
             ColourPickerSheet(
-                initialValue = roleColourPickerValue(
+                initialValue = colourPickerValue(
                     viewModel.colour,
                     MaterialTheme.colorScheme.primary.toArgb(),
                 ),
                 onColourSelected = {
-                    viewModel.updateColour(roleColourString(it))
+                    viewModel.updateColour(colourPickerString(it))
                     pickerScope.launch {
                         pickerSheetState.hide()
                         showColourPicker = false

@@ -55,9 +55,9 @@ suspend fun getKeys(vararg keys: String): Map<String, SyncedSetting> {
     return getKeys(*keys, token = StoatAPI.sessionToken)
 }
 
-suspend fun setKey(key: String, value: String) {
+suspend fun setKey(key: String, value: String, timestamp: Long = System.currentTimeMillis()) {
     StoatHttp.post("/sync/settings/set".api()) {
-        parameter("timestamp", System.currentTimeMillis())
+        parameter("timestamp", timestamp)
 
         // format: {"key": "value"}
         setBody(

@@ -939,6 +939,7 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Server Ordering</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Stoat for Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_release_notes">Release Notes</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_server_folders">Server Folders</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (unknown)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Reset %1$s settings</string>
 
@@ -1361,4 +1362,17 @@
     <string name="permission_mention_everyone_description">Mention everyone and online members.</string>
     <string name="permission_mention_roles">Mention roles</string>
     <string name="permission_mention_roles_description">Mention specific server roles.</string>
+    
+    <string name="server_folder_unnamed">Folder</string>
+    <string name="server_folder_default_name">New Folder</string>
+    <string name="server_context_sheet_open">Open server actions</string>
+    <string name="server_folder_sheet_open">Open folder actions</string>
+    <string name="server_folder_sheet_rename">Rename folder</string>
+    <string name="server_folder_sheet_colour">Change colour</string>
+    <string name="server_folder_sheet_delete">Delete folder</string>
+    <string name="server_folder_edit_name">Name</string>
+    <string name="server_folder_edit_save">Save</string>
+    <string name="server_context_sheet_actions_add_to_folder">Add to folder</string>
+    <string name="server_context_sheet_actions_new_folder">New folder</string>
+    <string name="server_context_sheet_actions_remove_from_folder">Remove from folder</string>
 </resources>

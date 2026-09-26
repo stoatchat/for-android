@@ -124,6 +124,7 @@ fun ChatSettingsScreen(
                                     "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
                                     "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
                                     "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
+                                    "server-folders" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
                                     else -> stringResource(
                                         R.string.settings_chat_hint_poorly_formed_settings_keys_key_unknown,
                                         key
@@ -138,7 +139,13 @@ fun ChatSettingsScreen(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             for (key in LoadedSettings.poorlyFormedSettingsKeys.filter {
-                                it in setOf("ordering", "android", "notifications", "release-notes")
+                                it in setOf(
+                                    "ordering",
+                                    "android",
+                                    "notifications",
+                                    "release-notes",
+                                    "server-folders"
+                                )
                             }) {
                                 TextButton(
                                     onClick = {
@@ -148,6 +155,7 @@ fun ChatSettingsScreen(
                                                 "android" -> SyncedSettings.resetAndroid()
                                                 "notifications" -> SyncedSettings.resetNotifications()
                                                 "release-notes" -> SyncedSettings.resetReleaseNotes()
+                                                "server-folders" -> SyncedSettings.resetServerFolders()
                                             }
                                             LoadedSettings.poorlyFormedSettingsKeys -= key
                                         }
@@ -161,6 +169,7 @@ fun ChatSettingsScreen(
                                                 "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
                                                 "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
                                                 "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
+                                                "server-folders" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
                                                 else -> key
                                             }
                                         )
