@@ -104,15 +104,19 @@ class RailDragState(
 
     private data class RowBox(val index: Int, val top: Float, val bottom: Float)
 
-    private fun boxes(): List<RowBox> =
+    private fun headerBottom(): Float =
+        listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == stickyHeaderKey }
+            ?.let { (it.offset + it.size).toFloat() } ?: Float.NEGATIVE_INFINITY
+
+    private fun boxes(minTop: Float = Float.NEGATIVE_INFINITY): List<RowBox> =
         listState.layoutInfo.visibleItemsInfo.mapNotNull { info ->
             val index = rowIndex[info.key] ?: return@mapNotNull null
             RowBox(index, info.offset.toFloat(), (info.offset + info.size).toFloat())
+                .takeIf { it.top >= minTop }
         }.sortedBy { it.index }
 
     fun rowAt(y: Float): RailRow? {
-        val header = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.key == stickyHeaderKey }
-        if (header != null && y <= header.offset + header.size) return null
+        if (y <= headerBottom()) return null
         return boxes().firstOrNull { y >= it.top && y <= it.bottom }?.let { rows[it.index] }
     }
 
@@ -150,7 +154,8 @@ class RailDragState(
         val source = rows.getOrNull(rowIndex[key] ?: -1)
         val canFold = source is RailRow.ServerRow
         val canNest = source is RailRow.ServerRow
-        val boxes = boxes()
+        // Rows z-under sticky header can't be dropped onto
+        val boxes = boxes(minTop = headerBottom())
         if (boxes.isEmpty()) return RailIntent.Move(null, null)
 
         fun insertAt(index: Int): RailIntent {
