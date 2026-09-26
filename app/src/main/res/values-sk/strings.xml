@@ -42,10 +42,6 @@
     <string name="mfa_password_header">Vložte svoje heslo</string>
     <string name="mfa_password_lead">Vložte svoje heslo aby ste pokračovali.</string>
     <string name="about_brought_to_you_by">Prinesené k vám z láskou od tímu Revolt.</string>
-    <string name="about_tab_version">Verzia</string>
-    <string name="about_tab_details">Detaily</string>
-    <string name="oss_attribution_body_2">Sme vďační pre vývojarou týchto projektov že robia svoju prácu prístupnu k svetu.</string>
-    <string name="oss_attribution_warning">Tento následovný list je automatický generovány. Možno bude nehotový alebo nesprávny.</string>
     <string name="comingsoon_toast">Prepáčte, táto funkcia ešte není dostupná.</string>
     <string name="send_alt">Poslať</string>
     <string name="pick_emoji_alt">Vybrať emoji</string>
@@ -75,7 +71,6 @@
     <string name="overview_screen_share_profile">Zdielať profil</string>
     <string name="overview_screen_changelog">List zmien</string>
     <string name="overview_screen_changelog_description">Revolt nikdy nespí, pozrite sa čo sa na čom sa pracuje</string>
-    <string name="overview_screen_feedback_description">Máte niečo čo povedať? Počúvame</string>
     <string name="user_card_tap_to_copy">Kliknite aby ste skopírovali</string>
     <string name="user_card_error_sharing">Vyskitol sa problém pri zdieľaní vášho profilu.</string>
     <string name="user_card_data_point_display_name">%1$d meno</string>
@@ -220,7 +215,6 @@
     <string name="about">O</string>
     <string name="password_forgot_heading">Zabudli ste svoje heslo?</string>
     <string name="verify_then_choose_username">Verifikujte svoj email, a potom si vyberete svoje používatelské meno.</string>
-    <string name="oss_attribution_body">Revolt je postavený s pomocou týchto skvelých open-source projektou.</string>
     <string name="mfa_interstitial_lead">Máte dvoj faktorovú autentifikáciu (2FA) zapnutú aby váš účet bol extra v bezpečí.</string>
     <string name="register_data">Vaše data sú v bezpečí s nami. Nepredávame ich, ani ich nepoužívame aby sme vám ukazovali reklamy.</string>
     <string name="emoji_category_people">Ľudia &amp; Teľo</string>

@@ -23,8 +23,8 @@
     <string name="password_manager_hint">Bruker du en passordbank\?</string>
     <string name="password_forgot_heading">Har du glemt passordet ditt?</string>
     <string name="password_forgot_instructions">Skriv inn e-posten din, så skal vi sende deg instruksjoner for å tilbakestille passordet ditt.</string>
-    <string name="register_heading">Velkommen til Revolt</string>
-    <string name="register_image_alt">Du kan bruke Revolt til å snakke om ting.</string>
+    <string name="register_heading">Velkommen til Stoat</string>
+    <string name="register_image_alt">Bruk Stoat til å snakke om ting.</string>
     <string name="register_data">Informasjonen din er trygg hos oss. Vi selger det ikke, og vi bruker det heller ikke til å vise deg reklamer.</string>
     <string name="register_email">E-post</string>
     <string name="register_password">Passord</string>
@@ -182,14 +182,13 @@
     <string name="settings_appearance">Utseende</string>
     <string name="settings_appearance_theme">Drakt</string>
     <string name="settings_appearance_theme_none">System</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Lys</string>
     <string name="settings_appearance_theme_amoled">Helt Svart</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (ikke støttet)</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You er ikke støttet på denne enheten.</string>
     <string name="settings_feedback">Tilbakemelding</string>
-    <string name="login_onboarding_body">Revolt er en av de beste måtene å holde kontakt med vennene og felleskapene dine, fra hvor som helst, når som helst.</string>
+    <string name="login_onboarding_body">Stoat er en av de beste måtene å holde kontakt med vennene og felleskapene dine, fra hvor som helst, når som helst.</string>
     <string name="register_form_heading">La oss sette deg opp.</string>
     <string name="register_email_verification_hint">Vi kommer til å sende deg en bekreftelses-e-post for å bekrefte kontoen din.</string>
     <string name="verify_then_choose_username">Bekreft e-posten din, så kan vi begynne med å velge brukernavnet ditt.</string>
@@ -216,11 +215,6 @@
     <string name="service_health_alert_actions_default">Lær mer</string>
     <string name="could_not_log_in_body">Du kan ha logget ut fra en annen enhet, eller internettforbindelsen din kan være nede.</string>
     <string name="could_not_log_in_cta_logout">Logg ut</string>
-    <string name="about_tab_version">Versjon</string>
-    <string name="about_tab_details">Detaljer</string>
-    <string name="oss_attribution_body_2">Vi er takknemlige overfor utviklerne av disse prosjektene for å ha gjort arbeidet sitt tilgjengelig for verden.</string>
-    <string name="oss_attribution_warning">Listen nedenfor er automatisk generert. Den kan være ufullstendig eller unøyaktig.</string>
-    <string name="oss_attribution_generation_date">Sist oppdatert: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Trykk for å se lisens</string>
     <string name="pick_emoji_alt">Velg emoji</string>
     <string name="badge_webhook_alt">Webhook</string>
@@ -303,8 +297,6 @@
     <string name="channel_age_gate_dob_year">År</string>
     <string name="channel_age_gate_dob_proceed">Fortsett</string>
     <string name="overview_screen_changelog">Endringslogg</string>
-    <string name="overview_screen_feedback">Gi tilbakemelding</string>
-    <string name="overview_screen_feedback_description">Har du noe å si? Vi er lutter øre</string>
     <string name="user_card_tap_to_copy">Trykk for å kopiere</string>
     <string name="friends">Venner</string>
     <string name="friends_incoming_requests">Innkommende forespørsler</string>
@@ -525,10 +517,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Serverrekkefølge</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt for Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (ukjent)</string>
-    <string name="settings_changelogs">Endringslogger</string>
-    <string name="settings_changelogs_new_header">Hva har skjedd ✨</string>
-    <string name="settings_changelogs_historical_version_header">Endringslogg for %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">den versjonen</string>
     <string name="settings_language">Språk</string>
     <string name="settings_language_auto">Systemstandard</string>
     <string name="channel_settings">Kanalinnstillinger</string>
@@ -556,7 +544,7 @@
     <string name="geogate_header">Ikke tilgjengelig i din region</string>
     <string name="geogate_channel_icon_alt">Utilgjengelig kanal</string>
     <string name="geogate_description">Revolt kan blokkere innhold i visse jurisdiksjoner som svar på lovgivning eller rettslige krav.</string>
-    <string name="geogate_acknowledge">Bekreft</string>
+    <string name="geogate_acknowledge">Anerkjenn</string>
     <string name="settings_appearance_colour_overrides_outline">Kontur</string>
     <string name="settings_chat_quick_reply_double_tap">Dobbeltrykk for å svare</string>
     <string name="share_target_attachment_too_large">Dette vedlegget er for stort for Revolt (maks. $1$s).</string>
@@ -570,4 +558,13 @@
     <string name="emoji_category_people">Folk og kropp</string>
     <string name="overview_screen_share_profile_description">Ta en titt på brukerkortet ditt og få en spesiell lenke å dele</string>
     <string name="user_card_error_sharing">Det oppstod en feil under deling av brukerkoret ditt.</string>
+    <string name="_new">Ny</string>
+    <string name="retry">Prøv på nytt</string>
+    <string name="mfa_prompt_title">Verifiser at det er deg</string>
+    <string name="mfa_prompt_lead">For din sikkerhet, bekreft denne handlingen med en av dine verifikasjonsmetoder.</string>
+    <string name="mfa_method_password">Passord</string>
+    <string name="mfa_prompt_confirm">Bekreft</string>
+    <string name="mfa_prompt_load_error_title">Noe gikk galt</string>
+    <string name="mfa_error_invalid_credentials">Feil passord. Vennligst prøv igjen.</string>
+    <string name="mfa_error_invalid_token">Koden var ikke akseptert. Den kan være feil eller utgått. Vennligst prøv igjen.</string>
 </resources>

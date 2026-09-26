@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_onboarding_heading">⎓¦リ⟍̅ ǁ𝙹⚍∷ ᓵ𝙹ᒲᒲ⚍リ¦ℸ ̣ǁ, ᓵ𝙹リリᒷᓵℸ ̣ ∴¦ℸ ̣⍑ ℸ ̣⍑ᒷ ∴𝙹∷ꖎ⟍̅.</string>
+    <string name="back">← ʖᔑᓵꖌ</string>
+    <string name="next">リᒷ ̇/ℸ ̣ →</string>
+    <string name="ok">𝙹ꖌ</string>
+    <string name="cancel">ᓵᔑリᓵᒷꖎ</string>
+    <string name="share">ᓭ⍑ᔑ∷ᒷ</string>
+    <string name="_new">リᒷ∴</string>
+    <string name="retry">∷ᒷℸ ̣∷ǁ</string>
+    <string name="lets_go">ꖎᒷℸ ̣\'ᓭ ˧𝙹</string>
+    <string name="loading">⎓ᒷℸ ̣ᓵ⍑¦リ˧ ᓭ𝙹ᒲᒷ ¦リ⎓𝙹, ⍑ᔑリ˧ ¦リ ℸ ̣⍑ᒷ∷ᒷ…</string>
+    <string name="rate_limit_toast">⍑𝙹ꖎ⟍̅ ǁ𝙹⚍∷ ⍑𝙹∷ᓭᒷᓭ! ǁ𝙹⚍\'∷ᒷ ⟍̅𝙹¦リ˧ ℸ ̣⍑ᔑℸ ̣ ℸ ̣𝙹𝙹 𝙹⎓ℸ ̣ᒷリ ¦リ ᔑ ᓭ⍑𝙹∷ℸ ̣ ᔑᒲ𝙹⚍リℸ ̣ 𝙹⎓ ℸ ̣¦ᒲᒷ.</string>
+    <string name="terms_of_service">ℸ ̣ᒷ∷ᒲᓭ 𝙹⎓ ᓭᒷ∷⍊¦ᓵᒷ</string>
+    <string name="privacy_policy">!¡∷¦⍊ᔑᓵǁ !¡𝙹ꖎ¦ᓵǁ</string>
+    <string name="community_guidelines">ᓵ𝙹ᒲᒲ⚍リ¦ℸ ̣ǁ ˧⚍¦⟍̅ᒷꖎ¦リᒷᓭ</string>
+    <string name="email">ᒷᒲᔑ¦ꖎ</string>
+    <string name="password">!¡ᔑᓭᓭ∴𝙹∷⟍̅</string>
+    <string name="hide_password">⍑¦⟍̅ᒷ !¡ᔑᓭᓭ∴𝙹∷⟍̅</string>
+    <string name="show_password">ᓭ⍑𝙹∴ !¡ᔑᓭᓭ∴𝙹∷⟍̅</string>
+    <string name="login">ꖎ𝙹˧ ¦リ</string>
+    <string name="signup">ᓭ¦˧リ ⚍!¡</string>
+    <string name="resend">∷ᒷᓭᒷリ⟍̅</string>
+    <string name="send_email">ᓭᒷリ⟍̅ ᒷᒲᔑ¦ꖎ</string>
+    <string name="service_health_alert">ᓵ⚍∷∷ᒷリℸ ̣ꖎǁ 𝙹リ˧𝙹¦リ˧</string>
+    <string name="service_health_alert_actions_default">ꖎᒷᔑ∷リ ᒲ𝙹∷ᒷ</string>
+    <string name="service_health_alert_actions_dismiss">⟍̅¦ᓭᒲ¦ᓭᓭ</string>
+    <string name="could_not_log_in_heading">ℸ ̣⍑ᒷ∷ᒷ ∴ᔑᓭ ᔑ !¡∷𝙹ʖꖎᒷᒲ ꖎ𝙹˧˧¦リ˧ ǁ𝙹⚍ ¦リ</string>
+    <string name="could_not_log_in_cta_try_again">ℸ ̣∷ǁ ᔑ˧ᔑ¦リ</string>
+    <string name="could_not_log_in_cta_logout">ꖎ𝙹˧ 𝙹⚍ℸ ̣</string>
+    <string name="could_not_log_in_body">ǁ𝙹⚍ ᒲ¦˧⍑ℸ ̣ ⍑ᔑ⍊ᒷ ꖎ𝙹˧˧ᒷ⟍̅ 𝙹⚍ℸ ̣ ⎓∷𝙹ᒲ ᔑリ𝙹ℸ ̣⍑ᒷ∷ ⟍̅ᒷ⍊¦ᓵᒷ, 𝙹∷ ǁ𝙹⚍∷ ¦リℸ ̣ᒷ∷リᒷℸ ̣ ᓵ𝙹リリᒷᓵℸ ̣¦𝙹リ ᒲ¦˧⍑ℸ ̣ ʖᒷ ⟍̅𝙹∴リ.</string>
+    <string name="login_onboarding_body">ᓭℸ ̣𝙹ᔑℸ ̣ ¦ᓭ 𝙹リᒷ 𝙹⎓ ℸ ̣⍑ᒷ ʖᒷᓭℸ ̣ ∴ᔑǁᓭ ℸ ̣𝙹 ᓭℸ ̣ᔑǁ ᓵ𝙹リリᒷᓵℸ ̣ᒷ⟍̅ ∴¦ℸ ̣⍑ ǁ𝙹⚍∷ ⎓∷¦ᒷリ⟍̅ᓭ ᔑリ⟍̅ ᓵ𝙹ᒲᒲ⚍リ¦ℸ ̣ǁ, ᔑリǁ∴⍑ᒷ∷ᒷ, ᔑリǁℸ ̣¦ᒲᒷ.</string>
+    <string name="service_health_alert_body_default">∴ᒷ ᔑ∷ᒷ ᓵ⚍∷∷ᒷリℸ ̣ꖎǁ ᒷ ̇/!¡ᒷ∷¦ᒷリᓵ¦リ˧ ¦ᓭᓭ⚍ᒷᓭ ∴¦ℸ ̣⍑ 𝙹⚍∷ ᓭᒷ∷⍊¦ᓵᒷᓭ. !¡ꖎᒷᔑᓭᒷ ᓵ⍑ᒷᓵꖌ 𝙹⚍∷ ᓭℸ ̣ᔑℸ ̣⚍ᓭ !¡ᔑ˧ᒷ ⎓𝙹∷ ᒲ𝙹∷ᒷ ¦リ⎓𝙹∷ᒲᔑℸ ̣¦𝙹リ.</string>
+    <string name="mfa_totp_code">ᓵ𝙹⟍̅ᒷ</string>
+    <string name="mfa_recovery_header">ᒷリℸ ̣ᒷ∷ ᔑ ∷ᒷᓵ𝙹⍊ᒷ∷ǁ ᓵ𝙹⟍̅ᒷ</string>
+    <string name="mfa_recovery_lead">ᒷリℸ ̣ᒷ∷ 𝙹リᒷ 𝙹⎓ ǁ𝙹⚍∷ ∷ᒷᓵ𝙹⍊ᒷ∷ǁ ᓵ𝙹⟍̅ᒷᓭ.</string>
+</resources>

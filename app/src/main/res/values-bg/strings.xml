@@ -91,17 +91,11 @@
     <string name="inline_media_picker_no_media_placeholder">Изберете медия…</string>
     <string name="emoji_picker_skin_tone_fitzpatrick_6">Тъмна кожа</string>
     <string name="could_not_log_in_body">Може да сте излезли от друго средство, или интернетът ви може да не работи.</string>
-    <string name="about_tab_details">Подробности</string>
     <string name="oss_attribution">Приписване на OSS</string>
-    <string name="oss_attribution_body">Revolt е създаден с помощта на тези страхотни проекти с отворен код.</string>
-    <string name="oss_attribution_body_2">Благодарни сме на разработчиците на тези проекти за това, че са предоставили работата си на света.</string>
-    <string name="oss_attribution_warning">Списъкът по-долу се генерира автоматично. Възможно е той да е непълен или неточен.</string>
-    <string name="oss_attribution_generation_date">Последна актуализация: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Натиснете, за да видите лиценза</string>
     <string name="emoji_category_flags">Знамена</string>
     <string name="about_full_name">Revolt на Android</string>
     <string name="about_brought_to_you_by">Представяме ви с ❤️ от екипа на Revolt.</string>
-    <string name="about_tab_version">Версия</string>
     <string name="pick_emoji_alt">Изберете емотикона</string>
     <string name="attachment_preview_close">Затворете</string>
     <string name="attachment_preview_remove">Премахнете</string>
@@ -119,7 +113,6 @@
     <string name="home_join_jenvolt">Присъединете се към Jenvolt</string>
     <string name="home_join_jenvolt_description">Jenvolt е пространството за разработчици за всички неща, свързани с приложенията за Android и други. Поддръжка и обратна връзка тук. Може би ще можете да изпробвате нови функции! 👀</string>
     <string name="overview_screen_error">Не можахме да заредим прегледа ви</string>
-    <string name="overview_screen_feedback_description">Имате нещо да кажете? Слушаме</string>
     <string name="friends_blocked">Блокирани</string>
     <string name="overview_screen_settings">Отворете настройките</string>
     <string name="overview_screen_error_description">Моля опитайте отново после.</string>
