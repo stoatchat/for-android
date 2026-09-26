@@ -4,6 +4,7 @@ private val STRING_IS_CUSTOM_EMOTES_REGEX = Regex("(?::[0-9A-HJKMNP-TV-Z]{26}:|\
 private val CUSTOM_EMOTE_REGEX = Regex(":[0-9A-HJKMNP-TV-Z]{26}:")
 private const val VARIATION_SELECTOR_16 = 0xFE0F
 private const val COMBINING_ENCLOSING_KEYCAP = 0x20E3
+private const val ZERO_WIDTH_NON_JOINER = "‌"
 
 private fun isKeycapBase(codepoint: Int): Boolean =
     codepoint == '#'.code || codepoint == '*'.code || codepoint in '0'.code..'9'.code
@@ -60,7 +61,8 @@ object Gigamoji {
         return count
     }
 
-    fun useGigamojiForMessage(content: String): GigamojiState {
+    fun useGigamojiForMessage(rawContent: String): GigamojiState {
+        val content = rawContent.replace(ZERO_WIDTH_NON_JOINER, "")
         if (content.isBlank()) return GigamojiState.None
         val unicodeCount = unicodeEmojiCount(content) ?: return GigamojiState.None
         val total = unicodeCount + countCustomEmotes(content)
