@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.text.format.Formatter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -219,7 +220,7 @@ fun MessageAttachment(
 ) {
     Box(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.medium)
+            .clip(if (waveform != null) CircleShape else MaterialTheme.shapes.medium)
             .clickable { onAttachmentClick(attachment) }
     ) {
         if (waveform != null) {
