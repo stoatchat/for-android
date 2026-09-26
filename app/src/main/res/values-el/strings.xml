@@ -62,10 +62,7 @@
     <string name="mfa_password_lead">Πληκτρολόγησε τον κωδικό πρόσβασής σου για να συνεχίσεις.</string>
     <string name="comingsoon_toast">Λυπούμαστε, αυτή η λειτουργία δεν είναι ακόμα έτοιμη.</string>
     <string name="check_mail">Ελέγξτε τα mail σας!</string>
-    <string name="oss_attribution_body">Το Revolt δημιουργείται με τη βοήθεια έργων ανοιχτού κώδικα.</string>
     <string name="about_brought_to_you_by">Με ❤️ από την ομάδα της Revolt.</string>
-    <string name="about_tab_version">Έκδοση</string>
-    <string name="about_tab_details">Λεπτομέριες</string>
     <string name="remove_reply_alt">Αφαίρεση απάντησης</string>
     <string name="reply_mention_on">\@ ενεργό</string>
     <string name="reply_mention_off">\@ ανενεργό</string>
@@ -107,11 +104,9 @@
     <string name="user_badge_founder">Ιδρυτής</string>
     <string name="report_reason_content_scams_fraud">Απάτες</string>
     <string name="emoji_picker_skin_tone_none">Χωρίς τόνο δέρματος</string>
-    <string name="overview_screen_feedback_description">Έχετε κάτι να πείτε; Είμαστε όλοι αυτιά</string>
     <string name="friends">Φίλοι</string>
     <string name="friends_outgoing_requests">Εξερχόμενα Αιτήματα</string>
     <string name="friends_all">\'Ολοι</string>
-    <string name="overview_screen_feedback">Συνεισφέρετε σχόλια</string>
     <string name="badge_webhook_alt">Webhook</string>
     <string name="overview_screen_title">Εσύ</string>
     <string name="overview_screen_error">Δεν ήταν δυνατή η φόρτωση της επισκόπησής σας</string>
@@ -254,7 +249,6 @@
     <string name="settings_appearance">Εμφάνιση</string>
     <string name="settings_appearance_theme">Θέμα</string>
     <string name="settings_appearance_theme_none">Σύστημα</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Ανοικτόχρωμο</string>
     <string name="settings_appearance_theme_amoled">Καθαρό Μαύρο</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Το Material You δεν υποστηρίζεται σε αυτή τη συσκευή.</string>
@@ -286,12 +280,10 @@
     <string name="notification_channel_group_social">Φίλοι και Κοινωνικά</string>
     <string name="notification_channel_group_conversations">Συζητήσεις</string>
     <string name="notification_channel_friend_requests_description">Εισερχόμενα αιτήματα φιλίας, καθώς και αποδεκτά αιτήματα που έχετε στείλει.</string>
-    <string name="oss_attribution_generation_date">Τελευταία ενημέρωση: %1$s</string>
     <string name="yesterday">Χθές</string>
     <string name="settings">Ρυθμίσεις</string>
     <string name="hide_password">Κρύψε τον κωδικό</string>
     <string name="show_password">Δείξε τον κωδικό</string>
-    <string name="oss_attribution_warning">Η παρακάτω λίστα δημιουργείται αυτόματα. Μπορεί να είναι ελλιπής ή ανακριβής.</string>
     <string name="oss_attribution_tap_to_view_license">Πατήστε για προβολή άδειας χρήσης</string>
     <string name="pick_emoji_alt">Επιλέξτε emoji</string>
     <string name="add_attachment_alt">Προσθήκη επισύναψης</string>
@@ -434,7 +426,6 @@
     <string name="settings_appearance_colour_overrides_error">Σφάλμα</string>
     <string name="settings_appearance_colour_overrides_outline">Περίγραμμα</string>
     <string name="channel_settings_delete_confirm_yes">Διαγραφή</string>
-    <string name="settings_changelogs">Κατάλογος Αλλαγών</string>
     <string name="settings_language">Γλώσσα</string>
     <string name="settings_language_auto">Προεπιλογή συστήματος</string>
     <string name="channel_settings">Ρυθμίσεις καναλιού</string>
@@ -458,7 +449,6 @@
     <string name="service_health_alert">Τώρα σε εξέλιξη</string>
     <string name="service_health_alert_body_default">Αυτήν τη στιγμή αντιμετωπίζουμε προβλήματα με τις υπηρεσίες μας. Ελέγξτε τη σελίδα κατάστασης για περισσότερες πληροφορίες.</string>
     <string name="service_health_alert_actions_dismiss">Απέρριψε</string>
-    <string name="oss_attribution_body_2">Είμαστε ευγνώμονες στους προγραμματιστές αυτών των εργασιών που έκαναν το έργο τους διαθέσιμο στον κόσμο.</string>
     <string name="message_context_sheet_actions_copy">Αντιγραφή</string>
     <string name="message_context_sheet_actions_copy_failed_empty">Το μήνυμα είναι κενό, τίποτα για αντιγραφή</string>
     <string name="message_context_sheet_actions_delete_confirmation_body">Θα φύγει για πάντα (πολύ καιρό!)</string>
@@ -498,8 +488,6 @@
     <string name="settings_chat_interactive_embeds_description">Οι διαδραστικές ενσωματώσεις σάς επιτρέπουν να αλληλεπιδράτε με ορισμένους τύπους συνδέσμων απευθείας μέσα στη συνομιλία. Για παράδειγμα, μπορείτε να αναπαράγετε βίντεο YouTube ή να κάνετε προεπισκόπηση άλμπουμ από το Apple Music.</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
     <string name="settings_feedback_description">Εγγραφείτε στον server του Revolt για να κάνετε σχόλια ή προτάσεις και να αναφέρετε σφάλματα.</string>
-    <string name="settings_changelogs_new_header">Τι μαγειρεύεται ✨</string>
-    <string name="settings_changelogs_historical_version_header">Κατάλογος αλλαγών για %1$s</string>
     <string name="channel_settings_overview_update_info_error_fallback">Παρουσιάστηκε σφάλμα κατά την ενημέρωση του καναλιού.</string>
     <string name="channel_settings_overview_nsfw_undo_confirm_title">Καταργήστε την επισήμανση αυτού του καναλιού ως NSFW;</string>
     <string name="channel_settings_overview_nsfw_undo_confirm_description">Δεν θα ζητείται πλέον από τους χρήστες να επιβεβαιώσουν την ηλικία τους πριν εγγραφούν σε αυτό το κανάλι. Βεβαιωθείτε ότι το περιεχόμενο είναι κατάλληλο για όλες τις ηλικίες.</string>
@@ -518,7 +506,6 @@
     <string name="report_block_yes">Μπλοκάρετε</string>
     <string name="report_block_no">Μην μπλοκάρετε</string>
     <string name="media_viewer_share_video">Κοινοποίηση βίντεο</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">αυτή την έκδοση</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="channel_info_sheet_options_invite">Πρόσκληση</string>
     <string name="channel_age_gate_title">Αυτό το κανάλι επισημαίνεται ως NSFW</string>

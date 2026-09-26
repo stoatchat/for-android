@@ -28,17 +28,14 @@
     <string name="could_not_log_in_heading">Kilo problema prisijungiant</string>
     <string name="lets_go">Eikime</string>
     <string name="login_onboarding_body">„Revolt“ – tai vienas geriausių būdų palaikyti ryšį su draugais ir bendruomene bet kur ir bet kada.</string>
-    <string name="oss_attribution_body">Revolt sukurta naudojant šiuos nuostabius atvirojo kodo projektus.</string>
     <string name="mfa_totp_header">Įvesti šešiaženklį kodą</string>
     <string name="mfa_password_header">Įveskite slaptažodį</string>
     <string name="badge_masquerade_alt">Iš susieto kanalo</string>
     <string name="mfa_interstitial_header">Dar vienas dalykas</string>
-    <string name="oss_attribution_warning">Toliau pateiktas sąrašas sugeneruojamas automatiškai. Jis gali būti neišsamus arba netikslus.</string>
     <string name="too_many_replies">Vienu metu galite atsakyti tik į %1$d pranešimus.</string>
     <string name="login_onboarding_heading">Raskite savo bendruomenę, susisiekite su pasauliu.</string>
     <string name="home_join_jenvolt_description">Jenvolt yra kūrėjų valdoma erdvė, skirta visiems Android programėlių ir daugiau. Parama ir atsiliepimai pateikiami čia. Galbūt galėsite išbandyti naujas funkcijas! 👀</string>
     <string name="badge_team_member_alt">Revolt komandos narys</string>
-    <string name="overview_screen_feedback_description">Turite ką pasakyti? Jus išklausysime</string>
     <string name="friends_deny_all_incoming">Išvalyti visus gaunamus prašymus</string>
     <string name="no_channels_heading">Šiek tiek nepatogu.</string>
     <string name="overview_screen_settings">Atidaryti nustatymus</string>
@@ -83,11 +80,7 @@
     <string name="about">Apie</string>
     <string name="about_full_name">Revolt ant Android</string>
     <string name="about_brought_to_you_by">Su ❤️ pristato „Revolt“ komanda.</string>
-    <string name="about_tab_version">Versija</string>
-    <string name="about_tab_details">Išsami informacija</string>
     <string name="oss_attribution">OSS priskyrimas</string>
-    <string name="oss_attribution_body_2">Esame dėkingi šių projektų kūrėjams už tai, kad jų darbai tapo prieinami pasauliui.</string>
-    <string name="oss_attribution_generation_date">Paskutinį kartą atnaujinta: %1$s</string>
     <string name="comingsoon_toast">Atsiprašome, ši funkcija dar neparengta.</string>
     <string name="typing_one">%1$s rašo…</string>
     <string name="typing_many">%1$s rašo…</string>
@@ -123,7 +116,6 @@
     <string name="overview_screen_share_profile_description">Pažvelkite į savo naudotojo kortelę ir gaukite specialią nuorodą, kuria galėsite dalytis</string>
     <string name="overview_screen_changelog">Pakeitimų sąrašas</string>
     <string name="overview_screen_changelog_description">Revolt niekada nemiega, pažiūrėkite, kas buvo kuriama</string>
-    <string name="overview_screen_feedback">Pateikite atsiliepimus</string>
     <string name="user_card_tap_to_copy">Bakstelėkite , kad nukopijuotumėte</string>
     <string name="user_card_error_sharing">Dalijantis naudotojo kortele įvyko klaida.</string>
     <string name="user_card_data_point_display_name">%1$d.Vardas</string>
@@ -484,7 +476,6 @@
     <string name="settings_appearance">Išvaizda</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Šviesi</string>
     <string name="settings_appearance_theme_amoled">Grynai juoda</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -512,10 +503,6 @@
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
     <string name="settings_feedback">Atsiliepimai</string>
     <string name="settings_feedback_description">Prisijunkite prie Revolt serverio ir pateikite atsiliepimų ar pasiūlymų bei praneškite apie klaidas.</string>
-    <string name="settings_changelogs">Keitimų sąrašai</string>
-    <string name="settings_changelogs_new_header">Kas buvo ruošiama ✨</string>
-    <string name="settings_changelogs_historical_version_header">%1$s pakeitimų sąrašas</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">šią versiją</string>
     <string name="settings_language">Kalba</string>
     <string name="settings_language_auto">Sistemos numatyta</string>
     <string name="channel_settings">Kanalo nustatymai</string>
