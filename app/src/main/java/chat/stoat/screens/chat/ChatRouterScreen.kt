@@ -101,6 +101,7 @@ import chat.stoat.sheets.EmoteInfoSheet
 import chat.stoat.sheets.LinkInfoSheet
 import chat.stoat.sheets.ReactionInfoSheet
 import chat.stoat.sheets.ServerContextSheet
+import chat.stoat.sheets.ServerFolderPickerSheet
 import chat.stoat.sheets.StatusSheet
 import chat.stoat.sheets.UserInfoSheet
 import chat.stoat.sheets.UserInfoSheet2
@@ -367,6 +368,7 @@ fun ChatRouterScreen(
 
     var showServerContextSheet by remember { mutableStateOf(false) }
     var serverContextSheetTarget by remember { mutableStateOf("") }
+    var showServerFolderPicker by remember { mutableStateOf(false) }
 
     var showUserContextSheet by remember { mutableStateOf(false) }
     var userContextSheetTarget by remember { mutableStateOf("") }
@@ -667,6 +669,30 @@ fun ChatRouterScreen(
                 onReportServer = {
                     reportServerTarget = serverContextSheetTarget
                     showReportServer = true
+                },
+                onPickFolder = {
+                    serverContextSheetState.hide()
+                    showServerContextSheet = false
+                    showServerFolderPicker = true
+                }
+            )
+        }
+    }
+
+    if (showServerFolderPicker) {
+        val serverFolderPickerState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            sheetState = serverFolderPickerState,
+            onDismissRequest = {
+                showServerFolderPicker = false
+            }
+        ) {
+            ServerFolderPickerSheet(
+                serverId = serverContextSheetTarget,
+                onHideSheet = {
+                    serverFolderPickerState.hide()
+                    showServerFolderPicker = false
                 }
             )
         }
