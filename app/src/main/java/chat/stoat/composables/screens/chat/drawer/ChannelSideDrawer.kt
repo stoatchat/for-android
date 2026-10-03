@@ -41,6 +41,9 @@ import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.foundation.withoutVisualEffect
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -57,6 +60,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -880,6 +884,29 @@ fun ColumnScope.ServerChannelListRenderer(
     serverId: String
 ) {
     val scope = rememberCoroutineScope()
+    val collapsedCategories = remember { mutableStateMapOf<String, Boolean>() }
+
+    val visibleItems by remember(categorisedChannels) {
+        derivedStateOf {
+            if (categorisedChannels.isNullOrEmpty()) return@derivedStateOf emptyList()
+            val result = mutableListOf<CategorisedChannelList>()
+            var currentCategoryId: String? = null
+            for (item in categorisedChannels) {
+                when (item) {
+                    is CategorisedChannelList.Category -> {
+                        currentCategoryId = item.category.id
+                        result.add(item)
+                    }
+                    is CategorisedChannelList.Channel -> {
+                        if (currentCategoryId == null || collapsedCategories[currentCategoryId] != true) {
+                            result.add(item)
+                        }
+                    }
+                }
+            }
+            result
+        }
+    }
 
     LazyColumn(
         state = channelListState,
@@ -912,8 +939,8 @@ fun ColumnScope.ServerChannelListRenderer(
             }
         }
 
-        items(categorisedChannels?.size ?: 0) {
-            when (val channelOrCat = categorisedChannels?.get(it)) {
+        items(visibleItems.size) {
+            when (val channelOrCat = visibleItems[it]) {
                 is CategorisedChannelList.Channel -> {
                     ChannelItem(
                         channel = channelOrCat.channel,
@@ -947,7 +974,16 @@ fun ColumnScope.ServerChannelListRenderer(
                 }
 
                 is CategorisedChannelList.Category -> {
-                    CategoryItem(category = channelOrCat.category)
+                    val categoryId = channelOrCat.category.id
+                    CategoryItem(
+                        category = channelOrCat.category,
+                        isCollapsed = categoryId != null && collapsedCategories[categoryId] == true,
+                        onToggleCollapse = {
+                            if (categoryId != null) {
+                                collapsedCategories[categoryId] = collapsedCategories[categoryId] != true
+                            }
+                        }
+                    )
                 }
 
                 else -> {}
@@ -1213,16 +1249,30 @@ private fun VoiceChannelParticipantRow(
 
 @Composable
 fun CategoryItem(
-    category: Category
+    category: Category,
+    isCollapsed: Boolean = false,
+    onToggleCollapse: () -> Unit = {}
 ) {
-    Text(
-        text = category.title ?: stringResource(R.string.unknown),
-        style = MaterialTheme.typography.labelLarge,
-        fontSize = 16.sp,
-        modifier = Modifier.padding(
-            start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable(onClick = onToggleCollapse)
+            .padding(start = 24.dp, end = 16.dp, top = 24.dp, bottom = 16.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = category.title ?: stringResource(R.string.unknown),
+            style = MaterialTheme.typography.labelLarge,
+            fontSize = 16.sp,
+            modifier = Modifier.weight(1f)
         )
-    )
+        Icon(
+            imageVector = if (isCollapsed) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(20.dp)
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
