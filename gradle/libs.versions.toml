@@ -10,8 +10,8 @@ agp = "9.3.2"
 google-services = "4.4.4"
 sentry = "8.41.0" # This is separate from the gradle plugin version which is defined ad hoc below
 sqldelight = "2.3.2"
-compose-bom = "2026.03.00"
-material3 = "1.5.0-alpha15"
+compose-bom = "2026.09.00"
+material3 = "1.5.0-alpha29"
 lifecycle = "2.10.0"
 accompanist = "0.37.3"
 ktor = "3.4.1"
@@ -54,7 +54,7 @@ kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui", version = "1.8.2" }
-compose-runtime = { module = "androidx.compose.runtime:runtime" }
+compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version = "1.12.1" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }

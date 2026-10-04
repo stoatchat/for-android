@@ -24,22 +24,20 @@ kotlin {
             implementation(libs.kotlin.serialization.json)
             implementation(libs.kotlin.serialization.cbor)
             implementation(libs.kotlin.datetime)
+            implementation(libs.compose.multiplatform.runtime)
             implementation(libs.kermit)
             implementation(libs.sentry.kotlin.multiplatform)
             implementation(libs.android.datastore.preferences.core)
-        }
-
-        androidMain.dependencies {
-            implementation(project.dependencies.platform(libs.compose.bom))
-            implementation(libs.compose.runtime)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.contentnegotiation)
-            implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.serialization.kotlinx.json)
+        }
 
-            implementation(libs.android.core.ktx)
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+
             implementation(libs.lifecycle.process)
             implementation(libs.android.datastore.preferences)
         }
