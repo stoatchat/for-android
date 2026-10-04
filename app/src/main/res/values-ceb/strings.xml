@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="next">Sunod</string>
+    <string name="ok">Sige</string>
+    <string name="cancel">Kansela</string>
+    <string name="share">I-share</string>
+    <string name="_new">Bag-o</string>
+    <string name="lets_go">Sige na</string>
+    <string name="loading">Nagkuha og impormasyon, hulat lang…</string>
+    <string name="terms_of_service">Mga Termino sa Serbisyo</string>
+    <string name="back">Balik</string>
+    <string name="retry">Sulay Usab</string>
+    <string name="rate_limit_toast">Hinay-hinay lang! Sige ra ka\'g buhat ana sulod sa mubo nga panahon.</string>
+</resources>

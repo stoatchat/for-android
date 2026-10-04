@@ -32,9 +32,6 @@
     <string name="mfa_password_lead">ใส่รหัสผ่านของคุณเพื่อจะไปต่อ</string>
     <string name="about">เกี่ยวกับ</string>
     <string name="about_full_name">Revolt บน Android</string>
-    <string name="about_tab_version">เวอร์ชั่น</string>
-    <string name="about_tab_details">รายละเอียด</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">เวอร์ชั้นนั้น</string>
     <string name="back">← กลับ</string>
     <string name="cancel">ยกเลิก</string>
     <string name="loading">กำลังรับข้อมูล, รอสักพักนะ…</string>
@@ -56,12 +53,10 @@
     <string name="mfa_password_header">ใส่รหัสผ่านของคุณ</string>
     <string name="about_brought_to_you_by">ให้คุณด้วย ❤️ โดยทีมงาน Revolt</string>
     <string name="oss_attribution">การระบุแหล่งที่มาของ OSS</string>
-    <string name="oss_attribution_body">Revolt ได้ถูกสร้างโดยใช้ผลงานโปรแกรมโอเพนซอร์สสุดเจ๋งมากมาย ดังนี้</string>
     <string name="community_guidelines">มาตรฐานชุมชน</string>
     <string name="register_form_heading">มาลงทะเบียนกันเถอะ</string>
     <string name="mfa_interstitial_lead">คุณได้เปิดใช้ระบบยืนยันตัวตนแบบสองขั้นตอนเพื่อเสริมความปลอดภัยให้บัญชีแล้ว</string>
     <string name="mfa_totp_lead">ใส่รหัสหกหลักจากแอพยืนยันตัวตนของคุณ</string>
-    <string name="oss_attribution_body_2">เราขอขอบคุณผู้พัฒนาเหล่านี้ที่นำผลงานให้ทั่วโลกใช้งานและต่อยอดได้</string>
     <string name="typing_one">%1$s กำลังพิมพ์…</string>
     <string name="send_alt">ส่ง</string>
     <string name="emoji_category_smileys">สไมลีย์และอีโมจิ</string>
@@ -71,8 +66,6 @@
     <string name="onboarding_others">ผู้ใช้อื่นจะค้นหา จดจำ และกล่าวถึงคุณได้ด้วยชื่อนี้</string>
     <string name="too_many_replies">คุณสามารถตอบกลับข้อความได้ทีละ %1$d ข้อความเท่านั้น</string>
     <string name="badge_masquerade_alt">จากช่องที่เชื่อมต่อ</string>
-    <string name="oss_attribution_warning">รายชื่อเหล่านี้ถูกสร้างขึ้นโดยอัตโนมัติ จึงอาจมีชื่อที่ขาดหายหรือไม่ตรงกัน</string>
-    <string name="oss_attribution_generation_date">อัพเดตล่าสุด: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">แตะเพื่อดูใบอนุญาต</string>
     <string name="comingsoon_toast">ขออภัย คุณสมบัตินี้ยังไม่พร้อมใช้งาน</string>
     <string name="typing_many">%1$s กำลังพิมพ์…</string>
@@ -117,7 +110,6 @@
     <string name="user_card_data_point_photo">รูป</string>
     <string name="could_not_log_in_heading">เกิดปัญหาในการล็อคอินของคุณ</string>
     <string name="attachment_preview_remove">ลบ</string>
-    <string name="overview_screen_feedback">ให้ข้อเสนอแนะ</string>
     <string name="time_rift_cta">โหลดข้อความ</string>
     <string name="hide_password">ซ่อนรหัสผ่าน</string>
     <string name="show_password">แสดงรหัสผ่าน</string>
