@@ -1,4 +1,4 @@
-package chat.stoat.api.internals
+package chat.stoat.ui.colour
 
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.core.graphics.toColorInt
-import chat.stoat.api.internals.colour.CSSColours
 
 fun Brush.Companion.solidColor(colour: Color) = SolidColor(colour)
 

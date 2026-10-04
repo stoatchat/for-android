@@ -41,14 +41,13 @@ import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.FriendRequests
+import chat.stoat.api.routes.channel.MAX_ADDABLE_PEOPLE_IN_GROUP
+import chat.stoat.api.routes.channel.MAX_PEOPLE_IN_GROUP
 import chat.stoat.api.routes.channel.createGroupDM
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.MemberListItem
 import kotlinx.coroutines.launch
-
-const val MAX_PEOPLE_IN_GROUP = 50
-const val MAX_ADDABLE_PEOPLE_IN_GROUP = MAX_PEOPLE_IN_GROUP - 1
 
 class CreateGroupScreenViewModel : ViewModel() {
     var groupName by mutableStateOf("")

@@ -95,8 +95,9 @@ class LoginViewModel(
                 } else e.message ?: "Unknown error"
                 return@launch
             }
-            if (response.error != null) {
-                _error = response.error.type
+            val error = response.error
+            if (error != null) {
+                _error = error.type
             } else {
                 Log.d("Login", "Checking for MFA")
                 if (response.proceedMfa) {
@@ -110,8 +111,9 @@ class LoginViewModel(
                     )
 
                     try {
-                        val token = response.firstUserHints!!.token
-                        val id = response.firstUserHints.id
+                        val hints = response.firstUserHints!!
+                        val token = hints.token
+                        val id = hints.id
 
                         kvStorage.set("sessionToken", token)
                         kvStorage.set("sessionId", id)
@@ -123,7 +125,7 @@ class LoginViewModel(
                         }
 
                         StoatAPI.loginAs(token)
-                        StoatAPI.setSessionId(response.firstUserHints.token)
+                        StoatAPI.setSessionId(id)
 
                         _navigateTo = "home"
                     } catch (e: Error) {

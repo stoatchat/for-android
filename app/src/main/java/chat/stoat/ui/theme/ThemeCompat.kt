@@ -1,4 +1,4 @@
-package chat.stoat.api.internals
+package chat.stoat.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

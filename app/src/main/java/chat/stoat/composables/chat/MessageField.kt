@@ -118,7 +118,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenDp
-import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
@@ -130,6 +129,7 @@ import chat.stoat.internals.Autocomplete
 import chat.stoat.media.AndroidVoiceRecorder
 import chat.stoat.media.Recording
 import chat.stoat.media.VoiceRecorder
+import chat.stoat.ui.colour.BrushCompat
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay

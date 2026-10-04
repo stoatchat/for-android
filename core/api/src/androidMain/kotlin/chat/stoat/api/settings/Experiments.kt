@@ -3,12 +3,10 @@ package chat.stoat.api.settings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import chat.stoat.BuildConfig
-import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.core.model.schemas.UserBadges
 import chat.stoat.core.model.schemas.has
-import chat.stoat.persistence.KVStorage
 
 class ExperimentInstance(
     default: Boolean,
@@ -42,9 +40,9 @@ object Experiments {
     }
 
     suspend fun hydrateWithKv() {
-        val kvStorage = KVStorage(StoatApplication.instance)
+        val kvStorage = StoatAPIHost.storage.kvStorage
 
-        if (BuildConfig.DEBUG) {
+        if (StoatAPIHost.config.isDebug) {
             LoadedSettings.experimentsEnabled = true
         } else {
             LoadedSettings.experimentsEnabled = kvStorage.getBoolean("experimentsEnabled") == true

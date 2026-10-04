@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.ui.theme.Theme
+import chat.stoat.api.settings.Theme
 
 private val NON_MATERIAL_COLOURS = mapOf(
     DisconnectionState.Disconnected to (Color(0xff4E0C0C) to Color(0xffff1744)),

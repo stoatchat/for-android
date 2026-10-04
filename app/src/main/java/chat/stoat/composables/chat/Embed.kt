@@ -23,13 +23,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import chat.stoat.api.internals.BrushCompat
-import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.microservices.january.asJanuaryProxyUrl
 import chat.stoat.composables.chat.specialembeds.SpecialEmbedSwitch
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.schemas.Embed
+import chat.stoat.ui.colour.BrushCompat
+import chat.stoat.ui.colour.solidColor
 import chat.stoat.core.model.schemas.Embed as EmbedSchema
 
 @Composable

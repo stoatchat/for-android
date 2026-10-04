@@ -5,7 +5,6 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
 import chat.stoat.core.model.schemas.Channel
-import chat.stoat.screens.create.MAX_ADDABLE_PEOPLE_IN_GROUP
 import io.ktor.client.request.delete
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -16,6 +15,9 @@ import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+
+const val MAX_PEOPLE_IN_GROUP = 50
+const val MAX_ADDABLE_PEOPLE_IN_GROUP = MAX_PEOPLE_IN_GROUP - 1
 
 @Serializable
 data class CreateGroupDMBody(

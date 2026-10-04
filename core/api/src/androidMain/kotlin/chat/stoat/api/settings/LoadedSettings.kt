@@ -4,10 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.core.model.schemas.AndroidSpecificSettingsSpecialEmbedSettings
-import chat.stoat.ui.theme.Theme
-import chat.stoat.ui.theme.getDefaultFont
-import chat.stoat.ui.theme.getDefaultTheme
+
+enum class Theme {
+    None,
+    Default,
+    Light,
+    M3Dynamic,
+    Amoled
+}
 
 enum class MessageReplyStyle {
     None,
@@ -23,19 +29,19 @@ enum class UserInterfaceFont {
 typealias SpecialEmbedSettings = AndroidSpecificSettingsSpecialEmbedSettings
 
 object LoadedSettings {
-    var theme by mutableStateOf(getDefaultTheme())
+    var theme by mutableStateOf(StoatAPIHost.platform.defaultTheme)
     var messageReplyStyle by mutableStateOf(MessageReplyStyle.SwipeFromEnd)
     var avatarRadius by mutableIntStateOf(50)
     var messageComposerBlurEnabled by mutableStateOf(true)
     var experimentsEnabled by mutableStateOf(false)
     var specialEmbedSettings by mutableStateOf(SpecialEmbedSettings())
     var poorlyFormedSettingsKeys by mutableStateOf(emptySet<String>())
-    var font by mutableStateOf(getDefaultFont())
+    var font by mutableStateOf(StoatAPIHost.platform.defaultFont)
 
     fun hydrateWithSettings(settings: SyncedSettings) {
         this.theme = settings.android.theme?.let {
             if (it == "Revolt") Theme.Default else Theme.valueOf(it)
-        } ?: getDefaultTheme()
+        } ?: StoatAPIHost.platform.defaultTheme
         this.messageReplyStyle =
             settings.android.messageReplyStyle?.let { MessageReplyStyle.valueOf(it) }
                 ?: MessageReplyStyle.SwipeFromEnd
@@ -48,16 +54,16 @@ object LoadedSettings {
             } catch (e: Exception) {
                 null
             }
-        } ?: getDefaultFont()
+        } ?: StoatAPIHost.platform.defaultFont
     }
 
     fun reset() {
-        theme = getDefaultTheme()
+        theme = StoatAPIHost.platform.defaultTheme
         messageReplyStyle = MessageReplyStyle.SwipeFromEnd
         avatarRadius = 50
         messageComposerBlurEnabled = true
         specialEmbedSettings = SpecialEmbedSettings()
         poorlyFormedSettingsKeys = emptySet()
-        font = getDefaultFont()
+        font = StoatAPIHost.platform.defaultFont
     }
 }

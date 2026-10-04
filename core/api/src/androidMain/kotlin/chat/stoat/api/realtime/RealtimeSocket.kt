@@ -3,8 +3,8 @@ package chat.stoat.api.realtime
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.internals.ActiveSlowmode
@@ -48,7 +48,6 @@ import chat.stoat.api.routes.server.fetchMember
 import chat.stoat.api.routes.sync.SyncedSetting
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
-import chat.stoat.c2dm.ChannelRegistrator
 import chat.stoat.core.model.data.STOAT_WEBSOCKET
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
@@ -56,7 +55,6 @@ import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
-import chat.stoat.persistence.SqlStorage
 import io.ktor.client.plugins.websocket.ws
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
@@ -86,14 +84,11 @@ sealed class RealtimeSocketFrames {
 }
 
 object RealtimeSocket {
-    val database = Database(SqlStorage.driver)
+    val database = Database(StoatAPIHost.storage.sqlDriver)
     var socket: WebSocketSession? = null
 
     @Volatile
     private var lastFrameAtElapsedRealtime: Long? = null
-
-    private val channelRegistrator: ChannelRegistrator
-        get() = ChannelRegistrator(StoatApplication.instance)
 
     private var _disconnectionState = mutableStateOf(DisconnectionState.Reconnecting)
     val disconnectionState: DisconnectionState
@@ -321,7 +316,7 @@ object RealtimeSocket {
                 logcat { "New voice states: ${voiceStateMap}" }
 
                 Log.d("RealtimeSocket", "Registering push notification channels.")
-                channelRegistrator.register()
+                StoatAPIHost.platform.onRealtimeHydrated()
 
                 StoatAPI.closeHydration()
             }

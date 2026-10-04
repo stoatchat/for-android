@@ -47,12 +47,10 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
-import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.internals.has
-import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.server.patchMember
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.settings.Experiments
@@ -69,6 +67,8 @@ import chat.stoat.composables.sheets.SheetTile
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
+import chat.stoat.ui.colour.BrushCompat
+import chat.stoat.ui.colour.solidColor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant

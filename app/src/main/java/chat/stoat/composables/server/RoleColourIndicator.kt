@@ -11,7 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import chat.stoat.api.internals.BrushCompat
+import chat.stoat.ui.colour.BrushCompat
 
 @Composable
 fun RoleColourIndicator(

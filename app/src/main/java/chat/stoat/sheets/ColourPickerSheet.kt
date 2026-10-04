@@ -58,9 +58,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import chat.stoat.R
-import chat.stoat.api.internals.BrushCompat
-import chat.stoat.api.internals.colour.CSSColours
 import chat.stoat.internals.TailwindColourScheme
+import chat.stoat.ui.colour.BrushCompat
+import chat.stoat.ui.colour.CSSColours
 import org.intellij.lang.annotations.Language
 
 enum class ColourPickerMode {

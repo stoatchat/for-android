@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.aboutlibraries.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.sentry.android)
-    alias(libs.plugins.sqldelight)
     alias(libs.plugins.google.services)
     id("kotlin-parcelize")
 }
@@ -162,6 +161,7 @@ sentry {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:api"))
 
     implementation(libs.android.core.ktx)
     implementation(libs.kotlin.reflect)
@@ -303,13 +303,5 @@ aboutLibraries {
     collect {
         includePlatform = true
         configPath = file("../compliance")
-    }
-}
-
-sqldelight {
-    databases {
-        create("Database") {
-            packageName.set("chat.stoat.persistence")
-        }
     }
 }

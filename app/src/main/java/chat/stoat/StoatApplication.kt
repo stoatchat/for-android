@@ -66,6 +66,7 @@ class StoatApplication : Application(), SingletonImageLoader.Factory {
 
     init {
         instance = this
+        installAppAPIHost(this)
         DynamicColors.applyToActivitiesIfAvailable(this)
     }
 }

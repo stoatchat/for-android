@@ -29,3 +29,4 @@ dependencyResolutionManagement {
 rootProject.name = "Stoat"
 include(":app")
 include(":core:model")
+include(":core:api")

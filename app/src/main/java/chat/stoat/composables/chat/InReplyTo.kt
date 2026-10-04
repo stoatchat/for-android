@@ -29,12 +29,13 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.SpecialUsers
-import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.channel.fetchSingleMessage
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
+import chat.stoat.ui.colour.solidColor
+import chat.stoat.ui.theme.TeamMemberFlairs
 import java.util.concurrent.CancellationException
 
 @Composable
@@ -127,7 +128,7 @@ fun InReplyTo(
                     bot = message.masquerade == null && author?.bot != null,
                     bridge = message.masquerade != null && author?.bot != null,
                     platformModeration = author?.id == SpecialUsers.PLATFORM_MODERATION_USER,
-                    teamMember = author?.id in SpecialUsers.TEAM_MEMBER_FLAIRS.keys,
+                    teamMember = author?.id in TeamMemberFlairs.TEAM_MEMBER_FLAIRS.keys,
                     webhook = message.webhook != null,
                     colour = contentColor.copy(alpha = 0.5f),
                     modifier = Modifier.size(12.dp),

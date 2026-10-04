@@ -63,13 +63,11 @@ import chat.stoat.activities.media.ImageViewActivity
 import chat.stoat.activities.media.VideoViewActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatJson
-import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.MessageFlag
 import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.SpecialUsers
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.internals.has
-import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.channel.unreact
 import chat.stoat.api.routes.microservices.january.asJanuaryProxyUrl
@@ -95,6 +93,9 @@ import chat.stoat.internals.toNavigationAction
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.media.parseVoiceMessageMetadata
 import chat.stoat.persistence.KVStorage
+import chat.stoat.ui.colour.BrushCompat
+import chat.stoat.ui.colour.solidColor
+import chat.stoat.ui.theme.TeamMemberFlairs
 import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.launch
 import chat.stoat.core.model.schemas.Message as MessageSchema
@@ -466,7 +467,7 @@ fun Message(
                                     bot = author.bot != null && message.masquerade == null,
                                     bridge = message.masquerade != null && author.bot != null,
                                     platformModeration = author.id == SpecialUsers.PLATFORM_MODERATION_USER,
-                                    teamMember = author.id in SpecialUsers.TEAM_MEMBER_FLAIRS.keys,
+                                    teamMember = author.id in TeamMemberFlairs.TEAM_MEMBER_FLAIRS.keys,
                                     webhook = fromWebhook,
                                     colour = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
                                     modifier = Modifier.size(16.dp),

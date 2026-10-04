@@ -66,7 +66,7 @@ class SessionSettingsScreenViewModel : ViewModel() {
     fun fetchSessions() {
         viewModelScope.launch {
             sessions.addAll(fetchAllSessions())
-            currentSession = sessions.firstOrNull { it.id === StoatAPI.sessionId }
+            currentSession = sessions.firstOrNull { it.id == StoatAPI.sessionId }
             Log.d(
                 "SessionSettingsScreen",
                 "Current session: $currentSession. Current session ID: ${StoatAPI.sessionId}"

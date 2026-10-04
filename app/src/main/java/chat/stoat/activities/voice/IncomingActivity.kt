@@ -62,7 +62,7 @@ import chat.stoat.composables.generic.Presence
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.presenceColour
 import chat.stoat.ui.theme.StoatTheme
-import chat.stoat.ui.theme.Theme
+import chat.stoat.api.settings.Theme
 import chat.stoat.ui.theme.getDefaultFont
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt

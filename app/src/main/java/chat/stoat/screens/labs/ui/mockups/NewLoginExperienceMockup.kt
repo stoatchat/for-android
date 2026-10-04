@@ -38,7 +38,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.stoat.R
 import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.ui.theme.Theme
+import chat.stoat.api.settings.Theme
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

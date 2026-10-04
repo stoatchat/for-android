@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import chat.stoat.api.internals.getComponentActivity
 import chat.stoat.composables.screens.splash.DisconnectedScreen
+import chat.stoat.internals.extensions.getComponentActivity
 
 @Composable
 fun DefaultDestinationScreen(

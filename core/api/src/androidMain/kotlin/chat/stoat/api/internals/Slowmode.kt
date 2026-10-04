@@ -25,7 +25,7 @@ data class ActiveSlowmode(
     }
 }
 
-internal fun formatCompactDuration(totalSeconds: Long): String {
+fun formatCompactDuration(totalSeconds: Long): String {
     var remaining = totalSeconds.coerceAtLeast(0)
     val days = remaining / 86_400
     remaining %= 86_400

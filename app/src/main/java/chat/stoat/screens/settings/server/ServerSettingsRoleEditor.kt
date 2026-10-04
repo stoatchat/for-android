@@ -69,7 +69,6 @@ import chat.stoat.R
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
-import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.deleteServerRole
@@ -97,6 +96,7 @@ import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.sheets.ColourPickerSheet
 import chat.stoat.sheets.colourPickerString
 import chat.stoat.sheets.colourPickerValue
+import chat.stoat.ui.colour.BrushCompat
 import chat.stoat.ui.theme.DarkColorScheme
 import chat.stoat.ui.theme.LightColorScheme
 import com.bumptech.glide.integration.compose.CrossFade

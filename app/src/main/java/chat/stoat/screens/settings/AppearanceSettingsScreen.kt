@@ -78,7 +78,7 @@ import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.sheets.ColourPickerSheet
 import chat.stoat.ui.theme.GoogleSansFlex
 import chat.stoat.ui.theme.Inter
-import chat.stoat.ui.theme.Theme
+import chat.stoat.api.settings.Theme
 import chat.stoat.ui.theme.applyFromKeyValueMap
 import chat.stoat.ui.theme.getFieldByName
 import chat.stoat.ui.theme.overridableColourSchemeFieldNameToResource

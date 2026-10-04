@@ -50,14 +50,14 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
-import chat.stoat.api.internals.colour.CSSColours
-import chat.stoat.api.internals.parseCssFunctionColour
 import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.bottomEndCircleCutout
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Server
+import chat.stoat.ui.colour.CSSColours
+import chat.stoat.ui.colour.parseCssFunctionColour
 
 private val ServerVoiceBadgeSize = 16.dp
 private val ServerVoiceBadgeIconSize = 12.dp

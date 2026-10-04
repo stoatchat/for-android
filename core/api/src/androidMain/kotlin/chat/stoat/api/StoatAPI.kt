@@ -2,15 +2,12 @@ package chat.stoat.api
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
-import chat.stoat.BuildConfig
-import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI.initialize
 import chat.stoat.api.internals.ActiveSlowmode
 import chat.stoat.api.internals.Members
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
 import chat.stoat.api.realtime.shouldReconnectOnForeground
-import chat.stoat.api.routes.account.MFA_TICKET_HEADER_NAME
 import chat.stoat.api.routes.user.fetchSelf
 import chat.stoat.api.unreads.Unreads
 import chat.stoat.core.model.data.STOAT_BASE
@@ -22,10 +19,6 @@ import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
-import chat.stoat.persistence.SqlStorage
-import com.chuckerteam.chucker.api.ChuckerCollector
-import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.chuckerteam.chucker.api.RetentionManager
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
@@ -77,8 +70,8 @@ fun String.api(): String {
 }
 
 fun buildUserAgent(accessMethod: String = "Ktor"): String {
-    return "$accessMethod StoatForAndroid/${BuildConfig.VERSION_NAME} " +
-            "${BuildConfig.APPLICATION_ID} Android/${android.os.Build.VERSION.SDK_INT} " +
+    return "$accessMethod StoatForAndroid/${StoatAPIHost.config.versionName} " +
+            "${StoatAPIHost.config.applicationId} Android/${android.os.Build.VERSION.SDK_INT} " +
             "(${android.os.Build.MANUFACTURER} ${android.os.Build.DEVICE}) Kotlin/${KotlinVersion.CURRENT}"
 }
 
@@ -114,20 +107,6 @@ val StoatHttp = HttpClient(OkHttp) {
 
     install(Logging) { level = LogLevel.INFO }
 
-    val chuckerCollector = ChuckerCollector(
-        context = StoatApplication.instance,
-        showNotification = true,
-        retentionPeriod = RetentionManager.Period.ONE_DAY
-    )
-
-    val chuckerInterceptor = ChuckerInterceptor.Builder(StoatApplication.instance)
-        .collector(chuckerCollector)
-        .maxContentLength(250_000L)
-        .redactHeaders(StoatAPI.TOKEN_HEADER_NAME, MFA_TICKET_HEADER_NAME)
-        .alwaysReadResponseBody(true)
-        .createShortcut(false)
-        .build()
-
     engine {
         addInterceptor { chain ->
             val request = chain.request().newBuilder()
@@ -139,7 +118,7 @@ val StoatHttp = HttpClient(OkHttp) {
                 .build()
             chain.proceed(request)
         }
-        addInterceptor(chuckerInterceptor)
+        StoatAPIHost.platform.httpInterceptors.forEach(::addInterceptor)
     }
 
     defaultRequest {
@@ -381,7 +360,7 @@ object StoatAPI {
             return
         }
 
-        val db = Database(SqlStorage.driver)
+        val db = Database(StoatAPIHost.storage.sqlDriver)
 
         val channels = db.channelQueries.selectAll().executeAsList().map {
             ChannelSchema(
@@ -439,7 +418,7 @@ object StoatAPI {
      * Clear the local caching database.
      */
     private fun clearPersistentCache() {
-        val db = Database(SqlStorage.driver)
+        val db = Database(StoatAPIHost.storage.sqlDriver)
         db.serverQueries.clear()
         db.channelQueries.clear()
     }

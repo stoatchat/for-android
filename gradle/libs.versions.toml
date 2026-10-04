@@ -53,6 +53,7 @@ kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui", version = "1.8.2" }
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
@@ -78,6 +79,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compose = { module = "com.github.bumptech.glide:compose", version = "1.0.0-beta01" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
+sentry = { module = "io.sentry:sentry", version.ref = "sentry" }
 sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentry" }
 sentry-compose-android = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
 hcaptcha = { module = "com.github.hcaptcha:hcaptcha-android-sdk", version = "3.8.1" }

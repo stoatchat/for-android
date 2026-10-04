@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import chat.stoat.api.internals.solidColor
+import chat.stoat.ui.colour.solidColor
 
 @Composable
 fun SheetTile(

@@ -1,4 +1,4 @@
-package chat.stoat.api.internals
+package chat.stoat.internals.extensions
 
 import android.content.Context
 import android.content.ContextWrapper

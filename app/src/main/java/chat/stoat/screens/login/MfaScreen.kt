@@ -78,8 +78,9 @@ class MfaScreenViewModel(
         _error = null
         viewModelScope.launch {
             val response = authenticateWithMfaTotpCode(mfaTicket, MfaResponseTotpCode(totpCode))
-            if (response.error != null) {
-                _error = response.error.type
+            val error = response.error
+            if (error != null) {
+                _error = error.type
             } else {
                 Log.d(
                     "MFA",
@@ -87,8 +88,9 @@ class MfaScreenViewModel(
                 )
 
                 try {
-                    val token = response.firstUserHints!!.token
-                    val id = response.firstUserHints.id
+                    val hints = response.firstUserHints!!
+                    val token = hints.token
+                    val id = hints.id
 
                     StoatAPI.loginAs(token)
                     StoatAPI.setSessionId(id)
@@ -108,8 +110,9 @@ class MfaScreenViewModel(
         viewModelScope.launch {
             val response =
                 authenticateWithMfaRecoveryCode(mfaTicket, MfaResponseRecoveryCode(recoveryCode))
-            if (response.error != null) {
-                _error = response.error.type
+            val error = response.error
+            if (error != null) {
+                _error = error.type
             } else {
                 Log.d(
                     "MFA",
@@ -117,8 +120,9 @@ class MfaScreenViewModel(
                 )
 
                 try {
-                    val token = response.firstUserHints!!.token
-                    val id = response.firstUserHints.id
+                    val hints = response.firstUserHints!!
+                    val token = hints.token
+                    val id = hints.id
 
                     StoatAPI.loginAs(token)
                     StoatAPI.setSessionId(id)

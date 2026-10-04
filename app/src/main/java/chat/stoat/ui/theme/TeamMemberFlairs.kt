@@ -1,4 +1,4 @@
-package chat.stoat.api.internals
+package chat.stoat.ui.theme
 
 import android.content.Context
 import android.graphics.RuntimeShader
@@ -9,16 +9,7 @@ import androidx.compose.ui.graphics.ShaderBrush
 import org.intellij.lang.annotations.Language
 import androidx.compose.ui.graphics.Brush as AndroidBrush
 
-object SpecialUsers {
-    const val JENNIFER = "01F1WKM5TK2V6KCZWR6DGBJDTZ"
-
-    const val PLATFORM_MODERATION_USER = "01FC17E1WTM2BGE4F3ARN3FDAF"
-
-    val TRUSTED_MODERATION_BOTS = listOf(
-        "01GXBYCNQ52A9QYCQ99RBPXPAW", // AutoMod
-        "01FCXRNNVW69AMSHBE61W1M5T3" // AutoMod Nightly
-    )
-
+object TeamMemberFlairs {
     sealed class TeamMemberFlair {
         data class Brush(val brush: AndroidBrush) : TeamMemberFlair()
         data class AGSLShader(val shader: String, val fallback: AndroidBrush) :

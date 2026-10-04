@@ -38,9 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
-import chat.stoat.api.internals.SpecialUsers
 import chat.stoat.api.internals.ULID
-import chat.stoat.api.internals.solidColor
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.composables.expressive.Wave
 import chat.stoat.composables.generic.RemoteImage
@@ -50,6 +48,8 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.core.model.schemas.User
+import chat.stoat.ui.colour.solidColor
+import chat.stoat.ui.theme.TeamMemberFlairs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -100,7 +100,7 @@ fun RawUserOverview(
     LaunchedEffect(user.id) {
         withContext(Dispatchers.IO) {
             user.id?.let {
-                teamMemberFlair = SpecialUsers.teamFlairAsBrush(
+                teamMemberFlair = TeamMemberFlairs.teamFlairAsBrush(
                     context,
                     it
                 )
@@ -115,7 +115,7 @@ fun RawUserOverview(
             .padding(horizontal = if (internalPadding) 16.dp else 0.dp)
             .clip(MaterialTheme.shapes.large)
             .then(
-                if (user.id in SpecialUsers.TEAM_MEMBER_FLAIRS.keys) {
+                if (user.id in TeamMemberFlairs.TEAM_MEMBER_FLAIRS.keys) {
                     Modifier
                         .border(
                             width = 4.dp,
@@ -243,7 +243,7 @@ fun RawUserOverview2(
     LaunchedEffect(user.id) {
         withContext(Dispatchers.IO) {
             user.id?.let {
-                teamMemberFlair = SpecialUsers.teamFlairAsBrush(
+                teamMemberFlair = TeamMemberFlairs.teamFlairAsBrush(
                     context,
                     it
                 )

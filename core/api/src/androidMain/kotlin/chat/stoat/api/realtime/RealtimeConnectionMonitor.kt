@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * Restarts realtime networking when the app returns into foregroung or we get moved to a different
  * network
  */
-internal class RealtimeConnectionMonitor(context: Context) : DefaultLifecycleObserver {
+class RealtimeConnectionMonitor(context: Context) : DefaultLifecycleObserver {
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
