@@ -1,10 +1,11 @@
 package chat.stoat.api
 
 import app.cash.sqldelight.db.SqlDriver
+import chat.stoat.api.internals.defaultHttpEngine
 import chat.stoat.api.settings.Theme
 import chat.stoat.api.settings.UserInterfaceFont
 import chat.stoat.persistence.KVStorage
-import okhttp3.Interceptor
+import io.ktor.client.engine.HttpClientEngine
 
 data class StoatAPIConfig(
     val versionName: String,
@@ -20,7 +21,8 @@ interface StoatAPIStorage {
 interface StoatAPIPlatform {
     val defaultTheme: Theme
     val defaultFont: UserInterfaceFont
-    val httpInterceptors: List<Interceptor>
+
+    fun createHttpEngine(): HttpClientEngine
 
     fun onRealtimeHydrated()
 }
@@ -30,7 +32,8 @@ interface StoatAPIPlatform {
 private object FallbackStoatAPIPlatform : StoatAPIPlatform {
     override val defaultTheme = Theme.Default
     override val defaultFont = UserInterfaceFont.Default
-    override val httpInterceptors = emptyList<Interceptor>()
+
+    override fun createHttpEngine() = defaultHttpEngine()
 
     override fun onRealtimeHydrated() {}
 }

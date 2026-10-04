@@ -21,9 +21,9 @@ import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
 import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -31,7 +31,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.header
 import io.ktor.serialization.kotlinx.json.json
-import io.sentry.Sentry
+import io.sentry.kotlin.multiplatform.Sentry
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -81,7 +81,16 @@ val StoatCbor = Cbor {
     ignoreUnknownKeys = true
 }
 
-val StoatHttp = HttpClient(OkHttp) {
+private val SessionTokenHeader = createClientPlugin("SessionTokenHeader") {
+    onRequest { request, _ ->
+        if (!request.headers.contains(StoatAPI.TOKEN_HEADER_NAME)) {
+            request.header(StoatAPI.TOKEN_HEADER_NAME, StoatAPI.sessionToken)
+        }
+    }
+}
+
+val StoatHttp = HttpClient(StoatAPIHost.platform.createHttpEngine()) {
+    install(SessionTokenHeader)
     install(DefaultRequest)
     install(ContentNegotiation) {
         json(StoatJson)
@@ -101,20 +110,6 @@ val StoatHttp = HttpClient(OkHttp) {
     }
 
     install(Logging) { level = LogLevel.INFO }
-
-    engine {
-        addInterceptor { chain ->
-            val request = chain.request().newBuilder()
-                .apply {
-                    if (chain.request().headers[StoatAPI.TOKEN_HEADER_NAME] == null) {
-                        header(StoatAPI.TOKEN_HEADER_NAME, StoatAPI.sessionToken)
-                    }
-                }
-                .build()
-            chain.proceed(request)
-        }
-        StoatAPIHost.platform.httpInterceptors.forEach(::addInterceptor)
-    }
 
     defaultRequest {
         url(STOAT_BASE)

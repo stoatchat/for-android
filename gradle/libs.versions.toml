@@ -8,7 +8,7 @@ kotlin-serialization = "1.10.0"
 ksp = "2.3.6"
 agp = "9.3.2"
 google-services = "4.4.4"
-sentry = "8.13.2" # This is separate from the gradle plugin version which is defined ad hoc below
+sentry = "8.41.0" # This is separate from the gradle plugin version which is defined ad hoc below
 sqldelight = "2.3.2"
 compose-bom = "2026.03.00"
 material3 = "1.5.0-alpha15"
@@ -47,6 +47,7 @@ android-test-rules = { module = "androidx.test:rules", version.ref = "androidx-t
 android-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 android-datastore = { module = "androidx.datastore:datastore", version = "1.1.7" }
 android-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version = "1.1.7" }
+android-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version = "1.1.7" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlin-serialization" }
@@ -79,7 +80,7 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compose = { module = "com.github.bumptech.glide:compose", version = "1.0.0-beta01" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
 aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
-sentry = { module = "io.sentry:sentry", version.ref = "sentry" }
+sentry-kotlin-multiplatform = { module = "io.sentry:sentry-kotlin-multiplatform", version = "0.27.0" }
 sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentry" }
 sentry-compose-android = { module = "io.sentry:sentry-compose-android", version.ref = "sentry" }
 hcaptcha = { module = "com.github.hcaptcha:hcaptcha-android-sdk", version = "3.8.1" }

@@ -17,7 +17,8 @@ import chat.stoat.ui.theme.getDefaultTheme
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
-import okhttp3.Interceptor
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
 
 fun installAppAPIHost(app: StoatApplication) {
     StoatAPIHost.install(
@@ -45,22 +46,24 @@ private class AppAPIPlatform(private val app: StoatApplication) : StoatAPIPlatfo
     override val defaultFont: UserInterfaceFont
         get() = getDefaultFont()
 
-    override val httpInterceptors: List<Interceptor> by lazy {
+    override fun createHttpEngine(): HttpClientEngine {
         val chuckerCollector = ChuckerCollector(
             context = app,
             showNotification = true,
             retentionPeriod = RetentionManager.Period.ONE_DAY
         )
 
-        listOf(
-            ChuckerInterceptor.Builder(app)
-                .collector(chuckerCollector)
-                .maxContentLength(250_000L)
-                .redactHeaders(StoatAPI.TOKEN_HEADER_NAME, MFA_TICKET_HEADER_NAME)
-                .alwaysReadResponseBody(true)
-                .createShortcut(false)
-                .build()
-        )
+        return OkHttp.create {
+            addInterceptor(
+                ChuckerInterceptor.Builder(app)
+                    .collector(chuckerCollector)
+                    .maxContentLength(250_000L)
+                    .redactHeaders(StoatAPI.TOKEN_HEADER_NAME, MFA_TICKET_HEADER_NAME)
+                    .alwaysReadResponseBody(true)
+                    .createShortcut(false)
+                    .build()
+            )
+        }
     }
 
     override fun onRealtimeHydrated() {

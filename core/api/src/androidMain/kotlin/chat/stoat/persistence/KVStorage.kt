@@ -1,20 +1,14 @@
 package chat.stoat.persistence
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.firstOrNull
 
-val Context.stoatKVStorage: DataStore<Preferences> by preferencesDataStore(name = "revolt_kv")
-
 class KVStorage(
-    private val mContext: Context
+    private val dataStore: DataStore<Preferences>
 ) {
-    private val dataStore = mContext.stoatKVStorage
-
     suspend fun set(key: String, value: String) {
         dataStore.edit { preferences ->
             preferences[stringPreferencesKey(key)] = value

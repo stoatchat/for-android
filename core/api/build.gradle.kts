@@ -25,6 +25,8 @@ kotlin {
             implementation(libs.kotlin.serialization.cbor)
             implementation(libs.kotlin.datetime)
             implementation(libs.kermit)
+            implementation(libs.sentry.kotlin.multiplatform)
+            implementation(libs.android.datastore.preferences.core)
         }
 
         androidMain.dependencies {
@@ -40,7 +42,6 @@ kotlin {
             implementation(libs.android.core.ktx)
             implementation(libs.lifecycle.process)
             implementation(libs.android.datastore.preferences)
-            implementation(libs.sentry)
         }
     }
 }
