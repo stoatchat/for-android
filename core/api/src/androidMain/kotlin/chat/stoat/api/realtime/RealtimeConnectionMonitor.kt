@@ -9,7 +9,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import chat.stoat.api.StoatAPI
-import logcat.logcat
+import co.touchlab.kermit.Logger
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -48,7 +48,7 @@ class RealtimeConnectionMonitor(context: Context) : DefaultLifecycleObserver {
             hasSeenValidatedNetwork = true
             reconnectWhenValidated = false
             if (shouldReconnect) {
-                logcat { "Validated default network changed; restarting realtime connection." }
+                Logger.d { "Validated default network changed; restarting realtime connection." }
                 StoatAPI.requestReconnect("validated default network changed")
             }
         }

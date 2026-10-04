@@ -24,6 +24,7 @@ kotlin {
             implementation(libs.kotlin.serialization.json)
             implementation(libs.kotlin.serialization.cbor)
             implementation(libs.kotlin.datetime)
+            implementation(libs.kermit)
         }
 
         androidMain.dependencies {
@@ -40,7 +41,6 @@ kotlin {
             implementation(libs.lifecycle.process)
             implementation(libs.android.datastore.preferences)
             implementation(libs.sentry)
-            implementation(libs.square.logcat)
         }
     }
 }

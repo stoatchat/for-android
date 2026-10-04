@@ -1,7 +1,6 @@
 package chat.stoat.api.realtime
 
 import android.os.SystemClock
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIHost
@@ -55,6 +54,7 @@ import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
+import co.touchlab.kermit.Logger
 import io.ktor.client.plugins.websocket.ws
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
@@ -69,9 +69,6 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.long
-import logcat.LogPriority
-import logcat.asLog
-import logcat.logcat
 
 enum class DisconnectionState {
     Disconnected,
@@ -100,7 +97,7 @@ object RealtimeSocket {
 
     suspend fun connect(token: String, onReady: () -> Unit) {
         if (disconnectionState == DisconnectionState.Connected) {
-            Log.d("RealtimeSocket", "Already connected to websocket. Refusing to connect again.")
+            Logger.d { "Already connected to websocket. Refusing to connect again." }
             return
         }
 
@@ -112,14 +109,14 @@ object RealtimeSocket {
                 activeSocket = this
                 socket = this
 
-                logcat { "Connected to websocket transport." }
+                Logger.d { "Connected to websocket transport." }
 
                 // Send authorization frame
                 val authFrame = AuthorizationFrame("Authenticate", token)
                 val authFrameString =
                     StoatJson.encodeToString(AuthorizationFrame.serializer(), authFrame)
 
-                logcat {
+                Logger.d {
                     "Sending authorization frame: ${
                         authFrameString.replace(
                             token,
@@ -147,16 +144,14 @@ object RealtimeSocket {
                                 updateDisconnectionState(DisconnectionState.Connected)
                                 pushReconnectEvent()
                                 onReady()
-                                logcat { "WebSocket authenticated." }
+                                Logger.d { "WebSocket authenticated." }
                             }
 
                             handleFrame(frameType, frameString)
                         } catch (e: CancellationException) {
                             throw e
                         } catch (e: Exception) {
-                            logcat(LogPriority.ERROR) {
-                                "Failed to handle frame: $frameString\n" + e.asLog()
-                            }
+                            Logger.e(e) { "Failed to handle frame: $frameString" }
                         }
                     }
                 }
@@ -166,7 +161,7 @@ object RealtimeSocket {
                 socket = null
                 lastFrameAtElapsedRealtime = null
                 updateDisconnectionState(DisconnectionState.Disconnected)
-                logcat { "WebSocket disconnected." }
+                Logger.d { "WebSocket disconnected." }
             }
         }
     }
@@ -192,19 +187,19 @@ object RealtimeSocket {
 
         val pingPacket = PingFrame("Ping", System.currentTimeMillis())
         socket?.send(StoatJson.encodeToString(PingFrame.serializer(), pingPacket))
-        Log.d("RealtimeSocket", "Sent ping frame with ${pingPacket.data}")
+        Logger.d { "Sent ping frame with ${pingPacket.data}" }
     }
 
     private suspend fun handleFrame(type: String, rawFrame: String) {
         when (type) {
             "Pong" -> {
                 val pongFrame = StoatJson.decodeFromString(PongFrame.serializer(), rawFrame)
-                Log.d("RealtimeSocket", "Received pong frame for ${pongFrame.data}")
+                Logger.d { "Received pong frame for ${pongFrame.data}" }
             }
 
             "Bulk" -> {
                 val bulkFrame = StoatJson.decodeFromString(BulkFrame.serializer(), rawFrame)
-                Log.d("RealtimeSocket", "Received bulk frame with ${bulkFrame.v.size} sub-frames.")
+                Logger.d { "Received bulk frame with ${bulkFrame.v.size} sub-frames." }
                 bulkFrame.v.forEach { subFrame ->
                     val subFrameType =
                         StoatJson.decodeFromString(AnyFrame.serializer(), subFrame.toString()).type
@@ -216,7 +211,7 @@ object RealtimeSocket {
                 val readyFrame = StoatJson.decodeFromString(ReadyFrame.serializer(), rawFrame)
                 StoatAPI.userSlowmodeCache.clear()
 
-                logcat {
+                Logger.d {
                     "Received ready frame with ${readyFrame.users.size} users, " +
                             "${readyFrame.servers.size} servers, " +
                             "${readyFrame.channels.size} channels, " +
@@ -224,11 +219,11 @@ object RealtimeSocket {
                             "and ${readyFrame.voiceStates.size} voice states."
                 }
 
-                Log.d("RealtimeSocket", "Adding users to cache.")
+                Logger.d { "Adding users to cache." }
                 val userMap = readyFrame.users.associateBy { it.id!! }
                 StoatAPI.userCache.putAll(userMap)
 
-                Log.d("RealtimeSocket", "Adding servers to cache.")
+                Logger.d { "Adding servers to cache." }
                 val serverMap = readyFrame.servers.associateBy { it.id!! }
                 StoatAPI.serverCache.putAll(serverMap)
 
@@ -256,15 +251,14 @@ object RealtimeSocket {
 
                 serversToDelete.forEach {
                     database.serverQueries.delete(it)
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Deleted server $it from local database due to not being in ready frame."
-                    )
+                    }
                     // Conversely, remove the server from the API state
                     StoatAPI.serverCache.remove(it)
                 }
 
-                Log.d("RealtimeSocket", "Adding channels to cache.")
+                Logger.d { "Adding channels to cache." }
                 val channelMap = readyFrame.channels.associateBy { it.id!! }
                 StoatAPI.channelCache.putAll(channelMap)
 
@@ -297,25 +291,24 @@ object RealtimeSocket {
 
                 channelsToDelete.forEach {
                     database.channelQueries.delete(it)
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Deleted channel $it from local database due to not being in ready frame."
-                    )
+                    }
                     // Conversely, remove the channel from the API state
                     StoatAPI.channelCache.remove(it)
                 }
 
-                Log.d("RealtimeSocket", "Adding emojis to cache.")
+                Logger.d { "Adding emojis to cache." }
                 val emojiMap = readyFrame.emojis.associateBy { it.id!! }
                 StoatAPI.emojiCache.putAll(emojiMap)
 
-                logcat { "Adding voice states to cache." }
+                Logger.d { "Adding voice states to cache." }
                 val voiceStateMap = readyFrame.voiceStates.associateBy { it.id }
                 StoatAPI.voiceStateCache.putAll(voiceStateMap)
 
-                logcat { "New voice states: ${voiceStateMap}" }
+                Logger.d { "New voice states: ${voiceStateMap}" }
 
-                Log.d("RealtimeSocket", "Registering push notification channels.")
+                Logger.d { "Registering push notification channels." }
                 StoatAPIHost.platform.onRealtimeHydrated()
 
                 StoatAPI.closeHydration()
@@ -323,13 +316,12 @@ object RealtimeSocket {
 
             "Message" -> {
                 val messageFrame = StoatJson.decodeFromString(MessageFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message frame for ${messageFrame.id} in channel ${messageFrame.channel}."
-                )
+                }
 
                 if (messageFrame.id == null) {
-                    Log.d("RealtimeSocket", "Message frame has no ID or channel. Ignoring.")
+                    Logger.d { "Message frame has no ID or channel. Ignoring." }
                     return
                 }
 
@@ -337,7 +329,7 @@ object RealtimeSocket {
 
                 messageFrame.channel?.let {
                     if (StoatAPI.channelCache[it] == null) {
-                        Log.d("RealtimeSocket", "Channel $it not found in cache. Ignoring.")
+                        Logger.d { "Channel $it not found in cache. Ignoring." }
                         return
                     }
 
@@ -351,18 +343,16 @@ object RealtimeSocket {
             "MessageAppend" -> {
                 val messageAppendFrame =
                     StoatJson.decodeFromString(MessageAppendFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message append frame for ${messageAppendFrame.id} in channel ${messageAppendFrame.channel}."
-                )
+                }
 
                 var message = StoatAPI.messageCache[messageAppendFrame.id]
 
                 if (message == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Message ${messageAppendFrame.id} not found in cache. Will not append."
-                    )
+                    }
                     return
                 }
 
@@ -378,17 +368,15 @@ object RealtimeSocket {
             "MessageUpdate" -> {
                 val messageUpdateFrame =
                     StoatJson.decodeFromString(MessageUpdateFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message update frame for ${messageUpdateFrame.id} in channel ${messageUpdateFrame.channel}."
-                )
+                }
 
                 val oldMessage = StoatAPI.messageCache[messageUpdateFrame.id]
                 if (oldMessage == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Message ${messageUpdateFrame.id} not found in cache. Will not update."
-                    )
+                    }
                     return
                 }
 
@@ -400,21 +388,20 @@ object RealtimeSocket {
                             messageUpdateFrame.data
                         )
                 } catch (e: SerializationException) {
-                    Log.d("RealtimeSocket", "Message update frame has invalid data. Ignoring.")
+                    Logger.d { "Message update frame has invalid data. Ignoring." }
                     return
                 }
 
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Merging message ${messageUpdateFrame.id} with updated partial."
-                )
+                }
 
                 StoatAPI.messageCache[messageUpdateFrame.id] =
                     oldMessage.mergeWithPartial(rawMessage)
 
                 messageUpdateFrame.channel.let {
                     if (StoatAPI.channelCache[it] == null) {
-                        Log.d("RealtimeSocket", "Channel $it not found in cache. Ignoring.")
+                        Logger.d { "Channel $it not found in cache. Ignoring." }
                         return
                     }
                 }
@@ -425,17 +412,15 @@ object RealtimeSocket {
             "MessageDelete" -> {
                 val messageDeleteFrame =
                     StoatJson.decodeFromString(MessageDeleteFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message react frame for ${messageDeleteFrame.id}."
-                )
+                }
 
                 val message = StoatAPI.messageCache[messageDeleteFrame.id]
                 if (message == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Message ${messageDeleteFrame.id} not found in cache. Will not delete."
-                    )
+                    }
                     return
                 }
 
@@ -446,17 +431,15 @@ object RealtimeSocket {
             "MessageReact" -> {
                 val messageReactFrame =
                     StoatJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message react frame for ${messageReactFrame.id}."
-                )
+                }
 
                 val oldMessage = StoatAPI.messageCache[messageReactFrame.id]
                 if (oldMessage == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Message ${messageReactFrame.id} not found in cache. Will not update."
-                    )
+                    }
                     return
                 }
 
@@ -475,17 +458,15 @@ object RealtimeSocket {
             "MessageUnreact" -> {
                 val messageUnreactFrame =
                     StoatJson.decodeFromString(MessageReactFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received message unreact frame for ${messageUnreactFrame.id}."
-                )
+                }
 
                 val oldMessage = StoatAPI.messageCache[messageUnreactFrame.id]
                 if (oldMessage == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Message ${messageUnreactFrame.id} not found in cache. Will not update."
-                    )
+                    }
                     return
                 }
 
@@ -544,7 +525,7 @@ object RealtimeSocket {
                     )
                     StoatAPI.userCache[userRelationshipFrame.user.id!!] = merged
                 } else {
-                    Log.w("RealtimeSocket", "Invalid UserRelationship frame: $rawFrame")
+                    Logger.w { "Invalid UserRelationship frame: $rawFrame" }
                 }
             }
 
@@ -585,10 +566,9 @@ object RealtimeSocket {
                 val channelCreateFrame =
                     StoatJson.decodeFromString(Channel.serializer(), rawFrame)
 
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received channel create frame for ${channelCreateFrame.id}, with name ${channelCreateFrame.name}. Adding to cache."
-                )
+                }
 
                 StoatAPI.channelCache[channelCreateFrame.id!!] = channelCreateFrame
                 channelCreateFrame.server?.let { serverId ->
@@ -619,17 +599,15 @@ object RealtimeSocket {
             "ChannelDelete" -> {
                 val channelDeleteFrame =
                     StoatJson.decodeFromString(ChannelDeleteFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received channel delete frame for ${channelDeleteFrame.id}. Removing from cache."
-                )
+                }
 
                 val currentChannel = StoatAPI.channelCache[channelDeleteFrame.id]
                 if (currentChannel == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Channel ${channelDeleteFrame.id} not found in cache. Ignoring."
-                    )
+                    }
                     return
                 }
 
@@ -641,10 +619,9 @@ object RealtimeSocket {
                     val existingServer = StoatAPI.serverCache[currentChannel.server]
 
                     if (existingServer == null) {
-                        Log.d(
-                            "RealtimeSocket",
+                        Logger.d {
                             "Server ${currentChannel.server} not found in cache. Ignoring."
-                        )
+                        }
                         return
                     }
 
@@ -660,10 +637,9 @@ object RealtimeSocket {
             "ChannelAck" -> {
                 val channelAckFrame =
                     StoatJson.decodeFromString(ChannelAckFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received channel ack frame for ${channelAckFrame.id} with new newest ${channelAckFrame.messageId}."
-                )
+                }
 
                 StoatAPI.unreads.processExternalAck(channelAckFrame.id, channelAckFrame.messageId)
             }
@@ -682,10 +658,9 @@ object RealtimeSocket {
             "ServerCreate" -> {
                 val serverCreateFrame =
                     StoatJson.decodeFromString(ServerCreateFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server create frame for ${serverCreateFrame.id}, with name ${serverCreateFrame.server.name}. Adding to cache."
-                )
+                }
 
                 StoatAPI.serverCache[serverCreateFrame.id] = serverCreateFrame.server
 
@@ -739,10 +714,9 @@ object RealtimeSocket {
                 }
 
                 if (!canPersistServer) {
-                    Log.e(
-                        "RealtimeSocket",
+                    Logger.e {
                         "Server ${serverCreateFrame.id} was missing required fields and could not be persisted."
-                    )
+                    }
                 }
             }
 
@@ -762,10 +736,9 @@ object RealtimeSocket {
             "ChannelStartTyping" -> {
                 val channelStartTypingFrame =
                     StoatJson.decodeFromString(ChannelStartTypingFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received channel start typing frame for ${channelStartTypingFrame.id}."
-                )
+                }
 
                 StoatAPI.wsFrameChannel.emit(channelStartTypingFrame)
             }
@@ -773,10 +746,9 @@ object RealtimeSocket {
             "ChannelStopTyping" -> {
                 val channelStopTypingFrame =
                     StoatJson.decodeFromString(ChannelStopTypingFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received channel stop typing frame for ${channelStopTypingFrame.id}."
-                )
+                }
 
                 StoatAPI.wsFrameChannel.emit(channelStopTypingFrame)
             }
@@ -784,10 +756,9 @@ object RealtimeSocket {
             "ServerUpdate" -> {
                 val serverUpdateFrame =
                     StoatJson.decodeFromString(ServerUpdateFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server update frame for ${serverUpdateFrame.id}."
-                )
+                }
 
                 val existing = StoatAPI.serverCache[serverUpdateFrame.id]
                     ?: return // if we don't have the server no point in updating it
@@ -801,7 +772,7 @@ object RealtimeSocket {
                         "Banner" -> updated = updated.copy(banner = null)
                         "Description" -> updated = updated.copy(description = null)
                         "Categories" -> updated = updated.copy(categories = null)
-                        else -> Log.e("RealtimeSocket", "Unknown server clear field: $it")
+                        else -> Logger.e { "Unknown server clear field: $it" }
                     }
                 }
 
@@ -819,7 +790,7 @@ object RealtimeSocket {
                             updated.flags
                         )
                     } catch (e: Exception) {
-                        Log.e("RealtimeSocket", "Failed to update server in local database.")
+                        Logger.e { "Failed to update server in local database." }
                     }
                 }
             }
@@ -827,10 +798,9 @@ object RealtimeSocket {
             "ServerDelete" -> {
                 val serverDeleteFrame =
                     StoatJson.decodeFromString(ServerDeleteFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server delete frame for ${serverDeleteFrame.id}."
-                )
+                }
 
                 val deletedChannelIds = (
                         StoatAPI.serverCache[serverDeleteFrame.id]?.channels.orEmpty() +
@@ -859,10 +829,9 @@ object RealtimeSocket {
             "ServerMemberUpdate" -> {
                 val serverMemberUpdateFrame =
                     StoatJson.decodeFromString(ServerMemberUpdateFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server member update frame for ${serverMemberUpdateFrame.id.user} in ${serverMemberUpdateFrame.id.server}."
-                )
+                }
 
                 val existing = StoatAPI.members.getMember(
                     serverMemberUpdateFrame.id.server,
@@ -877,11 +846,11 @@ object RealtimeSocket {
                         "Avatar" -> updated = updated.copy(avatar = null)
                         "Nickname" -> updated = updated.copy(nickname = null)
                         "Pronouns" -> updated = updated.copy(pronouns = null)
-                        else -> Log.e("RealtimeSocket", "Unknown server member clear field: $it")
+                        else -> Logger.e { "Unknown server member clear field: $it" }
                     }
                 }
 
-                Log.d("RealtimeSocket", "Updated member: $updated")
+                Logger.d { "Updated member: $updated" }
 
                 StoatAPI.members.setMember(serverMemberUpdateFrame.id.server, updated)
             }
@@ -889,10 +858,9 @@ object RealtimeSocket {
             "ServerMemberJoin" -> {
                 val serverMemberJoinFrame =
                     StoatJson.decodeFromString(ServerMemberJoinFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server member join frame for ${serverMemberJoinFrame.user} in ${serverMemberJoinFrame.id}."
-                )
+                }
 
                 val member = fetchMember(serverMemberJoinFrame.id, serverMemberJoinFrame.user)
 
@@ -902,10 +870,9 @@ object RealtimeSocket {
             "ServerMemberLeave" -> {
                 val serverMemberLeaveFrame =
                     StoatJson.decodeFromString(ServerMemberLeaveFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server member leave frame for ${serverMemberLeaveFrame.user} in ${serverMemberLeaveFrame.id}."
-                )
+                }
 
                 StoatAPI.members.removeMember(
                     serverMemberLeaveFrame.id,
@@ -916,27 +883,24 @@ object RealtimeSocket {
             "ServerRoleUpdate" -> {
                 val serverRoleUpdateFrame =
                     StoatJson.decodeFromString(ServerRoleUpdateFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server role update frame for ${serverRoleUpdateFrame.id}."
-                )
+                }
 
                 val server = StoatAPI.serverCache[serverRoleUpdateFrame.id]
                 if (server == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Server ${serverRoleUpdateFrame.id} not found in cache. Ignoring role update."
-                    )
+                    }
                     return
                 }
 
                 val existingRole = server.roles?.get(serverRoleUpdateFrame.roleId)
                 if (existingRole == null) {
                     // New role.
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "New role ${serverRoleUpdateFrame.roleId} in server ${serverRoleUpdateFrame.id}. Adding to cache."
-                    )
+                    }
                     val newRole = Role().mergeWithPartial(serverRoleUpdateFrame.data)
                     val newServer = server.copy(
                         roles = server.roles?.plus(
@@ -946,10 +910,9 @@ object RealtimeSocket {
                     StoatAPI.serverCache[serverRoleUpdateFrame.id] = newServer
                 } else {
                     // True role update.
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Updating existing role ${serverRoleUpdateFrame.roleId} in server ${serverRoleUpdateFrame.id}."
-                    )
+                    }
                     var updatedRole = existingRole.mergeWithPartial(serverRoleUpdateFrame.data)
                     serverRoleUpdateFrame.clear.orEmpty().forEach { field ->
                         updatedRole = when (field) {
@@ -970,11 +933,11 @@ object RealtimeSocket {
             "ServerRoleRanksUpdate" -> {
                 val serverRoleRanksUpdateFrame =
                     StoatJson.decodeFromString(ServerRoleRanksUpdateFrame.serializer(), rawFrame)
-                logcat { "Received server role ranks update frame for ${serverRoleRanksUpdateFrame.id}." }
+                Logger.d { "Received server role ranks update frame for ${serverRoleRanksUpdateFrame.id}." }
 
                 val server = StoatAPI.serverCache[serverRoleRanksUpdateFrame.id]
                 if (server == null) {
-                    logcat { "Server ${serverRoleRanksUpdateFrame.id} not found in cache. Ignoring role ranks update." }
+                    Logger.d { "Server ${serverRoleRanksUpdateFrame.id} not found in cache. Ignoring role ranks update." }
                     return
                 }
 
@@ -991,17 +954,15 @@ object RealtimeSocket {
             "ServerRoleDelete" -> {
                 val serverRoleDeleteFrame =
                     StoatJson.decodeFromString(ServerRoleDeleteFrame.serializer(), rawFrame)
-                Log.d(
-                    "RealtimeSocket",
+                Logger.d {
                     "Received server role delete frame for ${serverRoleDeleteFrame.id} and role ${serverRoleDeleteFrame.roleId}."
-                )
+                }
 
                 val server = StoatAPI.serverCache[serverRoleDeleteFrame.id]
                 if (server == null) {
-                    Log.d(
-                        "RealtimeSocket",
+                    Logger.d {
                         "Server ${serverRoleDeleteFrame.id} not found in cache. Ignoring role delete."
-                    )
+                    }
                     return
                 }
 
@@ -1016,7 +977,7 @@ object RealtimeSocket {
                 val voiceChannelJoinFrame =
                     StoatJson.decodeFromString(VoiceChannelJoinFrame.serializer(), rawFrame)
 
-                logcat { "Received voice channel join frame for channel ${voiceChannelJoinFrame.id}." }
+                Logger.d { "Received voice channel join frame for channel ${voiceChannelJoinFrame.id}." }
 
                 val newParticipants =
                     StoatAPI.voiceStateCache[voiceChannelJoinFrame.id]?.participants?.filter {
@@ -1032,7 +993,7 @@ object RealtimeSocket {
                 val voiceChannelLeaveFrame =
                     StoatJson.decodeFromString(VoiceChannelLeaveFrame.serializer(), rawFrame)
 
-                logcat { "Received voice channel leave frame for channel ${voiceChannelLeaveFrame.id}." }
+                Logger.d { "Received voice channel leave frame for channel ${voiceChannelLeaveFrame.id}." }
 
                 val existingChannelState =
                     StoatAPI.voiceStateCache[voiceChannelLeaveFrame.id] ?: return
@@ -1049,7 +1010,7 @@ object RealtimeSocket {
                 val voiceChannelMoveFrame =
                     StoatJson.decodeFromString(VoiceChannelMoveFrame.serializer(), rawFrame)
 
-                logcat { "Received voice channel move frame from ${voiceChannelMoveFrame.from} to ${voiceChannelMoveFrame.to}." }
+                Logger.d { "Received voice channel move frame from ${voiceChannelMoveFrame.from} to ${voiceChannelMoveFrame.to}." }
 
                 // Remove from old channel
                 val existingFromChannelState =
@@ -1078,7 +1039,7 @@ object RealtimeSocket {
                 val userVoiceStateUpdateFrame =
                     StoatJson.decodeFromString(UserVoiceStateUpdateFrame.serializer(), rawFrame)
 
-                logcat { "Received user voice state update frame for user ${userVoiceStateUpdateFrame.id} in channel ${userVoiceStateUpdateFrame.channelId}." }
+                Logger.d { "Received user voice state update frame for user ${userVoiceStateUpdateFrame.id} in channel ${userVoiceStateUpdateFrame.channelId}." }
 
                 val existingChannelState =
                     StoatAPI.voiceStateCache[userVoiceStateUpdateFrame.channelId] ?: return
@@ -1099,7 +1060,7 @@ object RealtimeSocket {
                 val userMoveVoiceChannelFrame =
                     StoatJson.decodeFromString(UserMoveVoiceChannelFrame.serializer(), rawFrame)
 
-                logcat { "We got moved into a different channel on node ${userMoveVoiceChannelFrame.node}." }
+                Logger.d { "We got moved into a different channel on node ${userMoveVoiceChannelFrame.node}." }
 
                 // Send message to UI to handle the move
                 StoatAPI.wsFrameChannel.emit(userMoveVoiceChannelFrame)
@@ -1127,7 +1088,7 @@ object RealtimeSocket {
             }
 
             else -> {
-                Log.i("RealtimeSocket", "Unknown frame: $rawFrame")
+                Logger.i { "Unknown frame: $rawFrame" }
             }
         }
     }

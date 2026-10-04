@@ -1,6 +1,5 @@
 package chat.stoat.api.unreads
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import chat.stoat.api.StoatAPI
@@ -11,6 +10,7 @@ import chat.stoat.api.routes.sync.syncUnreads
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.ChannelUnread
 import chat.stoat.api.settings.NotificationSettingsProvider
+import co.touchlab.kermit.Logger
 
 class Unreads {
     private val hasLoaded = mutableStateOf(false)
@@ -28,7 +28,7 @@ class Unreads {
                     )
                 }
             } catch (e: Exception) {
-                Log.e("Unreads", "Failed to sync unreads", e)
+                Logger.e(e) { "Failed to sync unreads" }
                 emptyMap()
             }
         )

@@ -1,6 +1,5 @@
 package chat.stoat.api
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import chat.stoat.api.StoatAPI.initialize
 import chat.stoat.api.internals.ActiveSlowmode
@@ -19,6 +18,7 @@ import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.util.ChannelVoiceState
 import chat.stoat.persistence.Database
+import co.touchlab.kermit.Logger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
@@ -56,9 +56,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
-import logcat.LogPriority
-import logcat.asLog
-import logcat.logcat
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import kotlin.time.Duration
@@ -204,9 +201,9 @@ object StoatAPI {
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: SocketException) {
-                        logcat { "WebSocket closed: ${e.message}" }
+                        Logger.d { "WebSocket closed: ${e.message}" }
                     } catch (e: Exception) {
-                        logcat(LogPriority.ERROR) { "WebSocket error:\n${e.asLog()}" }
+                        Logger.e(e) { "WebSocket error" }
                     }
 
                     if (!isActive || sessionToken != token) break
@@ -257,7 +254,7 @@ object StoatAPI {
         if (sessionToken.isEmpty() || reconnectRequestJob?.isActive == true) return
 
         reconnectRequestJob = socketScope.launch {
-            logcat { "Restarting realtime connection: $reason" }
+            Logger.d { "Restarting realtime connection: $reason" }
             connectWS()
         }
     }
@@ -291,7 +288,7 @@ object StoatAPI {
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    logcat(LogPriority.ERROR) { "Failed to ping WebSocket:\n${e.asLog()}" }
+                    Logger.e(e) { "Failed to ping WebSocket" }
                 }
             }
         }
@@ -354,7 +351,7 @@ object StoatAPI {
      */
     fun hydrateFromPersistentCache() {
         if (!openForLocalHydration) {
-            Log.w("RevoltAPI", "Hydration is closed, but was called")
+            Logger.w { "Hydration is closed, but was called" }
             // Stale data is worst case, let's track it even in prod
             Sentry.captureMessage("Local hydration called twice or after real data was fetched")
             return

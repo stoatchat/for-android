@@ -5,6 +5,7 @@ import chat.stoat.core.model.schemas.OrderingSettings
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFolder
 import chat.stoat.core.model.schemas.ServerFoldersSettings
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -16,9 +17,6 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
-import logcat.LogPriority
-import logcat.asLog
-import logcat.logcat
 
 private const val FOLDER_PREFIX = "folder-"
 
@@ -286,7 +284,7 @@ object ServerFolders {
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR) { "Failed to sync server sidebar: " + e.asLog() }
+            Logger.e(e) { "Failed to sync server sidebar" }
         }
     }
 }

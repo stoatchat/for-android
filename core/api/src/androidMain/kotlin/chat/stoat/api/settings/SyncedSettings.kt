@@ -12,14 +12,12 @@ import chat.stoat.core.model.schemas.OrderingSettings
 import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.core.model.schemas.ServerFoldersSettings
 import chat.stoat.core.model.schemas._NotificationSettingsToParse
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
-import logcat.LogPriority
-import logcat.asLog
-import logcat.logcat
 import java.util.concurrent.ConcurrentHashMap
 
 /*
@@ -152,7 +150,7 @@ object SyncedSettings {
                 channel = intermediate.channel.mapValues { it.value!!.jsonPrimitive.content }
             )
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR) { e.asLog() }
+            Logger.e(e) { "Failed to parse notification settings" }
             LoadedSettings.poorlyFormedSettingsKeys += "notifications"
             NotificationSettings()
         }

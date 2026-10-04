@@ -1,11 +1,11 @@
 package chat.stoat.api.routes.account
 
 import android.os.Build
-import android.util.Log
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
+import co.touchlab.kermit.Logger
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -156,7 +156,7 @@ suspend fun negotiateAuthentication(email: String, password: String): EmailPassw
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Stoat", "negotiateAuthentication: $responseContent")
+    Logger.d { "negotiateAuthentication: $responseContent" }
 
     try {
         val error = StoatJson.decodeFromString(StoatAPIError.serializer(), responseContent)
@@ -206,7 +206,7 @@ suspend fun authenticateWithMfaTotpCode(
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Stoat", "authenticateWithMfaTotpCode: $responseContent")
+    Logger.d { "authenticateWithMfaTotpCode: $responseContent" }
 
     return EmailPasswordAssessment(
         firstUserHints = StoatJson.decodeFromString(UserHints.serializer(), responseContent)
@@ -230,7 +230,7 @@ suspend fun authenticateWithMfaRecoveryCode(
     }
 
     val responseContent = response.bodyAsText()
-    Log.d("Stoat", "authenticateWithMfaRecoveryCode: $responseContent")
+    Logger.d { "authenticateWithMfaRecoveryCode: $responseContent" }
 
     return EmailPasswordAssessment(
         firstUserHints = StoatJson.decodeFromString(UserHints.serializer(), responseContent)

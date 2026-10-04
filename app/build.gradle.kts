@@ -260,6 +260,7 @@ dependencies {
     releaseImplementation(libs.chucker.noop)
 
     implementation(libs.square.logcat)
+    implementation(libs.kermit)
 
     implementation(libs.koin)
     implementation(libs.koin.compose)

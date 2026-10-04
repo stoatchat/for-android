@@ -7,6 +7,8 @@ import android.os.StrictMode
 import chat.stoat.api.realtime.RealtimeConnectionMonitor
 import chat.stoat.di.appModule
 import chat.stoat.di.viewModelModule
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
@@ -27,6 +29,12 @@ class StoatApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
+        Logger.setTag("Stoat")
+        if (!BuildConfig.DEBUG) {
+            Logger.setLogWriters(emptyList())
+            // Also skip building the log messages, not just writing them
+            Logger.setMinSeverity(Severity.Assert)
+        }
 
         if (BuildConfig.DEBUG) {
             LiveKit.loggingLevel = LoggingLevel.DEBUG
