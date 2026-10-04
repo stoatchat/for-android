@@ -20,13 +20,13 @@
     <string name="resend_verification">Stuur opnieuw een verificatie-e-mail</string>
     <string name="password_manager_hint">Gebruik je een wachtwoordmanager\?</string>
     <string name="password_forgot_heading">Je wachtwoord vergeten\?</string>
-    <string name="register_heading">Welkom bij Revolt</string>
-    <string name="register_image_alt">Gebruik Revolt om over dingen te praten.</string>
+    <string name="register_heading">Welkom bij Stoat</string>
+    <string name="register_image_alt">Gebruik Stoat om over dingen te praten.</string>
     <string name="register_form_heading">Laten we je opzetten.</string>
     <string name="register_data">Uw gegevens zijn veilig bij ons. We verkopen het niet en we gebruiken het ook niet om u advertenties te laten zien.</string>
     <string name="loading">Even wat info ophalen, momentje…</string>
     <string name="login_onboarding_heading">Vind uw gemeenschap, maak contact met de wereld.</string>
-    <string name="login_onboarding_body">Revolt is een van de beste manieren om altijd en overal in contact te blijven met je vrienden en de gemeenschap.</string>
+    <string name="login_onboarding_body">Stoat is een van de beste manieren om altijd en overal in contact te blijven met je vrienden en de gemeenschap.</string>
     <string name="password_forgot_instructions">Voer je e-mailadres in en we sturen je instructies om je wachtwoord opnieuw in te stellen.</string>
     <string name="register_instructions">Het is als een plek om rond te hangen, samen te komen en over dingen te praten. Het beste deel is dat het op internet staat.</string>
     <string name="register_email">Email</string>
@@ -43,7 +43,6 @@
     <string name="could_not_log_in_cta_try_again">Probeer opnieuw</string>
     <string name="could_not_log_in_cta_logout">Log uit</string>
     <string name="typing_several">Meerdere mensen zijn aan het typen</string>
-    <string name="oss_attribution_body">Revolt is gebouwd met hulp van deze geweldige open-source projecten.</string>
     <string name="too_many_replies">Je kan alleen %1$d berichten tegelijkertijd beantwoorden.</string>
     <string name="emoji_category_flags">Vlaggen</string>
     <string name="home_join_jenvolt">Sluit je aan bij Jenvolt</string>
@@ -78,13 +77,9 @@
     <string name="about">Over</string>
     <string name="about_full_name">Revolt op Android</string>
     <string name="about_brought_to_you_by">Met ❤️ aan je gebracht door de Revolt team.</string>
-    <string name="about_tab_version">Versie</string>
-    <string name="about_tab_details">Details</string>
     <string name="mfa_totp_code">Code</string>
     <string name="mfa_recovery_code">Code</string>
     <string name="oss_attribution">Toeschrijving van OSS</string>
-    <string name="oss_attribution_warning">De onderstaande lijst wordt automatisch gegenereerd. Deze kan onvolledig of onjuist zijn.</string>
-    <string name="oss_attribution_generation_date">Laatst bijgewerkt: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Tik om de licentie te bekijken</string>
     <string name="comingsoon_toast">Sorry, deze functie is nog niet klaar.</string>
     <string name="typing_one">%1$s is aan het typen…</string>
@@ -121,8 +116,6 @@
     <string name="overview_screen_share_profile_description">Bekijk je profielkaart en ontvang een speciale link om te delen</string>
     <string name="overview_screen_changelog">Wijzigingslogboek</string>
     <string name="overview_screen_changelog_description">Revolt slaapt nooit, kijk wat er aan gewerkt is</string>
-    <string name="overview_screen_feedback">Feedback geven</string>
-    <string name="overview_screen_feedback_description">Heb je iets om te zeggen? Wij zijn één en al oor</string>
     <string name="user_card_tap_to_copy">Tik om te kopiëren</string>
     <string name="user_card_error_sharing">Er is een fout opgetreden tijdens het delen van je gebruikerskaart.</string>
     <string name="user_card_data_point_display_name">%1$d.Naam</string>
@@ -233,7 +226,6 @@
     <string name="yesterday">Gister</string>
     <string name="x_days_ago">%1$d dagen terug</string>
     <string name="edited">(bewerkt)</string>
-    <string name="oss_attribution_body_2">We zijn dankbaar voor de ontwikkelaars van deze projecten dat zij hun werk beschikbaar hebben gesteld voor de wereld.</string>
     <string name="status_focus_explainer">Je zult geen meldingen ontvangen voor berichten, maar je ontvangt wel meldingen voor @vermeldingen.</string>
     <string name="status_invisible_explainer">Je kunt Revolt zoals gewoonlijk gebruiken, maar je zult niet als online verschijnen voor andere mensen.</string>
     <string name="settings">Instellingen</string>
@@ -307,4 +299,6 @@
     <string name="channel_settings_overview_description">Kanaalbeschrijving</string>
     <string name="channel_settings_overview_nsfw">Markeren als NSFW</string>
     <string name="channel_settings_overview_nsfw_confirm_title">Dit kanaal als NSFW markeren?</string>
+    <string name="retry">Opnieuw proberen</string>
+    <string name="_new">Nieuw</string>
 </resources>

@@ -33,19 +33,15 @@
     <string name="settings">設定</string>
     <string name="about">關於</string>
     <string name="about_brought_to_you_by">來自 Revolt 團隊用❤️為您獻上。</string>
-    <string name="about_tab_details">細節</string>
-    <string name="oss_attribution_body">Revolt 是在這些出色的開源專案的幫助下建立的。</string>
     <string name="overview_screen_settings">打開設定</string>
     <string name="overview_screen_share_profile">分享個人資料</string>
     <string name="overview_screen_share_profile_description">查看您的用戶卡並獲取特殊連結以進行分享</string>
     <string name="overview_screen_changelog">變更日誌</string>
     <string name="overview_screen_changelog_description">Revolt 永不停歇，看看正在進行的事情</string>
-    <string name="overview_screen_feedback">提供回饋</string>
     <string name="user_card_tap_to_copy">點擊複製</string>
     <string name="user_card_error_sharing">共享您的用戶卡時發生錯誤。</string>
     <string name="user_card_data_point_display_name">%1$d.名字</string>
     <string name="user_card_data_point_username">%1$d.使用者名字</string>
-    <string name="overview_screen_feedback_description">有話要說？我們洗耳恭聽</string>
     <string name="overview_screen_error_description">請稍後重試。</string>
     <string name="overview_screen_settings_description">更改您的外觀、管理您的帳戶等等</string>
     <string name="user_badge_platform_moderation">平台審核</string>
@@ -85,9 +81,6 @@
     <string name="mfa_recovery_code">代碼</string>
     <string name="mfa_password_header">輸入您的密碼</string>
     <string name="mfa_password_lead">輸入您的密碼以繼續。</string>
-    <string name="about_tab_version">版本</string>
-    <string name="oss_attribution_warning">以下列表是自動產生的，可能不完整或不準確。</string>
-    <string name="oss_attribution_generation_date">最後更新時間：%1$s</string>
     <string name="oss_attribution_tap_to_view_license">點擊查看許可證</string>
     <string name="comingsoon_toast">抱歉，此功能尚未準備好。</string>
     <string name="typing_one">%1$s 正在輸入…</string>
@@ -123,7 +116,6 @@
     <string name="register_email_verification_hint">我們將向您發送驗證電子郵件以確認您的帳戶。</string>
     <string name="add_server_sheet_step_1c_name_placeholder">我的伺服器</string>
     <string name="onboarding_others">其他人會透過這個名字找到、認出並提及您。</string>
-    <string name="oss_attribution_body_2">我們感謝這些專案的開發者向全世界展示他們的成果。</string>
     <string name="add_server_sheet_step_1c_name">伺服器名稱</string>
     <string name="register_image_alt">使用 Revolt 來聊天。</string>
     <string name="mfa_type_recovery">使用恢復程式碼</string>

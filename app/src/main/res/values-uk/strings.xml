@@ -199,7 +199,6 @@
     <string name="settings_category_general">Загальне</string>
     <string name="settings_appearance">Зовнішній вигляд</string>
     <string name="settings_appearance_theme">Тема</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Світла</string>
     <string name="settings_appearance_theme_amoled">Чисто чорна</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -207,12 +206,8 @@
     <string name="back">← Назад</string>
     <string name="reply_message_not_cached">Невідоме повідомлення</string>
     <string name="direct_messages">Особисті повідомлення</string>
-    <string name="oss_attribution_body">Revolt побудований за допомогою цих чудових проєктів із відкритим вихідним кодом.</string>
-    <string name="oss_attribution_generation_date">Останнє оновлення: %1$s</string>
-    <string name="oss_attribution_body_2">Ми вдячні розробникам цих проєктів за те, що вони зробили свою роботу доступною для світу.</string>
     <string name="oss_attribution_tap_to_view_license">Натисніть, щоб переглянути ліцензію</string>
     <string name="system_message_channel_renamed_alt">Канал перейменовано</string>
-    <string name="oss_attribution_warning">Наведений нижче список згенеровано автоматично. Він може бути неповним або неточним.</string>
     <string name="system_message_ownership_changed_alt">Власник змінився</string>
     <string name="system_message_channel_description_changed_alt">Опис каналу змінено</string>
     <string name="system_message_user_left_alt">Користувач вийшов</string>
@@ -224,8 +219,6 @@
     <string name="system_message_text_alt">Системне повідомлення</string>
     <string name="status_invisible">Невидимий</string>
     <string name="about_full_name">Revolt для Android</string>
-    <string name="about_tab_version">Версія</string>
-    <string name="about_tab_details">Подробиці</string>
     <string name="pick_emoji_alt">Вибір емодзі</string>
     <string name="emoji_category_animals">Тварини та природа</string>
     <string name="emoji_category_food">Їжа та напої</string>
@@ -306,9 +299,6 @@
     <string name="settings_appearance_colour_overrides_export">Експорт</string>
     <string name="settings_appearance_colour_overrides_import">Імпорт</string>
     <string name="settings_appearance_colour_overrides_outline_variant">Варіант контуру</string>
-    <string name="settings_changelogs">Список змін</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">ця версія</string>
-    <string name="settings_changelogs_historical_version_header">Список змін для %1$s</string>
     <string name="system_message_channel_icon_changed_alt">Значок каналу змінено</string>
     <string name="about_brought_to_you_by">Створено з ❤️ для вас командою Revolt.</string>
     <string name="emoji_category_smileys">Смайлики та емоції</string>
@@ -347,7 +337,6 @@
     <string name="settings_sessions_log_out_other_confirm">Вийти з усіх інших сесій\?</string>
     <string name="settings_sessions_log_out_other_confirm_no">Залишитися авторизованим</string>
     <string name="settings_appearance_colour_overrides">Перевизначення кольорів</string>
-    <string name="settings_changelogs_new_header">Що нового ✨</string>
     <string name="settings_appearance_colour_overrides_import_error">Цей файл не є файлом перевизначення кольорів.</string>
     <string name="user_info_sheet_bio_not_found">Не вдалося отримати інформацію про цього користувача. Будь ласка, переконайтеся, що ви маєте спільні сервери чи ви друзі.</string>
     <string name="settings_appearance_colour_overrides_error_container">Контейнер помилки</string>
@@ -518,8 +507,6 @@
     <string name="overview_screen_share_profile_description">Подивіться на свою картку користувача та отримайте спеціальне посилання, щоб поділитися</string>
     <string name="overview_screen_changelog">Журнал змін</string>
     <string name="overview_screen_changelog_description">Revolt ніколи не спить, погляньте на те, що було в розробці</string>
-    <string name="overview_screen_feedback">Залиште відгук</string>
-    <string name="overview_screen_feedback_description">Є що сказати? Ми всі вуха</string>
     <string name="user_card_tap_to_copy">Торкніться, щоб скопіювати</string>
     <string name="user_card_error_sharing">Під час надання доступу до вашої картки користувача сталася помилка.</string>
     <string name="user_card_data_point_display_name">%1$d.Ім\'я</string>
