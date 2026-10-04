@@ -1,12 +1,9 @@
 package chat.stoat.core.model.schemas
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Parcelize
 data class User(
     @SerialName("_id")
     val id: String? = null,
@@ -25,7 +22,7 @@ data class User(
     val bot: Bot? = null,
     val relationship: String? = null,
     val online: Boolean? = null
-) : Parcelable {
+) {
     fun mergeWithPartial(partial: User): User {
         return User(
             id = partial.id ?: id,
@@ -91,30 +88,26 @@ infix fun Long?.has(flag: UserBadges): Boolean {
 }
 
 @Serializable
-@Parcelize
 data class Bot(
     val owner: String? = null
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class Profile(
     val content: String? = null,
     val background: AutumnResource? = null
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class Relation(
     @SerialName("_id")
     val id: String? = null,
 
     val status: String? = null
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class Status(
     val text: String? = null,
     val presence: String? = null
-) : Parcelable
+)

@@ -1,12 +1,9 @@
 package chat.stoat.core.model.schemas
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@Parcelize
 data class AutumnResource(
     @SerialName("_id")
     val id: String? = null,
@@ -33,15 +30,14 @@ data class AutumnResource(
 
     @SerialName("object_id")
     val objectID: String? = null
-) : Parcelable
+)
 
 @Serializable
-@Parcelize
 data class Metadata(
     val type: String? = null,
     val width: Long? = null,
     val height: Long? = null
-) : Parcelable
+)
 
 @Serializable
 data class AutumnId(

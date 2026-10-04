@@ -44,6 +44,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -84,8 +85,8 @@ fun OverviewScreen(
     val context = LocalContext.current
     val resources = LocalResources.current
 
-    var isLoading by rememberSaveable { mutableStateOf(true) }
-    var user by rememberSaveable { mutableStateOf<User?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var user by remember { mutableStateOf<User?>(null) }
     LaunchedEffect(Unit) {
         val inCache = StoatAPI.userCache[StoatAPI.selfId]
         if (inCache != null) {

@@ -60,7 +60,7 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
-import chat.stoat.core.model.schemas.isInviteUri
+import chat.stoat.internals.extensions.isInviteUri
 import chat.stoat.internals.resolveTimestamp
 import chat.stoat.internals.toNavigationAction
 import chat.stoat.internals.toStoatWebLinkOrNull

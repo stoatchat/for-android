@@ -62,6 +62,7 @@ import chat.stoat.R
 import chat.stoat.activities.media.ImageViewActivity
 import chat.stoat.activities.media.VideoViewActivity
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.StoatJson
 import chat.stoat.api.internals.BrushCompat
 import chat.stoat.api.internals.MessageFlag
 import chat.stoat.api.internals.Roles
@@ -546,7 +547,7 @@ fun Message(
                                                     context,
                                                     ImageViewActivity::class.java
                                                 ).apply {
-                                                    putExtra("autumnResource", attachment)
+                                                    putExtra("autumnResource", StoatJson.encodeToString(AutumnResource.serializer(), attachment))
                                                 }
                                             )
                                         }
@@ -557,7 +558,7 @@ fun Message(
                                                     context,
                                                     VideoViewActivity::class.java
                                                 ).apply {
-                                                    putExtra("autumnResource", attachment)
+                                                    putExtra("autumnResource", StoatJson.encodeToString(AutumnResource.serializer(), attachment))
                                                 }
                                             )
                                         }

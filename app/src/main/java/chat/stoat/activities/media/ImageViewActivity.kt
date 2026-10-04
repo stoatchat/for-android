@@ -2,7 +2,6 @@ package chat.stoat.activities.media
 
 import android.content.ContentValues
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.stoat.R
 import chat.stoat.api.StoatHttp
+import chat.stoat.api.StoatJson
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
@@ -60,13 +60,8 @@ class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // due to a bug in Android 13 we still use the deprecated method on Android 13, despite the new method being available
-        val autumnResource = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("autumnResource", AutumnResource::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra("autumnResource")
-        }
+        val autumnResource = intent.getStringExtra("autumnResource")
+            ?.let { StoatJson.decodeFromString(AutumnResource.serializer(), it) }
 
         if (autumnResource?.id == null) {
             Log.e("ImageViewActivity", "No AutumnResource provided")
