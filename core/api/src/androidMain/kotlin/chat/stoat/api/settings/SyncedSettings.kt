@@ -16,9 +16,11 @@ import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.datetime.Clock
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
-import java.util.concurrent.ConcurrentHashMap
+import kotlin.concurrent.atomics.AtomicReference
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
 /*
  * - Note: When adding a new key -
@@ -27,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap
  *  3. Add UI for resetting the key if it's poorly formed
  */
 
+@OptIn(ExperimentalAtomicApi::class)
 object SyncedSettings {
     private val KEYS =
         arrayOf("ordering", "android", "notifications", "release-notes", "server-folders")
@@ -47,7 +50,7 @@ object SyncedSettings {
     private val _notifications = mutableStateOf(NotificationSettings())
     private val _releaseNotes = mutableStateOf(ReleaseNotesSettings())
     private val _serverFolders = mutableStateOf(ServerFoldersSettings())
-    private val revisions = ConcurrentHashMap<String, Long>()
+    private val revisions = AtomicReference(emptyMap<String, Long>())
     private val writeLock = Mutex()
 
     val ordering: OrderingSettings
@@ -64,7 +67,7 @@ object SyncedSettings {
     suspend fun fetch(apiToken: String = StoatAPI.sessionToken) {
         try {
             getKeys(*KEYS, token = apiToken).forEach { (key, setting) ->
-                revisions[key] = setting.timestamp
+                setRevision(key, setting.timestamp)
                 apply(key, setting.value)
             }
         } catch (e: Exception) {
@@ -76,8 +79,8 @@ object SyncedSettings {
 
     fun applyRemoteUpdate(update: Map<String, SyncedSetting>) {
         update.forEach { (key, setting) ->
-            if (key !in KEYS || setting.timestamp <= (revisions[key] ?: 0L)) return@forEach
-            revisions[key] = setting.timestamp
+            if (key !in KEYS || setting.timestamp <= (revisions.load()[key] ?: 0L)) return@forEach
+            setRevision(key, setting.timestamp)
             apply(key, setting.value)
             if (key == "android") LoadedSettings.hydrateWithSettings(this)
         }
@@ -113,6 +116,13 @@ object SyncedSettings {
         }
     }
 
+    private fun setRevision(key: String, timestamp: Long) {
+        while (true) {
+            val current = revisions.load()
+            if (revisions.compareAndSet(current, current + (key to timestamp))) return
+        }
+    }
+
     private inline fun parseOrLogPoorlyFormed(key: String, parse: () -> Unit) {
         try {
             parse()
@@ -123,8 +133,8 @@ object SyncedSettings {
     }
 
     private suspend fun write(key: String, value: String) {
-        val timestamp = System.currentTimeMillis()
-        revisions[key] = timestamp
+        val timestamp = Clock.System.now().toEpochMilliseconds()
+        setRevision(key, timestamp)
         // mutex is FIFO === writes reach the server in the order their timestamps were taken
         writeLock.withLock { setKey(key, value, timestamp) }
     }

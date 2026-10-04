@@ -1,10 +1,10 @@
 package chat.stoat.api.routes.account
 
-import android.os.Build
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.api
+import chat.stoat.api.internals.friendlySessionName
 import co.touchlab.kermit.Logger
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -235,8 +235,4 @@ suspend fun authenticateWithMfaRecoveryCode(
     return EmailPasswordAssessment(
         firstUserHints = StoatJson.decodeFromString(UserHints.serializer(), responseContent)
     )
-}
-
-fun friendlySessionName(): String {
-    return "Stoat for Android on ${Build.MANUFACTURER} ${Build.MODEL}"
 }

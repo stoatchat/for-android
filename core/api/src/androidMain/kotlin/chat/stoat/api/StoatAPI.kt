@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import chat.stoat.api.StoatAPI.initialize
 import chat.stoat.api.internals.ActiveSlowmode
 import chat.stoat.api.internals.Members
+import chat.stoat.api.internals.platformUserAgent
 import chat.stoat.api.realtime.DisconnectionState
 import chat.stoat.api.realtime.RealtimeSocket
 import chat.stoat.api.realtime.shouldReconnectOnForeground
@@ -51,13 +52,12 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
+import kotlinx.io.IOException
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
-import java.net.SocketException
-import java.net.SocketTimeoutException
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import chat.stoat.core.model.schemas.Channel as ChannelSchema
@@ -67,9 +67,7 @@ fun String.api(): String {
 }
 
 fun buildUserAgent(accessMethod: String = "Ktor"): String {
-    return "$accessMethod StoatForAndroid/${StoatAPIHost.config.versionName} " +
-            "${StoatAPIHost.config.applicationId} Android/${android.os.Build.VERSION.SDK_INT} " +
-            "(${android.os.Build.MANUFACTURER} ${android.os.Build.DEVICE}) Kotlin/${KotlinVersion.CURRENT}"
+    return "$accessMethod ${platformUserAgent()} Kotlin/${KotlinVersion.CURRENT}"
 }
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -200,7 +198,7 @@ object StoatAPI {
                         reconnectDelay = INITIAL_RECONNECT_DELAY
                     } catch (e: CancellationException) {
                         throw e
-                    } catch (e: SocketException) {
+                    } catch (e: IOException) {
                         Logger.d { "WebSocket closed: ${e.message}" }
                     } catch (e: Exception) {
                         Logger.e(e) { "WebSocket error" }
@@ -239,7 +237,7 @@ object StoatAPI {
                     connectionReady.await()
                 }
             } catch (_: TimeoutCancellationException) {
-                throw SocketTimeoutException(
+                throw RealtimeReadyTimeoutException(
                     "WebSocket did not authenticate within $CONNECTION_READY_TIMEOUT."
                 )
             }
@@ -441,3 +439,5 @@ class HitRateLimitException(retryAfter: Int = NO_RETRY_AFTER) :
     Exception(if (retryAfter == NO_RETRY_AFTER) "Hit rate limit" else "Hit rate limit, retry after ${retryAfter}ms") {
     val retryAfterMilliseconds = retryAfter.takeUnless { it == NO_RETRY_AFTER }
 }
+
+class RealtimeReadyTimeoutException(message: String) : Exception(message)

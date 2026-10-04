@@ -1,9 +1,10 @@
 package chat.stoat.api.internals
 
-import androidx.core.net.toUri
 import chat.stoat.api.StoatCbor
 import chat.stoat.core.model.data.STOAT_MARKETING
 import chat.stoat.core.model.schemas.User
+import io.ktor.http.Url
+import io.ktor.http.decodeURLQueryComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlin.io.encoding.Base64
@@ -43,8 +44,7 @@ object UserQR {
     @OptIn(ExperimentalEncodingApi::class, ExperimentalSerializationApi::class)
     fun fromUri(uriString: String): UserQRContents? {
         return try {
-            val uri = uriString.toUri()
-            val base64 = uri.query ?: return null
+            val base64 = Url(uriString).encodedQuery.decodeURLQueryComponent()
             val decodedBytes = Base64.decode(base64)
             StoatCbor.decodeFromByteArray(UserQRContents.serializer(), decodedBytes)
         } catch (e: Exception) {

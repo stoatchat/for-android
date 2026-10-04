@@ -1,12 +1,12 @@
 package chat.stoat.api.realtime
 
-import android.os.SystemClock
 import androidx.compose.runtime.mutableStateOf
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.internals.ActiveSlowmode
+import chat.stoat.api.internals.elapsedRealtimeMillis
 import chat.stoat.api.realtime.frames.receivable.AnyFrame
 import chat.stoat.api.realtime.frames.receivable.BulkFrame
 import chat.stoat.api.realtime.frames.receivable.ChannelAckFrame
@@ -64,6 +64,7 @@ import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.datetime.Clock
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
@@ -129,7 +130,7 @@ object RealtimeSocket {
                 var connectionReady = false
                 incoming.consumeEach { frame ->
                     if (frame is Frame.Text) {
-                        lastFrameAtElapsedRealtime = SystemClock.elapsedRealtime()
+                        lastFrameAtElapsedRealtime = elapsedRealtimeMillis()
                         val frameString = frame.readText()
                         try {
                             val frameType =
@@ -166,7 +167,7 @@ object RealtimeSocket {
         }
     }
 
-    fun isConnectionStale(nowElapsedRealtime: Long = SystemClock.elapsedRealtime()): Boolean {
+    fun isConnectionStale(nowElapsedRealtime: Long = elapsedRealtimeMillis()): Boolean {
         if (disconnectionState != DisconnectionState.Connected) return false
         val lastFrameAt = lastFrameAtElapsedRealtime ?: return true
         return nowElapsedRealtime - lastFrameAt > STALE_CONNECTION_THRESHOLD.inWholeMilliseconds
@@ -185,7 +186,7 @@ object RealtimeSocket {
     suspend fun sendPing() {
         if (disconnectionState != DisconnectionState.Connected) return
 
-        val pingPacket = PingFrame("Ping", System.currentTimeMillis())
+        val pingPacket = PingFrame("Ping", Clock.System.now().toEpochMilliseconds())
         socket?.send(StoatJson.encodeToString(PingFrame.serializer(), pingPacket))
         Logger.d { "Sent ping frame with ${pingPacket.data}" }
     }
@@ -647,7 +648,7 @@ object RealtimeSocket {
             "UserSlowmodes" -> {
                 val userSlowmodesFrame =
                     StoatJson.decodeFromString(UserSlowmodesFrame.serializer(), rawFrame)
-                val receivedAt = SystemClock.elapsedRealtime()
+                val receivedAt = elapsedRealtimeMillis()
 
                 userSlowmodesFrame.slowmodes.forEach { slowmode ->
                     StoatAPI.userSlowmodeCache[slowmode.channelId] =

@@ -18,20 +18,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import java.io.File
 
 const val MAX_ATTACHMENTS_PER_MESSAGE = 5
 
-data class FileArgs(
-    val file: File,
-    val filename: String,
-    val contentType: String,
-    val spoiler: Boolean = false,
-    val pickerIdentifier: String? = null,
-)
-
 suspend fun uploadToAutumn(
-    file: File,
+    bytes: ByteArray,
     name: String,
     tag: String,
     contentType: ContentType,
@@ -45,7 +36,7 @@ suspend fun uploadToAutumn(
                 formData {
                     append(
                         "file",
-                        file.readBytes(),
+                        bytes,
                         Headers.build {
                             append(HttpHeaders.ContentType, contentType.toString())
                             append(HttpHeaders.ContentDisposition, "filename=\"$name\"")

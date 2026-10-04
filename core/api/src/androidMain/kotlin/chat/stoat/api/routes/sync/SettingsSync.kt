@@ -8,6 +8,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
+import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -55,7 +56,7 @@ suspend fun getKeys(vararg keys: String): Map<String, SyncedSetting> {
     return getKeys(*keys, token = StoatAPI.sessionToken)
 }
 
-suspend fun setKey(key: String, value: String, timestamp: Long = System.currentTimeMillis()) {
+suspend fun setKey(key: String, value: String, timestamp: Long = Clock.System.now().toEpochMilliseconds()) {
     StoatHttp.post("/sync/settings/set".api()) {
         parameter("timestamp", timestamp)
 

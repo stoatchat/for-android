@@ -1,5 +1,6 @@
 package chat.stoat.api.internals
 
+import kotlinx.datetime.Clock
 import kotlin.experimental.and
 import kotlin.random.Random
 
@@ -122,7 +123,7 @@ object ULID {
     }
 
     fun makeNext(): String {
-        return makeSpecial(System.currentTimeMillis(), fetchEntropy())
+        return makeSpecial(Clock.System.now().toEpochMilliseconds(), fetchEntropy())
     }
 
     fun asTimestamp(ulid: String): Long {
