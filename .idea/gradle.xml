@@ -12,7 +12,9 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/api" />
+            <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/model" />
+            <option value="$PROJECT_DIR$/shared" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -30,3 +30,5 @@ rootProject.name = "Stoat"
 include(":app")
 include(":core:model")
 include(":core:api")
+include(":core:designsystem")
+include(":shared")

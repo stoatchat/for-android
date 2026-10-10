@@ -162,6 +162,8 @@ sentry {
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:api"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":shared"))
 
     implementation(libs.android.core.ktx)
     implementation(libs.kotlin.reflect)
