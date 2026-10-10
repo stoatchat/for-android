@@ -113,7 +113,7 @@ object ULID {
             ]
         chars[25] = b32chars[(entropy[9].toInt() and 0x1f)]
 
-        return String(chars)
+        return chars.concatToString()
     }
 
     private fun fetchEntropy(): ByteArray {

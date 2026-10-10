@@ -97,7 +97,7 @@ suspend fun fetchMembers(
     }
 
     membersResponse.users.forEach { user ->
-        user.id?.let { StoatAPI.userCache.putIfAbsent(it, user) }
+        user.id?.let { StoatAPI.userCache.getOrPut(it) { user } }
     }
 
     return membersResponse

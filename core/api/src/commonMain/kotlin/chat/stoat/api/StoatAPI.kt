@@ -35,9 +35,11 @@ import io.sentry.kotlin.multiplatform.Sentry
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.TimeoutCancellationException
@@ -58,6 +60,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.cbor.Cbor
 import kotlinx.serialization.json.Json
+import kotlin.concurrent.atomics.AtomicReference
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import chat.stoat.core.model.schemas.Channel as ChannelSchema
@@ -117,6 +121,7 @@ val StoatHttp = HttpClient(StoatAPIHost.platform.createHttpEngine()) {
     }
 }
 
+@OptIn(ExperimentalAtomicApi::class)
 object StoatAPI {
     const val TOKEN_HEADER_NAME = "x-session-token"
     private const val WS_EVENT_BUFFER_CAPACITY =
@@ -154,7 +159,7 @@ object StoatAPI {
 
     private var socketCoroutine: Job? = null
     private var pingCoroutine: Job? = null
-    private var reconnectRequestJob: Job? = null
+    private val reconnectRequestJob = AtomicReference<Job?>(null)
     private val socketRestartMutex = Mutex()
     private val socketScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -242,13 +247,24 @@ object StoatAPI {
         }
     }
 
-    @Synchronized
     fun requestReconnect(reason: String) {
-        if (sessionToken.isEmpty() || reconnectRequestJob?.isActive == true) return
+        if (sessionToken.isEmpty()) return
 
-        reconnectRequestJob = socketScope.launch {
+        // Started lazily so a request that loses the race to claim the slot never runs.
+        val job = socketScope.launch(start = CoroutineStart.LAZY) {
             Logger.d { "Restarting realtime connection: $reason" }
             connectWS()
+        }
+        while (true) {
+            val current = reconnectRequestJob.load()
+            if (current?.isActive == true) {
+                job.cancel()
+                return
+            }
+            if (reconnectRequestJob.compareAndSet(current, job)) {
+                job.start()
+                return
+            }
         }
     }
 
@@ -321,7 +337,7 @@ object StoatAPI {
 
         socketCoroutine?.cancel()
         pingCoroutine?.cancel()
-        reconnectRequestJob?.cancel()
+        reconnectRequestJob.load()?.cancel()
 
         clearPersistentCache()
     }

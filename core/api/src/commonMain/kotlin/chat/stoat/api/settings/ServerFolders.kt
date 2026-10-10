@@ -10,6 +10,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonArray
@@ -104,7 +105,7 @@ fun resolveServerSidebar(
     val byId = folders.associateBy { it.id }
     val folderOf = mutableMapOf<String, ServerFolder>()
     folders.forEach { folder ->
-        folder.servers.forEach { folderOf.putIfAbsent(it, folder) }
+        folder.servers.forEach { folderOf.getOrPut(it) { folder } }
     }
 
     val out = mutableListOf<ServerSidebarEntry>()
