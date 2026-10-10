@@ -154,7 +154,6 @@
     <string name="settings_appearance">Aparença</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Clar</string>
     <string name="settings_appearance_theme_amoled">Negre absolut</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -207,13 +206,7 @@
     <string name="invite_message">Has sigut invitat a unir-te a aquest servidor. T\'agradaria unir-te\?</string>
     <string name="invite_error_unknown">S\'ha produït un error desconegut.</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (sense suport)</string>
-    <string name="oss_attribution_body_2">Estem agraïts als desenvolupadors d\'aquests projectes per fer que el seu treball estigui disponible al món.</string>
-    <string name="oss_attribution_body">Revolt es construeix amb l\'ajuda d\'aquests fantàstics projectes de codi obert.</string>
-    <string name="oss_attribution_warning">La llista següent es genera automàticament. Pot estar incompleta o contenir errors.</string>
-    <string name="oss_attribution_generation_date">Última actualització: %1$s</string>
     <string name="about_brought_to_you_by">Creat amb ❤️ per l\'equip de Revolt.</string>
-    <string name="about_tab_version">Versió</string>
-    <string name="about_tab_details">Detalls</string>
     <string name="oss_attribution_tap_to_view_license">Toqueu per veure la llicència</string>
     <string name="about_full_name">Revolt per a Android</string>
     <string name="pick_emoji_alt">Tria emoji</string>
@@ -285,7 +278,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Revolt per a Android</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (desconegut)</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Restablir la configuració de %1$s</string>
-    <string name="settings_changelogs_new_header">Què s\'ha estat coent ✨</string>
     <string name="channel_settings_overview_description_hint">Aquest canal és només per parlar sobre…</string>
     <string name="channel_settings_overview_nsfw">Marcar com a NSFW</string>
     <string name="share_target_heading">Compartir a Revolt</string>
@@ -307,8 +299,6 @@
     <string name="overview_screen_error">No s\'ha pogut carregar la teva visió general</string>
     <string name="overview_screen_error_description">Si us plau, intenta-ho de nou més tard.</string>
     <string name="overview_screen_settings">Obre la configuració</string>
-    <string name="overview_screen_feedback">Envia un comentari</string>
-    <string name="overview_screen_feedback_description">Tens res a dir? Som tot orelles</string>
     <string name="user_card_tap_to_copy">Prem per a copiar</string>
     <string name="user_card_error_sharing">S\'ha produït un error en compartir la teva targeta d\'usuari.</string>
     <string name="discover_alt">Descobrir</string>
@@ -420,8 +410,6 @@
     <string name="settings_chat_quick_reply_double_tap">Toca dues vegades per respondre</string>
     <string name="settings_chat_interactive_embeds">Integracions interactives</string>
     <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
-    <string name="settings_changelogs">Registre de canvis</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">aquella versió</string>
     <string name="channel_settings">Configuració del canal</string>
     <string name="channel_settings_header">#%1$s</string>
     <string name="channel_settings_overview_description">Descripció del canal</string>
@@ -455,7 +443,6 @@
     <string name="spark_notifications_rationale_dismiss">Ara no</string>
     <string name="settings_appearance_colour_overrides_tertiary">Terciari</string>
     <string name="settings_chat_interactive_embeds_description">Les integracions interactives et permeten interactuar amb alguns tipus d\'enllaços directament dins del xat. Per exemple, pots reproduir vídeos de YouTube o previsualitzar àlbums d\'Apple Music.</string>
-    <string name="settings_changelogs_historical_version_header">Historial de canvis de %1$s</string>
     <string name="attachment_preview_remove">Eliminar</string>
     <string name="badge_webhook_alt">Webhook</string>
     <string name="home_join_jenvolt_description">Jenvolt és l\'espai de desenvolupament dedicat a l\'aplicació per a l\'Android i més. El suport i els comentaris es fan aquí. Potser tindràs l\'oportunitat de provar noves característiques! 👀</string>

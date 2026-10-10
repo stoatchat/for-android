@@ -48,7 +48,6 @@
     <string name="onboarding_changeable">Mas se demudares d\'eideias, puodes demudar l tou nome d\'outelizador a qualquiera momiento nas tues Definiçones d\'Outelizador.</string>
     <string name="token_invalid_toast">La tue sesson fui ancerrada. Ampeça la tue sesson outra beç fai fabor.</string>
     <string name="mfa_type_recovery">Ousar un código de recuperaçon</string>
-    <string name="about_tab_details">Detalhes</string>
     <string name="oss_attribution">Atribuiçon OSS</string>
     <string name="mfa_totp_lead">Pon l código de seis númaros de la tue app de outenticador.</string>
     <string name="mfa_totp_code">Código</string>
@@ -60,9 +59,6 @@
     <string name="about">Subre</string>
     <string name="about_full_name">Revolt an Android</string>
     <string name="about_brought_to_you_by">Traído pa ti cun ❤️ pula eiquipa Revolt.</string>
-    <string name="about_tab_version">Verson</string>
-    <string name="oss_attribution_body_2">Stamos gratos puls zambolbedores destes porjetos por çponibilizaren sou trabalho pa\'l mundo.</string>
-    <string name="oss_attribution_generation_date">Atualizado pula redadeira beç: %1$s</string>
     <string name="oss_attribution_tap_to_view_license">Clica pa ber lhicéncia</string>
     <string name="comingsoon_toast">Çculpa, este recurso inda nun stá ampuosto.</string>
     <string name="typing_one">%1$s stá çcrebindo…</string>
@@ -94,8 +90,6 @@
     <string name="friends">Amios</string>
     <string name="friends_incoming_requests">Solicitaçones Recibidas</string>
     <string name="friends_blocked">Bloqueado</string>
-    <string name="oss_attribution_body">Revolt ye custruido cula upa destes ancribles porjetos open-source.</string>
-    <string name="oss_attribution_warning">La lhista ambaixo ye outomaticamente generada. Puode ser ancumpleta ó ancorreta.</string>
     <string name="too_many_replies">Solo puodes arrespunder a %1$d mensaiges por beç.</string>
     <string name="badge_platform_moderation_alt">Moderaçon de Plataforma</string>
     <string name="home_join_jenvolt_description">Jenvolt ye\'l spácio developer-run pa to las cousas d\'Android app i más. Suporte, feedback bai pa eiqui. Talbeç bás a cunseguir spormentar nuobos recursos! 👀</string>
@@ -336,10 +330,6 @@
     <string name="settings_appearance_colour_overrides_outline">Cuntorno</string>
     <string name="settings_appearance_colour_overrides_outline_variant">Bariante de Cuntorno</string>
     <string name="friends_outgoing_requests">Solicitaçones inda nun aceitadas</string>
-    <string name="settings_changelogs">Registro de demudáncias</string>
-    <string name="settings_changelogs_new_header">L que se stá fazendo ✨</string>
-    <string name="settings_changelogs_historical_version_header">Changelog pa %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">essa berson</string>
     <string name="file_picker_chip_documents">Fexeiros</string>
     <string name="file_picker_chip_camera">Cámara</string>
     <string name="settings_sessions_first_seen">Bido pula purmeira beç an %1$s</string>
@@ -350,7 +340,6 @@
     <string name="settings_appearance">Aparença</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Claro</string>
     <string name="settings_appearance_theme_amoled">Negro Puro</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (sien suporte)</string>
@@ -536,8 +525,6 @@
     <string name="overview_screen_share_profile_description">Bei la tue carta d’outelizador i obten un link special pa cumpartir</string>
     <string name="overview_screen_changelog">Registro de demudáncias</string>
     <string name="overview_screen_changelog_description">Revolt nunca duorme, bei l que stá sendo fazido</string>
-    <string name="overview_screen_feedback">Dar feedback</string>
-    <string name="overview_screen_feedback_description">Tenes algo pa dezir? Somos todo oubidos</string>
     <string name="user_info_sheet_webhook">Ancuntreste un Webhook!</string>
     <string name="hide_password">Scunder palabra-passe</string>
     <string name="show_password">Amostrar palabra-passe</string>
