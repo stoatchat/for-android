@@ -79,9 +79,6 @@ fun ConversationsScreen(navController: NavController) {
 
                 if (notesChannel != null) {
                     ListItem(
-                        headlineContent = {
-                            Text(stringResource(R.string.channel_notes))
-                        },
                         supportingContent = {
                             if (preview.isNotBlank()) {
                                 Text(
@@ -113,7 +110,9 @@ fun ConversationsScreen(navController: NavController) {
                         modifier = Modifier.clickable {
                             navController.navigate("main/conversation/${notesChannel.id}")
                         }
-                    )
+                    ) {
+                        Text(stringResource(R.string.channel_notes))
+                    }
                     HorizontalDivider()
                 }
             }

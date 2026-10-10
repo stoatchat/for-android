@@ -400,7 +400,7 @@ fun SettingsListItem(
 ) {
     ListItem(
         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        headlineContent = headlineContent,
+        content = headlineContent,
         supportingContent = supportingContent,
         leadingContent = leadingContent,
         modifier = Modifier

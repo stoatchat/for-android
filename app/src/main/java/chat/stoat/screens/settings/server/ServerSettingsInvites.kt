@@ -34,9 +34,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -274,7 +275,10 @@ fun ServerSettingsInvites(
     BackHandler(enabled = viewModel.creating || viewModel.deletingInviteCode != null) {}
 
     if (showCreateSheet) {
-        val createSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val createSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         val createSheetScope = rememberCoroutineScope()
 
         ModalBottomSheet(
@@ -304,7 +308,10 @@ fun ServerSettingsInvites(
     }
 
     selectedInvite?.let { invite ->
-        val managementSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val managementSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         val managementSheetScope = rememberCoroutineScope()
 
         ModalBottomSheet(

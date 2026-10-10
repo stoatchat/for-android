@@ -33,11 +33,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -746,7 +747,10 @@ private fun RolePreviewSurface(
 @Composable
 private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
     var showColourPicker by remember { mutableStateOf(false) }
-    val pickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val pickerSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     val pickerScope = rememberCoroutineScope()
 
     if (showColourPicker) {

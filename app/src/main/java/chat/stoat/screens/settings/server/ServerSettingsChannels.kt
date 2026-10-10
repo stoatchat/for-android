@@ -44,10 +44,11 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -421,7 +422,10 @@ fun ServerSettingsChannels(
     }
 
     if (showAddSheet) {
-        val addSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val addSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         val addSheetScope = rememberCoroutineScope()
 
         fun dismissAddSheet(onDismissed: () -> Unit) {
@@ -1178,14 +1182,6 @@ private fun ChannelSectionRow(
                 leadingIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
                 trailingIconColor = MaterialTheme.colorScheme.onSecondaryContainer
             ),
-            headlineContent = {
-                Text(
-                    text = sectionTitle(section),
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            },
             supportingContent = {
                 Text(
                     pluralStringResource(
@@ -1286,7 +1282,14 @@ private fun ChannelSectionRow(
                     }
                 }
             }
-        )
+        ) {
+            Text(
+                text = sectionTitle(section),
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
@@ -1322,13 +1325,6 @@ private fun ChannelSettingsRow(
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
         ),
-        headlineContent = {
-            Text(
-                text = channel?.name ?: channelId,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
         supportingContent = {
             Text(
                 stringResource(
@@ -1374,7 +1370,13 @@ private fun ChannelSettingsRow(
                 }
             }
             .clickable(enabled = enabled, onClick = onClick)
-    )
+    ) {
+        Text(
+            text = channel?.name ?: channelId,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }
 
 @Composable

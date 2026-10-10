@@ -28,10 +28,11 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ProgressIndicatorDefaults
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,11 +103,6 @@ fun FilePreviewSheet(
                 .padding(top = 8.dp)
         ) {
             ListItem(
-                headlineContent = {
-                    Text(
-                        stringResource(R.string.attachment_preview_spoiler)
-                    )
-                },
                 supportingContent = {
                     Text(
                         stringResource(R.string.attachment_preview_spoiler_description)
@@ -121,7 +117,11 @@ fun FilePreviewSheet(
                 colors = ListItemDefaults.colors().copy(
                     containerColor = Color.Transparent,
                 )
-            )
+            ) {
+                Text(
+                    stringResource(R.string.attachment_preview_spoiler)
+                )
+            }
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -165,7 +165,10 @@ fun AttachmentManager(
     val scope = rememberCoroutineScope()
 
     if (showPreviewSheet) {
-        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         ModalBottomSheet(
             onDismissRequest = {
                 showPreviewSheet = false

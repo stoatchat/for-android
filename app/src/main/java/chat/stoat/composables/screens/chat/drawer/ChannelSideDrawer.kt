@@ -49,8 +49,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -222,7 +223,10 @@ fun ChannelSideDrawer(
     var serverFolderColourTarget by remember { mutableStateOf<String?>(null) }
 
     serverFolderSheetTarget?.let { folderId ->
-        val serverFolderSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val serverFolderSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
         ModalBottomSheet(
             sheetState = serverFolderSheetState,
@@ -246,7 +250,10 @@ fun ChannelSideDrawer(
     }
 
     serverFolderColourTarget?.let { folderId ->
-        val colourSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val colourSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         val folder = ServerFolders.folders.firstOrNull { it.id == folderId }
         val hideColourSheet: () -> Unit = {
             scope.launch {
@@ -282,7 +289,7 @@ fun ChannelSideDrawer(
     var channelContextSheetTarget by remember { mutableStateOf<String?>(null) }
 
     if (channelContextSheetTarget != null) {
-        val channelContextSheetState = rememberModalBottomSheetState()
+        val channelContextSheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
 
         ModalBottomSheet(
             sheetState = channelContextSheetState,

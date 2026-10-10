@@ -15,7 +15,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
+import chat.stoat.composables.generic.ControlledSlider
 
 enum class CornerRadiusPreset(val percentage: Int) {
     SHARP(0),
@@ -74,11 +75,12 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                             ),
                         )
 
-                        Slider(
+                        ControlledSlider(
                             value = sliderPosition,
                             onValueChange = { sliderPosition = it },
                             valueRange = 0f..50f,
-                            steps = 51
+                            steps = 49,
+                            track = { SliderDefaults.Track(sliderState = it, drawTick = { _, _ -> }) }
                         )
                     }
                 }

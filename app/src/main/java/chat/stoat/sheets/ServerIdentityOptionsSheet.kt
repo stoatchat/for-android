@@ -81,9 +81,6 @@ fun ServerIdentityOptionsSheet(userId: String) {
 
         Column {
             ListItem(
-                headlineContent = {
-                    Text("Show Username#Tag next to nickname or display name")
-                },
                 trailingContent = {
                     Switch(
                         checked = showUsernameDiscriminator,
@@ -102,11 +99,10 @@ fun ServerIdentityOptionsSheet(userId: String) {
                 colors = ListItemDefaults.colors().copy(
                     containerColor = Color.Transparent,
                 )
-            )
+            ) {
+                Text("Show Username#Tag next to nickname or display name")
+            }
             ListItem(
-                headlineContent = {
-                    Text("Ignore server avatar")
-                },
                 trailingContent = {
                     Switch(
                         checked = ignoreServerAvatar,
@@ -125,7 +121,9 @@ fun ServerIdentityOptionsSheet(userId: String) {
                 colors = ListItemDefaults.colors().copy(
                     containerColor = Color.Transparent,
                 )
-            )
+            ) {
+                Text("Ignore server avatar")
+            }
         }
     }
 }

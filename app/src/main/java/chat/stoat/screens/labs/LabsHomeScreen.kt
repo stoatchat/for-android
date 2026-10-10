@@ -142,13 +142,12 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
-                            headlineContent = {
-                                Text("New Login Experience")
-                            },
                             modifier = Modifier.clickable {
                                 navController.navigate("mockups/newlogin")
                             }
-                        )
+                        ) {
+                            Text("New Login Experience")
+                        }
                         HorizontalDivider()
                     }
                 }
@@ -158,40 +157,36 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
-                            headlineContent = {
-                                Text("Settings DSL")
-                            },
                             modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/settingsdsl")
                             }
-                        )
+                        ) {
+                            Text("Settings DSL")
+                        }
                         HorizontalDivider()
                         ListItem(
-                            headlineContent = {
-                                Text("Gradient Editor")
-                            },
                             modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/gradienteditor")
                             }
-                        )
+                        ) {
+                            Text("Gradient Editor")
+                        }
                         HorizontalDivider()
                         ListItem(
-                            headlineContent = {
-                                Text("New Card")
-                            },
                             modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/newcard")
                             }
-                        )
+                        ) {
+                            Text("New Card")
+                        }
                         HorizontalDivider()
                         ListItem(
-                            headlineContent = {
-                                Text("Telecom")
-                            },
                             modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/telecom")
                             }
-                        )
+                        ) {
+                            Text("Telecom")
+                        }
                         HorizontalDivider()
                     }
                 }

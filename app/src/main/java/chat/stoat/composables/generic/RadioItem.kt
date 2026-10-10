@@ -24,9 +24,6 @@ fun RadioItem(
                 onClick = onClick,
                 role = Role.RadioButton
             ),
-        headlineContent = {
-            label()
-        },
         leadingContent = {
             RadioButton(
                 selected = selected,
@@ -36,5 +33,7 @@ fun RadioItem(
         supportingContent = {
             description()
         }
-    )
+    ) {
+        label()
+    }
 }

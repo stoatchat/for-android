@@ -45,7 +45,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -95,6 +94,7 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.composables.generic.ControlledSlider
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.internals.extensions.zero
@@ -643,7 +643,7 @@ private fun VideoTimeline(
             )
         )
 
-        Slider(
+        ControlledSlider(
             value = sliderValue,
             onValueChange = { onScrub((it * usableDurationMs).toLong()) },
             onValueChangeFinished = onScrubFinished,

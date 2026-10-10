@@ -481,9 +481,6 @@ fun ServerSettingsRoles(
                             colors = ListItemDefaults.colors(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                             ),
-                            headlineContent = {
-                                Text(stringResource(R.string.server_settings_roles_everyone))
-                            },
                             supportingContent = {
                                 Text(
                                     stringResource(
@@ -493,8 +490,10 @@ fun ServerSettingsRoles(
                             },
                             leadingContent = { Spacer(Modifier.size(24.dp)) },
                             trailingContent = { Spacer(Modifier.size(48.dp)) },
-                            modifier = Modifier.padding(top = 8.dp),
-                        )
+                            modifier = Modifier.padding(top = 8.dp)
+                        ) {
+                            Text(stringResource(R.string.server_settings_roles_everyone))
+                        }
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -584,26 +583,6 @@ private fun RoleListRow(
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
-        headlineContent = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = entry.role.name ?: entry.id,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f, fill = false),
-                )
-                if (roleIcon != null) {
-                    GlideImage(
-                        model = "$STOAT_FILES/icons/${roleIcon.id}/original",
-                        contentDescription = null,
-                        transition = CrossFade,
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                            .size(16.dp),
-                    )
-                }
-            }
-        },
         supportingContent = if (lockedByHierarchy) {
             { Text(stringResource(R.string.server_settings_roles_above_you)) }
         } else null,
@@ -651,6 +630,25 @@ private fun RoleListRow(
                     }
                 }
             }
-            .clickable(enabled = enabled, onClick = onClick),
-    )
+            .clickable(enabled = enabled, onClick = onClick)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = entry.role.name ?: entry.id,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
+            )
+            if (roleIcon != null) {
+                GlideImage(
+                    model = "$STOAT_FILES/icons/${roleIcon.id}/original",
+                    contentDescription = null,
+                    transition = CrossFade,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .size(16.dp),
+                )
+            }
+        }
+    }
 }

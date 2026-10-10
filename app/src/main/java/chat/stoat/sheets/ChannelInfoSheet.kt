@@ -11,8 +11,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +52,10 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     val permissions by rememberChannelPermissions(channelId)
 
     if (memberListSheetShown) {
-        val memberListSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val memberListSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
         ModalBottomSheet(
             sheetState = memberListSheetState,

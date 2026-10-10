@@ -162,9 +162,6 @@ fun ExperimentsSettingsScreen(
         }
     ) {
         ListItem(
-            headlineContent = {
-                Text("Threefold Root User Interface")
-            },
             supportingContent = {
                 Text("Polar")
             },
@@ -175,12 +172,11 @@ fun ExperimentsSettingsScreen(
                 )
             },
             modifier = Modifier.clickable { viewModel.setUsePolarChecked(!viewModel.usePolarChecked.value) }
-        )
+        ) {
+            Text("Threefold Root User Interface")
+        }
 
         ListItem(
-            headlineContent = {
-                Text("Server Identity Options")
-            },
             supportingContent = {
                 Text("Enable options to control what parts of others' server identities you want to see.")
             },
@@ -191,12 +187,11 @@ fun ExperimentsSettingsScreen(
                 )
             },
             modifier = Modifier.clickable { viewModel.setEnableServerIdentityOptionsChecked(!viewModel.enableServerIdentityOptionsChecked.value) }
-        )
+        ) {
+            Text("Server Identity Options")
+        }
 
         ListItem(
-            headlineContent = {
-                Text("UserInfoSheet2")
-            },
             supportingContent = {
                 Text("New user sheet")
             },
@@ -207,16 +202,12 @@ fun ExperimentsSettingsScreen(
                 )
             },
             modifier = Modifier.clickable { viewModel.setShowUserSheet2Checked(!viewModel.showUserSheet2Checked.value) }
-        )
+        ) {
+            Text("UserInfoSheet2")
+        }
 
         if (Experiments.voiceMessages.isAvailable) {
             ListItem(
-                headlineContent = {
-                    Text(
-                        text = "Voice Messages",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                },
                 supportingContent = {
                     Text(
                         text = "Internal"
@@ -231,7 +222,12 @@ fun ExperimentsSettingsScreen(
                 modifier = Modifier.clickable {
                     viewModel.setVoiceMessagesChecked(!viewModel.voiceMessagesChecked.value)
                 }
-            )
+            ) {
+                Text(
+                    text = "Voice Messages",
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
 
         Subcategory(

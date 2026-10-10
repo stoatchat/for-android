@@ -20,11 +20,6 @@ fun AttributionItem(library: Library, onClick: () -> Unit) {
     val context = LocalContext.current
 
     ListItem(
-        headlineContent = {
-            Text(
-                text = library.name
-            )
-        },
         supportingContent = {
             Text(
                 text = stringResource(id = R.string.oss_attribution_tap_to_view_license)
@@ -47,5 +42,9 @@ fun AttributionItem(library: Library, onClick: () -> Unit) {
         },
         modifier = Modifier
             .clickable(onClick = onClick)
-    )
+    ) {
+        Text(
+            text = library.name
+        )
+    }
 }

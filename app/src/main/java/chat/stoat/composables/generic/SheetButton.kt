@@ -30,19 +30,6 @@ fun SheetButton(
     ) {
         ListItem(
             colors = TransparentListItemColours,
-            headlineContent = {
-                CompositionLocalProvider(
-                    value = if (dangerous) {
-                        LocalContentColor provides MaterialTheme.colorScheme.error
-                    } else if (special) {
-                        LocalContentColor provides MaterialTheme.colorScheme.primary
-                    } else {
-                        LocalContentColor provides MaterialTheme.colorScheme.onSurface
-                    }
-                ) {
-                    headlineContent()
-                }
-            },
             leadingContent = {
                 CompositionLocalProvider(
                     value = if (dangerous) {
@@ -86,6 +73,18 @@ fun SheetButton(
                     }
                 }
             }
-        )
+        ) {
+            CompositionLocalProvider(
+                value = if (dangerous) {
+                    LocalContentColor provides MaterialTheme.colorScheme.error
+                } else if (special) {
+                    LocalContentColor provides MaterialTheme.colorScheme.primary
+                } else {
+                    LocalContentColor provides MaterialTheme.colorScheme.onSurface
+                }
+            ) {
+                headlineContent()
+            }
+        }
     }
 }

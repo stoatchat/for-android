@@ -37,8 +37,9 @@ import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -109,7 +110,10 @@ fun OverviewScreen(
     var showUserCardSheet by rememberSaveable { mutableStateOf(false) }
 
     if (showUserCardSheet) {
-        val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val state = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         ModalBottomSheet(
             sheetState = state,
             onDismissRequest = { showUserCardSheet = false },

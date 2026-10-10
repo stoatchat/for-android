@@ -45,9 +45,6 @@ fun VoiceParticipant(
     ListItem(
         modifier = modifier,
         colors = TransparentListItemColours,
-        headlineContent = {
-            Text(displayNameInChannel(state.id, channelId))
-        },
         leadingContent = {
             UserAvatar(
                 username = displayNameInChannel(state.id, channelId),
@@ -93,5 +90,7 @@ fun VoiceParticipant(
                 }
             }
         }
-    )
+    ) {
+        Text(displayNameInChannel(state.id, channelId))
+    }
 }

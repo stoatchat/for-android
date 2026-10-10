@@ -95,13 +95,6 @@ fun LanguagePickerSettingsScreen(
         ) {
             item(key = "auto") {
                 ListItem(
-                    headlineContent = {
-                        Text(
-                            stringResource(id = R.string.settings_language_auto),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
                     leadingContent = {
                         RadioButton(
                             selected = viewModel.currentLocale == null,
@@ -112,7 +105,13 @@ fun LanguagePickerSettingsScreen(
                         AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList())
                         viewModel.currentLocale = null
                     }
-                )
+                ) {
+                    Text(
+                        stringResource(id = R.string.settings_language_auto),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             items(
                 viewModel.locales.size,
@@ -120,13 +119,6 @@ fun LanguagePickerSettingsScreen(
             ) { index ->
                 val locale = viewModel.locales[index]
                 ListItem(
-                    headlineContent = {
-                        Text(
-                            locale.displayLanguage,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
                     supportingContent = {
                         if (!locale.displayCountry.isNullOrEmpty()) {
                             Text(
@@ -158,7 +150,13 @@ fun LanguagePickerSettingsScreen(
                             )
                             viewModel.currentLocale = locale
                         }
-                )
+                ) {
+                    Text(
+                        locale.displayLanguage,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

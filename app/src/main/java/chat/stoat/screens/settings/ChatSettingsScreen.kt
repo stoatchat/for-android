@@ -222,9 +222,6 @@ fun ChatSettingsScreen(
 
             Column {
                 ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.settings_chat_interactive_embeds_youtube))
-                    },
                     trailingContent = {
                         Switch(
                             checked = LoadedSettings.specialEmbedSettings.embedYouTube,
@@ -238,12 +235,11 @@ fun ChatSettingsScreen(
                             )
                         )
                     }
-                )
+                ) {
+                    Text(stringResource(R.string.settings_chat_interactive_embeds_youtube))
+                }
 
                 ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.settings_chat_interactive_embeds_apple_music))
-                    },
                     trailingContent = {
                         Switch(
                             checked = LoadedSettings.specialEmbedSettings.embedAppleMusic,
@@ -257,7 +253,9 @@ fun ChatSettingsScreen(
                             )
                         )
                     }
-                )
+                ) {
+                    Text(stringResource(R.string.settings_chat_interactive_embeds_apple_music))
+                }
             }
         }
     }

@@ -34,13 +34,6 @@ fun SessionItem(
     }
 
     ListItem(
-        headlineContent = {
-            Text(
-                text = session.name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
         supportingContent = {
             Text(
                 text = stringResource(R.string.settings_sessions_first_seen, formattedTimestamp),
@@ -61,5 +54,11 @@ fun SessionItem(
             }
         },
         modifier = modifier
-    )
+    ) {
+        Text(
+            text = session.name,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }

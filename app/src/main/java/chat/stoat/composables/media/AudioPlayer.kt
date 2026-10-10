@@ -21,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatHttp
 import chat.stoat.composables.LocalSnackbarHostState
+import chat.stoat.composables.generic.ControlledSlider
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
@@ -196,14 +196,14 @@ fun AudioPlayer(
             }
 
             if (player.duration >= 0) {
-                Slider(
-                    value = player.currentPosition.toFloat(),
+                ControlledSlider(
+                    value = playback.currentTime.longValue.toFloat(),
                     onValueChange = { playback.seekTo(it.toLong()) },
                     valueRange = 0f..player.duration.toFloat(),
                     modifier = Modifier.weight(1f)
                 )
             } else {
-                Slider(
+                ControlledSlider(
                     value = 0f,
                     onValueChange = {},
                     valueRange = 0f..1f,

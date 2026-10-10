@@ -392,7 +392,6 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                 ListItemDefaults.colors().leadingContentColor
                             }
                         ),
-                        headlineContent = { Text(stringResource(R.string.voice_action_video)) },
                         leadingContent = {
                             Icon(
                                 painter = if (isCameraOn) painterResource(R.drawable.ic_videocam_24dp) else painterResource(
@@ -408,15 +407,12 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                     room.localParticipant.setCameraEnabled(!isCameraOn)
                                 }
                             }
-                    )
+                    ) { Text(stringResource(R.string.voice_action_video)) }
                     AnimatedVisibility(visible = isCameraOn) {
                         ListItem(
                             colors = ListItemDefaults.colors(
                                 containerColor = MaterialTheme.colorScheme.surfaceContainer
                             ),
-                            headlineContent = {
-                                Text(stringResource(R.string.voice_action_flip_camera))
-                            },
                             leadingContent = {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_cameraswitch_24dp),
@@ -431,7 +427,9 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                         ?.track as? LocalVideoTrack)
                                         ?.switchCamera()
                                 }
-                        )
+                        ) {
+                            Text(stringResource(R.string.voice_action_flip_camera))
+                        }
                     }
                     ListItem(
                         colors = ListItemDefaults.colors(
@@ -447,7 +445,6 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                 ListItemDefaults.colors().leadingContentColor
                             }
                         ),
-                        headlineContent = { Text(stringResource(R.string.voice_action_screen_share)) },
                         leadingContent = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_mobile_share_24px),
@@ -470,16 +467,13 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                         }
                                 }
                             }
-                    )
+                    ) { Text(stringResource(R.string.voice_action_screen_share)) }
                     if (audioHandler != null) {
                         Box(modifier = Modifier.fillMaxWidth()) {
                             ListItem(
                                 colors = ListItemDefaults.colors(
                                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                                 ),
-                                headlineContent = {
-                                    Text(stringResource(R.string.voice_audio_output))
-                                },
                                 supportingContent = {
                                     selectedAudioDevice?.let { Text(audioDeviceLabel(it)) }
                                 },
@@ -492,7 +486,9 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                 modifier = Modifier
                                     .clip(MaterialTheme.shapes.extraSmall)
                                     .clickable { outputMenuOpen = true }
-                            )
+                            ) {
+                                Text(stringResource(R.string.voice_audio_output))
+                            }
                             DropdownMenu(
                                 expanded = outputMenuOpen,
                                 onDismissRequest = { outputMenuOpen = false }

@@ -88,18 +88,6 @@ fun MemberListItem(
                     )
                 }
             ),
-        headlineContent = {
-            Text(
-                text = member?.nickname
-                    ?: user?.displayName
-                    ?: user?.username
-                    ?: user?.id
-                    ?: userId,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = LocalTextStyle.current.copy(brush = colour),
-            )
-        },
         supportingContent = {
             user?.status?.text?.let {
                 if (user.online == true) {
@@ -128,5 +116,16 @@ fun MemberListItem(
             )
         },
         trailingContent = trailingContent
-    )
+    ) {
+        Text(
+            text = member?.nickname
+                ?: user?.displayName
+                ?: user?.username
+                ?: user?.id
+                ?: userId,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = LocalTextStyle.current.copy(brush = colour),
+        )
+    }
 }

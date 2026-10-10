@@ -44,6 +44,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -51,7 +52,7 @@ import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.animateFloatingActionButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -141,7 +142,10 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
     BackHandler(fabMenuExpanded) { fabMenuExpanded = false }
 
     if (addByTagSheetVisible) {
-        val addByTagSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val addByTagSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         var username by rememberSaveable { mutableStateOf("") }
         var tag by rememberSaveable { mutableStateOf("") }
         var error by rememberSaveable { mutableStateOf<String?>(null) }
@@ -331,7 +335,10 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
     }
 
     if (qrResult != null) {
-        val qrResultSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val qrResultSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         var contents by rememberSaveable { mutableStateOf<UserQRContents?>(null) }
 
         LaunchedEffect(qrResult) {

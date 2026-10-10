@@ -31,8 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
@@ -59,6 +57,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import chat.stoat.R
+import chat.stoat.composables.generic.ControlledSlider
 import chat.stoat.internals.TailwindColourScheme
 import chat.stoat.ui.colour.BrushCompat
 import chat.stoat.ui.colour.CSSColours
@@ -102,21 +101,6 @@ private fun DrawScope.drawThumbMargin(
         topLeft = Offset(thumbOutlineXBase - 8.dp.toPx(), 0f),
         size = androidx.compose.ui.geometry.Size(16.dp.toPx(), size.height)
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CustomTrackSlider(
-    value: Float,
-    onValueChange: (Float) -> Unit,
-    valueRange: ClosedFloatingPointRange<Float>,
-    colors: SliderColors,
-    track: @Composable (SliderState) -> Unit,
-) {
-    val state = remember(valueRange) { SliderState(value, trackRange = valueRange) }
-    state.value = value
-
-    Slider(state = state, onValueChange = onValueChange, colors = colors, track = track)
 }
 
 private fun Color.asHexString(): String {
@@ -373,7 +357,7 @@ fun ColumnScope.ColourPickerSheet(
                             )
                         }
 
-                        CustomTrackSlider(
+                        ControlledSlider(
                             value = colorHsv.first,
                             onValueChange = {
                                 val (_, saturation, value) = colorHsv
@@ -425,7 +409,7 @@ fun ColumnScope.ColourPickerSheet(
                             )
                         }
 
-                        CustomTrackSlider(
+                        ControlledSlider(
                             value = colorHsv.second,
                             onValueChange = {
                                 val (hue, _, value) = colorHsv
@@ -488,7 +472,7 @@ fun ColumnScope.ColourPickerSheet(
                             )
                         }
 
-                        CustomTrackSlider(
+                        ControlledSlider(
                             value = colorHsv.third,
                             onValueChange = {
                                 val (hue, saturation, _) = colorHsv
@@ -551,7 +535,7 @@ fun ColumnScope.ColourPickerSheet(
                             )
                         }
 
-                        CustomTrackSlider(
+                        ControlledSlider(
                             value = color.alpha,
                             onValueChange = { color = color.copy(alpha = it) },
                             valueRange = 0f..1f,

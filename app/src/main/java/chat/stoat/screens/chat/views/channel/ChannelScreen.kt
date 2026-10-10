@@ -79,6 +79,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -87,7 +88,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -672,7 +673,10 @@ fun ChannelScreen(
     // <editor-fold desc="Sheets">
     var channelInfoSheetShown by remember { mutableStateOf(false) }
     if (channelInfoSheetShown) {
-        val channelInfoSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val channelInfoSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
         ModalBottomSheet(
             sheetState = channelInfoSheetState,
@@ -693,7 +697,10 @@ fun ChannelScreen(
     var messageContextSheetShown by remember { mutableStateOf(false) }
     var messageContextSheetTarget by remember { mutableStateOf("") }
     if (messageContextSheetShown) {
-        val messageContextSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val messageContextSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
         ModalBottomSheet(
             sheetState = messageContextSheetState,
@@ -719,7 +726,10 @@ fun ChannelScreen(
     var reactSheetShown by remember { mutableStateOf(false) }
     var reactSheetTarget by remember { mutableStateOf("") }
     if (reactSheetShown) {
-        val reactSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val reactSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
 
         ModalBottomSheet(
             sheetState = reactSheetState,

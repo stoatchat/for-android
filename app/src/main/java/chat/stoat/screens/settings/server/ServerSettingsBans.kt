@@ -30,9 +30,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -192,7 +193,10 @@ fun ServerSettingsBans(
     BackHandler(enabled = viewModel.unbanningUserId != null) {}
 
     detailsTarget?.let { target ->
-        val detailsSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        val detailsSheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
         val detailsSheetScope = rememberCoroutineScope()
         ModalBottomSheet(
             sheetState = detailsSheetState,

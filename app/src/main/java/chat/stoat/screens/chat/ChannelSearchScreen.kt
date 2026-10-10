@@ -165,6 +165,9 @@ class ChannelSearchScreenViewModel : ViewModel() {
     }
 }
 
+// The replacement, ExpandedFullScreenSearchBar, opens search in a separate dialog window, which
+// doesn't suit this screen being a navigation destination of its own.
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelSearchScreen(
