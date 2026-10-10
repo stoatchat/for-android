@@ -13,7 +13,7 @@ import co.touchlab.kermit.Logger
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Restarts realtime networking when the app returns into foregroung or we get moved to a different
+ * Restarts realtime networking when the app returns into foreground or we get moved to a different
  * network
  */
 class RealtimeConnectionMonitor(context: Context) : DefaultLifecycleObserver {
