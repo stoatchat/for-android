@@ -100,7 +100,6 @@
     <string name="settings_category_miscellaneous">Diverse</string>
     <string name="settings_appearance">Aspect</string>
     <string name="settings_appearance_theme">Temă</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Luminos</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
     <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (nu este acceptat)</string>
@@ -208,12 +207,7 @@
     <string name="report_reason_content_promotes_harm">Promovează vătămarea</string>
     <string name="report_reason_content_spam_abuse">Spam sau abuz de platformă similar</string>
     <string name="about_full_name">Revolt pe Android</string>
-    <string name="oss_attribution_warning">Lista de mai jos este generată automat. Aceasta poate fi incompletă sau inexactă.</string>
     <string name="about_brought_to_you_by">Oferit cu ❤️ de către echipa Revolt.</string>
-    <string name="oss_attribution_body">Revolt este construit cu ajutorul acestor minunate proiecte open-source.</string>
-    <string name="oss_attribution_body_2">Suntem recunoscători dezvoltatorilor acestor proiecte pentru că și-au pus munca la dispoziția lumii.</string>
-    <string name="about_tab_version">Versiunea</string>
-    <string name="about_tab_details">Detalii</string>
     <string name="system_message_user_added">%1$s a adăugat %2$s</string>
     <string name="spark_early_access">Bun venit la Accesul timpuriu! 🚀</string>
     <string name="spark_early_access_description_1">Ești unul dintre primii care au încercat noua noastră aplicație Android. Suntem încântați să te avem aici!</string>
@@ -223,7 +217,6 @@
     <string name="hint_provide_feedback">Iubim feedback-ul!</string>
     <string name="create_group_description">Adună-ți echipa într-un grup. Poți adăuga până la %1$d persoane.</string>
     <string name="system_message_ownership_changed">%1$s a transferat rolul de proprietar către %2$s</string>
-    <string name="oss_attribution_generation_date">Ultima actualizare: %1$s</string>
     <string name="badge_webhook_alt">Webhook</string>
     <string name="status_idle">Inactiv</string>
     <string name="status_text_error_too_long">Mesajul de stare este prea lung. Încearcă să-l păstrezi sub %1$d de caractere.</string>
@@ -283,8 +276,6 @@
     <string name="overview_screen_share_profile">Distribuie profilul</string>
     <string name="overview_screen_changelog">Jurnal de schimbări</string>
     <string name="overview_screen_changelog_description">Revolt nu doarme, aruncă o privire la ceea ce am lucrat</string>
-    <string name="overview_screen_feedback">Oferă părerea</string>
-    <string name="overview_screen_feedback_description">Ai ceva de zis? Suntem doar urechi</string>
     <string name="user_card_tap_to_copy">Apasă pentru a copia</string>
     <string name="user_card_error_sharing">Am întâmpinat o eroare la partajarea cardului de utilizator</string>
     <string name="user_card_data_point_display_name">%1$d.Nume</string>

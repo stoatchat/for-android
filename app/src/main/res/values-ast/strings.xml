@@ -38,10 +38,7 @@
     <string name="mfa_password_lead">Introduz la to contraseña pa seguir.</string>
     <string name="about">Alrodiu de</string>
     <string name="about_full_name">Revolt en Android</string>
-    <string name="about_tab_version">Versión</string>
     <string name="oss_attribution">Atribución de códigu abiertu</string>
-    <string name="oss_attribution_body_2">Damos-yos les gracies a los desenvolvedores d\'esos proyeutos por facer disponible\'l so trabayu pa tol mundu.</string>
-    <string name="oss_attribution_generation_date">Última actualización: %1$s</string>
     <string name="comingsoon_toast">Esculpa, esta función aínda nun tá llista.</string>
     <string name="typing_one">%1$s tá escribiendo…</string>
     <string name="typing_many">%1$s tán escribiendo…</string>
@@ -249,7 +246,6 @@
     <string name="settings_sessions_log_out_other_confirm_no">Caltener la sesión abierta</string>
     <string name="settings_appearance_theme">Temes</string>
     <string name="settings_appearance_theme_none">Sistema</string>
-    <string name="settings_appearance_theme_revolt">Revolt</string>
     <string name="settings_appearance_theme_light">Nidiu</string>
     <string name="settings_appearance_theme_amoled">Prietu dafechu</string>
     <string name="settings_appearance_theme_m3dynamic">Material You</string>
@@ -280,10 +276,6 @@
     <string name="settings_appearance_colour_overrides_export">Esportar</string>
     <string name="settings_appearance_colour_overrides_import">Importar</string>
     <string name="settings_feedback">Comentariu</string>
-    <string name="settings_changelogs">Logs de cambeos</string>
-    <string name="settings_changelogs_new_header">Lo que táse faciendo ✨</string>
-    <string name="settings_changelogs_historical_version_header">Log de cambeos pa %1$s</string>
-    <string name="settings_changelogs_historical_version_header_placeholder">esa versión</string>
     <string name="back">← P\'atrás</string>
     <string name="loading">Pescanciando daqué d\'información, aguanta ehí…</string>
     <string name="login_onboarding_heading">Atopa la to comunidá, conecta col mundu.</string>
@@ -304,9 +296,6 @@
     <string name="mfa_totp_lead">Pon el códigu de seyes númberos de la to aplicación d\'autenticación.</string>
     <string name="mfa_recovery_lead">Introduz ún de los tos códigos de recuperación.</string>
     <string name="about_brought_to_you_by">Trayíu pa ti con ❤️ pol equipu de Revolt.</string>
-    <string name="about_tab_details">Detalles</string>
-    <string name="oss_attribution_body">Revolt tá fechu cola ayuda d\'estos maraviyosos proyeutos de códigu abiertu.</string>
-    <string name="oss_attribution_warning">La llista d\'embaxu foi xenerada automáticamente. Pue tar incompleta o enquivocada.</string>
     <string name="oss_attribution_tap_to_view_license">Pulsa pa ver la llicencia</string>
     <string name="typing_several">Varies persones tán escribiendo</string>
     <string name="remove_reply_alt">Esaniciar rempuesta</string>
