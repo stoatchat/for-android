@@ -53,15 +53,30 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import chat.stoat.R
 import chat.stoat.composables.generic.ControlledSlider
 import chat.stoat.internals.TailwindColourScheme
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.colour_picker_alpha
+import chat.stoat.shared.resources.colour_picker_apply
+import chat.stoat.shared.resources.colour_picker_cancel
+import chat.stoat.shared.resources.colour_picker_hex
+import chat.stoat.shared.resources.colour_picker_hex_template
+import chat.stoat.shared.resources.colour_picker_hex_use
+import chat.stoat.shared.resources.colour_picker_hue
+import chat.stoat.shared.resources.colour_picker_hue_value_fmt
+import chat.stoat.shared.resources.colour_picker_mode_palette
+import chat.stoat.shared.resources.colour_picker_mode_sliders
+import chat.stoat.shared.resources.colour_picker_preview
+import chat.stoat.shared.resources.colour_picker_saturation
+import chat.stoat.shared.resources.colour_picker_use_default
+import chat.stoat.shared.resources.colour_picker_value
 import chat.stoat.ui.colour.BrushCompat
 import chat.stoat.ui.colour.CSSColours
 import org.intellij.lang.annotations.Language
+import org.jetbrains.compose.resources.stringResource
 
 enum class ColourPickerMode {
     Sliders,
@@ -302,9 +317,9 @@ fun ColumnScope.ColourPickerSheet(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val slidersLabel = stringResource(R.string.colour_picker_mode_sliders)
-        val paletteLabel = stringResource(R.string.colour_picker_mode_palette)
-        val hexLabel = stringResource(R.string.colour_picker_hex)
+        val slidersLabel = stringResource(Res.string.colour_picker_mode_sliders)
+        val paletteLabel = stringResource(Res.string.colour_picker_mode_palette)
+        val hexLabel = stringResource(Res.string.colour_picker_hex)
 
         ButtonGroup(
             modifier = Modifier.fillMaxWidth(),
@@ -341,12 +356,12 @@ fun ColumnScope.ColourPickerSheet(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                stringResource(R.string.colour_picker_hue),
+                                stringResource(Res.string.colour_picker_hue),
                                 style = MaterialTheme.typography.labelLarge
                             )
                             Text(
                                 stringResource(
-                                    R.string.colour_picker_hue_value_fmt,
+                                    Res.string.colour_picker_hue_value_fmt,
                                     colorHsv.first.toInt()
                                 ),
                                 style = MaterialTheme.typography.labelLarge.copy(
@@ -396,7 +411,7 @@ fun ColumnScope.ColourPickerSheet(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                stringResource(R.string.colour_picker_saturation),
+                                stringResource(Res.string.colour_picker_saturation),
                                 style = MaterialTheme.typography.labelLarge
                             )
                             Text(
@@ -459,7 +474,7 @@ fun ColumnScope.ColourPickerSheet(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                stringResource(R.string.colour_picker_value),
+                                stringResource(Res.string.colour_picker_value),
                                 style = MaterialTheme.typography.labelLarge
                             )
                             Text(
@@ -522,7 +537,7 @@ fun ColumnScope.ColourPickerSheet(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                stringResource(R.string.colour_picker_alpha),
+                                stringResource(Res.string.colour_picker_alpha),
                                 style = MaterialTheme.typography.labelLarge
                             )
                             Text(
@@ -615,7 +630,7 @@ fun ColumnScope.ColourPickerSheet(
                                     "#$it"
                                 }
                             },
-                            label = { Text(stringResource(R.string.colour_picker_hex_template)) },
+                            label = { Text(stringResource(Res.string.colour_picker_hex_template)) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .onFocusChanged {
@@ -636,7 +651,7 @@ fun ColumnScope.ColourPickerSheet(
                             ).all { it in '0'..'9' || it in 'a'..'f' || it in 'A'..'F' },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(stringResource(R.string.colour_picker_hex_use))
+                            Text(stringResource(Res.string.colour_picker_hex_use))
                         }
                     }
                 }
@@ -646,7 +661,7 @@ fun ColumnScope.ColourPickerSheet(
         Spacer(Modifier.height(8.dp))
 
         Text(
-            stringResource(R.string.colour_picker_preview),
+            stringResource(Res.string.colour_picker_preview),
             style = MaterialTheme.typography.labelLarge
         )
 
@@ -668,7 +683,7 @@ fun ColumnScope.ColourPickerSheet(
             TextButton(onClick = onUseDefaultColour, Modifier.fillMaxWidth()) {
                 Icon(painter = painterResource(R.drawable.ic_undo_24dp), null)
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.colour_picker_use_default))
+                Text(stringResource(Res.string.colour_picker_use_default))
             }
 
             Row(
@@ -678,7 +693,7 @@ fun ColumnScope.ColourPickerSheet(
                 TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Default.Close, null)
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.colour_picker_cancel))
+                    Text(stringResource(Res.string.colour_picker_cancel))
                 }
                 Button(
                     onClick = { onColourSelected(color.toArgb()) },
@@ -686,7 +701,7 @@ fun ColumnScope.ColourPickerSheet(
                 ) {
                     Icon(Icons.Default.Check, null)
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.colour_picker_apply))
+                    Text(stringResource(Res.string.colour_picker_apply))
                 }
             }
         }

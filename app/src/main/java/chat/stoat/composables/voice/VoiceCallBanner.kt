@@ -20,13 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.voice_action_disconnect
+import chat.stoat.shared.resources.voice_banner_tap_to_return
+import chat.stoat.shared.resources.voice_notification_fallback_channel_name
 import chat.stoat.voice.VoiceCallManager
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun VoiceCallBanner(modifier: Modifier = Modifier) {
@@ -63,13 +67,13 @@ fun VoiceCallBanner(modifier: Modifier = Modifier) {
                         text = channelId
                             ?.let { StoatAPI.channelCache[it] }
                             ?.let(ChannelUtils::resolveName)
-                            ?: stringResource(R.string.voice_notification_fallback_channel_name),
+                            ?: stringResource(Res.string.voice_notification_fallback_channel_name),
                         style = MaterialTheme.typography.titleSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = stringResource(R.string.voice_banner_tap_to_return),
+                        text = stringResource(Res.string.voice_banner_tap_to_return),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -77,7 +81,7 @@ fun VoiceCallBanner(modifier: Modifier = Modifier) {
                 IconButton(onClick = { VoiceCallManager.leave() }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_call_end_24dp__fill),
-                        contentDescription = stringResource(R.string.voice_action_disconnect),
+                        contentDescription = stringResource(Res.string.voice_action_disconnect),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }

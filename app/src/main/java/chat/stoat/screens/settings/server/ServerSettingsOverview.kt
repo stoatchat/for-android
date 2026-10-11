@@ -40,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -60,10 +59,33 @@ import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_settings_overview
+import chat.stoat.shared.resources.server_settings_overview_description_hint
+import chat.stoat.shared.resources.server_settings_overview_disabled
+import chat.stoat.shared.resources.server_settings_overview_discard
+import chat.stoat.shared.resources.server_settings_overview_discard_description
+import chat.stoat.shared.resources.server_settings_overview_discard_title
+import chat.stoat.shared.resources.server_settings_overview_file_error
+import chat.stoat.shared.resources.server_settings_overview_keep_editing
+import chat.stoat.shared.resources.server_settings_overview_save
+import chat.stoat.shared.resources.server_settings_overview_saved
+import chat.stoat.shared.resources.server_settings_overview_server_banner
+import chat.stoat.shared.resources.server_settings_overview_server_description
+import chat.stoat.shared.resources.server_settings_overview_server_icon
+import chat.stoat.shared.resources.server_settings_overview_server_name
+import chat.stoat.shared.resources.server_settings_overview_system_messages
+import chat.stoat.shared.resources.server_settings_overview_update_error
+import chat.stoat.shared.resources.server_settings_overview_user_banned
+import chat.stoat.shared.resources.server_settings_overview_user_joined
+import chat.stoat.shared.resources.server_settings_overview_user_kicked
+import chat.stoat.shared.resources.server_settings_overview_user_left
 import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -238,7 +260,7 @@ class ServerSettingsOverviewViewModel(
                 saveSucceeded++
             }.onFailure { error ->
                 updateError = error.message
-                    ?: context.getString(R.string.server_settings_overview_update_error)
+                    ?: getString(Res.string.server_settings_overview_update_error)
             }
 
             saving = false
@@ -282,7 +304,7 @@ class ServerSettingsOverviewViewModel(
                 context.contentResolver.openInputStream(uri)?.use { input ->
                     temporaryFile.outputStream().use(input::copyTo)
                 } ?: throw IllegalArgumentException(
-                    context.getString(R.string.server_settings_overview_file_error)
+                    getString(Res.string.server_settings_overview_file_error)
                 )
             }
         }
@@ -344,10 +366,10 @@ fun ServerSettingsOverview(
         AlertDialog(
             onDismissRequest = { showDiscardConfirmation = false },
             title = {
-                Text(stringResource(R.string.server_settings_overview_discard_title))
+                Text(stringResource(Res.string.server_settings_overview_discard_title))
             },
             text = {
-                Text(stringResource(R.string.server_settings_overview_discard_description))
+                Text(stringResource(Res.string.server_settings_overview_discard_description))
             },
             confirmButton = {
                 Button(
@@ -357,12 +379,12 @@ fun ServerSettingsOverview(
                         navController.popBackStack()
                     },
                 ) {
-                    Text(stringResource(R.string.server_settings_overview_discard))
+                    Text(stringResource(Res.string.server_settings_overview_discard))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDiscardConfirmation = false }) {
-                    Text(stringResource(R.string.server_settings_overview_keep_editing))
+                    Text(stringResource(Res.string.server_settings_overview_keep_editing))
                 }
             },
         )
@@ -370,7 +392,7 @@ fun ServerSettingsOverview(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings_overview)) },
+        title = { Text(stringResource(Res.string.server_settings_overview)) },
         onNavigateBack = ::navigateBack,
         floatingActionButton = {
             AnimatedVisibility(
@@ -404,7 +426,7 @@ fun ServerSettingsOverview(
                         Icon(
                             painter = painterResource(R.drawable.ic_check_24dp),
                             contentDescription = stringResource(
-                                R.string.server_settings_overview_save
+                                Res.string.server_settings_overview_save
                             ),
                         )
                     }
@@ -412,7 +434,7 @@ fun ServerSettingsOverview(
             }
         },
     ) {
-        val saveSuccessMessage = stringResource(R.string.server_settings_overview_saved)
+        val saveSuccessMessage = stringResource(Res.string.server_settings_overview_saved)
         LaunchedEffect(viewModel.saveSucceeded) {
             if (viewModel.saveSucceeded > 0) showSnackbar(saveSuccessMessage)
         }
@@ -435,7 +457,7 @@ fun ServerSettingsOverview(
         AnimatedVisibility(viewModel.updateError != null) {
             Text(
                 text = viewModel.updateError
-                    ?: stringResource(R.string.server_settings_overview_update_error),
+                    ?: stringResource(Res.string.server_settings_overview_update_error),
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -452,7 +474,7 @@ fun ServerSettingsOverview(
 @Composable
 private fun ServerInfoFields(viewModel: ServerSettingsOverviewViewModel) {
     Text(
-        text = stringResource(R.string.server_settings_overview_server_icon),
+        text = stringResource(Res.string.server_settings_overview_server_icon),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     )
@@ -471,7 +493,7 @@ private fun ServerInfoFields(viewModel: ServerSettingsOverviewViewModel) {
     }
 
     Text(
-        text = stringResource(R.string.server_settings_overview_server_banner),
+        text = stringResource(Res.string.server_settings_overview_server_banner),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     )
@@ -500,7 +522,7 @@ private fun ServerInfoFields(viewModel: ServerSettingsOverviewViewModel) {
     TextField(
         value = viewModel.serverName,
         onValueChange = viewModel::updateServerName,
-        label = { Text(stringResource(R.string.server_settings_overview_server_name)) },
+        label = { Text(stringResource(Res.string.server_settings_overview_server_name)) },
         supportingText = { Text("${viewModel.serverName.length}/32") },
         singleLine = true,
         enabled = !viewModel.saving,
@@ -512,8 +534,8 @@ private fun ServerInfoFields(viewModel: ServerSettingsOverviewViewModel) {
     TextField(
         value = viewModel.serverDescription,
         onValueChange = viewModel::updateServerDescription,
-        label = { Text(stringResource(R.string.server_settings_overview_server_description)) },
-        placeholder = { Text(stringResource(R.string.server_settings_overview_description_hint)) },
+        label = { Text(stringResource(Res.string.server_settings_overview_server_description)) },
+        placeholder = { Text(stringResource(Res.string.server_settings_overview_description_hint)) },
         supportingText = { Text("${viewModel.serverDescription.length}/1024") },
         minLines = 3,
         enabled = !viewModel.saving,
@@ -529,34 +551,34 @@ private fun SystemMessageFields(
     channels: List<Channel>,
 ) {
     Text(
-        text = stringResource(R.string.server_settings_overview_system_messages),
+        text = stringResource(Res.string.server_settings_overview_system_messages),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
     )
 
     SystemMessageChannelPicker(
-        label = stringResource(R.string.server_settings_overview_user_joined),
+        label = stringResource(Res.string.server_settings_overview_user_joined),
         selectedChannelId = viewModel.userJoinedChannel,
         channels = channels,
         enabled = !viewModel.saving,
         onSelected = viewModel::updateUserJoinedChannel,
     )
     SystemMessageChannelPicker(
-        label = stringResource(R.string.server_settings_overview_user_left),
+        label = stringResource(Res.string.server_settings_overview_user_left),
         selectedChannelId = viewModel.userLeftChannel,
         channels = channels,
         enabled = !viewModel.saving,
         onSelected = viewModel::updateUserLeftChannel,
     )
     SystemMessageChannelPicker(
-        label = stringResource(R.string.server_settings_overview_user_kicked),
+        label = stringResource(Res.string.server_settings_overview_user_kicked),
         selectedChannelId = viewModel.userKickedChannel,
         channels = channels,
         enabled = !viewModel.saving,
         onSelected = viewModel::updateUserKickedChannel,
     )
     SystemMessageChannelPicker(
-        label = stringResource(R.string.server_settings_overview_user_banned),
+        label = stringResource(Res.string.server_settings_overview_user_banned),
         selectedChannelId = viewModel.userBannedChannel,
         channels = channels,
         enabled = !viewModel.saving,
@@ -574,7 +596,7 @@ private fun SystemMessageChannelPicker(
     onSelected: (String?) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val disabled = stringResource(R.string.server_settings_overview_disabled)
+    val disabled = stringResource(Res.string.server_settings_overview_disabled)
     val selectedName = channels.firstOrNull { it.id == selectedChannelId }?.name ?: disabled
 
     ExposedDropdownMenuBox(

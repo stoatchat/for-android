@@ -13,7 +13,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.R
@@ -21,7 +20,13 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.removeMember
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.member_context_sheet_remove_from_channel
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.user_info_sheet_copy_id
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ColumnScope.GroupDMMemberContextSheet(
@@ -30,6 +35,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
     dismissSheet: suspend () -> Unit,
     onRequestUpdateMembers: suspend () -> Unit
 ) {
+    val copiedText = stringResource(Res.string.copied)
     val scope = rememberCoroutineScope()
     val channel = StoatAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
@@ -49,8 +55,8 @@ fun ColumnScope.GroupDMMemberContextSheet(
                 CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
                     Text(
                         stringResource(
-                            R.string.member_context_sheet_remove_from_channel,
-                            channel.name ?: stringResource(R.string.unknown)
+                            Res.string.member_context_sheet_remove_from_channel,
+                            channel.name ?: stringResource(Res.string.unknown)
                         ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -78,7 +84,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
     // TODO replace with something useful (currently so that your sheet is not empty if you don't have permissions)
     SheetButton(
         headlineContent = {
-            Text(stringResource(R.string.user_info_sheet_copy_id))
+            Text(stringResource(Res.string.user_info_sheet_copy_id))
         },
         leadingContent = {
             Icon(
@@ -92,7 +98,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
             if (Platform.needsShowClipboardNotification()) {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.copied),
+                    copiedText,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -110,6 +116,7 @@ fun ColumnScope.ServerMemberContextSheet(
     dismissSheet: suspend () -> Unit,
     onRequestUpdateMembers: suspend () -> Unit
 ) {
+    val copiedText = stringResource(Res.string.copied)
     val server = StoatAPI.serverCache[serverId]
     val channel = StoatAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
@@ -128,7 +135,7 @@ fun ColumnScope.ServerMemberContextSheet(
     // TODO replace with something useful (currently so that your sheet is not empty if you don't have permissions)
     SheetButton(
         headlineContent = {
-            Text(stringResource(R.string.user_info_sheet_copy_id))
+            Text(stringResource(Res.string.user_info_sheet_copy_id))
         },
         leadingContent = {
             Icon(
@@ -142,7 +149,7 @@ fun ColumnScope.ServerMemberContextSheet(
             if (Platform.needsShowClipboardNotification()) {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.copied),
+                    copiedText,
                     Toast.LENGTH_SHORT
                 ).show()
             }

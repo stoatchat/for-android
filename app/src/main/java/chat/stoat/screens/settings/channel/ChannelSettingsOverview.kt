@@ -42,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,8 +58,28 @@ import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.channel_settings_overview
+import chat.stoat.shared.resources.channel_settings_overview_description
+import chat.stoat.shared.resources.channel_settings_overview_description_hint
+import chat.stoat.shared.resources.channel_settings_overview_info
+import chat.stoat.shared.resources.channel_settings_overview_name
+import chat.stoat.shared.resources.channel_settings_overview_nsfw
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_confirm_description
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_confirm_no
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_confirm_title
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_confirm_yes
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_description
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_description
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_no
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_title
+import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_yes
+import chat.stoat.shared.resources.channel_settings_overview_save
+import chat.stoat.shared.resources.channel_settings_overview_update_info_error_fallback
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -231,16 +250,16 @@ fun ChannelSettingsOverview(
             },
             title = {
                 if (currentChannel?.nsfw == true) {
-                    Text(stringResource(R.string.channel_settings_overview_nsfw_undo_confirm_title))
+                    Text(stringResource(Res.string.channel_settings_overview_nsfw_undo_confirm_title))
                 } else {
-                    Text(stringResource(R.string.channel_settings_overview_nsfw_confirm_title))
+                    Text(stringResource(Res.string.channel_settings_overview_nsfw_confirm_title))
                 }
             },
             text = {
                 if (currentChannel?.nsfw == true) {
-                    Text(stringResource(R.string.channel_settings_overview_nsfw_undo_confirm_description))
+                    Text(stringResource(Res.string.channel_settings_overview_nsfw_undo_confirm_description))
                 } else {
-                    Text(stringResource(R.string.channel_settings_overview_nsfw_confirm_description))
+                    Text(stringResource(Res.string.channel_settings_overview_nsfw_confirm_description))
                 }
             },
             confirmButton = {
@@ -250,9 +269,9 @@ fun ChannelSettingsOverview(
                     }
                 ) {
                     if (currentChannel?.nsfw == true) {
-                        Text(stringResource(R.string.channel_settings_overview_nsfw_undo_confirm_yes))
+                        Text(stringResource(Res.string.channel_settings_overview_nsfw_undo_confirm_yes))
                     } else {
-                        Text(stringResource(R.string.channel_settings_overview_nsfw_confirm_yes))
+                        Text(stringResource(Res.string.channel_settings_overview_nsfw_confirm_yes))
                     }
                 }
             },
@@ -263,9 +282,9 @@ fun ChannelSettingsOverview(
                     }
                 ) {
                     if (currentChannel?.nsfw == true) {
-                        Text(stringResource(R.string.channel_settings_overview_nsfw_undo_confirm_no))
+                        Text(stringResource(Res.string.channel_settings_overview_nsfw_undo_confirm_no))
                     } else {
-                        Text(stringResource(R.string.channel_settings_overview_nsfw_confirm_no))
+                        Text(stringResource(Res.string.channel_settings_overview_nsfw_confirm_no))
                     }
                 }
             }
@@ -279,7 +298,7 @@ fun ChannelSettingsOverview(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.channel_settings_overview),
+                        text = stringResource(Res.string.channel_settings_overview),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -290,7 +309,7 @@ fun ChannelSettingsOverview(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -305,7 +324,7 @@ fun ChannelSettingsOverview(
                 FloatingActionButton(onClick = { viewModel.updateChannel() }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_check_24dp),
-                        contentDescription = stringResource(R.string.channel_settings_overview_save)
+                        contentDescription = stringResource(Res.string.channel_settings_overview_save)
                     )
                 }
             }
@@ -323,7 +342,7 @@ fun ChannelSettingsOverview(
                         .verticalScroll(rememberScrollState())
                 ) {
                     ListHeader {
-                        Text(stringResource(R.string.channel_settings_overview_info))
+                        Text(stringResource(Res.string.channel_settings_overview_info))
                     }
 
                     Box(
@@ -354,7 +373,7 @@ fun ChannelSettingsOverview(
                     AnimatedVisibility(visible = viewModel.uploadError != null) {
                         Text(
                             viewModel.uploadError
-                                ?: stringResource(R.string.channel_settings_overview_update_info_error_fallback),
+                                ?: stringResource(Res.string.channel_settings_overview_update_info_error_fallback),
                             color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -367,7 +386,7 @@ fun ChannelSettingsOverview(
                     AnimatedVisibility(visible = viewModel.updateError != null) {
                         Text(
                             viewModel.updateError
-                                ?: stringResource(R.string.channel_settings_overview_update_info_error_fallback),
+                                ?: stringResource(Res.string.channel_settings_overview_update_info_error_fallback),
                             color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -379,7 +398,7 @@ fun ChannelSettingsOverview(
 
                     TextField(
                         label = {
-                            Text(stringResource(R.string.channel_settings_overview_name))
+                            Text(stringResource(Res.string.channel_settings_overview_name))
                         },
                         value = viewModel.channelName,
                         onValueChange = { viewModel.channelName = it },
@@ -391,10 +410,10 @@ fun ChannelSettingsOverview(
 
                     TextField(
                         label = {
-                            Text(stringResource(R.string.channel_settings_overview_description))
+                            Text(stringResource(Res.string.channel_settings_overview_description))
                         },
                         placeholder = {
-                            Text(stringResource(R.string.channel_settings_overview_description_hint))
+                            Text(stringResource(Res.string.channel_settings_overview_description_hint))
                         },
                         value = viewModel.channelDescription,
                         onValueChange = { viewModel.channelDescription = it },
@@ -407,11 +426,11 @@ fun ChannelSettingsOverview(
                     )
 
                     ListHeader {
-                        Text(stringResource(R.string.channel_settings_overview_nsfw))
+                        Text(stringResource(Res.string.channel_settings_overview_nsfw))
                     }
 
                     Text(
-                        stringResource(R.string.channel_settings_overview_nsfw_description),
+                        stringResource(Res.string.channel_settings_overview_nsfw_description),
                         modifier = Modifier
                             .padding(vertical = 8.dp, horizontal = 16.dp),
                     )
@@ -419,9 +438,9 @@ fun ChannelSettingsOverview(
                     OutlinedButton(
                         content = {
                             if (currentChannel.nsfw == true) {
-                                Text(stringResource(R.string.channel_settings_overview_nsfw_undo_confirm_yes))
+                                Text(stringResource(Res.string.channel_settings_overview_nsfw_undo_confirm_yes))
                             } else {
-                                Text(stringResource(R.string.channel_settings_overview_nsfw_confirm_yes))
+                                Text(stringResource(Res.string.channel_settings_overview_nsfw_confirm_yes))
                             }
                         },
                         onClick = {

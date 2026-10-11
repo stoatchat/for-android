@@ -14,31 +14,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.composables.generic.Presence
 import chat.stoat.composables.generic.presenceColour
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.status
+import chat.stoat.shared.resources.status_dnd
+import chat.stoat.shared.resources.status_dnd_explainer
+import chat.stoat.shared.resources.status_focus
+import chat.stoat.shared.resources.status_focus_explainer
+import chat.stoat.shared.resources.status_idle
+import chat.stoat.shared.resources.status_invisible
+import chat.stoat.shared.resources.status_invisible_explainer
+import chat.stoat.shared.resources.status_online
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
-fun Presence.stringResource(): Int {
+fun Presence.stringResource(): StringResource {
     return when (this) {
-        Presence.Online -> R.string.status_online
-        Presence.Idle -> R.string.status_idle
-        Presence.Dnd -> R.string.status_dnd
-        Presence.Focus -> R.string.status_focus
-        Presence.Offline -> R.string.status_invisible
+        Presence.Online -> Res.string.status_online
+        Presence.Idle -> Res.string.status_idle
+        Presence.Dnd -> Res.string.status_dnd
+        Presence.Focus -> Res.string.status_focus
+        Presence.Offline -> Res.string.status_invisible
     }
 }
 
-fun Presence.explainerResource(): Int? {
+fun Presence.explainerResource(): StringResource? {
     return when (this) {
         Presence.Online -> null
         Presence.Idle -> null
-        Presence.Dnd -> R.string.status_dnd_explainer
-        Presence.Focus -> R.string.status_focus_explainer
-        Presence.Offline -> R.string.status_invisible_explainer
+        Presence.Dnd -> Res.string.status_dnd_explainer
+        Presence.Focus -> Res.string.status_focus_explainer
+        Presence.Offline -> Res.string.status_invisible_explainer
     }
 }
 
@@ -54,7 +64,7 @@ fun StatusPicker(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.status),
+            text = stringResource(Res.string.status),
             style = MaterialTheme.typography.labelLarge
         )
 

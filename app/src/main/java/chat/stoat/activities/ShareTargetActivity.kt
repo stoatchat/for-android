@@ -45,14 +45,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.routes.channel.sendMessage
@@ -68,11 +65,20 @@ import chat.stoat.composables.screens.chat.drawer.ChannelItem
 import chat.stoat.composables.screens.chat.drawer.ChannelItemIconType
 import chat.stoat.composables.screens.chat.drawer.DMOrGroupItem
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.views.channel.ChannelScreenActivePane
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.share
+import chat.stoat.shared.resources.share_target_invalid_intent
+import chat.stoat.shared.resources.share_target_login_first
+import chat.stoat.shared.resources.share_target_search_channels
+import chat.stoat.shared.resources.share_target_select_channel
 import chat.stoat.ui.theme.StoatTheme
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -141,7 +147,7 @@ class ShareTargetActivity : ComponentActivity() {
             else -> {
                 Toast.makeText(
                     this,
-                    getString(R.string.share_target_invalid_intent),
+                    getStringBlocking(Res.string.share_target_invalid_intent),
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -155,7 +161,7 @@ class ShareTargetActivity : ComponentActivity() {
         if (nonNullMedia.isNotEmpty() && safeMedia.isEmpty()) {
             Toast.makeText(
                 this,
-                getString(R.string.share_target_invalid_intent),
+                getStringBlocking(Res.string.share_target_invalid_intent),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -253,13 +259,12 @@ fun ShareTargetScreen(
     viewModel: ShareTargetScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         if (!viewModel.isLoggedIn()) {
             Toast.makeText(
                 context,
-                resources.getString(R.string.share_target_login_first),
+                getString(Res.string.share_target_login_first),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -307,7 +312,7 @@ fun ShareTargetScreen(
         Scaffold(
             topBar = {
                 TopAppBar(title = {
-                    Text(text = stringResource(R.string.share))
+                    Text(text = stringResource(Res.string.share))
                 })
             }
         ) { pv ->
@@ -339,7 +344,7 @@ fun ShareTargetScreen(
                             channelSearchContent = it
                         },
                         label = {
-                            Text(text = stringResource(R.string.share_target_search_channels))
+                            Text(text = stringResource(Res.string.share_target_search_channels))
                         },
                         modifier = Modifier
                             .padding(16.dp)
@@ -434,7 +439,7 @@ fun ShareTargetScreen(
                                 if (selectedChannel == null) {
                                     Toast.makeText(
                                         context,
-                                        resources.getString(R.string.share_target_select_channel),
+                                        getStringBlocking(Res.string.share_target_select_channel),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     return@MessageField

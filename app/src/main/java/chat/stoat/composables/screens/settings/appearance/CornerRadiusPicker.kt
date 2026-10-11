@@ -29,10 +29,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.corner_radius_picker_choose_radius
+import chat.stoat.shared.resources.corner_radius_picker_choose_radius_cancel
+import chat.stoat.shared.resources.corner_radius_picker_choose_radius_yes
+import chat.stoat.shared.resources.corner_radius_picker_circular
+import chat.stoat.shared.resources.corner_radius_picker_other
+import chat.stoat.shared.resources.corner_radius_picker_rounded
+import chat.stoat.shared.resources.corner_radius_picker_sharp
+import org.jetbrains.compose.resources.stringResource
 
 enum class CornerRadiusPreset(val percentage: Int) {
     SHARP(0),
@@ -50,7 +58,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
             onDismissRequest = { showOtherModal = false },
             title = {
                 Text(
-                    text = stringResource(R.string.corner_radius_picker_choose_radius),
+                    text = stringResource(Res.string.corner_radius_picker_choose_radius),
                 )
             },
             text = {
@@ -92,7 +100,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                         onUpdate(sliderPosition.toInt())
                     }
                 ) {
-                    Text(stringResource(R.string.corner_radius_picker_choose_radius_yes))
+                    Text(stringResource(Res.string.corner_radius_picker_choose_radius_yes))
                 }
             },
             dismissButton = {
@@ -101,7 +109,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                         showOtherModal = false
                     }
                 ) {
-                    Text(stringResource(R.string.corner_radius_picker_choose_radius_cancel))
+                    Text(stringResource(Res.string.corner_radius_picker_choose_radius_cancel))
                 }
             }
         )
@@ -117,7 +125,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                 onUpdate(CornerRadiusPreset.SHARP.percentage)
             },
             icon = painterResource(R.drawable.ux_corner_sharp),
-            label = stringResource(R.string.corner_radius_picker_sharp),
+            label = stringResource(Res.string.corner_radius_picker_sharp),
         )
         CornerRadiusPickerElement(
             selected = percentage == CornerRadiusPreset.ROUNDED.percentage,
@@ -125,7 +133,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                 onUpdate(CornerRadiusPreset.ROUNDED.percentage)
             },
             icon = painterResource(R.drawable.ux_corner_rounded),
-            label = stringResource(R.string.corner_radius_picker_rounded),
+            label = stringResource(Res.string.corner_radius_picker_rounded),
         )
         CornerRadiusPickerElement(
             selected = percentage == CornerRadiusPreset.CIRCULAR.percentage,
@@ -133,7 +141,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
                 onUpdate(CornerRadiusPreset.CIRCULAR.percentage)
             },
             icon = painterResource(R.drawable.ux_corner_circular),
-            label = stringResource(R.string.corner_radius_picker_circular),
+            label = stringResource(Res.string.corner_radius_picker_circular),
         )
         CornerRadiusPickerElement(
             selected = percentage !in CornerRadiusPreset.entries.map { it.percentage },
@@ -143,7 +151,7 @@ fun CornerRadiusPicker(percentage: Int, onUpdate: (Int) -> Unit, modifier: Modif
             icon = painterResource(R.drawable.ux_corner_other),
             label = if (percentage !in CornerRadiusPreset.entries.map { it.percentage }) {
                 percentage.toString()
-            } else stringResource(R.string.corner_radius_picker_other),
+            } else stringResource(Res.string.corner_radius_picker_other),
             highlightLabel = percentage !in CornerRadiusPreset.entries.map { it.percentage },
         )
     }

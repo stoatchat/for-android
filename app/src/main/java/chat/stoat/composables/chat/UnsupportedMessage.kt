@@ -22,10 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.message_not_supported
+import chat.stoat.shared.resources.message_not_supported_with_context
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -65,9 +68,9 @@ fun UnsupportedMessage(modifier: Modifier = Modifier, context: String? = null) {
             Spacer(modifier = Modifier.width(10.dp))
             Text(
                 if (context != null) stringResource(
-                    R.string.message_not_supported_with_context,
+                    Res.string.message_not_supported_with_context,
                     context
-                ) else stringResource(R.string.message_not_supported)
+                ) else stringResource(Res.string.message_not_supported)
             )
         }
     }

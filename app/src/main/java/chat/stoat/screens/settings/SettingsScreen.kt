@@ -29,7 +29,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -43,7 +42,27 @@ import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.persistence.KVStorage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.about
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.logout
+import chat.stoat.shared.resources.settings
+import chat.stoat.shared.resources.settings_account
+import chat.stoat.shared.resources.settings_appearance
+import chat.stoat.shared.resources.settings_category_account
+import chat.stoat.shared.resources.settings_category_general
+import chat.stoat.shared.resources.settings_category_last
+import chat.stoat.shared.resources.settings_category_miscellaneous
+import chat.stoat.shared.resources.settings_changelog
+import chat.stoat.shared.resources.settings_chat
+import chat.stoat.shared.resources.settings_feedback
+import chat.stoat.shared.resources.settings_feedback_description
+import chat.stoat.shared.resources.settings_language
+import chat.stoat.shared.resources.settings_notifications
+import chat.stoat.shared.resources.settings_profile
+import chat.stoat.shared.resources.settings_sessions
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 class SettingsScreenViewModel(
@@ -77,7 +96,7 @@ fun SettingsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.settings),
+                        text = stringResource(Res.string.settings),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -88,7 +107,7 @@ fun SettingsScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -107,12 +126,12 @@ fun SettingsScreen(
                         .padding(bottom = 10.dp)
                 ) {
                     ListHeader {
-                        Text(stringResource(R.string.settings_category_account))
+                        Text(stringResource(Res.string.settings_category_account))
                     }
 
                     SettingsListItem(
                         first = true,
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_account)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_account)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -127,7 +146,7 @@ fun SettingsScreen(
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_profile)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_profile)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -143,7 +162,7 @@ fun SettingsScreen(
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
                         last = true,
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_sessions)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_sessions)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -158,12 +177,12 @@ fun SettingsScreen(
                     )
 
                     ListHeader {
-                        Text(stringResource(R.string.settings_category_general))
+                        Text(stringResource(Res.string.settings_category_general))
                     }
 
                     SettingsListItem(
                         first = true,
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_appearance)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_appearance)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -178,7 +197,7 @@ fun SettingsScreen(
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_language)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_language)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -193,7 +212,7 @@ fun SettingsScreen(
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_chat)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_chat)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -209,7 +228,7 @@ fun SettingsScreen(
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
                         last = true,
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_notifications)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_notifications)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -224,7 +243,7 @@ fun SettingsScreen(
                     )
 
                     ListHeader {
-                        Text(stringResource(R.string.settings_category_miscellaneous))
+                        Text(stringResource(Res.string.settings_category_miscellaneous))
                     }
 
                     val miscLastIsExperiments = LoadedSettings.experimentsEnabled
@@ -238,7 +257,7 @@ fun SettingsScreen(
                     SettingsListItem(
                         first = true,
                         last = miscLastIsAbout,
-                        headlineContent = { Text(text = stringResource(id = R.string.about)) },
+                        headlineContent = { Text(text = stringResource(Res.string.about)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -312,7 +331,7 @@ fun SettingsScreen(
                     ListHeader {
                         Text(
                             stringResource(
-                                R.string.settings_category_last,
+                                Res.string.settings_category_last,
                                 BuildConfig.VERSION_NAME
                             )
                         )
@@ -320,7 +339,7 @@ fun SettingsScreen(
 
                     SettingsListItem(
                         first = true,
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_changelog)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_changelog)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -335,8 +354,8 @@ fun SettingsScreen(
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.settings_feedback)) },
-                        supportingContent = { Text(text = stringResource(id = R.string.settings_feedback_description)) },
+                        headlineContent = { Text(text = stringResource(Res.string.settings_feedback)) },
+                        supportingContent = { Text(text = stringResource(Res.string.settings_feedback_description)) },
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
@@ -361,7 +380,7 @@ fun SettingsScreen(
                         last = true,
                         headlineContent = {
                             CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
-                                Text(text = stringResource(id = R.string.logout))
+                                Text(text = stringResource(Res.string.logout))
                             }
                         },
                         leadingContent = {

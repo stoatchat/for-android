@@ -24,14 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.inline_media_picker_current_description
+import chat.stoat.shared.resources.inline_media_picker_no_media_placeholder
+import chat.stoat.shared.resources.inline_media_picker_remove
 import com.bumptech.glide.integration.compose.CrossFade
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InlineMediaPicker(
@@ -71,7 +75,7 @@ fun InlineMediaPicker(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_close_24dp),
-                        contentDescription = stringResource(R.string.inline_media_picker_remove)
+                        contentDescription = stringResource(Res.string.inline_media_picker_remove)
                     )
                 }
             }
@@ -104,7 +108,7 @@ fun InlineMediaPicker(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = stringResource(R.string.inline_media_picker_remove),
+                        text = stringResource(Res.string.inline_media_picker_remove),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -134,7 +138,7 @@ fun InlineMediaPickerMediaPicker(
     if (currentModel != null) {
         GlideImage(
             model = currentModel,
-            contentDescription = stringResource(R.string.inline_media_picker_current_description),
+            contentDescription = stringResource(Res.string.inline_media_picker_current_description),
             contentScale = if (circular) ContentScale.Crop else ContentScale.FillWidth,
             modifier = if (circular) {
                 Modifier
@@ -185,11 +189,11 @@ fun InlineMediaPickerMediaPicker(
             if (circular) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add_24dp),
-                    contentDescription = stringResource(R.string.inline_media_picker_no_media_placeholder)
+                    contentDescription = stringResource(Res.string.inline_media_picker_no_media_placeholder)
                 )
             } else {
                 Text(
-                    text = stringResource(R.string.inline_media_picker_no_media_placeholder),
+                    text = stringResource(Res.string.inline_media_picker_no_media_placeholder),
                     style = MaterialTheme.typography.bodySmall.copy(
                         textAlign = TextAlign.Center
                     )

@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,7 +54,20 @@ import chat.stoat.core.model.schemas.Session
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.composables.settings.sessions.SessionItem
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.logout
+import chat.stoat.shared.resources.settings_sessions
+import chat.stoat.shared.resources.settings_sessions_log_out_other
+import chat.stoat.shared.resources.settings_sessions_log_out_other_confirm
+import chat.stoat.shared.resources.settings_sessions_log_out_other_confirm_no
+import chat.stoat.shared.resources.settings_sessions_log_out_other_confirm_yes
+import chat.stoat.shared.resources.settings_sessions_log_out_other_description
+import chat.stoat.shared.resources.settings_sessions_other_sessions
+import chat.stoat.shared.resources.settings_sessions_this_device
+import chat.stoat.shared.resources.settings_sessions_this_device_unavailable
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 class SessionSettingsScreenViewModel : ViewModel() {
     var isLoading by mutableStateOf(true)
@@ -108,7 +120,7 @@ fun SessionSettingsScreen(
             },
             title = {
                 Text(
-                    text = stringResource(R.string.settings_sessions_log_out_other_confirm)
+                    text = stringResource(Res.string.settings_sessions_log_out_other_confirm)
                 )
             },
             confirmButton = {
@@ -118,7 +130,7 @@ fun SessionSettingsScreen(
                         viewModel.logoutOtherSessions()
                     }
                 ) {
-                    Text(stringResource(R.string.settings_sessions_log_out_other_confirm_yes))
+                    Text(stringResource(Res.string.settings_sessions_log_out_other_confirm_yes))
                 }
             },
             dismissButton = {
@@ -127,7 +139,7 @@ fun SessionSettingsScreen(
                         viewModel.showLogoutOtherConfirmation = false
                     }
                 ) {
-                    Text(stringResource(R.string.settings_sessions_log_out_other_confirm_no))
+                    Text(stringResource(Res.string.settings_sessions_log_out_other_confirm_no))
                 }
             }
         )
@@ -143,7 +155,7 @@ fun SessionSettingsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.settings_sessions),
+                        text = stringResource(Res.string.settings_sessions),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -154,7 +166,7 @@ fun SessionSettingsScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -182,7 +194,7 @@ fun SessionSettingsScreen(
                     LazyColumn {
                         stickyHeader(key = "thisDevice") {
                             ListHeader {
-                                Text(stringResource(id = R.string.settings_sessions_this_device))
+                                Text(stringResource(Res.string.settings_sessions_this_device))
                             }
                         }
 
@@ -200,7 +212,7 @@ fun SessionSettingsScreen(
                         } ?: run {
                             item(key = "noCurrentSession") {
                                 UIMarkdown(
-                                    input = stringResource(id = R.string.settings_sessions_this_device_unavailable),
+                                    input = stringResource(Res.string.settings_sessions_this_device_unavailable),
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(MaterialTheme.colorScheme.background)
@@ -211,7 +223,7 @@ fun SessionSettingsScreen(
 
                         stickyHeader(key = "otherSessions") {
                             ListHeader {
-                                Text(stringResource(id = R.string.settings_sessions_other_sessions))
+                                Text(stringResource(Res.string.settings_sessions_other_sessions))
                             }
                         }
 
@@ -234,13 +246,13 @@ fun SessionSettingsScreen(
                                         .padding(end = 16.dp)
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.settings_sessions_log_out_other),
+                                        text = stringResource(Res.string.settings_sessions_log_out_other),
                                         style = MaterialTheme.typography.labelLarge
                                     )
 
                                     Text(
                                         text = stringResource(
-                                            R.string.settings_sessions_log_out_other_description
+                                            Res.string.settings_sessions_log_out_other_description
                                         ),
                                         style = MaterialTheme.typography.bodySmall.copy(
                                             fontWeight = FontWeight.Normal
@@ -251,7 +263,7 @@ fun SessionSettingsScreen(
                                 FilledTonalButton(onClick = {
                                     viewModel.showLogoutOtherConfirmation = true
                                 }) {
-                                    Text(stringResource(R.string.logout))
+                                    Text(stringResource(Res.string.logout))
                                 }
                             }
                             Spacer(Modifier.height(8.dp))

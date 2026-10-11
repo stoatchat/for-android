@@ -59,7 +59,6 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,6 +89,38 @@ import chat.stoat.composables.vectorassets.MfaOn
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.settings_mfa
+import chat.stoat.shared.resources.settings_mfa_disable_totp
+import chat.stoat.shared.resources.settings_mfa_disable_totp_cta
+import chat.stoat.shared.resources.settings_mfa_disable_totp_description
+import chat.stoat.shared.resources.settings_mfa_enable_totp_cta
+import chat.stoat.shared.resources.settings_mfa_enable_totp_description
+import chat.stoat.shared.resources.settings_mfa_recovery
+import chat.stoat.shared.resources.settings_mfa_recovery_description_active
+import chat.stoat.shared.resources.settings_mfa_recovery_description_inactive
+import chat.stoat.shared.resources.settings_mfa_recovery_generate_cta
+import chat.stoat.shared.resources.settings_mfa_recovery_regenerate_cta
+import chat.stoat.shared.resources.settings_mfa_recovery_view_cta
+import chat.stoat.shared.resources.settings_mfa_security_keys
+import chat.stoat.shared.resources.settings_mfa_security_keys_web_manage_cta
+import chat.stoat.shared.resources.settings_mfa_security_keys_web_manage_description
+import chat.stoat.shared.resources.settings_mfa_status
+import chat.stoat.shared.resources.settings_mfa_status_enabled
+import chat.stoat.shared.resources.settings_mfa_status_not_set_up
+import chat.stoat.shared.resources.settings_mfa_status_not_set_up_description
+import chat.stoat.shared.resources.settings_mfa_totp
+import chat.stoat.shared.resources.settings_mfa_totp_disabled_snackbar
+import chat.stoat.shared.resources.settings_mfa_totp_enabled_snackbar
+import chat.stoat.shared.resources.settings_mfa_totp_setup_code_label
+import chat.stoat.shared.resources.settings_mfa_totp_setup_code_lead
+import chat.stoat.shared.resources.settings_mfa_totp_setup_copy_secret
+import chat.stoat.shared.resources.settings_mfa_totp_setup_manual
+import chat.stoat.shared.resources.settings_mfa_totp_setup_scan
+import chat.stoat.shared.resources.settings_mfa_totp_setup_title
+import chat.stoat.shared.resources.settings_mfa_totp_setup_verify
 import chat.stoat.ui.theme.FragmentMono
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
@@ -97,6 +128,9 @@ import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 @Stable
@@ -120,7 +154,7 @@ class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
     var actionError by mutableStateOf<String?>(null)
         private set
 
-    var snackbarMessage by mutableStateOf<Int?>(null)
+    var snackbarMessage by mutableStateOf<StringResource?>(null)
 
     var displayedRecoveryCodes by mutableStateOf<List<String>?>(null)
 
@@ -150,7 +184,7 @@ class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
     fun disableAuthenticator() = withMfaTicket { token ->
         disableTotp(token)
         loadDetails()
-        snackbarMessage = R.string.settings_mfa_totp_disabled_snackbar
+        snackbarMessage = Res.string.settings_mfa_totp_disabled_snackbar
     }
 
     fun showRecoveryCodes() = withMfaTicket { token ->
@@ -184,7 +218,7 @@ class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
                 .onSuccess {
                     loadDetails()
                     totpEnrollment = null
-                    snackbarMessage = R.string.settings_mfa_totp_enabled_snackbar
+                    snackbarMessage = Res.string.settings_mfa_totp_enabled_snackbar
                 }
         }
     }
@@ -228,11 +262,11 @@ fun MfaSettingsScreen(
 
     SettingsPage(
         navController,
-        title = { Text(stringResource(R.string.settings_mfa)) }
+        title = { Text(stringResource(Res.string.settings_mfa)) }
     ) {
         LaunchedEffect(viewModel.snackbarMessage) {
             viewModel.snackbarMessage?.let {
-                showSnackbar(resources.getString(it))
+                showSnackbar(getString(it))
                 viewModel.snackbarMessage = null
             }
         }
@@ -274,20 +308,20 @@ fun MfaSettingsScreen(
                                 .padding(bottom = 16.dp)
                         )
                         Text(
-                            text = stringResource(R.string.settings_mfa_status),
+                            text = stringResource(Res.string.settings_mfa_status),
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center
                         )
                         if (mfaConsideredEnabled) {
                             Text(
-                                text = stringResource(R.string.settings_mfa_status_enabled),
+                                text = stringResource(Res.string.settings_mfa_status_enabled),
                                 style = MaterialTheme.typography.headlineMedium,
                                 color = MaterialTheme.colorScheme.primary,
                                 textAlign = TextAlign.Center
                             )
                         } else {
                             Text(
-                                text = stringResource(R.string.settings_mfa_status_not_set_up),
+                                text = stringResource(Res.string.settings_mfa_status_not_set_up),
                                 style = MaterialTheme.typography.headlineMedium,
                                 color = MaterialTheme.colorScheme.error,
                                 textAlign = TextAlign.Center
@@ -296,7 +330,7 @@ fun MfaSettingsScreen(
                             Spacer(Modifier.height(16.dp))
 
                             Text(
-                                text = stringResource(R.string.settings_mfa_status_not_set_up_description),
+                                text = stringResource(Res.string.settings_mfa_status_not_set_up_description),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = TextAlign.Center,
@@ -322,14 +356,14 @@ fun MfaSettingsScreen(
 
                     if (viewModel.mfaState?.totpMfa == true) {
                         Subcategory(
-                            title = { Text(stringResource(R.string.settings_mfa_disable_totp)) }
+                            title = { Text(stringResource(Res.string.settings_mfa_disable_totp)) }
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             ) {
                                 Text(
-                                    text = stringResource(R.string.settings_mfa_disable_totp_description),
+                                    text = stringResource(Res.string.settings_mfa_disable_totp_description),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
 
@@ -341,20 +375,20 @@ fun MfaSettingsScreen(
                                         contentColor = MaterialTheme.colorScheme.onErrorContainer
                                     )
                                 ) {
-                                    Text(stringResource(R.string.settings_mfa_disable_totp_cta))
+                                    Text(stringResource(Res.string.settings_mfa_disable_totp_cta))
                                 }
                             }
                         }
                     } else {
                         Subcategory(
-                            title = { Text(stringResource(R.string.settings_mfa_totp)) }
+                            title = { Text(stringResource(Res.string.settings_mfa_totp)) }
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             ) {
                                 Text(
-                                    text = stringResource(R.string.settings_mfa_enable_totp_description),
+                                    text = stringResource(Res.string.settings_mfa_enable_totp_description),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
 
@@ -362,14 +396,14 @@ fun MfaSettingsScreen(
                                     onClick = { viewModel.beginTotpEnrollment() },
                                     enabled = !viewModel.actionBusy
                                 ) {
-                                    Text(stringResource(R.string.settings_mfa_enable_totp_cta))
+                                    Text(stringResource(Res.string.settings_mfa_enable_totp_cta))
                                 }
                             }
                         }
                     }
 
                     Subcategory(
-                        title = { Text(stringResource(R.string.settings_mfa_recovery)) }
+                        title = { Text(stringResource(Res.string.settings_mfa_recovery)) }
                     ) {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -380,9 +414,9 @@ fun MfaSettingsScreen(
                             Text(
                                 text = stringResource(
                                     if (recoveryActive) {
-                                        R.string.settings_mfa_recovery_description_active
+                                        Res.string.settings_mfa_recovery_description_active
                                     } else {
-                                        R.string.settings_mfa_recovery_description_inactive
+                                        Res.string.settings_mfa_recovery_description_inactive
                                     }
                                 ),
                                 style = MaterialTheme.typography.bodyMedium
@@ -394,14 +428,14 @@ fun MfaSettingsScreen(
                                         onClick = { viewModel.showRecoveryCodes() },
                                         enabled = !viewModel.actionBusy
                                     ) {
-                                        Text(stringResource(R.string.settings_mfa_recovery_view_cta))
+                                        Text(stringResource(Res.string.settings_mfa_recovery_view_cta))
                                     }
 
                                     OutlinedButton(
                                         onClick = { viewModel.rotateRecoveryCodes() },
                                         enabled = !viewModel.actionBusy
                                     ) {
-                                        Text(stringResource(R.string.settings_mfa_recovery_regenerate_cta))
+                                        Text(stringResource(Res.string.settings_mfa_recovery_regenerate_cta))
                                     }
                                 }
                             } else {
@@ -409,7 +443,7 @@ fun MfaSettingsScreen(
                                     onClick = { viewModel.rotateRecoveryCodes() },
                                     enabled = !viewModel.actionBusy
                                 ) {
-                                    Text(stringResource(R.string.settings_mfa_recovery_generate_cta))
+                                    Text(stringResource(Res.string.settings_mfa_recovery_generate_cta))
                                 }
                             }
                         }
@@ -417,14 +451,14 @@ fun MfaSettingsScreen(
 
                     if (viewModel.mfaState?.securityKeyMfa == true) {
                         Subcategory(
-                            title = { Text(stringResource(R.string.settings_mfa_security_keys)) }
+                            title = { Text(stringResource(Res.string.settings_mfa_security_keys)) }
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             ) {
                                 Text(
-                                    text = stringResource(R.string.settings_mfa_security_keys_web_manage_description),
+                                    text = stringResource(Res.string.settings_mfa_security_keys_web_manage_description),
                                     style = MaterialTheme.typography.bodyMedium
                                 )
 
@@ -436,7 +470,7 @@ fun MfaSettingsScreen(
                                         customTab.launchUrl(context, "$STOAT_WEB_APP/app".toUri())
                                     }
                                 ) {
-                                    Text(stringResource(R.string.settings_mfa_security_keys_web_manage_cta))
+                                    Text(stringResource(Res.string.settings_mfa_security_keys_web_manage_cta))
                                 }
                             }
                         }
@@ -454,6 +488,7 @@ private fun TotpEnrollmentSheet(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val copiedText = stringResource(Res.string.copied)
     val context = LocalContext.current
     val resources = LocalResources.current
     val clipboardManager = LocalClipboardManager.current
@@ -476,7 +511,7 @@ private fun TotpEnrollmentSheet(
                 .imePadding()
         ) {
             Text(
-                text = stringResource(R.string.settings_mfa_totp_setup_title),
+                text = stringResource(Res.string.settings_mfa_totp_setup_title),
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center
             )
@@ -484,7 +519,7 @@ private fun TotpEnrollmentSheet(
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = stringResource(R.string.settings_mfa_totp_setup_scan),
+                text = stringResource(Res.string.settings_mfa_totp_setup_scan),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -497,7 +532,7 @@ private fun TotpEnrollmentSheet(
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.settings_mfa_totp_setup_manual),
+                text = stringResource(Res.string.settings_mfa_totp_setup_manual),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -520,14 +555,14 @@ private fun TotpEnrollmentSheet(
                     if (Platform.needsShowClipboardNotification()) {
                         Toast.makeText(
                             context,
-                            resources.getString(R.string.copied),
+                            copiedText,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_content_copy_24dp),
-                        contentDescription = stringResource(R.string.settings_mfa_totp_setup_copy_secret)
+                        contentDescription = stringResource(Res.string.settings_mfa_totp_setup_copy_secret)
                     )
                 }
             }
@@ -535,7 +570,7 @@ private fun TotpEnrollmentSheet(
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.settings_mfa_totp_setup_code_lead),
+                text = stringResource(Res.string.settings_mfa_totp_setup_code_lead),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -552,7 +587,7 @@ private fun TotpEnrollmentSheet(
 
             TextField(
                 state = enrollment.input,
-                label = { Text(stringResource(R.string.settings_mfa_totp_setup_code_label)) },
+                label = { Text(stringResource(Res.string.settings_mfa_totp_setup_code_label)) },
                 inputTransformation = transformation,
                 lineLimits = TextFieldLineLimits.SingleLine,
                 keyboardOptions = KeyboardOptions(
@@ -590,7 +625,7 @@ private fun TotpEnrollmentSheet(
                     onClick = onDismiss,
                     enabled = !enrollment.busy
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(Res.string.cancel))
                 }
 
                 Button(
@@ -601,7 +636,7 @@ private fun TotpEnrollmentSheet(
                         if (busy) {
                             LoadingIndicator(modifier = Modifier.size(24.dp))
                         } else {
-                            Text(stringResource(R.string.settings_mfa_totp_setup_verify))
+                            Text(stringResource(Res.string.settings_mfa_totp_setup_verify))
                         }
                     }
                 }

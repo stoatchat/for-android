@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,34 @@ import chat.stoat.api.routes.user.blockUser
 import chat.stoat.core.model.schemas.UserReportReason
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.screens.settings.UserOverview
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.report_block_no
+import chat.stoat.shared.resources.report_block_question
+import chat.stoat.shared.resources.report_block_yes
+import chat.stoat.shared.resources.report_cancel
+import chat.stoat.shared.resources.report_reason
+import chat.stoat.shared.resources.report_reason_additional
+import chat.stoat.shared.resources.report_reason_additional_hint
+import chat.stoat.shared.resources.report_reason_user_ban_evasion
+import chat.stoat.shared.resources.report_reason_user_impersonation
+import chat.stoat.shared.resources.report_reason_user_inappropriate_content
+import chat.stoat.shared.resources.report_reason_user_other
+import chat.stoat.shared.resources.report_reason_user_spam_abuse
+import chat.stoat.shared.resources.report_reason_user_underage
+import chat.stoat.shared.resources.report_reason_user_unsolicited_spam
+import chat.stoat.shared.resources.report_submit
+import chat.stoat.shared.resources.report_submit_error
+import chat.stoat.shared.resources.report_submit_error_header
+import chat.stoat.shared.resources.report_submit_success
+import chat.stoat.shared.resources.report_submit_thanks
+import chat.stoat.shared.resources.report_submitting
+import chat.stoat.shared.resources.report_user
+import chat.stoat.shared.resources.report_user_heading
+import chat.stoat.shared.resources.report_user_preview
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 enum class UserReportFlowState {
     Reason,
@@ -65,13 +91,13 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
     when (state.value) {
         UserReportFlowState.Reason -> {
             val reasons = mapOf(
-                "UnsolicitedSpam" to stringResource(id = R.string.report_reason_user_unsolicited_spam),
-                "SpamAbuse" to stringResource(id = R.string.report_reason_user_spam_abuse),
-                "InappropriateProfile" to stringResource(id = R.string.report_reason_user_inappropriate_content),
-                "Impersonation" to stringResource(id = R.string.report_reason_user_impersonation),
-                "BanEvasion" to stringResource(id = R.string.report_reason_user_ban_evasion),
-                "Underage" to stringResource(id = R.string.report_reason_user_underage),
-                "NoneSpecified" to stringResource(id = R.string.report_reason_user_other)
+                "UnsolicitedSpam" to stringResource(Res.string.report_reason_user_unsolicited_spam),
+                "SpamAbuse" to stringResource(Res.string.report_reason_user_spam_abuse),
+                "InappropriateProfile" to stringResource(Res.string.report_reason_user_inappropriate_content),
+                "Impersonation" to stringResource(Res.string.report_reason_user_impersonation),
+                "BanEvasion" to stringResource(Res.string.report_reason_user_ban_evasion),
+                "Underage" to stringResource(Res.string.report_reason_user_underage),
+                "NoneSpecified" to stringResource(Res.string.report_reason_user_other)
             )
             val reasonDropdownExpanded = remember { mutableStateOf(false) }
 
@@ -81,17 +107,17 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_user_heading),
+                        text = stringResource(Res.string.report_user_heading),
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
                 text = {
                     Column {
-                        Text(text = stringResource(id = R.string.report_user))
+                        Text(text = stringResource(Res.string.report_user))
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = stringResource(id = R.string.report_user_preview),
+                            text = stringResource(Res.string.report_user_preview),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -110,12 +136,12 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         ) {
                             TextField(
                                 value = reasons[selectedReason.value]
-                                    ?: stringResource(id = R.string.unknown),
+                                    ?: stringResource(Res.string.unknown),
                                 readOnly = true,
                                 onValueChange = {},
                                 label = {
                                     Text(
-                                        text = stringResource(id = R.string.report_reason)
+                                        text = stringResource(Res.string.report_reason)
                                     )
                                 },
                                 trailingIcon = {
@@ -149,14 +175,14 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
 
                         FormTextField(
                             value = userAddedContext.value,
-                            label = stringResource(id = R.string.report_reason_additional),
+                            label = stringResource(Res.string.report_reason_additional),
                             onChange = {
                                 userAddedContext.value = it
                             },
                             supportingText = {
                                 Text(
                                     text = stringResource(
-                                        id = R.string.report_reason_additional_hint
+                                        Res.string.report_reason_additional_hint
                                     )
                                 )
                             }
@@ -170,7 +196,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         },
                         modifier = Modifier.testTag("report_cancel")
                     ) {
-                        Text(text = stringResource(id = R.string.report_cancel))
+                        Text(text = stringResource(Res.string.report_cancel))
                     }
                 },
                 confirmButton = {
@@ -180,7 +206,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         },
                         modifier = Modifier.testTag("report_send")
                     ) {
-                        Text(text = stringResource(id = R.string.report_submit))
+                        Text(text = stringResource(Res.string.report_submit))
                     }
                 }
             )
@@ -191,7 +217,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                 onDismissRequest = {},
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submitting),
+                        text = stringResource(Res.string.report_submitting),
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
@@ -241,7 +267,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submit_success),
+                        text = stringResource(Res.string.report_submit_success),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -253,7 +279,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = stringResource(id = R.string.report_submit_thanks),
+                                text = stringResource(Res.string.report_submit_thanks),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -261,7 +287,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         Spacer(modifier = Modifier.height(32.dp))
 
                         Text(
-                            text = stringResource(id = R.string.report_block_question),
+                            text = stringResource(Res.string.report_block_question),
                             textAlign = TextAlign.Center,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -275,7 +301,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         },
                         modifier = Modifier.testTag("report_block_no")
                     ) {
-                        Text(text = stringResource(id = R.string.report_block_no))
+                        Text(text = stringResource(Res.string.report_block_no))
                     }
                 },
                 confirmButton = {
@@ -288,7 +314,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         },
                         modifier = Modifier.testTag("report_block_yes")
                     ) {
-                        Text(text = stringResource(id = R.string.report_block_yes))
+                        Text(text = stringResource(Res.string.report_block_yes))
                     }
                 }
             )
@@ -308,7 +334,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submit_error_header),
+                        text = stringResource(Res.string.report_submit_error_header),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -316,7 +342,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                 text = {
                     Column {
                         Text(
-                            text = stringResource(id = R.string.report_submit_error),
+                            text = stringResource(Res.string.report_submit_error),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -328,7 +354,7 @@ fun ReportUserDialog(onDismiss: () -> Unit, userId: String) {
                         },
                         modifier = Modifier.testTag("report_error_ok")
                     ) {
-                        Text(text = stringResource(id = R.string.ok))
+                        Text(text = stringResource(Res.string.ok))
                     }
                 },
                 confirmButton = {}

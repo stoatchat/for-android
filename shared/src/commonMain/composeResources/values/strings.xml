@@ -1,0 +1,1377 @@
+<resources>
+
+    <string name="back">← Back</string>
+    <string name="next">Next →</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="share">Share</string>
+    <string name="_new">New</string>
+    <string name="retry">Retry</string>
+    <string name="lets_go">Let's go</string>
+    <string name="loading">Fetching some info, hang in there…</string>
+    <string name="rate_limit_toast">Hold your horses! You're doing that too often in a short amount of time.</string>
+
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="community_guidelines">Community Guidelines</string>
+
+    <string name="login_onboarding_heading">Find your community, connect with the world.</string>
+    <string name="login_onboarding_body">Stoat is one of the best ways to stay connected with your friends and community, anywhere, anytime.</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+
+    <string name="login">Log In</string>
+    <string name="signup">Sign Up</string>
+    <string name="resend">Resend</string>
+    <string name="send_email">Send email</string>
+
+    <string name="service_health_alert">Currently ongoing</string>
+    <string name="service_health_alert_body_default">We are currently experiencing issues with our services. Please check our status page for more information.</string>
+    <string name="service_health_alert_actions_default">Learn more</string>
+    <string name="service_health_alert_actions_dismiss">Dismiss</string>
+
+    <string name="could_not_log_in_heading">There was a problem logging you in</string>
+    <string name="could_not_log_in_body">You might have logged out from another device, or your internet connection might be down.</string>
+    <string name="could_not_log_in_cta_try_again">Try again</string>
+    <string name="could_not_log_in_cta_logout">Log out</string>
+
+    <string name="login_heading">Let's log you in</string>
+    <string name="password_forgot">Forgot password?</string>
+    <string name="resend_verification">Resend a verification email</string>
+    <string name="password_manager_hint">Using a password manager?</string>
+    <string name="password_forgot_heading">Forgot your password?</string>
+    <string name="password_forgot_instructions">Enter your email and we'll send you instructions on how to reset your password.</string>
+
+    <string name="register_heading">Welcome to Stoat</string>
+    <string name="register_image_alt">Use Stoat to chat about stuff.</string>
+    <string name="register_instructions">It's like a place to hang out, get together, and talk about stuff. Best part, it's on the internet.</string>
+    <string name="register_form_heading">Let's get you set up.</string>
+    <string name="register_data">Your data is safe with us. We don't sell it, and neither do we use it to show you ads.</string>
+    <string name="register_email">Email</string>
+    <string name="register_email_verification_hint">We'll send you a verification email to confirm your account.</string>
+    <string name="register_password">Password</string>
+    <string name="register_password_rules">Eight or more, common ones are bad. Symbols and numbers recommended.</string>
+
+    <string name="check_mail">Check your mail!</string>
+    <string name="instructions_at_mail">We've sent further instructions to %1$s.</string>
+    <string name="verify_then_choose_username">Verify your email, and then we'll get on with choosing your username.</string>
+    <string name="open_mail_app">Open mail app</string>
+
+    <string name="onboarding_welcome">Welcome!</string>
+    <string name="onboarding_lead">It's time to choose a username!</string>
+    <string name="onboarding_others">Others will find, recognise and mention you with this name.</string>
+    <string name="onboarding_changeable">But if you change your mind, you can change your username at any time in your User Settings.</string>
+    <string name="onboarding_username">Username</string>
+
+    <string name="token_invalid_toast">You have been logged out. Please log in again.</string>
+
+    <string name="mfa_interstitial_header">One more thing</string>
+    <string name="mfa_interstitial_lead">You've got 2FA enabled to keep your account extra-safe.</string>
+    <string name="mfa_type_otp">Use a one-time password</string>
+    <string name="mfa_type_recovery">Use a recovery code</string>
+
+    <string name="mfa_totp_header">Enter a six-digit code</string>
+    <string name="mfa_totp_lead">Enter the six-digit code from your authenticator app.</string>
+    <string name="mfa_totp_code">Code</string>
+
+    <string name="mfa_recovery_header">Enter a recovery code</string>
+    <string name="mfa_recovery_lead">Enter one of your recovery codes.</string>
+    <string name="mfa_recovery_code">Code</string>
+
+    <string name="mfa_password_header">Enter your password</string>
+    <string name="mfa_password_lead">Enter your password to continue.</string>
+
+    <string name="mfa_prompt_title">Verify it's you</string>
+    <string name="mfa_prompt_lead">For your security, confirm this action with one of your verification methods.</string>
+    <string name="mfa_prompt_confirm">Confirm</string>
+    <string name="mfa_prompt_load_error_title">Something went wrong</string>
+    <string name="mfa_prompt_load_error_description">Your verification methods couldn't be loaded.</string>
+    <string name="mfa_prompt_retry">Retry</string>
+    <string name="mfa_prompt_no_methods_title">No methods available</string>
+    <string name="mfa_prompt_no_methods_description">This account doesn't have any verification methods that can authorise this action.</string>
+    <string name="mfa_prompt_close">Close</string>
+    <string name="mfa_method_password">Password</string>
+    <string name="mfa_method_totp">Authenticator app</string>
+    <string name="mfa_method_recovery">Recovery code</string>
+    <string name="mfa_error_invalid_credentials">Incorrect password. Please try again.</string>
+    <string name="mfa_error_invalid_token">That code wasn't accepted. It may be incorrect or expired. Please try again.</string>
+    <string name="mfa_error_disallowed_method">This verification method isn't allowed for this action.</string>
+    <string name="mfa_error_generic">Something went wrong (%1$s).</string>
+
+    <string name="about">About</string>
+    <string name="about_full_name">Stoat for Android</string>
+    <string name="about_brought_to_you_by">Brought to you with ❤️ by the Stoat team.</string>
+    <string name="about_section_debug_information">Debug Information</string>
+    <string name="about_section_debug_information_description">If you're experiencing issues with the app, this information may be helpful to include when contacting support or submitting a bug report.</string>
+    <string name="about_section_debug_information_copy_as_json">Copy as JSON</string>
+    <string name="about_section_oss_licenses">Open Source Licenses</string>
+
+    <string name="oss_attribution">OSS Licenses</string>
+    <string name="oss_attribution_tap_to_view_license">Tap to view license</string>
+    <string name="oss_attribution_open_library_website">Open library website</string>
+
+    <string name="comingsoon_toast">Sorry, this feature is not ready yet.</string>
+
+    <string name="typing_blank" translatable="false"><!-- this is a hack to prevent the typing indicator from showing typing_several when it's animating away --></string>
+    <string name="typing_one">%1$s is typing…</string>
+    <string name="typing_many">%1$s are typing…</string>
+    <string name="typing_several">Several people are typing</string>
+    <string name="slowmode_immune">Immune</string>
+
+    <string name="send_alt">Send</string>
+    <string name="pick_emoji_alt">Pick emoji</string>
+    <string name="add_attachment_alt">Add attachment</string>
+    <string name="voice_message_start_recording">Record a voice message</string>
+    <string name="voice_message_slide_to_cancel">Slide to cancel</string>
+    <string name="voice_message_release_to_cancel">Release to cancel</string>
+    <string name="voice_message_finishing">Finishing…</string>
+    <string name="voice_message_temp_review_title">LGTM?</string>
+    <string name="voice_message_temp_review_description">Recorded %1$s of audio, send it?</string>
+    <string name="voice_message_discard">Don’t send</string>
+    <string name="voice_message_silent">No audio was picked up. Check your microphone and try again.</string>
+    <string name="voice_message_recording_failed">Couldn’t record the voice message.</string>
+    <string name="voice_message_microphone_permission_denied">Microphone permission is needed to record a voice message.</string>
+    <string name="remove_attachment_alt">Remove attachment</string>
+    <string name="remove_reply_alt">Remove reply</string>
+    <string name="reply_mention_on">@ on</string>
+    <string name="reply_mention_off">@ off</string>
+    <string name="too_many_replies">You can only reply to %1$d messages at a time.</string>
+
+    <string name="attachment_spoiler">Spoiler</string>
+
+    <string name="attachment_preview_remove">Remove</string>
+    <string name="attachment_preview_close">Close</string>
+    <string name="attachment_preview_spoiler">Mark as spoiler</string>
+    <string name="attachment_preview_spoiler_description">This attachment will only be revealed when tapped.</string>
+
+    <string name="emoji_category_smileys">Smileys &amp; Emotions</string>
+    <string name="emoji_category_people">People &amp; Body</string>
+    <string name="emoji_category_animals">Animals &amp; Nature</string>
+    <string name="emoji_category_food">Food &amp; Drink</string>
+    <string name="emoji_category_travel">Travel &amp; Places</string>
+    <string name="emoji_category_activities">Activities</string>
+    <string name="emoji_category_objects">Objects</string>
+    <string name="emoji_category_symbols">Symbols</string>
+    <string name="emoji_category_flags">Flags</string>
+
+    <string name="badge_bot_alt">Bot</string>
+    <string name="badge_masquerade_alt">From linked channel</string>
+    <string name="badge_platform_moderation_alt">Platform moderation</string>
+    <string name="badge_team_member_alt">Stoat team member</string>
+    <string name="badge_webhook_alt">Webhook</string>
+
+    <string name="unknown">Unknown</string>
+
+    <string name="menu">Menu</string>
+    <string name="logout">Log out</string>
+
+    <string name="home_join_jenvolt">Join Jenvolt</string>
+    <string name="home_join_jenvolt_description">Jenvolt is the developer-run space for all things Android app and more. Support, feedback go here. Maybe you will get to try out new features! 👀</string>
+
+    <!-- This is the user's personal home page. Does not need to be translated as "You", you can also use "Me" or "Overview" etc. Use your judgement. -->
+    <string name="overview_screen_title">You</string>
+    <string name="overview_screen_error">Couldn't load your overview</string>
+    <string name="overview_screen_error_description">Please try again later.</string>
+    <string name="overview_screen_settings">Open Settings</string>
+    <string name="overview_screen_settings_description">Change your look, manage your account, and more</string>
+    <string name="overview_screen_share_profile">Share Profile</string>
+    <string name="overview_screen_share_profile_description">Take a look at your user card and get a special link to share</string>
+    <string name="overview_screen_changelog">What's New?</string>
+    <string name="overview_screen_changelog_description">See what we've been working on recently and what's coming up next</string>
+    <string name="overview_screen_join_lounge">Join the Stoat server</string>
+    <string name="overview_screen_join_lounge_description">Hang out with other Stoat users, give feedback, and see what's happening with Stoat</string>
+    <string name="overview_screen_catch_up">Catch Up</string>
+    <string name="overview_screen_catch_up_description">See what you've missed while you were away</string>
+    <string name="overview_screen_catch_up_none">All caught up</string>
+    <string name="overview_screen_catch_up_none_description">You've seen all new messages since your last visit.</string>
+    <string name="overview_screen_catch_up_amount_badge_loading">…</string>
+
+    <string name="catch_up">Catch Up</string>
+
+    <string name="user_card_tap_to_copy">Tap to copy</string>
+    <string name="user_card_error_sharing">An error occurred while sharing your user card.</string>
+    <string name="user_card_data_point_display_name">%1$d.Name</string>
+    <string name="user_card_data_point_username">%1$d.Username</string>
+    <string name="user_card_data_point_join_date">%1$d.On Stoat Since</string>
+    <string name="user_card_data_point_qrcode">%1$d.QR Code</string>
+    <string name="user_card_data_point_photo">%1$d.Photo</string>
+
+    <string name="friends">Friends</string>
+    <string name="friends_incoming_requests">Incoming Requests</string>
+    <string name="friends_outgoing_requests">Outgoing Requests</string>
+    <string name="friends_all">All</string>
+    <string name="friends_blocked">Blocked</string>
+    <string name="friends_deny_all_incoming">Clear all incoming requests</string>
+    <string name="friends_new_group">New group</string>
+    <string name="friends_scan_qr">Scan QR code</string>
+    <string name="friends_scan_qr_result_sheet_invalid_title">Invalid QR code</string>
+    <string name="friends_scan_qr_result_sheet_invalid_description">This is not a valid Stoat QR code.</string>
+    <string name="friends_scan_qr_result_sheet_missing_permission_title">Missing camera permission</string>
+    <string name="friends_scan_qr_result_sheet_missing_permission_description">You need to grant the camera permission to scan QR codes.</string>
+    <string name="friends_scan_qr_result_sheet_success_title">Add friend?</string>
+    <string name="friends_add_by_tag">Add with username and tag</string>
+    <string name="friends_add_by_tag_sheet_description">You can add friends by their %1$susername%3$s and %2$stag%3$s. For example, if their username is %1$sToast%3$s and their tag is %2$s1234%3$s, you can add them with %1$sToast%3$s#%2$s1234%3$s.</string>
+    <string name="friends_add_by_tag_sheet_username">Username</string>
+    <string name="friends_add_by_tag_sheet_tag">Tag</string>
+    <string name="friends_add_by_tag_sheet_add">Add</string>
+    <string name="friends_add_by_tag_sheet_do_not_add">Don't add</string>
+    <string name="friends_add_by_tag_sheet_paste_from_clipboard">Paste clipboard</string>
+    <string name="friends_add_by_tag_sheet_invalid_clipboard">The clipboard does not contain a valid username and tag.</string>
+
+    <!-- In an experimental iteration of the app's UI, there are three tabs. This is the tab which contains servers. -->
+    <string name="main_tab_communities">Communities</string>
+    <!-- In an experimental iteration of the app's UI, there are three tabs. This is the tab which contains direct messages and groups. -->
+    <string name="main_tab_conversations">Conversations</string>
+    <!-- In an experimental iteration of the app's UI, there are three tabs. This is the tab which contains the user's personal home page. -->
+    <string name="main_tab_overview">You</string>
+
+    <string name="create_group">Create a new group</string>
+    <string name="create_group_description">Round up your crew in a group chat. You can add up to %1$d people.</string>
+    <string name="create_group_name">Group Name</string>
+    <string name="create_group_search">Search Friends</string>
+    <string name="create_group_action">Create</string>
+
+    <string name="server_plus_alt">Add server</string>
+    <string name="discover_alt">Discover</string>
+
+    <string name="no_channels_heading">Bit awkward.</string>
+    <string name="no_channels_body">There aren't any channels in this server. Not even a welcome channel. How rude.</string>
+    <string name="no_active_channel">You're not in a channel right now.</string>
+    <string name="no_active_channel_body">Select a server from the left to get started. If you're feeling adventurous, you can create a new server.</string>
+
+    <string name="channel_age_gate_title">This channel is marked as NSFW</string>
+    <string name="channel_age_gate_description">You must be 18 or older to view this channel.</string>
+    <string name="channel_age_gate_dob_section">Date of birth</string>
+    <string name="channel_age_gate_dob_day">Day</string>
+    <string name="channel_age_gate_dob_month">Month</string>
+    <string name="channel_age_gate_dob_year">Year</string>
+    <string name="channel_age_gate_dob_proceed">Proceed</string>
+    <string name="channel_age_gate_dob_cancel">Cancel</string>
+    <string name="channel_age_gate_dob_invalid">Enter your date of birth</string>
+    <string name="channel_age_gate_dob_too_young">You must be 18 or older to view this channel.</string>
+    <string name="channel_age_gate_dob_invalid_future">You can't be born in the future.</string>
+    <string name="channel_age_gate_dob_invalid_unlikely">You can't be born before %1$d.</string>
+
+    <string name="avatar_alt">%1$s's avatar</string>
+
+    <string name="direct_messages">Direct Messages</string>
+
+    <string name="channel_dm">Direct Message</string>
+    <string name="channel_text">Text Channel</string>
+    <string name="channel_voice">Voice Channel</string>
+    <string name="channel_group">Group</string>
+    <string name="channel_notes">Notes</string>
+
+    <string name="start_of_conversation">This is the start of your conversation</string>
+    <string name="time_rift_heading">There may be some messages missing here.</string>
+    <string name="time_rift_cta">Load messages</string>
+
+    <string name="message_field_placeholder_dm">Message @%1$s</string>
+    <string name="message_field_placeholder_text">Message #%1$s</string>
+    <string name="message_field_placeholder_voice">Message #%1$s</string>
+    <string name="message_field_placeholder_group">Message %1$s</string>
+    <string name="message_field_placeholder_notes">Add a note</string>
+
+    <string name="message_field_decoration_trusted_moderation_bot">Verified moderation bot</string>
+
+    <string name="message_field_denied_generic">You can't send messages in this channel.</string>
+    <string name="message_field_denied_no_permission">You don't have permission to send messages in this channel.</string>
+    <string name="message_field_denied_platform_moderation">This is a trusted channel for notices from our moderation team. You can't send messages here.</string>
+
+    <string name="message_field_editing_message">Editing message</string>
+    <string name="message_field_editing_message_cancel_alt">Cancel editing</string>
+
+    <string name="reply_message_not_cached">Unknown message</string>
+    <string name="reply_message_empty_has_attachments">Sent attachments</string>
+
+    <string name="message_blocked">Blocked message</string>
+    <string name="message_failed_to_send">Failed to send, long press for options</string>
+    <string name="message_jump_failed">Couldn’t load that message</string>
+
+    <string name="message_not_supported">Message cannot be displayed.</string>
+    <string name="message_not_supported_with_context">Message cannot be displayed (%1$s).</string>
+
+    <string name="message_embed_special_youtube_switch_alt">Tap to play video from YouTube</string>
+
+    <string name="system_message_ownership_changed_alt">Ownership changed</string>
+    <string name="system_message_channel_icon_changed_alt">Channel icon changed</string>
+    <string name="system_message_channel_description_changed_alt">Channel description changed</string>
+    <string name="system_message_channel_renamed_alt">Channel renamed</string>
+    <string name="system_message_user_removed_alt">User removed</string>
+    <string name="system_message_user_added_alt">User added</string>
+    <string name="system_message_user_banned_alt">User banned</string>
+    <string name="system_message_user_kicked_alt">User kicked</string>
+    <string name="system_message_user_left_alt">User left</string>
+    <string name="system_message_user_joined_alt">User joined</string>
+    <string name="system_message_message_pinned_alt">Message pinned</string>
+    <string name="system_message_message_unpinned_alt">Message unpinned</string>
+    <string name="system_message_call_started_alt">Call started</string>
+    <string name="system_message_text_alt">System message</string>
+
+    <string name="system_message_ownership_changed">%1$s transferred ownership to %2$s</string>
+    <string name="system_message_channel_icon_changed">%1$s changed the channel icon</string>
+    <string name="system_message_channel_description_changed">%1$s changed the channel description</string>
+    <string name="system_message_channel_renamed">%1$s renamed the channel to %2$s</string>
+    <string name="system_message_user_removed">%1$s removed %2$s</string>
+    <string name="system_message_user_added">%1$s added %2$s</string>
+    <string name="system_message_user_banned">%1$s has been banned</string>
+    <string name="system_message_user_kicked">%1$s has been kicked</string>
+    <string name="system_message_user_left">%1$s left</string>
+    <string name="system_message_user_joined">%1$s joined</string>
+    <string name="system_message_message_pinned">%1$s pinned a message to this channel</string>
+    <string name="system_message_message_unpinned">%1$s unpinned a message from this channel</string>
+    <string name="system_message_call_started">%1$s started a call</string>
+    <string name="system_message_call_started_with_finished_at">%1$s started a call which lasted %2$s</string>
+    <string name="system_message_call_duration_few_seconds">a few seconds</string>
+    <plurals name="system_message_call_duration_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <plurals name="system_message_call_duration_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="system_message_call_duration_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="system_message_call_duration_months">
+        <item quantity="one">%1$d month</item>
+        <item quantity="other">%1$d months</item>
+    </plurals>
+    <plurals name="system_message_call_duration_years">
+        <item quantity="one">%1$d year</item>
+        <item quantity="other">%1$d years</item>
+    </plurals>
+
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="x_days_ago">%1$d days ago</string>
+    <string name="edited">(edited)</string>
+
+    <string name="swipe_to_reply_keep_swiping">Reply</string>
+    <string name="swipe_to_reply_release">Release to reply</string>
+
+    <string name="disconnected">Disconnected</string>
+    <string name="tap_to_reconnect">Tap to reconnect</string>
+    <string name="reconnecting">Reconnecting…</string>
+    <string name="reconnected">Reconnected</string>
+
+    <string name="status">Status</string>
+    <string name="status_online">Online</string>
+    <string name="status_idle">Idle</string>
+    <string name="status_focus">Focus</string>
+    <string name="status_focus_explainer">You will not receive any notifications for messages, but you will receive notifications for @mentions.</string>
+    <string name="status_dnd">Do Not Disturb</string>
+    <string name="status_dnd_explainer">You will not receive any notifications, including messages and @mentions.</string>
+    <string name="status_offline">Offline</string>
+    <string name="status_invisible">Invisible</string>
+    <string name="status_invisible_explainer">You will be able to use Stoat as usual, but you will not appear as online to other people.</string>
+    <string name="status_text_none">What's up?</string>
+    <string name="status_text">Status text</string>
+    <string name="status_text_explainer">Your status text will be visible to everyone. Keep it short and sweet.</string>
+    <string name="status_text_placeholder">Tell the world what you're up to</string>
+    <string name="status_text_error_too_long">Status text is too long. Try to keep it under %1$d characters.</string>
+    <string name="status_text_error_other">An error occurred while updating your status text. Please try again later.</string>
+    <string name="status_rate_limited_title">Not so fast</string>
+    <string name="status_rate_limited_description">You’ve changed your status a few times in a short period. Give it a moment: you can set it again in about %1$s.</string>
+    <string name="status_rate_limited_description_unknown">You’ve changed your status a few times in a short period. Give it a moment, then try again.</string>
+    <plurals name="status_rate_limited_seconds">
+        <item quantity="one">%1$d second</item>
+        <item quantity="other">%1$d seconds</item>
+    </plurals>
+
+    <string name="no_connection">No connection</string>
+    <string name="no_connection_message">You are not connected to the internet. Please check your connection and try again.</string>
+    <string name="tap_to_retry">Tap to retry</string>
+
+    <string name="scroll_to_bottom">Scroll to bottom</string>
+    <string name="settings">Settings</string>
+
+    <string name="copy">Copy</string>
+    <string name="copied">Copied to clipboard</string>
+
+    <!-- See dev.snipme.highlights.model.SyntaxLanguage -->
+    <string name="programming_language_default">Plain Text</string>
+    <string name="programming_language_c" translatable="false">C</string>
+    <string name="programming_language_cpp" translatable="false">C++</string>
+    <string name="programming_language_dart" translatable="false">Dart</string>
+    <string name="programming_language_java" translatable="false">Java</string>
+    <string name="programming_language_kotlin" translatable="false">Kotlin</string>
+    <string name="programming_language_rust" translatable="false">Rust</string>
+    <string name="programming_language_csharp" translatable="false">C#</string>
+    <string name="programming_language_coffeescript" translatable="false">CoffeeScript</string>
+    <string name="programming_language_javascript" translatable="false">ECMAScript / JS</string>
+    <string name="programming_language_perl" translatable="false">Perl</string>
+    <string name="programming_language_python" translatable="false">Python</string>
+    <string name="programming_language_ruby" translatable="false">Ruby</string>
+    <string name="programming_language_shell" translatable="false">Shell</string>
+    <string name="programming_language_swift" translatable="false">Swift</string>
+    <string name="programming_language_typescript" translatable="false">TypeScript</string>
+    <string name="programming_language_go" translatable="false">Go</string>
+    <string name="programming_language_php" translatable="false">PHP</string>
+
+    <!-- Used to describe a snippet of code in a specific programming language -->
+    <string name="programming_language_snippet">[%1$s snippet]</string>
+    <string name="programming_language_snippet_default">[Code snippet]</string>
+
+    <string name="server_flag_official">Official Server</string>
+    <string name="server_flag_verified">Verified Server</string>
+
+    <string name="channel_link_invalid">You can't view this channel</string>
+    <string name="channel_link_invalid_description">This channel may have been deleted or you may not have permission to view it.</string>
+
+    <string name="emote_info_from_server">from %1$s</string>
+    <string name="emote_info_from_server_unknown">from a private server</string>
+    <string name="emote_info_from_unicode">A default emoji that you can use anywhere</string>
+
+    <string name="channel_info_sheet_description">Channel description</string>
+    <string name="channel_info_sheet_description_empty">There hasn't been a description set for this channel yet.</string>
+    <string name="channel_info_sheet_options">Options</string>
+    <string name="channel_info_sheet_options_members">Members</string>
+    <string name="channel_info_sheet_options_invite">Invite</string>
+    <string name="channel_info_sheet_options_add">Add members</string>
+    <string name="channel_info_sheet_options_notifications_manage">Manage notifications</string>
+
+    <string name="invite_dialog_header">Invite to #%1$s</string>
+    <string name="invite_dialog_description">Send this link to invite people to this channel.</string>
+    <string name="invite_dialog_copy">Copy</string>
+    <string name="invite_dialog_close">Close</string>
+
+    <string name="pinned_messages">Pinned Messages</string>
+    <string name="pinned_messages_view">View Pinned Messages</string>
+    <string name="pinned_messages_empty">No pinned messages yet, maybe you should pin one?</string>
+
+    <string name="channel_search">Search Messages</string>
+    <string name="channel_search_hint">Search messages</string>
+    <string name="channel_search_prompt">Type to search for messages in this channel.</string>
+    <string name="channel_search_empty">No messages found for “%1$s”.</string>
+    <string name="channel_search_clear">Clear search</string>
+    <string name="channel_search_sort_relevance">Relevance</string>
+    <string name="channel_search_sort_latest">Latest</string>
+    <string name="channel_search_sort_oldest">Oldest</string>
+
+    <string name="message_context_sheet_actions_copy">Copy</string>
+    <string name="message_context_sheet_actions_copy_failed_empty">Message is empty, nothing to copy</string>
+    <string name="message_context_sheet_actions_reply">Reply</string>
+    <string name="message_context_sheet_actions_edit">Edit</string>
+    <string name="message_context_sheet_actions_delete">Delete</string>
+    <string name="message_context_sheet_actions_delete_confirm">Are you sure you want to delete this message?</string>
+    <string name="message_context_sheet_actions_delete_confirm_yes">Yes</string>
+    <string name="message_context_sheet_actions_delete_confirm_no">No</string>
+    <string name="message_context_sheet_actions_copy_id">Copy ID</string>
+    <string name="message_context_sheet_actions_copy_id_copied">Copied message ID to clipboard</string>
+    <string name="message_context_sheet_actions_copy_link">Copy link</string>
+    <string name="message_context_sheet_actions_copy_link_copied">Copied message link to clipboard</string>
+    <string name="message_context_sheet_actions_react">React</string>
+    <string name="message_context_sheet_actions_report">Report</string>
+    <string name="message_context_sheet_actions_mark_unread">Mark as unread</string>
+
+    <string name="message_context_sheet_actions_delete_confirmation_title">Delete message?</string>
+    <string name="message_context_sheet_actions_delete_confirmation_body">It will be gone forever (a long time!)</string>
+    <string name="message_context_sheet_actions_delete_confirmation_yes">Delete</string>
+    <string name="message_context_sheet_actions_delete_confirmation_no">Keep</string>
+
+    <string name="channel_context_sheet_open">Open channel actions</string>
+    <string name="channel_context_sheet_actions_copy_id">Copy ID</string>
+    <string name="channel_context_sheet_actions_copy_id_copied">Copied channel ID to clipboard</string>
+    <string name="channel_context_sheet_actions_mark_read">Mark as read</string>
+
+    <string name="server_context_sheet_description_empty">There hasn't been a description set for this server yet.</string>
+
+    <string name="server_context_sheet_actions_copy_id">Copy ID</string>
+    <string name="server_context_sheet_actions_copy_id_copied">Copied server ID to clipboard</string>
+    <string name="server_context_sheet_actions_mark_read">Mark as read</string>
+    <string name="server_context_sheet_actions_leave">Leave</string>
+    <string name="server_context_sheet_actions_leave_confirm">Leave %1$s?</string>
+    <string name="server_context_sheet_actions_leave_confirm_eyebrow">Until you get invited back, you won't be able to rejoin.</string>
+    <string name="server_context_sheet_actions_leave_confirm_yes">Leave</string>
+    <string name="server_context_sheet_actions_leave_confirm_no">Stay</string>
+    <string name="server_context_sheet_actions_leave_silently">Leave Silently</string>
+    <string name="server_context_sheet_actions_report">Report</string>
+    <string name="server_context_sheet_moderators_early_disclaimer_title">Looking for server settings?</string>
+    <string name="server_context_sheet_moderators_early_disclaimer_body">We're still working on bringing server management to our Android app. Please use the web app to manage your server for now.</string>
+
+    <string name="user_info_sheet_open">Open user info</string>
+    <string name="user_info_sheet_user_not_found">Can't resolve this user</string>
+    <string name="user_info_sheet_user_not_found_description">This user may have been deleted or you may not have permission to view them.</string>
+    <string name="user_info_sheet_webhook">You've found a Webhook!</string>
+    <string name="user_info_sheet_webhook_body">Webhooks are automated broadcasts from other services on the internet. They can't chat back, but you can still see what they have to say.</string>
+    <string name="user_info_sheet_webhook_learn_more">Learn more</string>
+    <string name="user_info_sheet_category_bio">Bio</string>
+    <string name="user_info_sheet_bio_empty">This user hasn't set a bio yet.</string>
+    <string name="user_info_sheet_bio_not_found">This user's bio could not be fetched. Please verify you share a server or are friends.</string>
+    <string name="user_info_sheet_category_roles">Roles</string>
+    <string name="user_info_sheet_role_update_failed">Could not update this member's roles.</string>
+    <string name="user_info_sheet_category_joined">Joined</string>
+    <string name="user_info_sheet_category_joined_stoat" translatable="false">Stoat</string>
+    <string name="user_info_sheet_category_badges">Badges</string>
+    <string name="user_info_sheet_category_owner">Owner</string>
+    <string name="user_info_sheet_owner_not_found">Could not fetch owner information</string>
+    <string name="user_info_sheet_add_friend">Add Friend</string>
+    <string name="user_info_sheet_send_message">Send Message</string>
+    <string name="user_info_sheet_remove_friend">Remove Friend</string>
+    <string name="user_info_sheet_accept_request">Accept</string>
+    <string name="user_info_sheet_decline_request">Decline</string>
+    <string name="user_info_sheet_cancel_request">Cancel Request</string>
+    <string name="user_info_sheet_block">Block</string>
+    <string name="user_info_sheet_unblock">Unblock</string>
+    <string name="user_info_sheet_edit_profile">Edit Profile</string>
+    <string name="user_info_sheet_report">Report</string>
+    <string name="user_info_sheet_copy_id">Copy ID</string>
+    <string name="user_info_sheet_failed_to_open_dm">Could not open DM with this user.</string>
+    <string name="user_info_sheet_user_is_bot">This is a bot.</string>
+    <string name="user_info_sheet_user_is_bot_easter_egg">This is a bot. It has a plan.</string>
+    <string name="user_info_sheet_category_status">Status</string>
+
+    <string name="member_context_sheet_open">Open member options</string>
+    <string name="member_context_sheet_remove_from_channel">Remove from %1$s</string>
+
+    <string name="user_badge_developer">Developer</string>
+    <string name="user_badge_translator">Translator</string>
+    <string name="user_badge_supporter">Supporter</string>
+    <string name="user_badge_responsible_disclosure">Responsible Disclosure</string>
+    <string name="user_badge_founder">Founder</string>
+    <string name="user_badge_platform_moderation">Platform Moderation</string>
+    <string name="user_badge_active_supporter">Active Supporter</string>
+    <string name="user_badge_paw" translatable="false">🦊</string>
+    <string name="user_badge_early_adopter">Early Adopter</string>
+    <string name="user_badge_reserved_relevant_joke_badge_1" translatable="false">sus</string>
+    <string name="user_badge_reserved_relevant_joke_badge_2" translatable="false">It's Morbin Time</string>
+
+    <string name="add_server_sheet_step_0_title">Add Server</string>
+    <string name="add_server_sheet_step_0_description">A server is where the magic happens. Chat with your friends, share memes, build communities, and more.</string>
+    <string name="add_server_sheet_step_0_join">Join by invite code or link</string>
+    <string name="add_server_sheet_step_0_join_description">You already have an invite code to join an existing server.</string>
+    <string name="add_server_sheet_step_0_create">Create a new server</string>
+    <string name="add_server_sheet_step_0_create_description">You want to create a completely new server from scratch.</string>
+    <string name="add_server_sheet_step_1j_title">Join with an Invite</string>
+    <string name="add_server_sheet_step_1j_description">If you have an invite code or link, you can join a server right now.</string>
+    <string name="add_server_sheet_step_1j_examples_heading">Examples of invite codes include:</string>
+    <string name="add_server_sheet_step_1j_example_1" translatable="false">rvlt.gg/Testers</string>
+    <string name="add_server_sheet_step_1j_example_2" translatable="false">Testers</string>
+    <string name="add_server_sheet_step_1j_example_3" translatable="false">stoat.chat/invite/Testers</string>
+    <string name="add_server_sheet_step_1j_label">Invite code or link</string>
+    <string name="add_server_sheet_step_1j_join">Join</string>
+    <string name="add_server_sheet_step_1c_title">Create a Server</string>
+    <string name="add_server_sheet_step_1c_description">You can always customise the name or icon and invite your friends later.</string>
+    <string name="add_server_sheet_step_1c_name">Server Name</string>
+    <string name="add_server_sheet_step_1c_name_placeholder">My Server</string>
+    <string name="add_server_sheet_step_1c_name_error_range">Server name can be up to %1$d characters in length.</string>
+    <string name="add_server_sheet_step_1c_error">An error occurred while creating your server. Please try again later.</string>
+    <string name="add_server_sheet_step_1c_create">Create</string>
+
+    <string name="discover">Discover Stoat</string>
+
+    <string name="report">Report</string>
+    <string name="report_cancel">Cancel</string>
+
+    <string name="report_message_heading">Tell us what's wrong with this message</string>
+    <string name="report_message">Thank you for taking the time to report this message. Your report will not be shared with the user who sent the message or the server's moderators.</string>
+    <string name="report_message_preview">Selected message:</string>
+    <string name="report_message_bridge_notice">Note: This message may have been sent from another platform. It is recommended to also report the message on the platform it was sent from.</string>
+    <string name="report_server_heading">Tell us what's wrong with this server</string>
+    <string name="report_server">Thank you for taking the time to report this server. Your report will not be shared with the server's moderators.</string>
+    <string name="report_server_preview">Selected server:</string>
+    <string name="report_user_heading">Tell us what's wrong with this user</string>
+    <string name="report_user">Thank you for taking the time to report this user. Your report will not be shared with the user or the server's moderators.</string>
+    <string name="report_user_preview">Selected user:</string>
+
+    <string name="report_reason">Pick a category</string>
+
+    <string name="report_reason_content_illegal">Illegal content</string>
+    <string name="report_reason_content_illegal_goods">Drugs or other illegal goods</string>
+    <string name="report_reason_content_illegal_extortion">Extortion or blackmail</string>
+    <string name="report_reason_content_illegal_pornography">Revenge or underage pornography</string>
+    <string name="report_reason_content_illegal_hacking">Illegal hacking or cracking</string>
+    <string name="report_reason_content_extreme_violence">Extreme violence, gore or animal cruelty</string>
+    <string name="report_reason_content_promotes_harm">Promotes harm</string>
+    <string name="report_reason_content_unsolicited_spam">Unsolicited advertising or spam</string>
+    <string name="report_reason_content_raid">Raid or spam attack</string>
+    <string name="report_reason_content_spam_abuse">Spam or similar platform abuse</string>
+    <string name="report_reason_content_scams_fraud">Scams or fraud</string>
+    <string name="report_reason_content_malware">Malware or phishing</string>
+    <string name="report_reason_content_harassment">Harassment or cyberbullying</string>
+    <string name="report_reason_content_other">Other</string>
+
+    <string name="report_reason_user_unsolicited_spam">Unsolicited advertising or spam</string>
+    <string name="report_reason_user_spam_abuse">Spam or similar platform abuse</string>
+    <string name="report_reason_user_inappropriate_content">Inappropriate content (like NSFW)</string>
+    <string name="report_reason_user_impersonation">Impersonation</string>
+    <string name="report_reason_user_ban_evasion">Ban evasion</string>
+    <string name="report_reason_user_underage">Not of minimum age to use the platform</string>
+    <string name="report_reason_user_other">Other</string>
+
+    <string name="report_reason_additional">Additional information</string>
+    <string name="report_reason_additional_hint">Any additional information that may help us in our investigation. Optional.</string>
+
+    <string name="report_submit">Submit</string>
+    <string name="report_submitting">Reporting…</string>
+    <string name="report_submit_success">Reported</string>
+
+    <string name="report_submit_thanks">Thank you for helping to keep Stoat safe. We will review your report as soon as possible.</string>
+
+    <string name="report_submit_error_header">Error</string>
+    <string name="report_submit_error">An error occurred while submitting your report. Please try again later.</string>
+
+    <string name="report_submit_close">Close</string>
+
+    <string name="report_block_question">Would you like to block this user?</string>
+    <string name="report_block_yes">Block</string>
+    <string name="report_block_no">Don't block</string>
+
+    <string name="link_type_no_intent">No app found to handle this link</string>
+    <string name="link_open">Open</string>
+
+    <string name="invite_message">You've been invited to join this server. Would you like to join?</string>
+    <string name="invite_join">Join</string>
+    <string name="invite_cancel">Cancel</string>
+    <string name="invite_open_server">Open</string>
+    <string name="invite_already_member">You are already a member of this server.</string>
+    <string name="invite_error_header">There was an error</string>
+    <string name="invite_error_no_invite">No invite code was specified.</string>
+    <string name="invite_error_invalid_invite">Could not find an invite with the specified code.</string>
+    <string name="invite_error_banned">You are banned from this server.</string>
+    <string name="invite_error_unknown">An unknown error occurred.</string>
+
+    <string name="media_viewer_title_image">%1$s</string>
+    <string name="media_viewer_title_video">%1$s</string>
+    <string name="media_viewer_play">Play</string>
+    <string name="media_viewer_pause">Pause</string>
+    <string name="media_viewer_more">More…</string>
+    <string name="media_viewer_save">Save</string>
+    <string name="media_viewer_saved">Saved</string>
+    <string name="media_viewer_save_failed_audio">Failed to save audio</string>
+    <string name="media_viewer_save_failed_video">Failed to save video</string>
+    <string name="media_viewer_save_failed_image">Failed to save image</string>
+    <string name="media_viewer_open">Open</string>
+    <string name="media_viewer_share_url">Share URL</string>
+    <string name="media_viewer_share_audio">Share audio</string>
+    <string name="media_viewer_share_video">Share video</string>
+    <string name="media_viewer_fullscreen">Enter fullscreen</string>
+    <string name="media_viewer_exit_fullscreen">Exit fullscreen</string>
+    <string name="media_viewer_seek_back">Seek backward</string>
+    <string name="media_viewer_seek_forward">Seek forward</string>
+    <string name="media_viewer_playback_error">Couldn't play this video</string>
+    <string name="media_viewer_share_image">Share image</string>
+
+    <string name="colour_picker_mode_sliders">Sliders</string>
+    <string name="colour_picker_mode_palette">Palette</string>
+    <string name="colour_picker_hue">Hue</string>
+    <string name="colour_picker_hue_value_fmt">%1$d°</string>
+    <string name="colour_picker_saturation">Saturation</string>
+    <string name="colour_picker_value">Value</string>
+    <string name="colour_picker_red">Red</string>
+    <string name="colour_picker_green">Green</string>
+    <string name="colour_picker_blue">Blue</string>
+    <string name="colour_picker_hex">Hex</string>
+    <string name="colour_picker_hex_template" translatable="false">#AARRGGBB</string>
+    <string name="colour_picker_hex_use">Use</string>
+    <string name="colour_picker_alpha">Alpha</string>
+    <string name="colour_picker_preview">Preview</string>
+    <string name="colour_picker_use_default">Use Default</string>
+    <string name="colour_picker_cancel">Cancel</string>
+    <string name="colour_picker_apply">Apply</string>
+
+    <string name="file_picker_chip_photo_picker">Select Photos</string>
+    <string name="file_picker_chip_documents">Files</string>
+    <string name="file_picker_chip_camera">Camera</string>
+    <string name="file_picker_chip_camera_none_installed">No camera app installed</string>
+    <string name="file_picker_chip_camera_failed">Failed to open camera</string>
+
+    <string name="inline_media_picker_current_description">Currently selected media</string>
+    <string name="inline_media_picker_no_media_placeholder">Pick media…</string>
+    <string name="inline_media_picker_remove">Remove</string>
+
+    <string name="corner_radius_picker_sharp">Sharp</string>
+    <string name="corner_radius_picker_rounded">Rounded</string>
+    <string name="corner_radius_picker_circular">Circular</string>
+    <string name="corner_radius_picker_other">Other</string>
+    <string name="corner_radius_picker_choose_radius">Choose radius</string>
+    <string name="corner_radius_picker_choose_radius_yes">Use</string>
+    <string name="corner_radius_picker_choose_radius_cancel">Cancel</string>
+
+    <string name="emoji_picker_close_skin_tone_menu">Close skin tone menu</string>
+    <string name="emoji_picker_skin_tone_none">No skin tone</string>
+    <string name="emoji_picker_skin_tone_fitzpatrick_1_2">Light skin tone</string>
+    <string name="emoji_picker_skin_tone_fitzpatrick_3">Medium-light skin tone</string>
+    <string name="emoji_picker_skin_tone_fitzpatrick_4">Medium skin tone</string>
+    <string name="emoji_picker_skin_tone_fitzpatrick_5">Medium-dark skin tone</string>
+    <string name="emoji_picker_skin_tone_fitzpatrick_6">Dark skin tone</string>
+    <string name="emoji_picker_search_results_header">Search results</string>
+    <string name="emoji_picker_clear_search">Clear search</string>
+
+    <string name="voice_join_offering">Join the voice channel</string>
+    <string name="voice_join_offering_description_zero">Start the call</string>
+    <string name="voice_join_offering_description_one">with %1$s</string>
+    <string name="voice_join_offering_description_other">with %1$d others</string>
+    <string name="voice_join_permission_rationale_heading">We need your permission</string>
+    <string name="voice_join_permission_rationale_description">To join a voice channel, you need to grant the following permissions:</string>
+    <string name="voice_join_permission_rationale_permission_mic">Your microphone, so others can hear you when unmuted</string>
+    <string name="voice_join_permission_rationale_permission_camera">Your camera, so others can see you if you want to share video</string>
+    <string name="voice_join_permission_rationale_assurance">Don't worry, we won't use your microphone or camera without your permission.</string>
+    <string name="voice_join_permission_rationale_cta">Grant permissions</string>
+
+    <string name="voice_error_not_supported">Voice channels are not available at the moment.</string>
+    <string name="voice_error_no_nodes">All voice nodes are unavailable at the moment. Please try again later.</string>
+    <string name="voice_error_generic">An error occurred. Please try again later.</string>
+
+    <string name="voice_muted">Muted</string>
+    <string name="voice_deafened">Deafened</string>
+    <string name="voice_screen_sharing">Sharing their screen</string>
+    <string name="channel_voice_participants_more">and %1$d more</string>
+    <string name="voice_camera_on">Camera on</string>
+
+    <string name="voice_action_disconnect">Disconnect</string>
+
+    <string name="voice_action_mute">Mute</string>
+    <string name="voice_action_unmute">Unmute</string>
+    <string name="voice_action_deafen">Deafen</string>
+    <string name="voice_action_undeafen">Undeafen</string>
+    <string name="voice_action_video">Video</string>
+    <string name="voice_action_screen_share">Share screen</string>
+    <string name="voice_action_flip_camera">Flip camera</string>
+
+    <string name="voice_audio_output">Audio output</string>
+    <string name="voice_audio_output_speaker">Speaker</string>
+    <string name="voice_audio_output_earpiece">Earpiece</string>
+    <string name="voice_audio_output_wired_headset">Wired headset</string>
+
+    <string name="voice_status_connecting">Connecting…</string>
+    <string name="voice_status_reconnecting">Reconnecting…</string>
+    <string name="voice_status_connected">Connected</string>
+    <string name="voice_status_disconnected">No connection</string>
+
+    <string name="voice_notification_ongoing_call">Connected to voice</string>
+    <string name="voice_banner_tap_to_return">Tap to return to the call</string>
+    <string name="voice_start_call">Start a call</string>
+    <string name="voice_notification_fallback_channel_name">Voice channel</string>
+
+    <string name="spark_notifications_rationale">Stay in the loop</string>
+    <string name="spark_notifications_rationale_description">Enable notifications to be kept up to date with messages and mentions.</string>
+    <string name="spark_notifications_rationale_cta">Enable notifications</string>
+    <string name="spark_notifications_rationale_dismiss">Not now</string>
+
+    <string name="spark_keyboard_shortcuts">Using a keyboard?</string>
+    <string name="spark_keyboard_shortcuts_description">Stoat has keyboard shortcuts! Press %1$s to see them.</string>
+    <string name="spark_keyboard_shortcuts_cta">Open shortcuts</string>
+    <string name="spark_keyboard_shortcuts_dismiss">Alright</string>
+
+    <string name="spark_early_access">Welcome to Early Access! 🚀</string>
+    <string name="spark_early_access_description_1">You're one of the first to try out our new Android app. We're excited to have you here!</string>
+    <string name="spark_early_access_description_2">Since this is early access, things might not be perfect just yet. You might run into the occasional bug, crash, or weird quirk. Your feedback helps us smooth out the rough edges and make Stoat even better.</string>
+    <string name="spark_early_access_description_3">We're thrilled to have you on board. Let's make something great together!</string>
+    <string name="spark_early_access_cta">Got it</string>
+
+    <string name="spark_swipe_to_reply">Swipe to Reply is here.</string>
+    <string name="spark_swipe_to_reply_description">Making message threads has never been easier.\nJust swipe to the left on any message.\nReply up to five messages at once.</string>
+    <string name="spark_swipe_to_reply_cta">Got it</string>
+    <string name="spark_swipe_to_reply_customise">Customise Quick Reply</string>
+
+    <string name="hint_provide_feedback">We love feedback!</string>
+    <string name="hint_provide_feedback_description">If you have any feedback, suggestions, or bug reports, please let us know. We're always looking to improve Stoat.</string>
+    <string name="hint_provide_feedback_cta">Rate on Google Play</string>
+    <string name="hint_provide_feedback_join_server">Join Testers Server</string>
+    <string name="hint_provide_feedback_dismiss">Done</string>
+
+    <string name="notice_platform_mod_dm_title">Important notice regarding your account</string>
+    <string name="notice_platform_mod_dm_description">You have received an important notice regarding your account from our moderation team. Please read it carefully.</string>
+    <string name="notice_platform_mod_dm_acknowledge">View</string>
+
+    <string name="settings_category_account">Account</string>
+    <string name="settings_category_general">General</string>
+    <string name="settings_category_miscellaneous">Miscellaneous</string>
+    <string name="settings_category_last" translatable="false">Stoat v%1$s</string>
+
+    <string name="settings_account">Login &amp; Security</string>
+    <string name="settings_account_email">Email</string>
+    <string name="settings_account_email_loading_error">Failed to load email</string>
+    <string name="settings_account_email_edit_alt">Change email</string>
+    <string name="settings_account_email_edit_title">Change your email</string>
+    <string name="settings_account_email_edit_current">Your current email is %1$s.</string>
+    <string name="settings_account_email_edit_message">Please enter your new email address and your current account password.</string>
+    <string name="settings_account_email_edit_new_email">New email address</string>
+    <string name="settings_account_email_edit_password">Current password</string>
+    <string name="settings_account_email_edit_confirm">Change</string>
+    <string name="settings_account_email_edit_cancel">Keep current</string>
+    <string name="settings_account_email_confirm_email">One more thing</string>
+    <string name="settings_account_email_confirm_email_message">We just emailed you to confirm your new email address. Please click the link in that email to complete the change, and then you'll be all set.</string>
+    <string name="settings_account_email_confirm_email_open_mail_app">Open mail app</string>
+    <string name="settings_account_email_confirm_email_dismiss">Got it</string>
+    <string name="settings_account_password">Password</string>
+    <string name="settings_account_password_edit_alt">Change password</string>
+    <string name="settings_account_password_edit_title">Change your password</string>
+    <string name="settings_account_password_edit_message">Please enter your current password and your new password.</string>
+    <string name="settings_account_password_edit_message_hint">Good passwords are at least 10 characters long and include a mix of letters, numbers, and symbols.</string>
+    <string name="settings_account_password_edit_new_password">New password</string>
+    <string name="settings_account_password_edit_current_password">Current password</string>
+    <string name="settings_account_password_edit_confirm">Change</string>
+    <string name="settings_account_password_edit_cancel">Keep current</string>
+    <string name="settings_account_password_change_success">Your password has been changed.</string>
+    <string name="settings_account_mfa">Two-Factor Authentication</string>
+    <string name="settings_account_mfa_warning">You don't have any 2FA methods set up. You should set up 2FA to add an extra layer of security to your account.</string>
+    <string name="settings_account_mfa_totp">Authenticator App</string>
+    <string name="settings_account_mfa_totp_upsell">Protect your account with an 6-digit code from apps like Google Authenticator or Authy.</string>
+    <string name="settings_account_mfa_totp_manage_alt">Manage Authenticator App</string>
+
+    <string name="settings_mfa">Two-Factor Authentication</string>
+    <string name="settings_mfa_status">Two-factor authentication is</string>
+    <string name="settings_mfa_status_enabled">enabled</string>
+    <string name="settings_mfa_status_not_set_up">not set up</string>
+    <string name="settings_mfa_status_not_set_up_description">You don't have any 2FA methods set up. You should set up 2FA to add an extra layer of security to your account.</string>
+    <string name="settings_mfa_totp">Authenticator App</string>
+    <string name="settings_mfa_disable_totp">Disable Authenticator App</string>
+    <string name="settings_mfa_disable_totp_description">Disabling your Authenticator App will remove it as a 2FA method for your account. You will no longer be able to use it to log in.</string>
+    <string name="settings_mfa_disable_totp_cta">Disable</string>
+    <string name="settings_mfa_enable_totp_description">Protect your account with 6-digit codes from apps like Google Authenticator, Aegis, or Authy.</string>
+    <string name="settings_mfa_enable_totp_cta">Set up</string>
+    <string name="settings_mfa_totp_setup_title">Set up your authenticator app</string>
+    <string name="settings_mfa_totp_setup_scan">Scan this QR code with your authenticator app.</string>
+    <string name="settings_mfa_totp_setup_manual">Or enter this key manually:</string>
+    <string name="settings_mfa_totp_setup_copy_secret">Copy key</string>
+    <string name="settings_mfa_totp_setup_code_lead">Then enter the 6-digit code the app shows:</string>
+    <string name="settings_mfa_totp_setup_code_label">6-digit code</string>
+    <string name="settings_mfa_totp_setup_verify">Verify and enable</string>
+    <string name="settings_mfa_totp_enabled_snackbar">Authenticator app enabled</string>
+    <string name="settings_mfa_totp_disabled_snackbar">Authenticator app disabled</string>
+    <string name="settings_mfa_recovery">Recovery Codes</string>
+    <string name="settings_mfa_recovery_description_active">Recovery codes let you regain access to your account if you lose your other 2FA methods. Keep them somewhere safe.</string>
+    <string name="settings_mfa_recovery_description_inactive">You don't have recovery codes yet. Generate them so you can regain access to your account if you lose your authenticator.</string>
+    <string name="settings_mfa_recovery_view_cta">View codes</string>
+    <string name="settings_mfa_recovery_regenerate_cta">Regenerate</string>
+    <string name="settings_mfa_recovery_generate_cta">Generate codes</string>
+    <string name="settings_mfa_recovery_dialog_title">Your recovery codes</string>
+    <string name="settings_mfa_recovery_dialog_hint">Each code can be used once. Store them somewhere safe — anyone with these codes can access your account.</string>
+    <string name="settings_mfa_recovery_copy">Copy all</string>
+    <string name="settings_mfa_recovery_dialog_done">Done</string>
+    <string name="settings_mfa_security_keys">Security Keys</string>
+    <string name="settings_mfa_security_keys_web_manage_description">You have security keys enabled on your account. You can view, add, and remove security keys your security keys from your account settings in a web browser.</string>
+    <string name="settings_mfa_security_keys_web_manage_cta">Open browser</string>
+
+    <string name="settings_profile">Profile</string>
+    <string name="settings_profile_profile_picture">Profile picture</string>
+    <string name="settings_profile_custom_background">Custom background</string>
+    <string name="settings_profile_display_name">Display name</string>
+    <string name="settings_profile_pronouns">Pronouns</string>
+    <string name="settings_profile_save">Save</string>
+
+    <string name="settings_sessions">Sessions</string>
+    <string name="settings_sessions_this_device">This Device</string>
+    <string name="settings_sessions_this_device_unavailable">The session of this device is unavailable. Please **log in again** to view your current session.</string>
+    <string name="settings_sessions_other_sessions">Other Active Sessions</string>
+    <string name="settings_sessions_first_seen">First seen %1$s</string>
+    <string name="settings_sessions_log_out_other">Log out other sessions</string>
+    <string name="settings_sessions_log_out_other_description">This device will stay logged in.</string>
+    <string name="settings_sessions_log_out_other_confirm">Log out all other sessions?</string>
+    <string name="settings_sessions_log_out_other_confirm_yes">Log out</string>
+    <string name="settings_sessions_log_out_other_confirm_no">Keep logged in</string>
+
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_appearance_theme">Theme</string>
+    <string name="settings_appearance_theme_none">System</string>
+    <string name="settings_appearance_theme_default">Stoat</string>
+    <string name="settings_appearance_theme_light">Light</string>
+    <string name="settings_appearance_theme_amoled">Pure Black</string>
+    <string name="settings_appearance_theme_m3dynamic">Material You</string>
+    <string name="settings_appearance_theme_m3dynamic_unsupported">Material You (unsupported)</string>
+    <string name="settings_appearance_theme_m3dynamic_unsupported_toast">Material You is not supported on this device.</string>
+    <string name="settings_appearance_typeface">Font</string>
+    <string name="settings_appearance_typeface_default">Default</string>
+    <string name="settings_appearance_typeface_google_sans_flex" translatable="false">Google Sans Flex</string>
+    <string name="settings_appearance_visual_effects">Visual Effects</string>
+    <string name="settings_appearance_message_composer_blur">Blur effects in chat</string>
+
+    <string name="settings_appearance_avatar_shape">Profile Picture Shape</string>
+    <string name="settings_appearance_avatar_shape_description">Choose the rounding grade for profile pictures, including in chat and profiles. This applies to all users.</string>
+
+    <string name="settings_appearance_colour_overrides">Colour overrides</string>
+    <string name="settings_appearance_colour_overrides_primary">Primary</string>
+    <string name="settings_appearance_colour_overrides_on_primary">On Primary</string>
+    <string name="settings_appearance_colour_overrides_primary_container">Primary Container</string>
+    <string name="settings_appearance_colour_overrides_on_primary_container">On Primary Container</string>
+    <string name="settings_appearance_colour_overrides_inverse_primary">Inverse Primary</string>
+    <string name="settings_appearance_colour_overrides_secondary">Secondary</string>
+    <string name="settings_appearance_colour_overrides_on_secondary">On Secondary</string>
+    <string name="settings_appearance_colour_overrides_secondary_container">Secondary Container</string>
+    <string name="settings_appearance_colour_overrides_on_secondary_container">On Secondary Container</string>
+    <string name="settings_appearance_colour_overrides_tertiary">Tertiary</string>
+    <string name="settings_appearance_colour_overrides_on_tertiary">On Tertiary</string>
+    <string name="settings_appearance_colour_overrides_tertiary_container">Tertiary Container</string>
+    <string name="settings_appearance_colour_overrides_on_tertiary_container">On Tertiary Container</string>
+    <string name="settings_appearance_colour_overrides_background">Background</string>
+    <string name="settings_appearance_colour_overrides_on_background">On Background</string>
+    <string name="settings_appearance_colour_overrides_surface">Surface</string>
+    <string name="settings_appearance_colour_overrides_on_surface">On Surface</string>
+    <string name="settings_appearance_colour_overrides_surface_variant">Surface Variant</string>
+    <string name="settings_appearance_colour_overrides_on_surface_variant">On Surface Variant</string>
+    <string name="settings_appearance_colour_overrides_surface_tint">Surface Tint</string>
+    <string name="settings_appearance_colour_overrides_inverse_surface">Inverse Surface</string>
+    <string name="settings_appearance_colour_overrides_inverse_on_surface">Inverse On Surface</string>
+    <string name="settings_appearance_colour_overrides_error">Error</string>
+    <string name="settings_appearance_colour_overrides_on_error">On Error</string>
+    <string name="settings_appearance_colour_overrides_error_container">Error Container</string>
+    <string name="settings_appearance_colour_overrides_on_error_container">On Error Container</string>
+    <string name="settings_appearance_colour_overrides_outline">Outline</string>
+    <string name="settings_appearance_colour_overrides_outline_variant">Outline Variant</string>
+    <string name="settings_appearance_colour_overrides_scrim">Scrim</string>
+    <string name="settings_appearance_colour_overrides_export">Export</string>
+    <string name="settings_appearance_colour_overrides_import">Import</string>
+    <string name="settings_appearance_colour_overrides_import_error">This file is not a valid colour override file.</string>
+
+    <string name="settings_chat">Chat</string>
+    <string name="settings_chat_quick_reply">Quick Reply</string>
+    <string name="settings_chat_quick_reply_none">No Quick Reply</string>
+    <string name="settings_chat_quick_reply_none_description">You can reply from any message's menu.</string>
+    <string name="settings_chat_quick_reply_swipe_from_end">Swipe to reply</string>
+    <string name="settings_chat_quick_reply_double_tap">Double tap to reply</string>
+    <string name="settings_chat_interactive_embeds">Interactive Embeds</string>
+    <string name="settings_chat_interactive_embeds_description">Interactive Embeds allow you to interact with some types of links directly inside chat. For example, you can play YouTube videos or preview albums from Apple Music.</string>
+    <string name="settings_chat_interactive_embeds_youtube">YouTube</string>
+    <string name="settings_chat_interactive_embeds_apple_music">Apple Music</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys">Hint</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_description">Some of your Stoat settings are corrupted. This may be due to the use of third-party clients. The affected settings are:</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Notifications</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Server Ordering</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Stoat for Android</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_release_notes">Release Notes</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_server_folders">Server Folders</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_unknown">%1$s (unknown)</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Reset %1$s settings</string>
+
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_push">Push Notifications</string>
+    <string name="settings_notifications_push_description">Receive notifications for new messages, mentions, and other updates, even when you're not actively using the app.</string>
+    <string name="settings_notifications_system">System Settings</string>
+    <string name="settings_notifications_system_description">Manage notification permissions and preferences from your device's system settings.</string>
+
+    <string name="settings_feedback">Feedback</string>
+    <string name="settings_feedback_description">Join the Stoat server to give feedback or suggestions and report bugs.</string>
+
+    <string name="settings_changelog">What's New</string>
+
+    <string name="settings_language">Language</string>
+    <string name="settings_language_auto">System default</string>
+
+    <string name="channel_settings">Channel Settings</string>
+    <string name="channel_settings_header">#%1$s</string>
+    <string name="channel_settings_overview">Overview</string>
+    <string name="channel_settings_overview_update_info_error_fallback">There was an error updating the channel.</string>
+    <string name="channel_settings_overview_info">Channel Info</string>
+    <string name="channel_settings_overview_name">Channel Name</string>
+    <string name="channel_settings_overview_description">Channel Description</string>
+    <string name="channel_settings_overview_description_hint">This channel is exclusively for conversation about…</string>
+    <string name="channel_settings_overview_nsfw">Mark as NSFW</string>
+    <string name="channel_settings_overview_nsfw_description">Users are asked to confirm their age before joining NSFW channels.</string>
+    <string name="channel_settings_overview_nsfw_confirm_title">Mark this channel as NSFW?</string>
+    <string name="channel_settings_overview_nsfw_confirm_description">Users will be asked to confirm their age before joining this channel.</string>
+    <string name="channel_settings_overview_nsfw_confirm_yes">Mark as NSFW</string>
+    <string name="channel_settings_overview_nsfw_confirm_no">Keep as is</string>
+    <string name="channel_settings_overview_nsfw_undo_confirm_title">Unmark this channel as NSFW?</string>
+    <string name="channel_settings_overview_nsfw_undo_confirm_description">Users will no longer be asked to confirm their age before joining this channel. Please ensure the content is appropriate for all ages.</string>
+    <string name="channel_settings_overview_nsfw_undo_confirm_yes">Unmark as NSFW</string>
+    <string name="channel_settings_overview_nsfw_undo_confirm_no">Keep as is</string>
+    <string name="channel_settings_overview_save">Save</string>
+    <string name="channel_settings_permissions">Permissions</string>
+    <string name="channel_settings_permissions_description">Choose a role to configure its permissions in this channel.</string>
+    <string name="channel_settings_permissions_everyone_description">Permissions available without any role</string>
+    <string name="channel_settings_permissions_role_description">Choose whether this channel allows, inherits, or denies each permission.</string>
+    <string name="channel_settings_permissions_permission">You need permission to manage permissions to change these values.</string>
+    <string name="channel_settings_permissions_save">Save permissions</string>
+    <string name="channel_settings_permissions_saved">Channel permissions saved.</string>
+    <string name="channel_settings_permissions_update_error">There was an error updating channel permissions.</string>
+    <string name="channel_settings_permissions_discard_title">Discard permission changes?</string>
+    <string name="channel_settings_permissions_discard_description">Your unsaved channel permission changes will be lost.</string>
+    <string name="channel_settings_permissions_not_applied">Permissions not applied</string>
+    <string name="channel_settings_permissions_not_applied_description">You cannot apply this permission override, because you would lose the following permissions in this channel:</string>
+    <string name="channel_settings_delete">Delete Channel</string>
+    <string name="channel_settings_delete_confirm">Are you sure you want to delete this channel?</string>
+    <string name="channel_settings_delete_confirm_description">All messages and settings for this channel will be gone forever (a long time!)</string>
+    <string name="channel_settings_delete_confirm_yes">Delete</string>
+    <string name="channel_settings_delete_confirm_no">Keep</string>
+
+    <string name="share_target_heading">Share to Stoat</string>
+    <string name="share_target_login_first">Please log in before sharing to Stoat.</string>
+    <string name="share_target_invalid_intent">This is not a valid share intent.</string>
+    <string name="share_target_attachment_too_large">This attachment is too large for Stoat (max. $1$s).</string>
+    <string name="share_target_search_channels">Search channels</string>
+    <string name="share_target_select_channel">Select a channel to share to.</string>
+
+    <string name="notification_channel_group_conversations">Conversations</string>
+    <string name="notification_channel_group_social">Friends and Social</string>
+    <string name="notification_channel_friend_requests">Friend Requests</string>
+    <string name="notification_channel_friend_requests_description">Incoming friend requests, as well as accepted requests you've sent.</string>
+    <string name="notification_channel_messages">Messages</string>
+    <string name="notification_channel_messages_description">Unread messages from your conversations and channels.</string>
+    <string name="notification_channel_group_voice">Voice</string>
+    <string name="notification_channel_ongoing_call">Ongoing calls</string>
+    <string name="notification_channel_ongoing_call_description">Shown persistently while you are connected to a voice channel.</string>
+
+    <string name="keyboard_shortcut_messaging">Messaging</string>
+    <string name="keyboard_shortcut_messaging_new_line">New Line</string>
+    <string name="keyboard_shortcut_messaging_send_message">Send Message</string>
+
+    <string name="geogate_header">Not available in your region</string>
+    <string name="geogate_channel_icon_alt">Unavailable channel</string>
+    <string name="geogate_description">Stoat may block content in certain jurisdictions in response to legislation or legal notices</string>
+    <string name="geogate_description_variant_osa_uk_25" translatable="false">This channel is not available in your region while we review options on legal compliance.</string>
+    <string name="geogate_acknowledge">Acknowledge</string>
+
+    <string name="changelog_header">What's new</string>
+    <string name="changelog_load_error">There was an error loading the changelog.</string>
+    <string name="changelog_retry">Retry</string>
+
+    <string name="server_identity">Server identity</string>
+    <string name="server_identity_edit_member">Edit server identity</string>
+    <string name="server_identity_title">Identity in %1$s</string>
+    <string name="server_identity_member_title">Edit %1$s in %2$s</string>
+    <string name="server_identity_preview_description">This is how you'll appear in this server.</string>
+    <string name="server_identity_preview_description_member">This is how this member appears in the server.</string>
+    <string name="server_identity_avatar">Server avatar</string>
+    <string name="server_identity_avatar_inherited">Using your account avatar</string>
+    <string name="server_identity_avatar_inherited_member">Using their account avatar</string>
+    <string name="server_identity_avatar_custom">Your custom avatar for this server</string>
+    <string name="server_identity_avatar_custom_member">Their custom avatar for this server</string>
+    <string name="server_identity_nickname">Nickname</string>
+    <string name="server_identity_nickname_placeholder">Use your display name</string>
+    <string name="server_identity_nickname_placeholder_member">Use their display name</string>
+    <string name="server_identity_pronouns">Pronouns</string>
+    <string name="server_identity_pronouns_placeholder">Optional</string>
+    <string name="server_identity_permission_nickname">You don't have permission to change your nickname in this server.</string>
+    <string name="server_identity_permission_nickname_member">You don't have permission to change this member's nickname.</string>
+    <string name="server_identity_permission_avatar">You don't have permission to change your avatar in this server.</string>
+    <string name="server_identity_permission_avatar_member">You don't have permission to remove this member's server avatar.</string>
+    <string name="server_identity_permission_pronouns">Only members can change their own server pronouns.</string>
+    <string name="server_identity_save">Save identity</string>
+    <string name="server_identity_saved">Server identity saved.</string>
+    <string name="server_identity_update_error">There was an error updating the server identity.</string>
+    <string name="server_identity_load_error">There was an error loading the server identity.</string>
+    <string name="server_identity_retry">Retry</string>
+    <string name="server_identity_file_error">The selected image could not be read.</string>
+    <string name="server_identity_discard_title">Discard identity changes?</string>
+    <string name="server_identity_discard_description">Your unsaved identity changes will be lost.</string>
+    <string name="server_identity_discard">Discard</string>
+    <string name="server_identity_keep_editing">Keep editing</string>
+
+    <string name="server_settings">Server Settings</string>
+    <string name="server_settings_overview">Overview</string>
+    <string name="server_settings_channels">Channels</string>
+    <string name="server_settings_category_customisation">Customisation</string>
+    <string name="server_settings_emojis">Emojis</string>
+    <string name="server_settings_category_user_management">User Management</string>
+    <string name="server_settings_members">Members</string>
+    <string name="server_settings_roles">Roles</string>
+    <string name="server_settings_invites">Invites</string>
+    <string name="server_settings_bans">Bans</string>
+    <string name="server_settings_delete">Delete Server</string>
+    <string name="server_settings_delete_confirm">Delete %1$s?</string>
+    <string name="server_settings_delete_confirm_description">Once it's deleted, there's no going back.</string>
+    <string name="server_settings_delete_confirm_yes">Delete</string>
+    <string name="server_settings_delete_cancel">Cancel</string>
+    <string name="server_settings_delete_error">There was an error deleting the server.</string>
+
+    <string name="server_settings_channels_add_title">Add to server</string>
+    <string name="server_settings_channels_create_channel">Create channel</string>
+    <string name="server_settings_channels_create_channel_description">Start a new text or voice channel.</string>
+    <string name="server_settings_channels_create_category">Create category</string>
+    <string name="server_settings_channels_create_category_description">Group related channels together.</string>
+    <string name="server_settings_channels_create">Create</string>
+    <string name="server_settings_channels_channel_name">Channel name</string>
+    <string name="server_settings_channels_category_name">Category name</string>
+    <string name="server_settings_channels_category">Category</string>
+    <string name="server_settings_channels_new_text_channel">New text channel</string>
+    <string name="server_settings_channels_new_voice_channel">New voice channel</string>
+    <string name="server_settings_channels_text_description">Share messages, media, and files.</string>
+    <string name="server_settings_channels_voice_description">Talk together in a voice channel.</string>
+    <string name="server_settings_channels_text_channel">Text channel</string>
+    <string name="server_settings_channels_voice_channel">Voice channel</string>
+    <string name="server_settings_channels_uncategorised">Uncategorised</string>
+    <string name="server_settings_channels_category_actions">Category actions</string>
+    <string name="server_settings_channels_rename_category">Rename category</string>
+    <string name="server_settings_channels_rename">Rename</string>
+    <string name="server_settings_channels_delete_category">Delete category</string>
+    <string name="server_settings_channels_delete_category_title">Delete %1$s?</string>
+    <string name="server_settings_channels_delete_category_description">The category will be removed. Its channels will become uncategorised.</string>
+    <string name="server_settings_channels_delete">Delete</string>
+    <string name="server_settings_channels_reorder_channel">Reorder channel</string>
+    <string name="server_settings_channels_reorder_category">Reorder category</string>
+    <string name="server_settings_channels_move_channel_up">Move channel up</string>
+    <string name="server_settings_channels_move_channel_down">Move channel down</string>
+    <string name="server_settings_channels_move_category_up">Move category up</string>
+    <string name="server_settings_channels_move_category_down">Move category down</string>
+    <string name="server_settings_channels_reordered">Channel layout saved.</string>
+    <string name="server_settings_channels_undo">Undo</string>
+    <string name="server_settings_channels_create_error">There was an error creating the channel.</string>
+    <string name="server_settings_channels_update_error">There was an error updating the channel layout.</string>
+    <string name="server_settings_channels_reorder_error">There was an error saving the channel order.</string>
+    <string name="server_settings_channels_empty_title">No channels</string>
+    <string name="server_settings_channels_empty_description">Channels created for this server will appear here.</string>
+    <plurals name="server_settings_channels_count">
+        <item quantity="one">%1$d server channel</item>
+        <item quantity="other">%1$d server channels</item>
+    </plurals>
+    <plurals name="server_settings_channels_category_count">
+        <item quantity="one">%1$d channel</item>
+        <item quantity="other">%1$d channels</item>
+    </plurals>
+
+    <string name="server_settings_overview_server_icon">Server Icon</string>
+    <string name="server_settings_overview_server_banner">Server Banner</string>
+    <string name="server_settings_overview_server_name">Server Name</string>
+    <string name="server_settings_overview_server_description">Server Description</string>
+    <string name="server_settings_overview_description_hint">This server is about…</string>
+    <string name="server_settings_overview_system_messages">System message channels</string>
+    <string name="server_settings_overview_user_joined">User Joined</string>
+    <string name="server_settings_overview_user_left">User Left</string>
+    <string name="server_settings_overview_user_kicked">User Kicked</string>
+    <string name="server_settings_overview_user_banned">User Banned</string>
+    <string name="server_settings_overview_disabled">Disabled</string>
+    <string name="server_settings_overview_save">Save</string>
+    <string name="server_settings_overview_saved">Server settings saved.</string>
+    <string name="server_settings_overview_discard_title">Discard unsaved changes?</string>
+    <string name="server_settings_overview_discard_description">Your changes to this server will be lost.</string>
+    <string name="server_settings_overview_discard">Discard</string>
+    <string name="server_settings_overview_keep_editing">Keep editing</string>
+    <string name="server_settings_overview_update_error">There was an error updating the server.</string>
+    <string name="server_settings_overview_file_error">The selected image could not be read.</string>
+
+    <string name="member_moderation_timeout">Timeout</string>
+    <string name="member_moderation_kick">Kick</string>
+    <string name="member_moderation_ban">Ban</string>
+    <string name="member_moderation_timeout_member">Timeout member</string>
+    <string name="member_moderation_timeout_description">Temporarily prevent %1$s from interacting in this server.</string>
+    <string name="member_moderation_timeout_length">Timeout length</string>
+    <string name="member_moderation_remove_timeout">Remove current timeout</string>
+    <string name="member_moderation_kick_member">Kick member</string>
+    <string name="member_moderation_kick_description">Remove %1$s from this server? They can rejoin with another invite.</string>
+    <string name="member_moderation_ban_member">Ban member</string>
+    <string name="member_moderation_ban_description">Ban %1$s from this server? They will not be able to join again, unless they are unbanned.</string>
+    <string name="member_moderation_reason">Reason (optional)</string>
+    <string name="member_moderation_delete_history">Delete message history</string>
+    <string name="member_moderation_none">None</string>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d minute</item>
+        <item quantity="other">%1$d minutes</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+
+    <string name="server_settings_emojis_create_title">Create emoji</string>
+    <string name="server_settings_emojis_add">Add emoji</string>
+    <string name="server_settings_emojis_name">Emoji Name</string>
+    <string name="server_settings_emojis_saved_as">Will be saved as: %1$s</string>
+    <string name="server_settings_emojis_create">Create</string>
+    <string name="server_settings_emojis_delete">Delete</string>
+    <string name="server_settings_emojis_delete_title">Delete emoji?</string>
+    <string name="server_settings_emojis_delete_description">Delete :%1$s:? This cannot be undone.</string>
+    <string name="server_settings_emojis_created_by">Created by %1$s</string>
+    <string name="server_settings_emojis_choose_image">Choose image</string>
+    <string name="server_settings_emojis_selected_image">Selected emoji image</string>
+    <string name="server_settings_emojis_image_help">Your image will be resized to fit. Animated GIFs must be under %1$s.</string>
+    <string name="server_settings_emojis_slots_remaining">%1$d emoji slots remaining</string>
+    <string name="server_settings_emojis_usage">%1$d of %2$d emoji slots used</string>
+    <string name="server_settings_emojis_count">%1$d server emojis</string>
+    <string name="server_settings_emojis_empty_title">No custom emojis</string>
+    <string name="server_settings_emojis_empty">This server does not have any custom emojis yet.</string>
+    <string name="server_settings_emojis_created">Emoji created.</string>
+    <string name="server_settings_emojis_deleted">Emoji deleted.</string>
+    <string name="server_settings_emojis_create_error">There was an error creating the emoji.</string>
+    <string name="server_settings_emojis_delete_error">There was an error deleting the emoji.</string>
+    <string name="server_settings_emojis_limit_error">This server has reached its emoji limit.</string>
+    <string name="server_settings_emojis_file_error">The selected image could not be read.</string>
+    <string name="server_settings_emojis_processing_error">The selected image could not be resized.</string>
+    <string name="server_settings_emojis_animated_too_large">Animated emojis must be smaller than %1$s.</string>
+    <string name="server_settings_emojis_image_description">Emoji %1$s</string>
+
+    <string name="server_settings_invites_add">Create invite</string>
+    <string name="server_settings_invites_create_title">Create invite</string>
+    <string name="server_settings_invites_choose_channel">Choose the text channel new members will open when they join.</string>
+    <string name="server_settings_invites_created_description">Your invite is ready to share.</string>
+    <string name="server_settings_invites_copy">Copy invite link</string>
+    <string name="server_settings_invites_deleted">Invite deleted.</string>
+    <string name="server_settings_invites_delete">Delete invite</string>
+    <string name="server_settings_invites_delete_title">Delete invite?</string>
+    <string name="server_settings_invites_delete_description">Delete invite %1$s? Anyone with this link will no longer be able to join, unless they have another invite.</string>
+    <string name="server_settings_invites_delete_yes_delete">Delete</string>
+    <string name="server_settings_invites_delete_no_keep">Keep</string>
+    <string name="server_settings_invites_created_by_in_channel">Created by %1$s for %2$s</string>
+    <string name="server_settings_invites_unknown_user">Unknown user</string>
+    <string name="server_settings_invites_unknown_channel">Unknown channel</string>
+    <string name="server_settings_invites_empty_title">No active invites</string>
+    <string name="server_settings_invites_empty">This server does not have any active invites yet.</string>
+    <string name="server_settings_invites_no_channels">Create a text channel before creating an invite.</string>
+    <string name="server_settings_invites_retry">Retry</string>
+    <string name="server_settings_invites_load_error">There was an error loading the invites.</string>
+    <string name="server_settings_invites_create_error">There was an error creating the invite.</string>
+    <string name="server_settings_invites_delete_error">There was an error deleting the invite.</string>
+    <plurals name="server_settings_invites_count">
+        <item quantity="one">%1$d active invite</item>
+        <item quantity="other">%1$d active invites</item>
+    </plurals>
+
+    <string name="server_settings_bans_empty_title">No banned members</string>
+    <string name="server_settings_bans_empty_description">Members banned from this server will appear here.</string>
+    <string name="server_settings_bans_no_reason">No reason provided</string>
+    <string name="server_settings_bans_details_title">Ban details</string>
+    <string name="server_settings_bans_reason">Reason</string>
+    <string name="server_settings_bans_banned_by">Banned by %1$s</string>
+    <string name="server_settings_bans_retry">Retry</string>
+    <string name="server_settings_bans_load_error">There was an error loading the bans.</string>
+    <string name="server_settings_bans_unban">Unban</string>
+    <string name="server_settings_bans_unban_title">Unban %1$s?</string>
+    <string name="server_settings_bans_unban_description">%1$s will be able to join this server again with an invite.</string>
+    <string name="server_settings_bans_unbanned">Member unbanned.</string>
+    <string name="server_settings_bans_unban_error">There was an error unbanning this member.</string>
+    <plurals name="server_settings_bans_count">
+        <item quantity="one">%1$d banned member</item>
+        <item quantity="other">%1$d banned members</item>
+    </plurals>
+
+    <string name="server_settings_roles_create">Create role</string>
+    <string name="server_settings_roles_create_action">Create</string>
+    <string name="server_settings_roles_name">Role name</string>
+    <string name="server_settings_roles_everyone">Everyone</string>
+    <string name="server_settings_roles_everyone_description">Permissions available to every member without a role.</string>
+    <string name="server_settings_roles_above_you">This role is your highest role or above it.</string>
+    <string name="server_settings_roles_move_up">Move role up</string>
+    <string name="server_settings_roles_move_down">Move role down</string>
+    <string name="server_settings_roles_reorder">Reorder role</string>
+    <string name="server_settings_roles_reordered">Role order saved.</string>
+    <string name="server_settings_roles_undo">Undo</string>
+    <string name="server_settings_roles_create_error">There was an error creating the role.</string>
+    <string name="server_settings_roles_reorder_error">There was an error changing the role order.</string>
+    <string name="server_settings_roles_empty_title">No server roles</string>
+    <string name="server_settings_roles_empty_description">Roles created for this server will appear here.</string>
+    <plurals name="server_settings_roles_count">
+        <item quantity="one">%1$d server role</item>
+        <item quantity="other">%1$d server roles</item>
+    </plurals>
+
+    <string name="server_settings_role">Role</string>
+    <string name="server_settings_role_appearance">Appearance</string>
+    <string name="server_settings_role_appearance_permission">You need permission to manage roles to change this role’s appearance.</string>
+    <string name="server_settings_role_colour">Role colour</string>
+    <string name="server_settings_role_default_colour">Default</string>
+    <string name="server_settings_role_change_colour">Change colour</string>
+    <string name="server_settings_role_icon">Role icon</string>
+    <string name="server_settings_role_hoist">Show separately</string>
+    <string name="server_settings_role_hoist_description">Display members with this role separately in the member list.</string>
+    <string name="server_settings_role_preview_light">Light</string>
+    <string name="server_settings_role_preview_dark">Dark</string>
+    <string name="server_settings_role_preview_message">Stoat rocks!</string>
+    <string name="server_settings_role_permissions">Permissions</string>
+    <string name="server_settings_role_permissions_description">Choose whether this role allows, inherits, or denies each permission.</string>
+    <string name="server_settings_role_permissions_permission">You need permission to manage permissions to change these values.</string>
+    <string name="server_settings_role_save">Save role</string>
+    <string name="server_settings_role_saved">Role changes saved.</string>
+    <string name="server_settings_role_update_error">There was an error updating this role.</string>
+    <string name="server_settings_role_load_error">There was an error loading this role.</string>
+    <string name="server_settings_role_file_error">The selected role icon could not be read.</string>
+    <string name="server_settings_role_delete">Delete role</string>
+    <string name="server_settings_role_delete_title">Delete %1$s?</string>
+    <string name="server_settings_role_delete_description">Once it’s deleted, there’s no going back.</string>
+    <string name="server_settings_role_delete_error">There was an error deleting this role.</string>
+    <string name="server_settings_role_discard_title">Discard role changes?</string>
+    <string name="server_settings_role_discard_description">Your unsaved role changes will be lost.</string>
+    <string name="server_settings_role_discard">Discard</string>
+    <string name="server_settings_role_keep_editing">Keep editing</string>
+
+    <string name="server_role_permissions_admin">Administration</string>
+    <string name="server_role_permissions_members">Members</string>
+    <string name="server_role_permissions_channels">Channels</string>
+    <string name="server_role_permissions_messaging">Messaging</string>
+    <string name="server_role_permissions_voice">Voice</string>
+    <string name="server_role_permissions_mentions">Mentions</string>
+    <string name="permission_allow">Allow</string>
+    <string name="permission_neutral">Inherit</string>
+    <string name="permission_deny">Deny</string>
+
+    <string name="permission_manage_channels">Manage channels</string>
+    <string name="permission_manage_channels_description">Edit and delete channels.</string>
+    <string name="permission_manage_server">Manage server</string>
+    <string name="permission_manage_server_description">Edit the server’s information and settings.</string>
+    <string name="permission_manage_permissions">Manage permissions</string>
+    <string name="permission_manage_permissions_description">Edit permissions across the server.</string>
+    <string name="permission_manage_roles">Manage roles</string>
+    <string name="permission_manage_roles_description">Create, edit, reorder, and delete server roles.</string>
+    <string name="permission_manage_customisation">Manage customisation</string>
+    <string name="permission_manage_customisation_description">Create and manage server emoji.</string>
+    <string name="permission_kick_members">Kick members</string>
+    <string name="permission_kick_members_description">Remove lower-ranking members from the server.</string>
+    <string name="permission_ban_members">Ban members</string>
+    <string name="permission_ban_members_description">Ban lower-ranking members from the server.</string>
+    <string name="permission_timeout_members">Timeout members</string>
+    <string name="permission_timeout_members_description">Temporarily prevent lower-ranking members from interacting.</string>
+    <string name="permission_assign_roles">Assign roles</string>
+    <string name="permission_assign_roles_description">Assign lower roles to lower-ranking members.</string>
+    <string name="permission_change_nickname">Change nickname</string>
+    <string name="permission_change_nickname_description">Change their own server nickname.</string>
+    <string name="permission_manage_nicknames">Manage nicknames</string>
+    <string name="permission_manage_nicknames_description">Change other members’ server nicknames.</string>
+    <string name="permission_change_avatar">Change avatar</string>
+    <string name="permission_change_avatar_description">Change their own server avatar.</string>
+    <string name="permission_remove_avatars">Remove avatars</string>
+    <string name="permission_remove_avatars_description">Remove other members’ server avatars.</string>
+    <string name="permission_view_channels">View channels</string>
+    <string name="permission_view_channels_description">Access channels on this server.</string>
+    <string name="permission_read_history">Read message history</string>
+    <string name="permission_read_history_description">Read past messages in channels.</string>
+    <string name="permission_send_messages">Send messages</string>
+    <string name="permission_send_messages_description">Send messages in channels.</string>
+    <string name="permission_manage_messages">Manage messages</string>
+    <string name="permission_manage_messages_description">Delete and pin messages from other members.</string>
+    <string name="permission_manage_webhooks">Manage webhooks</string>
+    <string name="permission_manage_webhooks_description">Create and edit webhooks.</string>
+    <string name="permission_invite_others">Invite others</string>
+    <string name="permission_invite_others_description">Create invites for other people to use.</string>
+    <string name="permission_send_embeds">Send embeds</string>
+    <string name="permission_send_embeds_description">Send embedded links and custom embeds.</string>
+    <string name="permission_upload_files">Upload files</string>
+    <string name="permission_upload_files_description">Send attachments in chat.</string>
+    <string name="permission_masquerade">Masquerade</string>
+    <string name="permission_masquerade_description">Change name and avatar for individual messages.</string>
+    <string name="permission_react">React</string>
+    <string name="permission_react_description">React to messages with emoji.</string>
+    <string name="permission_bypass_slowmode">Bypass slowmode</string>
+    <string name="permission_bypass_slowmode_description">Send messages without waiting for slowmode.</string>
+    <string name="permission_connect">Connect</string>
+    <string name="permission_connect_description">Connect to voice channels.</string>
+    <string name="permission_speak">Speak</string>
+    <string name="permission_speak_description">Speak in voice calls.</string>
+    <string name="permission_video">Video</string>
+    <string name="permission_video_description">Share camera or screen in voice calls.</string>
+    <string name="permission_mute_members">Mute members</string>
+    <string name="permission_mute_members_description">Mute lower-ranking members in voice calls.</string>
+    <string name="permission_deafen_members">Deafen members</string>
+    <string name="permission_deafen_members_description">Deafen lower-ranking members in voice calls.</string>
+    <string name="permission_move_members">Move members</string>
+    <string name="permission_move_members_description">Move members between voice channels.</string>
+    <string name="permission_listen">Listen</string>
+    <string name="permission_listen_description">Hear people and see their video in voice calls.</string>
+    <string name="permission_mention_everyone">Mention everyone</string>
+    <string name="permission_mention_everyone_description">Mention everyone and online members.</string>
+    <string name="permission_mention_roles">Mention roles</string>
+    <string name="permission_mention_roles_description">Mention specific server roles.</string>
+    
+    <string name="server_folder_unnamed">Folder</string>
+    <string name="server_folder_default_name">New Folder</string>
+    <string name="server_context_sheet_open">Open server actions</string>
+    <string name="server_folder_sheet_open">Open folder actions</string>
+    <string name="server_folder_sheet_rename">Rename folder</string>
+    <string name="server_folder_sheet_colour">Change colour</string>
+    <string name="server_folder_sheet_delete">Delete folder</string>
+    <string name="server_folder_edit_name">Name</string>
+    <string name="server_folder_edit_save">Save</string>
+    <string name="server_context_sheet_actions_add_to_folder">Add to folder</string>
+    <string name="server_context_sheet_actions_new_folder">New folder</string>
+    <string name="server_context_sheet_actions_remove_from_folder">Remove from folder</string>
+</resources>

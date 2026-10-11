@@ -19,14 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.SpecialUsers
 import chat.stoat.api.routes.channel.fetchSingleMessage
@@ -34,8 +32,13 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.reply_message_empty_has_attachments
+import chat.stoat.shared.resources.reply_message_not_cached
+import chat.stoat.shared.resources.unknown
 import chat.stoat.ui.colour.solidColor
 import chat.stoat.ui.theme.TeamMemberFlairs
+import org.jetbrains.compose.resources.stringResource
 import java.util.concurrent.CancellationException
 
 @Composable
@@ -51,7 +54,7 @@ fun InReplyTo(
 
     val username = message?.let { authorName(it) }
         ?: author?.let { User.resolveDefaultName(it) }
-        ?: stringResource(id = R.string.unknown)
+        ?: stringResource(Res.string.unknown)
 
     val contentColor = LocalContentColor.current
     val usernameColor =
@@ -100,7 +103,7 @@ fun InReplyTo(
                             username
                         }
                     } else {
-                        stringResource(id = R.string.unknown)
+                        stringResource(Res.string.unknown)
                     },
                     style = LocalTextStyle.current.copy(
                         fontWeight = FontWeight.Bold,
@@ -139,7 +142,7 @@ fun InReplyTo(
 
                 if (message.content.isNullOrBlank()) {
                     Text(
-                        text = stringResource(id = R.string.reply_message_empty_has_attachments),
+                        text = stringResource(Res.string.reply_message_empty_has_attachments),
                         fontSize = 12.sp,
                         color = contentColor.copy(alpha = 0.7f),
                         maxLines = 1,
@@ -156,7 +159,7 @@ fun InReplyTo(
                 }
             } else {
                 Text(
-                    text = stringResource(id = R.string.reply_message_not_cached),
+                    text = stringResource(Res.string.reply_message_not_cached),
                     fontStyle = FontStyle.Italic, // inter _still_ doesn't have italics...
                     color = contentColor.copy(alpha = 0.7f),
                     fontFamily = FontFamily.Default, // ...so we use the default font

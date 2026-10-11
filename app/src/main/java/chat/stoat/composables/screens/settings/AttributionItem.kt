@@ -10,10 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import chat.stoat.R
 import chat.stoat.screens.about.Library
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.oss_attribution_open_library_website
+import chat.stoat.shared.resources.oss_attribution_tap_to_view_license
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AttributionItem(library: Library, onClick: () -> Unit) {
@@ -22,7 +25,7 @@ fun AttributionItem(library: Library, onClick: () -> Unit) {
     ListItem(
         supportingContent = {
             Text(
-                text = stringResource(id = R.string.oss_attribution_tap_to_view_license)
+                text = stringResource(Res.string.oss_attribution_tap_to_view_license)
             )
         },
         trailingContent = {
@@ -35,7 +38,7 @@ fun AttributionItem(library: Library, onClick: () -> Unit) {
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_open_in_new_24dp),
-                        contentDescription = stringResource(id = R.string.oss_attribution_open_library_website)
+                        contentDescription = stringResource(Res.string.oss_attribution_open_library_website)
                     )
                 }
             }

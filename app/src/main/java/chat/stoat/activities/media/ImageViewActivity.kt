@@ -36,7 +36,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.stoat.R
@@ -47,6 +46,15 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.providers.getAttachmentContentUri
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.media_viewer_open
+import chat.stoat.shared.resources.media_viewer_save
+import chat.stoat.shared.resources.media_viewer_saved
+import chat.stoat.shared.resources.media_viewer_share_image
+import chat.stoat.shared.resources.media_viewer_share_url
+import chat.stoat.shared.resources.media_viewer_title_image
+import chat.stoat.shared.resources.share
 import chat.stoat.ui.theme.StoatTheme
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
@@ -55,6 +63,8 @@ import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.glide.ZoomableGlideImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 class ImageViewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -161,8 +171,8 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                     }
 
                     val snackbar = snackbarHostState.showSnackbar(
-                        message = context.getString(R.string.media_viewer_saved),
-                        actionLabel = context.getString(R.string.media_viewer_open),
+                        message = getString(Res.string.media_viewer_saved),
+                        actionLabel = getString(Res.string.media_viewer_open),
                         duration = SnackbarDuration.Short
                     )
 
@@ -188,7 +198,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                     title = {
                         Text(
                             text = stringResource(
-                                id = R.string.media_viewer_title_image,
+                                Res.string.media_viewer_title_image,
                                 resource.filename ?: resource.id!!
                             ),
                             maxLines = 1,
@@ -201,7 +211,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_arrow_back_24dp),
-                                contentDescription = stringResource(id = R.string.back)
+                                contentDescription = stringResource(Res.string.back)
                             )
                         }
                     },
@@ -211,7 +221,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                         }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_ios_share_24dp),
-                                contentDescription = stringResource(id = R.string.share)
+                                contentDescription = stringResource(Res.string.share)
                             )
                         }
 
@@ -227,7 +237,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                                 },
                                 text = {
                                     Text(
-                                        stringResource(id = R.string.media_viewer_share_url)
+                                        stringResource(Res.string.media_viewer_share_url)
                                     )
                                 }
                             )
@@ -238,7 +248,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                                 text = {
                                     Text(
                                         stringResource(
-                                            id = R.string.media_viewer_share_image
+                                            Res.string.media_viewer_share_image
                                         )
                                     )
                                 }
@@ -251,7 +261,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_download_24dp),
                                 contentDescription = stringResource(
-                                    id = R.string.media_viewer_save
+                                    Res.string.media_viewer_save
                                 )
                             )
                         }

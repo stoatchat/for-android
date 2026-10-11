@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,6 +48,12 @@ import chat.stoat.composables.chat.authorColour
 import chat.stoat.composables.chat.authorName
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.schemas.Message
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.remove_reply_alt
+import chat.stoat.shared.resources.reply_mention_off
+import chat.stoat.shared.resources.reply_mention_on
+import chat.stoat.shared.resources.reply_message_empty_has_attachments
+import org.jetbrains.compose.resources.stringResource
 
 private class AnimatedReply(
     reply: SendMessageReply,
@@ -63,7 +68,7 @@ private class AnimatedReply(
 @Composable
 fun replyContentText(message: Message): String {
     return if (message.content.isNullOrBlank()) {
-        stringResource(id = R.string.reply_message_empty_has_attachments)
+        stringResource(Res.string.reply_message_empty_has_attachments)
     } else {
         message.content!!
     }
@@ -95,7 +100,7 @@ fun ManageableReply(
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_close_24dp),
-            contentDescription = stringResource(id = R.string.remove_reply_alt),
+            contentDescription = stringResource(Res.string.remove_reply_alt),
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)
                 .clickable {
@@ -143,9 +148,9 @@ fun ManageableReply(
 
         Text(
             text = if (reply.mention) {
-                stringResource(id = R.string.reply_mention_on)
+                stringResource(Res.string.reply_mention_on)
             } else {
-                stringResource(id = R.string.reply_mention_off)
+                stringResource(Res.string.reply_mention_off)
             },
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)

@@ -26,7 +26,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,7 +37,12 @@ import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_MARKETING
 import chat.stoat.api.settings.Theme
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.community_guidelines
+import chat.stoat.shared.resources.privacy_policy
+import chat.stoat.shared.resources.terms_of_service
 import com.chuckerteam.chucker.api.Chucker
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InitScreen(
@@ -155,15 +159,15 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Weblink(
-            text = stringResource(R.string.terms_of_service),
+            text = stringResource(Res.string.terms_of_service),
             url = "$STOAT_MARKETING/terms"
         )
         Weblink(
-            text = stringResource(R.string.privacy_policy),
+            text = stringResource(Res.string.privacy_policy),
             url = "$STOAT_MARKETING/privacy"
         )
         Weblink(
-            text = stringResource(R.string.community_guidelines),
+            text = stringResource(Res.string.community_guidelines),
             url = "$STOAT_MARKETING/aup"
         )
 

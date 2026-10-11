@@ -1,13 +1,23 @@
 package chat.stoat.internals
 
 import android.content.Context
-import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatJson
 import chat.stoat.core.model.schemas.Server
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.emoji_category_activities
+import chat.stoat.shared.resources.emoji_category_animals
+import chat.stoat.shared.resources.emoji_category_flags
+import chat.stoat.shared.resources.emoji_category_food
+import chat.stoat.shared.resources.emoji_category_objects
+import chat.stoat.shared.resources.emoji_category_people
+import chat.stoat.shared.resources.emoji_category_smileys
+import chat.stoat.shared.resources.emoji_category_symbols
+import chat.stoat.shared.resources.emoji_category_travel
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
+import org.jetbrains.compose.resources.StringResource
 
 @Serializable
 data class Emoji(
@@ -33,16 +43,16 @@ enum class FitzpatrickSkinTone(val modifierCodepoint: Int?) {
     Dark(0x1F3FF)
 }
 
-enum class UnicodeEmojiSection(val googleName: String, val nameResource: Int) {
-    Smileys("Smileys and emotions", R.string.emoji_category_smileys),
-    People("People", R.string.emoji_category_people),
-    Animals("Animals and nature", R.string.emoji_category_animals),
-    Food("Food and drink", R.string.emoji_category_food),
-    Travel("Travel and places", R.string.emoji_category_travel),
-    Activities("Activities and events", R.string.emoji_category_activities),
-    Objects("Objects", R.string.emoji_category_objects),
-    Symbols("Symbols", R.string.emoji_category_symbols),
-    Flags("Flags", R.string.emoji_category_flags)
+enum class UnicodeEmojiSection(val googleName: String, val nameResource: StringResource) {
+    Smileys("Smileys and emotions", Res.string.emoji_category_smileys),
+    People("People", Res.string.emoji_category_people),
+    Animals("Animals and nature", Res.string.emoji_category_animals),
+    Food("Food and drink", Res.string.emoji_category_food),
+    Travel("Travel and places", Res.string.emoji_category_travel),
+    Activities("Activities and events", Res.string.emoji_category_activities),
+    Objects("Objects", Res.string.emoji_category_objects),
+    Symbols("Symbols", Res.string.emoji_category_symbols),
+    Flags("Flags", Res.string.emoji_category_flags)
 }
 
 sealed class Category {

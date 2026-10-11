@@ -27,10 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.Roles
@@ -39,8 +36,30 @@ import chat.stoat.api.routes.server.banMember
 import chat.stoat.api.routes.server.kickMember
 import chat.stoat.api.routes.server.setMemberTimeout
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.duration_days
+import chat.stoat.shared.resources.duration_hours
+import chat.stoat.shared.resources.duration_minutes
+import chat.stoat.shared.resources.member_moderation_ban
+import chat.stoat.shared.resources.member_moderation_ban_description
+import chat.stoat.shared.resources.member_moderation_ban_member
+import chat.stoat.shared.resources.member_moderation_delete_history
+import chat.stoat.shared.resources.member_moderation_kick
+import chat.stoat.shared.resources.member_moderation_kick_description
+import chat.stoat.shared.resources.member_moderation_kick_member
+import chat.stoat.shared.resources.member_moderation_none
+import chat.stoat.shared.resources.member_moderation_reason
+import chat.stoat.shared.resources.member_moderation_remove_timeout
+import chat.stoat.shared.resources.member_moderation_timeout
+import chat.stoat.shared.resources.member_moderation_timeout_description
+import chat.stoat.shared.resources.member_moderation_timeout_length
+import chat.stoat.shared.resources.member_moderation_timeout_member
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -58,20 +77,20 @@ private data class DurationOption(
 
 @Composable
 private fun DurationOption.label(): String = when {
-    seconds == 0L -> stringResource(R.string.member_moderation_none)
+    seconds == 0L -> stringResource(Res.string.member_moderation_none)
     seconds % 1.days.inWholeSeconds == 0L -> {
         val days = (seconds / 1.days.inWholeSeconds).toInt()
-        pluralStringResource(R.plurals.duration_days, days, days)
+        pluralStringResource(Res.plurals.duration_days, days, days)
     }
 
     seconds % 1.hours.inWholeSeconds == 0L -> {
         val hours = (seconds / 1.hours.inWholeSeconds).toInt()
-        pluralStringResource(R.plurals.duration_hours, hours, hours)
+        pluralStringResource(Res.plurals.duration_hours, hours, hours)
     }
 
     else -> {
         val minutes = (seconds / 1.minutes.inWholeSeconds).toInt()
-        pluralStringResource(R.plurals.duration_minutes, minutes, minutes)
+        pluralStringResource(Res.plurals.duration_minutes, minutes, minutes)
     }
 }
 
@@ -129,7 +148,7 @@ internal fun MemberModerationDialog(
 ) {
     val userId = user.id ?: return
 
-    val username = user.displayName ?: user.username ?: stringResource(R.string.unknown)
+    val username = user.displayName ?: user.username ?: stringResource(Res.string.unknown)
     when (action) {
         MemberModerationAction.Timeout -> TimeoutMemberDialog(
             serverId = serverId,
@@ -245,21 +264,21 @@ private fun KickMemberDialog(
 
     AlertDialog(
         onDismissRequest = { if (!submitting) onDismiss() },
-        title = { Text(stringResource(R.string.member_moderation_kick_member)) },
+        title = { Text(stringResource(Res.string.member_moderation_kick_member)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.member_moderation_kick_description, username))
+                Text(stringResource(Res.string.member_moderation_kick_description, username))
                 error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss, enabled = !submitting) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
         confirmButton = {
             DialogConfirmButton(
-                label = stringResource(R.string.member_moderation_kick),
+                label = stringResource(Res.string.member_moderation_kick),
                 submitting = submitting,
                 onClick = {
                     scope.launch {
@@ -300,21 +319,21 @@ private fun BanMemberDialog(
 
     AlertDialog(
         onDismissRequest = { if (!submitting) onDismiss() },
-        title = { Text(stringResource(R.string.member_moderation_ban_member)) },
+        title = { Text(stringResource(Res.string.member_moderation_ban_member)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.member_moderation_ban_description, username))
+                Text(stringResource(Res.string.member_moderation_ban_description, username))
                 OutlinedTextField(
                     value = reason,
                     onValueChange = { reason = it.take(1024) },
                     enabled = !submitting,
-                    label = { Text(stringResource(R.string.member_moderation_reason)) },
+                    label = { Text(stringResource(Res.string.member_moderation_reason)) },
                     supportingText = { Text("${reason.length}/1024") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 DurationSelector(
-                    title = stringResource(R.string.member_moderation_delete_history),
+                    title = stringResource(Res.string.member_moderation_delete_history),
                     options = options,
                     selectedSeconds = deleteSeconds,
                     onSelected = { deleteSeconds = it },
@@ -325,12 +344,12 @@ private fun BanMemberDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss, enabled = !submitting) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
         confirmButton = {
             DialogConfirmButton(
-                label = stringResource(R.string.member_moderation_ban),
+                label = stringResource(Res.string.member_moderation_ban),
                 submitting = submitting,
                 onClick = {
                     scope.launch {
@@ -370,12 +389,12 @@ private fun TimeoutMemberDialog(
 
     AlertDialog(
         onDismissRequest = { if (!submitting) onDismiss() },
-        title = { Text(stringResource(R.string.member_moderation_timeout_member)) },
+        title = { Text(stringResource(Res.string.member_moderation_timeout_member)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.member_moderation_timeout_description, username))
+                Text(stringResource(Res.string.member_moderation_timeout_description, username))
                 DurationSelector(
-                    title = stringResource(R.string.member_moderation_timeout_length),
+                    title = stringResource(Res.string.member_moderation_timeout_length),
                     options = options,
                     selectedSeconds = durationSeconds,
                     onSelected = { durationSeconds = it },
@@ -395,7 +414,7 @@ private fun TimeoutMemberDialog(
                         },
                         enabled = !submitting,
                     ) {
-                        Text(stringResource(R.string.member_moderation_remove_timeout))
+                        Text(stringResource(Res.string.member_moderation_remove_timeout))
                     }
                 }
                 error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
@@ -403,12 +422,12 @@ private fun TimeoutMemberDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss, enabled = !submitting) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
         confirmButton = {
             DialogConfirmButton(
-                label = stringResource(R.string.member_moderation_timeout),
+                label = stringResource(Res.string.member_moderation_timeout),
                 submitting = submitting,
                 onClick = {
                     scope.launch {

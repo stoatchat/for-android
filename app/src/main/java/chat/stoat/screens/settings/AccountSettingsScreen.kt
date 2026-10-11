@@ -39,9 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -55,8 +53,40 @@ import chat.stoat.api.routes.account.changePassword
 import chat.stoat.api.routes.account.fetchAccount
 import chat.stoat.api.routes.account.fetchMfaSettings
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.settings_account
+import chat.stoat.shared.resources.settings_account_email
+import chat.stoat.shared.resources.settings_account_email_confirm_email
+import chat.stoat.shared.resources.settings_account_email_confirm_email_dismiss
+import chat.stoat.shared.resources.settings_account_email_confirm_email_message
+import chat.stoat.shared.resources.settings_account_email_confirm_email_open_mail_app
+import chat.stoat.shared.resources.settings_account_email_edit_alt
+import chat.stoat.shared.resources.settings_account_email_edit_cancel
+import chat.stoat.shared.resources.settings_account_email_edit_confirm
+import chat.stoat.shared.resources.settings_account_email_edit_current
+import chat.stoat.shared.resources.settings_account_email_edit_message
+import chat.stoat.shared.resources.settings_account_email_edit_new_email
+import chat.stoat.shared.resources.settings_account_email_edit_password
+import chat.stoat.shared.resources.settings_account_email_edit_title
+import chat.stoat.shared.resources.settings_account_email_loading_error
+import chat.stoat.shared.resources.settings_account_mfa
+import chat.stoat.shared.resources.settings_account_mfa_totp
+import chat.stoat.shared.resources.settings_account_mfa_totp_upsell
+import chat.stoat.shared.resources.settings_account_mfa_warning
+import chat.stoat.shared.resources.settings_account_password
+import chat.stoat.shared.resources.settings_account_password_change_success
+import chat.stoat.shared.resources.settings_account_password_edit_alt
+import chat.stoat.shared.resources.settings_account_password_edit_cancel
+import chat.stoat.shared.resources.settings_account_password_edit_confirm
+import chat.stoat.shared.resources.settings_account_password_edit_current_password
+import chat.stoat.shared.resources.settings_account_password_edit_message
+import chat.stoat.shared.resources.settings_account_password_edit_message_hint
+import chat.stoat.shared.resources.settings_account_password_edit_new_password
+import chat.stoat.shared.resources.settings_account_password_edit_title
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 class AccountSettingsScreenViewModel(val context: Application) : ViewModel() {
@@ -97,7 +127,7 @@ class AccountSettingsScreenViewModel(val context: Application) : ViewModel() {
                 }
             }
             .onFailure {
-                emailChangeError = context.getString(R.string.settings_account_email_loading_error)
+                emailChangeError = getString(Res.string.settings_account_email_loading_error)
             }
             .also { accountEmailLoaded = true }
 
@@ -151,7 +181,6 @@ fun AccountSettingsScreen(
     viewModel: AccountSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         viewModel.loadDetails()
@@ -160,8 +189,8 @@ fun AccountSettingsScreen(
     if (viewModel.showEmailChangeSuccess) {
         AlertDialog(
             onDismissRequest = { viewModel.showEmailChangeSuccess = false },
-            title = { Text(stringResource(R.string.settings_account_email_confirm_email)) },
-            text = { Text(stringResource(R.string.settings_account_email_confirm_email_message)) },
+            title = { Text(stringResource(Res.string.settings_account_email_confirm_email)) },
+            text = { Text(stringResource(Res.string.settings_account_email_confirm_email_message)) },
             confirmButton = {
                 TextButton(onClick = {
                     val intent = Intent(Intent.ACTION_MAIN)
@@ -171,12 +200,12 @@ fun AccountSettingsScreen(
 
                     viewModel.showEmailChangeSuccess = false
                 }) {
-                    Text(stringResource(R.string.settings_account_email_confirm_email_open_mail_app))
+                    Text(stringResource(Res.string.settings_account_email_confirm_email_open_mail_app))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.showEmailChangeSuccess = false }) {
-                    Text(stringResource(R.string.settings_account_email_confirm_email_dismiss))
+                    Text(stringResource(Res.string.settings_account_email_confirm_email_dismiss))
                 }
             }
         )
@@ -190,28 +219,28 @@ fun AccountSettingsScreen(
             onDismissRequest = {
                 if (!viewModel.waitingForEmailChangeNetworkResponse) viewModel.editingEmail = false
             },
-            title = { Text(stringResource(R.string.settings_account_email_edit_title)) },
+            title = { Text(stringResource(Res.string.settings_account_email_edit_title)) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
                         stringResource(
-                            R.string.settings_account_email_edit_current,
+                            Res.string.settings_account_email_edit_current,
                             viewModel.accountEmail
                         )
                     )
-                    Text(stringResource(R.string.settings_account_email_edit_message))
+                    Text(stringResource(Res.string.settings_account_email_edit_message))
                     TextField(
                         state = newEmailFieldState,
-                        label = { Text(stringResource(R.string.settings_account_email_edit_new_email)) },
+                        label = { Text(stringResource(Res.string.settings_account_email_edit_new_email)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.EmailAddress }
                     )
                     SecureTextField(
                         state = confirmationPasswordFieldState,
-                        label = { Text(stringResource(R.string.settings_account_email_edit_password)) },
+                        label = { Text(stringResource(Res.string.settings_account_email_edit_password)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.Password }
@@ -230,12 +259,12 @@ fun AccountSettingsScreen(
                             newEmailFieldState.text.isNotBlank() &&
                             confirmationPasswordFieldState.text.isNotBlank()
                 ) {
-                    Text(stringResource(R.string.settings_account_email_edit_confirm))
+                    Text(stringResource(Res.string.settings_account_email_edit_confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.editingEmail = false }) {
-                    Text(stringResource(R.string.settings_account_email_edit_cancel))
+                    Text(stringResource(Res.string.settings_account_email_edit_cancel))
                 }
             }
         )
@@ -250,23 +279,23 @@ fun AccountSettingsScreen(
                 if (!viewModel.waitingForPasswordChangeNetworkResponse) viewModel.editingPassword =
                     false
             },
-            title = { Text(stringResource(R.string.settings_account_password_edit_title)) },
+            title = { Text(stringResource(Res.string.settings_account_password_edit_title)) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Text(stringResource(R.string.settings_account_password_edit_message))
-                    Text(stringResource(R.string.settings_account_password_edit_message_hint))
+                    Text(stringResource(Res.string.settings_account_password_edit_message))
+                    Text(stringResource(Res.string.settings_account_password_edit_message_hint))
                     SecureTextField(
                         state = confirmationPasswordFieldState,
-                        label = { Text(stringResource(R.string.settings_account_password_edit_current_password)) },
+                        label = { Text(stringResource(Res.string.settings_account_password_edit_current_password)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.Password }
                     )
                     SecureTextField(
                         state = newPasswordFieldState,
-                        label = { Text(stringResource(R.string.settings_account_password_edit_new_password)) },
+                        label = { Text(stringResource(Res.string.settings_account_password_edit_new_password)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .semantics { contentType = ContentType.NewPassword }
@@ -287,12 +316,12 @@ fun AccountSettingsScreen(
                             newPasswordFieldState.text != confirmationPasswordFieldState.text &&
                             newPasswordFieldState.text.length >= 8
                 ) {
-                    Text(stringResource(R.string.settings_account_password_edit_confirm))
+                    Text(stringResource(Res.string.settings_account_password_edit_confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { viewModel.editingPassword = false }) {
-                    Text(stringResource(R.string.settings_account_password_edit_cancel))
+                    Text(stringResource(Res.string.settings_account_password_edit_cancel))
                 }
             }
         )
@@ -300,11 +329,11 @@ fun AccountSettingsScreen(
 
     SettingsPage(
         navController,
-        title = { Text(stringResource(R.string.settings_account)) }
+        title = { Text(stringResource(Res.string.settings_account)) }
     ) {
         LaunchedEffect(viewModel.showSnackbarPasswordChanged) {
             if (viewModel.showSnackbarPasswordChanged > 0) {
-                showSnackbar(resources.getString(R.string.settings_account_password_change_success))
+                showSnackbar(getString(Res.string.settings_account_password_change_success))
             }
         }
 
@@ -338,7 +367,7 @@ fun AccountSettingsScreen(
                     }
 
                     Subcategory(
-                        title = { Text(stringResource(R.string.settings_account_email)) }
+                        title = { Text(stringResource(Res.string.settings_account_email)) }
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.Center,
@@ -358,13 +387,13 @@ fun AccountSettingsScreen(
                             )
                             Icon(
                                 painter = painterResource(R.drawable.ic_edit_24dp),
-                                contentDescription = stringResource(R.string.settings_account_email_edit_alt)
+                                contentDescription = stringResource(Res.string.settings_account_email_edit_alt)
                             )
                         }
                     }
 
                     Subcategory(
-                        title = { Text(stringResource(R.string.settings_account_password)) }
+                        title = { Text(stringResource(Res.string.settings_account_password)) }
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.Center,
@@ -385,19 +414,19 @@ fun AccountSettingsScreen(
                             )
                             Icon(
                                 painter = painterResource(R.drawable.ic_edit_24dp),
-                                contentDescription = stringResource(R.string.settings_account_password_edit_alt)
+                                contentDescription = stringResource(Res.string.settings_account_password_edit_alt)
                             )
                         }
                     }
 
                     Subcategory(
-                        title = { Text(stringResource(R.string.settings_account_mfa)) }
+                        title = { Text(stringResource(Res.string.settings_account_mfa)) }
                     ) {
                         AnimatedVisibility(
                             viewModel.mfaStateLoaded && viewModel.mfaState?.totpMfa == false
                         ) {
                             Text(
-                                text = stringResource(R.string.settings_account_mfa_warning),
+                                text = stringResource(Res.string.settings_account_mfa_warning),
                                 color = MaterialTheme.colorScheme.onErrorContainer,
                                 style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier
@@ -423,12 +452,12 @@ fun AccountSettingsScreen(
                         ) {
                             Column(Modifier.weight(1f)) {
                                 Text(
-                                    text = stringResource(R.string.settings_account_mfa_totp),
+                                    text = stringResource(Res.string.settings_account_mfa_totp),
                                     style = MaterialTheme.typography.titleMedium
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = stringResource(R.string.settings_account_mfa_totp_upsell),
+                                    text = stringResource(Res.string.settings_account_mfa_totp_upsell),
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )

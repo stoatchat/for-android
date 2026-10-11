@@ -15,11 +15,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.core.model.schemas.UserBadges
 import chat.stoat.core.model.schemas.has
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.user_badge_active_supporter
+import chat.stoat.shared.resources.user_badge_developer
+import chat.stoat.shared.resources.user_badge_early_adopter
+import chat.stoat.shared.resources.user_badge_founder
+import chat.stoat.shared.resources.user_badge_paw
+import chat.stoat.shared.resources.user_badge_platform_moderation
+import chat.stoat.shared.resources.user_badge_reserved_relevant_joke_badge_1
+import chat.stoat.shared.resources.user_badge_reserved_relevant_joke_badge_2
+import chat.stoat.shared.resources.user_badge_responsible_disclosure
+import chat.stoat.shared.resources.user_badge_supporter
+import chat.stoat.shared.resources.user_badge_translator
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BadgeListEntryTemplate(
@@ -49,77 +61,77 @@ fun BadgeListEntry(badge: UserBadges) {
     when (badge.value) {
         UserBadges.Developer.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_developer),
+                label = stringResource(Res.string.user_badge_developer),
                 icon = painterResource(R.drawable.user_badge_developer)
             )
         }
 
         UserBadges.Translator.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_translator),
+                label = stringResource(Res.string.user_badge_translator),
                 icon = painterResource(R.drawable.user_badge_translator)
             )
         }
 
         UserBadges.Supporter.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_supporter),
+                label = stringResource(Res.string.user_badge_supporter),
                 icon = painterResource(R.drawable.user_badge_supporter)
             )
         }
 
         UserBadges.ResponsibleDisclosure.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_responsible_disclosure),
+                label = stringResource(Res.string.user_badge_responsible_disclosure),
                 icon = painterResource(R.drawable.user_badge_disclosure)
             )
         }
 
         UserBadges.Founder.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_founder),
+                label = stringResource(Res.string.user_badge_founder),
                 icon = painterResource(R.drawable.user_badge_founder)
             )
         }
 
         UserBadges.PlatformModeration.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_platform_moderation),
+                label = stringResource(Res.string.user_badge_platform_moderation),
                 icon = painterResource(R.drawable.user_badge_moderation)
             )
         }
 
         UserBadges.ActiveSupporter.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_active_supporter),
+                label = stringResource(Res.string.user_badge_active_supporter),
                 icon = painterResource(R.drawable.ic_emoji_people_24dp)
             )
         }
 
         UserBadges.Paw.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_paw),
+                label = stringResource(Res.string.user_badge_paw),
                 icon = painterResource(R.drawable.user_badge_paw)
             )
         }
 
         UserBadges.EarlyAdopter.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_early_adopter),
+                label = stringResource(Res.string.user_badge_early_adopter),
                 icon = painterResource(R.drawable.user_badge_early_adopter)
             )
         }
 
         UserBadges.ReservedRelevantJokeBadge1.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_reserved_relevant_joke_badge_1),
+                label = stringResource(Res.string.user_badge_reserved_relevant_joke_badge_1),
                 icon = painterResource(R.drawable.user_badge_reserved_relevant_one)
             )
         }
 
         UserBadges.ReservedRelevantJokeBadge2.value -> {
             BadgeListEntryTemplate(
-                label = stringResource(R.string.user_badge_reserved_relevant_joke_badge_2),
+                label = stringResource(Res.string.user_badge_reserved_relevant_joke_badge_2),
                 icon = painterResource(R.drawable.user_badge_reserved_relevant_two)
             )
         }
@@ -164,17 +176,17 @@ fun UserBadgeRow(badges: Long) {
                         UserBadges.ReservedRelevantJokeBadge2 -> painterResource(R.drawable.user_badge_reserved_relevant_two)
                     },
                     contentDescription = when (badge) {
-                        UserBadges.Developer -> stringResource(R.string.user_badge_developer)
-                        UserBadges.Translator -> stringResource(R.string.user_badge_translator)
-                        UserBadges.Supporter -> stringResource(R.string.user_badge_supporter)
-                        UserBadges.ResponsibleDisclosure -> stringResource(R.string.user_badge_responsible_disclosure)
-                        UserBadges.Founder -> stringResource(R.string.user_badge_founder)
-                        UserBadges.PlatformModeration -> stringResource(R.string.user_badge_platform_moderation)
-                        UserBadges.ActiveSupporter -> stringResource(R.string.user_badge_active_supporter)
-                        UserBadges.Paw -> stringResource(R.string.user_badge_paw)
-                        UserBadges.EarlyAdopter -> stringResource(R.string.user_badge_early_adopter)
-                        UserBadges.ReservedRelevantJokeBadge1 -> stringResource(R.string.user_badge_reserved_relevant_joke_badge_1)
-                        UserBadges.ReservedRelevantJokeBadge2 -> stringResource(R.string.user_badge_reserved_relevant_joke_badge_2)
+                        UserBadges.Developer -> stringResource(Res.string.user_badge_developer)
+                        UserBadges.Translator -> stringResource(Res.string.user_badge_translator)
+                        UserBadges.Supporter -> stringResource(Res.string.user_badge_supporter)
+                        UserBadges.ResponsibleDisclosure -> stringResource(Res.string.user_badge_responsible_disclosure)
+                        UserBadges.Founder -> stringResource(Res.string.user_badge_founder)
+                        UserBadges.PlatformModeration -> stringResource(Res.string.user_badge_platform_moderation)
+                        UserBadges.ActiveSupporter -> stringResource(Res.string.user_badge_active_supporter)
+                        UserBadges.Paw -> stringResource(Res.string.user_badge_paw)
+                        UserBadges.EarlyAdopter -> stringResource(Res.string.user_badge_early_adopter)
+                        UserBadges.ReservedRelevantJokeBadge1 -> stringResource(Res.string.user_badge_reserved_relevant_joke_badge_1)
+                        UserBadges.ReservedRelevantJokeBadge2 -> stringResource(Res.string.user_badge_reserved_relevant_joke_badge_2)
                     },
                     modifier = Modifier
                         .size(32.dp)

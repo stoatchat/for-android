@@ -40,7 +40,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
@@ -49,15 +48,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.composables.generic.NonIdealState
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.mfa_error_disallowed_method
+import chat.stoat.shared.resources.mfa_error_generic
+import chat.stoat.shared.resources.mfa_error_invalid_credentials
+import chat.stoat.shared.resources.mfa_error_invalid_token
+import chat.stoat.shared.resources.mfa_prompt_close
+import chat.stoat.shared.resources.mfa_prompt_confirm
+import chat.stoat.shared.resources.mfa_prompt_lead
+import chat.stoat.shared.resources.mfa_prompt_load_error_description
+import chat.stoat.shared.resources.mfa_prompt_load_error_title
+import chat.stoat.shared.resources.mfa_prompt_no_methods_description
+import chat.stoat.shared.resources.mfa_prompt_no_methods_title
+import chat.stoat.shared.resources.mfa_prompt_retry
+import chat.stoat.shared.resources.mfa_prompt_title
 import chat.stoat.ui.theme.FragmentMono
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun mfaErrorText(errorType: String?): String = when (errorType) {
     null -> ""
-    "InvalidCredentials" -> stringResource(R.string.mfa_error_invalid_credentials)
-    "InvalidToken" -> stringResource(R.string.mfa_error_invalid_token)
-    "DisallowedMfaMethod" -> stringResource(R.string.mfa_error_disallowed_method)
-    else -> stringResource(R.string.mfa_error_generic, errorType)
+    "InvalidCredentials" -> stringResource(Res.string.mfa_error_invalid_credentials)
+    "InvalidToken" -> stringResource(Res.string.mfa_error_invalid_token)
+    "DisallowedMfaMethod" -> stringResource(Res.string.mfa_error_disallowed_method)
+    else -> stringResource(Res.string.mfa_error_generic, errorType)
 }
 
 private enum class MfaPromptStage { Loading, LoadError, NoMethods, Form }
@@ -104,7 +119,7 @@ fun MfaPromptSheet(state: MfaPromptState) {
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.mfa_prompt_title),
+                text = stringResource(Res.string.mfa_prompt_title),
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center
             )
@@ -112,7 +127,7 @@ fun MfaPromptSheet(state: MfaPromptState) {
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = stringResource(R.string.mfa_prompt_lead),
+                text = stringResource(Res.string.mfa_prompt_lead),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -149,16 +164,16 @@ fun MfaPromptSheet(state: MfaPromptState) {
                                 modifier = Modifier.size(it)
                             )
                         },
-                        title = { Text(stringResource(R.string.mfa_prompt_load_error_title)) },
+                        title = { Text(stringResource(Res.string.mfa_prompt_load_error_title)) },
                         description = {
-                            Text(stringResource(R.string.mfa_prompt_load_error_description))
+                            Text(stringResource(Res.string.mfa_prompt_load_error_description))
                         },
                         actions = {
                             TextButton(onClick = { session.cancel() }) {
-                                Text(stringResource(R.string.cancel))
+                                Text(stringResource(Res.string.cancel))
                             }
                             Button(onClick = { session.retryLoad() }) {
-                                Text(stringResource(R.string.mfa_prompt_retry))
+                                Text(stringResource(Res.string.mfa_prompt_retry))
                             }
                         }
                     )
@@ -171,13 +186,13 @@ fun MfaPromptSheet(state: MfaPromptState) {
                                 modifier = Modifier.size(it)
                             )
                         },
-                        title = { Text(stringResource(R.string.mfa_prompt_no_methods_title)) },
+                        title = { Text(stringResource(Res.string.mfa_prompt_no_methods_title)) },
                         description = {
-                            Text(stringResource(R.string.mfa_prompt_no_methods_description))
+                            Text(stringResource(Res.string.mfa_prompt_no_methods_description))
                         },
                         actions = {
                             Button(onClick = { session.cancel() }) {
-                                Text(stringResource(R.string.mfa_prompt_close))
+                                Text(stringResource(Res.string.mfa_prompt_close))
                             }
                         }
                     )
@@ -250,7 +265,7 @@ private fun MfaPromptForm(session: MfaPromptSession) {
                 onClick = { session.cancel() },
                 enabled = !session.busy
             ) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
 
             Button(
@@ -262,7 +277,7 @@ private fun MfaPromptForm(session: MfaPromptSession) {
                     if (busy) {
                         LoadingIndicator(modifier = Modifier.size(24.dp))
                     } else {
-                        Text(stringResource(R.string.mfa_prompt_confirm))
+                        Text(stringResource(Res.string.mfa_prompt_confirm))
                     }
                 }
             }

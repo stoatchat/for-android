@@ -30,9 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,9 +39,18 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.composables.LocalSnackbarHostState
 import chat.stoat.composables.generic.ControlledSlider
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.media_viewer_more
+import chat.stoat.shared.resources.media_viewer_pause
+import chat.stoat.shared.resources.media_viewer_play
+import chat.stoat.shared.resources.media_viewer_save
+import chat.stoat.shared.resources.media_viewer_saved
+import chat.stoat.shared.resources.media_viewer_share_url
 import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -53,7 +60,6 @@ fun AudioPlayer(
     contentType: String,
 ) {
     val context = LocalContext.current
-    val resources = LocalResources.current
     val snackbarHostState = LocalSnackbarHostState.current
 
     val showMenu = remember { mutableStateOf(false) }
@@ -117,7 +123,7 @@ fun AudioPlayer(
                         )
                     }
 
-                    val message = resources.getString(R.string.media_viewer_saved)
+                    val message = getString(Res.string.media_viewer_saved)
                     if (snackbarHostState != null) {
                         snackbarHostState.showSnackbar(message)
                     } else {
@@ -184,12 +190,12 @@ fun AudioPlayer(
                     if (playback.isPlaying.value) {
                         Icon(
                             painter = painterResource(R.drawable.ic_pause_24dp__fill),
-                            contentDescription = stringResource(R.string.media_viewer_pause)
+                            contentDescription = stringResource(Res.string.media_viewer_pause)
                         )
                     } else {
                         Icon(
                             painter = painterResource(R.drawable.ic_play_arrow_24dp__fill),
-                            contentDescription = stringResource(R.string.media_viewer_play)
+                            contentDescription = stringResource(Res.string.media_viewer_play)
                         )
                     }
                 }
@@ -217,7 +223,7 @@ fun AudioPlayer(
             }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_more_vert_24dp),
-                    contentDescription = stringResource(R.string.media_viewer_more)
+                    contentDescription = stringResource(Res.string.media_viewer_more)
                 )
                 DropdownMenu(
                     expanded = showMenu.value,
@@ -230,7 +236,7 @@ fun AudioPlayer(
                             saveToStorage()
                         },
                         text = {
-                            Text(text = stringResource(R.string.media_viewer_save))
+                            Text(text = stringResource(Res.string.media_viewer_save))
                         }
                     )
                     DropdownMenuItem(
@@ -238,7 +244,7 @@ fun AudioPlayer(
                             shareUrl()
                         },
                         text = {
-                            Text(text = stringResource(R.string.media_viewer_share_url))
+                            Text(text = stringResource(Res.string.media_viewer_share_url))
                         }
                     )
                 }

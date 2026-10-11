@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -33,6 +32,15 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.avatar_alt
+import chat.stoat.shared.resources.status_dnd
+import chat.stoat.shared.resources.status_focus
+import chat.stoat.shared.resources.status_idle
+import chat.stoat.shared.resources.status_offline
+import chat.stoat.shared.resources.status_online
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 enum class Presence {
     Online,
@@ -82,12 +90,12 @@ private fun Presence.iconResource(): Int = when (this) {
     Presence.Offline -> R.drawable.ic_circle_24dp
 }
 
-private fun Presence.descriptionResource(): Int = when (this) {
-    Presence.Online -> R.string.status_online
-    Presence.Idle -> R.string.status_idle
-    Presence.Dnd -> R.string.status_dnd
-    Presence.Focus -> R.string.status_focus
-    Presence.Offline -> R.string.status_offline
+private fun Presence.descriptionResource(): StringResource = when (this) {
+    Presence.Online -> Res.string.status_online
+    Presence.Idle -> Res.string.status_idle
+    Presence.Dnd -> Res.string.status_dnd
+    Presence.Focus -> Res.string.status_focus
+    Presence.Offline -> Res.string.status_offline
 }
 
 @Composable
@@ -154,7 +162,7 @@ fun UserAvatar(
             RemoteImage(
                 url = rawUrl ?: "$STOAT_FILES/avatars/${avatar.id}",
                 contentScale = ContentScale.Crop,
-                description = stringResource(id = R.string.avatar_alt, username),
+                description = stringResource(Res.string.avatar_alt, username),
                 allowAnimation = allowAnimation,
                 modifier = Modifier
                     .clip(shape)
@@ -181,7 +189,7 @@ fun UserAvatar(
         } else {
             RemoteImage(
                 url = "$STOAT_BASE/users/${userId.ifBlank { "0".repeat(26) }}/default_avatar",
-                description = stringResource(id = R.string.avatar_alt, username),
+                description = stringResource(Res.string.avatar_alt, username),
                 allowAnimation = allowAnimation,
                 modifier = Modifier
                     .clip(shape)
@@ -234,7 +242,7 @@ fun GroupIcon(
                 url = rawUrl ?: "$STOAT_FILES/icons/${icon.id}",
                 allowAnimation = false,
                 contentScale = ContentScale.Crop,
-                description = stringResource(id = R.string.avatar_alt, name),
+                description = stringResource(Res.string.avatar_alt, name),
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.small)
                     .size(size)

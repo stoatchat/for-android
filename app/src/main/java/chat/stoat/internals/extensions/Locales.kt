@@ -1,18 +1,12 @@
 package chat.stoat.internals.extensions
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.XmlResourceParser
+import chat.stoat.R
 import java.util.Locale
 
-@SuppressLint("DiscouragedApi")
 fun Context.getSupportedLocales(): List<Locale> {
-    val id = resources.getIdentifier(
-        "_generated_res_locale_config",
-        "xml",
-        packageName
-    )
-    val localeXml = resources.getXml(id)
+    val localeXml = resources.getXml(R.xml.locales_config)
     val locales = ArrayList<String>()
     var event = localeXml.next()
     while (event != XmlResourceParser.END_DOCUMENT) {

@@ -131,7 +131,7 @@ android {
         }
     }
     androidResources {
-        generateLocaleConfig = true
+        generateLocaleConfig = false
     }
     lint {
         abortOnError = false
@@ -164,6 +164,7 @@ dependencies {
     implementation(project(":core:api"))
     implementation(project(":core:designsystem"))
     implementation(project(":shared"))
+    implementation(libs.compose.multiplatform.resources)
 
     implementation(libs.android.core.ktx)
     implementation(libs.kotlin.reflect)
@@ -306,5 +307,71 @@ aboutLibraries {
     collect {
         includePlatform = true
         configPath = file("../compliance")
+    }
+}
+
+abstract class GenerateLocaleConfig : DefaultTask() {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val composeResources: DirectoryProperty
+
+    @get:Input
+    abstract val defaultLocale: Property<String>
+
+    @get:Input
+    abstract val includePseudoLocales: Property<Boolean>
+
+    @get:OutputDirectory
+    abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        val qualified = composeResources.get().asFile
+            .listFiles { file -> file.isDirectory && file.name.startsWith("values-") }
+            .orEmpty()
+            .filter { it.resolve("strings.xml").exists() }
+            .map { it.name.removePrefix("values-").toLanguageTag() }
+            .sorted()
+        val pseudo = if (includePseudoLocales.get()) listOf("en-XA", "ar-XB") else emptyList()
+        val locales = listOf(defaultLocale.get()) + qualified + pseudo
+
+        val xml = outputDirectory.get().file("xml/locales_config.xml").asFile
+        xml.parentFile.mkdirs()
+        xml.writeText(
+            buildString {
+                appendLine("<locale-config xmlns:android=\"http://schemas.android.com/apk/res/android\">")
+                locales.forEach { appendLine("    <locale android:name=\"$it\"/>") }
+                appendLine("</locale-config>")
+            }
+        )
+    }
+
+    private fun String.toLanguageTag(): String = when {
+        startsWith("b+") -> removePrefix("b+").replace('+', '-')
+        contains("-r") -> replace("-r", "-")
+        else -> this
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val task = tasks.register<GenerateLocaleConfig>(
+            "generate${variant.name.replaceFirstChar(Char::uppercase)}StoatLocaleConfig"
+        ) {
+            composeResources.set(rootProject.layout.projectDirectory.dir("shared/src/commonMain/composeResources"))
+            defaultLocale.set(
+                providers.fileContents(layout.projectDirectory.file("src/main/res/resources.properties"))
+                    .asText
+                    .map { text ->
+                        Properties().apply { load(text.reader()) }
+                            .getProperty("unqualifiedResLocale")
+                    }
+            )
+            includePseudoLocales.set(variant.pseudoLocalesEnabled)
+        }
+        variant.sources.res?.addGeneratedSourceDirectory(
+            task,
+            GenerateLocaleConfig::outputDirectory
+        )
     }
 }

@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,7 +45,42 @@ import chat.stoat.api.routes.user.blockUser
 import chat.stoat.core.model.schemas.ContentReportReason
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.generic.FormTextField
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.report_block_no
+import chat.stoat.shared.resources.report_block_question
+import chat.stoat.shared.resources.report_block_yes
+import chat.stoat.shared.resources.report_cancel
+import chat.stoat.shared.resources.report_message
+import chat.stoat.shared.resources.report_message_bridge_notice
+import chat.stoat.shared.resources.report_message_heading
+import chat.stoat.shared.resources.report_message_preview
+import chat.stoat.shared.resources.report_reason
+import chat.stoat.shared.resources.report_reason_additional
+import chat.stoat.shared.resources.report_reason_additional_hint
+import chat.stoat.shared.resources.report_reason_content_extreme_violence
+import chat.stoat.shared.resources.report_reason_content_harassment
+import chat.stoat.shared.resources.report_reason_content_illegal
+import chat.stoat.shared.resources.report_reason_content_illegal_extortion
+import chat.stoat.shared.resources.report_reason_content_illegal_goods
+import chat.stoat.shared.resources.report_reason_content_illegal_hacking
+import chat.stoat.shared.resources.report_reason_content_illegal_pornography
+import chat.stoat.shared.resources.report_reason_content_malware
+import chat.stoat.shared.resources.report_reason_content_other
+import chat.stoat.shared.resources.report_reason_content_promotes_harm
+import chat.stoat.shared.resources.report_reason_content_raid
+import chat.stoat.shared.resources.report_reason_content_scams_fraud
+import chat.stoat.shared.resources.report_reason_content_spam_abuse
+import chat.stoat.shared.resources.report_reason_content_unsolicited_spam
+import chat.stoat.shared.resources.report_submit
+import chat.stoat.shared.resources.report_submit_error
+import chat.stoat.shared.resources.report_submit_error_header
+import chat.stoat.shared.resources.report_submit_success
+import chat.stoat.shared.resources.report_submit_thanks
+import chat.stoat.shared.resources.report_submitting
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 enum class MessageReportFlowState {
     Reason,
@@ -75,20 +109,20 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
     when (state.value) {
         MessageReportFlowState.Reason -> {
             val reasons = mapOf(
-                "Illegal" to stringResource(id = R.string.report_reason_content_illegal),
-                "IllegalGoods" to stringResource(id = R.string.report_reason_content_illegal_goods),
-                "IllegalExtortion" to stringResource(id = R.string.report_reason_content_illegal_extortion),
-                "IllegalPornography" to stringResource(id = R.string.report_reason_content_illegal_pornography),
-                "IllegalHacking" to stringResource(id = R.string.report_reason_content_illegal_hacking),
-                "ExtremeViolence" to stringResource(id = R.string.report_reason_content_extreme_violence),
-                "PromotesHarm" to stringResource(id = R.string.report_reason_content_promotes_harm),
-                "UnsolicitedSpam" to stringResource(id = R.string.report_reason_content_unsolicited_spam),
-                "Raid" to stringResource(id = R.string.report_reason_content_raid),
-                "SpamAbuse" to stringResource(id = R.string.report_reason_content_spam_abuse),
-                "ScamsFraud" to stringResource(id = R.string.report_reason_content_scams_fraud),
-                "Malware" to stringResource(id = R.string.report_reason_content_malware),
-                "Harassment" to stringResource(id = R.string.report_reason_content_harassment),
-                "NoneSpecified" to stringResource(id = R.string.report_reason_content_other)
+                "Illegal" to stringResource(Res.string.report_reason_content_illegal),
+                "IllegalGoods" to stringResource(Res.string.report_reason_content_illegal_goods),
+                "IllegalExtortion" to stringResource(Res.string.report_reason_content_illegal_extortion),
+                "IllegalPornography" to stringResource(Res.string.report_reason_content_illegal_pornography),
+                "IllegalHacking" to stringResource(Res.string.report_reason_content_illegal_hacking),
+                "ExtremeViolence" to stringResource(Res.string.report_reason_content_extreme_violence),
+                "PromotesHarm" to stringResource(Res.string.report_reason_content_promotes_harm),
+                "UnsolicitedSpam" to stringResource(Res.string.report_reason_content_unsolicited_spam),
+                "Raid" to stringResource(Res.string.report_reason_content_raid),
+                "SpamAbuse" to stringResource(Res.string.report_reason_content_spam_abuse),
+                "ScamsFraud" to stringResource(Res.string.report_reason_content_scams_fraud),
+                "Malware" to stringResource(Res.string.report_reason_content_malware),
+                "Harassment" to stringResource(Res.string.report_reason_content_harassment),
+                "NoneSpecified" to stringResource(Res.string.report_reason_content_other)
             )
             val reasonDropdownExpanded = remember { mutableStateOf(false) }
 
@@ -98,17 +132,17 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_message_heading),
+                        text = stringResource(Res.string.report_message_heading),
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
                 text = {
                     Column {
-                        Text(text = stringResource(id = R.string.report_message))
+                        Text(text = stringResource(Res.string.report_message))
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = stringResource(id = R.string.report_message_preview),
+                            text = stringResource(Res.string.report_message_preview),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -133,7 +167,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         if (messageIsBridged) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = stringResource(id = R.string.report_message_bridge_notice),
+                                text = stringResource(Res.string.report_message_bridge_notice),
                                 fontSize = 12.sp
                             )
                         }
@@ -148,12 +182,12 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         ) {
                             TextField(
                                 value = reasons[selectedReason.value]
-                                    ?: stringResource(id = R.string.unknown),
+                                    ?: stringResource(Res.string.unknown),
                                 readOnly = true,
                                 onValueChange = {},
                                 label = {
                                     Text(
-                                        text = stringResource(id = R.string.report_reason)
+                                        text = stringResource(Res.string.report_reason)
                                     )
                                 },
                                 trailingIcon = {
@@ -187,14 +221,14 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
 
                         FormTextField(
                             value = userAddedContext.value,
-                            label = stringResource(id = R.string.report_reason_additional),
+                            label = stringResource(Res.string.report_reason_additional),
                             onChange = {
                                 userAddedContext.value = it
                             },
                             supportingText = {
                                 Text(
                                     text = stringResource(
-                                        id = R.string.report_reason_additional_hint
+                                        Res.string.report_reason_additional_hint
                                     )
                                 )
                             }
@@ -208,7 +242,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         },
                         modifier = Modifier.testTag("report_cancel")
                     ) {
-                        Text(text = stringResource(id = R.string.report_cancel))
+                        Text(text = stringResource(Res.string.report_cancel))
                     }
                 },
                 confirmButton = {
@@ -218,7 +252,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         },
                         modifier = Modifier.testTag("report_send")
                     ) {
-                        Text(text = stringResource(id = R.string.report_submit))
+                        Text(text = stringResource(Res.string.report_submit))
                     }
                 }
             )
@@ -229,7 +263,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 onDismissRequest = {},
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submitting),
+                        text = stringResource(Res.string.report_submitting),
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
@@ -279,7 +313,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submit_success),
+                        text = stringResource(Res.string.report_submit_success),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -291,7 +325,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = stringResource(id = R.string.report_submit_thanks),
+                                text = stringResource(Res.string.report_submit_thanks),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -299,7 +333,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         Spacer(modifier = Modifier.height(32.dp))
 
                         Text(
-                            text = stringResource(id = R.string.report_block_question),
+                            text = stringResource(Res.string.report_block_question),
                             textAlign = TextAlign.Center,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -313,7 +347,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         },
                         modifier = Modifier.testTag("report_block_no")
                     ) {
-                        Text(text = stringResource(id = R.string.report_block_no))
+                        Text(text = stringResource(Res.string.report_block_no))
                     }
                 },
                 confirmButton = {
@@ -326,7 +360,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         },
                         modifier = Modifier.testTag("report_block_yes")
                     ) {
-                        Text(text = stringResource(id = R.string.report_block_yes))
+                        Text(text = stringResource(Res.string.report_block_yes))
                     }
                 }
             )
@@ -346,7 +380,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 },
                 title = {
                     Text(
-                        text = stringResource(id = R.string.report_submit_error_header),
+                        text = stringResource(Res.string.report_submit_error_header),
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -354,7 +388,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                 text = {
                     Column {
                         Text(
-                            text = stringResource(id = R.string.report_submit_error),
+                            text = stringResource(Res.string.report_submit_error),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -366,7 +400,7 @@ fun ReportMessageDialog(onDismiss: () -> Unit, messageId: String) {
                         },
                         modifier = Modifier.testTag("report_error_ok")
                     ) {
-                        Text(text = stringResource(id = R.string.ok))
+                        Text(text = stringResource(Res.string.ok))
                     }
                 },
                 confirmButton = {}

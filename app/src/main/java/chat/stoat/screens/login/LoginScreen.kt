@@ -31,10 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +45,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.R
-import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
@@ -56,8 +53,21 @@ import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.persistence.KVStorage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.email
+import chat.stoat.shared.resources.hide_password
+import chat.stoat.shared.resources.login
+import chat.stoat.shared.resources.login_heading
+import chat.stoat.shared.resources.password
+import chat.stoat.shared.resources.password_forgot
+import chat.stoat.shared.resources.resend_verification
+import chat.stoat.shared.resources.service_health_alert_body_default
+import chat.stoat.shared.resources.show_password
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 class LoginViewModel(
@@ -91,7 +101,7 @@ class LoginViewModel(
                 negotiateAuthentication(_email, _password)
             } catch (e: Exception) {
                 _error = if (e.message?.startsWith("Unexpected JSON token") == true) {
-                    StoatApplication.instance.getString(R.string.service_health_alert_body_default)
+                    getString(Res.string.service_health_alert_body_default)
                 } else e.message ?: "Unknown error"
                 return@launch
             }
@@ -157,7 +167,6 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
     }
     val showPassword = remember { mutableStateOf(false) }
 
-    val context = LocalContext.current
 
     LaunchedEffect(viewModel.navigateTo) {
         when (viewModel.navigateTo) {
@@ -204,7 +213,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.login_heading),
+                text = stringResource(Res.string.login_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Black,
@@ -223,7 +232,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
             ) {
                 FormTextField(
                     value = viewModel.email,
-                    label = stringResource(R.string.email),
+                    label = stringResource(Res.string.email),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
                     onChange = viewModel::setEmail,
@@ -235,7 +244,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                 )
                 SecureTextField(
                     passwordTextFieldState,
-                    label = { Text(stringResource(R.string.password)) },
+                    label = { Text(stringResource(Res.string.password)) },
                     textObfuscationMode = if (showPassword.value) {
                         TextObfuscationMode.Visible
                     } else {
@@ -252,14 +261,14 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                                 showPassword.value -> {
                                     Icon(
                                         painter = painterResource(R.drawable.ic_visibility_off_24dp),
-                                        contentDescription = stringResource(R.string.hide_password)
+                                        contentDescription = stringResource(Res.string.hide_password)
                                     )
                                 }
 
                                 else -> {
                                     Icon(
                                         painter = painterResource(R.drawable.ic_visibility_24dp),
-                                        contentDescription = stringResource(R.string.show_password)
+                                        contentDescription = stringResource(Res.string.show_password)
                                     )
                                 }
                             }
@@ -271,7 +280,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                 )
 
                 Weblink(
-                    text = stringResource(R.string.password_forgot),
+                    text = stringResource(Res.string.password_forgot),
                     url = "$STOAT_WEB_APP/login/reset",
                     modifier = Modifier.padding(vertical = 7.dp)
                 )
@@ -297,7 +306,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Weblink(
-                text = stringResource(R.string.resend_verification),
+                text = stringResource(Res.string.resend_verification),
                 url = "$STOAT_WEB_APP/login/resend",
                 modifier = Modifier
                     .padding(vertical = 7.dp)
@@ -310,7 +319,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                 TextButton(onClick = {
                     navController.popBackStack()
                 }) {
-                    Text(text = stringResource(R.string.back))
+                    Text(text = stringResource(Res.string.back))
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -318,7 +327,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                 Button(onClick = {
                     viewModel.doLogin()
                 }) {
-                    Text(text = stringResource(R.string.login))
+                    Text(text = stringResource(Res.string.login))
                 }
             }
         }

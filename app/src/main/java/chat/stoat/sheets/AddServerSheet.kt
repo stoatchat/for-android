@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,10 +63,34 @@ import chat.stoat.composables.vectorassets.NewServer
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.material.EasingTokens
 import chat.stoat.screens.chat.ChatRouterDestination
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.add_server_sheet_step_0_create
+import chat.stoat.shared.resources.add_server_sheet_step_0_create_description
+import chat.stoat.shared.resources.add_server_sheet_step_0_description
+import chat.stoat.shared.resources.add_server_sheet_step_0_join
+import chat.stoat.shared.resources.add_server_sheet_step_0_join_description
+import chat.stoat.shared.resources.add_server_sheet_step_0_title
+import chat.stoat.shared.resources.add_server_sheet_step_1c_create
+import chat.stoat.shared.resources.add_server_sheet_step_1c_description
+import chat.stoat.shared.resources.add_server_sheet_step_1c_error
+import chat.stoat.shared.resources.add_server_sheet_step_1c_name
+import chat.stoat.shared.resources.add_server_sheet_step_1c_name_error_range
+import chat.stoat.shared.resources.add_server_sheet_step_1c_name_placeholder
+import chat.stoat.shared.resources.add_server_sheet_step_1c_title
+import chat.stoat.shared.resources.add_server_sheet_step_1j_description
+import chat.stoat.shared.resources.add_server_sheet_step_1j_example_1
+import chat.stoat.shared.resources.add_server_sheet_step_1j_example_2
+import chat.stoat.shared.resources.add_server_sheet_step_1j_example_3
+import chat.stoat.shared.resources.add_server_sheet_step_1j_examples_heading
+import chat.stoat.shared.resources.add_server_sheet_step_1j_join
+import chat.stoat.shared.resources.add_server_sheet_step_1j_label
+import chat.stoat.shared.resources.add_server_sheet_step_1j_title
+import chat.stoat.shared.resources.back
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.launch
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.stringResource
 
 enum class AddServerSheetStep(val animationValue: Int) {
     Initial(0),
@@ -135,14 +158,14 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                         )
 
                         Text(
-                            text = stringResource(id = R.string.add_server_sheet_step_0_title),
+                            text = stringResource(Res.string.add_server_sheet_step_0_title),
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
 
                         Text(
-                            text = stringResource(id = R.string.add_server_sheet_step_0_description),
+                            text = stringResource(Res.string.add_server_sheet_step_0_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = LocalContentColor.current.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center,
@@ -160,12 +183,12 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             },
                             title = {
                                 Text(
-                                    text = stringResource(id = R.string.add_server_sheet_step_0_join)
+                                    text = stringResource(Res.string.add_server_sheet_step_0_join)
                                 )
                             },
                             description = {
                                 Text(
-                                    text = stringResource(id = R.string.add_server_sheet_step_0_join_description)
+                                    text = stringResource(Res.string.add_server_sheet_step_0_join_description)
                                 )
                             },
                         ) {
@@ -183,12 +206,12 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             },
                             title = {
                                 Text(
-                                    text = stringResource(id = R.string.add_server_sheet_step_0_create)
+                                    text = stringResource(Res.string.add_server_sheet_step_0_create)
                                 )
                             },
                             description = {
                                 Text(
-                                    text = stringResource(id = R.string.add_server_sheet_step_0_create_description)
+                                    text = stringResource(Res.string.add_server_sheet_step_0_create_description)
                                 )
                             },
                         ) {
@@ -207,7 +230,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1j_title),
+                                text = stringResource(Res.string.add_server_sheet_step_1j_title),
                                 style = MaterialTheme.typography.titleMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.fillMaxWidth()
@@ -219,13 +242,13 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                    contentDescription = stringResource(id = R.string.back),
+                                    contentDescription = stringResource(Res.string.back),
                                 )
                             }
                         }
 
                         Text(
-                            text = stringResource(id = R.string.add_server_sheet_step_1j_description),
+                            text = stringResource(Res.string.add_server_sheet_step_1j_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = LocalContentColor.current.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center,
@@ -234,7 +257,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
 
 
                         Text(
-                            text = stringResource(id = R.string.add_server_sheet_step_1j_examples_heading),
+                            text = stringResource(Res.string.add_server_sheet_step_1j_examples_heading),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.outline,
                             textAlign = TextAlign.Center,
@@ -246,7 +269,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1j_example_1),
+                                text = stringResource(Res.string.add_server_sheet_step_1j_example_1),
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 fontFamily = FragmentMono,
@@ -262,7 +285,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                     .fillMaxWidth()
                             )
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1j_example_2),
+                                text = stringResource(Res.string.add_server_sheet_step_1j_example_2),
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 fontFamily = FragmentMono,
@@ -275,7 +298,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                     .fillMaxWidth()
                             )
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1j_example_3),
+                                text = stringResource(Res.string.add_server_sheet_step_1j_example_3),
                                 style = MaterialTheme.typography.bodyMedium,
                                 textAlign = TextAlign.Center,
                                 fontFamily = FragmentMono,
@@ -297,7 +320,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                         TextField(
                             state = inviteState,
                             label = {
-                                Text(stringResource(R.string.add_server_sheet_step_1j_label))
+                                Text(stringResource(Res.string.add_server_sheet_step_1j_label))
                             },
                             lineLimits = TextFieldLineLimits.SingleLine,
                             modifier = Modifier
@@ -330,7 +353,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1j_join)
+                                text = stringResource(Res.string.add_server_sheet_step_1j_join)
                             )
                         }
                     }
@@ -360,7 +383,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1c_title),
+                                text = stringResource(Res.string.add_server_sheet_step_1c_title),
                                 style = MaterialTheme.typography.titleMedium,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.fillMaxWidth()
@@ -372,13 +395,13 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                    contentDescription = stringResource(id = R.string.back),
+                                    contentDescription = stringResource(Res.string.back),
                                 )
                             }
                         }
 
                         Text(
-                            text = stringResource(id = R.string.add_server_sheet_step_1c_description),
+                            text = stringResource(Res.string.add_server_sheet_step_1c_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = LocalContentColor.current.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center,
@@ -407,7 +430,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                             }
                             Text(
                                 text = when {
-                                    serverNameIsBlank -> stringResource(R.string.add_server_sheet_step_1c_name_placeholder)
+                                    serverNameIsBlank -> stringResource(Res.string.add_server_sheet_step_1c_name_placeholder)
                                     else -> serverNameState.text.toString()
                                 },
                                 style = MaterialTheme.typography.bodyLarge,
@@ -431,15 +454,15 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                         TextField(
                             state = serverNameState,
                             label = {
-                                Text(stringResource(R.string.add_server_sheet_step_1c_name))
+                                Text(stringResource(Res.string.add_server_sheet_step_1c_name))
                             },
                             lineLimits = TextFieldLineLimits.SingleLine,
                             supportingText = {
                                 Text(
                                     when {
-                                        serverCreationError -> stringResource(R.string.add_server_sheet_step_1c_error)
+                                        serverCreationError -> stringResource(Res.string.add_server_sheet_step_1c_error)
                                         serverNameRangeError -> stringResource(
-                                            R.string.add_server_sheet_step_1c_name_error_range,
+                                            Res.string.add_server_sheet_step_1c_name_error_range,
                                             32
                                         )
 
@@ -482,7 +505,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                 .fillMaxWidth()
                         ) {
                             Text(
-                                text = stringResource(id = R.string.add_server_sheet_step_1c_create)
+                                text = stringResource(Res.string.add_server_sheet_step_1c_create)
                             )
                         }
                     }

@@ -14,11 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_age_gate_dob_day
+import chat.stoat.shared.resources.channel_age_gate_dob_month
+import chat.stoat.shared.resources.channel_age_gate_dob_year
+import org.jetbrains.compose.resources.stringResource
 
 sealed class DobElement {
     data object Day : DobElement()
@@ -78,7 +81,7 @@ private fun DobPickerDay(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = stringResource(R.string.channel_age_gate_dob_day),
+            text = stringResource(Res.string.channel_age_gate_dob_day),
             style = MaterialTheme.typography.labelMedium,
         )
         OutlinedTextField(
@@ -116,7 +119,7 @@ private fun DobPickerMonth(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = stringResource(R.string.channel_age_gate_dob_month),
+            text = stringResource(Res.string.channel_age_gate_dob_month),
             style = MaterialTheme.typography.labelMedium,
         )
         OutlinedTextField(
@@ -153,7 +156,7 @@ private fun DobPickerYear(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = stringResource(R.string.channel_age_gate_dob_year),
+            text = stringResource(Res.string.channel_age_gate_dob_year),
             style = MaterialTheme.typography.labelMedium,
         )
         OutlinedTextField(

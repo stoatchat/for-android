@@ -30,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,15 @@ import chat.stoat.api.routes.channel.createGroupDM
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.MemberListItem
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.create_group
+import chat.stoat.shared.resources.create_group_action
+import chat.stoat.shared.resources.create_group_description
+import chat.stoat.shared.resources.create_group_name
+import chat.stoat.shared.resources.create_group_search
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 class CreateGroupScreenViewModel : ViewModel() {
     var groupName by mutableStateOf("")
@@ -111,7 +118,7 @@ fun CreateGroupScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.create_group),
+                        text = stringResource(Res.string.create_group),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -122,7 +129,7 @@ fun CreateGroupScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 }
@@ -137,7 +144,7 @@ fun CreateGroupScreen(
                 FloatingActionButton(onClick = { viewModel.createGroup(navController::popBackStack) }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_check_24dp),
-                        contentDescription = stringResource(R.string.create_group_action)
+                        contentDescription = stringResource(Res.string.create_group_action)
                     )
                 }
             }
@@ -149,7 +156,7 @@ fun CreateGroupScreen(
                 .imePadding()
         ) {
             Text(
-                text = stringResource(R.string.create_group_description, MAX_PEOPLE_IN_GROUP),
+                text = stringResource(Res.string.create_group_description, MAX_PEOPLE_IN_GROUP),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -166,7 +173,7 @@ fun CreateGroupScreen(
             TextField(
                 value = viewModel.groupName,
                 onValueChange = { viewModel.groupName = it },
-                label = { Text(stringResource(R.string.create_group_name)) },
+                label = { Text(stringResource(Res.string.create_group_name)) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,7 +188,7 @@ fun CreateGroupScreen(
                         contentDescription = null
                     )
                 },
-                label = { Text(stringResource(R.string.create_group_search)) },
+                label = { Text(stringResource(Res.string.create_group_search)) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()

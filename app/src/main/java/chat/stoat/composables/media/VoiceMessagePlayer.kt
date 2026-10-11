@@ -26,10 +26,13 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.media_viewer_pause
+import chat.stoat.shared.resources.media_viewer_play
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -71,9 +74,9 @@ fun VoiceMessagePlayer(
                         ),
                         contentDescription = stringResource(
                             if (playback.isPlaying.value) {
-                                R.string.media_viewer_pause
+                                Res.string.media_viewer_pause
                             } else {
-                                R.string.media_viewer_play
+                                Res.string.media_viewer_play
                             }
                         )
                     )

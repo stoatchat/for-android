@@ -11,11 +11,14 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.R
 import chat.stoat.api.internals.ULID
 import chat.stoat.core.model.schemas.Session
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.logout
+import chat.stoat.shared.resources.settings_sessions_first_seen
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SessionItem(
@@ -36,7 +39,7 @@ fun SessionItem(
     ListItem(
         supportingContent = {
             Text(
-                text = stringResource(R.string.settings_sessions_first_seen, formattedTimestamp),
+                text = stringResource(Res.string.settings_sessions_first_seen, formattedTimestamp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -48,7 +51,7 @@ fun SessionItem(
                 }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_logout_24dp),
-                        contentDescription = stringResource(R.string.logout)
+                        contentDescription = stringResource(Res.string.logout)
                     )
                 }
             }

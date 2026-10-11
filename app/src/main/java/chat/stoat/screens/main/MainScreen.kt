@@ -14,10 +14,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.screens.chat.views.OverviewScreen
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.main_tab_communities
+import chat.stoat.shared.resources.main_tab_conversations
+import chat.stoat.shared.resources.main_tab_overview
+import org.jetbrains.compose.resources.stringResource
 
 enum class MainScreenTab {
     Communities,
@@ -44,7 +48,7 @@ fun MainScreen(navController: NavController) {
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.main_tab_communities))
+                        Text(stringResource(Res.string.main_tab_communities))
                     }
                 )
                 NavigationBarItem(
@@ -63,7 +67,7 @@ fun MainScreen(navController: NavController) {
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.main_tab_conversations))
+                        Text(stringResource(Res.string.main_tab_conversations))
                     }
                 )
                 NavigationBarItem(
@@ -82,7 +86,7 @@ fun MainScreen(navController: NavController) {
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.main_tab_overview))
+                        Text(stringResource(Res.string.main_tab_overview))
                     }
                 )
             }

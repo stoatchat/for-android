@@ -20,13 +20,17 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.activities.StoatTweenColour
 import chat.stoat.activities.StoatTweenDp
 import chat.stoat.internals.server.PermissionOverrideValue
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.permission_allow
+import chat.stoat.shared.resources.permission_deny
+import chat.stoat.shared.resources.permission_neutral
+import org.jetbrains.compose.resources.stringResource
 
 private val PermissionOverrideOptions = listOf(
     PermissionOverrideValue.Allow,
@@ -111,9 +115,9 @@ private fun PermissionOverrideOption(
 ) {
     val label = stringResource(
         when (option) {
-            PermissionOverrideValue.Allow -> R.string.permission_allow
-            PermissionOverrideValue.Neutral -> R.string.permission_neutral
-            PermissionOverrideValue.Deny -> R.string.permission_deny
+            PermissionOverrideValue.Allow -> Res.string.permission_allow
+            PermissionOverrideValue.Neutral -> Res.string.permission_neutral
+            PermissionOverrideValue.Deny -> Res.string.permission_deny
         }
     )
     val icon = when (option) {

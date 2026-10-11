@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -45,8 +44,27 @@ import chat.stoat.composables.screens.settings.ServerOverview
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.availableServerSettingsOptions
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_context_sheet_actions_add_to_folder
+import chat.stoat.shared.resources.server_context_sheet_actions_copy_id
+import chat.stoat.shared.resources.server_context_sheet_actions_copy_id_copied
+import chat.stoat.shared.resources.server_context_sheet_actions_leave
+import chat.stoat.shared.resources.server_context_sheet_actions_leave_confirm
+import chat.stoat.shared.resources.server_context_sheet_actions_leave_confirm_eyebrow
+import chat.stoat.shared.resources.server_context_sheet_actions_leave_confirm_no
+import chat.stoat.shared.resources.server_context_sheet_actions_leave_confirm_yes
+import chat.stoat.shared.resources.server_context_sheet_actions_leave_silently
+import chat.stoat.shared.resources.server_context_sheet_actions_mark_read
+import chat.stoat.shared.resources.server_context_sheet_actions_remove_from_folder
+import chat.stoat.shared.resources.server_context_sheet_actions_report
+import chat.stoat.shared.resources.server_context_sheet_description_empty
+import chat.stoat.shared.resources.server_folder_default_name
+import chat.stoat.shared.resources.server_identity
+import chat.stoat.shared.resources.server_settings
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -56,6 +74,7 @@ fun ServerContextSheet(
     onPickFolder: suspend () -> Unit,
     onHideSheet: suspend () -> Unit
 ) {
+    val serverContextSheetActionsCopyIdCopiedText = stringResource(Res.string.server_context_sheet_actions_copy_id_copied)
     val server = StoatAPI.serverCache[serverId]
 
     if (server == null) {
@@ -82,7 +101,7 @@ fun ServerContextSheet(
 
     var showLeaveConfirmation by remember { mutableStateOf(false) }
     val currentFolder = ServerFolders.folderOf(serverId)
-    val newFolderName = stringResource(R.string.server_folder_default_name)
+    val newFolderName = stringResource(Res.string.server_folder_default_name)
     var leaveSilently by remember { mutableStateOf(false) }
 
     if (showLeaveConfirmation) {
@@ -93,8 +112,8 @@ fun ServerContextSheet(
             title = {
                 Text(
                     text = stringResource(
-                        id = R.string.server_context_sheet_actions_leave_confirm,
-                        server.name ?: stringResource(R.string.unknown)
+                        Res.string.server_context_sheet_actions_leave_confirm,
+                        server.name ?: stringResource(Res.string.unknown)
                     )
                 )
             },
@@ -102,7 +121,7 @@ fun ServerContextSheet(
                 Column {
                     Text(
                         text = stringResource(
-                            id = R.string.server_context_sheet_actions_leave_confirm_eyebrow
+                            Res.string.server_context_sheet_actions_leave_confirm_eyebrow
                         )
                     )
                     Row(
@@ -117,7 +136,7 @@ fun ServerContextSheet(
                         )
                         Text(
                             text = stringResource(
-                                id = R.string.server_context_sheet_actions_leave_silently
+                                Res.string.server_context_sheet_actions_leave_silently
                             ),
                             modifier = Modifier.padding(start = 4.dp)
                         )
@@ -137,7 +156,7 @@ fun ServerContextSheet(
                 ) {
                     Text(
                         text = stringResource(
-                            id = R.string.server_context_sheet_actions_leave_confirm_yes
+                            Res.string.server_context_sheet_actions_leave_confirm_yes
                         )
                     )
                 }
@@ -150,7 +169,7 @@ fun ServerContextSheet(
                 ) {
                     Text(
                         text = stringResource(
-                            id = R.string.server_context_sheet_actions_leave_confirm_no
+                            Res.string.server_context_sheet_actions_leave_confirm_no
                         )
                     )
                 }
@@ -171,7 +190,7 @@ fun ServerContextSheet(
                     content = if (server.description?.isBlank() == false) {
                         server.description!!
                     } else {
-                        stringResource(R.string.server_context_sheet_description_empty)
+                        stringResource(Res.string.server_context_sheet_description_empty)
                     },
                     serverId = serverId,
                 )
@@ -189,7 +208,7 @@ fun ServerContextSheet(
             },
             headlineContent = {
                 Text(
-                    text = stringResource(id = R.string.server_context_sheet_actions_copy_id)
+                    text = stringResource(Res.string.server_context_sheet_actions_copy_id)
                 )
             },
             onClick = {
@@ -200,7 +219,7 @@ fun ServerContextSheet(
                 if (Platform.needsShowClipboardNotification()) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.server_context_sheet_actions_copy_id_copied),
+                        serverContextSheetActionsCopyIdCopiedText,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -220,7 +239,7 @@ fun ServerContextSheet(
             },
             headlineContent = {
                 Text(
-                    text = stringResource(id = R.string.server_context_sheet_actions_mark_read)
+                    text = stringResource(Res.string.server_context_sheet_actions_mark_read)
                 )
             },
             onClick = {
@@ -241,7 +260,7 @@ fun ServerContextSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_context_sheet_actions_add_to_folder))
+                Text(stringResource(Res.string.server_context_sheet_actions_add_to_folder))
             },
             onClick = {
                 if (ServerFolders.folders.isEmpty()) {
@@ -264,7 +283,7 @@ fun ServerContextSheet(
                     )
                 },
                 headlineContent = {
-                    Text(stringResource(R.string.server_context_sheet_actions_remove_from_folder))
+                    Text(stringResource(Res.string.server_context_sheet_actions_remove_from_folder))
                 },
                 onClick = {
                     coroutineScope.launch {
@@ -283,7 +302,7 @@ fun ServerContextSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_identity))
+                Text(stringResource(Res.string.server_identity))
             },
             onClick = {
                 coroutineScope.launch {
@@ -307,7 +326,7 @@ fun ServerContextSheet(
                     )
                 },
                 headlineContent = {
-                    Text(stringResource(R.string.server_settings))
+                    Text(stringResource(Res.string.server_settings))
                 },
                 onClick = {
                     coroutineScope.launch {
@@ -331,7 +350,7 @@ fun ServerContextSheet(
                 },
                 headlineContent = {
                     Text(
-                        text = stringResource(id = R.string.server_context_sheet_actions_report),
+                        text = stringResource(Res.string.server_context_sheet_actions_report),
                     )
                 },
                 dangerous = true,
@@ -349,7 +368,7 @@ fun ServerContextSheet(
                 },
                 headlineContent = {
                     Text(
-                        text = stringResource(id = R.string.server_context_sheet_actions_leave)
+                        text = stringResource(Res.string.server_context_sheet_actions_leave)
                     )
                 },
                 dangerous = true,

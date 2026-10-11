@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -70,7 +69,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import chat.stoat.BuildConfig
-import chat.stoat.R
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatHttp
@@ -88,6 +86,7 @@ import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.internals.StoatWebLink
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.material.EasingTokens
 import chat.stoat.persistence.KVStorage
@@ -138,12 +137,23 @@ import chat.stoat.screens.settings.server.ServerSettingsInvites
 import chat.stoat.screens.settings.server.ServerSettingsOverview
 import chat.stoat.screens.settings.server.ServerSettingsRoleEditor
 import chat.stoat.screens.settings.server.ServerSettingsRoles
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.could_not_log_in_body
+import chat.stoat.shared.resources.could_not_log_in_cta_logout
+import chat.stoat.shared.resources.could_not_log_in_cta_try_again
+import chat.stoat.shared.resources.could_not_log_in_heading
+import chat.stoat.shared.resources.keyboard_shortcut_messaging
+import chat.stoat.shared.resources.keyboard_shortcut_messaging_new_line
+import chat.stoat.shared.resources.keyboard_shortcut_messaging_send_message
+import chat.stoat.shared.resources.rate_limit_toast
 import chat.stoat.ui.theme.StoatTheme
 import chat.stoat.voice.VoiceCallManager
 import io.ktor.client.request.get
 import io.sentry.android.core.SentryAndroid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivityViewModel(
@@ -255,7 +265,7 @@ class MainActivityViewModel(
                     Log.e("MainActivity", "Rate limited while checking onboarding state", e)
                     Toast.makeText(
                         context,
-                        context.getString(R.string.rate_limit_toast),
+                        getString(Res.string.rate_limit_toast),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@launch startWithoutDestination()
@@ -434,15 +444,15 @@ class MainActivity : AppCompatActivity() {
         deviceId: Int
     ) {
         val messaging = KeyboardShortcutGroup(
-            getString(R.string.keyboard_shortcut_messaging),
+            getStringBlocking(Res.string.keyboard_shortcut_messaging),
             listOf(
                 KeyboardShortcutInfo(
-                    getString(R.string.keyboard_shortcut_messaging_new_line),
+                    getStringBlocking(Res.string.keyboard_shortcut_messaging_new_line),
                     KeyEvent.KEYCODE_ENTER,
                     0
                 ),
                 KeyboardShortcutInfo(
-                    getString(R.string.keyboard_shortcut_messaging_send_message),
+                    getStringBlocking(Res.string.keyboard_shortcut_messaging_send_message),
                     KeyEvent.KEYCODE_ENTER,
                     KeyEvent.META_CTRL_ON
                 )
@@ -538,10 +548,10 @@ fun AppEntrypoint(
                             // no-op
                         },
                         title = {
-                            Text(stringResource(R.string.could_not_log_in_heading))
+                            Text(stringResource(Res.string.could_not_log_in_heading))
                         },
                         text = {
-                            Text(stringResource(R.string.could_not_log_in_body))
+                            Text(stringResource(Res.string.could_not_log_in_body))
                         },
                         confirmButton = {
                             TextButton(
@@ -550,7 +560,7 @@ fun AppEntrypoint(
                                     onRetryConnection()
                                 }
                             ) {
-                                Text(stringResource(R.string.could_not_log_in_cta_try_again))
+                                Text(stringResource(Res.string.could_not_log_in_cta_try_again))
                             }
                         },
                         dismissButton = {
@@ -560,7 +570,7 @@ fun AppEntrypoint(
                                     onLogout()
                                 }
                             ) {
-                                Text(stringResource(R.string.could_not_log_in_cta_logout))
+                                Text(stringResource(Res.string.could_not_log_in_cta_logout))
                             }
                         }
                     )

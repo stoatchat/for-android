@@ -15,12 +15,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.composables.vectorassets.SwipeToReplySpark
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.spark_swipe_to_reply
+import chat.stoat.shared.resources.spark_swipe_to_reply_cta
+import chat.stoat.shared.resources.spark_swipe_to_reply_customise
+import chat.stoat.shared.resources.spark_swipe_to_reply_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SwipeToReplySparkSheet(
@@ -38,12 +42,12 @@ fun SwipeToReplySparkSheet(
         Spacer(Modifier) // Counts towards the vertical arrangement
 
         Text(
-            text = stringResource(R.string.spark_swipe_to_reply),
+            text = stringResource(Res.string.spark_swipe_to_reply),
             style = MaterialTheme.typography.titleMedium,
         )
 
         Text(
-            text = stringResource(R.string.spark_swipe_to_reply_description),
+            text = stringResource(Res.string.spark_swipe_to_reply_description),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )
@@ -55,13 +59,13 @@ fun SwipeToReplySparkSheet(
                 onClick = onOpenOptions,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.spark_swipe_to_reply_customise))
+                Text(stringResource(Res.string.spark_swipe_to_reply_customise))
             }
             Button(
                 onClick = onDismissSheet,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.spark_swipe_to_reply_cta))
+                Text(stringResource(Res.string.spark_swipe_to_reply_cta))
             }
         }
     }

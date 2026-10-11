@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
@@ -31,6 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.internals.extensions.getSupportedLocales
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.settings_language
+import chat.stoat.shared.resources.settings_language_auto
+import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 
 class LanguagePickerSettingsScreen : ViewModel() {
@@ -69,7 +73,7 @@ fun LanguagePickerSettingsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        stringResource(id = R.string.settings_language),
+                        stringResource(Res.string.settings_language),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -81,7 +85,7 @@ fun LanguagePickerSettingsScreen(
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                contentDescription = stringResource(id = R.string.back)
+                                contentDescription = stringResource(Res.string.back)
                             )
                         }
                     }
@@ -107,7 +111,7 @@ fun LanguagePickerSettingsScreen(
                     }
                 ) {
                     Text(
-                        stringResource(id = R.string.settings_language_auto),
+                        stringResource(Res.string.settings_language_auto),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

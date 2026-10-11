@@ -37,13 +37,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.isUlid
 import chat.stoat.api.routes.custom.fetchEmoji
@@ -56,7 +54,12 @@ import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.text.MessageProcessor
 import chat.stoat.persistence.KVStorage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.emote_info_from_server
+import chat.stoat.shared.resources.emote_info_from_server_unknown
+import chat.stoat.shared.resources.emote_info_from_unicode
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -291,19 +294,19 @@ fun ReactionInfoSheet(messageId: String, emoji: String, onDismiss: () -> Unit) {
                                         when (cached.parent!!.type) {
                                             "Server" -> StoatAPI.serverCache[cached.parent!!.id]?.name?.let {
                                                 stringResource(
-                                                    id = R.string.emote_info_from_server,
+                                                    Res.string.emote_info_from_server,
                                                     it
                                                 )
                                             }
-                                                ?: stringResource(id = R.string.emote_info_from_server_unknown)
+                                                ?: stringResource(Res.string.emote_info_from_server_unknown)
 
-                                            else -> stringResource(id = R.string.emote_info_from_server_unknown)
+                                            else -> stringResource(Res.string.emote_info_from_server_unknown)
                                         }
                                     } else {
-                                        stringResource(id = R.string.emote_info_from_server_unknown)
+                                        stringResource(Res.string.emote_info_from_server_unknown)
                                     }
                                 } else {
-                                    stringResource(id = R.string.emote_info_from_unicode)
+                                    stringResource(Res.string.emote_info_from_unicode)
                                 }
                             )
                         }

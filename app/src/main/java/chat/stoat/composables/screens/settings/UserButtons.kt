@@ -28,9 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -50,10 +48,33 @@ import chat.stoat.dialogs.memberModerationPermissions
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.serverIdentityCapabilities
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.member_moderation_ban
+import chat.stoat.shared.resources.member_moderation_kick
+import chat.stoat.shared.resources.member_moderation_timeout
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.server_identity_edit_member
+import chat.stoat.shared.resources.user_info_sheet_accept_request
+import chat.stoat.shared.resources.user_info_sheet_add_friend
+import chat.stoat.shared.resources.user_info_sheet_block
+import chat.stoat.shared.resources.user_info_sheet_cancel_request
+import chat.stoat.shared.resources.user_info_sheet_copy_id
+import chat.stoat.shared.resources.user_info_sheet_decline_request
+import chat.stoat.shared.resources.user_info_sheet_edit_profile
+import chat.stoat.shared.resources.user_info_sheet_failed_to_open_dm
+import chat.stoat.shared.resources.user_info_sheet_remove_friend
+import chat.stoat.shared.resources.user_info_sheet_report
+import chat.stoat.shared.resources.user_info_sheet_send_message
+import chat.stoat.shared.resources.user_info_sheet_unblock
+import chat.stoat.shared.resources.user_info_sheet_user_is_bot
+import chat.stoat.shared.resources.user_info_sheet_user_is_bot_easter_egg
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun UserButtons(
@@ -63,7 +84,6 @@ fun UserButtons(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val resources = LocalResources.current
     val clipboard = LocalClipboardManager.current
 
     var botEasterEgg by remember { mutableStateOf(false) }
@@ -117,7 +137,7 @@ fun UserButtons(
             },
             modifier = Modifier.weight(1f)
         ) {
-            Text(stringResource(R.string.user_info_sheet_add_friend))
+            Text(stringResource(Res.string.user_info_sheet_add_friend))
         }
     }
 
@@ -141,7 +161,7 @@ fun UserButtons(
                         },
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text(stringResource(R.string.user_info_sheet_add_friend))
+                        Text(stringResource(Res.string.user_info_sheet_add_friend))
                     }
                 } else {
                     Row(
@@ -163,9 +183,9 @@ fun UserButtons(
                         )
                         Text(
                             if (botEasterEgg) {
-                                stringResource(R.string.user_info_sheet_user_is_bot_easter_egg)
+                                stringResource(Res.string.user_info_sheet_user_is_bot_easter_egg)
                             } else {
-                                stringResource(R.string.user_info_sheet_user_is_bot)
+                                stringResource(Res.string.user_info_sheet_user_is_bot)
                             },
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -185,7 +205,7 @@ fun UserButtons(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_edit_profile))
+                    Text(stringResource(Res.string.user_info_sheet_edit_profile))
                 }
             }
 
@@ -202,7 +222,7 @@ fun UserButtons(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    resources.getString(R.string.user_info_sheet_failed_to_open_dm),
+                                    getString(Res.string.user_info_sheet_failed_to_open_dm),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -210,7 +230,7 @@ fun UserButtons(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_send_message))
+                    Text(stringResource(Res.string.user_info_sheet_send_message))
                 }
                 // Remove friend (in overflow menu)
             }
@@ -229,7 +249,7 @@ fun UserButtons(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_cancel_request))
+                    Text(stringResource(Res.string.user_info_sheet_cancel_request))
                 }
             }
 
@@ -247,7 +267,7 @@ fun UserButtons(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_accept_request))
+                    Text(stringResource(Res.string.user_info_sheet_accept_request))
                 }
                 Button(
                     onClick = {
@@ -266,7 +286,7 @@ fun UserButtons(
                     ),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_decline_request))
+                    Text(stringResource(Res.string.user_info_sheet_decline_request))
                 }
             }
 
@@ -284,7 +304,7 @@ fun UserButtons(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(stringResource(R.string.user_info_sheet_unblock))
+                    Text(stringResource(Res.string.user_info_sheet_unblock))
                 }
             }
 
@@ -301,7 +321,7 @@ fun UserButtons(
                         "Friend" -> {
                             DropdownMenuItem(
                                 text = {
-                                    Text(stringResource(R.string.user_info_sheet_remove_friend))
+                                    Text(stringResource(Res.string.user_info_sheet_remove_friend))
                                 },
                                 leadingIcon = {
                                     Icon(
@@ -329,7 +349,7 @@ fun UserButtons(
 
                         else -> DropdownMenuItem(
                             text = {
-                                Text(stringResource(R.string.user_info_sheet_block))
+                                Text(stringResource(Res.string.user_info_sheet_block))
                             },
                             leadingIcon = {
                                 Icon(
@@ -353,7 +373,7 @@ fun UserButtons(
 
                     DropdownMenuItem(
                         text = {
-                            Text(stringResource(R.string.user_info_sheet_copy_id))
+                            Text(stringResource(Res.string.user_info_sheet_copy_id))
                         },
                         leadingIcon = {
                             Icon(
@@ -372,7 +392,7 @@ fun UserButtons(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                stringResource(R.string.user_info_sheet_report),
+                                stringResource(Res.string.user_info_sheet_report),
                                 color = MaterialTheme.colorScheme.error
                             )
                         },
@@ -390,7 +410,7 @@ fun UserButtons(
                                 if (Platform.needsShowClipboardNotification()) {
                                     Toast.makeText(
                                         context,
-                                        resources.getString(R.string.copied),
+                                        getString(Res.string.copied),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -404,7 +424,7 @@ fun UserButtons(
                         if (canEditServerIdentity) {
                             DropdownMenuItem(
                                 text = {
-                                    Text(stringResource(R.string.server_identity_edit_member))
+                                    Text(stringResource(Res.string.server_identity_edit_member))
                                 },
                                 leadingIcon = {
                                     Icon(
@@ -431,7 +451,7 @@ fun UserButtons(
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = stringResource(R.string.member_moderation_timeout),
+                                        text = stringResource(Res.string.member_moderation_timeout),
                                         color = MaterialTheme.colorScheme.error,
                                     )
                                 },
@@ -453,7 +473,7 @@ fun UserButtons(
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = stringResource(R.string.member_moderation_kick),
+                                        text = stringResource(Res.string.member_moderation_kick),
                                         color = MaterialTheme.colorScheme.error,
                                     )
                                 },
@@ -475,7 +495,7 @@ fun UserButtons(
                             DropdownMenuItem(
                                 text = {
                                     Text(
-                                        text = stringResource(R.string.member_moderation_ban),
+                                        text = stringResource(Res.string.member_moderation_ban),
                                         color = MaterialTheme.colorScheme.error,
                                     )
                                 },
@@ -502,7 +522,7 @@ fun UserButtons(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_more_vert_24dp),
-                        contentDescription = stringResource(R.string.menu)
+                        contentDescription = stringResource(Res.string.menu)
                     )
                 }
             }

@@ -17,13 +17,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.next
+import chat.stoat.shared.resources.register_heading
+import chat.stoat.shared.resources.register_instructions
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RegisterGreetingScreen(navController: NavController) {
@@ -42,7 +46,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.register_heading),
+                text = stringResource(Res.string.register_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Black,
@@ -56,7 +60,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = stringResource(R.string.register_instructions),
+                text = stringResource(Res.string.register_instructions),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -74,7 +78,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             TextButton(onClick = {
                 navController.popBackStack()
             }) {
-                Text(text = stringResource(R.string.back))
+                Text(text = stringResource(Res.string.back))
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -82,7 +86,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             Button(onClick = {
                 navController.navigate("register/details")
             }) {
-                Text(text = stringResource(R.string.next))
+                Text(text = stringResource(Res.string.next))
             }
         }
     }

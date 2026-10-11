@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import chat.stoat.R
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
@@ -16,6 +15,10 @@ import chat.stoat.api.routes.voice.joinCall
 import chat.stoat.composables.voice.VoiceSound
 import chat.stoat.composables.voice.VoiceSoundPlayer
 import chat.stoat.services.OngoingCallService
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.voice_error_generic
+import chat.stoat.shared.resources.voice_error_no_nodes
+import chat.stoat.shared.resources.voice_error_not_supported
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.request.get
@@ -42,6 +45,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.StringResource
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -58,7 +62,7 @@ object VoiceCallManager {
     var room: Room? by mutableStateOf(null)
         private set
 
-    var errorResource: Int? by mutableStateOf<Int?>(null)
+    var errorResource: StringResource? by mutableStateOf<StringResource?>(null)
         private set
 
     var isDeafened: Boolean by mutableStateOf(false)
@@ -121,7 +125,7 @@ object VoiceCallManager {
                 newRoom.localParticipant.setMicrophoneEnabled(true)
             } catch (e: Exception) {
                 logcat(LogPriority.ERROR) { "Could not connect to LiveKit room\n" + e.asLog() }
-                errorResource = R.string.voice_error_generic
+                errorResource = Res.string.voice_error_generic
             }
         }
     }
@@ -306,7 +310,7 @@ object VoiceCallManager {
             root = getRootRoute()
         } catch (e: Exception) {
             logcat(LogPriority.ERROR) { "Could not get root route\n" + e.asLog() }
-            errorResource = R.string.voice_error_generic
+            errorResource = Res.string.voice_error_generic
             return null
         }
 
@@ -316,20 +320,20 @@ object VoiceCallManager {
             logcat(LogPriority.ERROR) {
                 IllegalStateException("LiveKit is not supported by this API version!").asLog()
             }
-            errorResource = R.string.voice_error_not_supported
+            errorResource = Res.string.voice_error_not_supported
             return null
         }
 
         if (lk.nodes.isEmpty()) {
             logcat(LogPriority.ERROR) { IllegalStateException("No LiveKit nodes available!").asLog() }
-            errorResource = R.string.voice_error_no_nodes
+            errorResource = Res.string.voice_error_no_nodes
             return null
         }
 
         val node = fastestNode(lk.nodes)
         if (node == null) {
             logcat(LogPriority.ERROR) { "No LiveKit node responded to probing!" }
-            errorResource = R.string.voice_error_no_nodes
+            errorResource = Res.string.voice_error_no_nodes
             return null
         }
 
@@ -337,7 +341,7 @@ object VoiceCallManager {
             joinCall(channelId, node.name)
         } catch (e: Exception) {
             logcat(LogPriority.ERROR) { "Could not get LiveKit token\n" + e.asLog() }
-            errorResource = R.string.voice_error_generic
+            errorResource = Res.string.voice_error_generic
             null
         }
     }

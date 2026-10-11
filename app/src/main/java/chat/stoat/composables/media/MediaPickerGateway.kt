@@ -24,10 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.file_picker_chip_camera
+import chat.stoat.shared.resources.file_picker_chip_documents
+import chat.stoat.shared.resources.file_picker_chip_photo_picker
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MediaPickerGateway(
@@ -70,7 +74,7 @@ fun MediaPickerGateway(
                         contentDescription = null,
                     )
                     Text(
-                        stringResource(R.string.file_picker_chip_photo_picker),
+                        stringResource(Res.string.file_picker_chip_photo_picker),
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
@@ -106,7 +110,7 @@ fun MediaPickerGateway(
                         contentDescription = null,
                     )
                     Text(
-                        stringResource(R.string.file_picker_chip_documents),
+                        stringResource(Res.string.file_picker_chip_documents),
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
@@ -130,7 +134,7 @@ fun MediaPickerGateway(
                         contentDescription = null,
                     )
                     Text(
-                        stringResource(R.string.file_picker_chip_camera),
+                        stringResource(Res.string.file_picker_chip_camera),
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )

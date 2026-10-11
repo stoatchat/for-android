@@ -14,12 +14,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.time_rift_cta
+import chat.stoat.shared.resources.time_rift_heading
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimeRift(modifier: Modifier = Modifier, onMessageLoad: () -> Unit) {
@@ -33,7 +35,7 @@ fun TimeRift(modifier: Modifier = Modifier, onMessageLoad: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(id = R.string.time_rift_heading),
+            text = stringResource(Res.string.time_rift_heading),
             color = MaterialTheme.colorScheme.onBackground.copy(
                 alpha = 0.9f
             ),
@@ -50,7 +52,7 @@ fun TimeRift(modifier: Modifier = Modifier, onMessageLoad: () -> Unit) {
 
         TextButton(onClick = onMessageLoad) {
             Text(
-                text = stringResource(id = R.string.time_rift_cta),
+                text = stringResource(Res.string.time_rift_cta),
                 color = LocalContentColor.current.copy(
                     alpha = 0.9f
                 ),

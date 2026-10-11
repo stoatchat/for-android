@@ -47,8 +47,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.customActions
@@ -73,10 +71,32 @@ import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
 import chat.stoat.internals.server.serverRoleCapabilities
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.server_settings_roles
+import chat.stoat.shared.resources.server_settings_roles_above_you
+import chat.stoat.shared.resources.server_settings_roles_count
+import chat.stoat.shared.resources.server_settings_roles_create
+import chat.stoat.shared.resources.server_settings_roles_create_action
+import chat.stoat.shared.resources.server_settings_roles_create_error
+import chat.stoat.shared.resources.server_settings_roles_empty_description
+import chat.stoat.shared.resources.server_settings_roles_empty_title
+import chat.stoat.shared.resources.server_settings_roles_everyone
+import chat.stoat.shared.resources.server_settings_roles_everyone_description
+import chat.stoat.shared.resources.server_settings_roles_move_down
+import chat.stoat.shared.resources.server_settings_roles_move_up
+import chat.stoat.shared.resources.server_settings_roles_name
+import chat.stoat.shared.resources.server_settings_roles_reorder
+import chat.stoat.shared.resources.server_settings_roles_reorder_error
+import chat.stoat.shared.resources.server_settings_roles_reordered
+import chat.stoat.shared.resources.server_settings_roles_undo
 import com.bumptech.glide.integration.compose.CrossFade
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
@@ -112,7 +132,7 @@ class ServerSettingsRolesViewModel(
                 .onSuccess { createdRoleId = it.id }
                 .onFailure {
                     createError = it.message
-                        ?: context.getString(R.string.server_settings_roles_create_error)
+                        ?: getString(Res.string.server_settings_roles_create_error)
                 }
             creating = false
         }
@@ -140,7 +160,7 @@ class ServerSettingsRolesViewModel(
                 }
                 .onFailure {
                     reorderError = it.message
-                        ?: context.getString(R.string.server_settings_roles_reorder_error)
+                        ?: getString(Res.string.server_settings_roles_reorder_error)
                 }
             reorderingRoleId = null
         }
@@ -157,7 +177,7 @@ class ServerSettingsRolesViewModel(
             runCatching { reorderServerRoles(serverId, roleIds) }
                 .onFailure {
                     reorderError = it.message
-                        ?: context.getString(R.string.server_settings_roles_reorder_error)
+                        ?: getString(Res.string.server_settings_roles_reorder_error)
                 }
             reorderingRoleId = null
         }
@@ -246,13 +266,13 @@ fun ServerSettingsRoles(
             onDismissRequest = {
                 if (!viewModel.creating) showCreateDialog = false
             },
-            title = { Text(stringResource(R.string.server_settings_roles_create)) },
+            title = { Text(stringResource(Res.string.server_settings_roles_create)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
                         value = roleName,
                         onValueChange = { if (it.length <= 32) roleName = it },
-                        label = { Text(stringResource(R.string.server_settings_roles_name)) },
+                        label = { Text(stringResource(Res.string.server_settings_roles_name)) },
                         supportingText = { Text("${roleName.length}/32") },
                         singleLine = true,
                         enabled = !viewModel.creating,
@@ -269,7 +289,7 @@ fun ServerSettingsRoles(
                 TextButton(
                     enabled = !viewModel.creating,
                     onClick = { showCreateDialog = false },
-                ) { Text(stringResource(R.string.cancel)) }
+                ) { Text(stringResource(Res.string.cancel)) }
             },
             confirmButton = {
                 Button(
@@ -279,7 +299,7 @@ fun ServerSettingsRoles(
                     if (viewModel.creating) {
                         CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                     } else {
-                        Text(stringResource(R.string.server_settings_roles_create_action))
+                        Text(stringResource(Res.string.server_settings_roles_create_action))
                     }
                 }
             },
@@ -288,7 +308,7 @@ fun ServerSettingsRoles(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings_roles)) },
+        title = { Text(stringResource(Res.string.server_settings_roles)) },
         scrollable = false,
         onNavigateBack = {
             if (!viewModel.creating && viewModel.reorderingRoleId == null) navController.popBackStack()
@@ -304,14 +324,14 @@ fun ServerSettingsRoles(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_24dp),
-                        contentDescription = stringResource(R.string.server_settings_roles_create),
+                        contentDescription = stringResource(Res.string.server_settings_roles_create),
                     )
                 }
             }
         },
     ) {
-        val reorderedMessage = stringResource(R.string.server_settings_roles_reordered)
-        val undoLabel = stringResource(R.string.server_settings_roles_undo)
+        val reorderedMessage = stringResource(Res.string.server_settings_roles_reordered)
+        val undoLabel = stringResource(Res.string.server_settings_roles_undo)
         LaunchedEffect(viewModel.reordered) {
             if (viewModel.reordered > 0) {
                 showSnackbar(
@@ -336,7 +356,7 @@ fun ServerSettingsRoles(
             item(key = "role-count") {
                 Text(
                     text = pluralStringResource(
-                        R.plurals.server_settings_roles_count,
+                        Res.plurals.server_settings_roles_count,
                         displayedEntries.size,
                         displayedEntries.size,
                     ),
@@ -350,8 +370,8 @@ fun ServerSettingsRoles(
                 item(key = "empty") {
                     ServerSettingsEmptyState(
                         icon = R.drawable.ic_flag_24dp,
-                        title = R.string.server_settings_roles_empty_title,
-                        description = R.string.server_settings_roles_empty_description,
+                        title = Res.string.server_settings_roles_empty_title,
+                        description = Res.string.server_settings_roles_empty_description,
                     )
                 }
             }
@@ -414,7 +434,7 @@ fun ServerSettingsRoles(
                                             R.drawable.ic_drag_handle_24dp
                                         ),
                                         contentDescription = stringResource(
-                                            R.string.server_settings_roles_reorder
+                                            Res.string.server_settings_roles_reorder
                                         ),
                                     )
                                 }
@@ -484,7 +504,7 @@ fun ServerSettingsRoles(
                             supportingContent = {
                                 Text(
                                     stringResource(
-                                        R.string.server_settings_roles_everyone_description
+                                        Res.string.server_settings_roles_everyone_description
                                     )
                                 )
                             },
@@ -492,7 +512,7 @@ fun ServerSettingsRoles(
                             trailingContent = { Spacer(Modifier.size(48.dp)) },
                             modifier = Modifier.padding(top = 8.dp)
                         ) {
-                            Text(stringResource(R.string.server_settings_roles_everyone))
+                            Text(stringResource(Res.string.server_settings_roles_everyone))
                         }
                         Box(
                             contentAlignment = Alignment.Center,
@@ -577,14 +597,14 @@ private fun RoleListRow(
         targetValue = if (isDragging) 8.dp else 0.dp,
         label = "role drag elevation",
     )
-    val moveUpLabel = stringResource(R.string.server_settings_roles_move_up)
-    val moveDownLabel = stringResource(R.string.server_settings_roles_move_down)
+    val moveUpLabel = stringResource(Res.string.server_settings_roles_move_up)
+    val moveDownLabel = stringResource(Res.string.server_settings_roles_move_down)
     ListItem(
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         supportingContent = if (lockedByHierarchy) {
-            { Text(stringResource(R.string.server_settings_roles_above_you)) }
+            { Text(stringResource(Res.string.server_settings_roles_above_you)) }
         } else null,
         leadingContent = {
             Box(

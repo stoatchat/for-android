@@ -14,13 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.stoat.BuildConfig
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.spark_notifications_rationale
+import chat.stoat.shared.resources.spark_notifications_rationale_cta
+import chat.stoat.shared.resources.spark_notifications_rationale_description
+import chat.stoat.shared.resources.spark_notifications_rationale_dismiss
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun NotificationRationaleDialog(
@@ -30,7 +35,7 @@ fun NotificationRationaleDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(id = R.string.spark_notifications_rationale))
+            Text(stringResource(Res.string.spark_notifications_rationale))
         },
         text = {
             Column(
@@ -45,7 +50,7 @@ fun NotificationRationaleDialog(
                         .align(Alignment.CenterHorizontally)
                 )
                 Text(
-                    text = stringResource(id = R.string.spark_notifications_rationale_description)
+                    text = stringResource(Res.string.spark_notifications_rationale_description)
                 )
                 if (BuildConfig.DEBUG) {
                     Text(
@@ -66,7 +71,7 @@ fun NotificationRationaleDialog(
                 onSelected(false)
                 onDismiss()
             }) {
-                Text(stringResource(id = R.string.spark_notifications_rationale_dismiss))
+                Text(stringResource(Res.string.spark_notifications_rationale_dismiss))
             }
         },
         confirmButton = {
@@ -74,7 +79,7 @@ fun NotificationRationaleDialog(
                 onSelected(true)
                 onDismiss()
             }) {
-                Text(stringResource(id = R.string.spark_notifications_rationale_cta))
+                Text(stringResource(Res.string.spark_notifications_rationale_cta))
             }
         }
     )

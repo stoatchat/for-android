@@ -12,11 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.no_connection
+import chat.stoat.shared.resources.no_connection_message
+import chat.stoat.shared.resources.tap_to_retry
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DisconnectedScreen(onRetry: () -> Unit) {
@@ -28,7 +31,7 @@ fun DisconnectedScreen(onRetry: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.no_connection),
+            text = stringResource(Res.string.no_connection),
             style = MaterialTheme.typography.headlineMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -36,7 +39,7 @@ fun DisconnectedScreen(onRetry: () -> Unit) {
         )
 
         Text(
-            text = stringResource(R.string.no_connection_message),
+            text = stringResource(Res.string.no_connection_message),
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
@@ -46,7 +49,7 @@ fun DisconnectedScreen(onRetry: () -> Unit) {
         )
 
         Button(onClick = onRetry) {
-            Text(stringResource(R.string.tap_to_retry))
+            Text(stringResource(Res.string.tap_to_retry))
         }
     }
 }

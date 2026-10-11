@@ -114,9 +114,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
@@ -169,6 +167,29 @@ import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.internals.extensions.zero
 import chat.stoat.screens.chat.LocalIsConnected
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources._new
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.channel_notes
+import chat.stoat.shared.resources.channel_search
+import chat.stoat.shared.resources.file_picker_chip_camera
+import chat.stoat.shared.resources.file_picker_chip_camera_failed
+import chat.stoat.shared.resources.file_picker_chip_camera_none_installed
+import chat.stoat.shared.resources.file_picker_chip_documents
+import chat.stoat.shared.resources.file_picker_chip_photo_picker
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.message_failed_to_send
+import chat.stoat.shared.resources.message_field_editing_message
+import chat.stoat.shared.resources.message_field_editing_message_cancel_alt
+import chat.stoat.shared.resources.message_jump_failed
+import chat.stoat.shared.resources.retry
+import chat.stoat.shared.resources.scroll_to_bottom
+import chat.stoat.shared.resources.spark_keyboard_shortcuts
+import chat.stoat.shared.resources.spark_keyboard_shortcuts_cta
+import chat.stoat.shared.resources.spark_keyboard_shortcuts_description
+import chat.stoat.shared.resources.spark_keyboard_shortcuts_dismiss
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.voice_start_call
 import chat.stoat.sheets.ChannelInfoSheet
 import chat.stoat.sheets.MessageContextSheet
 import chat.stoat.sheets.ReactSheet
@@ -188,6 +209,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import kotlin.math.max
@@ -239,10 +262,11 @@ fun ChannelScreen(
     onRequestedMessageConsumed: () -> Unit = {},
     viewModel: ChannelScreenViewModel = koinViewModel()
 ) {
+    val filePickerChipCameraFailedText = stringResource(Res.string.file_picker_chip_camera_failed)
+    val filePickerChipCameraNoneInstalledText = stringResource(Res.string.file_picker_chip_camera_none_installed)
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val resources = LocalResources.current
     val config = LocalConfiguration.current
 
     DisposableEffect(Unit) {
@@ -445,9 +469,7 @@ fun ChannelScreen(
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                resources.getString(
-                    R.string.file_picker_chip_camera_failed
-                ),
+                filePickerChipCameraFailedText,
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -461,9 +483,7 @@ fun ChannelScreen(
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                resources.getString(
-                    R.string.file_picker_chip_camera_none_installed
-                ),
+                filePickerChipCameraNoneInstalledText,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -660,8 +680,8 @@ fun ChannelScreen(
     LaunchedEffect(viewModel.jumpFailure) {
         val failure = viewModel.jumpFailure ?: return@LaunchedEffect
         val result = snackbarHostState.showSnackbar(
-            message = resources.getString(R.string.message_jump_failed),
-            actionLabel = resources.getString(R.string.retry),
+            message = getString(Res.string.message_jump_failed),
+            actionLabel = getString(Res.string.retry),
             duration = SnackbarDuration.Long,
         )
         viewModel.consumeJumpFailure(failure.requestId)
@@ -778,7 +798,7 @@ fun ChannelScreen(
                                         val partner =
                                             StoatAPI.userCache[ChannelUtils.resolveDMPartner(it)]
                                         UserAvatar(
-                                            username = it.name ?: stringResource(R.string.unknown),
+                                            username = it.name ?: stringResource(Res.string.unknown),
                                             userId = ChannelUtils.resolveDMPartner(it) ?: "",
                                             size = 24.dp,
                                             presenceSize = 12.dp,
@@ -788,7 +808,7 @@ fun ChannelScreen(
 
                                     ChannelType.Group -> {
                                         GroupIcon(
-                                            name = it.name ?: stringResource(R.string.unknown),
+                                            name = it.name ?: stringResource(Res.string.unknown),
                                             size = 24.dp,
                                             icon = it.icon
                                         )
@@ -815,26 +835,26 @@ fun ChannelScreen(
                                 ) {
                                     when (it.channelType) {
                                         ChannelType.TextChannel, ChannelType.VoiceChannel, ChannelType.Group -> Text(
-                                            it.name ?: stringResource(R.string.unknown),
+                                            it.name ?: stringResource(Res.string.unknown),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis
                                         )
 
                                         ChannelType.SavedMessages -> Text(
-                                            stringResource(R.string.channel_notes),
+                                            stringResource(Res.string.channel_notes),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis
                                         )
 
                                         ChannelType.DirectMessage -> Text(
                                             ChannelUtils.resolveName(it)
-                                                ?: stringResource(R.string.unknown),
+                                                ?: stringResource(Res.string.unknown),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis
                                         )
 
                                         else -> Text(
-                                            stringResource(R.string.unknown),
+                                            stringResource(Res.string.unknown),
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis
                                         )
@@ -869,7 +889,7 @@ fun ChannelScreen(
                             IconButton(onClick = onToggleDrawer) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_menu_24dp),
-                                    contentDescription = stringResource(id = R.string.menu)
+                                    contentDescription = stringResource(Res.string.menu)
                                 )
                             }
                         }
@@ -877,7 +897,7 @@ fun ChannelScreen(
                             IconButton(onClick = backButtonAction ?: {}) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                    contentDescription = stringResource(id = R.string.back)
+                                    contentDescription = stringResource(Res.string.back)
                                 )
                             }
                         }
@@ -900,7 +920,7 @@ fun ChannelScreen(
                             }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_call_24dp__fill),
-                                    contentDescription = stringResource(id = R.string.voice_start_call)
+                                    contentDescription = stringResource(Res.string.voice_start_call)
                                 )
                             }
                         }
@@ -913,7 +933,7 @@ fun ChannelScreen(
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_search_24dp),
-                                contentDescription = stringResource(id = R.string.channel_search)
+                                contentDescription = stringResource(Res.string.channel_search)
                             )
                         }
                     }
@@ -1097,7 +1117,7 @@ fun ChannelScreen(
                                                         Row {
                                                             UserAvatarWidthPlaceholder()
                                                             Text(
-                                                                stringResource(R.string.message_failed_to_send),
+                                                                stringResource(Res.string.message_failed_to_send),
                                                                 style = MaterialTheme.typography.bodyMedium,
                                                                 color = MaterialTheme.colorScheme.error.copy(
                                                                     alpha = 0.8f
@@ -1185,14 +1205,14 @@ fun ChannelScreen(
                                             modifier = Modifier.padding(16.dp)
                                         ) {
                                             Text(
-                                                stringResource(R.string.spark_keyboard_shortcuts),
+                                                stringResource(Res.string.spark_keyboard_shortcuts),
                                                 style = MaterialTheme.typography.bodyLarge,
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
                                                 buildAnnotatedString {
                                                     val raw =
-                                                        stringResource(R.string.spark_keyboard_shortcuts_description)
+                                                        stringResource(Res.string.spark_keyboard_shortcuts_description)
                                                     val before = raw.substringBefore("%1\$s")
                                                     val after = raw.substringAfter("%1\$s")
 
@@ -1231,7 +1251,7 @@ fun ChannelScreen(
                                                     },
                                                     modifier = Modifier.weight(1f)
                                                 ) {
-                                                    Text(stringResource(R.string.spark_keyboard_shortcuts_dismiss))
+                                                    Text(stringResource(Res.string.spark_keyboard_shortcuts_dismiss))
                                                 }
                                                 TextButton(
                                                     onClick = {
@@ -1239,7 +1259,7 @@ fun ChannelScreen(
                                                     },
                                                     modifier = Modifier.weight(1f)
                                                 ) {
-                                                    Text(stringResource(R.string.spark_keyboard_shortcuts_cta))
+                                                    Text(stringResource(Res.string.spark_keyboard_shortcuts_cta))
                                                 }
                                             }
                                         }
@@ -1319,7 +1339,7 @@ fun ChannelScreen(
                                         Badge(
                                             containerColor = MaterialTheme.colorScheme.primary
                                         ) {
-                                            Text(stringResource(R.string._new))
+                                            Text(stringResource(Res.string._new))
                                         }
                                     }
                                 }
@@ -1343,7 +1363,7 @@ fun ChannelScreen(
                                     Icon(
                                         painter = painterResource(R.drawable.ic_south_24dp),
                                         contentDescription = stringResource(
-                                            R.string.scroll_to_bottom
+                                            Res.string.scroll_to_bottom
                                         )
                                     )
                                 }
@@ -1449,7 +1469,7 @@ fun ChannelScreen(
                                                     channelName = viewModel.channel?.let { channel ->
                                                         ChannelUtils.resolveName(channel)
                                                     }
-                                                        ?: stringResource(R.string.unknown),
+                                                        ?: stringResource(Res.string.unknown),
                                                     containerModifier =
                                                         if (messageComposerBlurEnabled) {
                                                             Modifier.hazeEffect(
@@ -1508,14 +1528,14 @@ fun ChannelScreen(
                                                                 )
                                                                 Spacer(Modifier.width(8.dp))
                                                                 Text(
-                                                                    stringResource(R.string.message_field_editing_message),
+                                                                    stringResource(Res.string.message_field_editing_message),
                                                                     modifier = Modifier.weight(1f),
                                                                     style = MaterialTheme.typography.labelLarge
                                                                 )
                                                                 Icon(
                                                                     painter = painterResource(R.drawable.ic_close_24dp),
                                                                     contentDescription = stringResource(
-                                                                        R.string.message_field_editing_message_cancel_alt
+                                                                        Res.string.message_field_editing_message_cancel_alt
                                                                     ),
                                                                     tint = MaterialTheme.colorScheme.onSurface.copy(
                                                                         alpha = 0.8f
@@ -1625,7 +1645,7 @@ fun ChannelScreen(
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },
-                                                        text = { Text(stringResource(R.string.file_picker_chip_documents)) },
+                                                        text = { Text(stringResource(Res.string.file_picker_chip_documents)) },
                                                         onClick = {
                                                             openDocumentPickerCallback()
                                                             viewModel.activePane =
@@ -1639,7 +1659,7 @@ fun ChannelScreen(
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },
-                                                        text = { Text(stringResource(R.string.file_picker_chip_camera)) },
+                                                        text = { Text(stringResource(Res.string.file_picker_chip_camera)) },
                                                         onClick = {
                                                             openCameraCallback()
                                                             viewModel.activePane =
@@ -1653,7 +1673,7 @@ fun ChannelScreen(
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },
-                                                        text = { Text(stringResource(R.string.file_picker_chip_photo_picker)) },
+                                                        text = { Text(stringResource(Res.string.file_picker_chip_photo_picker)) },
                                                         onClick = {
                                                             openPhotoPickerCallback()
                                                             viewModel.activePane =

@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,6 +23,11 @@ import chat.stoat.R
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_notes
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.unknown
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelHeader(
@@ -47,7 +51,7 @@ fun ChannelHeader(
             }) {
                 Icon(
                     painter = painterResource(R.drawable.ic_menu_24dp),
-                    contentDescription = stringResource(R.string.menu)
+                    contentDescription = stringResource(Res.string.menu)
                 )
             }
 
@@ -78,9 +82,9 @@ fun ChannelHeader(
                 text = channel.name
                     ?: ChannelUtils.resolveName(channel)
                     ?: if (channel.channelType == ChannelType.SavedMessages) {
-                        stringResource(R.string.channel_notes)
+                        stringResource(Res.string.channel_notes)
                     } else {
-                        stringResource(R.string.unknown)
+                        stringResource(Res.string.unknown)
                     },
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
@@ -91,7 +95,7 @@ fun ChannelHeader(
 
             Icon(
                 painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
-                contentDescription = stringResource(R.string.menu),
+                contentDescription = stringResource(Res.string.menu),
                 modifier = Modifier
                     .size(18.dp)
                     .alpha(0.4f)

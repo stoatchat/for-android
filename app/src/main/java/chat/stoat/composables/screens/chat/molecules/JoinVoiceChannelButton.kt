@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -24,7 +23,14 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.screens.chat.StackedUserAvatars
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.voice_join_offering
+import chat.stoat.shared.resources.voice_join_offering_description_one
+import chat.stoat.shared.resources.voice_join_offering_description_other
+import chat.stoat.shared.resources.voice_join_offering_description_zero
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun JoinVoiceChannelButton(channelId: String, modifier: Modifier = Modifier) {
@@ -58,26 +64,26 @@ fun JoinVoiceChannelButton(channelId: String, modifier: Modifier = Modifier) {
             )
         }
         Text(
-            stringResource(R.string.voice_join_offering),
+            stringResource(Res.string.voice_join_offering),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Start
         )
         Text(
             when {
                 voiceStatesForChannel == null || voiceStatesForChannel.participants.isEmpty() ->
-                    stringResource(R.string.voice_join_offering_description_zero)
+                    stringResource(Res.string.voice_join_offering_description_zero)
 
                 voiceStatesForChannel.participants.size == 1 ->
                     stringResource(
-                        R.string.voice_join_offering_description_one,
+                        Res.string.voice_join_offering_description_one,
                         voiceStatesForChannel.participants[0].id.let {
                             StoatAPI.userCache[it]?.let { u -> User.resolveDefaultName(u) }
-                                ?: R.string.unknown
+                                ?: Res.string.unknown
                         })
 
                 else ->
                     stringResource(
-                        R.string.voice_join_offering_description_other,
+                        Res.string.voice_join_offering_description_other,
                         voiceStatesForChannel.participants.size
                     )
             },

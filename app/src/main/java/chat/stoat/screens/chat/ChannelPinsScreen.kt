@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -49,7 +48,13 @@ import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.zero
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.pinned_messages
+import chat.stoat.shared.resources.pinned_messages_empty
+import chat.stoat.shared.resources.tap_to_retry
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 class ChannelPinsScreenViewModel : ViewModel() {
     val pinnedMessages = mutableStateListOf<Message>()
@@ -118,7 +123,7 @@ fun ChannelPinsScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = stringResource(R.string.pinned_messages),
+                            text = stringResource(Res.string.pinned_messages),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -129,7 +134,7 @@ fun ChannelPinsScreen(
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                contentDescription = stringResource(id = R.string.back)
+                                contentDescription = stringResource(Res.string.back)
                             )
                         }
                     }
@@ -163,7 +168,7 @@ fun ChannelPinsScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = viewModel.error
-                                    ?: stringResource(R.string.pinned_messages_empty),
+                                    ?: stringResource(Res.string.pinned_messages_empty),
                                 color = if (viewModel.error != null) MaterialTheme.colorScheme.error else LocalContentColor.current,
                                 modifier = Modifier.padding(horizontal = 64.dp),
                                 textAlign = TextAlign.Center
@@ -171,7 +176,7 @@ fun ChannelPinsScreen(
                             if (viewModel.error != null) {
                                 Spacer(Modifier.height(8.dp))
                                 TextButton(onClick = { viewModel.loadPins(channelId) }) {
-                                    Text(stringResource(R.string.tap_to_retry))
+                                    Text(stringResource(Res.string.tap_to_retry))
                                 }
                             }
                         }

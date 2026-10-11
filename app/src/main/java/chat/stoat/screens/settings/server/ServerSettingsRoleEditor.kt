@@ -56,7 +56,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -83,6 +82,7 @@ import chat.stoat.composables.server.RoleColourIndicator
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.PermissionDescription
 import chat.stoat.core.model.schemas.Role
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.PermissionOverrideValue
 import chat.stoat.internals.server.ServerPermissionGroups
@@ -94,6 +94,38 @@ import chat.stoat.internals.server.serverRoleCapabilities
 import chat.stoat.internals.server.withOverride
 import chat.stoat.internals.server.withPermission
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.server_identity_retry
+import chat.stoat.shared.resources.server_settings_role
+import chat.stoat.shared.resources.server_settings_role_appearance
+import chat.stoat.shared.resources.server_settings_role_appearance_permission
+import chat.stoat.shared.resources.server_settings_role_change_colour
+import chat.stoat.shared.resources.server_settings_role_colour
+import chat.stoat.shared.resources.server_settings_role_default_colour
+import chat.stoat.shared.resources.server_settings_role_delete
+import chat.stoat.shared.resources.server_settings_role_delete_description
+import chat.stoat.shared.resources.server_settings_role_delete_error
+import chat.stoat.shared.resources.server_settings_role_delete_title
+import chat.stoat.shared.resources.server_settings_role_discard
+import chat.stoat.shared.resources.server_settings_role_discard_description
+import chat.stoat.shared.resources.server_settings_role_discard_title
+import chat.stoat.shared.resources.server_settings_role_file_error
+import chat.stoat.shared.resources.server_settings_role_hoist
+import chat.stoat.shared.resources.server_settings_role_hoist_description
+import chat.stoat.shared.resources.server_settings_role_icon
+import chat.stoat.shared.resources.server_settings_role_keep_editing
+import chat.stoat.shared.resources.server_settings_role_load_error
+import chat.stoat.shared.resources.server_settings_role_permissions
+import chat.stoat.shared.resources.server_settings_role_permissions_description
+import chat.stoat.shared.resources.server_settings_role_permissions_permission
+import chat.stoat.shared.resources.server_settings_role_preview_message
+import chat.stoat.shared.resources.server_settings_role_save
+import chat.stoat.shared.resources.server_settings_role_saved
+import chat.stoat.shared.resources.server_settings_role_update_error
+import chat.stoat.shared.resources.server_settings_roles_everyone
+import chat.stoat.shared.resources.server_settings_roles_everyone_description
+import chat.stoat.shared.resources.server_settings_roles_name
 import chat.stoat.sheets.ColourPickerSheet
 import chat.stoat.sheets.colourPickerString
 import chat.stoat.sheets.colourPickerValue
@@ -107,6 +139,9 @@ import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import androidx.compose.ui.semantics.Role as SemanticsRole
@@ -182,7 +217,7 @@ class ServerSettingsRoleEditorViewModel(
             initialRole = null
             initialDefaultPermissions = server.defaultPermissions ?: BitDefaults.Server
             defaultPermissions = initialDefaultPermissions
-            roleName = context.getString(R.string.server_settings_roles_everyone)
+            roleName = getStringBlocking(Res.string.server_settings_roles_everyone)
             colour = null
             hoist = false
             iconModel = null
@@ -202,7 +237,7 @@ class ServerSettingsRoleEditorViewModel(
                         .onFailure {
                             if (loadedKey == key) {
                                 error = it.message
-                                    ?: context.getString(R.string.server_settings_role_load_error)
+                                    ?: getString(Res.string.server_settings_role_load_error)
                             }
                         }
                 }
@@ -300,7 +335,7 @@ class ServerSettingsRoleEditorViewModel(
                 }
                 saveSucceeded++
             }.onFailure {
-                error = it.message ?: context.getString(R.string.server_settings_role_update_error)
+                error = it.message ?: getString(Res.string.server_settings_role_update_error)
             }
             saving = false
             uploadProgress = 0f
@@ -316,7 +351,7 @@ class ServerSettingsRoleEditorViewModel(
                 .onSuccess { deletedRoleId = roleId }
                 .onFailure {
                     error =
-                        it.message ?: context.getString(R.string.server_settings_role_delete_error)
+                        it.message ?: getString(Res.string.server_settings_role_delete_error)
                 }
             deleting = false
         }
@@ -350,7 +385,7 @@ class ServerSettingsRoleEditorViewModel(
                 context.contentResolver.openInputStream(uri)?.use { input ->
                     target.outputStream().use(input::copyTo)
                 } ?: throw IllegalArgumentException(
-                    context.getString(R.string.server_settings_role_file_error)
+                    getString(Res.string.server_settings_role_file_error)
                 )
             }
         }
@@ -410,11 +445,11 @@ fun ServerSettingsRoleEditor(
     if (showDiscardConfirmation) {
         AlertDialog(
             onDismissRequest = { showDiscardConfirmation = false },
-            title = { Text(stringResource(R.string.server_settings_role_discard_title)) },
-            text = { Text(stringResource(R.string.server_settings_role_discard_description)) },
+            title = { Text(stringResource(Res.string.server_settings_role_discard_title)) },
+            text = { Text(stringResource(Res.string.server_settings_role_discard_description)) },
             dismissButton = {
                 TextButton(onClick = { showDiscardConfirmation = false }) {
-                    Text(stringResource(R.string.server_settings_role_keep_editing))
+                    Text(stringResource(Res.string.server_settings_role_keep_editing))
                 }
             },
             confirmButton = {
@@ -422,7 +457,7 @@ fun ServerSettingsRoleEditor(
                     viewModel.reset()
                     showDiscardConfirmation = false
                     navController.popBackStack()
-                }) { Text(stringResource(R.string.server_settings_role_discard)) }
+                }) { Text(stringResource(Res.string.server_settings_role_discard)) }
             },
         )
     }
@@ -435,17 +470,17 @@ fun ServerSettingsRoleEditor(
             title = {
                 Text(
                     stringResource(
-                        R.string.server_settings_role_delete_title,
+                        Res.string.server_settings_role_delete_title,
                         viewModel.roleName,
                     )
                 )
             },
-            text = { Text(stringResource(R.string.server_settings_role_delete_description)) },
+            text = { Text(stringResource(Res.string.server_settings_role_delete_description)) },
             dismissButton = {
                 TextButton(
                     enabled = !viewModel.deleting,
                     onClick = { showDeleteConfirmation = false },
-                ) { Text(stringResource(R.string.cancel)) }
+                ) { Text(stringResource(Res.string.cancel)) }
             },
             confirmButton = {
                 Button(
@@ -455,7 +490,7 @@ fun ServerSettingsRoleEditor(
                     if (viewModel.deleting) {
                         CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
                     } else {
-                        Text(stringResource(R.string.server_settings_role_delete))
+                        Text(stringResource(Res.string.server_settings_role_delete))
                     }
                 }
             },
@@ -473,8 +508,8 @@ fun ServerSettingsRoleEditor(
         navController = navController,
         title = {
             Text(
-                if (roleId == DefaultRoleId) stringResource(R.string.server_settings_roles_everyone)
-                else viewModel.roleName.ifBlank { stringResource(R.string.server_settings_role) }
+                if (roleId == DefaultRoleId) stringResource(Res.string.server_settings_roles_everyone)
+                else viewModel.roleName.ifBlank { stringResource(Res.string.server_settings_role) }
             )
         },
         onNavigateBack = ::navigateBack,
@@ -502,14 +537,14 @@ fun ServerSettingsRoleEditor(
                     } else {
                         Icon(
                             painterResource(R.drawable.ic_check_24dp),
-                            contentDescription = stringResource(R.string.server_settings_role_save),
+                            contentDescription = stringResource(Res.string.server_settings_role_save),
                         )
                     }
                 }
             }
         },
     ) {
-        val savedMessage = stringResource(R.string.server_settings_role_saved)
+        val savedMessage = stringResource(Res.string.server_settings_role_saved)
         LaunchedEffect(viewModel.saveSucceeded) {
             if (viewModel.saveSucceeded > 0) showSnackbar(savedMessage)
         }
@@ -534,7 +569,7 @@ fun ServerSettingsRoleEditor(
                         textAlign = TextAlign.Center,
                     )
                     Button(onClick = viewModel::retryLoad) {
-                        Text(stringResource(R.string.server_identity_retry))
+                        Text(stringResource(Res.string.server_identity_retry))
                     }
                 }
             }
@@ -547,11 +582,11 @@ fun ServerSettingsRoleEditor(
             if (editorCapabilities.canManageRoles) {
                 RoleAppearanceEditor(viewModel)
             } else {
-                ReadOnlyNotice(R.string.server_settings_role_appearance_permission)
+                ReadOnlyNotice(Res.string.server_settings_role_appearance_permission)
             }
         } else {
             Text(
-                text = stringResource(R.string.server_settings_roles_everyone_description),
+                text = stringResource(Res.string.server_settings_roles_everyone_description),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -559,14 +594,14 @@ fun ServerSettingsRoleEditor(
         }
 
         Text(
-            text = stringResource(R.string.server_settings_role_permissions),
+            text = stringResource(Res.string.server_settings_role_permissions),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 4.dp),
         )
 
         if (roleId != DefaultRoleId) {
             Text(
-                text = stringResource(R.string.server_settings_role_permissions_description),
+                text = stringResource(Res.string.server_settings_role_permissions_description),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
@@ -574,7 +609,7 @@ fun ServerSettingsRoleEditor(
         }
 
         if (!editorCapabilities.canManagePermissions) {
-            ReadOnlyNotice(R.string.server_settings_role_permissions_permission)
+            ReadOnlyNotice(Res.string.server_settings_role_permissions_permission)
         }
 
         ServerPermissionGroups.forEach { group ->
@@ -615,7 +650,7 @@ fun ServerSettingsRoleEditor(
             ) {
                 Icon(painterResource(R.drawable.ic_delete_24dp), contentDescription = null)
                 Text(
-                    stringResource(R.string.server_settings_role_delete),
+                    stringResource(Res.string.server_settings_role_delete),
                     modifier = Modifier.padding(start = 8.dp),
                 )
             }
@@ -702,7 +737,7 @@ private fun RolePreviewSurface(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = name.trim().ifBlank {
-                                stringResource(R.string.server_settings_roles_name)
+                                stringResource(Res.string.server_settings_roles_name)
                             },
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = MaterialTheme.typography.labelLarge.fontSize,
@@ -728,7 +763,7 @@ private fun RolePreviewSurface(
                         }
                     }
                     Text(
-                        text = stringResource(R.string.server_settings_role_preview_message),
+                        text = stringResource(Res.string.server_settings_role_preview_message),
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontSize = MaterialTheme.typography.bodySmall.fontSize,
                             lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
@@ -788,14 +823,14 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
     }
 
     Text(
-        text = stringResource(R.string.server_settings_role_appearance),
+        text = stringResource(Res.string.server_settings_role_appearance),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp, bottom = 4.dp),
     )
     OutlinedTextField(
         value = viewModel.roleName,
         onValueChange = viewModel::updateName,
-        label = { Text(stringResource(R.string.server_settings_roles_name)) },
+        label = { Text(stringResource(Res.string.server_settings_roles_name)) },
         supportingText = { Text("${viewModel.roleName.length}/32") },
         singleLine = true,
         enabled = !viewModel.saving,
@@ -805,7 +840,7 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
     )
 
     Text(
-        text = stringResource(R.string.server_settings_role_colour),
+        text = stringResource(Res.string.server_settings_role_colour),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     )
@@ -822,16 +857,16 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
         )
         Text(
             text = if (viewModel.colour == null) {
-                stringResource(R.string.server_settings_role_default_colour)
+                stringResource(Res.string.server_settings_role_default_colour)
             } else {
-                stringResource(R.string.server_settings_role_change_colour)
+                stringResource(Res.string.server_settings_role_change_colour)
             },
             modifier = Modifier.padding(start = 12.dp),
         )
     }
 
     Text(
-        text = stringResource(R.string.server_settings_role_icon),
+        text = stringResource(Res.string.server_settings_role_icon),
         style = MaterialTheme.typography.titleSmall,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     )
@@ -861,11 +896,11 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    stringResource(R.string.server_settings_role_hoist),
+                    stringResource(Res.string.server_settings_role_hoist),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    stringResource(R.string.server_settings_role_hoist_description),
+                    stringResource(Res.string.server_settings_role_hoist_description),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -880,7 +915,7 @@ private fun RoleAppearanceEditor(viewModel: ServerSettingsRoleEditorViewModel) {
 }
 
 @Composable
-private fun ReadOnlyNotice(message: Int) {
+private fun ReadOnlyNotice(message: StringResource) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
         shape = MaterialTheme.shapes.large,

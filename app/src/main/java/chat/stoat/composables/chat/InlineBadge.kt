@@ -7,9 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.badge_bot_alt
+import chat.stoat.shared.resources.badge_masquerade_alt
+import chat.stoat.shared.resources.badge_team_member_alt
+import chat.stoat.shared.resources.badge_webhook_alt
+import org.jetbrains.compose.resources.stringResource
 
 enum class InlineBadge {
     Bot,
@@ -28,35 +33,35 @@ fun InlineBadge(
     when (badge) {
         InlineBadge.Bot -> Icon(
             painter = painterResource(id = R.drawable.ic_smart_toy_24dp),
-            contentDescription = stringResource(id = R.string.badge_bot_alt),
+            contentDescription = stringResource(Res.string.badge_bot_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.Bridge -> Icon(
             painter = painterResource(id = R.drawable.ic_link_24dp),
-            contentDescription = stringResource(id = R.string.badge_masquerade_alt),
+            contentDescription = stringResource(Res.string.badge_masquerade_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.PlatformModeration -> Icon(
             painter = painterResource(id = R.drawable.ic_brightness_alert_24dp),
-            contentDescription = stringResource(id = R.string.badge_bot_alt),
+            contentDescription = stringResource(Res.string.badge_bot_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.TeamMember -> Icon(
             painter = painterResource(id = R.drawable.ic_hardware_24dp),
-            contentDescription = stringResource(id = R.string.badge_team_member_alt),
+            contentDescription = stringResource(Res.string.badge_team_member_alt),
             tint = colour,
             modifier = modifier
         )
 
         InlineBadge.Webhook -> Icon(
             painter = painterResource(id = R.drawable.ic_cloud_24dp),
-            contentDescription = stringResource(id = R.string.badge_webhook_alt),
+            contentDescription = stringResource(Res.string.badge_webhook_alt),
             tint = colour,
             modifier = modifier.padding(start = 4.dp)
         )

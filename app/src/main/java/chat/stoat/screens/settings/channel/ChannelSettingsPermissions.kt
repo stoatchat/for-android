@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -69,8 +68,30 @@ import chat.stoat.internals.server.withOverride
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_settings_permissions
+import chat.stoat.shared.resources.channel_settings_permissions_description
+import chat.stoat.shared.resources.channel_settings_permissions_discard_description
+import chat.stoat.shared.resources.channel_settings_permissions_discard_title
+import chat.stoat.shared.resources.channel_settings_permissions_everyone_description
+import chat.stoat.shared.resources.channel_settings_permissions_not_applied
+import chat.stoat.shared.resources.channel_settings_permissions_not_applied_description
+import chat.stoat.shared.resources.channel_settings_permissions_permission
+import chat.stoat.shared.resources.channel_settings_permissions_role_description
+import chat.stoat.shared.resources.channel_settings_permissions_save
+import chat.stoat.shared.resources.channel_settings_permissions_saved
+import chat.stoat.shared.resources.channel_settings_permissions_update_error
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.server_settings_role
+import chat.stoat.shared.resources.server_settings_role_discard
+import chat.stoat.shared.resources.server_settings_role_keep_editing
+import chat.stoat.shared.resources.server_settings_roles_above_you
+import chat.stoat.shared.resources.server_settings_roles_everyone
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 private const val DefaultChannelRoleId = "default"
@@ -147,7 +168,7 @@ class ChannelSettingsPermissionsViewModel(
                 saveSucceeded++
             }.onFailure {
                 error = it.message
-                    ?: context.getString(R.string.channel_settings_permissions_update_error)
+                    ?: getString(Res.string.channel_settings_permissions_update_error)
             }
             saving = false
         }
@@ -238,7 +259,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.channel_settings_permissions)) },
+        title = { Text(stringResource(Res.string.channel_settings_permissions)) },
     ) {
         if (channel == null || server == null) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -248,7 +269,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
         }
 
         Text(
-            text = stringResource(R.string.channel_settings_permissions_description),
+            text = stringResource(Res.string.channel_settings_permissions_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -260,14 +281,14 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
                 last = roles.isEmpty(),
                 headlineContent = {
                     Text(
-                        text = stringResource(R.string.server_settings_roles_everyone),
+                        text = stringResource(Res.string.server_settings_roles_everyone),
                         modifier = Modifier.offset(y = 4.dp),
                     )
                 },
                 supportingContent = {
                     Text(
                         text = stringResource(
-                            R.string.channel_settings_permissions_everyone_description
+                            Res.string.channel_settings_permissions_everyone_description
                         ),
                         modifier = Modifier.offset(y = 4.dp),
                     )
@@ -313,7 +334,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
                     )
                 },
                 supportingContent = if (elevated) null else {
-                    { Text(stringResource(R.string.server_settings_roles_above_you)) }
+                    { Text(stringResource(Res.string.server_settings_roles_above_you)) }
                 },
                 leadingContent = {
                     Box(
@@ -374,14 +395,14 @@ fun ChannelSettingsPermissionEditor(
         AlertDialog(
             onDismissRequest = { showDiscardConfirmation = false },
             title = {
-                Text(stringResource(R.string.channel_settings_permissions_discard_title))
+                Text(stringResource(Res.string.channel_settings_permissions_discard_title))
             },
             text = {
-                Text(stringResource(R.string.channel_settings_permissions_discard_description))
+                Text(stringResource(Res.string.channel_settings_permissions_discard_description))
             },
             dismissButton = {
                 TextButton(onClick = { showDiscardConfirmation = false }) {
-                    Text(stringResource(R.string.server_settings_role_keep_editing))
+                    Text(stringResource(Res.string.server_settings_role_keep_editing))
                 }
             },
             confirmButton = {
@@ -390,7 +411,7 @@ fun ChannelSettingsPermissionEditor(
                     showDiscardConfirmation = false
                     navController.popBackStack()
                 }) {
-                    Text(stringResource(R.string.server_settings_role_discard))
+                    Text(stringResource(Res.string.server_settings_role_discard))
                 }
             },
         )
@@ -400,13 +421,13 @@ fun ChannelSettingsPermissionEditor(
         AlertDialog(
             onDismissRequest = { blockedPermissions = null },
             title = {
-                Text(stringResource(R.string.channel_settings_permissions_not_applied))
+                Text(stringResource(Res.string.channel_settings_permissions_not_applied))
             },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         stringResource(
-                            R.string.channel_settings_permissions_not_applied_description
+                            Res.string.channel_settings_permissions_not_applied_description
                         )
                     )
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -418,7 +439,7 @@ fun ChannelSettingsPermissionEditor(
             },
             confirmButton = {
                 TextButton(onClick = { blockedPermissions = null }) {
-                    Text(stringResource(R.string.ok))
+                    Text(stringResource(Res.string.ok))
                 }
             },
         )
@@ -429,9 +450,9 @@ fun ChannelSettingsPermissionEditor(
         title = {
             Text(
                 if (roleId == DefaultChannelRoleId) {
-                    stringResource(R.string.server_settings_roles_everyone)
+                    stringResource(Res.string.server_settings_roles_everyone)
                 } else {
-                    role?.name ?: stringResource(R.string.server_settings_role)
+                    role?.name ?: stringResource(Res.string.server_settings_role)
                 }
             )
         },
@@ -469,7 +490,7 @@ fun ChannelSettingsPermissionEditor(
                         Icon(
                             painter = painterResource(R.drawable.ic_check_24dp),
                             contentDescription = stringResource(
-                                R.string.channel_settings_permissions_save
+                                Res.string.channel_settings_permissions_save
                             ),
                         )
                     }
@@ -477,7 +498,7 @@ fun ChannelSettingsPermissionEditor(
             }
         },
     ) {
-        val savedMessage = stringResource(R.string.channel_settings_permissions_saved)
+        val savedMessage = stringResource(Res.string.channel_settings_permissions_saved)
         LaunchedEffect(viewModel.saveSucceeded) {
             if (viewModel.consumeSaveSucceeded()) showSnackbar(savedMessage)
         }
@@ -490,7 +511,7 @@ fun ChannelSettingsPermissionEditor(
         }
 
         Text(
-            text = stringResource(R.string.channel_settings_permissions_role_description),
+            text = stringResource(Res.string.channel_settings_permissions_role_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -499,9 +520,9 @@ fun ChannelSettingsPermissionEditor(
         if (!canManage) {
             ChannelPermissionReadOnlyNotice(
                 message = if (!elevated) {
-                    R.string.server_settings_roles_above_you
+                    Res.string.server_settings_roles_above_you
                 } else {
-                    R.string.channel_settings_permissions_permission
+                    Res.string.channel_settings_permissions_permission
                 }
             )
         }
@@ -552,7 +573,7 @@ fun ChannelSettingsPermissionEditor(
 }
 
 @Composable
-private fun ChannelPermissionReadOnlyNotice(message: Int) {
+private fun ChannelPermissionReadOnlyNotice(message: StringResource) {
     Surface(
         color = MaterialTheme.colorScheme.secondaryContainer,
         shape = MaterialTheme.shapes.large,

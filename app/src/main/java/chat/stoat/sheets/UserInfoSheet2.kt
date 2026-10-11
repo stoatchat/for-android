@@ -44,7 +44,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,11 +74,26 @@ import chat.stoat.composables.sheets.SheetTile
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.rate_limit_toast
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.user_info_sheet_category_badges
+import chat.stoat.shared.resources.user_info_sheet_category_bio
+import chat.stoat.shared.resources.user_info_sheet_category_joined
+import chat.stoat.shared.resources.user_info_sheet_category_joined_stoat
+import chat.stoat.shared.resources.user_info_sheet_category_owner
+import chat.stoat.shared.resources.user_info_sheet_category_roles
+import chat.stoat.shared.resources.user_info_sheet_category_status
+import chat.stoat.shared.resources.user_info_sheet_owner_not_found
+import chat.stoat.shared.resources.user_info_sheet_role_update_failed
+import chat.stoat.shared.resources.user_info_sheet_user_not_found
+import chat.stoat.shared.resources.user_info_sheet_user_not_found_description
 import chat.stoat.ui.colour.BrushCompat
 import chat.stoat.ui.colour.solidColor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.semantics.Role as SemanticsRole
 
 private fun canAssignRolesToMember(serverId: String, targetUserId: String): Boolean {
@@ -115,8 +129,8 @@ fun UserInfoSheet2(
         mutableStateOf(member?.roles.orEmpty())
     }
     var updatingRoleId by remember(serverId, userId) { mutableStateOf<String?>(null) }
-    val rateLimitMessage = stringResource(R.string.rate_limit_toast)
-    val roleUpdateError = stringResource(R.string.user_info_sheet_role_update_failed)
+    val rateLimitMessage = stringResource(Res.string.rate_limit_toast)
+    val roleUpdateError = stringResource(Res.string.user_info_sheet_role_update_failed)
     var userFetchFinished by remember(userId) { mutableStateOf(user != null) }
 
     LaunchedEffect(userId) {
@@ -177,12 +191,12 @@ fun UserInfoSheet2(
                 },
                 title = {
                     Text(
-                        text = stringResource(R.string.user_info_sheet_user_not_found)
+                        text = stringResource(Res.string.user_info_sheet_user_not_found)
                     )
                 },
                 description = {
                     Text(
-                        text = stringResource(R.string.user_info_sheet_user_not_found_description)
+                        text = stringResource(Res.string.user_info_sheet_user_not_found_description)
                     )
                 }
             )
@@ -309,7 +323,7 @@ fun UserInfoSheet2(
 
                 SheetTile(
                     header = {
-                        Text(stringResource(R.string.user_info_sheet_category_roles))
+                        Text(stringResource(Res.string.user_info_sheet_category_roles))
                     },
                     contentPreview = {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -397,7 +411,7 @@ fun UserInfoSheet2(
         item(key = "joined") {
             SheetTile(
                 header = {
-                    Text(stringResource(R.string.user_info_sheet_category_joined))
+                    Text(stringResource(Res.string.user_info_sheet_category_joined))
                 },
                 contentPreview = {
                     if (joinedAt != null && server?.name != null) {
@@ -423,7 +437,7 @@ fun UserInfoSheet2(
                         )
 
                         Text(
-                            text = stringResource(id = R.string.user_info_sheet_category_joined_stoat),
+                            text = stringResource(Res.string.user_info_sheet_category_joined_stoat),
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
@@ -450,7 +464,7 @@ fun UserInfoSheet2(
                     )
 
                     Text(
-                        text = stringResource(id = R.string.user_info_sheet_category_joined_stoat),
+                        text = stringResource(Res.string.user_info_sheet_category_joined_stoat),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
@@ -461,7 +475,7 @@ fun UserInfoSheet2(
             item(key = "info") {
                 SheetTile(
                     header = {
-                        Text(stringResource(R.string.user_info_sheet_category_badges))
+                        Text(stringResource(Res.string.user_info_sheet_category_badges))
                     },
                     contentPreview = {
                         user.badges?.let { UserBadgeRow(badges = it) }
@@ -476,7 +490,7 @@ fun UserInfoSheet2(
             item(key = "status") {
                 SheetTile(
                     header = {
-                        Text(stringResource(R.string.user_info_sheet_category_status))
+                        Text(stringResource(Res.string.user_info_sheet_category_status))
                     },
                     contentPreview = {
                         Text(
@@ -501,7 +515,7 @@ fun UserInfoSheet2(
             item(key = "bot-owner") {
                 SheetTile(
                     header = {
-                        Text(stringResource(R.string.user_info_sheet_category_owner))
+                        Text(stringResource(Res.string.user_info_sheet_category_owner))
                     },
                     contentPreview = {
                         Row(
@@ -510,7 +524,7 @@ fun UserInfoSheet2(
                             resolvedOwner?.let {
                                 UserAvatar(
                                     username = it.displayName ?: it.username
-                                    ?: stringResource(R.string.unknown),
+                                    ?: stringResource(Res.string.unknown),
                                     avatar = it.avatar,
                                     userId = it.id!!,
                                     size = 32.dp
@@ -518,7 +532,7 @@ fun UserInfoSheet2(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = it.displayName ?: it.username
-                                    ?: stringResource(R.string.unknown),
+                                    ?: stringResource(Res.string.unknown),
                                     fontSize = 14.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -530,7 +544,7 @@ fun UserInfoSheet2(
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    text = stringResource(R.string.unknown),
+                                    text = stringResource(Res.string.unknown),
                                     fontSize = 14.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -552,7 +566,7 @@ fun UserInfoSheet2(
                             },
                             title = {
                                 Text(
-                                    text = stringResource(R.string.user_info_sheet_owner_not_found)
+                                    text = stringResource(Res.string.user_info_sheet_owner_not_found)
                                 )
                             }
                         )
@@ -565,7 +579,7 @@ fun UserInfoSheet2(
             item(key = "bio", span = StaggeredGridItemSpan.FullLine) {
                 SheetTile(
                     header = {
-                        Text(stringResource(R.string.user_info_sheet_category_bio))
+                        Text(stringResource(Res.string.user_info_sheet_category_bio))
                     },
                     contentPreview = {
                         ChatMarkdown(content = profile?.content!!, serverId = serverId)

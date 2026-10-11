@@ -17,13 +17,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.check_mail
+import chat.stoat.shared.resources.instructions_at_mail
+import chat.stoat.shared.resources.open_mail_app
+import chat.stoat.shared.resources.verify_then_choose_username
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RegisterVerifyScreen(navController: NavController, email: String) {
@@ -47,7 +51,7 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.check_mail),
+                text = stringResource(Res.string.check_mail),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Black,
@@ -61,7 +65,7 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = stringResource(R.string.instructions_at_mail, email),
+                text = stringResource(Res.string.instructions_at_mail, email),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -77,7 +81,7 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.verify_then_choose_username),
+                text = stringResource(Res.string.verify_then_choose_username),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -97,7 +101,7 @@ fun RegisterVerifyScreen(navController: NavController, email: String) {
                 intent.addCategory(Intent.CATEGORY_APP_EMAIL)
                 intentLauncher.launch(intent)
             }) {
-                Text(text = stringResource(R.string.open_mail_app))
+                Text(text = stringResource(Res.string.open_mail_app))
             }
         }
     }

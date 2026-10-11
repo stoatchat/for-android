@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -42,7 +41,29 @@ import chat.stoat.api.settings.SpecialEmbedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.generic.RadioItem
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.settings_chat
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_description
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_android
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_notifications
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_ordering
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_release_notes
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_server_folders
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_key_unknown
+import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_reset
+import chat.stoat.shared.resources.settings_chat_interactive_embeds
+import chat.stoat.shared.resources.settings_chat_interactive_embeds_apple_music
+import chat.stoat.shared.resources.settings_chat_interactive_embeds_description
+import chat.stoat.shared.resources.settings_chat_interactive_embeds_youtube
+import chat.stoat.shared.resources.settings_chat_quick_reply
+import chat.stoat.shared.resources.settings_chat_quick_reply_double_tap
+import chat.stoat.shared.resources.settings_chat_quick_reply_none
+import chat.stoat.shared.resources.settings_chat_quick_reply_none_description
+import chat.stoat.shared.resources.settings_chat_quick_reply_swipe_from_end
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 class ChatSettingsScreenViewModel : ViewModel() {
     fun updateMessageReplyStyle(next: MessageReplyStyle) {
@@ -76,7 +97,7 @@ fun ChatSettingsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.settings_chat),
+                        text = stringResource(Res.string.settings_chat),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -87,7 +108,7 @@ fun ChatSettingsScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -110,23 +131,23 @@ fun ChatSettingsScreen(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys),
+                            text = stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_description),
+                            text = stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_description),
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         for (key in LoadedSettings.poorlyFormedSettingsKeys) {
                             Text(
                                 text = " • " + when (key) {
-                                    "ordering" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
-                                    "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
-                                    "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
-                                    "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
-                                    "server-folders" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
+                                    "ordering" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
+                                    "android" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
+                                    "notifications" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
+                                    "release-notes" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
+                                    "server-folders" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
                                     else -> stringResource(
-                                        R.string.settings_chat_hint_poorly_formed_settings_keys_key_unknown,
+                                        Res.string.settings_chat_hint_poorly_formed_settings_keys_key_unknown,
                                         key
                                     )
                                 },
@@ -163,13 +184,13 @@ fun ChatSettingsScreen(
                                 ) {
                                     Text(
                                         text = stringResource(
-                                            R.string.settings_chat_hint_poorly_formed_settings_keys_reset,
+                                            Res.string.settings_chat_hint_poorly_formed_settings_keys_reset,
                                             when (key) {
-                                                "ordering" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
-                                                "android" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
-                                                "notifications" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
-                                                "release-notes" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
-                                                "server-folders" -> stringResource(R.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
+                                                "ordering" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_ordering)
+                                                "android" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_android)
+                                                "notifications" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_notifications)
+                                                "release-notes" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_release_notes)
+                                                "server-folders" -> stringResource(Res.string.settings_chat_hint_poorly_formed_settings_keys_key_server_folders)
                                                 else -> key
                                             }
                                         )
@@ -183,7 +204,7 @@ fun ChatSettingsScreen(
 
             ListHeader {
                 Text(
-                    text = stringResource(R.string.settings_chat_quick_reply)
+                    text = stringResource(Res.string.settings_chat_quick_reply)
                 )
             }
 
@@ -191,31 +212,31 @@ fun ChatSettingsScreen(
                 RadioItem(
                     selected = LoadedSettings.messageReplyStyle == MessageReplyStyle.None,
                     onClick = { viewModel.updateMessageReplyStyle(MessageReplyStyle.None) },
-                    label = { Text(text = stringResource(R.string.settings_chat_quick_reply_none)) },
+                    label = { Text(text = stringResource(Res.string.settings_chat_quick_reply_none)) },
                     description = {
-                        Text(text = stringResource(R.string.settings_chat_quick_reply_none_description))
+                        Text(text = stringResource(Res.string.settings_chat_quick_reply_none_description))
                     }
                 )
                 RadioItem(
                     selected = LoadedSettings.messageReplyStyle == MessageReplyStyle.SwipeFromEnd,
                     onClick = { viewModel.updateMessageReplyStyle(MessageReplyStyle.SwipeFromEnd) },
-                    label = { Text(text = stringResource(R.string.settings_chat_quick_reply_swipe_from_end)) }
+                    label = { Text(text = stringResource(Res.string.settings_chat_quick_reply_swipe_from_end)) }
                 )
                 RadioItem(
                     selected = LoadedSettings.messageReplyStyle == MessageReplyStyle.DoubleTap,
                     onClick = { viewModel.updateMessageReplyStyle(MessageReplyStyle.DoubleTap) },
-                    label = { Text(text = stringResource(R.string.settings_chat_quick_reply_double_tap)) }
+                    label = { Text(text = stringResource(Res.string.settings_chat_quick_reply_double_tap)) }
                 )
             }
 
             ListHeader {
                 Text(
-                    text = stringResource(R.string.settings_chat_interactive_embeds)
+                    text = stringResource(Res.string.settings_chat_interactive_embeds)
                 )
             }
 
             Text(
-                stringResource(R.string.settings_chat_interactive_embeds_description),
+                stringResource(Res.string.settings_chat_interactive_embeds_description),
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 16.dp),
             )
@@ -236,7 +257,7 @@ fun ChatSettingsScreen(
                         )
                     }
                 ) {
-                    Text(stringResource(R.string.settings_chat_interactive_embeds_youtube))
+                    Text(stringResource(Res.string.settings_chat_interactive_embeds_youtube))
                 }
 
                 ListItem(
@@ -254,7 +275,7 @@ fun ChatSettingsScreen(
                         )
                     }
                 ) {
-                    Text(stringResource(R.string.settings_chat_interactive_embeds_apple_music))
+                    Text(stringResource(Res.string.settings_chat_interactive_embeds_apple_music))
                 }
             }
         }

@@ -19,13 +19,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.composables.chat.viewUrlInBrowser
 import chat.stoat.core.model.data.STOAT_SUPPORT
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.user_info_sheet_webhook
+import chat.stoat.shared.resources.user_info_sheet_webhook_body
+import chat.stoat.shared.resources.user_info_sheet_webhook_learn_more
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun WebHookUserSheet(modifier: Modifier = Modifier) {
@@ -53,13 +57,13 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
             )
         }
         Text(
-            text = stringResource(R.string.user_info_sheet_webhook),
+            text = stringResource(Res.string.user_info_sheet_webhook),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = stringResource(R.string.user_info_sheet_webhook_body),
+            text = stringResource(Res.string.user_info_sheet_webhook_body),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -72,7 +76,7 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(top = 8.dp)
         ) {
-            Text(text = stringResource(R.string.user_info_sheet_webhook_learn_more))
+            Text(text = stringResource(Res.string.user_info_sheet_webhook_learn_more))
         }
     }
 }

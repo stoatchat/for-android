@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
@@ -55,10 +54,19 @@ import chat.stoat.api.internals.formatCompactDuration
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.slowmode_immune
+import chat.stoat.shared.resources.typing_blank
+import chat.stoat.shared.resources.typing_many
+import chat.stoat.shared.resources.typing_one
+import chat.stoat.shared.resources.typing_several
+import chat.stoat.shared.resources.unknown
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun StackedUserAvatars(
@@ -80,7 +88,7 @@ fun StackedUserAvatars(
                 avatar = user?.avatar,
                 userId = userId,
                 username = user?.let { User.resolveDefaultName(it) }
-                    ?: stringResource(id = R.string.unknown),
+                    ?: stringResource(Res.string.unknown),
                 rawUrl = maybeMember?.avatar?.let { "$STOAT_FILES/avatars/${it.id}" },
                 size = size,
                 modifier = Modifier
@@ -147,12 +155,12 @@ fun TypingIndicator(
             }
         )
 
-    fun typingMessageResource(userCount: Int): Int {
+    fun typingMessageResource(userCount: Int): StringResource {
         return when (userCount) {
-            0 -> R.string.typing_blank
-            1 -> R.string.typing_one
-            in 2..4 -> R.string.typing_many
-            else -> R.string.typing_several
+            0 -> Res.string.typing_blank
+            1 -> Res.string.typing_one
+            in 2..4 -> Res.string.typing_many
+            else -> Res.string.typing_several
         }
     }
 
@@ -201,7 +209,7 @@ fun TypingIndicator(
 
                         Text(
                             text = stringResource(
-                                id = typingMessageResource(displayedTypingUsers.size),
+                                typingMessageResource(displayedTypingUsers.size),
                                 displayedTypingUsers.joinToString { userId ->
                                     StoatAPI.userCache[userId]?.let { u ->
                                         val maybeMember = serverId?.let {
@@ -250,7 +258,7 @@ fun TypingIndicator(
                         )
                         if (slowmodeImmune) {
                             Text(
-                                text = stringResource(R.string.slowmode_immune),
+                                text = stringResource(Res.string.slowmode_immune),
                                 color = slowmodeColor,
                                 fontSize = 12.sp,
                                 maxLines = 1,

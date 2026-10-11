@@ -70,7 +70,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -103,17 +102,45 @@ import chat.stoat.composables.vectorassets.HL_USERNAME
 import chat.stoat.composables.vectorassets.Nametag
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.extensions.zero
 import chat.stoat.screens.chat.LocalIsConnected
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.friends
+import chat.stoat.shared.resources.friends_add_by_tag
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_add
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_description
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_do_not_add
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_invalid_clipboard
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_paste_from_clipboard
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_tag
+import chat.stoat.shared.resources.friends_add_by_tag_sheet_username
+import chat.stoat.shared.resources.friends_all
+import chat.stoat.shared.resources.friends_blocked
+import chat.stoat.shared.resources.friends_deny_all_incoming
+import chat.stoat.shared.resources.friends_incoming_requests
+import chat.stoat.shared.resources.friends_new_group
+import chat.stoat.shared.resources.friends_outgoing_requests
+import chat.stoat.shared.resources.friends_scan_qr
+import chat.stoat.shared.resources.friends_scan_qr_result_sheet_invalid_description
+import chat.stoat.shared.resources.friends_scan_qr_result_sheet_invalid_title
+import chat.stoat.shared.resources.friends_scan_qr_result_sheet_missing_permission_description
+import chat.stoat.shared.resources.friends_scan_qr_result_sheet_missing_permission_title
+import chat.stoat.shared.resources.friends_scan_qr_result_sheet_success_title
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.status_online
+import chat.stoat.shared.resources.unknown
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 private fun showInvalidClipboardToast(context: Context) {
     Toast.makeText(
         context,
-        context.getString(R.string.friends_add_by_tag_sheet_invalid_clipboard),
+        getStringBlocking(Res.string.friends_add_by_tag_sheet_invalid_clipboard),
         Toast.LENGTH_SHORT
     ).show()
 }
@@ -173,7 +200,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                         .padding(vertical = 24.dp)
                 )
                 Text(
-                    text = stringResource(R.string.friends_add_by_tag),
+                    text = stringResource(Res.string.friends_add_by_tag),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -181,7 +208,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                 Text(
                     text = AnnotatedString.fromHtml(
                         stringResource(
-                            R.string.friends_add_by_tag_sheet_description,
+                            Res.string.friends_add_by_tag_sheet_description,
                             "<font color=\"${
                                 Color(HL_USERNAME).toArgb().let {
                                     "#%02x%02x%02x".format(
@@ -224,7 +251,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             }
                         },
                         label = {
-                            Text(stringResource(R.string.friends_add_by_tag_sheet_username))
+                            Text(stringResource(Res.string.friends_add_by_tag_sheet_username))
                         },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions.Default.copy(
@@ -250,7 +277,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             }
                         },
                         label = {
-                            Text(stringResource(R.string.friends_add_by_tag_sheet_tag))
+                            Text(stringResource(Res.string.friends_add_by_tag_sheet_tag))
                         },
                         supportingText = {
                             Text("") // Layout hack
@@ -309,7 +336,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             }
                         }
                     ) {
-                        Text(stringResource(R.string.friends_add_by_tag_sheet_paste_from_clipboard))
+                        Text(stringResource(Res.string.friends_add_by_tag_sheet_paste_from_clipboard))
                     }
                     Button(
                         onClick = {
@@ -327,7 +354,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                         },
                         enabled = username.isNotBlank() && tag.isNotBlank()
                     ) {
-                        Text(stringResource(R.string.friends_add_by_tag_sheet_add))
+                        Text(stringResource(Res.string.friends_add_by_tag_sheet_add))
                     }
                 }
             }
@@ -376,13 +403,13 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                 when {
                     qrResult is QRResult.QRMissingPermission -> {
                         Text(
-                            text = stringResource(R.string.friends_scan_qr_result_sheet_missing_permission_title),
+                            text = stringResource(Res.string.friends_scan_qr_result_sheet_missing_permission_title),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
-                            text = stringResource(R.string.friends_scan_qr_result_sheet_missing_permission_description),
+                            text = stringResource(Res.string.friends_scan_qr_result_sheet_missing_permission_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = LocalContentColor.current.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center,
@@ -395,13 +422,13 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(stringResource(R.string.ok))
+                            Text(stringResource(Res.string.ok))
                         }
                     }
 
                     qrResult is QRResult.QRSuccess && contents != null -> {
                         Text(
-                            text = stringResource(R.string.friends_scan_qr_result_sheet_success_title),
+                            text = stringResource(Res.string.friends_scan_qr_result_sheet_success_title),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -410,7 +437,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                         )
 
                         UserAvatar(
-                            username = contents?.username ?: stringResource(R.string.unknown),
+                            username = contents?.username ?: stringResource(Res.string.unknown),
                             userId = contents?.id ?: "",
                             allowAnimation = false,
                             shape = RoundedCornerShape(LoadedSettings.avatarRadius),
@@ -484,7 +511,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                 ),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text(stringResource(R.string.friends_add_by_tag_sheet_add))
+                                Text(stringResource(Res.string.friends_add_by_tag_sheet_add))
                             }
 
                             Button(
@@ -502,20 +529,20 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                 ),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text(stringResource(R.string.friends_add_by_tag_sheet_do_not_add))
+                                Text(stringResource(Res.string.friends_add_by_tag_sheet_do_not_add))
                             }
                         }
                     }
 
                     qrResult is QRResult.QRError || contents == null -> {
                         Text(
-                            text = stringResource(R.string.friends_scan_qr_result_sheet_invalid_title),
+                            text = stringResource(Res.string.friends_scan_qr_result_sheet_invalid_title),
                             style = MaterialTheme.typography.titleMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Text(
-                            text = stringResource(R.string.friends_scan_qr_result_sheet_invalid_description),
+                            text = stringResource(Res.string.friends_scan_qr_result_sheet_invalid_description),
                             style = MaterialTheme.typography.bodyMedium,
                             color = LocalContentColor.current.copy(alpha = 0.7f),
                             textAlign = TextAlign.Center,
@@ -528,7 +555,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(stringResource(R.string.ok))
+                            Text(stringResource(Res.string.ok))
                         }
                     }
                 }
@@ -551,7 +578,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                 TopAppBar(
                     title = {
                         Text(
-                            text = stringResource(R.string.friends),
+                            text = stringResource(Res.string.friends),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -563,7 +590,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_menu_24dp),
-                                    contentDescription = stringResource(id = R.string.menu)
+                                    contentDescription = stringResource(Res.string.menu)
                                 )
                             }
                         }
@@ -574,7 +601,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                         }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_more_vert_24dp),
-                                contentDescription = stringResource(R.string.menu)
+                                contentDescription = stringResource(Res.string.menu)
                             )
                         }
                         DropdownMenu(
@@ -585,7 +612,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                         ) {
                             DropdownMenuItem(
                                 text = {
-                                    Text(stringResource(R.string.friends_deny_all_incoming))
+                                    Text(stringResource(Res.string.friends_deny_all_incoming))
                                 },
                                 onClick = {
                                     scope.launch {
@@ -614,7 +641,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
             LazyColumn {
                 stickyHeader(key = "incoming") {
                     CountableListHeader(
-                        text = stringResource(id = R.string.friends_incoming_requests),
+                        text = stringResource(Res.string.friends_incoming_requests),
                         count = FriendRequests.getIncoming().size
                     )
                 }
@@ -649,7 +676,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
 
                 stickyHeader(key = "outgoing") {
                     CountableListHeader(
-                        text = stringResource(id = R.string.friends_outgoing_requests),
+                        text = stringResource(Res.string.friends_outgoing_requests),
                         count = FriendRequests.getOutgoing().size
                     )
                 }
@@ -684,7 +711,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
 
                 stickyHeader(key = "online") {
                     CountableListHeader(
-                        text = stringResource(id = R.string.status_online),
+                        text = stringResource(Res.string.status_online),
                         count = FriendRequests.getOnlineFriends().size
                     )
                 }
@@ -719,7 +746,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
 
                 stickyHeader(key = "not_online") {
                     CountableListHeader(
-                        text = stringResource(id = R.string.friends_all),
+                        text = stringResource(Res.string.friends_all),
                         count = FriendRequests.getFriends(true).size
                     )
                 }
@@ -754,7 +781,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
 
                 stickyHeader(key = "blocked") {
                     CountableListHeader(
-                        text = stringResource(id = R.string.friends_blocked),
+                        text = stringResource(Res.string.friends_blocked),
                         count = FriendRequests.getBlocked().size
                     )
                 }
@@ -831,7 +858,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             contentDescription = null
                         )
                     },
-                    text = { Text(stringResource(R.string.friends_new_group)) },
+                    text = { Text(stringResource(Res.string.friends_new_group)) },
                 )
                 FloatingActionButtonMenuItem(
                     modifier = Modifier.semantics { isTraversalGroup = true },
@@ -845,7 +872,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             contentDescription = null
                         )
                     },
-                    text = { Text(stringResource(R.string.friends_scan_qr)) },
+                    text = { Text(stringResource(Res.string.friends_scan_qr)) },
                 )
                 FloatingActionButtonMenuItem(
                     modifier = Modifier.semantics { isTraversalGroup = true },
@@ -859,7 +886,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             contentDescription = null
                         )
                     },
-                    text = { Text(stringResource(R.string.friends_add_by_tag)) },
+                    text = { Text(stringResource(Res.string.friends_add_by_tag)) },
                 )
             }
         }

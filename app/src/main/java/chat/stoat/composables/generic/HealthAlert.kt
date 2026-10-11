@@ -9,10 +9,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
-import chat.stoat.R
 import chat.stoat.core.model.schemas.HealthNotice
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.service_health_alert
+import chat.stoat.shared.resources.service_health_alert_actions_default
+import chat.stoat.shared.resources.service_health_alert_actions_dismiss
+import chat.stoat.shared.resources.service_health_alert_body_default
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
@@ -24,10 +28,10 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
             // Purposefully empty
         },
         title = {
-            Text(stringResource(R.string.service_health_alert))
+            Text(stringResource(Res.string.service_health_alert))
         },
         text = {
-            Text(notice.alert?.text ?: stringResource(R.string.service_health_alert_body_default))
+            Text(notice.alert?.text ?: stringResource(Res.string.service_health_alert_body_default))
         },
         confirmButton = {
             notice.alert?.actions?.map { action ->
@@ -47,13 +51,13 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
                     ) {
                         Text(
                             action.text
-                                ?: stringResource(R.string.service_health_alert_actions_default)
+                                ?: stringResource(Res.string.service_health_alert_actions_default)
                         )
                     }
                 }
             }
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.service_health_alert_actions_dismiss))
+                Text(stringResource(Res.string.service_health_alert_actions_dismiss))
             }
         }
     )

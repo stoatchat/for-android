@@ -14,11 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.spark_early_access
+import chat.stoat.shared.resources.spark_early_access_cta
+import chat.stoat.shared.resources.spark_early_access_description_1
+import chat.stoat.shared.resources.spark_early_access_description_2
+import chat.stoat.shared.resources.spark_early_access_description_3
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EarlyAccessSheet(onClose: () -> Unit) {
@@ -39,27 +45,27 @@ fun EarlyAccessSheet(onClose: () -> Unit) {
                 .padding(vertical = 8.dp)
         )
         Text(
-            stringResource(R.string.spark_early_access),
+            stringResource(Res.string.spark_early_access),
             style = MaterialTheme.typography.headlineLarge.copy(fontSize = 24.sp),
             textAlign = TextAlign.Center
         )
         Text(
-            stringResource(R.string.spark_early_access_description_1),
+            stringResource(Res.string.spark_early_access_description_1),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
         Text(
-            stringResource(R.string.spark_early_access_description_2),
+            stringResource(Res.string.spark_early_access_description_2),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
         Text(
-            stringResource(R.string.spark_early_access_description_3),
+            stringResource(Res.string.spark_early_access_description_3),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
         )
         TextButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.spark_early_access_cta))
+            Text(stringResource(Res.string.spark_early_access_cta))
         }
     }
 }

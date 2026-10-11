@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -22,10 +21,16 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.composables.generic.SheetButton
 
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id
+import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id_copied
+import chat.stoat.shared.resources.channel_context_sheet_actions_mark_read
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
+    val channelContextSheetActionsCopyIdCopiedText = stringResource(Res.string.channel_context_sheet_actions_copy_id_copied)
     val channel = StoatAPI.channelCache[channelId]
     if (channel == null) {
         Box(
@@ -46,7 +51,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.channel_context_sheet_actions_copy_id),
+                text = stringResource(Res.string.channel_context_sheet_actions_copy_id),
             )
         },
         leadingContent = {
@@ -63,7 +68,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             if (Platform.needsShowClipboardNotification()) {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.channel_context_sheet_actions_copy_id_copied),
+                    channelContextSheetActionsCopyIdCopiedText,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -77,7 +82,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.channel_context_sheet_actions_mark_read),
+                text = stringResource(Res.string.channel_context_sheet_actions_mark_read),
             )
         },
         leadingContent = {

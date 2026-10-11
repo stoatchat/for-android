@@ -58,7 +58,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
@@ -96,6 +95,13 @@ import chat.stoat.screens.chat.views.FriendsScreen
 import chat.stoat.screens.chat.views.NoCurrentChannelScreen
 import chat.stoat.screens.chat.views.OverviewScreen
 import chat.stoat.screens.chat.views.channel.ChannelScreen
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_link_invalid
+import chat.stoat.shared.resources.channel_link_invalid_description
+import chat.stoat.shared.resources.notice_platform_mod_dm_acknowledge
+import chat.stoat.shared.resources.notice_platform_mod_dm_description
+import chat.stoat.shared.resources.notice_platform_mod_dm_title
+import chat.stoat.shared.resources.ok
 import chat.stoat.sheets.AddServerSheet
 import chat.stoat.sheets.EarlyAccessSheet
 import chat.stoat.sheets.EmoteInfoSheet
@@ -118,6 +124,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import logcat.LogPriority
 import logcat.logcat
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 sealed class ChatRouterDestination {
@@ -592,10 +599,10 @@ fun ChatRouterScreen(
         AlertDialog(
             onDismissRequest = {},
             title = {
-                Text(stringResource(id = R.string.notice_platform_mod_dm_title))
+                Text(stringResource(Res.string.notice_platform_mod_dm_title))
             },
             text = {
-                Text(stringResource(id = R.string.notice_platform_mod_dm_description))
+                Text(stringResource(Res.string.notice_platform_mod_dm_description))
             },
             confirmButton = {
                 TextButton(onClick = {
@@ -604,7 +611,7 @@ fun ChatRouterScreen(
                         viewModel.setSaveDestination(ChatRouterDestination.Channel(it))
                     }
                 }) {
-                    Text(stringResource(id = R.string.notice_platform_mod_dm_acknowledge))
+                    Text(stringResource(Res.string.notice_platform_mod_dm_acknowledge))
                 }
             }
         )
@@ -793,14 +800,14 @@ fun ChatRouterScreen(
             },
             title = {
                 Text(
-                    text = stringResource(id = R.string.channel_link_invalid),
+                    text = stringResource(Res.string.channel_link_invalid),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
             text = {
                 Text(
-                    text = stringResource(id = R.string.channel_link_invalid_description),
+                    text = stringResource(Res.string.channel_link_invalid_description),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -809,7 +816,7 @@ fun ChatRouterScreen(
                 TextButton(onClick = {
                     showChannelUnavailableAlert = false
                 }) {
-                    Text(text = stringResource(id = R.string.ok))
+                    Text(text = stringResource(Res.string.ok))
                 }
             }
         )

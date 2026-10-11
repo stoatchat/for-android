@@ -42,7 +42,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import chat.stoat.R
@@ -55,9 +54,13 @@ import chat.stoat.composables.chat.Message
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.supportSwipeReply
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.swipe_to_reply_keep_swiping
+import chat.stoat.shared.resources.swipe_to_reply_release
 import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
 const val SWIPE_TO_REPLY_THRESHOLD = -450f
@@ -294,11 +297,11 @@ fun RegularMessage(
                         Text(
                             when (it) {
                                 true -> stringResource(
-                                    R.string.swipe_to_reply_release
+                                    Res.string.swipe_to_reply_release
                                 )
 
                                 else -> stringResource(
-                                    R.string.swipe_to_reply_keep_swiping
+                                    Res.string.swipe_to_reply_keep_swiping
                                 )
                             },
                             color = indicatorForeground,

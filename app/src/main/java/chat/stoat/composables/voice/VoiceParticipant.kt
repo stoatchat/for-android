@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.api.StoatAPI
@@ -24,6 +23,12 @@ import chat.stoat.composables.chat.displayNameInChannel
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.internals.extensions.TransparentListItemColours
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.voice_camera_on
+import chat.stoat.shared.resources.voice_deafened
+import chat.stoat.shared.resources.voice_muted
+import chat.stoat.shared.resources.voice_screen_sharing
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun VoiceParticipant(
@@ -66,25 +71,25 @@ fun VoiceParticipant(
                 if (!state.isPublishing) {
                     Icon(
                         painter = painterResource(R.drawable.ic_mic_off_24dp),
-                        contentDescription = stringResource(R.string.voice_muted),
+                        contentDescription = stringResource(Res.string.voice_muted),
                     )
                 }
                 if (!state.isReceiving) {
                     Icon(
                         painter = painterResource(R.drawable.ic_headset_off_24dp),
-                        contentDescription = stringResource(R.string.voice_deafened),
+                        contentDescription = stringResource(Res.string.voice_deafened),
                     )
                 }
                 if (state.camera) {
                     Icon(
                         painter = painterResource(R.drawable.ic_videocam_24dp),
-                        contentDescription = stringResource(R.string.voice_camera_on),
+                        contentDescription = stringResource(Res.string.voice_camera_on),
                     )
                 }
                 if (state.screensharing) {
                     Icon(
                         painter = painterResource(R.drawable.ic_screen_share_24dp),
-                        contentDescription = stringResource(R.string.voice_screen_sharing),
+                        contentDescription = stringResource(Res.string.voice_screen_sharing),
                         tint = MaterialTheme.colorScheme.primary
                     )
                 }

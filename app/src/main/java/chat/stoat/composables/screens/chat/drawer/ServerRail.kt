@@ -40,7 +40,6 @@ import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onLongClick
 import androidx.compose.ui.semantics.semantics
@@ -56,8 +55,16 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.bottomEndCircleCutout
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Server
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_context_sheet_open
+import chat.stoat.shared.resources.server_folder_sheet_open
+import chat.stoat.shared.resources.server_folder_unnamed
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.voice_notification_ongoing_call
+import chat.stoat.shared.resources.voice_screen_sharing
 import chat.stoat.ui.colour.CSSColours
 import chat.stoat.ui.colour.parseCssFunctionColour
+import org.jetbrains.compose.resources.stringResource
 
 private val ServerVoiceBadgeSize = 16.dp
 private val ServerVoiceBadgeIconSize = 12.dp
@@ -199,11 +206,11 @@ fun ServerIconImage(server: Server, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .clip(CircleShape)
                 .then(modifier),
-            description = server.name ?: stringResource(R.string.unknown)
+            description = server.name ?: stringResource(Res.string.unknown)
         )
     } else {
         IconPlaceholder(
-            name = server.name ?: stringResource(R.string.unknown),
+            name = server.name ?: stringResource(Res.string.unknown),
             modifier = Modifier
                 .clip(CircleShape)
                 .then(modifier)
@@ -230,7 +237,7 @@ fun ServerRailIcon(
         voiceParticipants.isNotEmpty() -> R.drawable.ic_volume_up_24dp
         else -> null
     }
-    val longClickLabel = stringResource(R.string.server_context_sheet_open)
+    val longClickLabel = stringResource(Res.string.server_context_sheet_open)
 
     RailIndicatorBox(
         selected = selected,
@@ -267,9 +274,9 @@ fun ServerRailIcon(
                     painter = painterResource(voiceBadgeIcon),
                     contentDescription = stringResource(
                         if (hasScreenShare) {
-                            R.string.voice_screen_sharing
+                            Res.string.voice_screen_sharing
                         } else {
-                            R.string.voice_notification_ongoing_call
+                            Res.string.voice_notification_ongoing_call
                         }
                     ),
                     tint = MaterialTheme.colorScheme.onSurface,
@@ -290,8 +297,8 @@ fun FolderRailHeader(
     foldTarget: Boolean = false,
 ) {
     val collapsed = entry.folder.collapsed == true
-    val name = entry.folder.name.ifEmpty { stringResource(R.string.server_folder_unnamed) }
-    val longClickLabel = stringResource(R.string.server_folder_sheet_open)
+    val name = entry.folder.name.ifEmpty { stringResource(Res.string.server_folder_unnamed) }
+    val longClickLabel = stringResource(Res.string.server_folder_sheet_open)
     val holdsSelected = entry.servers.any { it.id == currentServer }
     val hasUnread = entry.servers.any { server ->
         server.id?.let { StoatAPI.unreads.serverHasUnread(it) } == true

@@ -28,10 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
@@ -44,10 +41,27 @@ import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.composables.settings.profile.StatusPicker
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.settings
+import chat.stoat.shared.resources.status_rate_limited_description
+import chat.stoat.shared.resources.status_rate_limited_description_unknown
+import chat.stoat.shared.resources.status_rate_limited_seconds
+import chat.stoat.shared.resources.status_rate_limited_title
+import chat.stoat.shared.resources.status_text
+import chat.stoat.shared.resources.status_text_error_other
+import chat.stoat.shared.resources.status_text_error_too_long
+import chat.stoat.shared.resources.status_text_explainer
+import chat.stoat.shared.resources.status_text_none
+import chat.stoat.shared.resources.status_text_placeholder
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 
 private data class StatusRateLimit(val retryAfterMilliseconds: Int?)
 
@@ -58,10 +72,10 @@ fun StatusTextEditDialog(
     onRateLimited: (Int?) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val statusTextErrorTooLongText = stringResource(Res.string.status_text_error_too_long, 128)
     val fieldState = rememberTextFieldState(initialStatus)
     var errorText by remember { mutableStateOf<String?>(null) }
     var isConfirmEnabled by remember { mutableStateOf(false) }
-    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(fieldState.text) {
@@ -73,19 +87,19 @@ fun StatusTextEditDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = stringResource(id = R.string.status_text)
+                text = stringResource(Res.string.status_text)
             )
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text(
-                    text = stringResource(id = R.string.status_text_explainer)
+                    text = stringResource(Res.string.status_text_explainer)
                 )
                 TextField(
                     state = fieldState,
                     placeholder = {
                         Text(
-                            text = stringResource(id = R.string.status_text_placeholder),
+                            text = stringResource(Res.string.status_text_placeholder),
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                             )
@@ -110,7 +124,7 @@ fun StatusTextEditDialog(
                 onClick = {
                     errorText = null
                     if (fieldState.text.length > 128) {
-                        errorText = resources.getString(R.string.status_text_error_too_long, 128)
+                        errorText = statusTextErrorTooLongText
                     } else {
                         if (fieldState.text == initialStatus) {
                             onDismiss()
@@ -134,7 +148,7 @@ fun StatusTextEditDialog(
                                         "Failed to remove status text\n${e.asLog()}"
                                     }
                                     errorText =
-                                        resources.getString(R.string.status_text_error_other)
+                                        getString(Res.string.status_text_error_other)
                                 }
                             }
                         } else {
@@ -156,7 +170,7 @@ fun StatusTextEditDialog(
                                         "Failed to update status text\n${e.asLog()}"
                                     }
                                     errorText =
-                                        resources.getString(R.string.status_text_error_other)
+                                        getString(Res.string.status_text_error_other)
                                 }
                             }
                         }
@@ -165,7 +179,7 @@ fun StatusTextEditDialog(
                 }
             ) {
                 Text(
-                    text = stringResource(id = R.string.ok)
+                    text = stringResource(Res.string.ok)
                 )
             }
         },
@@ -174,7 +188,7 @@ fun StatusTextEditDialog(
                 onClick = onDismiss
             ) {
                 Text(
-                    text = stringResource(id = R.string.cancel)
+                    text = stringResource(Res.string.cancel)
                 )
             }
         }
@@ -192,23 +206,23 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     rateLimit?.let { limit ->
         val waitTime = limit.retryAfterMilliseconds?.let { milliseconds ->
             val seconds = ((milliseconds.coerceAtLeast(0) + 999) / 1_000).coerceAtLeast(1)
-            pluralStringResource(R.plurals.status_rate_limited_seconds, seconds, seconds)
+            pluralStringResource(Res.plurals.status_rate_limited_seconds, seconds, seconds)
         }
         AlertDialog(
             onDismissRequest = { rateLimit = null },
-            title = { Text(stringResource(R.string.status_rate_limited_title)) },
+            title = { Text(stringResource(Res.string.status_rate_limited_title)) },
             text = {
                 Text(
                     if (waitTime != null) {
-                        stringResource(R.string.status_rate_limited_description, waitTime)
+                        stringResource(Res.string.status_rate_limited_description, waitTime)
                     } else {
-                        stringResource(R.string.status_rate_limited_description_unknown)
+                        stringResource(Res.string.status_rate_limited_description_unknown)
                     }
                 )
             },
             confirmButton = {
                 TextButton(onClick = { rateLimit = null }) {
-                    Text(stringResource(R.string.ok))
+                    Text(stringResource(Res.string.ok))
                 }
             },
         )
@@ -267,7 +281,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             Text(
-                text = selfUser.status?.text ?: stringResource(id = R.string.status_text_none),
+                text = selfUser.status?.text ?: stringResource(Res.string.status_text_none),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = if (selfUser.status?.text == null) {
                         MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
@@ -299,7 +313,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
         },
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.settings)
+                text = stringResource(Res.string.settings)
             )
         },
         onClick = {

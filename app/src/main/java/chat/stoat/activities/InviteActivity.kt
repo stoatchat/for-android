@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -60,10 +59,24 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Invite
 import chat.stoat.core.model.schemas.InviteJoined
 import chat.stoat.core.model.util.RsResult
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.invite_already_member
+import chat.stoat.shared.resources.invite_cancel
+import chat.stoat.shared.resources.invite_error_banned
+import chat.stoat.shared.resources.invite_error_header
+import chat.stoat.shared.resources.invite_error_invalid_invite
+import chat.stoat.shared.resources.invite_error_no_invite
+import chat.stoat.shared.resources.invite_error_unknown
+import chat.stoat.shared.resources.invite_join
+import chat.stoat.shared.resources.invite_message
+import chat.stoat.shared.resources.invite_open_server
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.unknown
 import chat.stoat.ui.theme.StoatTheme
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 class InviteActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -217,7 +230,7 @@ fun InviteScreen(
                                     url = "$STOAT_FILES/icons/${invite.serverIcon!!.id}/${invite.serverIcon!!.filename}",
                                     allowAnimation = false,
                                     description = viewModel.inviteResult?.value?.serverName
-                                        ?: stringResource(id = R.string.unknown),
+                                        ?: stringResource(Res.string.unknown),
                                     modifier = Modifier
                                         .size(64.dp)
                                         .clip(CircleShape)
@@ -225,7 +238,7 @@ fun InviteScreen(
                             } else {
                                 IconPlaceholder(
                                     name = invite?.serverName
-                                        ?: stringResource(id = R.string.unknown),
+                                        ?: stringResource(Res.string.unknown),
                                     modifier = Modifier
                                         .size(64.dp)
                                         .clip(CircleShape)
@@ -236,7 +249,7 @@ fun InviteScreen(
 
                             Text(
                                 text = viewModel.inviteResult?.value?.serverName
-                                    ?: stringResource(id = R.string.unknown),
+                                    ?: stringResource(Res.string.unknown),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 24.sp,
                                 textAlign = TextAlign.Center,
@@ -247,10 +260,10 @@ fun InviteScreen(
 
                             Text(
                                 text = stringResource(
-                                    id = if (StoatAPI.serverCache.containsKey(
+                                    if (StoatAPI.serverCache.containsKey(
                                             invite?.serverId
                                         )
-                                    ) R.string.invite_already_member else R.string.invite_message
+                                    ) Res.string.invite_already_member else Res.string.invite_message
                                 ),
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.fillMaxWidth()
@@ -275,9 +288,8 @@ fun InviteScreen(
                                 ) {
                                     Text(
                                         text = stringResource(
-                                            id =
-                                                if (StoatAPI.serverCache.containsKey(invite?.serverId)) R.string.invite_open_server
-                                                else R.string.invite_join
+                                            if (StoatAPI.serverCache.containsKey(invite?.serverId)) Res.string.invite_open_server
+                                                else Res.string.invite_join
                                         )
                                     )
                                 }
@@ -289,7 +301,7 @@ fun InviteScreen(
                                     modifier = Modifier
                                         .testTag("decline_invite")
                                 ) {
-                                    Text(text = stringResource(id = R.string.invite_cancel))
+                                    Text(text = stringResource(Res.string.invite_cancel))
                                 }
                             }
                         }
@@ -313,7 +325,7 @@ fun InvalidInviteError(error: StoatAPIError? = null, onDismissRequest: () -> Uni
         },
         title = {
             Text(
-                text = stringResource(id = R.string.invite_error_header),
+                text = stringResource(Res.string.invite_error_header),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -322,10 +334,10 @@ fun InvalidInviteError(error: StoatAPIError? = null, onDismissRequest: () -> Uni
             Column {
                 Text(
                     text = stringResource(
-                        id = when (error?.type) {
-                            "NotFound" -> R.string.invite_error_invalid_invite
-                            "Banned" -> R.string.invite_error_banned
-                            else -> R.string.invite_error_unknown
+                        when (error?.type) {
+                            "NotFound" -> Res.string.invite_error_invalid_invite
+                            "Banned" -> Res.string.invite_error_banned
+                            else -> Res.string.invite_error_unknown
                         }
                     ),
                     textAlign = TextAlign.Center,
@@ -339,7 +351,7 @@ fun InvalidInviteError(error: StoatAPIError? = null, onDismissRequest: () -> Uni
                     onDismissRequest()
                 }
             ) {
-                Text(text = stringResource(id = R.string.invite_cancel))
+                Text(text = stringResource(Res.string.invite_cancel))
             }
         },
         confirmButton = {}
@@ -359,7 +371,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
         },
         title = {
             Text(
-                text = stringResource(id = R.string.invite_error_header),
+                text = stringResource(Res.string.invite_error_header),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -367,7 +379,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
         text = {
             Column {
                 Text(
-                    text = stringResource(id = R.string.invite_error_no_invite),
+                    text = stringResource(Res.string.invite_error_no_invite),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -379,7 +391,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
                     onDismissRequest()
                 }
             ) {
-                Text(text = stringResource(id = R.string.ok))
+                Text(text = stringResource(Res.string.ok))
             }
         },
         confirmButton = {}

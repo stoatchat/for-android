@@ -10,7 +10,6 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.util.fastDistinctBy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatJson
 import chat.stoat.api.internals.ChannelUtils
@@ -54,6 +53,11 @@ import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.settings.providers.AgeGateUnlockedStorageProvider
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.message_field_denied_generic
+import chat.stoat.shared.resources.message_field_denied_no_permission
+import chat.stoat.shared.resources.message_field_denied_platform_moderation
+import chat.stoat.shared.resources.typing_blank
 import com.mikepenz.markdown.model.State
 import com.mikepenz.markdown.model.parseMarkdownFlow
 import io.ktor.http.ContentType
@@ -131,7 +135,7 @@ class ChannelScreenViewModel(
     var ensuredSelfMember by mutableStateOf(false)
 
     var denyMessageField by mutableStateOf(false)
-    var denyMessageFieldReasonResource by mutableIntStateOf(R.string.typing_blank)
+    var denyMessageFieldReasonResource by mutableStateOf(Res.string.typing_blank)
 
     var editingMessage by mutableStateOf<String?>(null)
     var isSending by mutableStateOf(false)
@@ -174,7 +178,7 @@ class ChannelScreenViewModel(
         this.jumpFailure = null
         this.ensuredSelfMember = false
         this.denyMessageField = false
-        this.denyMessageFieldReasonResource = R.string.typing_blank
+        this.denyMessageFieldReasonResource = Res.string.typing_blank
         this.editingMessage = null
         this.isSending = false
         this.ageGateUnlocked = channel?.nsfw != true
@@ -281,9 +285,9 @@ class ChannelScreenViewModel(
         }
 
         denyMessageFieldReasonResource = when {
-            partnerId == SpecialUsers.PLATFORM_MODERATION_USER -> R.string.message_field_denied_platform_moderation
-            !canSend -> R.string.message_field_denied_no_permission
-            else -> R.string.message_field_denied_generic
+            partnerId == SpecialUsers.PLATFORM_MODERATION_USER -> Res.string.message_field_denied_platform_moderation
+            !canSend -> Res.string.message_field_denied_no_permission
+            else -> Res.string.message_field_denied_generic
         }
     }
 

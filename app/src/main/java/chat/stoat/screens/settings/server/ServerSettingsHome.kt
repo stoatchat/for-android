@@ -1,7 +1,6 @@
 package chat.stoat.screens.settings.server
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.stoat.R
@@ -44,7 +42,26 @@ import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_settings
+import chat.stoat.shared.resources.server_settings_bans
+import chat.stoat.shared.resources.server_settings_category_customisation
+import chat.stoat.shared.resources.server_settings_category_user_management
+import chat.stoat.shared.resources.server_settings_channels
+import chat.stoat.shared.resources.server_settings_delete
+import chat.stoat.shared.resources.server_settings_delete_cancel
+import chat.stoat.shared.resources.server_settings_delete_confirm
+import chat.stoat.shared.resources.server_settings_delete_confirm_description
+import chat.stoat.shared.resources.server_settings_delete_confirm_yes
+import chat.stoat.shared.resources.server_settings_delete_error
+import chat.stoat.shared.resources.server_settings_emojis
+import chat.stoat.shared.resources.server_settings_invites
+import chat.stoat.shared.resources.server_settings_members
+import chat.stoat.shared.resources.server_settings_overview
+import chat.stoat.shared.resources.server_settings_roles
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 private const val MEMBERS_PANEL_ACCESSIBLE = false
 
@@ -70,7 +87,7 @@ fun ServerSettingsHome(
     var showDeleteConfirmation by remember { mutableStateOf(false) }
     var isDeleting by remember { mutableStateOf(false) }
     var deleteError by remember { mutableStateOf<String?>(null) }
-    val deleteErrorFallback = stringResource(R.string.server_settings_delete_error)
+    val deleteErrorFallback = stringResource(Res.string.server_settings_delete_error)
 
     if (showDeleteConfirmation && server != null) {
         AlertDialog(
@@ -83,14 +100,14 @@ fun ServerSettingsHome(
             title = {
                 Text(
                     stringResource(
-                        R.string.server_settings_delete_confirm,
+                        Res.string.server_settings_delete_confirm,
                         server.name ?: serverId,
                     )
                 )
             },
             text = {
                 Column {
-                    Text(stringResource(R.string.server_settings_delete_confirm_description))
+                    Text(stringResource(Res.string.server_settings_delete_confirm_description))
                     deleteError?.let {
                         Text(
                             text = it,
@@ -108,7 +125,7 @@ fun ServerSettingsHome(
                         deleteError = null
                     },
                 ) {
-                    Text(stringResource(R.string.server_settings_delete_cancel))
+                    Text(stringResource(Res.string.server_settings_delete_cancel))
                 }
             },
             confirmButton = {
@@ -141,7 +158,7 @@ fun ServerSettingsHome(
                             strokeWidth = 2.dp,
                         )
                     } else {
-                        Text(stringResource(R.string.server_settings_delete_confirm_yes))
+                        Text(stringResource(Res.string.server_settings_delete_confirm_yes))
                     }
                 }
             },
@@ -150,7 +167,7 @@ fun ServerSettingsHome(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings)) },
+        title = { Text(stringResource(Res.string.server_settings)) },
     ) {
         if (server == null || permissions == null) {
             Box(
@@ -179,7 +196,7 @@ fun ServerSettingsHome(
 
         if (overviewOptions.isNotEmpty()) {
             ServerSettingsSection(
-                title = server.name ?: stringResource(R.string.server_settings),
+                title = server.name ?: stringResource(Res.string.server_settings),
                 options = overviewOptions,
                 onOptionSelected = { option ->
                     when (option) {
@@ -197,7 +214,7 @@ fun ServerSettingsHome(
 
         if (customisationOptions.isNotEmpty()) {
             ServerSettingsSection(
-                title = stringResource(R.string.server_settings_category_customisation),
+                title = stringResource(Res.string.server_settings_category_customisation),
                 options = customisationOptions,
                 onOptionSelected = { option ->
                     if (option == ServerSettingsOption.Emojis) {
@@ -209,7 +226,7 @@ fun ServerSettingsHome(
 
         if (userManagementOptions.isNotEmpty()) {
             ServerSettingsSection(
-                title = stringResource(R.string.server_settings_category_user_management),
+                title = stringResource(Res.string.server_settings_category_user_management),
                 options = userManagementOptions,
                 onOptionSelected = { option ->
                     when (option) {
@@ -295,16 +312,16 @@ private fun ServerSettingsOptionRow(
     )
 }
 
-private val ServerSettingsOption.stringResource: Int
-    @StringRes get() = when (this) {
-        ServerSettingsOption.Overview -> R.string.server_settings_overview
-        ServerSettingsOption.Channels -> R.string.server_settings_channels
-        ServerSettingsOption.Emojis -> R.string.server_settings_emojis
-        ServerSettingsOption.Members -> R.string.server_settings_members
-        ServerSettingsOption.Roles -> R.string.server_settings_roles
-        ServerSettingsOption.Invites -> R.string.server_settings_invites
-        ServerSettingsOption.Bans -> R.string.server_settings_bans
-        ServerSettingsOption.DeleteServer -> R.string.server_settings_delete
+private val ServerSettingsOption.stringResource: StringResource
+    get() = when (this) {
+        ServerSettingsOption.Overview -> Res.string.server_settings_overview
+        ServerSettingsOption.Channels -> Res.string.server_settings_channels
+        ServerSettingsOption.Emojis -> Res.string.server_settings_emojis
+        ServerSettingsOption.Members -> Res.string.server_settings_members
+        ServerSettingsOption.Roles -> Res.string.server_settings_roles
+        ServerSettingsOption.Invites -> Res.string.server_settings_invites
+        ServerSettingsOption.Bans -> Res.string.server_settings_bans
+        ServerSettingsOption.DeleteServer -> Res.string.server_settings_delete
     }
 
 private val ServerSettingsOption.iconResource: Int

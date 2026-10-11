@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -58,6 +57,13 @@ import chat.stoat.api.internals.ULID
 import chat.stoat.api.internals.UserQR
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.user_card_data_point_display_name
+import chat.stoat.shared.resources.user_card_data_point_join_date
+import chat.stoat.shared.resources.user_card_data_point_photo
+import chat.stoat.shared.resources.user_card_data_point_qrcode
+import chat.stoat.shared.resources.user_card_data_point_username
 import chat.stoat.ui.theme.FragmentMono
 import com.bumptech.glide.Glide
 import com.google.zxing.BarcodeFormat
@@ -67,6 +73,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.stringResource
 import java.time.Instant
 import java.util.Date
 
@@ -214,7 +221,7 @@ fun UserCard(
                 )
 
                 Text(
-                    stringResource(R.string.user_card_data_point_display_name, 1).uppercase(),
+                    stringResource(Res.string.user_card_data_point_display_name, 1).uppercase(),
                     fontFamily = FragmentMono,
                     fontSize = 12.sp,
                     letterSpacing = 1.sp,
@@ -226,7 +233,7 @@ fun UserCard(
                 )
 
                 Text(
-                    user?.displayName ?: user?.username ?: stringResource(R.string.unknown),
+                    user?.displayName ?: user?.username ?: stringResource(Res.string.unknown),
                     maxLines = 1,
                     autoSize = TextAutoSize.StepBased(
                         minFontSize = 12.sp,
@@ -242,7 +249,7 @@ fun UserCard(
                 )
 
                 Text(
-                    stringResource(R.string.user_card_data_point_username, 2).uppercase(),
+                    stringResource(Res.string.user_card_data_point_username, 2).uppercase(),
                     fontFamily = FragmentMono,
                     fontSize = 12.sp,
                     letterSpacing = 1.sp,
@@ -256,7 +263,7 @@ fun UserCard(
                 Text(
                     text = buildAnnotatedString {
                         pushStyle(SpanStyle(fontWeight = FontWeight.Medium))
-                        append(user?.username ?: stringResource(R.string.unknown))
+                        append(user?.username ?: stringResource(Res.string.unknown))
                         pop()
                         pushStyle(SpanStyle(fontWeight = FontWeight.ExtraLight))
                         append("#${user?.discriminator ?: "0000"}")
@@ -276,7 +283,7 @@ fun UserCard(
                 )
 
                 Text(
-                    stringResource(R.string.user_card_data_point_join_date, 3).uppercase(),
+                    stringResource(Res.string.user_card_data_point_join_date, 3).uppercase(),
                     fontFamily = FragmentMono,
                     fontSize = 12.sp,
                     letterSpacing = 1.sp,
@@ -311,7 +318,7 @@ fun UserCard(
                 )
 
                 Text(
-                    stringResource(R.string.user_card_data_point_qrcode, 4).uppercase(),
+                    stringResource(Res.string.user_card_data_point_qrcode, 4).uppercase(),
                     fontFamily = FragmentMono,
                     fontSize = 12.sp,
                     letterSpacing = 1.sp,
@@ -336,7 +343,7 @@ fun UserCard(
                 )
 
                 Text(
-                    stringResource(R.string.user_card_data_point_photo, 5).uppercase(),
+                    stringResource(Res.string.user_card_data_point_photo, 5).uppercase(),
                     fontFamily = FragmentMono,
                     fontSize = 12.sp,
                     letterSpacing = 1.sp,
@@ -352,7 +359,7 @@ fun UserCard(
                     end.linkTo(parent.end)
                 }) {
                     UserAvatar(
-                        username = user?.username ?: stringResource(R.string.unknown),
+                        username = user?.username ?: stringResource(Res.string.unknown),
                         userId = user?.id ?: "00000000000000000000000000",
                         avatar = user?.avatar,
                         shape = CircleShape,

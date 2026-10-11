@@ -45,8 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,7 +64,28 @@ import chat.stoat.core.model.schemas.BannedUser
 import chat.stoat.core.model.schemas.ServerBan
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.server_settings_bans
+import chat.stoat.shared.resources.server_settings_bans_banned_by
+import chat.stoat.shared.resources.server_settings_bans_count
+import chat.stoat.shared.resources.server_settings_bans_details_title
+import chat.stoat.shared.resources.server_settings_bans_empty_description
+import chat.stoat.shared.resources.server_settings_bans_empty_title
+import chat.stoat.shared.resources.server_settings_bans_load_error
+import chat.stoat.shared.resources.server_settings_bans_no_reason
+import chat.stoat.shared.resources.server_settings_bans_reason
+import chat.stoat.shared.resources.server_settings_bans_retry
+import chat.stoat.shared.resources.server_settings_bans_unban
+import chat.stoat.shared.resources.server_settings_bans_unban_description
+import chat.stoat.shared.resources.server_settings_bans_unban_error
+import chat.stoat.shared.resources.server_settings_bans_unban_title
+import chat.stoat.shared.resources.server_settings_bans_unbanned
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 class ServerSettingsBansViewModel(
@@ -103,7 +122,7 @@ class ServerSettingsBansViewModel(
                 .onFailure { error ->
                     if (loadedServerId == serverId) {
                         loadError = error.message
-                            ?: context.getString(R.string.server_settings_bans_load_error)
+                            ?: getString(Res.string.server_settings_bans_load_error)
                     }
                 }
 
@@ -134,7 +153,7 @@ class ServerSettingsBansViewModel(
                 }
                 .onFailure { error ->
                     unbanError = error.message
-                        ?: context.getString(R.string.server_settings_bans_unban_error)
+                        ?: getString(Res.string.server_settings_bans_unban_error)
                 }
 
             unbanningUserId = null
@@ -231,13 +250,13 @@ fun ServerSettingsBans(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings_bans)) },
+        title = { Text(stringResource(Res.string.server_settings_bans)) },
         scrollable = false,
         onNavigateBack = {
             if (viewModel.unbanningUserId == null) navController.popBackStack()
         },
     ) {
-        val unbannedMessage = stringResource(R.string.server_settings_bans_unbanned)
+        val unbannedMessage = stringResource(Res.string.server_settings_bans_unbanned)
         LaunchedEffect(viewModel.unbanSucceeded) {
             if (viewModel.unbanSucceeded > 0) {
                 unbanTarget = null
@@ -285,7 +304,7 @@ private fun BanList(
         item(key = "count") {
             Text(
                 text = pluralStringResource(
-                    R.plurals.server_settings_bans_count,
+                    Res.plurals.server_settings_bans_count,
                     entries.size,
                     entries.size,
                 ),
@@ -314,8 +333,8 @@ private fun BanList(
             item(key = "empty") {
                 ServerSettingsEmptyState(
                     icon = R.drawable.ic_gavel_24dp,
-                    title = R.string.server_settings_bans_empty_title,
-                    description = R.string.server_settings_bans_empty_description,
+                    title = Res.string.server_settings_bans_empty_title,
+                    description = Res.string.server_settings_bans_empty_description,
                 )
             }
         } else {
@@ -363,7 +382,7 @@ private fun BanListItem(
     val username = entry.user?.username ?: userId
     val displayName = entry.user?.let { "${it.username}#${it.discriminator}" } ?: userId
     val reason = entry.ban.reason?.takeIf(String::isNotBlank)
-        ?: stringResource(R.string.server_settings_bans_no_reason)
+        ?: stringResource(Res.string.server_settings_bans_no_reason)
     val shape = when {
         first && last -> MaterialTheme.shapes.large
         first -> MaterialTheme.shapes.extraSmall.copy(
@@ -411,7 +430,7 @@ private fun BanListItem(
             )
         }
         TextButton(onClick = onUnban, enabled = enabled) {
-            Text(stringResource(R.string.server_settings_bans_unban))
+            Text(stringResource(Res.string.server_settings_bans_unban))
         }
     }
 }
@@ -425,7 +444,7 @@ private fun BanDetailsSheet(
     val username = entry.user?.username ?: userId
     val displayName = entry.user?.let { "${it.username}#${it.discriminator}" } ?: userId
     val reason = entry.ban.reason?.takeIf(String::isNotBlank)
-        ?: stringResource(R.string.server_settings_bans_no_reason)
+        ?: stringResource(Res.string.server_settings_bans_no_reason)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -436,7 +455,7 @@ private fun BanDetailsSheet(
             .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
     ) {
         Text(
-            text = stringResource(R.string.server_settings_bans_details_title),
+            text = stringResource(Res.string.server_settings_bans_details_title),
             style = MaterialTheme.typography.headlineSmall,
         )
 
@@ -460,7 +479,7 @@ private fun BanDetailsSheet(
                 entry.bannedByName?.let { bannedBy ->
                     Text(
                         text = stringResource(
-                            R.string.server_settings_bans_banned_by,
+                            Res.string.server_settings_bans_banned_by,
                             bannedBy,
                         ),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -472,7 +491,7 @@ private fun BanDetailsSheet(
 
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(
-                text = stringResource(R.string.server_settings_bans_reason),
+                text = stringResource(Res.string.server_settings_bans_reason),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.labelLarge,
             )
@@ -493,7 +512,7 @@ private fun BanDetailsSheet(
             onClick = onDone,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(stringResource(R.string.ok))
+            Text(stringResource(Res.string.ok))
         }
     }
 }
@@ -513,7 +532,7 @@ private fun BanLoadError(message: String, onRetry: () -> Unit) {
             textAlign = TextAlign.Center,
         )
         Button(onClick = onRetry) {
-            Text(stringResource(R.string.server_settings_bans_retry))
+            Text(stringResource(Res.string.server_settings_bans_retry))
         }
     }
 }
@@ -533,11 +552,11 @@ private fun UnbanDialog(
     AlertDialog(
         onDismissRequest = { if (!unbanning) onDismiss() },
         title = {
-            Text(stringResource(R.string.server_settings_bans_unban_title, username))
+            Text(stringResource(Res.string.server_settings_bans_unban_title, username))
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.server_settings_bans_unban_description, username))
+                Text(stringResource(Res.string.server_settings_bans_unban_description, username))
                 AnimatedVisibility(error != null) {
                     Text(
                         text = error.orEmpty(),
@@ -548,7 +567,7 @@ private fun UnbanDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss, enabled = !unbanning) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
         confirmButton = {
@@ -565,7 +584,7 @@ private fun UnbanDialog(
                         modifier = Modifier.size(18.dp),
                     )
                 } else {
-                    Text(stringResource(R.string.server_settings_bans_unban))
+                    Text(stringResource(Res.string.server_settings_bans_unban))
                 }
             }
         },

@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -40,6 +39,12 @@ import chat.stoat.R
 import chat.stoat.api.routes.microservices.gazette.GazetteChangelog
 import chat.stoat.api.routes.microservices.gazette.getChangelogById
 import chat.stoat.composables.markdown.prose.ProseMarkdown
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.changelog_header
+import chat.stoat.shared.resources.changelog_load_error
+import chat.stoat.shared.resources.changelog_retry
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -49,6 +54,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import org.jetbrains.compose.resources.stringResource
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -118,7 +124,7 @@ fun ReadChangelogScreen(
             TopAppBar(
                 title = {
                     Text(
-                        stringResource(R.string.changelog_header),
+                        stringResource(Res.string.changelog_header),
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
@@ -132,7 +138,7 @@ fun ReadChangelogScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                formattedDate ?: stringResource(R.string.unknown),
+                                formattedDate ?: stringResource(Res.string.unknown),
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
@@ -142,7 +148,7 @@ fun ReadChangelogScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 }
@@ -172,14 +178,14 @@ fun ReadChangelogScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            stringResource(R.string.changelog_load_error),
+                            stringResource(Res.string.changelog_load_error),
                             modifier = Modifier.padding(16.dp)
                         )
                         Button(
                             onClick = { viewModel.retry() },
                             modifier = Modifier.padding(top = 8.dp)
                         ) {
-                            Text(stringResource(R.string.changelog_retry))
+                            Text(stringResource(Res.string.changelog_retry))
                         }
                     }
 

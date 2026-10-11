@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,10 +60,43 @@ import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.ServerIdentityCapabilities
 import chat.stoat.internals.server.serverIdentityCapabilities
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_identity_avatar
+import chat.stoat.shared.resources.server_identity_avatar_custom
+import chat.stoat.shared.resources.server_identity_avatar_custom_member
+import chat.stoat.shared.resources.server_identity_avatar_inherited
+import chat.stoat.shared.resources.server_identity_avatar_inherited_member
+import chat.stoat.shared.resources.server_identity_discard
+import chat.stoat.shared.resources.server_identity_discard_description
+import chat.stoat.shared.resources.server_identity_discard_title
+import chat.stoat.shared.resources.server_identity_file_error
+import chat.stoat.shared.resources.server_identity_keep_editing
+import chat.stoat.shared.resources.server_identity_load_error
+import chat.stoat.shared.resources.server_identity_member_title
+import chat.stoat.shared.resources.server_identity_nickname
+import chat.stoat.shared.resources.server_identity_nickname_placeholder
+import chat.stoat.shared.resources.server_identity_nickname_placeholder_member
+import chat.stoat.shared.resources.server_identity_permission_avatar
+import chat.stoat.shared.resources.server_identity_permission_avatar_member
+import chat.stoat.shared.resources.server_identity_permission_nickname
+import chat.stoat.shared.resources.server_identity_permission_nickname_member
+import chat.stoat.shared.resources.server_identity_permission_pronouns
+import chat.stoat.shared.resources.server_identity_preview_description
+import chat.stoat.shared.resources.server_identity_preview_description_member
+import chat.stoat.shared.resources.server_identity_pronouns
+import chat.stoat.shared.resources.server_identity_pronouns_placeholder
+import chat.stoat.shared.resources.server_identity_retry
+import chat.stoat.shared.resources.server_identity_save
+import chat.stoat.shared.resources.server_identity_saved
+import chat.stoat.shared.resources.server_identity_title
+import chat.stoat.shared.resources.server_identity_update_error
+import chat.stoat.shared.resources.unknown
 import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -124,7 +156,7 @@ class ServerIdentitySettingsViewModel(
                         loaded = true
                     } else {
                         loadError = error.message
-                            ?: context.getString(R.string.server_identity_load_error)
+                            ?: getString(Res.string.server_identity_load_error)
                     }
                 }
 
@@ -229,7 +261,7 @@ class ServerIdentitySettingsViewModel(
                 }
                 .onFailure { error ->
                     updateError = error.message
-                        ?: context.getString(R.string.server_identity_update_error)
+                        ?: getString(Res.string.server_identity_update_error)
                 }
 
             saving = false
@@ -264,7 +296,7 @@ class ServerIdentitySettingsViewModel(
                     context.contentResolver.openInputStream(uri)?.use { input ->
                         temporaryFile.outputStream().use(input::copyTo)
                     } ?: throw IllegalArgumentException(
-                        context.getString(R.string.server_identity_file_error)
+                        getString(Res.string.server_identity_file_error)
                     )
                 }
         }
@@ -319,8 +351,8 @@ fun ServerIdentitySettingsScreen(
     if (showDiscardConfirmation) {
         AlertDialog(
             onDismissRequest = { showDiscardConfirmation = false },
-            title = { Text(stringResource(R.string.server_identity_discard_title)) },
-            text = { Text(stringResource(R.string.server_identity_discard_description)) },
+            title = { Text(stringResource(Res.string.server_identity_discard_title)) },
+            text = { Text(stringResource(Res.string.server_identity_discard_description)) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -329,12 +361,12 @@ fun ServerIdentitySettingsScreen(
                         navController.popBackStack()
                     },
                 ) {
-                    Text(stringResource(R.string.server_identity_discard))
+                    Text(stringResource(Res.string.server_identity_discard))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDiscardConfirmation = false }) {
-                    Text(stringResource(R.string.server_identity_keep_editing))
+                    Text(stringResource(Res.string.server_identity_keep_editing))
                 }
             },
         )
@@ -346,15 +378,15 @@ fun ServerIdentitySettingsScreen(
             Text(
                 if (editingOwnIdentity) {
                     stringResource(
-                        R.string.server_identity_title,
-                        server?.name ?: stringResource(R.string.unknown),
+                        Res.string.server_identity_title,
+                        server?.name ?: stringResource(Res.string.unknown),
                     )
                 } else {
                     stringResource(
-                        R.string.server_identity_member_title,
+                        Res.string.server_identity_member_title,
                         user?.let { User.resolveDefaultName(it) }
-                            ?: stringResource(R.string.unknown),
-                        server?.name ?: stringResource(R.string.unknown),
+                            ?: stringResource(Res.string.unknown),
+                        server?.name ?: stringResource(Res.string.unknown),
                     )
                 },
                 maxLines = 1,
@@ -395,14 +427,14 @@ fun ServerIdentitySettingsScreen(
                     } else {
                         Icon(
                             painter = painterResource(R.drawable.ic_check_24dp),
-                            contentDescription = stringResource(R.string.server_identity_save),
+                            contentDescription = stringResource(Res.string.server_identity_save),
                         )
                     }
                 }
             }
         },
     ) {
-        val savedMessage = stringResource(R.string.server_identity_saved)
+        val savedMessage = stringResource(Res.string.server_identity_saved)
         LaunchedEffect(viewModel.saveSucceeded) {
             if (viewModel.saveSucceeded > 0) showSnackbar(savedMessage)
         }
@@ -422,7 +454,7 @@ fun ServerIdentitySettingsScreen(
         if (!viewModel.loaded) {
             LoadError(
                 message = viewModel.loadError
-                    ?: stringResource(R.string.server_identity_load_error),
+                    ?: stringResource(Res.string.server_identity_load_error),
                 onRetry = { viewModel.load(serverId, targetUserId, force = true) },
             )
             return@SettingsPage
@@ -432,9 +464,9 @@ fun ServerIdentitySettingsScreen(
             Text(
                 text = stringResource(
                     if (editingOwnIdentity) {
-                        R.string.server_identity_preview_description
+                        Res.string.server_identity_preview_description
                     } else {
-                        R.string.server_identity_preview_description_member
+                        Res.string.server_identity_preview_description_member
                     }
                 ),
                 style = MaterialTheme.typography.labelLarge,
@@ -455,7 +487,7 @@ fun ServerIdentitySettingsScreen(
         }
 
         Text(
-            text = stringResource(R.string.server_identity_avatar),
+            text = stringResource(Res.string.server_identity_avatar),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp),
         )
@@ -475,23 +507,23 @@ fun ServerIdentitySettingsScreen(
                     when (description) {
                         ServerAvatarDescription.PermissionDenied ->
                             if (editingOwnIdentity) {
-                                R.string.server_identity_permission_avatar
+                                Res.string.server_identity_permission_avatar
                             } else {
-                                R.string.server_identity_permission_avatar_member
+                                Res.string.server_identity_permission_avatar_member
                             }
 
                         ServerAvatarDescription.Inherited ->
                             if (editingOwnIdentity) {
-                                R.string.server_identity_avatar_inherited
+                                Res.string.server_identity_avatar_inherited
                             } else {
-                                R.string.server_identity_avatar_inherited_member
+                                Res.string.server_identity_avatar_inherited_member
                             }
 
                         ServerAvatarDescription.Custom ->
                             if (editingOwnIdentity) {
-                                R.string.server_identity_avatar_custom
+                                Res.string.server_identity_avatar_custom
                             } else {
-                                R.string.server_identity_avatar_custom_member
+                                Res.string.server_identity_avatar_custom_member
                             }
                     }
                 ),
@@ -534,14 +566,14 @@ fun ServerIdentitySettingsScreen(
         OutlinedTextField(
             value = viewModel.nickname,
             onValueChange = viewModel::updateNickname,
-            label = { Text(stringResource(R.string.server_identity_nickname)) },
+            label = { Text(stringResource(Res.string.server_identity_nickname)) },
             placeholder = {
                 Text(
                     stringResource(
                         if (editingOwnIdentity) {
-                            R.string.server_identity_nickname_placeholder
+                            Res.string.server_identity_nickname_placeholder
                         } else {
-                            R.string.server_identity_nickname_placeholder_member
+                            Res.string.server_identity_nickname_placeholder_member
                         }
                     )
                 )
@@ -559,9 +591,9 @@ fun ServerIdentitySettingsScreen(
                     } else {
                         stringResource(
                             if (editingOwnIdentity) {
-                                R.string.server_identity_permission_nickname
+                                Res.string.server_identity_permission_nickname
                             } else {
-                                R.string.server_identity_permission_nickname_member
+                                Res.string.server_identity_permission_nickname_member
                             }
                         )
                     }
@@ -578,8 +610,8 @@ fun ServerIdentitySettingsScreen(
         OutlinedTextField(
             value = viewModel.pronouns,
             onValueChange = viewModel::updatePronouns,
-            label = { Text(stringResource(R.string.server_identity_pronouns)) },
-            placeholder = { Text(stringResource(R.string.server_identity_pronouns_placeholder)) },
+            label = { Text(stringResource(Res.string.server_identity_pronouns)) },
+            placeholder = { Text(stringResource(Res.string.server_identity_pronouns_placeholder)) },
             leadingIcon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_person_celebrate_24dp),
@@ -591,7 +623,7 @@ fun ServerIdentitySettingsScreen(
                     if (capabilities.canChangePronouns) {
                         "${viewModel.pronouns.length}/24"
                     } else {
-                        stringResource(R.string.server_identity_permission_pronouns)
+                        stringResource(Res.string.server_identity_permission_pronouns)
                     }
                 )
             },
@@ -606,7 +638,7 @@ fun ServerIdentitySettingsScreen(
         AnimatedVisibility(viewModel.updateError != null) {
             Text(
                 text = viewModel.updateError
-                    ?: stringResource(R.string.server_identity_update_error),
+                    ?: stringResource(Res.string.server_identity_update_error),
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -642,7 +674,7 @@ private fun LoadError(message: String, onRetry: () -> Unit) {
         )
         Spacer(Modifier.height(8.dp))
         TextButton(onClick = onRetry) {
-            Text(stringResource(R.string.server_identity_retry))
+            Text(stringResource(Res.string.server_identity_retry))
         }
     }
 }

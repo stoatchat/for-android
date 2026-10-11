@@ -21,13 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
 import chat.stoat.internals.extensions.zero
 import chat.stoat.screens.chat.LocalIsConnected
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.no_active_channel
+import chat.stoat.shared.resources.no_active_channel_body
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +57,7 @@ fun NoCurrentChannelScreen(useDrawer: Boolean, onDrawerClicked: () -> Unit) {
                             }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_menu_24dp),
-                                    contentDescription = stringResource(id = R.string.menu)
+                                    contentDescription = stringResource(Res.string.menu)
                                 )
                             }
                         }
@@ -72,14 +76,14 @@ fun NoCurrentChannelScreen(useDrawer: Boolean, onDrawerClicked: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.no_active_channel),
+                text = stringResource(Res.string.no_active_channel),
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
             Text(
-                text = stringResource(R.string.no_active_channel_body),
+                text = stringResource(Res.string.no_active_channel_body),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )

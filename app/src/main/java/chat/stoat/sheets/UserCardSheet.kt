@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,9 +41,17 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.profile.UserCard
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.copy
+import chat.stoat.shared.resources.share
+import chat.stoat.shared.resources.user_card_error_sharing
+import chat.stoat.shared.resources.user_card_tap_to_copy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import java.io.File
 import java.io.FileOutputStream
 
@@ -153,7 +160,7 @@ fun UserCardSheet(user: User?) {
         if (Platform.needsShowClipboardNotification()) {
             Toast.makeText(
                 context,
-                context.getString(R.string.copied),
+                getString(Res.string.copied),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -164,7 +171,7 @@ fun UserCardSheet(user: User?) {
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = stringResource(R.string.user_card_tap_to_copy),
+            text = stringResource(Res.string.user_card_tap_to_copy),
             style = MaterialTheme.typography.titleSmall,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -187,7 +194,7 @@ fun UserCardSheet(user: User?) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(R.string.user_card_error_sharing),
+                text = stringResource(Res.string.user_card_error_sharing),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error
             )
@@ -214,7 +221,7 @@ fun UserCardSheet(user: User?) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        stringResource(R.string.share),
+                        stringResource(Res.string.share),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -234,7 +241,7 @@ fun UserCardSheet(user: User?) {
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        stringResource(R.string.copy),
+                        stringResource(Res.string.copy),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

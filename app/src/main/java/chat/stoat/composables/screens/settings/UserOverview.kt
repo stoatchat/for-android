@@ -29,14 +29,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.routes.user.fetchUserProfile
@@ -48,10 +46,13 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.unknown
 import chat.stoat.ui.colour.solidColor
 import chat.stoat.ui.theme.TeamMemberFlairs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SelfUserOverview() {
@@ -172,7 +173,7 @@ fun RawUserOverview(
                 .fillMaxWidth()
         ) {
             UserAvatar(
-                username = user.displayName ?: stringResource(id = R.string.unknown),
+                username = user.displayName ?: stringResource(Res.string.unknown),
                 rawUrl = pfpUrl,
                 userId = user.id ?: ULID.makeSpecial(0),
                 avatar = user.avatar,
@@ -276,7 +277,7 @@ fun RawUserOverview2(
                 .fillMaxWidth()
         ) {
             UserAvatar(
-                username = user.displayName ?: stringResource(id = R.string.unknown),
+                username = user.displayName ?: stringResource(Res.string.unknown),
                 rawUrl = pfpUrl,
                 userId = user.id ?: ULID.makeSpecial(0),
                 avatar = user.avatar,

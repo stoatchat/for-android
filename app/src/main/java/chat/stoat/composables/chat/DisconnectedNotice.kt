@@ -21,12 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.api.realtime.DisconnectionState
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.disconnected
+import chat.stoat.shared.resources.reconnected
+import chat.stoat.shared.resources.reconnecting
+import chat.stoat.shared.resources.tap_to_reconnect
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 private fun DisconnectedNoticeBase(
@@ -60,7 +64,7 @@ private fun DisconnectedNoticeBase(
             )
             if (canTapToRetry) {
                 Text(
-                    text = stringResource(R.string.tap_to_reconnect),
+                    text = stringResource(Res.string.tap_to_reconnect),
                     color = foreground,
                     modifier = Modifier.padding(start = 8.dp),
                     fontWeight = FontWeight.Normal
@@ -77,7 +81,7 @@ fun DisconnectedNotice(state: DisconnectionState, onReconnect: () -> Unit) {
             background = MaterialTheme.colorScheme.error,
             foreground = MaterialTheme.colorScheme.onError,
             icon = Icons.Default.Warning,
-            text = stringResource(id = R.string.disconnected),
+            text = stringResource(Res.string.disconnected),
             canTapToRetry = true,
             onRetry = onReconnect
         )
@@ -86,7 +90,7 @@ fun DisconnectedNotice(state: DisconnectionState, onReconnect: () -> Unit) {
             background = MaterialTheme.colorScheme.secondary,
             foreground = MaterialTheme.colorScheme.onSecondary,
             icon = Icons.Default.Refresh,
-            text = stringResource(id = R.string.reconnecting),
+            text = stringResource(Res.string.reconnecting),
             canTapToRetry = true,
             onRetry = onReconnect,
         )
@@ -95,7 +99,7 @@ fun DisconnectedNotice(state: DisconnectionState, onReconnect: () -> Unit) {
             background = MaterialTheme.colorScheme.primary,
             foreground = MaterialTheme.colorScheme.onPrimary,
             icon = Icons.Default.Done,
-            text = stringResource(id = R.string.reconnected)
+            text = stringResource(Res.string.reconnected)
         )
     }
 }

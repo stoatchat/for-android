@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentType
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -37,17 +36,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import chat.stoat.R
-import chat.stoat.StoatApplication
 import chat.stoat.api.routes.account.RegistrationBody
 import chat.stoat.api.routes.account.register
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.composables.generic.FormTextField
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.register_data
+import chat.stoat.shared.resources.register_email
+import chat.stoat.shared.resources.register_email_verification_hint
+import chat.stoat.shared.resources.register_form_heading
+import chat.stoat.shared.resources.register_password
+import chat.stoat.shared.resources.register_password_rules
+import chat.stoat.shared.resources.service_health_alert_body_default
+import chat.stoat.shared.resources.signup
 import com.hcaptcha.sdk.HCaptcha
 import com.hcaptcha.sdk.HCaptchaConfig
 import com.hcaptcha.sdk.HCaptchaSize
 import com.hcaptcha.sdk.HCaptchaTheme
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 class RegisterDetailsScreenViewModel : ViewModel() {
     var email by mutableStateOf("")
@@ -61,7 +70,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
                 getRootRoute()
             } catch (e: Exception) {
                 error = if (e.message?.startsWith("Expected response body of the type") == true) {
-                    StoatApplication.instance.getString(R.string.service_health_alert_body_default)
+                    getString(Res.string.service_health_alert_body_default)
                 } else e.message
                 return@launch
             }
@@ -135,7 +144,7 @@ fun RegisterDetailsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.register_form_heading),
+                text = stringResource(Res.string.register_form_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Black,
@@ -149,7 +158,7 @@ fun RegisterDetailsScreen(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.register_data),
+                text = stringResource(Res.string.register_data),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -173,13 +182,13 @@ fun RegisterDetailsScreen(
                 FormTextField(
                     value = viewModel.email,
                     onChange = { viewModel.email = it },
-                    label = stringResource(R.string.register_email),
+                    label = stringResource(Res.string.register_email),
                     type = KeyboardType.Email,
                     action = ImeAction.Next,
                     modifier = Modifier.semantics { contentType = ContentType.EmailAddress }
                 )
                 Text(
-                    text = stringResource(R.string.register_email_verification_hint),
+                    text = stringResource(Res.string.register_email_verification_hint),
                     color = MaterialTheme.colorScheme.onBackground.copy(
                         alpha = 0.5f
                     ),
@@ -192,13 +201,13 @@ fun RegisterDetailsScreen(
                 FormTextField(
                     value = viewModel.password,
                     onChange = { viewModel.password = it },
-                    label = stringResource(R.string.register_password),
+                    label = stringResource(Res.string.register_password),
                     type = KeyboardType.Password,
                     action = ImeAction.Done,
                     modifier = Modifier.semantics { contentType = ContentType.NewPassword }
                 )
                 Text(
-                    text = stringResource(R.string.register_password_rules),
+                    text = stringResource(Res.string.register_password_rules),
                     color = MaterialTheme.colorScheme.onBackground.copy(
                         alpha = 0.5f
                     ),
@@ -221,7 +230,7 @@ fun RegisterDetailsScreen(
             TextButton(onClick = {
                 navController.popBackStack()
             }) {
-                Text(text = stringResource(R.string.back))
+                Text(text = stringResource(Res.string.back))
             }
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -234,7 +243,7 @@ fun RegisterDetailsScreen(
                 },
                 enabled = viewModel.email.isNotBlank() && viewModel.password.isNotBlank()
             ) {
-                Text(text = stringResource(R.string.signup))
+                Text(text = stringResource(Res.string.signup))
             }
         }
     }

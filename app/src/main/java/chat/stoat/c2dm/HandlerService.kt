@@ -28,9 +28,13 @@ import chat.stoat.api.routes.channel.fetchSingleChannel
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.c2dm.ChannelRegistrator.Companion.CHANNEL_ID_GROUP_CONVERSATIONS_MESSAGES
 import chat.stoat.core.model.data.STOAT_FILES
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.KVStorage
 import chat.stoat.persistence.SqlStorage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_context_sheet_actions_mark_read
+import chat.stoat.shared.resources.message_context_sheet_actions_reply
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -228,7 +232,7 @@ class HandlerService : FirebaseMessagingService() {
         ShortcutManagerCompat.pushDynamicShortcut(this, shortcut)
 
         val remoteInput = RemoteInput.Builder("content").run {
-            setLabel(getString(R.string.message_context_sheet_actions_reply))
+            setLabel(getStringBlocking(Res.string.message_context_sheet_actions_reply))
             build()
         }
 
@@ -239,7 +243,7 @@ class HandlerService : FirebaseMessagingService() {
         val replyAction: NotificationCompat.Action =
             NotificationCompat.Action.Builder(
                 R.drawable.ic_reply_24dp,
-                getString(R.string.message_context_sheet_actions_reply),
+                getStringBlocking(Res.string.message_context_sheet_actions_reply),
                 PendingIntent.getBroadcast(
                     this,
                     channelId.hashCode(),
@@ -258,7 +262,7 @@ class HandlerService : FirebaseMessagingService() {
         val markAsReadAction: NotificationCompat.Action =
             NotificationCompat.Action.Builder(
                 R.drawable.ic_mark_chat_read_24dp,
-                getString(R.string.channel_context_sheet_actions_mark_read),
+                getStringBlocking(Res.string.channel_context_sheet_actions_mark_read),
                 PendingIntent.getBroadcast(
                     this,
                     channelId.hashCode() xor 1,

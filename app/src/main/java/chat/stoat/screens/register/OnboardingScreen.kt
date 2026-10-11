@@ -18,18 +18,24 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.stoat.R
 import chat.stoat.api.routes.onboard.OnboardingCompletionBody
 import chat.stoat.api.routes.onboard.completeOnboarding
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.persistence.KVStorage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.next
+import chat.stoat.shared.resources.onboarding_changeable
+import chat.stoat.shared.resources.onboarding_lead
+import chat.stoat.shared.resources.onboarding_others
+import chat.stoat.shared.resources.onboarding_username
+import chat.stoat.shared.resources.onboarding_welcome
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> Unit) {
@@ -78,7 +84,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.onboarding_welcome),
+                text = stringResource(Res.string.onboarding_welcome),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Black,
@@ -92,7 +98,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.onboarding_lead),
+                text = stringResource(Res.string.onboarding_lead),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -108,7 +114,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.onboarding_others),
+                text = stringResource(Res.string.onboarding_others),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -124,7 +130,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = stringResource(R.string.onboarding_changeable),
+                text = stringResource(Res.string.onboarding_changeable),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -148,7 +154,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
                 FormTextField(
                     value = username.value,
                     onChange = { username.value = it },
-                    label = stringResource(R.string.onboarding_username)
+                    label = stringResource(Res.string.onboarding_username)
                 )
 
                 if (error.value.isNotBlank()) {
@@ -170,7 +176,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
             },
             enabled = username.value.isNotBlank()
         ) {
-            Text(text = stringResource(R.string.next))
+            Text(text = stringResource(Res.string.next))
         }
     }
 }

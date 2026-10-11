@@ -1,19 +1,27 @@
 package chat.stoat.composables.mfa
 
-import androidx.annotation.StringRes
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.text.input.KeyboardType
-import chat.stoat.R
 import chat.stoat.api.routes.account.MfaResponse
 import chat.stoat.api.routes.account.MfaResponsePassword
 import chat.stoat.api.routes.account.MfaResponseRecoveryCode
 import chat.stoat.api.routes.account.MfaResponseTotpCode
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.mfa_method_password
+import chat.stoat.shared.resources.mfa_method_recovery
+import chat.stoat.shared.resources.mfa_method_totp
+import chat.stoat.shared.resources.mfa_password_lead
+import chat.stoat.shared.resources.mfa_recovery_code
+import chat.stoat.shared.resources.mfa_recovery_lead
+import chat.stoat.shared.resources.mfa_totp_code
+import chat.stoat.shared.resources.mfa_totp_lead
+import org.jetbrains.compose.resources.StringResource
 
 enum class MfaMethod(
     val apiName: String,
-    @param:StringRes val label: Int,
-    @param:StringRes val lead: Int,
-    @param:StringRes val inputLabel: Int,
+    val label: StringResource,
+    val lead: StringResource,
+    val inputLabel: StringResource,
     val keyboardType: KeyboardType,
     val secureInput: Boolean,
     val monospaceInput: Boolean,
@@ -26,9 +34,9 @@ enum class MfaMethod(
 ) {
     Totp(
         apiName = "Totp",
-        label = R.string.mfa_method_totp,
-        lead = R.string.mfa_totp_lead,
-        inputLabel = R.string.mfa_totp_code,
+        label = Res.string.mfa_method_totp,
+        lead = Res.string.mfa_totp_lead,
+        inputLabel = Res.string.mfa_totp_code,
         keyboardType = KeyboardType.Number,
         secureInput = false,
         monospaceInput = true,
@@ -41,9 +49,9 @@ enum class MfaMethod(
 
     Password(
         apiName = "Password",
-        label = R.string.mfa_method_password,
-        lead = R.string.mfa_password_lead,
-        inputLabel = R.string.mfa_method_password,
+        label = Res.string.mfa_method_password,
+        lead = Res.string.mfa_password_lead,
+        inputLabel = Res.string.mfa_method_password,
         keyboardType = KeyboardType.Password,
         secureInput = true,
         monospaceInput = false,
@@ -56,9 +64,9 @@ enum class MfaMethod(
 
     Recovery(
         apiName = "Recovery",
-        label = R.string.mfa_method_recovery,
-        lead = R.string.mfa_recovery_lead,
-        inputLabel = R.string.mfa_recovery_code,
+        label = Res.string.mfa_method_recovery,
+        lead = Res.string.mfa_recovery_lead,
+        inputLabel = Res.string.mfa_recovery_code,
         keyboardType = KeyboardType.Text,
         secureInput = false,
         monospaceInput = true,

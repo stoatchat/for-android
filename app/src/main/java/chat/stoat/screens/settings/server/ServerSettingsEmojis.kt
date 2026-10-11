@@ -56,7 +56,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,6 +79,35 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.server_settings_emojis
+import chat.stoat.shared.resources.server_settings_emojis_add
+import chat.stoat.shared.resources.server_settings_emojis_animated_too_large
+import chat.stoat.shared.resources.server_settings_emojis_choose_image
+import chat.stoat.shared.resources.server_settings_emojis_count
+import chat.stoat.shared.resources.server_settings_emojis_create
+import chat.stoat.shared.resources.server_settings_emojis_create_error
+import chat.stoat.shared.resources.server_settings_emojis_create_title
+import chat.stoat.shared.resources.server_settings_emojis_created
+import chat.stoat.shared.resources.server_settings_emojis_created_by
+import chat.stoat.shared.resources.server_settings_emojis_delete
+import chat.stoat.shared.resources.server_settings_emojis_delete_description
+import chat.stoat.shared.resources.server_settings_emojis_delete_error
+import chat.stoat.shared.resources.server_settings_emojis_delete_title
+import chat.stoat.shared.resources.server_settings_emojis_deleted
+import chat.stoat.shared.resources.server_settings_emojis_empty
+import chat.stoat.shared.resources.server_settings_emojis_empty_title
+import chat.stoat.shared.resources.server_settings_emojis_file_error
+import chat.stoat.shared.resources.server_settings_emojis_image_description
+import chat.stoat.shared.resources.server_settings_emojis_image_help
+import chat.stoat.shared.resources.server_settings_emojis_limit_error
+import chat.stoat.shared.resources.server_settings_emojis_name
+import chat.stoat.shared.resources.server_settings_emojis_processing_error
+import chat.stoat.shared.resources.server_settings_emojis_saved_as
+import chat.stoat.shared.resources.server_settings_emojis_selected_image
+import chat.stoat.shared.resources.server_settings_emojis_slots_remaining
+import chat.stoat.shared.resources.server_settings_emojis_usage
 import com.bumptech.glide.Glide
 import com.bumptech.glide.integration.compose.CrossFade
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -90,6 +118,8 @@ import io.ktor.http.ContentType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -227,9 +257,9 @@ class ServerSettingsEmojisViewModel(
                 createSucceeded++
             }.onFailure { error ->
                 createError = when (error.message) {
-                    "TooManyEmoji" -> context.getString(R.string.server_settings_emojis_limit_error)
+                    "TooManyEmoji" -> getString(Res.string.server_settings_emojis_limit_error)
                     else -> error.message
-                        ?: context.getString(R.string.server_settings_emojis_create_error)
+                        ?: getString(Res.string.server_settings_emojis_create_error)
                 }
             }
 
@@ -249,7 +279,7 @@ class ServerSettingsEmojisViewModel(
                 .onSuccess { deleteSucceeded++ }
                 .onFailure { error ->
                     deleteError = error.message
-                        ?: context.getString(R.string.server_settings_emojis_delete_error)
+                        ?: getString(Res.string.server_settings_emojis_delete_error)
                 }
 
             deletingEmojiId = null
@@ -299,7 +329,7 @@ class ServerSettingsEmojisViewModel(
                     resizeStaticEmoji(uri, file)
                     if (file.length() > emojiUploadLimit) {
                         throw IllegalArgumentException(
-                            context.getString(R.string.server_settings_emojis_processing_error)
+                            getString(Res.string.server_settings_emojis_processing_error)
                         )
                     }
                     PreparedEmojiFile(
@@ -324,10 +354,10 @@ class ServerSettingsEmojisViewModel(
         } == true
     }
 
-    private fun copyAnimatedEmoji(uri: Uri, outputFile: File) {
+    private suspend fun copyAnimatedEmoji(uri: Uri, outputFile: File) {
         val input = context.contentResolver.openInputStream(uri)
             ?: throw IllegalArgumentException(
-                context.getString(R.string.server_settings_emojis_file_error)
+                getString(Res.string.server_settings_emojis_file_error)
             )
 
         input.use { source ->
@@ -340,8 +370,7 @@ class ServerSettingsEmojisViewModel(
                     total += read
                     if (total > emojiUploadLimit) {
                         throw IllegalArgumentException(
-                            context.getString(
-                                R.string.server_settings_emojis_animated_too_large,
+                            getString(Res.string.server_settings_emojis_animated_too_large,
                                 formattedEmojiUploadLimit,
                             )
                         )
@@ -352,7 +381,7 @@ class ServerSettingsEmojisViewModel(
         }
     }
 
-    private fun resizeStaticEmoji(uri: Uri, outputFile: File) {
+    private suspend fun resizeStaticEmoji(uri: Uri, outputFile: File) {
         val request = Glide.with(context)
             .asBitmap()
             .load(uri)
@@ -372,13 +401,13 @@ class ServerSettingsEmojisViewModel(
             }
             if (!compressed) {
                 throw IllegalArgumentException(
-                    context.getString(R.string.server_settings_emojis_processing_error)
+                    getString(Res.string.server_settings_emojis_processing_error)
                 )
             }
         } catch (error: Throwable) {
             if (error is IllegalArgumentException) throw error
             throw IllegalArgumentException(
-                context.getString(R.string.server_settings_emojis_processing_error),
+                getString(Res.string.server_settings_emojis_processing_error),
                 error,
             )
         } finally {
@@ -482,7 +511,7 @@ fun ServerSettingsEmojis(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings_emojis)) },
+        title = { Text(stringResource(Res.string.server_settings_emojis)) },
         scrollable = false,
         onNavigateBack = {
             if (!viewModel.creating && viewModel.deletingEmojiId == null) {
@@ -515,15 +544,15 @@ fun ServerSettingsEmojis(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_24dp),
-                        contentDescription = stringResource(R.string.server_settings_emojis_add),
+                        contentDescription = stringResource(Res.string.server_settings_emojis_add),
                     )
                 }
             }
         },
     ) {
-        val createdMessage = stringResource(R.string.server_settings_emojis_created)
-        val deletedMessage = stringResource(R.string.server_settings_emojis_deleted)
-        val limitMessage = stringResource(R.string.server_settings_emojis_limit_error)
+        val createdMessage = stringResource(Res.string.server_settings_emojis_created)
+        val deletedMessage = stringResource(Res.string.server_settings_emojis_deleted)
+        val limitMessage = stringResource(Res.string.server_settings_emojis_limit_error)
 
         LaunchedEffect(viewModel.createSucceeded) {
             if (viewModel.createSucceeded > 0) {
@@ -577,8 +606,8 @@ private fun EmojiList(
         item(key = "usage") {
             Text(
                 text = emojiLimit?.let { limit ->
-                    stringResource(R.string.server_settings_emojis_usage, emojis.size, limit)
-                } ?: stringResource(R.string.server_settings_emojis_count, emojis.size),
+                    stringResource(Res.string.server_settings_emojis_usage, emojis.size, limit)
+                } ?: stringResource(Res.string.server_settings_emojis_count, emojis.size),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -589,8 +618,8 @@ private fun EmojiList(
             item(key = "empty") {
                 ServerSettingsEmptyState(
                     icon = R.drawable.ic_mood_24dp,
-                    title = R.string.server_settings_emojis_empty_title,
-                    description = R.string.server_settings_emojis_empty,
+                    title = Res.string.server_settings_emojis_empty_title,
+                    description = Res.string.server_settings_emojis_empty,
                 )
             }
         } else {
@@ -638,7 +667,7 @@ private fun CreateEmojiSheet(
             .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
     ) {
         Text(
-            text = stringResource(R.string.server_settings_emojis_create_title),
+            text = stringResource(Res.string.server_settings_emojis_create_title),
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
@@ -657,7 +686,7 @@ private fun CreateEmojiSheet(
                 GlideImage(
                     model = viewModel.emojiModel,
                     contentDescription = stringResource(
-                        R.string.server_settings_emojis_selected_image
+                        Res.string.server_settings_emojis_selected_image
                     ),
                     contentScale = ContentScale.Fit,
                     transition = CrossFade,
@@ -675,7 +704,7 @@ private fun CreateEmojiSheet(
                         contentDescription = null,
                     )
                     Text(
-                        text = stringResource(R.string.server_settings_emojis_choose_image),
+                        text = stringResource(Res.string.server_settings_emojis_choose_image),
                         style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Center,
                     )
@@ -686,11 +715,11 @@ private fun CreateEmojiSheet(
         TextField(
             value = viewModel.emojiName,
             onValueChange = viewModel::updateEmojiName,
-            label = { Text(stringResource(R.string.server_settings_emojis_name)) },
+            label = { Text(stringResource(Res.string.server_settings_emojis_name)) },
             supportingText = {
                 Text(
                     stringResource(
-                        R.string.server_settings_emojis_saved_as,
+                        Res.string.server_settings_emojis_saved_as,
                         savedEmojiName.ifEmpty { "—" },
                     )
                 )
@@ -702,7 +731,7 @@ private fun CreateEmojiSheet(
 
         Text(
             text = stringResource(
-                R.string.server_settings_emojis_image_help,
+                Res.string.server_settings_emojis_image_help,
                 viewModel.formattedEmojiUploadLimit,
             ),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -712,10 +741,10 @@ private fun CreateEmojiSheet(
         Text(
             text = viewModel.emojiLimit?.let { limit ->
                 stringResource(
-                    R.string.server_settings_emojis_slots_remaining,
+                    Res.string.server_settings_emojis_slots_remaining,
                     (limit - emojiCount).coerceAtLeast(0),
                 )
-            } ?: stringResource(R.string.server_settings_emojis_count, emojiCount),
+            } ?: stringResource(Res.string.server_settings_emojis_count, emojiCount),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodySmall,
         )
@@ -730,7 +759,7 @@ private fun CreateEmojiSheet(
         AnimatedVisibility(viewModel.createError != null) {
             Text(
                 text = viewModel.createError
-                    ?: stringResource(R.string.server_settings_emojis_create_error),
+                    ?: stringResource(Res.string.server_settings_emojis_create_error),
                 color = MaterialTheme.colorScheme.error,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
@@ -749,7 +778,7 @@ private fun CreateEmojiSheet(
                     strokeWidth = 2.dp,
                 )
             } else {
-                Text(stringResource(R.string.server_settings_emojis_create))
+                Text(stringResource(Res.string.server_settings_emojis_create))
             }
         }
     }
@@ -818,7 +847,7 @@ private fun EmojiManagementSheet(
                 )
                 Text(
                     stringResource(
-                        R.string.server_settings_emojis_created_by,
+                        Res.string.server_settings_emojis_created_by,
                         User.resolveDefaultName(user),
                     )
                 )
@@ -833,7 +862,7 @@ private fun EmojiManagementSheet(
             ),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(stringResource(R.string.server_settings_emojis_delete))
+            Text(stringResource(Res.string.server_settings_emojis_delete))
         }
     }
 }
@@ -848,7 +877,7 @@ private fun EmojiDeleteDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.server_settings_emojis_delete_title)) },
+        title = { Text(stringResource(Res.string.server_settings_emojis_delete_title)) },
         text = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -858,7 +887,7 @@ private fun EmojiDeleteDialog(
                 EmojiImage(emoji = emoji, size = 64)
                 Text(
                     text = stringResource(
-                        R.string.server_settings_emojis_delete_description,
+                        Res.string.server_settings_emojis_delete_description,
                         emoji.name.orEmpty(),
                     ),
                     textAlign = TextAlign.Center,
@@ -888,7 +917,7 @@ private fun EmojiDeleteDialog(
                         strokeWidth = 2.dp,
                     )
                 } else {
-                    Text(stringResource(R.string.server_settings_emojis_delete))
+                    Text(stringResource(Res.string.server_settings_emojis_delete))
                 }
             }
         },
@@ -897,7 +926,7 @@ private fun EmojiDeleteDialog(
                 enabled = !deleting,
                 onClick = onDismiss,
             ) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(Res.string.cancel))
             }
         },
     )
@@ -911,7 +940,7 @@ private fun EmojiImage(
     RemoteImage(
         url = "$STOAT_FILES/emojis/${emoji.id}",
         description = stringResource(
-            R.string.server_settings_emojis_image_description,
+            Res.string.server_settings_emojis_image_description,
             emoji.name.orEmpty(),
         ),
         contentScale = ContentScale.Fit,

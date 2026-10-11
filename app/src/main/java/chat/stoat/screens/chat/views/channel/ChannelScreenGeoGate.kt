@@ -13,13 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.composables.vectorassets.GeoGateUX
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.geogate_acknowledge
+import chat.stoat.shared.resources.geogate_description
+import chat.stoat.shared.resources.geogate_description_variant_osa_uk_25
+import chat.stoat.shared.resources.geogate_header
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelScreenGeoGate(
@@ -39,7 +43,7 @@ fun ChannelScreenGeoGate(
         )
 
         Text(
-            text = stringResource(R.string.geogate_header),
+            text = stringResource(Res.string.geogate_header),
             style = MaterialTheme.typography.titleMedium.copy(
                 textAlign = TextAlign.Center
             ),
@@ -49,7 +53,7 @@ fun ChannelScreenGeoGate(
         when (GeoStateProvider.geoState?.countryCode) {
             "GB" -> {
                 Text(
-                    text = stringResource(R.string.geogate_description_variant_osa_uk_25),
+                    text = stringResource(Res.string.geogate_description_variant_osa_uk_25),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textAlign = TextAlign.Center
                     ),
@@ -59,7 +63,7 @@ fun ChannelScreenGeoGate(
 
             else -> {
                 Text(
-                    text = stringResource(R.string.geogate_description),
+                    text = stringResource(Res.string.geogate_description),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         textAlign = TextAlign.Center
                     ),
@@ -69,7 +73,7 @@ fun ChannelScreenGeoGate(
         }
 
         Button(onClick = { onAcknowledge() }) {
-            Text(stringResource(R.string.geogate_acknowledge))
+            Text(stringResource(Res.string.geogate_acknowledge))
         }
     }
 }

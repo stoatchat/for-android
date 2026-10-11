@@ -18,11 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
@@ -31,6 +29,9 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.User
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.unknown
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelSheetHeader(
@@ -86,7 +87,7 @@ fun ChannelSheetHeader(
             Text(
                 text = channel.name
                     ?: ChannelUtils.resolveName(channel)
-                    ?: stringResource(R.string.unknown),
+                    ?: stringResource(Res.string.unknown),
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

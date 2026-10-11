@@ -17,12 +17,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import chat.stoat.R
 import chat.stoat.api.settings.ServerFolders
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.drawer.parseFolderColour
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.cancel
+import chat.stoat.shared.resources.server_context_sheet_actions_new_folder
+import chat.stoat.shared.resources.server_folder_default_name
+import chat.stoat.shared.resources.server_folder_edit_name
+import chat.stoat.shared.resources.server_folder_edit_save
+import chat.stoat.shared.resources.server_folder_sheet_colour
+import chat.stoat.shared.resources.server_folder_sheet_delete
+import chat.stoat.shared.resources.server_folder_sheet_rename
+import chat.stoat.shared.resources.server_folder_unnamed
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ServerFolderSheet(
@@ -39,12 +49,12 @@ fun ServerFolderSheet(
 
         AlertDialog(
             onDismissRequest = { showRenameDialog = false },
-            title = { Text(stringResource(R.string.server_folder_sheet_rename)) },
+            title = { Text(stringResource(Res.string.server_folder_sheet_rename)) },
             text = {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text(stringResource(R.string.server_folder_edit_name)) },
+                    label = { Text(stringResource(Res.string.server_folder_edit_name)) },
                     singleLine = true
                 )
             },
@@ -58,12 +68,12 @@ fun ServerFolderSheet(
                         }
                     }
                 ) {
-                    Text(stringResource(R.string.server_folder_edit_save))
+                    Text(stringResource(Res.string.server_folder_edit_save))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showRenameDialog = false }) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(Res.string.cancel))
                 }
             }
         )
@@ -78,7 +88,7 @@ fun ServerFolderSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_folder_sheet_rename))
+                Text(stringResource(Res.string.server_folder_sheet_rename))
             },
             onClick = { showRenameDialog = true }
         )
@@ -91,7 +101,7 @@ fun ServerFolderSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_folder_sheet_colour))
+                Text(stringResource(Res.string.server_folder_sheet_colour))
             },
             onClick = {
                 coroutineScope.launch { onChangeColour() }
@@ -106,7 +116,7 @@ fun ServerFolderSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_folder_sheet_delete))
+                Text(stringResource(Res.string.server_folder_sheet_delete))
             },
             dangerous = true,
             onClick = {
@@ -125,7 +135,7 @@ fun ServerFolderPickerSheet(
     onHideSheet: suspend () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val newFolderName = stringResource(R.string.server_folder_default_name)
+    val newFolderName = stringResource(Res.string.server_folder_default_name)
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
         ServerFolders.folders.forEach { folder ->
@@ -141,7 +151,7 @@ fun ServerFolderPickerSheet(
                 headlineContent = {
                     Text(
                         folder.name.ifEmpty {
-                            stringResource(R.string.server_folder_unnamed)
+                            stringResource(Res.string.server_folder_unnamed)
                         }
                     )
                 },
@@ -162,7 +172,7 @@ fun ServerFolderPickerSheet(
                 )
             },
             headlineContent = {
-                Text(stringResource(R.string.server_context_sheet_actions_new_folder))
+                Text(stringResource(Res.string.server_context_sheet_actions_new_folder))
             },
             onClick = {
                 coroutineScope.launch {

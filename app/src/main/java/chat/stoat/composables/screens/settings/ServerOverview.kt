@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.R
@@ -33,6 +32,11 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.has
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.server_flag_official
+import chat.stoat.shared.resources.server_flag_verified
+import chat.stoat.shared.resources.unknown
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ServerOverview(server: Server) {
@@ -91,7 +95,7 @@ fun ServerOverview(server: Server) {
                 )
             } ?: run {
                 IconPlaceholder(
-                    name = server.name ?: stringResource(R.string.unknown),
+                    name = server.name ?: stringResource(Res.string.unknown),
                     modifier = Modifier
                         .clip(CircleShape)
                         .height(48.dp)
@@ -105,7 +109,7 @@ fun ServerOverview(server: Server) {
                 if (server.flags has ServerFlags.Official) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_workspace_premium_24dp__fill),
-                        contentDescription = stringResource(R.string.server_flag_official),
+                        contentDescription = stringResource(Res.string.server_flag_official),
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .size(24.dp)
@@ -114,7 +118,7 @@ fun ServerOverview(server: Server) {
                 if (server.flags has ServerFlags.Verified) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_verified_24dp__fill),
-                        contentDescription = stringResource(R.string.server_flag_verified),
+                        contentDescription = stringResource(Res.string.server_flag_verified),
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .size(24.dp)
@@ -122,7 +126,7 @@ fun ServerOverview(server: Server) {
                 }
 
                 Text(
-                    text = server.name ?: stringResource(R.string.unknown),
+                    text = server.name ?: stringResource(Res.string.unknown),
                     style = MaterialTheme.typography.labelLarge,
                     fontSize = 16.sp
                 )

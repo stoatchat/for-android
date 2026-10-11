@@ -107,7 +107,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -129,12 +128,34 @@ import chat.stoat.internals.Autocomplete
 import chat.stoat.media.AndroidVoiceRecorder
 import chat.stoat.media.Recording
 import chat.stoat.media.VoiceRecorder
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.add_attachment_alt
+import chat.stoat.shared.resources.message_field_placeholder_dm
+import chat.stoat.shared.resources.message_field_placeholder_group
+import chat.stoat.shared.resources.message_field_placeholder_notes
+import chat.stoat.shared.resources.message_field_placeholder_text
+import chat.stoat.shared.resources.message_field_placeholder_voice
+import chat.stoat.shared.resources.pick_emoji_alt
+import chat.stoat.shared.resources.send_alt
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.voice_message_discard
+import chat.stoat.shared.resources.voice_message_finishing
+import chat.stoat.shared.resources.voice_message_microphone_permission_denied
+import chat.stoat.shared.resources.voice_message_recording_failed
+import chat.stoat.shared.resources.voice_message_release_to_cancel
+import chat.stoat.shared.resources.voice_message_silent
+import chat.stoat.shared.resources.voice_message_slide_to_cancel
+import chat.stoat.shared.resources.voice_message_start_recording
+import chat.stoat.shared.resources.voice_message_temp_review_description
+import chat.stoat.shared.resources.voice_message_temp_review_title
 import chat.stoat.ui.colour.BrushCompat
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
 
 fun Pair<Int, Int>.asTextRange(): TextRange {
@@ -194,9 +215,9 @@ private fun VoiceRecordingStatus(
         )
         Spacer(modifier = Modifier.weight(1f))
         val instruction = when {
-            isFinishing -> R.string.voice_message_finishing
-            isCancelArmed -> R.string.voice_message_release_to_cancel
-            else -> R.string.voice_message_slide_to_cancel
+            isFinishing -> Res.string.voice_message_finishing
+            isCancelArmed -> Res.string.voice_message_release_to_cancel
+            else -> Res.string.voice_message_slide_to_cancel
         }
         Box(
             contentAlignment = Alignment.CenterEnd,
@@ -206,9 +227,9 @@ private fun VoiceRecordingStatus(
             }
         ) {
             listOf(
-                R.string.voice_message_slide_to_cancel,
-                R.string.voice_message_release_to_cancel,
-                R.string.voice_message_finishing,
+                Res.string.voice_message_slide_to_cancel,
+                Res.string.voice_message_release_to_cancel,
+                Res.string.voice_message_finishing,
             ).forEach { label ->
                 val labelAlpha by animateFloatAsState(
                     targetValue = if (label == instruction) 1f else 0f,
@@ -217,7 +238,7 @@ private fun VoiceRecordingStatus(
                 )
                 Text(
                     text = stringResource(label),
-                    color = if (label == R.string.voice_message_release_to_cancel) {
+                    color = if (label == Res.string.voice_message_release_to_cancel) {
                         MaterialTheme.colorScheme.error
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
@@ -289,6 +310,8 @@ fun MessageField(
     onSendVoiceMessage: ((Recording) -> Boolean)? = null,
     contentBeforeInput: @Composable ColumnScope.() -> Unit = {},
 ) {
+    val voiceMessageRecordingFailedText = stringResource(Res.string.voice_message_recording_failed)
+    val voiceMessageMicrophonePermissionDeniedText = stringResource(Res.string.voice_message_microphone_permission_denied)
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val voiceRecorder = remember(context) {
@@ -316,7 +339,7 @@ fun MessageField(
         } catch (_: Exception) {
             Toast.makeText(
                 context,
-                R.string.voice_message_recording_failed,
+                voiceMessageRecordingFailedText,
                 Toast.LENGTH_SHORT
             ).show()
             false
@@ -328,7 +351,7 @@ fun MessageField(
         if (!granted) {
             Toast.makeText(
                 context,
-                R.string.voice_message_microphone_permission_denied,
+                voiceMessageMicrophonePermissionDeniedText,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -362,7 +385,7 @@ fun MessageField(
         ) {
             Toast.makeText(
                 context,
-                R.string.voice_message_recording_failed,
+                getString(Res.string.voice_message_recording_failed),
                 Toast.LENGTH_SHORT
             ).show()
         } else if (
@@ -372,7 +395,7 @@ fun MessageField(
             if (recording.isSilent) {
                 Toast.makeText(
                     context,
-                    R.string.voice_message_silent,
+                    getString(Res.string.voice_message_silent),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -382,11 +405,11 @@ fun MessageField(
     }
 
     val placeholderResource = when (channelType) {
-        ChannelType.DirectMessage -> R.string.message_field_placeholder_dm
-        ChannelType.Group -> R.string.message_field_placeholder_group
-        ChannelType.TextChannel -> R.string.message_field_placeholder_text
-        ChannelType.VoiceChannel -> R.string.message_field_placeholder_voice
-        ChannelType.SavedMessages -> R.string.message_field_placeholder_notes
+        ChannelType.DirectMessage -> Res.string.message_field_placeholder_dm
+        ChannelType.Group -> Res.string.message_field_placeholder_group
+        ChannelType.TextChannel -> Res.string.message_field_placeholder_text
+        ChannelType.VoiceChannel -> Res.string.message_field_placeholder_voice
+        ChannelType.SavedMessages -> Res.string.message_field_placeholder_notes
     }
 
     val sendButtonVisible =
@@ -538,12 +561,12 @@ fun MessageField(
                 pendingVoiceMessage = null
             },
             title = {
-                Text(stringResource(R.string.voice_message_temp_review_title))
+                Text(stringResource(Res.string.voice_message_temp_review_title))
             },
             text = {
                 val totalSeconds = recording.durationMillis / 1_000
                 val duration = "%d:%02d".format(totalSeconds / 60, totalSeconds % 60)
-                Text(stringResource(R.string.voice_message_temp_review_description, duration))
+                Text(stringResource(Res.string.voice_message_temp_review_description, duration))
             },
             confirmButton = {
                 TextButton(
@@ -553,7 +576,7 @@ fun MessageField(
                         }
                     }
                 ) {
-                    Text(stringResource(R.string.send_alt))
+                    Text(stringResource(Res.string.send_alt))
                 }
             },
             dismissButton = {
@@ -562,7 +585,7 @@ fun MessageField(
                         pendingVoiceMessage = null
                     }
                 ) {
-                    Text(stringResource(R.string.voice_message_discard))
+                    Text(stringResource(Res.string.voice_message_discard))
                 }
             }
         )
@@ -632,7 +655,7 @@ fun MessageField(
                                 icon = {
                                     UserAvatar(
                                         username = item.user.username
-                                            ?: stringResource(R.string.unknown),
+                                            ?: stringResource(Res.string.unknown),
                                         userId = item.user.id ?: "",
                                         avatar = item.user.avatar,
                                         rawUrl = item.member?.avatar?.id?.let {
@@ -822,7 +845,7 @@ fun MessageField(
                         Icon(
                             Icons.Default.Add,
                             tint = voiceAuxiliaryContentColor,
-                            contentDescription = stringResource(id = R.string.add_attachment_alt),
+                            contentDescription = stringResource(Res.string.add_attachment_alt),
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .size(32.dp)
@@ -934,7 +957,7 @@ fun MessageField(
                     Icon(
                         painter = painterResource(R.drawable.ic_mood_24dp),
                         tint = voiceAuxiliaryContentColor,
-                        contentDescription = stringResource(id = R.string.pick_emoji_alt),
+                        contentDescription = stringResource(Res.string.pick_emoji_alt),
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(32.dp)
@@ -1039,7 +1062,7 @@ fun MessageField(
                             Icon(
                                 painter = painterResource(R.drawable.ic_mic_24dp),
                                 tint = voiceMicContentColor,
-                                contentDescription = stringResource(R.string.voice_message_start_recording),
+                                contentDescription = stringResource(Res.string.voice_message_start_recording),
                                 modifier = Modifier.size(24.dp)
                             )
                         }
@@ -1063,7 +1086,7 @@ fun MessageField(
                         } else {
                             MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.38f)
                         },
-                        contentDescription = stringResource(id = R.string.send_alt),
+                        contentDescription = stringResource(Res.string.send_alt),
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .offset(x = sendButtonOffsetX)

@@ -35,10 +35,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,8 +54,19 @@ import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.internals.Platform
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.about
+import chat.stoat.shared.resources.about_brought_to_you_by
+import chat.stoat.shared.resources.about_full_name
+import chat.stoat.shared.resources.about_section_debug_information
+import chat.stoat.shared.resources.about_section_debug_information_copy_as_json
+import chat.stoat.shared.resources.about_section_debug_information_description
+import chat.stoat.shared.resources.about_section_oss_licenses
+import chat.stoat.shared.resources.copied
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import java.net.URI
 
 class AboutViewModel : ViewModel() {
@@ -88,7 +97,6 @@ class AboutViewModel : ViewModel() {
 @Composable
 fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewModel()) {
     val context = LocalContext.current
-    val resources = LocalResources.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
@@ -99,7 +107,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
         navController,
         title = {
             Text(
-                text = stringResource(id = R.string.about),
+                text = stringResource(Res.string.about),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -122,7 +130,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
             ) {
                 Image(
                     painter = painterResource(R.drawable.stoat_logo_white),
-                    contentDescription = stringResource(R.string.about_full_name),
+                    contentDescription = stringResource(Res.string.about_full_name),
                     colorFilter = ColorFilter.tint(LocalContentColor.current),
                     modifier = Modifier
                         .width(250.dp)
@@ -135,7 +143,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(R.string.about_full_name),
+                        text = stringResource(Res.string.about_full_name),
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center
                     )
@@ -170,11 +178,11 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.about_section_debug_information),
+                            text = stringResource(Res.string.about_section_debug_information),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = stringResource(R.string.about_section_debug_information_description),
+                            text = stringResource(Res.string.about_section_debug_information_description),
                             style = MaterialTheme.typography.bodySmall,
                             lineHeight = 16.sp,
                             fontWeight = FontWeight.Normal,
@@ -242,7 +250,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                                         if (Platform.needsShowClipboardNotification()) {
                                             Toast.makeText(
                                                 context,
-                                                resources.getString(R.string.copied),
+                                                getString(Res.string.copied),
                                                 Toast.LENGTH_SHORT
                                             ).show()
                                         }
@@ -256,7 +264,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
 
                                 Spacer(Modifier.width(8.dp))
 
-                                Text(text = stringResource(id = R.string.about_section_debug_information_copy_as_json))
+                                Text(text = stringResource(Res.string.about_section_debug_information_copy_as_json))
                             }
 
                             Spacer(Modifier.height(8.dp))
@@ -285,7 +293,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.about_section_oss_licenses),
+                            text = stringResource(Res.string.about_section_oss_licenses),
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
@@ -299,7 +307,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
             }
 
             Text(
-                text = stringResource(R.string.about_brought_to_you_by),
+                text = stringResource(Res.string.about_brought_to_you_by),
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontWeight = FontWeight.Light
                 ),

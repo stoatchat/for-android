@@ -5,7 +5,17 @@ import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.content.ContextCompat.getSystemService
-import chat.stoat.R
+import chat.stoat.internals.extensions.getStringBlocking
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.notification_channel_friend_requests
+import chat.stoat.shared.resources.notification_channel_friend_requests_description
+import chat.stoat.shared.resources.notification_channel_group_conversations
+import chat.stoat.shared.resources.notification_channel_group_social
+import chat.stoat.shared.resources.notification_channel_group_voice
+import chat.stoat.shared.resources.notification_channel_messages
+import chat.stoat.shared.resources.notification_channel_messages_description
+import chat.stoat.shared.resources.notification_channel_ongoing_call
+import chat.stoat.shared.resources.notification_channel_ongoing_call_description
 
 // TODO
 //  * Add the remaining groups.
@@ -33,19 +43,19 @@ class ChannelRegistrator(val context: Context) {
         notificationManager.createNotificationChannelGroup(
             NotificationChannelGroup(
                 CHANNEL_ID_GROUP_CONVERSATIONS,
-                context.getString(R.string.notification_channel_group_conversations)
+                getStringBlocking(Res.string.notification_channel_group_conversations)
             )
         )
         notificationManager.createNotificationChannelGroup(
             NotificationChannelGroup(
                 CHANNEL_ID_GROUP_SOCIAL,
-                context.getString(R.string.notification_channel_group_social)
+                getStringBlocking(Res.string.notification_channel_group_social)
             )
         )
         notificationManager.createNotificationChannelGroup(
             NotificationChannelGroup(
                 CHANNEL_ID_GROUP_VOICE,
-                context.getString(R.string.notification_channel_group_voice)
+                getStringBlocking(Res.string.notification_channel_group_voice)
             )
         )
     }
@@ -54,34 +64,34 @@ class ChannelRegistrator(val context: Context) {
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ID_GROUP_SOCIAL_FRIENDREQUESTS,
-                context.getString(R.string.notification_channel_friend_requests),
+                getStringBlocking(Res.string.notification_channel_friend_requests),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 group = CHANNEL_ID_GROUP_SOCIAL
                 description =
-                    context.getString(R.string.notification_channel_friend_requests_description)
+                    getStringBlocking(Res.string.notification_channel_friend_requests_description)
             }
         )
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ID_GROUP_CONVERSATIONS_MESSAGES,
-                context.getString(R.string.notification_channel_messages),
+                getStringBlocking(Res.string.notification_channel_messages),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 group = CHANNEL_ID_GROUP_CONVERSATIONS
                 description =
-                    context.getString(R.string.notification_channel_messages_description)
+                    getStringBlocking(Res.string.notification_channel_messages_description)
             }
         )
         notificationManager.createNotificationChannel(
             NotificationChannel(
                 CHANNEL_ID_GROUP_VOICE_ONGOING,
-                context.getString(R.string.notification_channel_ongoing_call),
+                getStringBlocking(Res.string.notification_channel_ongoing_call),
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 group = CHANNEL_ID_GROUP_VOICE
                 description =
-                    context.getString(R.string.notification_channel_ongoing_call_description)
+                    getStringBlocking(Res.string.notification_channel_ongoing_call_description)
                 setSound(null, null)
                 enableVibration(false)
             }

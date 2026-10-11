@@ -76,7 +76,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -114,6 +113,25 @@ import chat.stoat.core.model.schemas.has
 import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_context_sheet_open
+import chat.stoat.shared.resources.channel_notes
+import chat.stoat.shared.resources.channel_voice_participants_more
+import chat.stoat.shared.resources.direct_messages
+import chat.stoat.shared.resources.discover_alt
+import chat.stoat.shared.resources.friends
+import chat.stoat.shared.resources.geogate_channel_icon_alt
+import chat.stoat.shared.resources.menu
+import chat.stoat.shared.resources.no_channels_body
+import chat.stoat.shared.resources.no_channels_heading
+import chat.stoat.shared.resources.overview_screen_title
+import chat.stoat.shared.resources.server_flag_official
+import chat.stoat.shared.resources.server_flag_verified
+import chat.stoat.shared.resources.server_folder_default_name
+import chat.stoat.shared.resources.server_plus_alt
+import chat.stoat.shared.resources.settings
+import chat.stoat.shared.resources.unknown
+import chat.stoat.shared.resources.voice_screen_sharing
 import chat.stoat.sheets.ChannelContextSheet
 import chat.stoat.sheets.ColourPickerSheet
 import chat.stoat.sheets.ServerFolderSheet
@@ -126,6 +144,7 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -216,7 +235,7 @@ fun ChannelSideDrawer(
                 lastMemberKey = entry.servers.last().id!!
             )
         }
-    val newFolderName = stringResource(R.string.server_folder_default_name)
+    val newFolderName = stringResource(Res.string.server_folder_default_name)
 
     val scope = rememberCoroutineScope()
     var serverFolderSheetTarget by remember { mutableStateOf<String?>(null) }
@@ -522,7 +541,7 @@ fun ChannelSideDrawer(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_add_24dp),
-                            contentDescription = stringResource(R.string.server_plus_alt)
+                            contentDescription = stringResource(Res.string.server_plus_alt)
                         )
                     }
                 }
@@ -541,7 +560,7 @@ fun ChannelSideDrawer(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_explore_24dp),
-                            contentDescription = stringResource(R.string.discover_alt)
+                            contentDescription = stringResource(Res.string.discover_alt)
                         )
                     }
                 }
@@ -564,7 +583,7 @@ fun ChannelSideDrawer(
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_settings_24dp),
-                                contentDescription = stringResource(R.string.settings)
+                                contentDescription = stringResource(Res.string.settings)
                             )
                         }
                     }
@@ -649,7 +668,7 @@ fun ChannelSideDrawer(
                                         id = R.drawable.ic_workspace_premium_24dp__fill
                                     ),
                                     contentDescription = stringResource(
-                                        R.string.server_flag_official
+                                        Res.string.server_flag_official
                                     ),
                                     tint = LocalContentColor.current,
                                     modifier = Modifier
@@ -662,7 +681,7 @@ fun ChannelSideDrawer(
                                         id = R.drawable.ic_verified_24dp__fill
                                     ),
                                     contentDescription = stringResource(
-                                        R.string.server_flag_verified
+                                        Res.string.server_flag_verified
                                     ),
                                     tint = LocalContentColor.current,
                                     modifier = Modifier
@@ -672,8 +691,8 @@ fun ChannelSideDrawer(
 
                             Text(
                                 text = when (currentServer) {
-                                    null -> stringResource(R.string.direct_messages)
-                                    else -> server?.name ?: stringResource(R.string.unknown)
+                                    null -> stringResource(Res.string.direct_messages)
+                                    else -> server?.name ?: stringResource(Res.string.unknown)
                                 },
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1,
@@ -687,7 +706,7 @@ fun ChannelSideDrawer(
                             }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_more_vert_24dp),
-                                    contentDescription = stringResource(R.string.menu),
+                                    contentDescription = stringResource(Res.string.menu),
                                     tint = LocalContentColor.current
                                 )
                             }
@@ -747,7 +766,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
             ChannelItem(
                 channel = Channel(
                     id = "overview",
-                    name = stringResource(R.string.overview_screen_title),
+                    name = stringResource(Res.string.overview_screen_title),
                     channelType = ChannelType.TextChannel
                 ),
                 iconType = ChannelItemIconType.Painter(painterResource(R.drawable.ic_star_shine_24dp)),
@@ -768,7 +787,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
             ChannelItem(
                 channel = Channel(
                     id = "friends",
-                    name = stringResource(R.string.friends),
+                    name = stringResource(Res.string.friends),
                     channelType = ChannelType.TextChannel
                 ),
                 iconType = ChannelItemIconType.Painter(painterResource(R.drawable.ic_group_24dp)),
@@ -793,7 +812,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                 ChannelItem(
                     channel = Channel(
                         id = notesChannel.id,
-                        name = stringResource(R.string.channel_notes),
+                        name = stringResource(Res.string.channel_notes),
                         channelType = ChannelType.SavedMessages
                     ),
                     isCurrent = currentDestination is ChatRouterDestination.Channel &&
@@ -904,14 +923,14 @@ fun ColumnScope.ServerChannelListRenderer(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = stringResource(R.string.no_channels_heading),
+                        text = stringResource(Res.string.no_channels_heading),
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     Text(
-                        text = stringResource(R.string.no_channels_body),
+                        text = stringResource(Res.string.no_channels_body),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
@@ -1013,7 +1032,7 @@ fun ChannelItem(
                         CircleShape
                     )
                     .combinedClickable(
-                        onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
+                        onLongClickLabel = stringResource(Res.string.channel_context_sheet_open),
                         onLongClick = {
                             channel.id?.let { chId ->
                                 onOpenChannelContextSheet(chId)
@@ -1048,7 +1067,7 @@ fun ChannelItem(
                                     channel.nsfw == true -> {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_grid_3x3_off_24dp),
-                                    contentDescription = stringResource(R.string.geogate_channel_icon_alt),
+                                    contentDescription = stringResource(Res.string.geogate_channel_icon_alt),
                                 )
                             }
 
@@ -1065,9 +1084,9 @@ fun ChannelItem(
                     }
                 }
                 Text(
-                    text = (ChannelUtils.resolveName(channel) ?: stringResource(R.string.unknown))
+                    text = (ChannelUtils.resolveName(channel) ?: stringResource(Res.string.unknown))
                             + if (appendServerName && channel.server != null) {
-                        " (${StoatAPI.serverCache[channel.server]?.name ?: stringResource(R.string.unknown)})"
+                        " (${StoatAPI.serverCache[channel.server]?.name ?: stringResource(Res.string.unknown)})"
                     } else {
                         ""
                     },
@@ -1166,7 +1185,7 @@ private fun VoiceChannelParticipantPreview(
             if (hiddenParticipantCount > 0) {
                 Text(
                     text = stringResource(
-                        R.string.channel_voice_participants_more,
+                        Res.string.channel_voice_participants_more,
                         hiddenParticipantCount
                     ),
                     style = MaterialTheme.typography.bodySmall,
@@ -1187,7 +1206,7 @@ private fun VoiceChannelParticipantRow(
     val displayName = channel.server
         ?.let { StoatAPI.members.getMember(it, state.id)?.nickname }
         ?: user?.let(User::resolveDefaultName)
-        ?: stringResource(R.string.unknown)
+        ?: stringResource(Res.string.unknown)
     Row(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -1210,7 +1229,7 @@ private fun VoiceChannelParticipantRow(
         if (state.screensharing) {
             Icon(
                 painter = painterResource(R.drawable.ic_screen_share_24dp),
-                contentDescription = stringResource(R.string.voice_screen_sharing),
+                contentDescription = stringResource(Res.string.voice_screen_sharing),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp)
             )
@@ -1223,7 +1242,7 @@ fun CategoryItem(
     category: Category
 ) {
     Text(
-        text = category.title ?: stringResource(R.string.unknown),
+        text = category.title ?: stringResource(Res.string.unknown),
         style = MaterialTheme.typography.labelLarge,
         fontSize = 16.sp,
         modifier = Modifier.padding(
@@ -1257,7 +1276,7 @@ fun DMOrGroupItem(
     Row(
         Modifier
             .combinedClickable(
-                onLongClickLabel = stringResource(R.string.channel_context_sheet_open),
+                onLongClickLabel = stringResource(Res.string.channel_context_sheet_open),
                 onLongClick = {
                     channel.id?.let { chId ->
                         onOpenChannelContextSheet(chId)
@@ -1306,14 +1325,14 @@ fun DMOrGroupItem(
         ) {
             when (channel.channelType) {
                 ChannelType.Group -> GroupIcon(
-                    name = channel.name ?: stringResource(R.string.unknown),
+                    name = channel.name ?: stringResource(Res.string.unknown),
                     size = 28.dp,
                     icon = channel.icon
                 )
 
                 else -> UserAvatar(
                     username = partner?.let { User.resolveDefaultName(it) } ?: channel.name
-                    ?: stringResource(R.string.unknown),
+                    ?: stringResource(Res.string.unknown),
                     presence = presenceFromStatus(
                         partner?.status?.presence,
                         partner?.online ?: false
@@ -1328,7 +1347,7 @@ fun DMOrGroupItem(
             Column(Modifier.weight(1f)) {
                 Text(
                     text = partner?.let { User.resolveDefaultName(it) } ?: channel.name
-                    ?: stringResource(R.string.unknown),
+                    ?: stringResource(Res.string.unknown),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant

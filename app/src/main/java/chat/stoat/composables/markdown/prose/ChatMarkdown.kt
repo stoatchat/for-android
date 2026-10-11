@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.text.LinkAnnotation
@@ -49,7 +48,6 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
-import chat.stoat.R
 import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.isUlid
@@ -73,6 +71,8 @@ import chat.stoat.markdown.SPOILER_ELEMENT_TYPE
 import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.markdown.TIMESTAMP_ELEMENT_TYPE
 import chat.stoat.markdown.USER_MENTION_ELEMENT_TYPE
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.link_type_no_intent
 import chat.stoat.ui.theme.FragmentMono
 import chat.stoat.ui.theme.isThemeDark
 import com.mikepenz.markdown.annotator.DefaultAnnotatorSettings
@@ -101,6 +101,7 @@ import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.parser.MarkdownParser
 import java.util.concurrent.ConcurrentHashMap
+import org.jetbrains.compose.resources.stringResource
 
 private data class MathEntry(val key: String, val latex: String, val displayMode: Boolean)
 private data class RenderedMath(val renderer: RaTeXRenderer, val size: Size)
@@ -216,6 +217,7 @@ fun ChatMarkdown(
     fontSizeMultiplier: Float = 1f,
     modifier: Modifier = Modifier
 ) {
+    val linkTypeNoIntentText = stringResource(Res.string.link_type_no_intent)
     val fontSize = LocalTextStyle.current.fontSize * fontSizeMultiplier
     val context = LocalContext.current
     val density = LocalDensity.current
@@ -477,7 +479,6 @@ fun ChatMarkdown(
         }
         spoilerAwareAnnotator
     }
-    val resources = LocalResources.current
     val toolbarColor = MaterialTheme.colorScheme.surfaceContainer.toArgb()
     val uriHandler = remember(scope, serverId, toolbarColor) {
         object : UriHandler {
@@ -537,7 +538,7 @@ fun ChatMarkdown(
                         } catch (_: Exception) {
                             Toast.makeText(
                                 context,
-                                resources.getString(R.string.link_type_no_intent),
+                                linkTypeNoIntentText,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

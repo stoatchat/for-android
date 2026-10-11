@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -54,8 +53,18 @@ import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.RawUserOverview
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Profile
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.settings_profile
+import chat.stoat.shared.resources.settings_profile_custom_background
+import chat.stoat.shared.resources.settings_profile_display_name
+import chat.stoat.shared.resources.settings_profile_profile_picture
+import chat.stoat.shared.resources.settings_profile_pronouns
+import chat.stoat.shared.resources.settings_profile_save
+import chat.stoat.shared.resources.user_info_sheet_category_bio
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
@@ -285,7 +294,7 @@ fun ProfileSettingsScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = stringResource(R.string.settings_profile),
+                        text = stringResource(Res.string.settings_profile),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -296,7 +305,7 @@ fun ProfileSettingsScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -373,7 +382,7 @@ fun ProfileSettingsScreen(
                                 .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 0.dp)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.settings_profile_profile_picture),
+                                text = stringResource(Res.string.settings_profile_profile_picture),
                                 style = MaterialTheme.typography.labelLarge
                             )
 
@@ -399,7 +408,7 @@ fun ProfileSettingsScreen(
                                 .padding(20.dp)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.settings_profile_custom_background),
+                                text = stringResource(Res.string.settings_profile_custom_background),
                                 style = MaterialTheme.typography.labelLarge,
                             )
 
@@ -431,7 +440,7 @@ fun ProfileSettingsScreen(
                             },
                             label = {
                                 Text(
-                                    text = stringResource(R.string.settings_profile_display_name),
+                                    text = stringResource(Res.string.settings_profile_display_name),
                                     style = MaterialTheme.typography.labelLarge,
                                 )
                             },
@@ -469,7 +478,7 @@ fun ProfileSettingsScreen(
                             Spacer(modifier = Modifier.width(8.dp))
 
                             Text(
-                                text = stringResource(id = R.string.settings_profile_save),
+                                text = stringResource(Res.string.settings_profile_save),
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -485,7 +494,7 @@ fun ProfileSettingsScreen(
                             },
                             label = {
                                 Text(
-                                    text = stringResource(id = R.string.settings_profile_pronouns),
+                                    text = stringResource(Res.string.settings_profile_pronouns),
                                     style = MaterialTheme.typography.labelLarge,
                                 )
                             },
@@ -525,7 +534,7 @@ fun ProfileSettingsScreen(
                             Spacer(modifier = Modifier.width(8.dp))
 
                             Text(
-                                text = stringResource(id = R.string.settings_profile_save),
+                                text = stringResource(Res.string.settings_profile_save),
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -541,7 +550,7 @@ fun ProfileSettingsScreen(
                             },
                             label = {
                                 Text(
-                                    text = stringResource(id = R.string.user_info_sheet_category_bio),
+                                    text = stringResource(Res.string.user_info_sheet_category_bio),
                                     style = MaterialTheme.typography.labelLarge,
                                 )
                             },
@@ -578,7 +587,7 @@ fun ProfileSettingsScreen(
                             Spacer(modifier = Modifier.width(8.dp))
 
                             Text(
-                                text = stringResource(id = R.string.settings_profile_save),
+                                text = stringResource(Res.string.settings_profile_save),
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }

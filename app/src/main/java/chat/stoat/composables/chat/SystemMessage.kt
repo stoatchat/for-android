@@ -24,8 +24,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,7 +32,45 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.schemas.Message
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.system_message_call_duration_days
+import chat.stoat.shared.resources.system_message_call_duration_few_seconds
+import chat.stoat.shared.resources.system_message_call_duration_hours
+import chat.stoat.shared.resources.system_message_call_duration_minutes
+import chat.stoat.shared.resources.system_message_call_duration_months
+import chat.stoat.shared.resources.system_message_call_duration_years
+import chat.stoat.shared.resources.system_message_call_started
+import chat.stoat.shared.resources.system_message_call_started_alt
+import chat.stoat.shared.resources.system_message_call_started_with_finished_at
+import chat.stoat.shared.resources.system_message_channel_description_changed
+import chat.stoat.shared.resources.system_message_channel_description_changed_alt
+import chat.stoat.shared.resources.system_message_channel_icon_changed
+import chat.stoat.shared.resources.system_message_channel_icon_changed_alt
+import chat.stoat.shared.resources.system_message_channel_renamed
+import chat.stoat.shared.resources.system_message_channel_renamed_alt
+import chat.stoat.shared.resources.system_message_message_pinned
+import chat.stoat.shared.resources.system_message_message_pinned_alt
+import chat.stoat.shared.resources.system_message_message_unpinned
+import chat.stoat.shared.resources.system_message_message_unpinned_alt
+import chat.stoat.shared.resources.system_message_ownership_changed
+import chat.stoat.shared.resources.system_message_ownership_changed_alt
+import chat.stoat.shared.resources.system_message_text_alt
+import chat.stoat.shared.resources.system_message_user_added
+import chat.stoat.shared.resources.system_message_user_added_alt
+import chat.stoat.shared.resources.system_message_user_banned
+import chat.stoat.shared.resources.system_message_user_banned_alt
+import chat.stoat.shared.resources.system_message_user_joined
+import chat.stoat.shared.resources.system_message_user_joined_alt
+import chat.stoat.shared.resources.system_message_user_kicked
+import chat.stoat.shared.resources.system_message_user_kicked_alt
+import chat.stoat.shared.resources.system_message_user_left
+import chat.stoat.shared.resources.system_message_user_left_alt
+import chat.stoat.shared.resources.system_message_user_removed
+import chat.stoat.shared.resources.system_message_user_removed_alt
+import chat.stoat.shared.resources.unknown
 import kotlinx.datetime.Instant
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 
 enum class SystemMessageType(val type: String) {
     CHANNEL_OWNERSHIP_CHANGED("channel_ownership_changed"),
@@ -94,7 +130,7 @@ fun SystemMessage(
                 SystemMessageType.CHANNEL_OWNERSHIP_CHANGED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_ownership_changed,
+                            Res.string.system_message_ownership_changed,
                             message.system!!.from.mention(),
                             message.system!!.to.mention()
                         ),
@@ -105,7 +141,7 @@ fun SystemMessage(
                 SystemMessageType.CHANNEL_ICON_CHANGED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_channel_icon_changed,
+                            Res.string.system_message_channel_icon_changed,
                             message.system!!.by.mention()
                         ),
                         serverId = serverId
@@ -115,7 +151,7 @@ fun SystemMessage(
                 SystemMessageType.CHANNEL_DESCRIPTION_CHANGED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_channel_description_changed,
+                            Res.string.system_message_channel_description_changed,
                             message.system!!.by.mention()
                         ),
                         serverId = serverId
@@ -125,9 +161,9 @@ fun SystemMessage(
                 SystemMessageType.CHANNEL_RENAMED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_channel_renamed,
+                            Res.string.system_message_channel_renamed,
                             message.system!!.by.mention(),
-                            "**${message.system!!.name ?: stringResource(R.string.unknown)}**"
+                            "**${message.system!!.name ?: stringResource(Res.string.unknown)}**"
                         ),
                         serverId = serverId
                     )
@@ -136,7 +172,7 @@ fun SystemMessage(
                 SystemMessageType.USER_REMOVE -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_removed,
+                            Res.string.system_message_user_removed,
                             message.system!!.by.mention(),
                             message.system!!.id.mention()
                         ),
@@ -147,7 +183,7 @@ fun SystemMessage(
                 SystemMessageType.USER_ADDED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_added,
+                            Res.string.system_message_user_added,
                             message.system!!.by.mention(),
                             message.system!!.id.mention()
                         ),
@@ -158,7 +194,7 @@ fun SystemMessage(
                 SystemMessageType.USER_BANNED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_banned,
+                            Res.string.system_message_user_banned,
                             message.system!!.id.mention()
                         ),
                         serverId = serverId
@@ -168,7 +204,7 @@ fun SystemMessage(
                 SystemMessageType.USER_KICKED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_kicked,
+                            Res.string.system_message_user_kicked,
                             message.system!!.id.mention()
                         ),
                         serverId = serverId
@@ -178,7 +214,7 @@ fun SystemMessage(
                 SystemMessageType.USER_LEFT -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_left,
+                            Res.string.system_message_user_left,
                             message.system!!.id.mention()
                         ),
                         serverId = serverId
@@ -188,7 +224,7 @@ fun SystemMessage(
                 SystemMessageType.USER_JOINED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_user_joined,
+                            Res.string.system_message_user_joined,
                             message.system!!.id.mention()
                         ),
                         serverId = serverId
@@ -198,7 +234,7 @@ fun SystemMessage(
                 SystemMessageType.MESSAGE_PINNED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_message_pinned,
+                            Res.string.system_message_message_pinned,
                             message.system!!.by.mention()
                         ),
                         serverId = serverId
@@ -208,7 +244,7 @@ fun SystemMessage(
                 SystemMessageType.MESSAGE_UNPINNED -> {
                     ChatMarkdown(
                         stringResource(
-                            R.string.system_message_message_unpinned,
+                            Res.string.system_message_message_unpinned,
                             message.system!!.by.mention()
                         ),
                         serverId = serverId
@@ -223,13 +259,13 @@ fun SystemMessage(
                     ChatMarkdown(
                         if (callDuration != null) {
                             stringResource(
-                                R.string.system_message_call_started_with_finished_at,
+                                Res.string.system_message_call_started_with_finished_at,
                                 message.system!!.by.mention(),
                                 formatCallDuration(callDuration)
                             )
                         } else {
                             stringResource(
-                                R.string.system_message_call_started,
+                                Res.string.system_message_call_started,
                                 message.system!!.by.mention()
                             )
                         },
@@ -316,35 +352,35 @@ private fun formatCallDuration(durationMillis: Long): String {
     val duration = humanizeCallDuration(durationMillis)
     return when (duration.unit) {
         CallDurationUnit.FEW_SECONDS -> stringResource(
-            R.string.system_message_call_duration_few_seconds
+            Res.string.system_message_call_duration_few_seconds
         )
 
         CallDurationUnit.MINUTES -> pluralStringResource(
-            R.plurals.system_message_call_duration_minutes,
+            Res.plurals.system_message_call_duration_minutes,
             duration.quantity,
             duration.quantity
         )
 
         CallDurationUnit.HOURS -> pluralStringResource(
-            R.plurals.system_message_call_duration_hours,
+            Res.plurals.system_message_call_duration_hours,
             duration.quantity,
             duration.quantity
         )
 
         CallDurationUnit.DAYS -> pluralStringResource(
-            R.plurals.system_message_call_duration_days,
+            Res.plurals.system_message_call_duration_days,
             duration.quantity,
             duration.quantity
         )
 
         CallDurationUnit.MONTHS -> pluralStringResource(
-            R.plurals.system_message_call_duration_months,
+            Res.plurals.system_message_call_duration_months,
             duration.quantity,
             duration.quantity
         )
 
         CallDurationUnit.YEARS -> pluralStringResource(
-            R.plurals.system_message_call_duration_years,
+            Res.plurals.system_message_call_duration_years,
             duration.quantity,
             duration.quantity
         )
@@ -357,7 +393,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.CHANNEL_OWNERSHIP_CHANGED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_key_24dp),
-                contentDescription = stringResource(R.string.system_message_ownership_changed_alt),
+                contentDescription = stringResource(Res.string.system_message_ownership_changed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -367,7 +403,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
             Icon(
                 painter = painterResource(R.drawable.ic_landscape_2_edit_24dp),
                 contentDescription = stringResource(
-                    R.string.system_message_channel_icon_changed_alt
+                    Res.string.system_message_channel_icon_changed_alt
                 ),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -378,7 +414,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
             Icon(
                 painter = painterResource(R.drawable.ic_contract_edit_24dp),
                 contentDescription = stringResource(
-                    R.string.system_message_channel_description_changed_alt
+                    Res.string.system_message_channel_description_changed_alt
                 ),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
@@ -388,7 +424,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.CHANNEL_RENAMED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_ink_highlighter_move_24dp),
-                contentDescription = stringResource(R.string.system_message_channel_renamed_alt),
+                contentDescription = stringResource(Res.string.system_message_channel_renamed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -397,7 +433,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_REMOVE -> {
             Icon(
                 painter = painterResource(R.drawable.ic_group_remove_24dp),
-                contentDescription = stringResource(R.string.system_message_user_removed_alt),
+                contentDescription = stringResource(Res.string.system_message_user_removed_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -406,7 +442,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_ADDED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_group_add_24dp),
-                contentDescription = stringResource(R.string.system_message_user_added_alt),
+                contentDescription = stringResource(Res.string.system_message_user_added_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -415,7 +451,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_BANNED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_gavel_24dp),
-                contentDescription = stringResource(R.string.system_message_user_banned_alt),
+                contentDescription = stringResource(Res.string.system_message_user_banned_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -424,7 +460,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_KICKED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_sports_and_outdoors_24dp),
-                contentDescription = stringResource(R.string.system_message_user_kicked_alt),
+                contentDescription = stringResource(Res.string.system_message_user_kicked_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -433,7 +469,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_LEFT -> {
             Icon(
                 painter = painterResource(R.drawable.ic_door_open_24dp),
-                contentDescription = stringResource(R.string.system_message_user_left_alt),
+                contentDescription = stringResource(Res.string.system_message_user_left_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -442,7 +478,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.USER_JOINED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_waving_hand_24dp),
-                contentDescription = stringResource(R.string.system_message_user_joined_alt),
+                contentDescription = stringResource(Res.string.system_message_user_joined_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size),
             )
@@ -451,7 +487,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.MESSAGE_PINNED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_keep_24dp),
-                contentDescription = stringResource(R.string.system_message_message_pinned_alt),
+                contentDescription = stringResource(Res.string.system_message_message_pinned_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -460,7 +496,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.MESSAGE_UNPINNED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_keep_off_24dp),
-                contentDescription = stringResource(R.string.system_message_message_unpinned_alt),
+                contentDescription = stringResource(Res.string.system_message_message_unpinned_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -469,7 +505,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.CALL_STARTED -> {
             Icon(
                 painter = painterResource(R.drawable.ic_call_24dp__fill),
-                contentDescription = stringResource(R.string.system_message_call_started_alt),
+                contentDescription = stringResource(Res.string.system_message_call_started_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )
@@ -478,7 +514,7 @@ fun SystemMessageIcon(type: SystemMessageType, modifier: Modifier = Modifier, si
         SystemMessageType.TEXT -> {
             Icon(
                 painter = painterResource(R.drawable.ic_info_24dp),
-                contentDescription = stringResource(R.string.system_message_text_alt),
+                contentDescription = stringResource(Res.string.system_message_text_alt),
                 tint = LocalContentColor.current,
                 modifier = modifier.size(size)
             )

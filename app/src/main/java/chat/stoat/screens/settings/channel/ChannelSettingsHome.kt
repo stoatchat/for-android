@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -47,7 +46,19 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.channel_settings
+import chat.stoat.shared.resources.channel_settings_delete
+import chat.stoat.shared.resources.channel_settings_delete_confirm
+import chat.stoat.shared.resources.channel_settings_delete_confirm_description
+import chat.stoat.shared.resources.channel_settings_delete_confirm_no
+import chat.stoat.shared.resources.channel_settings_delete_confirm_yes
+import chat.stoat.shared.resources.channel_settings_header
+import chat.stoat.shared.resources.channel_settings_overview
+import chat.stoat.shared.resources.channel_settings_permissions
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,13 +74,13 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
             onDismissRequest = {
                 showDeletionConfirmation = false
             },
-            title = { Text(stringResource(R.string.channel_settings_delete_confirm)) },
-            text = { Text(stringResource(R.string.channel_settings_delete_confirm_description)) },
+            title = { Text(stringResource(Res.string.channel_settings_delete_confirm)) },
+            text = { Text(stringResource(Res.string.channel_settings_delete_confirm_description)) },
             dismissButton = {
                 TextButton(onClick = {
                     showDeletionConfirmation = false
                 }) {
-                    Text(stringResource(R.string.channel_settings_delete_confirm_no))
+                    Text(stringResource(Res.string.channel_settings_delete_confirm_no))
                 }
             },
             confirmButton = {
@@ -80,7 +91,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         navController.popBackStack()
                     }
                 }) {
-                    Text(stringResource(R.string.channel_settings_delete_confirm_yes))
+                    Text(stringResource(Res.string.channel_settings_delete_confirm_yes))
                 }
             }
         )
@@ -96,13 +107,13 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         text = channel?.let {
                             when (it.channelType) {
                                 ChannelType.TextChannel, ChannelType.VoiceChannel -> stringResource(
-                                    R.string.channel_settings_header,
+                                    Res.string.channel_settings_header,
                                     channel.name ?: channelId
                                 )
 
-                                else -> channel.name ?: stringResource(R.string.channel_settings)
+                                else -> channel.name ?: stringResource(Res.string.channel_settings)
                             }
-                        } ?: stringResource(R.string.channel_settings),
+                        } ?: stringResource(Res.string.channel_settings),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -113,7 +124,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                            contentDescription = stringResource(id = R.string.back)
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -138,7 +149,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             last = !showPermissions && !showDelete,
                             headlineContent = {
                                 Text(
-                                    text = stringResource(id = R.string.channel_settings_overview)
+                                    text = stringResource(Res.string.channel_settings_overview)
                                 )
                             },
                             leadingContent = {
@@ -164,7 +175,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             last = !showDelete,
                             headlineContent = {
                                 Text(
-                                    text = stringResource(id = R.string.channel_settings_permissions)
+                                    text = stringResource(Res.string.channel_settings_permissions)
                                 )
                             },
                             leadingContent = {
@@ -190,7 +201,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             headlineContent = {
                                 CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
                                     Text(
-                                        text = stringResource(id = R.string.channel_settings_delete)
+                                        text = stringResource(Res.string.channel_settings_delete)
                                     )
                                 }
                             },

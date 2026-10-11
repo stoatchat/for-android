@@ -35,23 +35,28 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.R
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.createInvite
 import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.invite_dialog_close
+import chat.stoat.shared.resources.invite_dialog_copy
+import chat.stoat.shared.resources.invite_dialog_description
+import chat.stoat.shared.resources.invite_dialog_header
+import chat.stoat.shared.resources.unknown
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 private val inviteChars = ('a'..'z') + ('A'..'Z') + ('0'..'9')
 
@@ -72,6 +77,7 @@ operator fun InviteCodeChar.compareTo(other: InviteCodeChar): Int {
 
 @Composable
 fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
+    val copiedText = stringResource(Res.string.copied)
     val channel = StoatAPI.channelCache[channelId]
 
     if (channel == null) {
@@ -89,7 +95,6 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
 
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
-    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
 
     var swapInviteJob by remember { mutableStateOf<Job?>(null) }
@@ -134,8 +139,8 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
         ) {
             Text(
                 stringResource(
-                    R.string.invite_dialog_header,
-                    channel.name ?: stringResource(R.string.unknown)
+                    Res.string.invite_dialog_header,
+                    channel.name ?: stringResource(Res.string.unknown)
                 ),
                 style = MaterialTheme.typography.headlineMedium
             )
@@ -188,7 +193,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
             Spacer(Modifier.height(16.dp))
 
             Text(
-                stringResource(R.string.invite_dialog_description),
+                stringResource(Res.string.invite_dialog_description),
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -201,7 +206,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                 TextButton(onClick = {
                     onDismissRequest()
                 }) {
-                    Text(stringResource(R.string.invite_dialog_close))
+                    Text(stringResource(Res.string.invite_dialog_close))
                 }
                 Spacer(Modifier.width(8.dp))
                 Button(onClick = {
@@ -214,12 +219,12 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                     if (Platform.needsShowClipboardNotification()) {
                         Toast.makeText(
                             context,
-                            resources.getString(R.string.copied),
+                            copiedText,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
                 }) {
-                    Text(stringResource(R.string.invite_dialog_copy))
+                    Text(stringResource(Res.string.invite_dialog_copy))
                 }
             }
         }

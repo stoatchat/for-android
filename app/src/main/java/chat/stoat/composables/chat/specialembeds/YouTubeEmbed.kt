@@ -19,14 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import chat.stoat.R
 import chat.stoat.composables.chat.VideoPlayButton
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.core.model.data.STOAT_PROXY
 import chat.stoat.core.model.schemas.Special
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.message_embed_special_youtube_switch_alt
 import org.intellij.lang.annotations.Language
+import org.jetbrains.compose.resources.stringResource
 
 @Language("HTML")
 private const val YOUTUBE_EMBED_TEMPLATE = """
@@ -136,7 +137,7 @@ fun YoutubeEmbedSwitch(special: Special, modifier: Modifier = Modifier) {
             ) {
                 RemoteImage(
                     "https://i3.ytimg.com/vi/${special.id ?: "none"}/maxresdefault.jpg",
-                    stringResource(R.string.message_embed_special_youtube_switch_alt),
+                    stringResource(Res.string.message_embed_special_youtube_switch_alt),
                     width = 1280,
                     height = 720,
                 )

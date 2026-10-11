@@ -55,7 +55,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -72,7 +71,19 @@ import chat.stoat.internals.EmojiImpl
 import chat.stoat.internals.EmojiPickerItem
 import chat.stoat.internals.FitzpatrickSkinTone
 import chat.stoat.internals.UnicodeEmojiSection
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.emoji_picker_clear_search
+import chat.stoat.shared.resources.emoji_picker_close_skin_tone_menu
+import chat.stoat.shared.resources.emoji_picker_search_results_header
+import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_1_2
+import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_3
+import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_4
+import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_5
+import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_6
+import chat.stoat.shared.resources.emoji_picker_skin_tone_none
+import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EmojiPicker(
@@ -229,7 +240,7 @@ fun EmojiPicker(
 
                     Icon(
                         painter = painterResource(R.drawable.ic_close_24dp),
-                        contentDescription = stringResource(R.string.emoji_picker_clear_search),
+                        contentDescription = stringResource(Res.string.emoji_picker_clear_search),
                         modifier = Modifier
                             .clip(CircleShape)
                             .padding(4.dp)
@@ -279,27 +290,27 @@ fun EmojiPicker(
                                     .clickable(
                                         onClickLabel = when (skinTone) {
                                             FitzpatrickSkinTone.None -> stringResource(
-                                                R.string.emoji_picker_skin_tone_none
+                                                Res.string.emoji_picker_skin_tone_none
                                             )
 
                                             FitzpatrickSkinTone.Light -> stringResource(
-                                                R.string.emoji_picker_skin_tone_fitzpatrick_1_2
+                                                Res.string.emoji_picker_skin_tone_fitzpatrick_1_2
                                             )
 
                                             FitzpatrickSkinTone.MediumLight -> stringResource(
-                                                R.string.emoji_picker_skin_tone_fitzpatrick_3
+                                                Res.string.emoji_picker_skin_tone_fitzpatrick_3
                                             )
 
                                             FitzpatrickSkinTone.Medium -> stringResource(
-                                                R.string.emoji_picker_skin_tone_fitzpatrick_4
+                                                Res.string.emoji_picker_skin_tone_fitzpatrick_4
                                             )
 
                                             FitzpatrickSkinTone.MediumDark -> stringResource(
-                                                R.string.emoji_picker_skin_tone_fitzpatrick_5
+                                                Res.string.emoji_picker_skin_tone_fitzpatrick_5
                                             )
 
                                             FitzpatrickSkinTone.Dark -> stringResource(
-                                                R.string.emoji_picker_skin_tone_fitzpatrick_6
+                                                Res.string.emoji_picker_skin_tone_fitzpatrick_6
                                             )
                                         }
                                     ) {
@@ -342,7 +353,7 @@ fun EmojiPicker(
                     Icon(
                         painter = painterResource(R.drawable.ic_keyboard_arrow_right_24dp),
                         contentDescription = stringResource(
-                            R.string.emoji_picker_close_skin_tone_menu
+                            Res.string.emoji_picker_close_skin_tone_menu
                         ),
                         tint = LocalContentColor.current,
                         modifier = Modifier
@@ -393,7 +404,7 @@ fun EmojiPicker(
                     ) {
                         if (server.icon == null) {
                             IconPlaceholder(
-                                name = server.name ?: stringResource(R.string.unknown),
+                                name = server.name ?: stringResource(Res.string.unknown),
                                 fontSize = 16.sp,
                                 modifier = Modifier
                                     .clip(CircleShape)
@@ -504,7 +515,7 @@ fun EmojiPicker(
                     }
                 ) {
                     Text(
-                        text = stringResource(R.string.emoji_picker_search_results_header),
+                        text = stringResource(Res.string.emoji_picker_search_results_header),
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -638,7 +649,7 @@ fun ColumnScope.PickerItem(
 
                     is Category.ServerEmoteCategory ->
                         item.category.server.name
-                            ?: stringResource(R.string.unknown)
+                            ?: stringResource(Res.string.unknown)
                 },
                 style = MaterialTheme.typography.labelMedium,
                 modifier = Modifier

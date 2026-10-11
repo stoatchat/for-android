@@ -52,8 +52,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -81,6 +79,31 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.ok
+import chat.stoat.shared.resources.server_settings_invites
+import chat.stoat.shared.resources.server_settings_invites_add
+import chat.stoat.shared.resources.server_settings_invites_choose_channel
+import chat.stoat.shared.resources.server_settings_invites_copy
+import chat.stoat.shared.resources.server_settings_invites_count
+import chat.stoat.shared.resources.server_settings_invites_create_error
+import chat.stoat.shared.resources.server_settings_invites_create_title
+import chat.stoat.shared.resources.server_settings_invites_created_by_in_channel
+import chat.stoat.shared.resources.server_settings_invites_created_description
+import chat.stoat.shared.resources.server_settings_invites_delete
+import chat.stoat.shared.resources.server_settings_invites_delete_description
+import chat.stoat.shared.resources.server_settings_invites_delete_error
+import chat.stoat.shared.resources.server_settings_invites_delete_no_keep
+import chat.stoat.shared.resources.server_settings_invites_delete_title
+import chat.stoat.shared.resources.server_settings_invites_delete_yes_delete
+import chat.stoat.shared.resources.server_settings_invites_deleted
+import chat.stoat.shared.resources.server_settings_invites_empty
+import chat.stoat.shared.resources.server_settings_invites_empty_title
+import chat.stoat.shared.resources.server_settings_invites_load_error
+import chat.stoat.shared.resources.server_settings_invites_no_channels
+import chat.stoat.shared.resources.server_settings_invites_retry
+import chat.stoat.shared.resources.server_settings_invites_unknown_channel
+import chat.stoat.shared.resources.server_settings_invites_unknown_user
 import chat.stoat.ui.theme.FragmentMono
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -88,6 +111,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
 internal fun inviteLink(code: String, compact: Boolean = false): String =
@@ -151,7 +177,7 @@ class ServerSettingsInvitesViewModel(
                 }
                 .onFailure { error ->
                     loadError = error.message
-                        ?: context.getString(R.string.server_settings_invites_load_error)
+                        ?: getString(Res.string.server_settings_invites_load_error)
                 }
 
             result.getOrNull()?.let { hydrateMissingCreators(it) }
@@ -185,7 +211,7 @@ class ServerSettingsInvitesViewModel(
                 }
                 .onFailure { error ->
                     createError = error.message
-                        ?: context.getString(R.string.server_settings_invites_create_error)
+                        ?: getString(Res.string.server_settings_invites_create_error)
                 }
 
             creating = false
@@ -212,7 +238,7 @@ class ServerSettingsInvitesViewModel(
                 }
                 .onFailure { error ->
                     deleteError = error.message
-                        ?: context.getString(R.string.server_settings_invites_delete_error)
+                        ?: getString(Res.string.server_settings_invites_delete_error)
                 }
 
             deletingInviteCode = null
@@ -351,7 +377,7 @@ fun ServerSettingsInvites(
 
     SettingsPage(
         navController = navController,
-        title = { Text(stringResource(R.string.server_settings_invites)) },
+        title = { Text(stringResource(Res.string.server_settings_invites)) },
         scrollable = false,
         onNavigateBack = {
             if (!viewModel.creating && viewModel.deletingInviteCode == null) {
@@ -375,14 +401,14 @@ fun ServerSettingsInvites(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_add_24dp),
-                        contentDescription = stringResource(R.string.server_settings_invites_add),
+                        contentDescription = stringResource(Res.string.server_settings_invites_add),
                     )
                 }
             }
         },
     ) {
-        val deletedMessage = stringResource(R.string.server_settings_invites_deleted)
-        val noChannelsMessage = stringResource(R.string.server_settings_invites_no_channels)
+        val deletedMessage = stringResource(Res.string.server_settings_invites_deleted)
+        val noChannelsMessage = stringResource(Res.string.server_settings_invites_no_channels)
 
         LaunchedEffect(viewModel.createSucceeded) {
             if (viewModel.createSucceeded > 0) listState.animateScrollToItem(0)
@@ -437,7 +463,7 @@ private fun InviteList(
         item(key = "count") {
             Text(
                 text = pluralStringResource(
-                    R.plurals.server_settings_invites_count,
+                    Res.plurals.server_settings_invites_count,
                     invites.size,
                     invites.size,
                 ),
@@ -473,7 +499,7 @@ private fun InviteList(
                         textAlign = TextAlign.Center,
                     )
                     Button(onClick = onRetry) {
-                        Text(stringResource(R.string.server_settings_invites_retry))
+                        Text(stringResource(Res.string.server_settings_invites_retry))
                     }
                 }
             }
@@ -481,8 +507,8 @@ private fun InviteList(
             item(key = "empty") {
                 ServerSettingsEmptyState(
                     icon = R.drawable.ic_link_24dp,
-                    title = R.string.server_settings_invites_empty_title,
-                    description = R.string.server_settings_invites_empty,
+                    title = Res.string.server_settings_invites_empty_title,
+                    description = Res.string.server_settings_invites_empty,
                 )
             }
         } else {
@@ -518,7 +544,7 @@ private fun InviteListItem(
     onClick: () -> Unit,
 ) {
     val creatorName = creator?.let(User::resolveDefaultName)
-        ?: stringResource(R.string.server_settings_invites_unknown_user)
+        ?: stringResource(Res.string.server_settings_invites_unknown_user)
     val shape = when {
         first && last -> MaterialTheme.shapes.large
         first -> MaterialTheme.shapes.extraSmall.copy(
@@ -559,7 +585,7 @@ private fun InviteListItem(
             )
             Text(
                 text = channel?.name?.let { "#$it" }
-                    ?: stringResource(R.string.server_settings_invites_unknown_channel),
+                    ?: stringResource(Res.string.server_settings_invites_unknown_channel),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
@@ -596,7 +622,7 @@ private fun CreateInviteSheet(
             .padding(bottom = 24.dp),
     ) {
         Text(
-            text = stringResource(R.string.server_settings_invites_create_title),
+            text = stringResource(Res.string.server_settings_invites_create_title),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
                 .fillMaxWidth()
@@ -612,7 +638,7 @@ private fun CreateInviteSheet(
                         .padding(horizontal = 24.dp),
                 ) {
                     Text(
-                        text = stringResource(R.string.server_settings_invites_created_description),
+                        text = stringResource(Res.string.server_settings_invites_created_description),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     InviteLink(
@@ -623,7 +649,7 @@ private fun CreateInviteSheet(
                         onClick = onDone,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Text(stringResource(R.string.ok))
+                        Text(stringResource(Res.string.ok))
                     }
                 }
             } else {
@@ -633,7 +659,7 @@ private fun CreateInviteSheet(
                         .padding(horizontal = 24.dp),
                 ) {
                     Text(
-                        text = stringResource(R.string.server_settings_invites_choose_channel),
+                        text = stringResource(Res.string.server_settings_invites_choose_channel),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
@@ -671,7 +697,7 @@ private fun CreateInviteSheet(
                             headlineContent = {
                                 Text(
                                     text = channel.name
-                                        ?: stringResource(R.string.server_settings_invites_unknown_channel),
+                                        ?: stringResource(Res.string.server_settings_invites_unknown_channel),
                                 )
                             },
                             leadingContent = {
@@ -699,7 +725,7 @@ private fun InviteManagementSheet(
     onDelete: () -> Unit,
 ) {
     val creatorName = creator?.let(User::resolveDefaultName)
-        ?: stringResource(R.string.server_settings_invites_unknown_user)
+        ?: stringResource(Res.string.server_settings_invites_unknown_user)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -718,10 +744,10 @@ private fun InviteManagementSheet(
         )
         Text(
             text = stringResource(
-                R.string.server_settings_invites_created_by_in_channel,
+                Res.string.server_settings_invites_created_by_in_channel,
                 creatorName,
                 channel?.name?.let { "#$it" }
-                    ?: stringResource(R.string.server_settings_invites_unknown_channel),
+                    ?: stringResource(Res.string.server_settings_invites_unknown_channel),
             ),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -738,7 +764,7 @@ private fun InviteManagementSheet(
             ),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Text(stringResource(R.string.server_settings_invites_delete))
+            Text(stringResource(Res.string.server_settings_invites_delete))
         }
     }
 }
@@ -776,7 +802,7 @@ private fun InviteLink(link: String, copyableLink: String) {
         )
         Icon(
             painter = painterResource(R.drawable.ic_content_copy_24dp),
-            contentDescription = stringResource(R.string.server_settings_invites_copy),
+            contentDescription = stringResource(Res.string.server_settings_invites_copy),
         )
     }
 }
@@ -791,12 +817,12 @@ private fun InviteDeleteDialog(
 ) {
     AlertDialog(
         onDismissRequest = { if (!deleting) onDismiss() },
-        title = { Text(stringResource(R.string.server_settings_invites_delete_title)) },
+        title = { Text(stringResource(Res.string.server_settings_invites_delete_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
                     stringResource(
-                        R.string.server_settings_invites_delete_description,
+                        Res.string.server_settings_invites_delete_description,
                         invite.id,
                     )
                 )
@@ -813,7 +839,7 @@ private fun InviteDeleteDialog(
                 onClick = onDismiss,
                 enabled = !deleting,
             ) {
-                Text(stringResource(R.string.server_settings_invites_delete_no_keep))
+                Text(stringResource(Res.string.server_settings_invites_delete_no_keep))
             }
         },
         confirmButton = {
@@ -831,7 +857,7 @@ private fun InviteDeleteDialog(
                         strokeWidth = 2.dp,
                     )
                 } else {
-                    Text(stringResource(R.string.server_settings_invites_delete_yes_delete))
+                    Text(stringResource(Res.string.server_settings_invites_delete_yes_delete))
                 }
             }
         },

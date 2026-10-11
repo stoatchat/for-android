@@ -21,7 +21,13 @@ import androidx.core.telecom.CallsManager
 import chat.stoat.R
 import chat.stoat.activities.MainActivity
 import chat.stoat.c2dm.ChannelRegistrator
+import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.services.OngoingCallService.Companion.hangupEvents
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.voice_action_mute
+import chat.stoat.shared.resources.voice_action_unmute
+import chat.stoat.shared.resources.voice_notification_fallback_channel_name
+import chat.stoat.shared.resources.voice_notification_ongoing_call
 import chat.stoat.voice.VoiceCallManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -117,7 +123,7 @@ class OngoingCallService : Service() {
             ACTION_START -> {
                 val channelId = intent.getStringExtra(EXTRA_CHANNEL_ID) ?: return START_NOT_STICKY
                 val channelName = intent.getStringExtra(EXTRA_CHANNEL_NAME)
-                    ?: getString(R.string.voice_notification_fallback_channel_name)
+                    ?: getStringBlocking(Res.string.voice_notification_fallback_channel_name)
 
                 currentChannelName = channelName
                 if (registeredChannelId != channelId) {
@@ -212,12 +218,12 @@ class OngoingCallService : Service() {
         return NotificationCompat.Builder(this, ChannelRegistrator.CHANNEL_ID_GROUP_VOICE_ONGOING)
             .setSmallIcon(R.drawable.ic_notification_monochrome)
             .setContentTitle(channelName)
-            .setContentText(getString(R.string.voice_notification_ongoing_call))
+            .setContentText(getStringBlocking(Res.string.voice_notification_ongoing_call))
             .setStyle(NotificationCompat.CallStyle.forOngoingCall(caller, hangupIntent))
             .addAction(
                 if (isMicMuted) R.drawable.ic_mic_24dp else R.drawable.ic_mic_off_24dp,
-                getString(
-                    if (isMicMuted) R.string.voice_action_unmute else R.string.voice_action_mute
+                getStringBlocking(
+                    if (isMicMuted) Res.string.voice_action_unmute else Res.string.voice_action_mute
                 ),
                 toggleMuteIntent
             )

@@ -36,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -47,7 +46,16 @@ import chat.stoat.R
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_MARKETING
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.community_guidelines
+import chat.stoat.shared.resources.login
+import chat.stoat.shared.resources.login_onboarding_body
+import chat.stoat.shared.resources.login_onboarding_heading
+import chat.stoat.shared.resources.privacy_policy
+import chat.stoat.shared.resources.signup
+import chat.stoat.shared.resources.terms_of_service
 import com.chuckerteam.chucker.api.Chucker
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -102,7 +110,7 @@ fun LoginGreetingScreen(navController: NavController) {
             )
 
             Text(
-                text = stringResource(R.string.login_onboarding_heading),
+                text = stringResource(Res.string.login_onboarding_heading),
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Black,
@@ -114,7 +122,7 @@ fun LoginGreetingScreen(navController: NavController) {
             )
 
             Text(
-                text = stringResource(R.string.login_onboarding_body),
+                text = stringResource(Res.string.login_onboarding_body),
                 color = MaterialTheme.colorScheme.onBackground.copy(
                     alpha = 0.5f
                 ),
@@ -141,7 +149,7 @@ fun LoginGreetingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .testTag("view_login_page_button")
             ) {
-                Text(text = stringResource(R.string.login))
+                Text(text = stringResource(Res.string.login))
             }
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -152,7 +160,7 @@ fun LoginGreetingScreen(navController: NavController) {
                     .fillMaxWidth()
                     .testTag("view_signup_page_button")
             ) {
-                Text(text = stringResource(R.string.signup))
+                Text(text = stringResource(Res.string.signup))
             }
 
             AnimatedVisibility(showBoringButton) {
@@ -182,15 +190,15 @@ fun LoginGreetingScreen(navController: NavController) {
                 LocalTextStyle provides LocalTextStyle.current.copy(textAlign = TextAlign.Center)
             ) {
                 Weblink(
-                    text = stringResource(R.string.terms_of_service),
+                    text = stringResource(Res.string.terms_of_service),
                     url = "$STOAT_MARKETING/terms"
                 )
                 Weblink(
-                    text = stringResource(R.string.privacy_policy),
+                    text = stringResource(Res.string.privacy_policy),
                     url = "$STOAT_MARKETING/privacy"
                 )
                 Weblink(
-                    text = stringResource(R.string.community_guidelines),
+                    text = stringResource(Res.string.community_guidelines),
                     url = "$STOAT_MARKETING/aup"
                 )
                 if (BuildConfig.DEBUG) {

@@ -26,15 +26,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import chat.stoat.R
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.voice_join_permission_rationale_assurance
+import chat.stoat.shared.resources.voice_join_permission_rationale_cta
+import chat.stoat.shared.resources.voice_join_permission_rationale_description
+import chat.stoat.shared.resources.voice_join_permission_rationale_heading
+import chat.stoat.shared.resources.voice_join_permission_rationale_permission_camera
+import chat.stoat.shared.resources.voice_join_permission_rationale_permission_mic
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.shouldShowRationale
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -72,13 +79,13 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
             ) {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = stringResource(R.string.voice_join_permission_rationale_heading),
+                    text = stringResource(Res.string.voice_join_permission_rationale_heading),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = stringResource(R.string.voice_join_permission_rationale_description),
+                    text = stringResource(Res.string.voice_join_permission_rationale_description),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
@@ -92,7 +99,7 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                         contentDescription = null
                     )
                     Text(
-                        text = stringResource(R.string.voice_join_permission_rationale_permission_mic),
+                        text = stringResource(Res.string.voice_join_permission_rationale_permission_mic),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.weight(1f)
@@ -107,14 +114,14 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                         contentDescription = null
                     )
                     Text(
-                        text = stringResource(R.string.voice_join_permission_rationale_permission_camera),
+                        text = stringResource(Res.string.voice_join_permission_rationale_permission_camera),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Start,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 Text(
-                    text = stringResource(R.string.voice_join_permission_rationale_assurance),
+                    text = stringResource(Res.string.voice_join_permission_rationale_assurance),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.tertiary,
@@ -136,7 +143,7 @@ fun VoicePermissionSwitch(onCancel: () -> Unit, onPermissionGranted: @Composable
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = stringResource(R.string.voice_join_permission_rationale_cta))
+                    Text(text = stringResource(Res.string.voice_join_permission_rationale_cta))
                 }
             }
         }

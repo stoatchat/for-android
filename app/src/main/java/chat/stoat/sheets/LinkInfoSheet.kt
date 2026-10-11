@@ -21,16 +21,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.copy
+import chat.stoat.shared.resources.link_open
+import chat.stoat.shared.resources.link_type_no_intent
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
+    val linkTypeNoIntentText = stringResource(Res.string.link_type_no_intent)
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -57,7 +64,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
                             Toast
                                 .makeText(
                                     context,
-                                    context.getString(R.string.link_type_no_intent),
+                                    linkTypeNoIntentText,
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()
@@ -76,7 +83,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.link_open)
+                text = stringResource(Res.string.link_open)
             )
         },
         leadingContent = {
@@ -97,7 +104,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
                 Toast
                     .makeText(
                         context,
-                        context.getString(R.string.link_type_no_intent),
+                        linkTypeNoIntentText,
                         Toast.LENGTH_SHORT
                     )
                     .show()
@@ -107,7 +114,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.copy)
+                text = stringResource(Res.string.copy)
             )
         },
         leadingContent = {
@@ -122,7 +129,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
                 if (Platform.needsShowClipboardNotification()) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.copied),
+                        getString(Res.string.copied),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

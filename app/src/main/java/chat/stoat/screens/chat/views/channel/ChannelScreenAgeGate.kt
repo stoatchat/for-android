@@ -21,9 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
@@ -32,19 +30,30 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.R
 import chat.stoat.composables.generic.DobPicker
 import chat.stoat.composables.generic.DobRegion
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_age_gate_description
+import chat.stoat.shared.resources.channel_age_gate_dob_cancel
+import chat.stoat.shared.resources.channel_age_gate_dob_invalid
+import chat.stoat.shared.resources.channel_age_gate_dob_invalid_future
+import chat.stoat.shared.resources.channel_age_gate_dob_invalid_unlikely
+import chat.stoat.shared.resources.channel_age_gate_dob_proceed
+import chat.stoat.shared.resources.channel_age_gate_dob_section
+import chat.stoat.shared.resources.channel_age_gate_dob_too_young
+import chat.stoat.shared.resources.channel_age_gate_title
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelScreenAgeGate(
     onAccept: () -> Unit,
     onDeny: () -> Unit
 ) {
-    val context = LocalContext.current
 
     var dayValue by remember { mutableStateOf("") }
     var monthValue by remember { mutableStateOf("") }
@@ -72,7 +81,7 @@ fun ChannelScreenAgeGate(
 
             // Invalid condition
             if (day == null || month == null || year == null) {
-                dobPickerError = context.getString(R.string.channel_age_gate_dob_invalid)
+                dobPickerError = getString(Res.string.channel_age_gate_dob_invalid)
                 return@LaunchedEffect
             }
 
@@ -83,7 +92,7 @@ fun ChannelScreenAgeGate(
             try {
                 then = LocalDateTime(year, month, day, 0, 0, 0)
             } catch (e: Throwable) {
-                dobPickerError = context.getString(R.string.channel_age_gate_dob_invalid)
+                dobPickerError = getString(Res.string.channel_age_gate_dob_invalid)
                 return@LaunchedEffect
             }
 
@@ -91,13 +100,13 @@ fun ChannelScreenAgeGate(
             val diff =
                 now.toInstant(UtcOffset.ZERO).epochSeconds - then.toInstant(UtcOffset.ZERO).epochSeconds
             if (diff < 568025136) {
-                dobPickerError = context.getString(R.string.channel_age_gate_dob_too_young)
+                dobPickerError = getString(Res.string.channel_age_gate_dob_too_young)
                 return@LaunchedEffect
             }
 
             // Born in future condition
             if (then.toInstant(UtcOffset.ZERO).epochSeconds > now.toInstant(UtcOffset.ZERO).epochSeconds) {
-                dobPickerError = context.getString(R.string.channel_age_gate_dob_invalid_future)
+                dobPickerError = getString(Res.string.channel_age_gate_dob_invalid_future)
                 return@LaunchedEffect
             }
 
@@ -106,7 +115,7 @@ fun ChannelScreenAgeGate(
             val minYob = 1908
             if (year < minYob) {
                 dobPickerError =
-                    context.getString(R.string.channel_age_gate_dob_invalid_unlikely, minYob)
+                    getString(Res.string.channel_age_gate_dob_invalid_unlikely, minYob)
                 return@LaunchedEffect
             }
 
@@ -130,14 +139,14 @@ fun ChannelScreenAgeGate(
         )
 
         Text(
-            text = stringResource(R.string.channel_age_gate_title),
+            text = stringResource(Res.string.channel_age_gate_title),
             style = MaterialTheme.typography.titleMedium.copy(
                 textAlign = TextAlign.Center
             ),
         )
 
         Text(
-            text = stringResource(R.string.channel_age_gate_description),
+            text = stringResource(Res.string.channel_age_gate_description),
             style = MaterialTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center
             ),
@@ -153,7 +162,7 @@ fun ChannelScreenAgeGate(
         )
 
         Text(
-            text = stringResource(R.string.channel_age_gate_dob_section),
+            text = stringResource(Res.string.channel_age_gate_dob_section),
             style = MaterialTheme.typography.labelLarge
         )
 
@@ -174,11 +183,11 @@ fun ChannelScreenAgeGate(
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         ) {
             Button(onClick = { onDeny() }) {
-                Text(stringResource(R.string.channel_age_gate_dob_cancel))
+                Text(stringResource(Res.string.channel_age_gate_dob_cancel))
             }
 
             TextButton(onClick = { onAccept() }, enabled = dobValid) {
-                Text(stringResource(R.string.channel_age_gate_dob_proceed))
+                Text(stringResource(Res.string.channel_age_gate_dob_proceed))
             }
         }
     }

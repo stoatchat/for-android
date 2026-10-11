@@ -3,8 +3,38 @@ package chat.stoat.ui.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import chat.stoat.R
 import chat.stoat.core.model.data.OverridableColourScheme
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_background
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_error
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_error_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_inverse_on_surface
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_inverse_primary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_inverse_surface
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_background
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_error
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_error_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_primary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_primary_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_secondary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_secondary_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_surface
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_surface_variant
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_tertiary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_on_tertiary_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_outline
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_outline_variant
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_primary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_primary_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_scrim
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_secondary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_secondary_container
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_surface
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_surface_tint
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_surface_variant
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_tertiary
+import chat.stoat.shared.resources.settings_appearance_colour_overrides_tertiary_container
+import org.jetbrains.compose.resources.StringResource
 
 
 fun OverridableColourScheme.applyTo(colorScheme: ColorScheme): ColorScheme {
@@ -201,37 +231,37 @@ val overridableColourSchemeFieldNames: List<String>
         "scrim"
     )
 
-val overridableColourSchemeFieldNameToResource: Map<String, Int>
+val overridableColourSchemeFieldNameToResource: Map<String, StringResource>
     get() = mapOf(
-        "primary" to R.string.settings_appearance_colour_overrides_primary,
-        "onPrimary" to R.string.settings_appearance_colour_overrides_on_primary,
-        "primaryContainer" to R.string.settings_appearance_colour_overrides_primary_container,
-        "onPrimaryContainer" to R.string.settings_appearance_colour_overrides_on_primary_container,
-        "inversePrimary" to R.string.settings_appearance_colour_overrides_inverse_primary,
-        "secondary" to R.string.settings_appearance_colour_overrides_secondary,
-        "onSecondary" to R.string.settings_appearance_colour_overrides_on_secondary,
-        "secondaryContainer" to R.string.settings_appearance_colour_overrides_secondary_container,
-        "onSecondaryContainer" to R.string.settings_appearance_colour_overrides_on_secondary_container,
-        "tertiary" to R.string.settings_appearance_colour_overrides_tertiary,
-        "onTertiary" to R.string.settings_appearance_colour_overrides_on_tertiary,
-        "tertiaryContainer" to R.string.settings_appearance_colour_overrides_tertiary_container,
-        "onTertiaryContainer" to R.string.settings_appearance_colour_overrides_on_tertiary_container,
-        "background" to R.string.settings_appearance_colour_overrides_background,
-        "onBackground" to R.string.settings_appearance_colour_overrides_on_background,
-        "surface" to R.string.settings_appearance_colour_overrides_surface,
-        "onSurface" to R.string.settings_appearance_colour_overrides_on_surface,
-        "surfaceVariant" to R.string.settings_appearance_colour_overrides_surface_variant,
-        "onSurfaceVariant" to R.string.settings_appearance_colour_overrides_on_surface_variant,
-        "surfaceTint" to R.string.settings_appearance_colour_overrides_surface_tint,
-        "inverseSurface" to R.string.settings_appearance_colour_overrides_inverse_surface,
-        "inverseOnSurface" to R.string.settings_appearance_colour_overrides_inverse_on_surface,
-        "error" to R.string.settings_appearance_colour_overrides_error,
-        "onError" to R.string.settings_appearance_colour_overrides_on_error,
-        "errorContainer" to R.string.settings_appearance_colour_overrides_error_container,
-        "onErrorContainer" to R.string.settings_appearance_colour_overrides_on_error_container,
-        "outline" to R.string.settings_appearance_colour_overrides_outline,
-        "outlineVariant" to R.string.settings_appearance_colour_overrides_outline_variant,
-        "scrim" to R.string.settings_appearance_colour_overrides_scrim
+        "primary" to Res.string.settings_appearance_colour_overrides_primary,
+        "onPrimary" to Res.string.settings_appearance_colour_overrides_on_primary,
+        "primaryContainer" to Res.string.settings_appearance_colour_overrides_primary_container,
+        "onPrimaryContainer" to Res.string.settings_appearance_colour_overrides_on_primary_container,
+        "inversePrimary" to Res.string.settings_appearance_colour_overrides_inverse_primary,
+        "secondary" to Res.string.settings_appearance_colour_overrides_secondary,
+        "onSecondary" to Res.string.settings_appearance_colour_overrides_on_secondary,
+        "secondaryContainer" to Res.string.settings_appearance_colour_overrides_secondary_container,
+        "onSecondaryContainer" to Res.string.settings_appearance_colour_overrides_on_secondary_container,
+        "tertiary" to Res.string.settings_appearance_colour_overrides_tertiary,
+        "onTertiary" to Res.string.settings_appearance_colour_overrides_on_tertiary,
+        "tertiaryContainer" to Res.string.settings_appearance_colour_overrides_tertiary_container,
+        "onTertiaryContainer" to Res.string.settings_appearance_colour_overrides_on_tertiary_container,
+        "background" to Res.string.settings_appearance_colour_overrides_background,
+        "onBackground" to Res.string.settings_appearance_colour_overrides_on_background,
+        "surface" to Res.string.settings_appearance_colour_overrides_surface,
+        "onSurface" to Res.string.settings_appearance_colour_overrides_on_surface,
+        "surfaceVariant" to Res.string.settings_appearance_colour_overrides_surface_variant,
+        "onSurfaceVariant" to Res.string.settings_appearance_colour_overrides_on_surface_variant,
+        "surfaceTint" to Res.string.settings_appearance_colour_overrides_surface_tint,
+        "inverseSurface" to Res.string.settings_appearance_colour_overrides_inverse_surface,
+        "inverseOnSurface" to Res.string.settings_appearance_colour_overrides_inverse_on_surface,
+        "error" to Res.string.settings_appearance_colour_overrides_error,
+        "onError" to Res.string.settings_appearance_colour_overrides_on_error,
+        "errorContainer" to Res.string.settings_appearance_colour_overrides_error_container,
+        "onErrorContainer" to Res.string.settings_appearance_colour_overrides_on_error_container,
+        "outline" to Res.string.settings_appearance_colour_overrides_outline,
+        "outlineVariant" to Res.string.settings_appearance_colour_overrides_outline_variant,
+        "scrim" to Res.string.settings_appearance_colour_overrides_scrim
     )
 
 

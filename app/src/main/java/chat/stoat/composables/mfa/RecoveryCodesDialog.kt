@@ -18,27 +18,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import chat.stoat.R
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.settings_mfa_recovery_copy
+import chat.stoat.shared.resources.settings_mfa_recovery_dialog_done
+import chat.stoat.shared.resources.settings_mfa_recovery_dialog_hint
+import chat.stoat.shared.resources.settings_mfa_recovery_dialog_title
 import chat.stoat.ui.theme.FragmentMono
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RecoveryCodesDialog(codes: List<String>, onDismiss: () -> Unit) {
+    val copiedText = stringResource(Res.string.copied)
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
-    val resources = LocalResources.current
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.settings_mfa_recovery_dialog_title)) },
+        title = { Text(stringResource(Res.string.settings_mfa_recovery_dialog_title)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text(stringResource(R.string.settings_mfa_recovery_dialog_hint))
+                Text(stringResource(Res.string.settings_mfa_recovery_dialog_hint))
 
                 SelectionContainer {
                     Column(
@@ -74,17 +78,17 @@ fun RecoveryCodesDialog(codes: List<String>, onDismiss: () -> Unit) {
                 if (Platform.needsShowClipboardNotification()) {
                     Toast.makeText(
                         context,
-                        resources.getString(R.string.copied),
+                        copiedText,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }) {
-                Text(stringResource(R.string.settings_mfa_recovery_copy))
+                Text(stringResource(Res.string.settings_mfa_recovery_copy))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.settings_mfa_recovery_dialog_done))
+                Text(stringResource(Res.string.settings_mfa_recovery_dialog_done))
             }
         }
     )

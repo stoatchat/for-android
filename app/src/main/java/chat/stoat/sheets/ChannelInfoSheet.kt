@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import chat.stoat.R
@@ -39,8 +38,16 @@ import chat.stoat.composables.screens.chat.ChannelSheetHeader
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.chat.dialogs.InviteDialog
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_info_sheet_options_add
+import chat.stoat.shared.resources.channel_info_sheet_options_invite
+import chat.stoat.shared.resources.channel_info_sheet_options_members
+import chat.stoat.shared.resources.channel_info_sheet_options_notifications_manage
+import chat.stoat.shared.resources.pinned_messages_view
+import chat.stoat.shared.resources.settings
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +125,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             SheetButton(
                 headlineContent = {
                     Text(
-                        text = stringResource(id = R.string.channel_info_sheet_options_members),
+                        text = stringResource(Res.string.channel_info_sheet_options_members),
                     )
                 },
                 leadingContent = {
@@ -147,7 +154,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 SheetButton(
                     headlineContent = {
                         Text(
-                            text = stringResource(id = R.string.channel_info_sheet_options_invite),
+                            text = stringResource(Res.string.channel_info_sheet_options_invite),
                         )
                     },
                     leadingContent = {
@@ -166,7 +173,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 SheetButton(
                     headlineContent = {
                         Text(
-                            text = stringResource(id = R.string.channel_info_sheet_options_add),
+                            text = stringResource(Res.string.channel_info_sheet_options_add),
                         )
                     },
                     leadingContent = {
@@ -187,7 +194,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     /*SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.channel_info_sheet_options_notifications_manage),
+                text = stringResource(Res.string.channel_info_sheet_options_notifications_manage),
             )
         },
         leadingContent = {
@@ -202,7 +209,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.pinned_messages_view),
+                text = stringResource(Res.string.pinned_messages_view),
             )
         },
         leadingContent = {
@@ -228,7 +235,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         SheetButton(
             headlineContent = {
                 Text(
-                    text = stringResource(id = R.string.settings),
+                    text = stringResource(Res.string.settings),
                 )
             },
             leadingContent = {

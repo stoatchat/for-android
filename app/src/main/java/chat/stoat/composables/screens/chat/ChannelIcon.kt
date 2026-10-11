@@ -4,13 +4,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import chat.stoat.R
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.channel_dm
+import chat.stoat.shared.resources.channel_group
+import chat.stoat.shared.resources.channel_notes
+import chat.stoat.shared.resources.channel_text
+import chat.stoat.shared.resources.channel_voice
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChannelIcon(channel: Channel, modifier: Modifier = Modifier) {
@@ -39,7 +45,7 @@ private fun ChannelIcon(
     if (hasVoice || channelType == ChannelType.VoiceChannel) {
         Icon(
             painter = painterResource(R.drawable.ic_volume_up_24dp),
-            contentDescription = stringResource(R.string.channel_voice),
+            contentDescription = stringResource(Res.string.channel_voice),
             modifier = modifier
         )
         return
@@ -49,7 +55,7 @@ private fun ChannelIcon(
         ChannelType.TextChannel -> {
             Icon(
                 painter = painterResource(R.drawable.ic_grid_3x3_24dp),
-                contentDescription = stringResource(R.string.channel_text),
+                contentDescription = stringResource(Res.string.channel_text),
                 modifier = modifier
             )
         }
@@ -57,7 +63,7 @@ private fun ChannelIcon(
         ChannelType.SavedMessages -> {
             Icon(
                 painter = painterResource(R.drawable.ic_note_stack_24dp),
-                contentDescription = stringResource(R.string.channel_notes),
+                contentDescription = stringResource(Res.string.channel_notes),
                 modifier = modifier
             )
         }
@@ -65,7 +71,7 @@ private fun ChannelIcon(
         ChannelType.DirectMessage -> {
             Icon(
                 painter = painterResource(R.drawable.ic_account_circle_24dp),
-                contentDescription = stringResource(R.string.channel_dm),
+                contentDescription = stringResource(Res.string.channel_dm),
                 modifier = modifier
             )
         }
@@ -73,7 +79,7 @@ private fun ChannelIcon(
         ChannelType.Group -> {
             Icon(
                 painter = painterResource(R.drawable.ic_account_box_24dp),
-                contentDescription = stringResource(R.string.channel_group),
+                contentDescription = stringResource(Res.string.channel_group),
                 modifier = modifier
             )
         }

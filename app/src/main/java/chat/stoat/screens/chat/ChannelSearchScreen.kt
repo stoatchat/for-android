@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -52,9 +51,21 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
 import chat.stoat.core.model.schemas.Message
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.back
+import chat.stoat.shared.resources.channel_search_clear
+import chat.stoat.shared.resources.channel_search_empty
+import chat.stoat.shared.resources.channel_search_hint
+import chat.stoat.shared.resources.channel_search_prompt
+import chat.stoat.shared.resources.channel_search_sort_latest
+import chat.stoat.shared.resources.channel_search_sort_oldest
+import chat.stoat.shared.resources.channel_search_sort_relevance
+import chat.stoat.shared.resources.tap_to_retry
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 private const val MAX_QUERY_LENGTH = 64
 private const val SEARCH_DEBOUNCE_MS = 350L
@@ -66,10 +77,10 @@ data class ChannelMessageJump(
     val messageId: String,
 )
 
-enum class SearchSort(val apiValue: String, val label: Int) {
-    RELEVANCE("Relevance", R.string.channel_search_sort_relevance),
-    LATEST("Latest", R.string.channel_search_sort_latest),
-    OLDEST("Oldest", R.string.channel_search_sort_oldest)
+enum class SearchSort(val apiValue: String, val label: StringResource) {
+    RELEVANCE("Relevance", Res.string.channel_search_sort_relevance),
+    LATEST("Latest", Res.string.channel_search_sort_latest),
+    OLDEST("Oldest", Res.string.channel_search_sort_oldest)
 }
 
 class ChannelSearchScreenViewModel : ViewModel() {
@@ -192,12 +203,12 @@ fun ChannelSearchScreen(
                     onSearch = { viewModel.search(channelId) },
                     expanded = true,
                     onExpandedChange = { if (!it) navController.popBackStack() },
-                    placeholder = { Text(stringResource(R.string.channel_search_hint)) },
+                    placeholder = { Text(stringResource(Res.string.channel_search_hint)) },
                     leadingIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_arrow_back_24dp),
-                                contentDescription = stringResource(R.string.back)
+                                contentDescription = stringResource(Res.string.back)
                             )
                         }
                     },
@@ -206,7 +217,7 @@ fun ChannelSearchScreen(
                             IconButton(onClick = { viewModel.clear() }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_close_24dp),
-                                    contentDescription = stringResource(R.string.channel_search_clear)
+                                    contentDescription = stringResource(Res.string.channel_search_clear)
                                 )
                             }
                         }
@@ -264,13 +275,13 @@ private fun SearchResults(
                     )
                     Spacer(Modifier.height(8.dp))
                     TextButton(onClick = { viewModel.search(channelId) }) {
-                        Text(stringResource(R.string.tap_to_retry))
+                        Text(stringResource(Res.string.tap_to_retry))
                     }
                 }
 
                 !viewModel.hasSearched -> CenteredColumn {
                     Text(
-                        text = stringResource(R.string.channel_search_prompt),
+                        text = stringResource(Res.string.channel_search_prompt),
                         color = LocalContentColor.current,
                         modifier = Modifier.padding(horizontal = 64.dp),
                         textAlign = TextAlign.Center
@@ -279,7 +290,7 @@ private fun SearchResults(
 
                 viewModel.results.isEmpty() -> CenteredColumn {
                     Text(
-                        text = stringResource(R.string.channel_search_empty, viewModel.query),
+                        text = stringResource(Res.string.channel_search_empty, viewModel.query),
                         color = LocalContentColor.current,
                         modifier = Modifier.padding(horizontal = 64.dp),
                         textAlign = TextAlign.Center

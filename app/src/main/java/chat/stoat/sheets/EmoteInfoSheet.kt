@@ -25,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,14 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Platform
+import chat.stoat.shared.resources.Res
+import chat.stoat.shared.resources.copied
+import chat.stoat.shared.resources.copy
+import chat.stoat.shared.resources.emote_info_from_server
+import chat.stoat.shared.resources.emote_info_from_server_unknown
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
@@ -86,11 +92,11 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
                 Text(
                     text = if (parentServer != null) {
                         stringResource(
-                            id = R.string.emote_info_from_server,
+                            Res.string.emote_info_from_server,
                             parentServer?.name ?: ""
                         )
                     } else {
-                        stringResource(id = R.string.emote_info_from_server_unknown)
+                        stringResource(Res.string.emote_info_from_server_unknown)
                     }
                 )
             }
@@ -102,7 +108,7 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
     SheetButton(
         headlineContent = {
             Text(
-                text = stringResource(id = R.string.copy)
+                text = stringResource(Res.string.copy)
             )
         },
         leadingContent = {
@@ -117,7 +123,7 @@ fun EmoteInfoSheet(id: String, onDismiss: () -> Unit) {
                 if (Platform.needsShowClipboardNotification()) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.copied),
+                        getString(Res.string.copied),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
