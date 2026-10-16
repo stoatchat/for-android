@@ -947,4 +947,15 @@
     <string name="server_settings_channels_reorder_error">C'è stato un errore durante il salvataggio dell'ordine dei canali.</string>
     <string name="server_settings_channels_empty_title">Nessun canale</string>
     <string name="server_context_sheet_actions_add_to_folder">Aggiungi alla cartella</string>
+    <string name="server_settings_channels_empty_description">I canali creati per questo server appariranno qui</string>
+    <plurals name="server_settings_channels_count">
+        <item quantity="one">%1$d canale del server</item>
+        <item quantity="many">%1$d canali dei server</item>
+        <item quantity="other">%1$d canali dei server</item>
+    </plurals>
+    <plurals name="server_settings_channels_category_count">
+        <item quantity="one">%1$d canale</item>
+        <item quantity="many">%1$d canali</item>
+        <item quantity="other">%1$d canali</item>
+    </plurals>
 </resources>

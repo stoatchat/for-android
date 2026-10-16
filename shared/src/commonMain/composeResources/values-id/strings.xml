@@ -82,8 +82,8 @@
     <string name="x_days_ago">%1$d hari yang lalu</string>
     <string name="edited">(diedit)</string>
     <string name="disconnected">Terputus</string>
-    <string name="tap_to_reconnect">Ketuk untuk menghubungkan kembali</string>
-    <string name="reconnecting">Menghubungkan kembali…</string>
+    <string name="tap_to_reconnect">Ketuk untuk menghubungkan ulang</string>
+    <string name="reconnecting">Menghubungkan ulang…</string>
     <string name="reconnected">Terhubung</string>
     <string name="tap_to_retry">Ketuk untuk mencoba lagi</string>
     <string name="settings">Pengaturan</string>
