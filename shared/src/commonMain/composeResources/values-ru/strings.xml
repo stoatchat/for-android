@@ -12,13 +12,13 @@
     <string name="lets_go">Начнём</string>
     <string name="send_email">Отправить письмо</string>
     <string name="register_heading">Добро пожаловать в Stoat</string>
-    <string name="login_heading">Войдём в аккаунт</string>
+    <string name="login_heading">Давайте вас авторизуем</string>
     <string name="password_manager_hint">Используете менеджер паролей?</string>
     <string name="password_forgot_heading">Забыли свой пароль?</string>
     <string name="register_image_alt">Используйте Stoat для общения на разные темы.</string>
     <string name="register_form_heading">Давайте создадим аккаунт.</string>
     <string name="check_mail">Проверьте свою почту!</string>
-    <string name="instructions_at_mail">Мы отправили дальнейшие действия на %1$s.</string>
+    <string name="instructions_at_mail">Мы отправили дальнейшие указания на %1$s.</string>
     <string name="register_email">Электронная почта</string>
     <string name="register_email_verification_hint">Мы отправим вам письмо для подтверждения вашего аккаунта.</string>
     <string name="open_mail_app">Открыть приложение почты</string>
@@ -114,7 +114,7 @@
     <string name="settings_category_general">Общее</string>
     <string name="settings_appearance">Внешний вид</string>
     <string name="settings_appearance_theme_none">Системная</string>
-    <string name="settings_feedback">Отзыв</string>
+    <string name="settings_feedback">Обратная связь</string>
     <string name="back">← Назад</string>
     <string name="password_forgot">Забыли пароль?</string>
     <string name="resend">Отправить повторно</string>
@@ -122,9 +122,9 @@
     <string name="share">Поделиться</string>
     <string name="loading">Получаем информацию, подождите…</string>
     <string name="login_onboarding_heading">Найди себе сообщество, соединись с миром.</string>
-    <string name="login_onboarding_body">Stoat - это один из лучших способов оставаться на связи с друзями и сообществом, где угодно и когда угодно.</string>
+    <string name="login_onboarding_body">Stoat - это один из лучших способов оставаться на связи с друзьями и сообществом, где угодно и когда угодно.</string>
     <string name="register_password">Пароль</string>
-    <string name="register_password_rules">Восемь или больше, те, что частые - плохие. Символы и цифры рекомендованы.</string>
+    <string name="register_password_rules">Восемь или больше, часто используемые ненадёжны. Символы и цифры рекомендованы.</string>
     <string name="verify_then_choose_username">Подтвердите свою почту, после чего вы перейдёте к выбору имени пользователя.</string>
     <string name="onboarding_lead">Время выбрать имя пользователя!</string>
     <string name="onboarding_others">Другие будут искать, узнавать и вспоминать вас по этому имени.</string>
@@ -139,8 +139,8 @@
     <string name="comingsoon_toast">Простите, но эта функция ещё не готова.</string>
     <string name="remove_reply_alt">Убрать ответ</string>
     <string name="reply_mention_on">@ включён</string>
-    <string name="resend_verification">Отправить повторно письмо подтверждения</string>
-    <string name="password_forgot_instructions">Введите свою электронную почту, мы отправим инструкции как восстановить ваш пароль.</string>
+    <string name="resend_verification">Отправить письмо подтверждения снова</string>
+    <string name="password_forgot_instructions">Введите вашу электронную почту, и мы отправим вам инструкции по восстановлению пароля.</string>
     <string name="register_instructions">Это как место, где можно зависнуть, собраться вместе и поговорить про разные вещи. Наилучшее то, что это в интернете.</string>
     <string name="register_data">С нами ваши данные в безопасности. Мы не продаём их и не используем для показа рекламы.</string>
     <string name="too_many_replies">Вы можете отвечать одновременно лишь на %1$d сообщений.</string>
@@ -413,7 +413,7 @@
     <string name="message_context_sheet_actions_delete_confirmation_body">Оно исчезнет навсегда (это надолго!)</string>
     <string name="message_context_sheet_actions_delete_confirmation_yes">Удалить</string>
     <string name="message_context_sheet_actions_delete_confirmation_no">Оставить</string>
-    <string name="settings_feedback_description">Присоединяйтесь к серверу Revolt, чтобы оставлять отзывы и предложения и сообщать об ошибках.</string>
+    <string name="settings_feedback_description">Присоединяйтесь к серверу Stoat, чтобы оставлять отзывы и предложения и сообщать об ошибках.</string>
     <string name="friends_new_group">Новая группа</string>
     <string name="create_group_description">Соберите свою команду в групповом чате. Вы можете добавить до %1$d человек.</string>
     <string name="user_info_sheet_user_is_bot">Это бот.</string>
@@ -456,7 +456,7 @@
     <string name="user_info_sheet_owner_not_found">Не удалось получить информацию о владельце</string>
     <string name="link_type_no_intent">Не найдено приложение для работы с этой ссылкой</string>
     <string name="file_picker_chip_camera_none_installed">Не установлено приложение камеры</string>
-    <string name="service_health_alert_body_default">В настоящее время мы испытываем проблемы с нашими сервисами. Пожалуйста, ознакомьтесь с нашей страницей статуса для дополнительной информации.</string>
+    <string name="service_health_alert_body_default">В данный момент мы испытываем проблемы с нашими сервисами. Пожалуйста, проверьте нашу статус-страницу для подробностей.</string>
     <string name="rate_limit_toast">Попридержи коней! Слишком много действий за короткий промежуток времени.</string>
     <string name="hide_password">Скрыть пароль</string>
     <string name="show_password">Показать пароль</string>
@@ -478,7 +478,7 @@
     <string name="programming_language_default">Обычный текст</string>
     <string name="service_health_alert">В настоящее время продолжается</string>
     <string name="service_health_alert_actions_default">Узнать подробнее</string>
-    <string name="service_health_alert_actions_dismiss">Отклонить</string>
+    <string name="service_health_alert_actions_dismiss">Скрыть</string>
     <string name="colour_picker_hue_value_fmt">%1$d°</string>
     <string name="colour_picker_value">Значение</string>
     <string name="colour_picker_alpha">Альфа</string>
@@ -490,7 +490,7 @@
     <string name="overview_screen_error_description">Пожалуйста, попробуйте позже.</string>
     <string name="overview_screen_settings">Открыть настройки</string>
     <string name="overview_screen_settings_description">Меняйте ваш образ, управляйте аккаунтом и многое другое</string>
-    <string name="overview_screen_share_profile">Поделится профилем</string>
+    <string name="overview_screen_share_profile">Поделиться профилем</string>
     <string name="overview_screen_changelog">Что нового?</string>
     <string name="overview_screen_changelog_description">Узнайте, над чем мы работали в последнее время и что появится в скором времени</string>
     <string name="user_info_sheet_webhook_learn_more">Узнать больше</string>
@@ -557,7 +557,6 @@
     <string name="spark_keyboard_shortcuts_dismiss">Хорошо</string>
     <string name="keyboard_shortcut_messaging_new_line">Новая Строка</string>
     <string name="keyboard_shortcut_messaging_send_message">Отправить Сообщение</string>
-    <string name="spark_early_access_description_3">Мы очень рады видеть вас в команде. Давайте вместе создадим нечто великое!</string>
     <string name="spark_early_access_cta">Понятно</string>
     <string name="hint_provide_feedback">Мы любим обратную связь!</string>
     <string name="hint_provide_feedback_description">Если у вас есть обратная связь, предложения или отчеты об ошибках, пожалуйста, дайте нам знать. Мы всегда стремимся улучшить Revolt.</string>
@@ -1197,4 +1196,31 @@
     <string name="media_viewer_fullscreen">В полный экран</string>
     <string name="media_viewer_exit_fullscreen">Выйти из полного экрана</string>
     <string name="media_viewer_seek_back">Отмотать назад</string>
+    <string name="settings_appearance_theme_default">Stoat</string>
+    <string name="settings_appearance_visual_effects">Визуальные эффекты</string>
+    <string name="settings_appearance_message_composer_blur">Применять размытие к эффектам в чате</string>
+    <string name="voice_deafened">Звук отключен</string>
+    <string name="voice_muted">Микрофон отключен</string>
+    <string name="voice_screen_sharing">Демонстрирует экран</string>
+    <string name="voice_message_temp_review_title">Звучит нормально?</string>
+    <plurals name="status_rate_limited_seconds">
+        <item quantity="one">%1$d секунда</item>
+        <item quantity="few">%1$d секунды</item>
+        <item quantity="many">%1$d секунд</item>
+        <item quantity="other">%1$d секунд</item>
+    </plurals>
+    <string name="user_info_sheet_role_update_failed">Не удалось обновить роли этого участника.</string>
+    <string name="media_viewer_playback_error">Не удалось воспроизвести видео</string>
+    <string name="settings_mfa_security_keys">Ключи безопасности</string>
+    <string name="settings_mfa_security_keys_web_manage_description">На вашем аккаунте включены ключи безопасности. Вы можете просматривать, добавлять и удалять ключи безопасности в настройках аккаунта в веб-браузере.</string>
+    <string name="settings_mfa_security_keys_web_manage_cta">Открыть браузер</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_release_notes">Список изменений</string>
+    <string name="settings_chat_hint_poorly_formed_settings_keys_key_server_folders">Папки серверов</string>
+    <string name="invite_open_server">Открыть</string>
+    <string name="media_viewer_seek_forward">Промотать вперёд</string>
+    <string name="settings_notifications">Уведомления</string>
+    <string name="settings_notifications_push">Push-уведомления</string>
+    <string name="settings_notifications_push_description">Получайте уведомления о новых сообщениях, упоминаниях и других событиях, даже когда приложение не используется.</string>
+    <string name="settings_notifications_system">Системные настройки</string>
+    <string name="settings_notifications_system_description">Управляйте разрешениями и настройками уведомлений в системных настройках вашего устройства.</string>
 </resources>
