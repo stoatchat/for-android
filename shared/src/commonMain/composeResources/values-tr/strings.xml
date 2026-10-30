@@ -566,7 +566,6 @@
     <string name="spark_early_access_description_2">Bu erken erişim olduğundan, işler henüz mükemmel olmayabilir. Ara sıra hatalarla karşılaşabilirsiniz. Geri bildiriminiz hataları düzeltmemize ve Stoat'ı daha da iyi hale getirmemize yardımcı olur.</string>
     <string name="spark_early_access_cta">Anladım</string>
     <string name="hint_provide_feedback_description">Herhangi bir geri bildiriminiz, öneriniz veya hata bildiriminiz varsa lütfen bize iletin. Stoat’ı sürekli iyileştirmeye çalışıyoruz.</string>
-    <string name="spark_early_access_description_3">Seni aramızda görmekten mutluluk duyarız. Hadi birlikte güzel bir şey yaratalım!</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_notifications">Bildirmler</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_ordering">Sunucu Sıralaması</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_key_android">Android için Stoar</string>

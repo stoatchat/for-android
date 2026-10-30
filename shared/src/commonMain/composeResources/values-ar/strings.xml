@@ -528,8 +528,7 @@
     <string name="settings_sessions_log_out_other">تسجيل الخروج من الحصص الأخرى</string>
     <string name="user_badge_responsible_disclosure">افشاء مسؤول</string>
     <string name="spark_early_access">مرحبًا بكم في مرحلة الوصول المبكر! 🚀</string>
-    <string name="spark_early_access_description_2">بما أن هذه النسخة في مرحلة "الوصول المبكر"، فقد لا تكون الأمور مثالية تماماً بعد؛ إذ قد تواجه بعض الأخطاء التقنية العرضية، أو حالات توقف مفاجئ للبرنامج، أو سلوكيات غير معتادة. وتساعدنا ملاحظاتك وآراؤك في معالجة هذه الجوانب وتحسين Stoat وجعله أفضل.</string>
-    <string name="spark_early_access_description_3">يسعدنا جداً انضمامك إلينا. دعنا نصنع شيئاً رائعاً معاً!</string>
+    <string name="spark_early_access_description_2">بما أن هذه النسخة في مرحلة الوصول المبكر، فقد لا تكون الأمور مثالية تماماً بعد؛ إذ قد تواجه بعض الأخطاء التقنية العرضية، أو حالات توقف مفاجئ للبرنامج، أو سلوكيات غير معتادة. وتساعدنا ملاحظاتك وآراؤك في معالجة هذه الجوانب وتحسين Stoat وجعله أفضل.</string>
     <string name="hint_provide_feedback">نُحب تلقّي آرائكم وملاحظاتكم!</string>
     <string name="hint_provide_feedback_description">إذا كانت لديك أي ملاحظات أو اقتراحات أو بلاغات عن أخطاء برمجية، فيرجى إعلامنا بذلك؛ فنحن نسعى دائمًا لتحسين Stoat.</string>
     <string name="hint_provide_feedback_join_server">انضم إلى خادم المختبرين</string>

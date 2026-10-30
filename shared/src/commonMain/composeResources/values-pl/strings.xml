@@ -571,7 +571,6 @@
     <string name="spark_early_access">Witamy we wczesnej dostępie! 🚀</string>
     <string name="spark_early_access_description_1">Jesteś jednym z pierwszych, którzy wypróbowali naszą nową aplikację na Androida. Cieszymy się, że tu jesteś!</string>
     <string name="spark_early_access_description_2">Ponieważ jest to wczesny dostęp, wszystko może nie być jeszcze idealne. Możesz natknąć się na sporadyczne błędy, awarie lub dziwne dziwactwa. Twoja opinia pomoże nam wygładzić nierówne krawędzie i uczynić Revolt jeszcze lepszym.</string>
-    <string name="spark_early_access_description_3">Cieszymy się, że mamy cię na pokładzie. Stwórzmy razem coś wspaniałego!</string>
     <string name="settings_chat_hint_poorly_formed_settings_keys_description">Niektóre ustawienia Revolt są uszkodzone. Może to być spowodowane korzystaniem z klientów innych firm. Dotyczy to następujących ustawień:</string>
     <string name="hint_provide_feedback_description">Jeśli masz jakieś uwagi, sugestie lub raporty o błędach, daj nam znać. Zawsze staramy się ulepszać Revolt.</string>
     <string name="main_tab_communities">Społeczności</string>

@@ -82,8 +82,8 @@
     <string name="x_days_ago">%1$d hari yang lalu</string>
     <string name="edited">(diedit)</string>
     <string name="disconnected">Terputus</string>
-    <string name="tap_to_reconnect">Ketuk untuk menghubungkan kembali</string>
-    <string name="reconnecting">Menghubungkan kembali…</string>
+    <string name="tap_to_reconnect">Ketuk untuk menghubungkan ulang</string>
+    <string name="reconnecting">Menghubungkan ulang…</string>
     <string name="reconnected">Terhubung</string>
     <string name="tap_to_retry">Ketuk untuk mencoba lagi</string>
     <string name="settings">Pengaturan</string>
@@ -697,7 +697,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Atur ulang pengaturan %1$s</string>
     <string name="channel_settings_overview_info">Info Saluran</string>
     <string name="channel_settings_overview_name">Nama Saluran</string>
-    <string name="spark_early_access_description_3">Kami sangat senang Anda bergabung. Mari ciptakan sesuatu yang hebat bersama-sama!</string>
     <string name="spark_swipe_to_reply_description">Membuat utas pesan tidak pernah semudah ini.\nCukup geser ke kiri pada pesan apapun.\nBalas hingga lima pesan sekaligus.</string>
     <string name="hint_provide_feedback_join_server">Bergabunglah dengan Server Penguji</string>
     <string name="settings_category_miscellaneous">Lain-lain</string>

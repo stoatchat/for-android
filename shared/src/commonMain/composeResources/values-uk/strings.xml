@@ -554,7 +554,6 @@
     <string name="spark_notifications_rationale_dismiss">Не зараз</string>
     <string name="spark_keyboard_shortcuts_cta">Відкрити ярлики</string>
     <string name="spark_keyboard_shortcuts_dismiss">Добре</string>
-    <string name="spark_early_access_description_3">Ми дуже раді, що ви на борту. Давайте зробимо щось чудове разом!</string>
     <string name="spark_early_access_cta">Зрозумів</string>
     <string name="hint_provide_feedback">Ми любимо відгуки!</string>
     <string name="hint_provide_feedback_description">Якщо у вас є відгук, пропозиції чи звіти про помилки, повідомте нас. Ми завжди прагнемо покращити Revolt.</string>

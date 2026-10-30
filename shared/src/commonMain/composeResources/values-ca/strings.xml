@@ -258,7 +258,6 @@
     <string name="settings_appearance_avatar_shape_description">Selecciona el grau d'arrodoniment de les fotos de perfil, incloses les del xat i els perfils. Això s'aplica a tots els usuaris.</string>
     <string name="spark_early_access">Benvinguts a l'accés anticipat! 🚀</string>
     <string name="spark_early_access_description_1">Ets un dels primers a provar la nostra nova aplicació per a Android. Estem molt contents de tenir-te aquí!</string>
-    <string name="spark_early_access_description_3">Estem molt contents de tenir-te amb nosaltres. Fem pinya i creem quelcom genial!</string>
     <string name="spark_early_access_cta">Entesos</string>
     <string name="hint_provide_feedback">Ens encanta rebre comentaris!</string>
     <string name="hint_provide_feedback_description">Si tens cap comentari, suggeriment o vols informar d'algun error, fes-nos-ho saber. Sempre estem buscant maneres de millorar Revolt.</string>
