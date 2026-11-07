@@ -526,7 +526,6 @@
     <string name="colour_picker_apply">Aplicar</string>
     <string name="spark_early_access">Bem-vindo ao Acesso Antecipado! 🚀</string>
     <string name="spark_early_access_description_1">Você é um dos primeiros a experimentar nosso novo aplicativo para Android. Estamos felizes em ter você aqui!</string>
-    <string name="spark_early_access_description_3">Estamos entusiasmados por ter você a bordo. Vamos fazer algo incrível juntos!</string>
     <string name="spark_early_access_cta">Entendi</string>
     <string name="hint_provide_feedback">Adoramos feedback!</string>
     <string name="hint_provide_feedback_cta">Avalie no Google Play</string>
@@ -672,4 +671,68 @@
     <string name="about_section_debug_information">Informações de depuração</string>
     <string name="about_section_debug_information_description">Se você estiver enfrentando problemas com o aplicativo, pode ser útil incluir essas informações ao entrar em contato com o suporte ou ao enviar um relatório de bug.</string>
     <string name="message_jump_failed">Não foi possível carregar essa mensagem</string>
+    <string name="voice_message_start_recording">Grave uma mensagem de voz</string>
+    <string name="voice_message_slide_to_cancel">Deslize para cancelar</string>
+    <string name="voice_message_release_to_cancel">Liberar para fechar</string>
+    <string name="voice_message_finishing">Acabamento…</string>
+    <string name="voice_message_temp_review_title">Tá bom pra você?</string>
+    <string name="voice_message_temp_review_description">%1$s de áudio gravado; enviar?</string>
+    <string name="voice_message_discard">Não envie</string>
+    <string name="voice_message_silent">Nenhum áudio foi captado. Verifique seu microfone e tente novamente.</string>
+    <string name="voice_message_recording_failed">Não foi possível gravar a mensagem de voz.</string>
+    <string name="voice_message_microphone_permission_denied">É necessária permissão de acesso ao microfone para gravar uma mensagem de voz.</string>
+    <string name="message_not_supported_with_context">A mensagem não pode ser exibida (%1$s).</string>
+    <string name="system_message_message_pinned_alt">Mensagem fixada</string>
+    <string name="system_message_message_unpinned_alt">Mensagem desfixada</string>
+    <string name="system_message_call_started_alt">Chamada iniciada</string>
+    <string name="system_message_message_pinned">%1$s fixou uma mensagem neste canal</string>
+    <string name="system_message_message_unpinned">%1$s removeu uma mensagem fixada deste canal</string>
+    <string name="system_message_call_started">%1$s iniciou uma chamada</string>
+    <string name="system_message_call_started_with_finished_at">%1$s iniciou uma chamada que durou %2$s</string>
+    <string name="system_message_call_duration_few_seconds">a poucos segundos</string>
+    <plurals name="system_message_call_duration_minutes">
+        <item quantity="one">%1$d minuto</item>
+        <item quantity="many">%1$d minutos</item>
+        <item quantity="other">%1$d minutos</item>
+    </plurals>
+    <plurals name="system_message_call_duration_hours">
+        <item quantity="one">%1$d hora</item>
+        <item quantity="many">%1$d horas</item>
+        <item quantity="other">%1$d horas</item>
+    </plurals>
+    <plurals name="system_message_call_duration_days">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="many">%1$d dias</item>
+        <item quantity="other">%1$d dias</item>
+    </plurals>
+    <plurals name="system_message_call_duration_months">
+        <item quantity="one">%1$d mês</item>
+        <item quantity="many">%1$d meses</item>
+        <item quantity="other">%1$d meses</item>
+    </plurals>
+    <plurals name="system_message_call_duration_years">
+        <item quantity="one">%1$d ano</item>
+        <item quantity="many">%1$d anos</item>
+        <item quantity="other">%1$d anos</item>
+    </plurals>
+    <string name="status_rate_limited_title">Não tão rápido</string>
+    <string name="status_rate_limited_description">Você alterou seu status algumas vezes em um curto período. Aguarde um pouco: você poderá defini-lo novamente em cerca de %1$s.</string>
+    <string name="status_rate_limited_description_unknown">Você alterou seu status algumas vezes em um curto período. Aguarde um pouco e tente novamente.</string>
+    <plurals name="status_rate_limited_seconds">
+        <item quantity="one">%1$d segundo</item>
+        <item quantity="many">%1$d segundos</item>
+        <item quantity="other">%1$d segundos</item>
+    </plurals>
+    <string name="pinned_messages">Mensagens fixadas</string>
+    <string name="pinned_messages_view">Ver mensagens fixadas</string>
+    <string name="pinned_messages_empty">Ainda não há mensagens fixadas; talvez você deva fixar uma?</string>
+    <string name="channel_search">Pesquisar mensagens</string>
+    <string name="channel_search_hint">Pesquisar mensagens</string>
+    <string name="channel_search_prompt">Digite para pesquisar mensagens neste canal.</string>
+    <string name="channel_search_empty">Nenhuma mensagem encontrada para “%1$s”.</string>
+    <string name="channel_search_clear">Limpar pesquisa</string>
+    <string name="channel_search_sort_relevance">Relevância</string>
+    <string name="channel_search_sort_latest">Mais recente</string>
+    <string name="channel_search_sort_oldest">Mais antigo</string>
+    <string name="user_info_sheet_role_update_failed">Não foi possível atualizar as funções deste membro.</string>
 </resources>
