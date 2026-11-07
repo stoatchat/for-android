@@ -560,7 +560,6 @@
     <string name="spark_early_access">欢迎参与抢先体验！🚀</string>
     <string name="spark_early_access_description_1">您是第一批试用我们全新 Android 应用程序的用户。很高兴有您的参与！</string>
     <string name="spark_early_access_description_2">因为是抢先体验，所以一些功能还不完善。您可能会偶尔遇到错误、崩溃或奇怪的行为。您的反馈能帮助我们打磨 Revolt，让它变得更好。</string>
-    <string name="spark_early_access_description_3">我们很荣幸有您的加入。我们可以一起取得成就！</string>
     <string name="spark_early_access_cta">了解</string>
     <string name="hint_provide_feedback">我们热爱反馈！</string>
     <string name="hint_provide_feedback_description">如果您有任何反馈、建议或错误报告，请告诉我们。我们始终致力于改进 Revolt。</string>

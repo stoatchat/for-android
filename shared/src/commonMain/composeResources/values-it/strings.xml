@@ -474,7 +474,7 @@
     <string name="overview_screen_settings_description">Cambia il tuo look, modifica il tuo account ed altro</string>
     <string name="overview_screen_share_profile">Condividi Profilo</string>
     <string name="overview_screen_share_profile_description">Dai un'occhiata al tuo profilo e ricevi un link speciale per condividerlo</string>
-    <string name="overview_screen_changelog">Registro modifiche</string>
+    <string name="overview_screen_changelog">Registro modifiche?</string>
     <string name="overview_screen_changelog_description">Guarda le ultime novità e i prossimi aggiornamenti</string>
     <string name="message_field_editing_message_cancel_alt">Annulla modifiche</string>
     <string name="user_info_sheet_webhook_body">I Webhook sono servizi di broadcast automatici provenienti da altri servizi su internet. Non possono risponderti, ma puoi vedere che hanno da dirti.</string>
@@ -550,7 +550,7 @@
     <string name="could_not_log_in_cta_logout">Esci</string>
     <string name="programming_language_snippet">[Frammento %1$s]</string>
     <string name="spark_keyboard_shortcuts_description">Stoat ha le scorciatoie da tastiera! Premi %1$s per vederli.</string>
-    <string name="spark_early_access_description_2">Dato che questo è un accesso anticipato, alcune cose potrebbero non ancora funzionare. Potresti incontrare dei bug o crash occasionali. Il tuo feedback ci potrebbe aiutare a smussare gli spigoli più appuntiti per rendere Stoat un posto migliore.</string>
+    <string name="spark_early_access_description_2">Se qualcosa non funziona o ti sembra strano, segnalacelo tramite il feedback nelle impostazioni.</string>
     <string name="hint_provide_feedback_description">Se vuoi darci qualche feedback, suggerimento o vuoi segnalare dei bug, per favore, faccelo sapere. Cercheremo sempre di migliorare Stoat.</string>
     <string name="main_tab_communities">Community</string>
     <string name="main_tab_conversations">Conversazioni</string>
@@ -560,8 +560,7 @@
     <string name="spark_keyboard_shortcuts_cta">Apri scorciatoie</string>
     <string name="spark_keyboard_shortcuts_dismiss">D'accordo</string>
     <string name="spark_early_access">Benvenuto/a nell'Accesso Anticipato! 🚀</string>
-    <string name="spark_early_access_description_1">Sei tra i primi a provare la nostra nuova app Android. Siamo felici di vederti qui!</string>
-    <string name="spark_early_access_description_3">Siamo entusiasti di averti a bordo. Facciamo qualcosa di bello assieme!</string>
+    <string name="spark_early_access_description_1">La nostra app mobile è ancora in fase di sviluppo, quindi potresti riscontrare bug, funzionalità mancanti o alcuni aspetti non ancora perfezionati.</string>
     <string name="spark_early_access_cta">Capito</string>
     <string name="hint_provide_feedback">Amiamo i feedback!</string>
     <string name="hint_provide_feedback_cta">Valuta su Google Play</string>
@@ -868,7 +867,7 @@
     <string name="server_identity_avatar_inherited_member">Utilizza l'avatar del loro profilo</string>
     <string name="server_identity_avatar_custom">Il tuo avatar personalizzato per questo server</string>
     <string name="server_identity_avatar_custom_member">Il loro avatar personalizzato per questo server</string>
-    <string name="server_identity_nickname">Nickname</string>
+    <string name="server_identity_nickname">Soprannome</string>
     <string name="server_identity_nickname_placeholder">Usa il tuo nome visualizzato</string>
     <string name="server_settings_delete_cancel">Annulla</string>
     <string name="server_settings_delete_error">Si è verificato un errore durante l'eliminazione del server.</string>
@@ -947,4 +946,31 @@
     <string name="server_settings_channels_reorder_error">C'è stato un errore durante il salvataggio dell'ordine dei canali.</string>
     <string name="server_settings_channels_empty_title">Nessun canale</string>
     <string name="server_context_sheet_actions_add_to_folder">Aggiungi alla cartella</string>
+    <string name="server_settings_channels_empty_description">I canali creati per questo server appariranno qui.</string>
+    <plurals name="server_settings_channels_count">
+        <item quantity="one">%1$d canale del server</item>
+        <item quantity="many">%1$d canali dei server</item>
+        <item quantity="other">%1$d canali dei server</item>
+    </plurals>
+    <plurals name="server_settings_channels_category_count">
+        <item quantity="one">%1$d canale</item>
+        <item quantity="many">%1$d canali</item>
+        <item quantity="other">%1$d canali</item>
+    </plurals>
+    <string name="server_settings_overview_server_name">Nome del server</string>
+    <string name="server_settings_overview_server_description">Descrizione del server</string>
+    <string name="server_settings_overview_description_hint">Questo server è dedicato a…</string>
+    <string name="server_settings_overview_system_messages">Canali di messaggi di sistema</string>
+    <string name="server_settings_overview_disabled">Disabile</string>
+    <string name="server_settings_overview_save">Salva</string>
+    <string name="server_settings_overview_saved">Impostazioni del server salvate.</string>
+    <string name="server_settings_overview_discard_title">Elimina le modifiche non salvate?</string>
+    <string name="server_settings_overview_discard_description">Le modifiche apportate a questo server andranno perse.</string>
+    <string name="server_settings_overview_keep_editing">Continua a modificare</string>
+    <string name="server_settings_overview_update_error">Si è verificato un errore durante l'aggiornamento del server.</string>
+    <string name="server_settings_overview_file_error">Non è stato possibile leggere l'immagine selezionata.</string>
+    <string name="server_settings_overview_server_icon">Icona del server</string>
+    <string name="server_settings_overview_server_banner">Intestazione del server</string>
+    <string name="server_settings_overview_user_joined">L'utente si è unito</string>
+    <string name="server_settings_overview_user_left">L'utente è uscito</string>
 </resources>

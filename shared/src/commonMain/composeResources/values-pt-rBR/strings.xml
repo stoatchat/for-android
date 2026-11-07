@@ -557,10 +557,9 @@
     <string name="keyboard_shortcut_messaging">Mensagens</string>
     <string name="keyboard_shortcut_messaging_new_line">Nova Linha</string>
     <string name="keyboard_shortcut_messaging_send_message">Enviar Mensagem</string>
-    <string name="spark_early_access">Bem-vindo(a) ao Acesso Antecipado! 🚀</string>
-    <string name="spark_early_access_description_1">Você é um dos primeiros a testar nosso novo app Android. Estamos entusiasmados em ter você aqui!</string>
+    <string name="spark_early_access">Você está usando uma versão inicial</string>
+    <string name="spark_early_access_description_1">Nosso aplicativo móvel ainda está em desenvolvimento, então talvez você encontre bugs, recursos ausentes ou algumas imperfeições.</string>
     <string name="spark_early_access_description_2">Como este é um acesso antecipado, as coisas podem não estar perfeitas ainda. Você pode se deparar com algum bug, crash ou comportamento estranho ocasionalmente. Seu feedback nos ajuda a ajustar os detalhes e tornar o Stoat ainda melhor.</string>
-    <string name="spark_early_access_description_3">Estamos emocionados por ter você a bordo. Vamos fazer algo grande juntos!</string>
     <string name="spark_early_access_cta">Entendido</string>
     <string name="hint_provide_feedback">Amamos feedback!</string>
     <string name="hint_provide_feedback_cta">Avaliar na Google Play</string>

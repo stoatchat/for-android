@@ -82,8 +82,8 @@
     <string name="x_days_ago">%1$d hari yang lalu</string>
     <string name="edited">(diedit)</string>
     <string name="disconnected">Terputus</string>
-    <string name="tap_to_reconnect">Ketuk untuk menghubungkan kembali</string>
-    <string name="reconnecting">Menghubungkan kembali…</string>
+    <string name="tap_to_reconnect">Ketuk untuk menghubungkan ulang</string>
+    <string name="reconnecting">Menghubungkan ulang…</string>
     <string name="reconnected">Terhubung</string>
     <string name="tap_to_retry">Ketuk untuk mencoba lagi</string>
     <string name="settings">Pengaturan</string>
@@ -679,8 +679,8 @@
     <string name="spark_keyboard_shortcuts_description">Stoat memiliki pintasan keyboard! Tekan %1$s untuk melihatnya.</string>
     <string name="spark_keyboard_shortcuts_cta">Buka pintasan</string>
     <string name="spark_keyboard_shortcuts_dismiss">Baiklah</string>
-    <string name="spark_early_access">Selamat datang di Akses Awal! 🚀</string>
-    <string name="spark_early_access_description_1">Anda salah satu orang pertama yang mencoba aplikasi Android baru kami. Kami senang Anda ada di sini!</string>
+    <string name="spark_early_access">Anda menggunakan versi awal</string>
+    <string name="spark_early_access_description_1">Aplikasi seluler kami masih dalam tahap pengembangan, jadi Anda mungkin menemukan bug, fitur yang belum tersedia, atau bagian-bagian yang belum sempurna.</string>
     <string name="spark_swipe_to_reply">Geser untuk membalas sudah hadir.</string>
     <string name="hint_provide_feedback">Kami senang menerima masukan!</string>
     <string name="hint_provide_feedback_cta">Beri nilai di Google Play</string>
@@ -697,7 +697,6 @@
     <string name="settings_chat_hint_poorly_formed_settings_keys_reset">Atur ulang pengaturan %1$s</string>
     <string name="channel_settings_overview_info">Info Saluran</string>
     <string name="channel_settings_overview_name">Nama Saluran</string>
-    <string name="spark_early_access_description_3">Kami sangat senang Anda bergabung. Mari ciptakan sesuatu yang hebat bersama-sama!</string>
     <string name="spark_swipe_to_reply_description">Membuat utas pesan tidak pernah semudah ini.\nCukup geser ke kiri pada pesan apapun.\nBalas hingga lima pesan sekaligus.</string>
     <string name="hint_provide_feedback_join_server">Bergabunglah dengan Server Penguji</string>
     <string name="settings_category_miscellaneous">Lain-lain</string>
@@ -717,8 +716,8 @@
     <string name="spark_notifications_rationale_cta">Hidupkan notifikasi</string>
     <string name="spark_notifications_rationale_description">Hidupkan notifikasi agar selalu diperbarui dengan pesan dan sebutan.</string>
     <string name="settings_account_email">Email</string>
-    <string name="spark_early_access_description_2">Karena ini adalah akses awal, mungkin masih ada hal yang belum sempurna sama sekali. Anda mungkin sesekali menemui bug, crash, atau masalah aneh. Masukan Anda membantu kami memperbaiki kekurangan tersebut dan membuat Stoat menjadi lebih baik.</string>
-    <string name="spark_early_access_cta">Paham</string>
+    <string name="spark_early_access_description_2">Jika ada yang rusak atau terasa tidak beres, beritahu kami melalui Masukan di Pengaturan.</string>
+    <string name="spark_early_access_cta">Kedengarannya bagus</string>
     <string name="spark_swipe_to_reply_cta">Paham</string>
     <string name="settings_account_email_confirm_email_dismiss">Paham</string>
     <string name="settings_account_password">Kata sandi</string>
