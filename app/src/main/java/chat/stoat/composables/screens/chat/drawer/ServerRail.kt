@@ -48,9 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.settings.ServerSidebarEntry
-import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.bottomEndCircleCutout
+import chat.stoat.core.designsystem.components.IconPlaceholder
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES

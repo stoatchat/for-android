@@ -11,7 +11,11 @@ plugins {
 kotlin {
     android {
         namespace = "chat.stoat.core.api"
-        compileSdk = libs.versions.compileSdk.get().toInt()
+        compileSdk {
+            version = release(libs.versions.compileSdk.get().toInt()) {
+                minorApiLevel = libs.versions.compileSdkMinor.get().toInt()
+            }
+        }
         minSdk = libs.versions.minSdk.get().toInt()
 
         withHostTest {}

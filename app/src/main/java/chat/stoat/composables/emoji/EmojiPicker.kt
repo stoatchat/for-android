@@ -61,8 +61,8 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.IconPlaceholder
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES

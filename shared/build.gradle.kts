@@ -11,7 +11,11 @@ plugins {
 kotlin {
     android {
         namespace = "chat.stoat.shared"
-        compileSdk = libs.versions.compileSdk.get().toInt()
+        compileSdk {
+            version = release(libs.versions.compileSdk.get().toInt()) {
+                minorApiLevel = libs.versions.compileSdkMinor.get().toInt()
+            }
+        }
         minSdk = libs.versions.minSdk.get().toInt()
 
         withHostTest {}
@@ -36,6 +40,8 @@ kotlin {
             implementation(libs.compose.multiplatform.ui)
             implementation(libs.compose.multiplatform.material3)
             implementation(libs.compose.multiplatform.resources)
+            implementation(libs.compose.multiplatform.ui.tooling.preview)
+            implementation(libs.shimmer)
         }
     }
 }

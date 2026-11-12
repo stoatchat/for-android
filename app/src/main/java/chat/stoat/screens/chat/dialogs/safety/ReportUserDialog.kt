@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.safety.putUserReport
 import chat.stoat.api.routes.user.blockUser
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.UserReportReason
-import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.ok

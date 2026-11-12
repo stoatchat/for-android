@@ -90,7 +90,7 @@ import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
-import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.core.designsystem.icons.StoatIcon
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter

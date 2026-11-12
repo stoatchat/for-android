@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import chat.stoat.api.routes.onboard.OnboardingCompletionBody
 import chat.stoat.api.routes.onboard.completeOnboarding
-import chat.stoat.composables.generic.FormTextField
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.next

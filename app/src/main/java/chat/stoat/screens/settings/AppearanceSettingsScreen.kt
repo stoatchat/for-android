@@ -67,9 +67,9 @@ import chat.stoat.api.StoatCbor
 import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
-import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.screens.settings.appearance.ColourChip
 import chat.stoat.composables.screens.settings.appearance.CornerRadiusPicker
+import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.GoogleSansFlex

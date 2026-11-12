@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatHttp
 import chat.stoat.composables.LocalSnackbarHostState
-import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag

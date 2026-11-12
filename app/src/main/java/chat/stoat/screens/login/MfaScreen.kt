@@ -37,8 +37,8 @@ import chat.stoat.api.routes.account.MfaResponseRecoveryCode
 import chat.stoat.api.routes.account.MfaResponseTotpCode
 import chat.stoat.api.routes.account.authenticateWithMfaRecoveryCode
 import chat.stoat.api.routes.account.authenticateWithMfaTotpCode
-import chat.stoat.composables.generic.CollapsibleCard
-import chat.stoat.composables.generic.FormTextField
+import chat.stoat.core.designsystem.components.CollapsibleCard
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.persistence.KVStorage

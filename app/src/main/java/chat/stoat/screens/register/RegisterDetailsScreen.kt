@@ -39,7 +39,7 @@ import androidx.navigation.NavController
 import chat.stoat.api.routes.account.RegistrationBody
 import chat.stoat.api.routes.account.register
 import chat.stoat.api.routes.misc.getRootRoute
-import chat.stoat.composables.generic.FormTextField
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.register_data

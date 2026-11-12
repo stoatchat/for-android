@@ -51,8 +51,8 @@ import chat.stoat.api.routes.invites.joinInviteByCode
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.IconPlaceholder
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTheme

@@ -37,8 +37,8 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.MessageReplyStyle
 import chat.stoat.api.settings.SpecialEmbedSettings
 import chat.stoat.api.settings.SyncedSettings
-import chat.stoat.composables.generic.ListHeader
-import chat.stoat.composables.generic.RadioItem
+import chat.stoat.core.designsystem.components.ListHeader
+import chat.stoat.core.designsystem.components.RadioItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res

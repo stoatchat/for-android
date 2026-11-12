@@ -42,11 +42,11 @@ import chat.stoat.api.routes.channel.fetchGroupParticipants
 import chat.stoat.api.routes.server.fetchMembers
 import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.chat.MemberListItem
-import chat.stoat.composables.generic.CountableListHeader
 import chat.stoat.composables.generic.Presence
 import chat.stoat.composables.generic.RemoteImage
-import chat.stoat.composables.generic.SheetHeaderPadding
 import chat.stoat.composables.generic.presenceFromStatus
+import chat.stoat.core.designsystem.components.CountableListHeader
+import chat.stoat.core.designsystem.components.SheetHeaderPadding
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Member

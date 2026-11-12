@@ -1,4 +1,4 @@
-package chat.stoat.composables.generic
+package chat.stoat.core.designsystem.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import chat.stoat.internals.extensions.TransparentListItemColours
 
 @Composable
 fun SheetButton(

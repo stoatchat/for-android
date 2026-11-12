@@ -31,7 +31,7 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcon
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter

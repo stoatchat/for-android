@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import chat.stoat.composables.generic.ListHeader
-import chat.stoat.composables.generic.RadioItem
+import chat.stoat.core.designsystem.components.ListHeader
+import chat.stoat.core.designsystem.components.RadioItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res

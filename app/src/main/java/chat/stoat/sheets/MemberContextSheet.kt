@@ -16,7 +16,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.removeMember
-import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform

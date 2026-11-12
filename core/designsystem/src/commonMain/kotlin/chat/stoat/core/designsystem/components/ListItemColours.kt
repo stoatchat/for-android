@@ -1,4 +1,4 @@
-package chat.stoat.internals.extensions
+package chat.stoat.core.designsystem.components
 
 import androidx.compose.material3.ListItemColors
 import androidx.compose.material3.ListItemDefaults

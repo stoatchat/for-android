@@ -31,8 +31,8 @@ import chat.stoat.api.internals.Roles
 import chat.stoat.api.internals.has
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.ChannelSheetHeader
+import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType

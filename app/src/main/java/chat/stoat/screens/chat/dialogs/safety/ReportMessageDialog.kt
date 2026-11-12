@@ -40,11 +40,11 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.safety.putMessageReport
 import chat.stoat.api.routes.user.blockUser
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ContentReportReason
 import chat.stoat.composables.chat.Message
-import chat.stoat.composables.generic.FormTextField
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.report_block_no

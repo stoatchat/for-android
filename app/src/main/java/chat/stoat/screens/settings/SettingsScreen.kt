@@ -38,7 +38,7 @@ import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.persistence.KVStorage

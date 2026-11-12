@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
-import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.corner_radius_picker_choose_radius
 import chat.stoat.shared.resources.corner_radius_picker_choose_radius_cancel

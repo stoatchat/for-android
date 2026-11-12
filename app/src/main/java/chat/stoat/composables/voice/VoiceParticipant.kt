@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.chat.displayNameInChannel
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.designsystem.components.TransparentListItemColours
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.util.UserVoiceState
-import chat.stoat.internals.extensions.TransparentListItemColours
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.voice_camera_on
 import chat.stoat.shared.resources.voice_deafened

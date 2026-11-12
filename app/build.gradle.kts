@@ -55,7 +55,11 @@ fun buildproperty(propertyName: String, fallbackEnv: String? = null): String? {
 }
 
 android {
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt()) {
+            minorApiLevel = libs.versions.compileSdkMinor.get().toInt()
+        }
+    }
     namespace = "chat.stoat"
 
     defaultConfig {

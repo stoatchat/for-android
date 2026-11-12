@@ -17,8 +17,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import chat.stoat.api.settings.ServerFolders
-import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.drawer.parseFolderColour
+import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res

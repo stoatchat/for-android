@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.user.patchSelf
-import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.generic.asApiName
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.composables.settings.profile.StatusPicker
+import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User

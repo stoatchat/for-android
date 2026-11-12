@@ -80,7 +80,9 @@ import chat.stoat.core.designsystem.resources.ic_ios_share_24dp
 import chat.stoat.core.designsystem.resources.ic_keep_24dp
 import chat.stoat.core.designsystem.resources.ic_keep_off_24dp
 import chat.stoat.core.designsystem.resources.ic_key_24dp
+import chat.stoat.core.designsystem.resources.ic_keyboard_arrow_down_24dp
 import chat.stoat.core.designsystem.resources.ic_keyboard_arrow_right_24dp
+import chat.stoat.core.designsystem.resources.ic_keyboard_arrow_up_24dp
 import chat.stoat.core.designsystem.resources.ic_lab_research_24dp
 import chat.stoat.core.designsystem.resources.ic_landscape_2_edit_24dp
 import chat.stoat.core.designsystem.resources.ic_language_24dp
@@ -192,6 +194,7 @@ object StoatIcons {
     val ChatSettings = StoatIcon(Res.drawable.ic_chat_24dp)
     val ClearSearch = StoatIcon(Res.drawable.ic_close_24dp)
     val CloseSkinToneMenu = StoatIcon(Res.drawable.ic_keyboard_arrow_right_24dp)
+    val Collapse = StoatIcon(Res.drawable.ic_keyboard_arrow_up_24dp)
     val Confirm = StoatIcon(Res.drawable.ic_check_24dp)
     val ConfirmEdit = StoatIcon(Res.drawable.ic_edit_24dp)
     val Copy = StoatIcon(Res.drawable.ic_content_copy_24dp)
@@ -223,6 +226,7 @@ object StoatIcons {
     val EnterFullscreen = StoatIcon(Res.drawable.ic_fullscreen_24dp)
     val Error = StoatIcon(Res.drawable.ic_error_24dp)
     val ExitFullscreen = StoatIcon(Res.drawable.ic_fullscreen_exit_24dp)
+    val Expand = StoatIcon(Res.drawable.ic_keyboard_arrow_down_24dp)
     val ExpandToolbar = StoatIcon(Res.drawable.ic_chevron_forward_24dp)
     val Experiments = StoatIcon(Res.drawable.ic_lab_research_24dp)
     val ExportTheme = StoatIcon(Res.drawable.ic_file_export_24dp)

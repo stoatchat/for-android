@@ -53,7 +53,7 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.patchChannel
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.composables.generic.InlineMediaPicker
-import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES

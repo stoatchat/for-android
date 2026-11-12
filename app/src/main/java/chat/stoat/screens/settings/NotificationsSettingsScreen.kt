@@ -28,7 +28,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.routes.push.unsubscribePush
-import chat.stoat.composables.generic.CenteredListItem
+import chat.stoat.core.designsystem.components.CenteredListItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.dialogs.NotificationRationaleDialog

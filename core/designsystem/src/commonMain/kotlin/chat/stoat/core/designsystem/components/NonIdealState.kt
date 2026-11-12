@@ -1,4 +1,4 @@
-package chat.stoat.composables.generic
+package chat.stoat.core.designsystem.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -87,7 +84,7 @@ fun NonIdealStatePreview() {
     NonIdealState(
         icon = {
             Icon(
-                imageVector = Icons.Default.Star,
+                painter = StoatIcons.TabOverview.painter(),
                 contentDescription = null,
                 modifier = Modifier.size(it)
             )
@@ -124,7 +121,7 @@ fun NonIdealStatePreviewNoDescription() {
     NonIdealState(
         icon = {
             Icon(
-                imageVector = Icons.Default.Warning,
+                painter = StoatIcons.Error.painter(),
                 contentDescription = null,
                 modifier = Modifier.size(it)
             )

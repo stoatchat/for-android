@@ -1,4 +1,4 @@
-package chat.stoat.composables.generic
+package chat.stoat.core.designsystem.components
 
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemColors

@@ -93,11 +93,11 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.MemberListItem
-import chat.stoat.composables.generic.CountableListHeader
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.vectorassets.HL_TAG
 import chat.stoat.composables.vectorassets.HL_USERNAME
 import chat.stoat.composables.vectorassets.Nametag
+import chat.stoat.core.designsystem.components.CountableListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.AutumnResource

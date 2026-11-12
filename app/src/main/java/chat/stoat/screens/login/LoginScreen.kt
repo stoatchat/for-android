@@ -47,8 +47,8 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
 import chat.stoat.api.routes.onboard.needsOnboarding
-import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.generic.Weblink
+import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono

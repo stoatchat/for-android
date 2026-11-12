@@ -48,10 +48,10 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.auth.fetchAllSessions
 import chat.stoat.api.routes.auth.logoutAllSessions
 import chat.stoat.api.routes.auth.logoutSessionById
+import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
-import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.composables.settings.sessions.SessionItem
 import chat.stoat.shared.resources.Res

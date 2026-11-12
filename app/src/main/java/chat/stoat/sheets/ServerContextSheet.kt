@@ -36,9 +36,9 @@ import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.api.settings.ServerFolders
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.ServerOverview
+import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform

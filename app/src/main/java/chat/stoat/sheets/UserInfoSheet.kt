@@ -56,12 +56,12 @@ import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.composables.chat.RoleListEntry
 import chat.stoat.composables.chat.UserBadgeList
 import chat.stoat.composables.chat.UserBadgeRow
-import chat.stoat.composables.generic.NonIdealState
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.RawUserOverview
 import chat.stoat.composables.screens.settings.UserButtons
 import chat.stoat.composables.sheets.SheetTile
+import chat.stoat.core.designsystem.components.NonIdealState
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Profile
