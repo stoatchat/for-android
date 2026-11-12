@@ -26,13 +26,12 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_pause_24dp__fill
-import chat.stoat.shared.resources.ic_play_arrow_24dp__fill
 import chat.stoat.shared.resources.media_viewer_pause
 import chat.stoat.shared.resources.media_viewer_play
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -66,13 +65,11 @@ fun VoiceMessagePlayer(
                     LoadingIndicator()
                 } else {
                     Icon(
-                        painter = painterResource(
-                            if (playback.isPlaying.value) {
-                                Res.drawable.ic_pause_24dp__fill
-                            } else {
-                                Res.drawable.ic_play_arrow_24dp__fill
-                            }
-                        ),
+                        painter = if (playback.isPlaying.value) {
+                            StoatIcons.Pause.painter()
+                        } else {
+                            StoatIcons.Play.painter()
+                        },
                         contentDescription = stringResource(
                             if (playback.isPlaying.value) {
                                 Res.string.media_viewer_pause

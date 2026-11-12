@@ -44,6 +44,8 @@ import chat.stoat.api.routes.channel.createGroupDM
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.MemberListItem
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.create_group
@@ -51,11 +53,7 @@ import chat.stoat.shared.resources.create_group_action
 import chat.stoat.shared.resources.create_group_description
 import chat.stoat.shared.resources.create_group_name
 import chat.stoat.shared.resources.create_group_search
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_search_24dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class CreateGroupScreenViewModel : ViewModel() {
@@ -130,7 +128,7 @@ fun CreateGroupScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -145,7 +143,7 @@ fun CreateGroupScreen(
             ) {
                 FloatingActionButton(onClick = { viewModel.createGroup(navController::popBackStack) }) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_check_24dp),
+                        painter = StoatIcons.Confirm.painter(),
                         contentDescription = stringResource(Res.string.create_group_action)
                     )
                 }
@@ -186,7 +184,7 @@ fun CreateGroupScreen(
                 onValueChange = { viewModel.updateFriendSearchQuery(it) },
                 leadingIcon = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_search_24dp),
+                        painter = StoatIcons.Search.painter(),
                         contentDescription = null
                     )
                 },

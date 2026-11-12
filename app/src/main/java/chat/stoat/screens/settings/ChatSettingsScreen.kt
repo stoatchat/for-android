@@ -39,9 +39,10 @@ import chat.stoat.api.settings.SpecialEmbedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.generic.RadioItem
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import chat.stoat.shared.resources.settings_chat
 import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys
 import chat.stoat.shared.resources.settings_chat_hint_poorly_formed_settings_keys_description
@@ -62,7 +63,6 @@ import chat.stoat.shared.resources.settings_chat_quick_reply_none
 import chat.stoat.shared.resources.settings_chat_quick_reply_none_description
 import chat.stoat.shared.resources.settings_chat_quick_reply_swipe_from_end
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class ChatSettingsScreenViewModel : ViewModel() {
@@ -107,7 +107,7 @@ fun ChatSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }

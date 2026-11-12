@@ -77,19 +77,17 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.UserAvatarWidthPlaceholder
 import chat.stoat.composables.markdown.prose.ChatMarkdown
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.UserBadges
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.edited
-import chat.stoat.shared.resources.ic_add_reaction_24dp
-import chat.stoat.shared.resources.ic_block_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
 import chat.stoat.shared.resources.message_blocked
 import chat.stoat.shared.resources.message_context_sheet_actions_react
 import chat.stoat.shared.resources.unknown
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import chat.stoat.core.model.schemas.has as hasUserBadge
 import chat.stoat.internals.text.Gigamoji
@@ -340,7 +338,7 @@ fun Message(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_block_24dp),
+                            painter = StoatIcons.BlockedMessage.painter(),
                             contentDescription = null
                         )
 
@@ -500,7 +498,7 @@ fun Message(
 
                                 if (message.edited != null) {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_edit_24dp),
+                                        painter = StoatIcons.EditedIndicator.painter(),
                                         contentDescription = stringResource(Res.string.edited),
                                         tint = MaterialTheme.colorScheme.onBackground.copy(
                                             alpha = 0.5f
@@ -702,7 +700,7 @@ fun Message(
                                         .padding(8.dp)
                                 ) {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_add_reaction_24dp),
+                                        painter = StoatIcons.AddReaction.painter(),
                                         contentDescription = stringResource(Res.string.message_context_sheet_actions_react),
                                         modifier = Modifier.size(16.dp)
                                     )

@@ -49,12 +49,12 @@ import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.routes.user.patchSelf
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.RawUserOverview
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_check_24dp
 import chat.stoat.shared.resources.settings_profile
 import chat.stoat.shared.resources.settings_profile_custom_background
 import chat.stoat.shared.resources.settings_profile_display_name
@@ -64,7 +64,6 @@ import chat.stoat.shared.resources.settings_profile_save
 import chat.stoat.shared.resources.user_info_sheet_category_bio
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -305,7 +304,7 @@ fun ProfileSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -472,7 +471,7 @@ fun ProfileSettingsScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_check_24dp),
+                                painter = StoatIcons.Save.painter(),
                                 contentDescription = null
                             )
 
@@ -528,7 +527,7 @@ fun ProfileSettingsScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_check_24dp),
+                                painter = StoatIcons.Save.painter(),
                                 contentDescription = null
                             )
 
@@ -581,7 +580,7 @@ fun ProfileSettingsScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_check_24dp),
+                                painter = StoatIcons.Save.painter(),
                                 contentDescription = null
                             )
 

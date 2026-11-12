@@ -100,6 +100,8 @@ import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.chat.ChannelIcon
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Category
@@ -120,16 +122,6 @@ import chat.stoat.shared.resources.direct_messages
 import chat.stoat.shared.resources.discover_alt
 import chat.stoat.shared.resources.friends
 import chat.stoat.shared.resources.geogate_channel_icon_alt
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_explore_24dp
-import chat.stoat.shared.resources.ic_grid_3x3_off_24dp
-import chat.stoat.shared.resources.ic_group_24dp
-import chat.stoat.shared.resources.ic_more_vert_24dp
-import chat.stoat.shared.resources.ic_screen_share_24dp
-import chat.stoat.shared.resources.ic_settings_24dp
-import chat.stoat.shared.resources.ic_star_shine_24dp
-import chat.stoat.shared.resources.ic_verified_24dp__fill
-import chat.stoat.shared.resources.ic_workspace_premium_24dp__fill
 import chat.stoat.shared.resources.menu
 import chat.stoat.shared.resources.no_channels_body
 import chat.stoat.shared.resources.no_channels_heading
@@ -152,7 +144,6 @@ import kotlinx.coroutines.supervisorScope
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -549,7 +540,7 @@ fun ChannelSideDrawer(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_add_24dp),
+                            painter = StoatIcons.Add.painter(),
                             contentDescription = stringResource(Res.string.server_plus_alt)
                         )
                     }
@@ -568,7 +559,7 @@ fun ChannelSideDrawer(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_explore_24dp),
+                            painter = StoatIcons.Discover.painter(),
                             contentDescription = stringResource(Res.string.discover_alt)
                         )
                     }
@@ -591,7 +582,7 @@ fun ChannelSideDrawer(
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_settings_24dp),
+                                painter = StoatIcons.Settings.painter(),
                                 contentDescription = stringResource(Res.string.settings)
                             )
                         }
@@ -673,9 +664,7 @@ fun ChannelSideDrawer(
                         ) {
                             if (server?.flags has ServerFlags.Official) {
                                 Icon(
-                                    painter = painterResource(
-                                        Res.drawable.ic_workspace_premium_24dp__fill
-                                    ),
+                                    painter = StoatIcons.Official.painter(),
                                     contentDescription = stringResource(
                                         Res.string.server_flag_official
                                     ),
@@ -686,9 +675,7 @@ fun ChannelSideDrawer(
                             }
                             if (server?.flags has ServerFlags.Verified) {
                                 Icon(
-                                    painter = painterResource(
-                                        Res.drawable.ic_verified_24dp__fill
-                                    ),
+                                    painter = StoatIcons.Verified.painter(),
                                     contentDescription = stringResource(
                                         Res.string.server_flag_verified
                                     ),
@@ -714,7 +701,7 @@ fun ChannelSideDrawer(
                                 server?.id?.let { srvId -> onShowServerContextSheet(srvId) }
                             }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_more_vert_24dp),
+                                    painter = StoatIcons.MoreOptions.painter(),
                                     contentDescription = stringResource(Res.string.menu),
                                     tint = LocalContentColor.current
                                 )
@@ -778,7 +765,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     name = stringResource(Res.string.overview_screen_title),
                     channelType = ChannelType.TextChannel
                 ),
-                iconType = ChannelItemIconType.Painter(painterResource(Res.drawable.ic_star_shine_24dp)),
+                iconType = ChannelItemIconType.Painter(StoatIcons.TabOverview.painter()),
                 isCurrent = currentDestination is ChatRouterDestination.Overview,
                 onDestinationChanged = {
                     onDestinationChanged(ChatRouterDestination.Overview)
@@ -799,7 +786,7 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
                     name = stringResource(Res.string.friends),
                     channelType = ChannelType.TextChannel
                 ),
-                iconType = ChannelItemIconType.Painter(painterResource(Res.drawable.ic_group_24dp)),
+                iconType = ChannelItemIconType.Painter(StoatIcons.Friends.painter()),
                 isCurrent = currentDestination is ChatRouterDestination.Friends,
                 onDestinationChanged = {
                     onDestinationChanged(ChatRouterDestination.Friends)
@@ -1075,7 +1062,7 @@ fun ChannelItem(
                             GeoStateProvider.geoState?.isAgeRestrictedGeo == true &&
                                     channel.nsfw == true -> {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_grid_3x3_off_24dp),
+                                    painter = StoatIcons.RestrictedChannel.painter(),
                                     contentDescription = stringResource(Res.string.geogate_channel_icon_alt),
                                 )
                             }
@@ -1237,7 +1224,7 @@ private fun VoiceChannelParticipantRow(
         )
         if (state.screensharing) {
             Icon(
-                painter = painterResource(Res.drawable.ic_screen_share_24dp),
+                painter = StoatIcons.ScreenSharing.painter(),
                 contentDescription = stringResource(Res.string.voice_screen_sharing),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp)

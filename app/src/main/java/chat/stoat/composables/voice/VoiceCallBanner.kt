@@ -23,14 +23,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_call_end_24dp__fill
-import chat.stoat.shared.resources.ic_voice_chat_24dp
 import chat.stoat.shared.resources.voice_action_disconnect
 import chat.stoat.shared.resources.voice_banner_tap_to_return
 import chat.stoat.shared.resources.voice_notification_fallback_channel_name
 import chat.stoat.voice.VoiceCallManager
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -55,7 +54,7 @@ fun VoiceCallBanner(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(start = 16.dp, end = 4.dp)
             ) {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_voice_chat_24dp),
+                    painter = StoatIcons.JoinVoice.painter(),
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
@@ -81,7 +80,7 @@ fun VoiceCallBanner(modifier: Modifier = Modifier) {
                 }
                 IconButton(onClick = { VoiceCallManager.leave() }) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_call_end_24dp__fill),
+                        painter = StoatIcons.HangUp.painter(),
                         contentDescription = stringResource(Res.string.voice_action_disconnect),
                         tint = MaterialTheme.colorScheme.error
                     )

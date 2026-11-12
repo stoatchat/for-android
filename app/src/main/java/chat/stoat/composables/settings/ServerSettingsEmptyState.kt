@@ -13,14 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.DrawableResource
+import chat.stoat.core.designsystem.icons.StoatIcon
+import chat.stoat.core.designsystem.icons.painter
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ServerSettingsEmptyState(
-    icon: DrawableResource,
+    icon: StoatIcon,
     title: StringResource,
     description: StringResource,
 ) {
@@ -32,7 +32,7 @@ fun ServerSettingsEmptyState(
             .padding(horizontal = 32.dp, vertical = 64.dp),
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = icon.painter(),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(48.dp),

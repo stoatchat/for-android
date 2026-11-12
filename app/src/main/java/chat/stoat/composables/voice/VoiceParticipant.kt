@@ -19,18 +19,15 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.chat.displayNameInChannel
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.internals.extensions.TransparentListItemColours
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_headset_off_24dp
-import chat.stoat.shared.resources.ic_mic_off_24dp
-import chat.stoat.shared.resources.ic_screen_share_24dp
-import chat.stoat.shared.resources.ic_videocam_24dp
 import chat.stoat.shared.resources.voice_camera_on
 import chat.stoat.shared.resources.voice_deafened
 import chat.stoat.shared.resources.voice_muted
 import chat.stoat.shared.resources.voice_screen_sharing
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -73,25 +70,25 @@ fun VoiceParticipant(
             ) {
                 if (!state.isPublishing) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_mic_off_24dp),
+                        painter = StoatIcons.MicrophoneMuted.painter(),
                         contentDescription = stringResource(Res.string.voice_muted),
                     )
                 }
                 if (!state.isReceiving) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_headset_off_24dp),
+                        painter = StoatIcons.Deafened.painter(),
                         contentDescription = stringResource(Res.string.voice_deafened),
                     )
                 }
                 if (state.camera) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_videocam_24dp),
+                        painter = StoatIcons.CallCamera.painter(),
                         contentDescription = stringResource(Res.string.voice_camera_on),
                     )
                 }
                 if (state.screensharing) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_screen_share_24dp),
+                        painter = StoatIcons.ScreenSharing.painter(),
                         contentDescription = stringResource(Res.string.voice_screen_sharing),
                         tint = MaterialTheme.colorScheme.primary
                     )

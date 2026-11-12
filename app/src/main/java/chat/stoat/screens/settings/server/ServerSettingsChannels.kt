@@ -82,6 +82,8 @@ import chat.stoat.api.routes.server.createServerChannel
 import chat.stoat.api.routes.server.patchServer
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberServerPermissions
@@ -97,15 +99,6 @@ import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_delete_24dp
-import chat.stoat.shared.resources.ic_drag_handle_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_grid_3x3_24dp
-import chat.stoat.shared.resources.ic_list_24dp
-import chat.stoat.shared.resources.ic_more_vert_24dp
-import chat.stoat.shared.resources.ic_tag_24dp
-import chat.stoat.shared.resources.ic_volume_up_24dp
 import chat.stoat.shared.resources.retry
 import chat.stoat.shared.resources.server_settings_channels
 import chat.stoat.shared.resources.server_settings_channels_add_title
@@ -147,7 +140,6 @@ import chat.stoat.shared.resources.server_settings_channels_voice_channel
 import chat.stoat.shared.resources.server_settings_channels_voice_description
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -505,7 +497,7 @@ fun ServerSettingsChannels(
                 },
                 leadingContent = {
                     SettingsIcon {
-                        Icon(painterResource(Res.drawable.ic_tag_24dp), contentDescription = null)
+                        Icon(StoatIcons.TextChannel.painter(), contentDescription = null)
                     }
                 },
                 modifier = Modifier.clickable {
@@ -529,7 +521,7 @@ fun ServerSettingsChannels(
                 leadingContent = {
                     SettingsIcon {
                         Icon(
-                            painterResource(Res.drawable.ic_volume_up_24dp),
+                            StoatIcons.VoiceChannel.painter(),
                             contentDescription = null
                         )
                     }
@@ -561,7 +553,7 @@ fun ServerSettingsChannels(
                     leadingContent = {
                         SettingsIcon {
                             Icon(
-                                painterResource(Res.drawable.ic_list_24dp),
+                                StoatIcons.ChannelCategory.painter(),
                                 contentDescription = null
                             )
                         }
@@ -701,7 +693,7 @@ fun ServerSettingsChannels(
                     }
                 ) {
                     Icon(
-                        painterResource(Res.drawable.ic_add_24dp),
+                        StoatIcons.Add.painter(),
                         contentDescription = stringResource(
                             Res.string.server_settings_channels_add_title
                         )
@@ -774,7 +766,7 @@ fun ServerSettingsChannels(
             if (!hasChannelLayoutItems) {
                 item(key = "empty") {
                     ServerSettingsEmptyState(
-                        icon = Res.drawable.ic_grid_3x3_24dp,
+                        icon = StoatIcons.Channels,
                         title = Res.string.server_settings_channels_empty_title,
                         description = Res.string.server_settings_channels_empty_description,
                     )
@@ -1243,7 +1235,7 @@ private fun ChannelSectionRow(
             },
             leadingContent = {
                 Icon(
-                    painterResource(Res.drawable.ic_list_24dp),
+                    StoatIcons.ChannelCategory.painter(),
                     contentDescription = null
                 )
             },
@@ -1252,7 +1244,7 @@ private fun ChannelSectionRow(
                     Box {
                         IconButton(enabled = enabled, onClick = { menuExpanded = true }) {
                             Icon(
-                                painterResource(Res.drawable.ic_more_vert_24dp),
+                                StoatIcons.MoreOptions.painter(),
                                 contentDescription = stringResource(
                                     Res.string.server_settings_channels_category_actions
                                 )
@@ -1272,7 +1264,7 @@ private fun ChannelSectionRow(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painterResource(Res.drawable.ic_add_24dp),
+                                        StoatIcons.Add.painter(),
                                         contentDescription = null
                                     )
                                 },
@@ -1292,7 +1284,7 @@ private fun ChannelSectionRow(
                                     },
                                     leadingIcon = {
                                         Icon(
-                                            painterResource(Res.drawable.ic_edit_24dp),
+                                            StoatIcons.Edit.painter(),
                                             contentDescription = null
                                         )
                                     },
@@ -1314,7 +1306,7 @@ private fun ChannelSectionRow(
                                     },
                                     leadingIcon = {
                                         Icon(
-                                            painterResource(Res.drawable.ic_delete_24dp),
+                                            StoatIcons.Delete.painter(),
                                             contentDescription = null,
                                             tint = MaterialTheme.colorScheme.error
                                         )
@@ -1441,7 +1433,7 @@ private fun ReorderDragHandle(
         onClick = {}
     ) {
         Icon(
-            painterResource(Res.drawable.ic_drag_handle_24dp),
+            StoatIcons.Reorder.painter(),
             contentDescription = contentDescription
         )
     }

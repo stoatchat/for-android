@@ -51,6 +51,8 @@ import chat.stoat.api.routes.server.fetchMember
 import chat.stoat.api.routes.server.patchMemberIdentity
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.UserOverview
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.User
@@ -59,10 +61,6 @@ import chat.stoat.internals.server.ServerIdentityCapabilities
 import chat.stoat.internals.server.serverIdentityCapabilities
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_error_24dp
-import chat.stoat.shared.resources.ic_id_card_24dp
-import chat.stoat.shared.resources.ic_person_celebrate_24dp
 import chat.stoat.shared.resources.server_identity_avatar
 import chat.stoat.shared.resources.server_identity_avatar_custom
 import chat.stoat.shared.resources.server_identity_avatar_custom_member
@@ -98,7 +96,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -429,7 +426,7 @@ fun ServerIdentitySettingsScreen(
                         )
                     } else {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_check_24dp),
+                            painter = StoatIcons.Save.painter(),
                             contentDescription = stringResource(Res.string.server_identity_save),
                         )
                     }
@@ -583,7 +580,7 @@ fun ServerIdentitySettingsScreen(
             },
             leadingIcon = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_id_card_24dp),
+                    painter = StoatIcons.ServerIdentity.painter(),
                     contentDescription = null,
                 )
             },
@@ -617,7 +614,7 @@ fun ServerIdentitySettingsScreen(
             placeholder = { Text(stringResource(Res.string.server_identity_pronouns_placeholder)) },
             leadingIcon = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_person_celebrate_24dp),
+                    painter = StoatIcons.Pronouns.painter(),
                     contentDescription = null,
                 )
             },
@@ -664,7 +661,7 @@ private fun LoadError(message: String, onRetry: () -> Unit) {
             .padding(32.dp),
     ) {
         Icon(
-            painter = painterResource(Res.drawable.ic_error_24dp),
+            painter = StoatIcons.Error.painter(),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.error,
             modifier = Modifier.size(40.dp),

@@ -14,9 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_keyboard_arrow_right_24dp
-import org.jetbrains.compose.resources.painterResource
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 
 /**
  * Sheet selection. Used when a modal sheet prompts a choice out of x options.
@@ -56,7 +55,7 @@ fun SheetSelection(
             }
         }
         Icon(
-            painter = painterResource(Res.drawable.ic_keyboard_arrow_right_24dp),
+            painter = StoatIcons.Disclosure.painter(),
             contentDescription = null,
             tint = arrowTint
         )

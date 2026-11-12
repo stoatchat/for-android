@@ -119,6 +119,8 @@ import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Member
@@ -128,11 +130,6 @@ import chat.stoat.media.Recording
 import chat.stoat.media.VoiceRecorder
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.add_attachment_alt
-import chat.stoat.shared.resources.ic_campaign_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_mic_24dp
-import chat.stoat.shared.resources.ic_mood_24dp
-import chat.stoat.shared.resources.ic_send_24dp
 import chat.stoat.shared.resources.message_field_placeholder_dm
 import chat.stoat.shared.resources.message_field_placeholder_group
 import chat.stoat.shared.resources.message_field_placeholder_notes
@@ -158,7 +155,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -820,7 +816,7 @@ fun MessageField(
                                 label = { Text("@${item.content}") },
                                 icon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_campaign_24dp),
+                                        painter = StoatIcons.MassMention.painter(),
                                         contentDescription = null,
                                         modifier = Modifier
                                             .size(SuggestionChipDefaults.IconSize)
@@ -959,7 +955,7 @@ fun MessageField(
                     )
 
                     Icon(
-                        painter = painterResource(Res.drawable.ic_mood_24dp),
+                        painter = StoatIcons.Emoji.painter(),
                         tint = voiceAuxiliaryContentColor,
                         contentDescription = stringResource(Res.string.pick_emoji_alt),
                         modifier = Modifier
@@ -1064,7 +1060,7 @@ fun MessageField(
                                 .testTag("voice_message")
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_mic_24dp),
+                                painter = StoatIcons.RecordVoiceMessage.painter(),
                                 tint = voiceMicContentColor,
                                 contentDescription = stringResource(Res.string.voice_message_start_recording),
                                 modifier = Modifier.size(24.dp)
@@ -1082,8 +1078,8 @@ fun MessageField(
                 ) {
                     Icon(
                         painter = when {
-                            editMode -> painterResource(Res.drawable.ic_edit_24dp)
-                            else -> painterResource(Res.drawable.ic_send_24dp)
+                            editMode -> StoatIcons.ConfirmEdit.painter()
+                            else -> StoatIcons.Send.painter()
                         },
                         tint = if (sendEnabled) {
                             MaterialTheme.colorScheme.onPrimary

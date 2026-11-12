@@ -51,14 +51,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.routes.microservices.autumn.FileArgs
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.attachment_preview_close
 import chat.stoat.shared.resources.attachment_preview_remove
 import chat.stoat.shared.resources.attachment_preview_spoiler
 import chat.stoat.shared.resources.attachment_preview_spoiler_description
-import chat.stoat.shared.resources.ic_attach_file_off_24dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import java.io.File
 
@@ -142,7 +142,7 @@ fun FilePreviewSheet(
                     onRemove()
                 }, modifier = Modifier.weight(1f)) {
                     Icon(
-                        painterResource(Res.drawable.ic_attach_file_off_24dp),
+                        StoatIcons.RemoveAttachment.painter(),
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))

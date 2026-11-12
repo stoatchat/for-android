@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.generic.RadioItem
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.enums.EnumEntries
 
@@ -118,7 +118,7 @@ fun SettingsPage(
                             onNavigateBack?.invoke() ?: navController.popBackStack()
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                painter = StoatIcons.Back.painter(),
                                 contentDescription = stringResource(Res.string.back)
                             )
                         }

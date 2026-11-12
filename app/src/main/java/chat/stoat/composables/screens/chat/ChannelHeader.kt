@@ -19,15 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.internals.ChannelUtils
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_notes
-import chat.stoat.shared.resources.ic_keyboard_arrow_right_24dp
-import chat.stoat.shared.resources.ic_menu_24dp
 import chat.stoat.shared.resources.menu
 import chat.stoat.shared.resources.unknown
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -51,7 +50,7 @@ fun ChannelHeader(
                 onToggleDrawer()
             }) {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_menu_24dp),
+                    painter = StoatIcons.OpenDrawer.painter(),
                     contentDescription = stringResource(Res.string.menu)
                 )
             }
@@ -95,7 +94,7 @@ fun ChannelHeader(
             Spacer(modifier = Modifier.width(4.dp))
 
             Icon(
-                painter = painterResource(Res.drawable.ic_keyboard_arrow_right_24dp),
+                painter = StoatIcons.Disclosure.painter(),
                 contentDescription = stringResource(Res.string.menu),
                 modifier = Modifier
                     .size(18.dp)

@@ -59,13 +59,12 @@ import androidx.compose.ui.unit.sp
 import chat.stoat.composables.generic.Presence
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.presenceColour
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.designsystem.theme.getDefaultFont
 import chat.stoat.core.model.settings.Theme
-import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_call_24dp__fill
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.painterResource
 import kotlin.math.roundToInt
 
 class IncomingActivity : ComponentActivity() {
@@ -279,7 +278,7 @@ fun IncomingCallInner() {
                         .background(MaterialTheme.colorScheme.tertiaryContainer)
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_call_24dp__fill),
+                        painter = StoatIcons.Call.painter(),
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier

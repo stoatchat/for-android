@@ -12,12 +12,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.api.internals.ULID
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_logout_24dp
 import chat.stoat.shared.resources.logout
 import chat.stoat.shared.resources.settings_sessions_first_seen
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -50,7 +50,7 @@ fun SessionItem(
                     onLogout(session)
                 }) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_logout_24dp),
+                        painter = StoatIcons.LogOut.painter(),
                         contentDescription = stringResource(Res.string.logout)
                     )
                 }

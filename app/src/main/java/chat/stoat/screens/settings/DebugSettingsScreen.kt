@@ -45,6 +45,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.persistence.Database
@@ -52,13 +54,11 @@ import chat.stoat.persistence.KVStorage
 import chat.stoat.persistence.SqlStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -201,7 +201,7 @@ fun DebugSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }

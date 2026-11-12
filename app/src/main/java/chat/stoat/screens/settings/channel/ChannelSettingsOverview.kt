@@ -54,6 +54,8 @@ import chat.stoat.api.routes.channel.patchChannel
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.shared.resources.Res
@@ -75,11 +77,8 @@ import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_t
 import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_yes
 import chat.stoat.shared.resources.channel_settings_overview_save
 import chat.stoat.shared.resources.channel_settings_overview_update_info_error_fallback
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_check_24dp
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -309,7 +308,7 @@ fun ChannelSettingsOverview(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -324,7 +323,7 @@ fun ChannelSettingsOverview(
             ) {
                 FloatingActionButton(onClick = { viewModel.updateChannel() }) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_check_24dp),
+                        painter = StoatIcons.Save.painter(),
                         contentDescription = stringResource(Res.string.channel_settings_overview_save)
                     )
                 }

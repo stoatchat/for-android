@@ -91,6 +91,9 @@ import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.core.designsystem.icons.StoatIcon
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
@@ -98,15 +101,6 @@ import chat.stoat.internals.extensions.zero
 import chat.stoat.providers.getAttachmentContentUri
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_download_24dp
-import chat.stoat.shared.resources.ic_forward_5_24dp
-import chat.stoat.shared.resources.ic_fullscreen_24dp
-import chat.stoat.shared.resources.ic_fullscreen_exit_24dp
-import chat.stoat.shared.resources.ic_ios_share_24dp
-import chat.stoat.shared.resources.ic_pause_24dp__fill
-import chat.stoat.shared.resources.ic_play_arrow_24dp__fill
-import chat.stoat.shared.resources.ic_replay_5_24dp
 import chat.stoat.shared.resources.media_viewer_exit_fullscreen
 import chat.stoat.shared.resources.media_viewer_fullscreen
 import chat.stoat.shared.resources.media_viewer_open
@@ -126,9 +120,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.seconds
 
@@ -346,7 +338,7 @@ fun VideoViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                         navigationIcon = {
                             IconButton(onClick = onClose) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                    painter = StoatIcons.Back.painter(),
                                     contentDescription = stringResource(Res.string.back)
                                 )
                             }
@@ -354,7 +346,7 @@ fun VideoViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                         actions = {
                             IconButton(onClick = { shareSubmenuIsOpen = true }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_ios_share_24dp),
+                                    painter = StoatIcons.Share.painter(),
                                     contentDescription = stringResource(Res.string.share)
                                 )
                             }
@@ -375,7 +367,7 @@ fun VideoViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
 
                             IconButton(onClick = ::saveToGallery) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_download_24dp),
+                                    painter = StoatIcons.SaveToDevice.painter(),
                                     contentDescription = stringResource(Res.string.media_viewer_save)
                                 )
                             }
@@ -486,7 +478,7 @@ private fun StoatVideoPlayer(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     VideoControlButton(
-                        icon = Res.drawable.ic_replay_5_24dp,
+                        icon = StoatIcons.SeekBack,
                         contentDescription = stringResource(Res.string.media_viewer_seek_back),
                         enabled = seekBackState.isEnabled,
                         onClick = {
@@ -511,13 +503,11 @@ private fun StoatVideoPlayer(
                             )
                     ) {
                         Icon(
-                            painter = painterResource(
-                                if (playPauseState.showPlay) {
-                                    Res.drawable.ic_play_arrow_24dp__fill
-                                } else {
-                                    Res.drawable.ic_pause_24dp__fill
-                                }
-                            ),
+                            painter = if (playPauseState.showPlay) {
+                                StoatIcons.Play.painter()
+                            } else {
+                                StoatIcons.Pause.painter()
+                            },
                             contentDescription = stringResource(
                                 if (playPauseState.showPlay) {
                                     Res.string.media_viewer_play
@@ -533,7 +523,7 @@ private fun StoatVideoPlayer(
                     Spacer(Modifier.width(24.dp))
 
                     VideoControlButton(
-                        icon = Res.drawable.ic_forward_5_24dp,
+                        icon = StoatIcons.SeekForward,
                         contentDescription = stringResource(Res.string.media_viewer_seek_forward),
                         enabled = seekForwardState.isEnabled,
                         onClick = {
@@ -616,7 +606,7 @@ private fun StoatVideoPlayer(
 
 @Composable
 private fun VideoControlButton(
-    icon: DrawableResource,
+    icon: StoatIcon,
     contentDescription: String,
     enabled: Boolean,
     onClick: () -> Unit
@@ -629,7 +619,7 @@ private fun VideoControlButton(
             .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.5f), CircleShape)
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = icon.painter(),
             contentDescription = contentDescription,
             tint = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(
                 alpha = 0.5f
@@ -698,13 +688,11 @@ private fun VideoTimeline(
 
         IconButton(onClick = onFullscreenClick) {
             Icon(
-                painter = painterResource(
-                    if (isFullscreen) {
-                        Res.drawable.ic_fullscreen_exit_24dp
-                    } else {
-                        Res.drawable.ic_fullscreen_24dp
-                    }
-                ),
+                painter = if (isFullscreen) {
+                    StoatIcons.ExitFullscreen.painter()
+                } else {
+                    StoatIcons.EnterFullscreen.painter()
+                },
                 contentDescription = stringResource(
                     if (isFullscreen) {
                         Res.string.media_viewer_exit_fullscreen

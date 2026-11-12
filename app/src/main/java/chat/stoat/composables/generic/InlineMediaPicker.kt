@@ -26,16 +26,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_close_24dp
 import chat.stoat.shared.resources.inline_media_picker_current_description
 import chat.stoat.shared.resources.inline_media_picker_no_media_placeholder
 import chat.stoat.shared.resources.inline_media_picker_remove
 import com.bumptech.glide.integration.compose.CrossFade
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -75,7 +74,7 @@ fun InlineMediaPicker(
                     enabled = (currentModel != null) && removeEnabled
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_close_24dp),
+                        painter = StoatIcons.Dismiss.painter(),
                         contentDescription = stringResource(Res.string.inline_media_picker_remove)
                     )
                 }
@@ -102,7 +101,7 @@ fun InlineMediaPicker(
                     modifier = Modifier.width(480.dp)
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_close_24dp),
+                        painter = StoatIcons.Dismiss.painter(),
                         contentDescription = null
                     )
 
@@ -189,7 +188,7 @@ fun InlineMediaPickerMediaPicker(
         ) {
             if (circular) {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_add_24dp),
+                    painter = StoatIcons.Add.painter(),
                     contentDescription = stringResource(Res.string.inline_media_picker_no_media_placeholder)
                 )
             } else {

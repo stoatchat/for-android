@@ -25,14 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.file_picker_chip_camera
 import chat.stoat.shared.resources.file_picker_chip_documents
 import chat.stoat.shared.resources.file_picker_chip_photo_picker
-import chat.stoat.shared.resources.ic_attach_file_24dp
-import chat.stoat.shared.resources.ic_camera_24dp
-import chat.stoat.shared.resources.ic_photo_library_24dp
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -72,7 +70,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(Res.drawable.ic_photo_library_24dp),
+                        StoatIcons.PhotoLibrary.painter(),
                         contentDescription = null,
                     )
                     Text(
@@ -108,7 +106,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(Res.drawable.ic_attach_file_24dp),
+                        StoatIcons.AttachFile.painter(),
                         contentDescription = null,
                     )
                     Text(
@@ -132,7 +130,7 @@ fun MediaPickerGateway(
                         .padding(8.dp)
                 ) {
                     Icon(
-                        painterResource(Res.drawable.ic_camera_24dp),
+                        StoatIcons.TakePhoto.painter(),
                         contentDescription = null,
                     )
                     Text(

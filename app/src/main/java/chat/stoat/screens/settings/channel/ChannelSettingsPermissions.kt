@@ -53,6 +53,8 @@ import chat.stoat.api.routes.channel.setChannelRolePermissions
 import chat.stoat.api.routes.channel.setDefaultChannelPermissions
 import chat.stoat.composables.generic.PermissionOverridePicker
 import chat.stoat.composables.server.RoleColourIndicator
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.PermissionDescription
 import chat.stoat.core.model.schemas.Role
@@ -79,8 +81,6 @@ import chat.stoat.shared.resources.channel_settings_permissions_role_description
 import chat.stoat.shared.resources.channel_settings_permissions_save
 import chat.stoat.shared.resources.channel_settings_permissions_saved
 import chat.stoat.shared.resources.channel_settings_permissions_update_error
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_group_24dp
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.server_settings_role
 import chat.stoat.shared.resources.server_settings_role_discard
@@ -91,7 +91,6 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -310,7 +309,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
             ) {
                 SettingsIcon {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_group_24dp),
+                        painter = StoatIcons.Members.painter(),
                         contentDescription = null,
                     )
                 }
@@ -489,7 +488,7 @@ fun ChannelSettingsPermissionEditor(
                         LoadingIndicator(Modifier.size(24.dp))
                     } else {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_check_24dp),
+                            painter = StoatIcons.Save.painter(),
                             contentDescription = stringResource(
                                 Res.string.channel_settings_permissions_save
                             ),

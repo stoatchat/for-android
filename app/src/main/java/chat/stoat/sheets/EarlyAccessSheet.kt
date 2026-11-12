@@ -19,13 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_plumbing_24dp
 import chat.stoat.shared.resources.spark_early_access
 import chat.stoat.shared.resources.spark_early_access_cta
 import chat.stoat.shared.resources.spark_early_access_description_1
 import chat.stoat.shared.resources.spark_early_access_description_2
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -40,7 +40,7 @@ fun EarlyAccessSheet(onClose: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(Res.drawable.ic_plumbing_24dp),
+            painter = StoatIcons.EarlyAccess.painter(),
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             modifier = Modifier

@@ -51,12 +51,11 @@ import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.bottomEndCircleCutout
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_folder_open_24dp
-import chat.stoat.shared.resources.ic_screen_share_24dp
-import chat.stoat.shared.resources.ic_volume_up_24dp
 import chat.stoat.shared.resources.server_context_sheet_open
 import chat.stoat.shared.resources.server_folder_sheet_open
 import chat.stoat.shared.resources.server_folder_unnamed
@@ -65,7 +64,6 @@ import chat.stoat.shared.resources.voice_notification_ongoing_call
 import chat.stoat.shared.resources.voice_screen_sharing
 import chat.stoat.ui.colour.CSSColours
 import chat.stoat.ui.colour.parseCssFunctionColour
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private val ServerVoiceBadgeSize = 16.dp
@@ -235,8 +233,8 @@ fun ServerRailIcon(
     }
     val hasScreenShare = voiceParticipants.any { it.screensharing }
     val voiceBadgeIcon = when {
-        hasScreenShare -> Res.drawable.ic_screen_share_24dp
-        voiceParticipants.isNotEmpty() -> Res.drawable.ic_volume_up_24dp
+        hasScreenShare -> StoatIcons.ScreenSharingActivity
+        voiceParticipants.isNotEmpty() -> StoatIcons.VoiceActivity
         else -> null
     }
     val longClickLabel = stringResource(Res.string.server_context_sheet_open)
@@ -273,7 +271,7 @@ fun ServerRailIcon(
                 modifier = Modifier.size(ServerVoiceBadgeSize)
             ) {
                 Icon(
-                    painter = painterResource(voiceBadgeIcon),
+                    painter = voiceBadgeIcon.painter(),
                     contentDescription = stringResource(
                         if (hasScreenShare) {
                             Res.string.voice_screen_sharing
@@ -350,7 +348,7 @@ fun FolderIcon(entry: ServerSidebarEntry.Folder, modifier: Modifier = Modifier) 
             FolderPreview(entry.servers)
         } else {
             Icon(
-                painter = painterResource(Res.drawable.ic_folder_open_24dp),
+                painter = StoatIcons.Folder.painter(),
                 contentDescription = null,
                 tint = colour ?: MaterialTheme.colorScheme.onSurface
             )

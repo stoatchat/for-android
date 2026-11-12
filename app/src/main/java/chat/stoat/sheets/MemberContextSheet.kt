@@ -17,16 +17,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.removeMember
 import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
-import chat.stoat.shared.resources.ic_identifier_copy_24dp
-import chat.stoat.shared.resources.ic_person_off_24dp
 import chat.stoat.shared.resources.member_context_sheet_remove_from_channel
 import chat.stoat.shared.resources.unknown
 import chat.stoat.shared.resources.user_info_sheet_copy_id
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -67,7 +66,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
             leadingContent = {
                 CompositionLocalProvider(value = LocalContentColor provides MaterialTheme.colorScheme.error) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_person_off_24dp),
+                        painter = StoatIcons.RemoveFriend.painter(),
                         contentDescription = null
                     )
                 }
@@ -89,7 +88,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                painter = StoatIcons.CopyId.painter(),
                 contentDescription = null
             )
         },
@@ -140,7 +139,7 @@ fun ColumnScope.ServerMemberContextSheet(
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                painter = StoatIcons.CopyId.painter(),
                 contentDescription = null
             )
         },

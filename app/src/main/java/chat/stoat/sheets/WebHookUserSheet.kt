@@ -22,13 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import chat.stoat.composables.chat.viewUrlInBrowser
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_SUPPORT
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_webhook_24dp
 import chat.stoat.shared.resources.user_info_sheet_webhook
 import chat.stoat.shared.resources.user_info_sheet_webhook_body
 import chat.stoat.shared.resources.user_info_sheet_webhook_learn_more
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -50,7 +50,7 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(Res.drawable.ic_webhook_24dp),
+                painter = StoatIcons.Webhook.painter(),
                 tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp)

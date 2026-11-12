@@ -68,6 +68,8 @@ import chat.stoat.api.routes.invites.fetchServerInvites
 import chat.stoat.api.routes.user.fetchUser
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.core.model.schemas.Channel
@@ -79,10 +81,6 @@ import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_content_copy_24dp
-import chat.stoat.shared.resources.ic_link_24dp
-import chat.stoat.shared.resources.ic_tag_24dp
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.server_settings_invites
 import chat.stoat.shared.resources.server_settings_invites_add
@@ -114,7 +112,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -403,7 +400,7 @@ fun ServerSettingsInvites(
                     },
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_add_24dp),
+                        painter = StoatIcons.Add.painter(),
                         contentDescription = stringResource(Res.string.server_settings_invites_add),
                     )
                 }
@@ -509,7 +506,7 @@ private fun InviteList(
         } else if (invites.isEmpty()) {
             item(key = "empty") {
                 ServerSettingsEmptyState(
-                    icon = Res.drawable.ic_link_24dp,
+                    icon = StoatIcons.Invites,
                     title = Res.string.server_settings_invites_empty_title,
                     description = Res.string.server_settings_invites_empty,
                 )
@@ -705,7 +702,7 @@ private fun CreateInviteSheet(
                             },
                             leadingContent = {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_tag_24dp),
+                                    painter = StoatIcons.Channel.painter(),
                                     contentDescription = null,
                                 )
                             },
@@ -804,7 +801,7 @@ private fun InviteLink(link: String, copyableLink: String) {
             overflow = TextOverflow.Ellipsis
         )
         Icon(
-            painter = painterResource(Res.drawable.ic_content_copy_24dp),
+            painter = StoatIcons.Copy.painter(),
             contentDescription = stringResource(Res.string.server_settings_invites_copy),
         )
     }

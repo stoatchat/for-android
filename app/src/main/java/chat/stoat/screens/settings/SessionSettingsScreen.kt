@@ -48,13 +48,14 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.auth.fetchAllSessions
 import chat.stoat.api.routes.auth.logoutAllSessions
 import chat.stoat.api.routes.auth.logoutSessionById
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.composables.settings.sessions.SessionItem
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import chat.stoat.shared.resources.logout
 import chat.stoat.shared.resources.settings_sessions
 import chat.stoat.shared.resources.settings_sessions_log_out_other
@@ -66,7 +67,6 @@ import chat.stoat.shared.resources.settings_sessions_other_sessions
 import chat.stoat.shared.resources.settings_sessions_this_device
 import chat.stoat.shared.resources.settings_sessions_this_device_unavailable
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class SessionSettingsScreenViewModel : ViewModel() {
@@ -165,7 +165,7 @@ fun SessionSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }

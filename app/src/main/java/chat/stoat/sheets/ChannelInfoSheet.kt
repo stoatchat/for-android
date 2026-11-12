@@ -33,6 +33,8 @@ import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.ChannelSheetHeader
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.chat.dialogs.InviteDialog
@@ -41,16 +43,10 @@ import chat.stoat.shared.resources.channel_info_sheet_options_add
 import chat.stoat.shared.resources.channel_info_sheet_options_invite
 import chat.stoat.shared.resources.channel_info_sheet_options_members
 import chat.stoat.shared.resources.channel_info_sheet_options_notifications_manage
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_list_24dp
-import chat.stoat.shared.resources.ic_notification_settings_24dp
-import chat.stoat.shared.resources.ic_pinboard_24dp
-import chat.stoat.shared.resources.ic_settings_24dp
 import chat.stoat.shared.resources.pinned_messages_view
 import chat.stoat.shared.resources.settings
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,7 +130,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 },
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_list_24dp),
+                        painter = StoatIcons.Members.painter(),
                         contentDescription = null
                     )
                 },
@@ -163,7 +159,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_add_24dp),
+                            painter = StoatIcons.AddMembers.painter(),
                             contentDescription = null
                         )
                     },
@@ -182,7 +178,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                     },
                     leadingContent = {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_add_24dp),
+                            painter = StoatIcons.AddMembers.painter(),
                             contentDescription = null
                         )
                     },
@@ -203,7 +199,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_notification_settings_24dp),
+                painter = StoatIcons.NotificationSettings.painter(),
                 contentDescription = null
             )
         },
@@ -218,7 +214,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_pinboard_24dp),
+                painter = StoatIcons.PinnedMessages.painter(),
                 contentDescription = null
             )
         },
@@ -244,7 +240,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             },
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_settings_24dp),
+                    painter = StoatIcons.Settings.painter(),
                     contentDescription = null
                 )
             },

@@ -49,6 +49,8 @@ import chat.stoat.api.routes.account.negotiateAuthentication
 import chat.stoat.api.routes.onboard.needsOnboarding
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.generic.Weblink
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.persistence.KVStorage
@@ -56,8 +58,6 @@ import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.email
 import chat.stoat.shared.resources.hide_password
-import chat.stoat.shared.resources.ic_visibility_24dp
-import chat.stoat.shared.resources.ic_visibility_off_24dp
 import chat.stoat.shared.resources.login
 import chat.stoat.shared.resources.login_heading
 import chat.stoat.shared.resources.password
@@ -67,7 +67,6 @@ import chat.stoat.shared.resources.service_health_alert_body_default
 import chat.stoat.shared.resources.show_password
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -261,14 +260,14 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
                             when {
                                 showPassword.value -> {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_visibility_off_24dp),
+                                        painter = StoatIcons.HidePassword.painter(),
                                         contentDescription = stringResource(Res.string.hide_password)
                                     )
                                 }
 
                                 else -> {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_visibility_24dp),
+                                        painter = StoatIcons.ShowPassword.painter(),
                                         contentDescription = stringResource(Res.string.show_password)
                                     )
                                 }

@@ -39,11 +39,11 @@ import chat.stoat.api.routes.account.authenticateWithMfaRecoveryCode
 import chat.stoat.api.routes.account.authenticateWithMfaTotpCode
 import chat.stoat.composables.generic.CollapsibleCard
 import chat.stoat.composables.generic.FormTextField
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_key_24dp
-import chat.stoat.shared.resources.ic_shield_lock_24dp
 import chat.stoat.shared.resources.mfa_interstitial_header
 import chat.stoat.shared.resources.mfa_interstitial_lead
 import chat.stoat.shared.resources.mfa_recovery_code
@@ -54,7 +54,6 @@ import chat.stoat.shared.resources.mfa_totp_header
 import chat.stoat.shared.resources.mfa_totp_lead
 import chat.stoat.shared.resources.next
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -233,7 +232,7 @@ fun MfaScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_shield_lock_24dp),
+                                    painter = StoatIcons.Authenticator.painter(),
                                     contentDescription = null, // See label
                                     modifier = Modifier.padding(end = 16.dp)
                                 )
@@ -286,7 +285,7 @@ fun MfaScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_key_24dp),
+                                    painter = StoatIcons.RecoveryCode.painter(),
                                     contentDescription = null, // See label
                                     modifier = Modifier.padding(end = 16.dp)
                                 )

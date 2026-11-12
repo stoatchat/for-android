@@ -36,11 +36,10 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatHttp
 import chat.stoat.composables.LocalSnackbarHostState
 import chat.stoat.composables.generic.ControlledSlider
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_more_vert_24dp
-import chat.stoat.shared.resources.ic_pause_24dp__fill
-import chat.stoat.shared.resources.ic_play_arrow_24dp__fill
 import chat.stoat.shared.resources.media_viewer_more
 import chat.stoat.shared.resources.media_viewer_pause
 import chat.stoat.shared.resources.media_viewer_play
@@ -51,7 +50,6 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.readRawBytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -191,12 +189,12 @@ fun AudioPlayer(
                 } else {
                     if (playback.isPlaying.value) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_pause_24dp__fill),
+                            painter = StoatIcons.Pause.painter(),
                             contentDescription = stringResource(Res.string.media_viewer_pause)
                         )
                     } else {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_play_arrow_24dp__fill),
+                            painter = StoatIcons.Play.painter(),
                             contentDescription = stringResource(Res.string.media_viewer_play)
                         )
                     }
@@ -224,7 +222,7 @@ fun AudioPlayer(
                 showMenu.value = !showMenu.value
             }) {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_more_vert_24dp),
+                    painter = StoatIcons.MoreOptions.painter(),
                     contentDescription = stringResource(Res.string.media_viewer_more)
                 )
                 DropdownMenu(

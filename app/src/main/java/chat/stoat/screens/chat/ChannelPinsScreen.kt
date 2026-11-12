@@ -44,16 +44,16 @@ import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.zero
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import chat.stoat.shared.resources.pinned_messages
 import chat.stoat.shared.resources.pinned_messages_empty
 import chat.stoat.shared.resources.tap_to_retry
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class ChannelPinsScreenViewModel : ViewModel() {
@@ -133,7 +133,7 @@ fun ChannelPinsScreen(
                             navController.popBackStack()
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                painter = StoatIcons.Back.painter(),
                                 contentDescription = stringResource(Res.string.back)
                             )
                         }

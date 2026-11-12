@@ -14,17 +14,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.screens.chat.views.OverviewScreen
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_forum_24dp
-import chat.stoat.shared.resources.ic_forum_24dp__fill
-import chat.stoat.shared.resources.ic_star_shine_24dp
-import chat.stoat.shared.resources.ic_star_shine_24dp__fill
-import chat.stoat.shared.resources.ic_tag_24dp
 import chat.stoat.shared.resources.main_tab_communities
 import chat.stoat.shared.resources.main_tab_conversations
 import chat.stoat.shared.resources.main_tab_overview
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class MainScreenTab {
@@ -45,9 +41,7 @@ fun MainScreen(navController: NavController) {
                     onClick = { currentTab = MainScreenTab.Communities },
                     icon = {
                         Icon(
-                            painter = painterResource(
-                                Res.drawable.ic_tag_24dp
-                            ),
+                            painter = StoatIcons.TabCommunities.painter(),
                             contentDescription = null,
                         )
                     },
@@ -60,13 +54,11 @@ fun MainScreen(navController: NavController) {
                     onClick = { currentTab = MainScreenTab.Conversations },
                     icon = {
                         Icon(
-                            painter = painterResource(
-                                if (currentTab == MainScreenTab.Conversations) {
-                                    Res.drawable.ic_forum_24dp__fill
-                                } else {
-                                    Res.drawable.ic_forum_24dp
-                                }
-                            ),
+                            painter = if (currentTab == MainScreenTab.Conversations) {
+                                StoatIcons.TabConversationsSelected.painter()
+                            } else {
+                                StoatIcons.TabConversations.painter()
+                            },
                             contentDescription = null,
                         )
                     },
@@ -79,13 +71,11 @@ fun MainScreen(navController: NavController) {
                     onClick = { currentTab = MainScreenTab.Overview },
                     icon = {
                         Icon(
-                            painter = painterResource(
-                                if (currentTab == MainScreenTab.Overview) {
-                                    Res.drawable.ic_star_shine_24dp__fill
-                                } else {
-                                    Res.drawable.ic_star_shine_24dp
-                                }
-                            ),
+                            painter = if (currentTab == MainScreenTab.Overview) {
+                                StoatIcons.TabOverviewSelected.painter()
+                            } else {
+                                StoatIcons.TabOverview.painter()
+                            },
                             contentDescription = null,
                         )
                     },

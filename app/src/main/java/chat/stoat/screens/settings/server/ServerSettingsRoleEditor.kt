@@ -77,6 +77,8 @@ import chat.stoat.api.routes.server.setServerRolePermissions
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.PermissionOverridePicker
 import chat.stoat.composables.server.RoleColourIndicator
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.DarkColorScheme
 import chat.stoat.core.designsystem.theme.LightColorScheme
 import chat.stoat.core.model.data.STOAT_FILES
@@ -96,8 +98,6 @@ import chat.stoat.internals.server.withPermission
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_delete_24dp
 import chat.stoat.shared.resources.server_identity_retry
 import chat.stoat.shared.resources.server_settings_role
 import chat.stoat.shared.resources.server_settings_role_appearance
@@ -141,7 +141,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -537,7 +536,7 @@ fun ServerSettingsRoleEditor(
                         CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
                     } else {
                         Icon(
-                            painterResource(Res.drawable.ic_check_24dp),
+                            StoatIcons.Save.painter(),
                             contentDescription = stringResource(Res.string.server_settings_role_save),
                         )
                     }
@@ -649,7 +648,7 @@ fun ServerSettingsRoleEditor(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             ) {
-                Icon(painterResource(Res.drawable.ic_delete_24dp), contentDescription = null)
+                Icon(StoatIcons.Delete.painter(), contentDescription = null)
                 Text(
                     stringResource(Res.string.server_settings_role_delete),
                     modifier = Modifier.padding(start = 8.dp),

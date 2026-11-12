@@ -39,6 +39,8 @@ import chat.stoat.api.routes.user.unblockUser
 import chat.stoat.api.routes.user.unfriendUser
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User
 import chat.stoat.dialogs.MemberModerationAction
 import chat.stoat.dialogs.MemberModerationDialog
@@ -48,16 +50,6 @@ import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.serverIdentityCapabilities
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
-import chat.stoat.shared.resources.ic_block_24dp
-import chat.stoat.shared.resources.ic_flag_24dp
-import chat.stoat.shared.resources.ic_gavel_24dp
-import chat.stoat.shared.resources.ic_id_card_24dp
-import chat.stoat.shared.resources.ic_identifier_copy_24dp
-import chat.stoat.shared.resources.ic_more_vert_24dp
-import chat.stoat.shared.resources.ic_person_off_24dp
-import chat.stoat.shared.resources.ic_smart_toy_24dp
-import chat.stoat.shared.resources.ic_sports_and_outdoors_24dp
-import chat.stoat.shared.resources.ic_timer_24dp
 import chat.stoat.shared.resources.member_moderation_ban
 import chat.stoat.shared.resources.member_moderation_kick
 import chat.stoat.shared.resources.member_moderation_timeout
@@ -82,7 +74,6 @@ import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -187,7 +178,7 @@ fun UserButtons(
                             .weight(1f)
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_smart_toy_24dp),
+                            painter = StoatIcons.Bot.painter(),
                             contentDescription = null
                         )
                         Text(
@@ -334,7 +325,7 @@ fun UserButtons(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_person_off_24dp),
+                                        painter = StoatIcons.RemoveFriend.painter(),
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onSurface
                                     )
@@ -362,7 +353,7 @@ fun UserButtons(
                             },
                             leadingIcon = {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_block_24dp),
+                                    painter = StoatIcons.Block.painter(),
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
@@ -386,7 +377,7 @@ fun UserButtons(
                         },
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                                painter = StoatIcons.CopyId.painter(),
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
@@ -407,7 +398,7 @@ fun UserButtons(
                         },
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_flag_24dp),
+                                painter = StoatIcons.Report.painter(),
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.error
                             )
@@ -437,7 +428,7 @@ fun UserButtons(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_id_card_24dp),
+                                        painter = StoatIcons.ServerIdentity.painter(),
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onSurface
                                     )
@@ -466,7 +457,7 @@ fun UserButtons(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_timer_24dp),
+                                        painter = StoatIcons.Timeout.painter(),
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.error
                                     )
@@ -488,7 +479,7 @@ fun UserButtons(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_sports_and_outdoors_24dp),
+                                        painter = StoatIcons.Kick.painter(),
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.error
                                     )
@@ -510,7 +501,7 @@ fun UserButtons(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_gavel_24dp),
+                                        painter = StoatIcons.Ban.painter(),
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.error
                                     )
@@ -530,7 +521,7 @@ fun UserButtons(
                     }
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_more_vert_24dp),
+                        painter = StoatIcons.MoreOptions.painter(),
                         contentDescription = stringResource(Res.string.menu)
                     )
                 }

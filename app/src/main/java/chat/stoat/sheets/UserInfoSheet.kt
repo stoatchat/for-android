@@ -62,13 +62,12 @@ import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.RawUserOverview
 import chat.stoat.composables.screens.settings.UserButtons
 import chat.stoat.composables.sheets.SheetTile
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_badge_24dp
-import chat.stoat.shared.resources.ic_error_24dp
-import chat.stoat.shared.resources.ic_psychology_alt_24dp
 import chat.stoat.shared.resources.rate_limit_toast
 import chat.stoat.shared.resources.unknown
 import chat.stoat.shared.resources.user_info_sheet_category_badges
@@ -87,7 +86,6 @@ import chat.stoat.ui.colour.solidColor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.semantics.Role as SemanticsRole
 
@@ -179,7 +177,7 @@ fun UserInfoSheet(
         NonIdealState(
             icon = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_error_24dp),
+                    painter = StoatIcons.Error.painter(),
                     contentDescription = null,
                     modifier = Modifier.size(it)
                 )
@@ -248,7 +246,7 @@ fun UserInfoSheet(
                             onClick = { showServerIdentityOptions = true },
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_psychology_alt_24dp),
+                                painter = StoatIcons.ServerIdentity.painter(),
                                 contentDescription = null
                             )
                         }
@@ -259,7 +257,7 @@ fun UserInfoSheet(
                             onClick = { showUserCard = true },
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_badge_24dp),
+                                painter = StoatIcons.UserCard.painter(),
                                 contentDescription = null
                             )
                         }
@@ -499,7 +497,7 @@ fun UserInfoSheet(
                                 )
                             } ?: run {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_error_24dp),
+                                    painter = StoatIcons.RoleUnknown.painter(),
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -519,7 +517,7 @@ fun UserInfoSheet(
                         NonIdealState(
                             icon = {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_error_24dp),
+                                    painter = StoatIcons.Error.painter(),
                                     contentDescription = null,
                                     modifier = Modifier.size(24.dp)
                                 )

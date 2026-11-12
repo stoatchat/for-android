@@ -40,47 +40,7 @@ kotlin {
     }
 }
 
-// Process compose multiplatform resources so we can keep downloading icon files verbatim from Google Fonts
-val composeResourceSources = tasks.register<Sync>("prepareComposeResourceSources") {
-    description =
-        "Prepares a copy of the compose resource sources for processing by the compose multiplatform plugin."
-    val output = layout.buildDirectory.dir("composeResourceSources/commonMain")
-    from("src/commonMain/composeResources")
-    into(output)
-    filesMatching("drawable*/*.xml") {
-        filter { line ->
-            line.replace("@android:color/white", "#FFFFFFFF")
-                .replace("@android:color/black", "#FF000000")
-        }
-    }
-    doLast {
-        val unsupportedColour =
-            Regex("""android:(fillColor|strokeColor|color|startColor|centerColor|endColor)="[?@]""")
-        val offenders = output.get().asFile.walk()
-            .filter { it.extension == "xml" && it.parentFile.name.startsWith("drawable") }
-            .filter { unsupportedColour.containsMatchIn(it.readText()) }
-            .map { it.name }
-            .toList()
-        if (offenders.isNotEmpty()) {
-            throw GradleException(
-                "Vector drawables with theme or resource colours, which compose-resources can't draw: " +
-                        offenders.joinToString()
-            )
-        }
-    }
-}
-
-tasks.matching {
-    it.name == "convertXmlValueResourcesForCommonMain" || it.name == "copyNonXmlValueResourcesForCommonMain"
-}.configureEach {
-    dependsOn(composeResourceSources)
-}
-
 compose.resources {
     packageOfResClass = "chat.stoat.shared.resources"
     publicResClass = true
-    customDirectory(
-        sourceSetName = "commonMain",
-        directoryProvider = composeResourceSources.flatMap { layout.buildDirectory.dir("composeResourceSources/commonMain") },
-    )
 }

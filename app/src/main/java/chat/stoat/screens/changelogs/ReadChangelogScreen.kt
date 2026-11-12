@@ -37,12 +37,13 @@ import androidx.navigation.NavController
 import chat.stoat.api.routes.microservices.gazette.GazetteChangelog
 import chat.stoat.api.routes.microservices.gazette.getChangelogById
 import chat.stoat.composables.markdown.prose.ProseMarkdown
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.changelog_header
 import chat.stoat.shared.resources.changelog_load_error
 import chat.stoat.shared.resources.changelog_retry
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,7 +54,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import java.time.Instant
 import java.time.ZoneId
@@ -147,7 +147,7 @@ fun ReadChangelogScreen(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }

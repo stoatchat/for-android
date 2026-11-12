@@ -38,11 +38,11 @@ import chat.stoat.composables.generic.asApiName
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.composables.settings.profile.StatusPicker
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_settings_24dp
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.settings
 import chat.stoat.shared.resources.status_rate_limited_description
@@ -60,7 +60,6 @@ import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -298,7 +297,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
             )
 
             Icon(
-                painter = painterResource(Res.drawable.ic_edit_24dp),
+                painter = StoatIcons.Edit.painter(),
                 contentDescription = null,
                 modifier = Modifier.padding(16.dp)
             )
@@ -308,7 +307,7 @@ fun StatusSheet(onBeforeNavigation: () -> Unit, onGoSettings: () -> Unit) {
     SheetButton(
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_settings_24dp),
+                painter = StoatIcons.Settings.painter(),
                 contentDescription = null
             )
         },

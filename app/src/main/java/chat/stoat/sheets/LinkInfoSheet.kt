@@ -23,17 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.copy
-import chat.stoat.shared.resources.ic_content_copy_24dp
-import chat.stoat.shared.resources.ic_open_in_browser_24dp
 import chat.stoat.shared.resources.link_open
 import chat.stoat.shared.resources.link_type_no_intent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -89,7 +88,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_open_in_browser_24dp),
+                painter = StoatIcons.OpenInBrowser.painter(),
                 contentDescription = null
             )
         },
@@ -120,7 +119,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_content_copy_24dp),
+                painter = StoatIcons.Copy.painter(),
                 contentDescription = null
             )
         },

@@ -50,10 +50,11 @@ import chat.stoat.activities.StoatTweenSize
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.formatCompactDuration
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_timer_24dp
 import chat.stoat.shared.resources.slowmode_immune
 import chat.stoat.shared.resources.typing_blank
 import chat.stoat.shared.resources.typing_many
@@ -65,7 +66,6 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -251,7 +251,7 @@ fun TypingIndicator(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_timer_24dp),
+                            painter = StoatIcons.Slowmode.painter(),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = slowmodeColor,

@@ -39,24 +39,12 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.about
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_campaign_24dp
-import chat.stoat.shared.resources.ic_chat_24dp
-import chat.stoat.shared.resources.ic_devices_24dp
-import chat.stoat.shared.resources.ic_feedback_24dp
-import chat.stoat.shared.resources.ic_id_card_24dp
-import chat.stoat.shared.resources.ic_info_24dp
-import chat.stoat.shared.resources.ic_lab_research_24dp
-import chat.stoat.shared.resources.ic_language_24dp
-import chat.stoat.shared.resources.ic_lock_24dp
-import chat.stoat.shared.resources.ic_logout_24dp
-import chat.stoat.shared.resources.ic_notifications_24dp
-import chat.stoat.shared.resources.ic_palette_24dp
-import chat.stoat.shared.resources.ic_sign_language_24dp
 import chat.stoat.shared.resources.logout
 import chat.stoat.shared.resources.settings
 import chat.stoat.shared.resources.settings_account
@@ -74,7 +62,6 @@ import chat.stoat.shared.resources.settings_notifications
 import chat.stoat.shared.resources.settings_profile
 import chat.stoat.shared.resources.settings_sessions
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -119,7 +106,7 @@ fun SettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -148,7 +135,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_lock_24dp),
+                                    painter = StoatIcons.Account.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -163,7 +150,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_id_card_24dp),
+                                    painter = StoatIcons.Profile.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -179,7 +166,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_devices_24dp),
+                                    painter = StoatIcons.Sessions.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -199,7 +186,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_palette_24dp),
+                                    painter = StoatIcons.Appearance.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -214,7 +201,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_language_24dp),
+                                    painter = StoatIcons.Language.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -229,7 +216,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_chat_24dp),
+                                    painter = StoatIcons.ChatSettings.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -245,7 +232,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_notifications_24dp),
+                                    painter = StoatIcons.Notifications.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -274,7 +261,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_info_24dp),
+                                    painter = StoatIcons.About.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -292,7 +279,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_sign_language_24dp),
+                                        painter = StoatIcons.Debug.painter(),
                                         contentDescription = null,
                                     )
                                 }
@@ -311,7 +298,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_sign_language_24dp),
+                                        painter = StoatIcons.Labs.painter(),
                                         contentDescription = null,
                                     )
                                 }
@@ -330,7 +317,7 @@ fun SettingsScreen(
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_lab_research_24dp),
+                                        painter = StoatIcons.Experiments.painter(),
                                         contentDescription = null,
                                     )
                                 }
@@ -356,7 +343,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_campaign_24dp),
+                                    painter = StoatIcons.Changelog.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -372,7 +359,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_feedback_24dp),
+                                    painter = StoatIcons.Feedback.painter(),
                                     contentDescription = null,
                                 )
                             }
@@ -399,7 +386,7 @@ fun SettingsScreen(
                         leadingContent = {
                             SettingsIcon(danger = true) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_logout_24dp),
+                                    painter = StoatIcons.LogOut.painter(),
                                     contentDescription = null,
                                 )
                             }

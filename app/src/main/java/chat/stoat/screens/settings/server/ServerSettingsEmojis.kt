@@ -71,6 +71,8 @@ import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.composables.generic.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User
@@ -79,8 +81,6 @@ import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_mood_24dp
 import chat.stoat.shared.resources.server_settings_emojis
 import chat.stoat.shared.resources.server_settings_emojis_add
 import chat.stoat.shared.resources.server_settings_emojis_animated_too_large
@@ -119,7 +119,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -544,7 +543,7 @@ fun ServerSettingsEmojis(
                     },
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_add_24dp),
+                        painter = StoatIcons.Add.painter(),
                         contentDescription = stringResource(Res.string.server_settings_emojis_add),
                     )
                 }
@@ -618,7 +617,7 @@ private fun EmojiList(
         if (emojis.isEmpty()) {
             item(key = "empty") {
                 ServerSettingsEmptyState(
-                    icon = Res.drawable.ic_mood_24dp,
+                    icon = StoatIcons.Emojis,
                     title = Res.string.server_settings_emojis_empty_title,
                     description = Res.string.server_settings_emojis_empty,
                 )
@@ -701,7 +700,7 @@ private fun CreateEmojiSheet(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_add_24dp),
+                        painter = StoatIcons.Add.painter(),
                         contentDescription = null,
                     )
                     Text(

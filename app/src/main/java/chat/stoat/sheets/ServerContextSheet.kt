@@ -39,18 +39,12 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.composables.screens.settings.ServerOverview
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.availableServerSettingsOptions
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_door_open_24dp
-import chat.stoat.shared.resources.ic_folder_24dp
-import chat.stoat.shared.resources.ic_folder_off_24dp
-import chat.stoat.shared.resources.ic_id_card_24dp
-import chat.stoat.shared.resources.ic_identifier_copy_24dp
-import chat.stoat.shared.resources.ic_mark_chat_read_24dp
-import chat.stoat.shared.resources.ic_report_24dp
-import chat.stoat.shared.resources.ic_settings_24dp
 import chat.stoat.shared.resources.server_context_sheet_actions_add_to_folder
 import chat.stoat.shared.resources.server_context_sheet_actions_copy_id
 import chat.stoat.shared.resources.server_context_sheet_actions_copy_id_copied
@@ -70,7 +64,6 @@ import chat.stoat.shared.resources.server_settings
 import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -209,7 +202,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                    painter = StoatIcons.CopyId.painter(),
                     contentDescription = null
                 )
             },
@@ -240,7 +233,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_mark_chat_read_24dp),
+                    painter = StoatIcons.MarkRead.painter(),
                     contentDescription = null
                 )
             },
@@ -262,7 +255,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_folder_24dp),
+                    painter = StoatIcons.AddToFolder.painter(),
                     contentDescription = null
                 )
             },
@@ -285,7 +278,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_folder_off_24dp),
+                        painter = StoatIcons.RemoveFromFolder.painter(),
                         contentDescription = null
                     )
                 },
@@ -304,7 +297,7 @@ fun ServerContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_id_card_24dp),
+                    painter = StoatIcons.ServerIdentity.painter(),
                     contentDescription = null,
                 )
             },
@@ -328,7 +321,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_settings_24dp),
+                        painter = StoatIcons.Settings.painter(),
                         contentDescription = null,
                     )
                 },
@@ -351,7 +344,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_report_24dp),
+                        painter = StoatIcons.Report.painter(),
                         contentDescription = null
                     )
                 },
@@ -369,7 +362,7 @@ fun ServerContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_door_open_24dp),
+                        painter = StoatIcons.Leave.painter(),
                         contentDescription = null,
                     )
                 },

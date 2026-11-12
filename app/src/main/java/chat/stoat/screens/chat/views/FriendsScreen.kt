@@ -98,6 +98,8 @@ import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.vectorassets.HL_TAG
 import chat.stoat.composables.vectorassets.HL_USERNAME
 import chat.stoat.composables.vectorassets.Nametag
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.getStringBlocking
@@ -125,11 +127,6 @@ import chat.stoat.shared.resources.friends_scan_qr_result_sheet_invalid_title
 import chat.stoat.shared.resources.friends_scan_qr_result_sheet_missing_permission_description
 import chat.stoat.shared.resources.friends_scan_qr_result_sheet_missing_permission_title
 import chat.stoat.shared.resources.friends_scan_qr_result_sheet_success_title
-import chat.stoat.shared.resources.ic_group_add_24dp
-import chat.stoat.shared.resources.ic_menu_24dp
-import chat.stoat.shared.resources.ic_more_vert_24dp
-import chat.stoat.shared.resources.ic_qr_code_scanner_24dp
-import chat.stoat.shared.resources.ic_tag_24dp
 import chat.stoat.shared.resources.menu
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.status_online
@@ -138,7 +135,6 @@ import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanQRCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private fun showInvalidClipboardToast(context: Context) {
@@ -593,7 +589,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                 onDrawerClicked()
                             }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_menu_24dp),
+                                    painter = StoatIcons.OpenDrawer.painter(),
                                     contentDescription = stringResource(Res.string.menu)
                                 )
                             }
@@ -604,7 +600,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                             overflowMenuShown = true
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_more_vert_24dp),
+                                painter = StoatIcons.MoreOptions.painter(),
                                 contentDescription = stringResource(Res.string.menu)
                             )
                         }
@@ -858,7 +854,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(Res.drawable.ic_group_add_24dp),
+                            StoatIcons.NewGroup.painter(),
                             contentDescription = null
                         )
                     },
@@ -872,7 +868,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(Res.drawable.ic_qr_code_scanner_24dp),
+                            StoatIcons.ScanQrCode.painter(),
                             contentDescription = null
                         )
                     },
@@ -886,7 +882,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                     },
                     icon = {
                         Icon(
-                            painterResource(Res.drawable.ic_tag_24dp),
+                            StoatIcons.AddFriendByUsername.painter(),
                             contentDescription = null
                         )
                     },

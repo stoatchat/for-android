@@ -66,24 +66,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.chat.displayNameInChannel
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_call_end_24dp__fill
-import chat.stoat.shared.resources.ic_cameraswitch_24dp
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_chevron_forward_24dp
-import chat.stoat.shared.resources.ic_headset_24dp
-import chat.stoat.shared.resources.ic_headset_off_24dp
-import chat.stoat.shared.resources.ic_mic_24dp
-import chat.stoat.shared.resources.ic_mic_off_24dp
-import chat.stoat.shared.resources.ic_mobile_share_24px
-import chat.stoat.shared.resources.ic_screen_share_24dp
-import chat.stoat.shared.resources.ic_sprint_24dp
-import chat.stoat.shared.resources.ic_videocam_24dp
-import chat.stoat.shared.resources.ic_videocam_off_24dp
-import chat.stoat.shared.resources.ic_volume_up_24dp
-import chat.stoat.shared.resources.ic_wifi_tethering_24dp
-import chat.stoat.shared.resources.ic_wifi_tethering_error_24dp
 import chat.stoat.shared.resources.unknown
 import chat.stoat.shared.resources.voice_action_deafen
 import chat.stoat.shared.resources.voice_action_disconnect
@@ -120,7 +106,6 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.seconds
 
@@ -235,7 +220,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                     ) {
                                         if (trackRef.source == Track.Source.SCREEN_SHARE) {
                                             Icon(
-                                                painter = painterResource(Res.drawable.ic_screen_share_24dp),
+                                                painter = StoatIcons.ScreenSharing.painter(),
                                                 contentDescription = stringResource(Res.string.voice_screen_sharing),
                                                 modifier = Modifier.size(16.dp)
                                             )
@@ -320,14 +305,12 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                     }
                                 ) {
                                     Icon(
-                                        painter = painterResource(
-                                            when (roomState) {
-                                                Room.State.CONNECTING -> Res.drawable.ic_sprint_24dp
-                                                Room.State.CONNECTED -> Res.drawable.ic_wifi_tethering_24dp
-                                                Room.State.DISCONNECTED -> Res.drawable.ic_wifi_tethering_error_24dp
-                                                Room.State.RECONNECTING -> Res.drawable.ic_sprint_24dp
-                                            }
-                                        ),
+                                        painter = when (roomState) {
+                                            Room.State.CONNECTING -> StoatIcons.VoiceConnecting.painter()
+                                            Room.State.CONNECTED -> StoatIcons.VoiceConnected.painter()
+                                            Room.State.DISCONNECTED -> StoatIcons.VoiceDisconnected.painter()
+                                            Room.State.RECONNECTING -> StoatIcons.VoiceConnecting.painter()
+                                        },
                                         contentDescription = null
                                     )
                                     Text(
@@ -428,9 +411,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         ),
                         leadingContent = {
                             Icon(
-                                painter = if (isCameraOn) painterResource(Res.drawable.ic_videocam_24dp) else painterResource(
-                                    Res.drawable.ic_videocam_off_24dp
-                                ),
+                                painter = if (isCameraOn) StoatIcons.CallCamera.painter() else StoatIcons.CallCameraOff.painter(),
                                 contentDescription = null
                             )
                         },
@@ -449,7 +430,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                             ),
                             leadingContent = {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_cameraswitch_24dp),
+                                    painter = StoatIcons.SwitchCamera.painter(),
                                     contentDescription = null
                                 )
                             },
@@ -481,7 +462,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         ),
                         leadingContent = {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_mobile_share_24px),
+                                painter = StoatIcons.StartScreenShare.painter(),
                                 contentDescription = null
                             )
                         },
@@ -513,7 +494,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                 },
                                 leadingContent = {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_volume_up_24dp),
+                                        painter = StoatIcons.AudioOutput.painter(),
                                         contentDescription = null
                                     )
                                 },
@@ -533,7 +514,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                                         trailingIcon = {
                                             if (device == selectedAudioDevice) {
                                                 Icon(
-                                                    painter = painterResource(Res.drawable.ic_check_24dp),
+                                                    painter = StoatIcons.Selected.painter(),
                                                     contentDescription = null
                                                 )
                                             }
@@ -581,9 +562,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = if (isMicOn) painterResource(Res.drawable.ic_mic_24dp) else painterResource(
-                            Res.drawable.ic_mic_off_24dp
-                        ),
+                        painter = if (isMicOn) StoatIcons.Microphone.painter() else StoatIcons.MicrophoneMuted.painter(),
                         contentDescription = stringResource(
                             if (isMicOn) Res.string.voice_action_mute else Res.string.voice_action_unmute
                         )
@@ -602,9 +581,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = if (isDeafened) painterResource(Res.drawable.ic_headset_off_24dp) else painterResource(
-                            Res.drawable.ic_headset_24dp
-                        ),
+                        painter = if (isDeafened) StoatIcons.Deafened.painter() else StoatIcons.Deafen.painter(),
                         contentDescription = stringResource(
                             if (isDeafened) Res.string.voice_action_undeafen else Res.string.voice_action_deafen
                         )
@@ -623,7 +600,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_chevron_forward_24dp),
+                        painter = StoatIcons.ExpandToolbar.painter(),
                         contentDescription = null,
                         modifier = Modifier.graphicsLayer { rotationZ = chevronRotation }
                     )
@@ -641,7 +618,7 @@ fun VoiceSheet(onDisconnect: () -> Unit) {
                         .height(64.dp)
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_call_end_24dp__fill),
+                        painter = StoatIcons.HangUp.painter(),
                         contentDescription = stringResource(Res.string.voice_action_disconnect)
                     )
                 }

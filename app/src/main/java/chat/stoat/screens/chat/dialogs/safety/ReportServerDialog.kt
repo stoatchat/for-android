@@ -31,12 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.safety.putServerReport
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ContentReportReason
 import chat.stoat.composables.generic.FormTextField
 import chat.stoat.composables.screens.settings.ServerOverview
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_close_24dp
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.report_cancel
 import chat.stoat.shared.resources.report_reason
@@ -68,7 +68,6 @@ import chat.stoat.shared.resources.report_submit_thanks
 import chat.stoat.shared.resources.report_submitting
 import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class ServerReportFlowState {
@@ -268,7 +267,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_check_24dp),
+                        painter = StoatIcons.Success.painter(),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -313,7 +312,7 @@ fun ReportServerDialog(onDismiss: () -> Unit, serverId: String) {
                 },
                 icon = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_close_24dp),
+                        painter = StoatIcons.Dismiss.painter(),
                         contentDescription = null, // decorative
                         tint = MaterialTheme.colorScheme.primary
                     )

@@ -41,21 +41,13 @@ import chat.stoat.api.routes.channel.react
 import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.composables.chat.Message
 import chat.stoat.composables.generic.SheetButton
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.comingsoon_toast
 import chat.stoat.shared.resources.copied
-import chat.stoat.shared.resources.ic_add_reaction_24dp
-import chat.stoat.shared.resources.ic_content_copy_24dp
-import chat.stoat.shared.resources.ic_delete_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_identifier_copy_24dp
-import chat.stoat.shared.resources.ic_ios_share_24dp
-import chat.stoat.shared.resources.ic_link_24dp
-import chat.stoat.shared.resources.ic_reply_24dp
-import chat.stoat.shared.resources.ic_report_24dp
-import chat.stoat.shared.resources.ic_visibility_off_24dp
 import chat.stoat.shared.resources.message_context_sheet_actions_copy
 import chat.stoat.shared.resources.message_context_sheet_actions_copy_failed_empty
 import chat.stoat.shared.resources.message_context_sheet_actions_copy_id
@@ -75,7 +67,6 @@ import chat.stoat.shared.resources.message_context_sheet_actions_report
 import chat.stoat.shared.resources.share
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -129,7 +120,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_content_copy_24dp),
+                            painter = StoatIcons.Copy.painter(),
                             contentDescription = null
                         )
                     },
@@ -175,7 +166,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_link_24dp),
+                            painter = StoatIcons.CopyLink.painter(),
                             contentDescription = null
                         )
                     },
@@ -233,7 +224,7 @@ fun MessageContextSheet(
                 SheetButton(
                     leadingContent = {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                            painter = StoatIcons.CopyId.painter(),
                             contentDescription = null
                         )
                     },
@@ -361,7 +352,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_reply_24dp),
+                    painter = StoatIcons.Reply.painter(),
                     contentDescription = null
                 )
             },
@@ -381,7 +372,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_add_reaction_24dp),
+                    painter = StoatIcons.AddReaction.painter(),
                     contentDescription = null
                 )
             },
@@ -399,7 +390,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_edit_24dp),
+                        painter = StoatIcons.Edit.painter(),
                         contentDescription = null
                     )
                 },
@@ -420,7 +411,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_visibility_off_24dp),
+                    painter = StoatIcons.MarkUnread.painter(),
                     contentDescription = null
                 )
             },
@@ -445,7 +436,7 @@ fun MessageContextSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_ios_share_24dp),
+                    painter = StoatIcons.Share.painter(),
                     contentDescription = null,
                 )
             },
@@ -471,7 +462,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_delete_24dp),
+                        painter = StoatIcons.Delete.painter(),
                         contentDescription = null
                     )
                 },
@@ -491,7 +482,7 @@ fun MessageContextSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_report_24dp),
+                        painter = StoatIcons.Report.painter(),
                         contentDescription = null
                     )
                 },

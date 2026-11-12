@@ -49,6 +49,8 @@ import androidx.navigation.NavController
 import chat.stoat.BuildConfig
 import chat.stoat.api.StoatJson
 import chat.stoat.api.routes.misc.getRootRoute
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.internals.Platform
@@ -62,8 +64,6 @@ import chat.stoat.shared.resources.about_section_debug_information_copy_as_json
 import chat.stoat.shared.resources.about_section_debug_information_description
 import chat.stoat.shared.resources.about_section_oss_licenses
 import chat.stoat.shared.resources.copied
-import chat.stoat.shared.resources.ic_chevron_forward_24dp
-import chat.stoat.shared.resources.ic_content_copy_24dp
 import chat.stoat.shared.resources.stoat_logo_white
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -193,7 +193,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                     }
                     Spacer(Modifier.weight(1f))
                     Icon(
-                        painter = painterResource(Res.drawable.ic_chevron_forward_24dp),
+                        painter = StoatIcons.Disclosure.painter(),
                         contentDescription = null,
                         tint = LocalContentColor.current.copy(alpha = 0.5f),
                         modifier = Modifier.rotate(debugInfoChevronRotation)
@@ -260,7 +260,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                                 }
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_content_copy_24dp),
+                                    painter = StoatIcons.Copy.painter(),
                                     contentDescription = null
                                 )
 
@@ -301,7 +301,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                     }
                     Spacer(Modifier.weight(1f))
                     Icon(
-                        painter = painterResource(Res.drawable.ic_chevron_forward_24dp),
+                        painter = StoatIcons.Disclosure.painter(),
                         contentDescription = null,
                         tint = LocalContentColor.current.copy(alpha = 0.5f)
                     )

@@ -39,6 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.api.settings.LoadedSettings
@@ -47,9 +49,6 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.providers.getAttachmentContentUri
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_download_24dp
-import chat.stoat.shared.resources.ic_ios_share_24dp
 import chat.stoat.shared.resources.media_viewer_open
 import chat.stoat.shared.resources.media_viewer_save
 import chat.stoat.shared.resources.media_viewer_saved
@@ -65,7 +64,6 @@ import me.saket.telephoto.zoomable.glide.ZoomableGlideImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class ImageViewActivity : ComponentActivity() {
@@ -212,7 +210,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             onClose()
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                painter = StoatIcons.Back.painter(),
                                 contentDescription = stringResource(Res.string.back)
                             )
                         }
@@ -222,7 +220,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             shareSubmenuIsOpen.value = true
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_ios_share_24dp),
+                                painter = StoatIcons.Share.painter(),
                                 contentDescription = stringResource(Res.string.share)
                             )
                         }
@@ -261,7 +259,7 @@ fun ImageViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
                             saveToGallery()
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_download_24dp),
+                                painter = StoatIcons.SaveToDevice.painter(),
                                 contentDescription = stringResource(
                                     Res.string.media_viewer_save
                                 )

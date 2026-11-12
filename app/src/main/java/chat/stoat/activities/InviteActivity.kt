@@ -53,13 +53,14 @@ import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Invite
 import chat.stoat.core.model.schemas.InviteJoined
 import chat.stoat.core.model.util.RsResult
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_error_24dp
 import chat.stoat.shared.resources.invite_already_member
 import chat.stoat.shared.resources.invite_cancel
 import chat.stoat.shared.resources.invite_error_banned
@@ -75,7 +76,6 @@ import chat.stoat.shared.resources.unknown
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class InviteActivity : ComponentActivity() {
@@ -318,7 +318,7 @@ fun InvalidInviteError(error: StoatAPIError? = null, onDismissRequest: () -> Uni
         onDismissRequest = onDismissRequest,
         icon = {
             Icon(
-                painter = painterResource(Res.drawable.ic_error_24dp),
+                painter = StoatIcons.Error.painter(),
                 contentDescription = null, // decorative
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -364,7 +364,7 @@ fun NoInviteSpecifiedError(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
         icon = {
             Icon(
-                painter = painterResource(Res.drawable.ic_error_24dp),
+                painter = StoatIcons.Error.painter(),
                 contentDescription = null, // decorative
                 tint = MaterialTheme.colorScheme.primary
             )

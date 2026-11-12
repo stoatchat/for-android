@@ -49,17 +49,17 @@ import chat.stoat.api.settings.MessageReplyStyle
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.Message
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.supportSwipeReply
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_reply_24dp
 import chat.stoat.shared.resources.swipe_to_reply_keep_swiping
 import chat.stoat.shared.resources.swipe_to_reply_release
 import com.mikepenz.markdown.model.State
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
@@ -276,7 +276,7 @@ fun RegularMessage(
                     )
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_reply_24dp),
+                        painter = StoatIcons.Reply.painter(),
                         contentDescription = null,
                         modifier = Modifier.size(
                             min(

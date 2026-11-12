@@ -23,15 +23,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import chat.stoat.activities.StoatTweenColour
 import chat.stoat.activities.StoatTweenDp
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.server.PermissionOverrideValue
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_check_24dp
-import chat.stoat.shared.resources.ic_close_24dp
-import chat.stoat.shared.resources.ic_remove_24dp
 import chat.stoat.shared.resources.permission_allow
 import chat.stoat.shared.resources.permission_deny
 import chat.stoat.shared.resources.permission_neutral
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private val PermissionOverrideOptions = listOf(
@@ -123,9 +121,9 @@ private fun PermissionOverrideOption(
         }
     )
     val icon = when (option) {
-        PermissionOverrideValue.Allow -> Res.drawable.ic_check_24dp
-        PermissionOverrideValue.Neutral -> Res.drawable.ic_remove_24dp
-        PermissionOverrideValue.Deny -> Res.drawable.ic_close_24dp
+        PermissionOverrideValue.Allow -> StoatIcons.PermissionAllow
+        PermissionOverrideValue.Neutral -> StoatIcons.PermissionInherit
+        PermissionOverrideValue.Deny -> StoatIcons.PermissionDeny
     }
 
     Box(
@@ -142,7 +140,7 @@ private fun PermissionOverrideOption(
             ),
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = icon.painter(),
             contentDescription = label,
             tint = contentColor,
             modifier = Modifier.size(20.dp),

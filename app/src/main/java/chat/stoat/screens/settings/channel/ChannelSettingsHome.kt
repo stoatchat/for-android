@@ -40,6 +40,8 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.channel.leaveDeleteOrCloseChannel
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.screens.settings.SettingsIcon
@@ -55,12 +57,7 @@ import chat.stoat.shared.resources.channel_settings_delete_confirm_yes
 import chat.stoat.shared.resources.channel_settings_header
 import chat.stoat.shared.resources.channel_settings_overview
 import chat.stoat.shared.resources.channel_settings_permissions
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_delete_24dp
-import chat.stoat.shared.resources.ic_info_24dp
-import chat.stoat.shared.resources.ic_page_info_24dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,7 +123,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -158,7 +155,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_info_24dp),
+                                        painter = StoatIcons.Overview.painter(),
                                         contentDescription = null,
                                     )
                                 }
@@ -184,7 +181,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_page_info_24dp),
+                                        painter = StoatIcons.Permissions.painter(),
                                         contentDescription = null,
                                     )
                                 }
@@ -211,7 +208,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             leadingContent = {
                                 SettingsIcon(danger = true) {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_delete_24dp),
+                                        painter = StoatIcons.Delete.painter(),
                                         contentDescription = null,
                                     )
                                 }

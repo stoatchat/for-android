@@ -17,19 +17,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.screens.chat.StackedUserAvatars
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_voice_chat_24dp
 import chat.stoat.shared.resources.unknown
 import chat.stoat.shared.resources.voice_join_offering
 import chat.stoat.shared.resources.voice_join_offering_description_one
 import chat.stoat.shared.resources.voice_join_offering_description_other
 import chat.stoat.shared.resources.voice_join_offering_description_zero
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -58,7 +58,7 @@ fun JoinVoiceChannelButton(channelId: String, modifier: Modifier = Modifier) {
             )
         } else {
             Icon(
-                painter = painterResource(Res.drawable.ic_voice_chat_24dp),
+                painter = StoatIcons.JoinVoice.painter(),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )

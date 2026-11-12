@@ -25,9 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_error_24dp
-import org.jetbrains.compose.resources.painterResource
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 
 private val NoneLambda = @Composable { throw UnsupportedOperationException() }
 
@@ -109,7 +108,7 @@ fun NonIdealStatePreviewNoActions() {
     NonIdealState(
         icon = {
             Icon(
-                painter = painterResource(Res.drawable.ic_error_24dp),
+                painter = StoatIcons.Error.painter(),
                 contentDescription = null,
                 modifier = Modifier.size(it)
             )

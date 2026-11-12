@@ -32,6 +32,9 @@ import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.ListHeader
+import chat.stoat.core.designsystem.icons.StoatIcon
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.ServerSettingsOption
 import chat.stoat.internals.server.availableServerSettingsOptions
@@ -40,14 +43,6 @@ import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_delete_24dp
-import chat.stoat.shared.resources.ic_flag_24dp
-import chat.stoat.shared.resources.ic_gavel_24dp
-import chat.stoat.shared.resources.ic_grid_3x3_24dp
-import chat.stoat.shared.resources.ic_group_24dp
-import chat.stoat.shared.resources.ic_info_24dp
-import chat.stoat.shared.resources.ic_link_24dp
-import chat.stoat.shared.resources.ic_mood_24dp
 import chat.stoat.shared.resources.server_settings
 import chat.stoat.shared.resources.server_settings_bans
 import chat.stoat.shared.resources.server_settings_category_customisation
@@ -65,9 +60,7 @@ import chat.stoat.shared.resources.server_settings_members
 import chat.stoat.shared.resources.server_settings_overview
 import chat.stoat.shared.resources.server_settings_roles
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private const val MEMBERS_PANEL_ACCESSIBLE = false
@@ -310,7 +303,7 @@ private fun ServerSettingsOptionRow(
         leadingContent = {
             SettingsIcon(danger = dangerous) {
                 Icon(
-                    painter = painterResource(option.iconResource),
+                    painter = option.iconResource.painter(),
                     contentDescription = null,
                 )
             }
@@ -331,14 +324,14 @@ private val ServerSettingsOption.stringResource: StringResource
         ServerSettingsOption.DeleteServer -> Res.string.server_settings_delete
     }
 
-private val ServerSettingsOption.iconResource: DrawableResource
+private val ServerSettingsOption.iconResource: StoatIcon
     get() = when (this) {
-        ServerSettingsOption.Overview -> Res.drawable.ic_info_24dp
-        ServerSettingsOption.Channels -> Res.drawable.ic_grid_3x3_24dp
-        ServerSettingsOption.Emojis -> Res.drawable.ic_mood_24dp
-        ServerSettingsOption.Members -> Res.drawable.ic_group_24dp
-        ServerSettingsOption.Roles -> Res.drawable.ic_flag_24dp
-        ServerSettingsOption.Invites -> Res.drawable.ic_link_24dp
-        ServerSettingsOption.Bans -> Res.drawable.ic_gavel_24dp
-        ServerSettingsOption.DeleteServer -> Res.drawable.ic_delete_24dp
+        ServerSettingsOption.Overview -> StoatIcons.Overview
+        ServerSettingsOption.Channels -> StoatIcons.Channels
+        ServerSettingsOption.Emojis -> StoatIcons.Emojis
+        ServerSettingsOption.Members -> StoatIcons.Members
+        ServerSettingsOption.Roles -> StoatIcons.Roles
+        ServerSettingsOption.Invites -> StoatIcons.Invites
+        ServerSettingsOption.Bans -> StoatIcons.Bans
+        ServerSettingsOption.DeleteServer -> StoatIcons.Delete
     }

@@ -84,6 +84,8 @@ import chat.stoat.composables.mfa.RecoveryCodesDialog
 import chat.stoat.composables.mfa.mfaErrorText
 import chat.stoat.composables.vectorassets.MfaOff
 import chat.stoat.composables.vectorassets.MfaOn
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
@@ -91,7 +93,6 @@ import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
 import chat.stoat.shared.resources.copied
-import chat.stoat.shared.resources.ic_content_copy_24dp
 import chat.stoat.shared.resources.settings_mfa
 import chat.stoat.shared.resources.settings_mfa_disable_totp
 import chat.stoat.shared.resources.settings_mfa_disable_totp_cta
@@ -129,7 +130,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -561,7 +561,7 @@ private fun TotpEnrollmentSheet(
                     }
                 }) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_content_copy_24dp),
+                        painter = StoatIcons.Copy.painter(),
                         contentDescription = stringResource(Res.string.settings_mfa_totp_setup_copy_secret)
                     )
                 }

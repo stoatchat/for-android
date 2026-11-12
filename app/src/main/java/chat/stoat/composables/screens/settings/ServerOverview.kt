@@ -26,17 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.has
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_verified_24dp__fill
-import chat.stoat.shared.resources.ic_workspace_premium_24dp__fill
 import chat.stoat.shared.resources.server_flag_official
 import chat.stoat.shared.resources.server_flag_verified
 import chat.stoat.shared.resources.unknown
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -109,7 +108,7 @@ fun ServerOverview(server: Server) {
             CompositionLocalProvider(LocalContentColor provides Color.White) {
                 if (server.flags has ServerFlags.Official) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_workspace_premium_24dp__fill),
+                        painter = StoatIcons.Official.painter(),
                         contentDescription = stringResource(Res.string.server_flag_official),
                         modifier = Modifier
                             .padding(end = 8.dp)
@@ -118,7 +117,7 @@ fun ServerOverview(server: Server) {
                 }
                 if (server.flags has ServerFlags.Verified) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_verified_24dp__fill),
+                        painter = StoatIcons.Verified.painter(),
                         contentDescription = stringResource(Res.string.server_flag_verified),
                         modifier = Modifier
                             .padding(end = 8.dp)

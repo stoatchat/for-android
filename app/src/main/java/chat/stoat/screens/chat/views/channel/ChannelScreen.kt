@@ -160,6 +160,8 @@ import chat.stoat.composables.screens.chat.molecules.JoinVoiceChannelButton
 import chat.stoat.composables.skeletons.MessageSkeleton
 import chat.stoat.composables.skeletons.MessageSkeletonVariant
 import chat.stoat.composables.voice.VoiceCallBanner
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
@@ -175,18 +177,6 @@ import chat.stoat.shared.resources.file_picker_chip_camera_failed
 import chat.stoat.shared.resources.file_picker_chip_camera_none_installed
 import chat.stoat.shared.resources.file_picker_chip_documents
 import chat.stoat.shared.resources.file_picker_chip_photo_picker
-import chat.stoat.shared.resources.ic_action_key_24dp
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_attach_file_24dp
-import chat.stoat.shared.resources.ic_call_24dp__fill
-import chat.stoat.shared.resources.ic_camera_24dp
-import chat.stoat.shared.resources.ic_close_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_keyboard_arrow_right_24dp
-import chat.stoat.shared.resources.ic_menu_24dp
-import chat.stoat.shared.resources.ic_photo_library_24dp
-import chat.stoat.shared.resources.ic_search_24dp
-import chat.stoat.shared.resources.ic_south_24dp
 import chat.stoat.shared.resources.menu
 import chat.stoat.shared.resources.message_failed_to_send
 import chat.stoat.shared.resources.message_field_editing_message
@@ -220,7 +210,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -885,7 +874,7 @@ fun ChannelScreen(
                                 }
 
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_keyboard_arrow_right_24dp),
+                                    painter = StoatIcons.Disclosure.painter(),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(16.dp)
@@ -899,7 +888,7 @@ fun ChannelScreen(
                         if (useDrawer) {
                             IconButton(onClick = onToggleDrawer) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_menu_24dp),
+                                    painter = StoatIcons.OpenDrawer.painter(),
                                     contentDescription = stringResource(Res.string.menu)
                                 )
                             }
@@ -907,7 +896,7 @@ fun ChannelScreen(
                         if (useBackButton) {
                             IconButton(onClick = backButtonAction ?: {}) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                    painter = StoatIcons.Back.painter(),
                                     contentDescription = stringResource(Res.string.back)
                                 )
                             }
@@ -930,7 +919,7 @@ fun ChannelScreen(
                                 }
                             }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_call_24dp__fill),
+                                    painter = StoatIcons.Call.painter(),
                                     contentDescription = stringResource(Res.string.voice_start_call)
                                 )
                             }
@@ -943,7 +932,7 @@ fun ChannelScreen(
                             }
                         }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_search_24dp),
+                                painter = StoatIcons.Search.painter(),
                                 contentDescription = stringResource(Res.string.channel_search)
                             )
                         }
@@ -1242,7 +1231,7 @@ fun ChannelScreen(
                                                     ) {
                                                         with(LocalDensity.current) {
                                                             Image(
-                                                                painterResource(Res.drawable.ic_action_key_24dp),
+                                                                StoatIcons.MetaKey.painter(),
                                                                 contentDescription = null,
                                                                 colorFilter = ColorFilter.tint(
                                                                     LocalContentColor.current
@@ -1372,7 +1361,7 @@ fun ChannelScreen(
                                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                                 ) {
                                     Icon(
-                                        painter = painterResource(Res.drawable.ic_south_24dp),
+                                        painter = StoatIcons.ScrollToBottom.painter(),
                                         contentDescription = stringResource(
                                             Res.string.scroll_to_bottom
                                         )
@@ -1533,7 +1522,7 @@ fun ChannelScreen(
                                                                 verticalAlignment = Alignment.CenterVertically
                                                             ) {
                                                                 Icon(
-                                                                    painter = painterResource(Res.drawable.ic_edit_24dp),
+                                                                    painter = StoatIcons.Editing.painter(),
                                                                     contentDescription = null,
                                                                     modifier = Modifier.size(20.dp)
                                                                 )
@@ -1544,7 +1533,7 @@ fun ChannelScreen(
                                                                     style = MaterialTheme.typography.labelLarge
                                                                 )
                                                                 Icon(
-                                                                    painter = painterResource(Res.drawable.ic_close_24dp),
+                                                                    painter = StoatIcons.CancelEditing.painter(),
                                                                     contentDescription = stringResource(
                                                                         Res.string.message_field_editing_message_cancel_alt
                                                                     ),
@@ -1652,7 +1641,7 @@ fun ChannelScreen(
                                                     DropdownMenuItem(
                                                         leadingIcon = {
                                                             Icon(
-                                                                painter = painterResource(Res.drawable.ic_attach_file_24dp),
+                                                                painter = StoatIcons.AttachFile.painter(),
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },
@@ -1666,7 +1655,7 @@ fun ChannelScreen(
                                                     DropdownMenuItem(
                                                         leadingIcon = {
                                                             Icon(
-                                                                painter = painterResource(Res.drawable.ic_camera_24dp),
+                                                                painter = StoatIcons.TakePhoto.painter(),
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },
@@ -1680,7 +1669,7 @@ fun ChannelScreen(
                                                     DropdownMenuItem(
                                                         leadingIcon = {
                                                             Icon(
-                                                                painter = painterResource(Res.drawable.ic_photo_library_24dp),
+                                                                painter = StoatIcons.PhotoLibrary.painter(),
                                                                 contentDescription = null // Provided by text below
                                                             )
                                                         },

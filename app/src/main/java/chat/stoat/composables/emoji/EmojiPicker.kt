@@ -63,6 +63,8 @@ import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.generic.IconPlaceholder
 import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Category
 import chat.stoat.internals.EmojiImpl
@@ -79,20 +81,8 @@ import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_4
 import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_5
 import chat.stoat.shared.resources.emoji_picker_skin_tone_fitzpatrick_6
 import chat.stoat.shared.resources.emoji_picker_skin_tone_none
-import chat.stoat.shared.resources.ic_bus_railway_24dp
-import chat.stoat.shared.resources.ic_close_24dp
-import chat.stoat.shared.resources.ic_emoji_nature_24dp
-import chat.stoat.shared.resources.ic_emoji_objects_24dp
-import chat.stoat.shared.resources.ic_emoji_people_24dp
-import chat.stoat.shared.resources.ic_emoji_symbols_24dp
-import chat.stoat.shared.resources.ic_flag_24dp
-import chat.stoat.shared.resources.ic_keyboard_arrow_right_24dp
-import chat.stoat.shared.resources.ic_mood_24dp
-import chat.stoat.shared.resources.ic_sports_and_outdoors_24dp
-import chat.stoat.shared.resources.ic_sports_bar_24dp
 import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -249,7 +239,7 @@ fun EmojiPicker(
                     innerTextField()
 
                     Icon(
-                        painter = painterResource(Res.drawable.ic_close_24dp),
+                        painter = StoatIcons.ClearSearch.painter(),
                         contentDescription = stringResource(Res.string.emoji_picker_clear_search),
                         modifier = Modifier
                             .clip(CircleShape)
@@ -361,7 +351,7 @@ fun EmojiPicker(
                         textAlign = TextAlign.Center
                     )
                     Icon(
-                        painter = painterResource(Res.drawable.ic_keyboard_arrow_right_24dp),
+                        painter = StoatIcons.CloseSkinToneMenu.painter(),
                         contentDescription = stringResource(
                             Res.string.emoji_picker_close_skin_tone_menu
                         ),
@@ -462,41 +452,23 @@ fun EmojiPicker(
                     ) {
                         Icon(
                             painter = when (category) {
-                                UnicodeEmojiSection.Smileys -> painterResource(
-                                    Res.drawable.ic_mood_24dp
-                                )
+                                UnicodeEmojiSection.Smileys -> StoatIcons.EmojiSmileys.painter()
 
-                                UnicodeEmojiSection.People -> painterResource(
-                                    Res.drawable.ic_emoji_people_24dp
-                                )
+                                UnicodeEmojiSection.People -> StoatIcons.EmojiPeople.painter()
 
-                                UnicodeEmojiSection.Animals -> painterResource(
-                                    Res.drawable.ic_emoji_nature_24dp
-                                )
+                                UnicodeEmojiSection.Animals -> StoatIcons.EmojiNature.painter()
 
-                                UnicodeEmojiSection.Food -> painterResource(
-                                    Res.drawable.ic_sports_bar_24dp
-                                )
+                                UnicodeEmojiSection.Food -> StoatIcons.EmojiFood.painter()
 
-                                UnicodeEmojiSection.Travel -> painterResource(
-                                    Res.drawable.ic_bus_railway_24dp
-                                )
+                                UnicodeEmojiSection.Travel -> StoatIcons.EmojiTravel.painter()
 
-                                UnicodeEmojiSection.Activities -> painterResource(
-                                    Res.drawable.ic_sports_and_outdoors_24dp
-                                )
+                                UnicodeEmojiSection.Activities -> StoatIcons.EmojiActivities.painter()
 
-                                UnicodeEmojiSection.Objects -> painterResource(
-                                    Res.drawable.ic_emoji_objects_24dp
-                                )
+                                UnicodeEmojiSection.Objects -> StoatIcons.EmojiObjects.painter()
 
-                                UnicodeEmojiSection.Symbols -> painterResource(
-                                    Res.drawable.ic_emoji_symbols_24dp
-                                )
+                                UnicodeEmojiSection.Symbols -> StoatIcons.EmojiSymbols.painter()
 
-                                UnicodeEmojiSection.Flags -> painterResource(
-                                    Res.drawable.ic_flag_24dp
-                                )
+                                UnicodeEmojiSection.Flags -> StoatIcons.EmojiFlags.painter()
                             },
                             contentDescription = null,
                             tint = if (currentCategory.value is Category.UnicodeEmojiCategory && (currentCategory.value as Category.UnicodeEmojiCategory).definition == category) {

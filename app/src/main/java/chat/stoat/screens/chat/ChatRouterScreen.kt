@@ -78,6 +78,8 @@ import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.DisconnectedNotice
 import chat.stoat.composables.screens.chat.drawer.ChannelSideDrawer
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.ReleaseNotesSettings
 import chat.stoat.core.model.schemas.User
@@ -95,7 +97,6 @@ import chat.stoat.screens.chat.views.channel.ChannelScreen
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_link_invalid
 import chat.stoat.shared.resources.channel_link_invalid_description
-import chat.stoat.shared.resources.ic_lock_24dp
 import chat.stoat.shared.resources.notice_platform_mod_dm_acknowledge
 import chat.stoat.shared.resources.notice_platform_mod_dm_description
 import chat.stoat.shared.resources.notice_platform_mod_dm_title
@@ -122,7 +123,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import logcat.LogPriority
 import logcat.logcat
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 
@@ -794,7 +794,7 @@ fun ChatRouterScreen(
             },
             icon = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_lock_24dp),
+                    painter = StoatIcons.Locked.painter(),
                     contentDescription = null, // decorative
                     tint = MaterialTheme.colorScheme.primary
                 )

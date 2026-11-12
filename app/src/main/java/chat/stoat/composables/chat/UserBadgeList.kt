@@ -18,10 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.UserBadges
 import chat.stoat.core.model.schemas.has
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_emoji_people_24dp
 import chat.stoat.shared.resources.user_badge_active_supporter
 import chat.stoat.shared.resources.user_badge_developer
 import chat.stoat.shared.resources.user_badge_disclosure
@@ -113,7 +114,7 @@ fun BadgeListEntry(badge: UserBadges) {
         UserBadges.ActiveSupporter.value -> {
             BadgeListEntryTemplate(
                 label = stringResource(Res.string.user_badge_active_supporter),
-                icon = painterResource(Res.drawable.ic_emoji_people_24dp),
+                icon = StoatIcons.ActiveSupporterBadge.painter(),
                 tint = LocalContentColor.current,
             )
         }
@@ -179,7 +180,7 @@ fun UserBadgeRow(badges: Long) {
                         UserBadges.ResponsibleDisclosure -> painterResource(Res.drawable.user_badge_disclosure)
                         UserBadges.Founder -> painterResource(Res.drawable.user_badge_founder)
                         UserBadges.PlatformModeration -> painterResource(Res.drawable.user_badge_moderation)
-                        UserBadges.ActiveSupporter -> painterResource(Res.drawable.ic_emoji_people_24dp)
+                        UserBadges.ActiveSupporter -> StoatIcons.ActiveSupporterBadge.painter()
                         UserBadges.Paw -> painterResource(Res.drawable.user_badge_paw)
                         UserBadges.EarlyAdopter -> painterResource(Res.drawable.user_badge_early_adopter)
                         UserBadges.ReservedRelevantJokeBadge1 -> painterResource(Res.drawable.user_badge_reserved_relevant_one)

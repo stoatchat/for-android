@@ -48,6 +48,8 @@ import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
@@ -58,14 +60,11 @@ import chat.stoat.shared.resources.channel_search_prompt
 import chat.stoat.shared.resources.channel_search_sort_latest
 import chat.stoat.shared.resources.channel_search_sort_oldest
 import chat.stoat.shared.resources.channel_search_sort_relevance
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_close_24dp
 import chat.stoat.shared.resources.tap_to_retry
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private const val MAX_QUERY_LENGTH = 64
@@ -208,7 +207,7 @@ fun ChannelSearchScreen(
                     leadingIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                painter = StoatIcons.Back.painter(),
                                 contentDescription = stringResource(Res.string.back)
                             )
                         }
@@ -217,7 +216,7 @@ fun ChannelSearchScreen(
                         if (viewModel.query.isNotEmpty()) {
                             IconButton(onClick = { viewModel.clear() }) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_close_24dp),
+                                    painter = StoatIcons.ClearSearch.painter(),
                                     contentDescription = stringResource(Res.string.channel_search_clear)
                                 )
                             }

@@ -52,13 +52,14 @@ import chat.stoat.api.internals.hasPermission
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.patchServer
 import chat.stoat.composables.generic.InlineMediaPicker
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_check_24dp
 import chat.stoat.shared.resources.server_settings_overview
 import chat.stoat.shared.resources.server_settings_overview_description_hint
 import chat.stoat.shared.resources.server_settings_overview_disabled
@@ -84,7 +85,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -424,7 +424,7 @@ fun ServerSettingsOverview(
                         )
                     } else {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_check_24dp),
+                            painter = StoatIcons.Save.painter(),
                             contentDescription = stringResource(
                                 Res.string.server_settings_overview_save
                             ),

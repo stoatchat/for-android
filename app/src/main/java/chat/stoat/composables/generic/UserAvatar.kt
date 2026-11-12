@@ -27,24 +27,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.core.designsystem.icons.StoatIcon
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.avatar_alt
-import chat.stoat.shared.resources.ic_bedtime_24dp
-import chat.stoat.shared.resources.ic_circle_24dp
-import chat.stoat.shared.resources.ic_circle_24dp__fill
-import chat.stoat.shared.resources.ic_circle_circle_24dp
-import chat.stoat.shared.resources.ic_do_not_disturb_on_24dp
 import chat.stoat.shared.resources.status_dnd
 import chat.stoat.shared.resources.status_focus
 import chat.stoat.shared.resources.status_idle
 import chat.stoat.shared.resources.status_offline
 import chat.stoat.shared.resources.status_online
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class Presence {
@@ -87,12 +83,12 @@ fun presenceColour(presence: Presence): Color {
     }
 }
 
-private fun Presence.iconResource(): DrawableResource = when (this) {
-    Presence.Online -> Res.drawable.ic_circle_24dp__fill
-    Presence.Idle -> Res.drawable.ic_bedtime_24dp
-    Presence.Dnd -> Res.drawable.ic_do_not_disturb_on_24dp
-    Presence.Focus -> Res.drawable.ic_circle_circle_24dp
-    Presence.Offline -> Res.drawable.ic_circle_24dp
+private fun Presence.iconResource(): StoatIcon = when (this) {
+    Presence.Online -> StoatIcons.PresenceOnline
+    Presence.Idle -> StoatIcons.PresenceIdle
+    Presence.Dnd -> StoatIcons.PresenceDnd
+    Presence.Focus -> StoatIcons.PresenceFocus
+    Presence.Offline -> StoatIcons.PresenceOffline
 }
 
 private fun Presence.descriptionResource(): StringResource = when (this) {
@@ -110,7 +106,7 @@ fun PresenceBadge(presence: Presence, size: Dp = 16.dp) {
         modifier = Modifier.size(size)
     ) {
         Icon(
-            painter = painterResource(presence.iconResource()),
+            painter = presence.iconResource().painter(),
             contentDescription = stringResource(presence.descriptionResource()),
             tint = presenceColour(presence),
             modifier = Modifier

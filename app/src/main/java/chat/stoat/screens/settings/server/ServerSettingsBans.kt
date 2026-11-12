@@ -58,6 +58,7 @@ import chat.stoat.api.routes.server.fetchServerBans
 import chat.stoat.api.routes.server.unbanMember
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.model.schemas.BanListResult
 import chat.stoat.core.model.schemas.BannedUser
 import chat.stoat.core.model.schemas.ServerBan
@@ -65,7 +66,6 @@ import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_gavel_24dp
 import chat.stoat.shared.resources.ok
 import chat.stoat.shared.resources.server_settings_bans
 import chat.stoat.shared.resources.server_settings_bans_banned_by
@@ -332,7 +332,7 @@ private fun BanList(
         } else if (entries.isEmpty()) {
             item(key = "empty") {
                 ServerSettingsEmptyState(
-                    icon = Res.drawable.ic_gavel_24dp,
+                    icon = StoatIcons.Bans,
                     title = Res.string.server_settings_bans_empty_title,
                     description = Res.string.server_settings_bans_empty_description,
                 )

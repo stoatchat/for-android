@@ -70,6 +70,8 @@ import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.generic.ListHeader
 import chat.stoat.composables.screens.settings.appearance.ColourChip
 import chat.stoat.composables.screens.settings.appearance.CornerRadiusPicker
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.GoogleSansFlex
 import chat.stoat.core.designsystem.theme.Inter
 import chat.stoat.core.designsystem.theme.systemSupportsDynamicColors
@@ -79,10 +81,6 @@ import chat.stoat.core.model.settings.UserInterfaceFont
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
-import chat.stoat.shared.resources.ic_file_export_24dp
-import chat.stoat.shared.resources.ic_file_open_24dp
-import chat.stoat.shared.resources.ic_keyboard_arrow_right_24dp
 import chat.stoat.shared.resources.settings_appearance
 import chat.stoat.shared.resources.settings_appearance_avatar_shape
 import chat.stoat.shared.resources.settings_appearance_avatar_shape_description
@@ -112,7 +110,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -346,7 +343,7 @@ fun AppearanceSettingsScreen(
                         navController.popBackStack()
                     }) {
                         Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                            painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)
                         )
                     }
@@ -536,7 +533,7 @@ fun AppearanceSettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_keyboard_arrow_right_24dp),
+                        painter = StoatIcons.Disclosure.painter(),
                         contentDescription = null,
                         modifier = Modifier
                             .padding(start = 20.dp, end = 4.dp)
@@ -568,7 +565,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_file_open_24dp),
+                                    painter = StoatIcons.ImportTheme.painter(),
                                     contentDescription = null
                                 )
 
@@ -586,7 +583,7 @@ fun AppearanceSettingsScreen(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_file_export_24dp),
+                                    painter = StoatIcons.ExportTheme.painter(),
                                     contentDescription = null
                                 )
 

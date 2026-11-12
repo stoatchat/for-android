@@ -18,15 +18,14 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.generic.SheetButton
 
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id
 import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id_copied
 import chat.stoat.shared.resources.channel_context_sheet_actions_mark_read
-import chat.stoat.shared.resources.ic_identifier_copy_24dp
-import chat.stoat.shared.resources.ic_mark_chat_read_24dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -57,7 +56,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_identifier_copy_24dp),
+                painter = StoatIcons.CopyId.painter(),
                 contentDescription = null
             )
         },
@@ -88,7 +87,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
         },
         leadingContent = {
             Icon(
-                painter = painterResource(Res.drawable.ic_mark_chat_read_24dp),
+                painter = StoatIcons.MarkRead.painter(),
                 contentDescription = null
             )
         },

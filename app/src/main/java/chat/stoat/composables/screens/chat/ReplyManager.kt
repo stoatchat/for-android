@@ -45,14 +45,14 @@ import chat.stoat.composables.chat.authorAvatarUrl
 import chat.stoat.composables.chat.authorColour
 import chat.stoat.composables.chat.authorName
 import chat.stoat.composables.generic.UserAvatar
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.shared.resources.Res
-import chat.stoat.shared.resources.ic_close_24dp
 import chat.stoat.shared.resources.remove_reply_alt
 import chat.stoat.shared.resources.reply_mention_off
 import chat.stoat.shared.resources.reply_mention_on
 import chat.stoat.shared.resources.reply_message_empty_has_attachments
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private class AnimatedReply(
@@ -99,7 +99,7 @@ fun ManageableReply(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(Res.drawable.ic_close_24dp),
+            painter = StoatIcons.RemoveReply.painter(),
             contentDescription = stringResource(Res.string.remove_reply_alt),
             modifier = Modifier
                 .clip(MaterialTheme.shapes.small)

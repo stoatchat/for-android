@@ -63,6 +63,8 @@ import chat.stoat.api.routes.server.createServerRole
 import chat.stoat.api.routes.server.reorderServerRoles
 import chat.stoat.composables.server.RoleColourIndicator
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.internals.extensions.rememberServerPermissions
@@ -71,11 +73,6 @@ import chat.stoat.internals.server.serverRoleCapabilities
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_add_24dp
-import chat.stoat.shared.resources.ic_chevron_forward_24dp
-import chat.stoat.shared.resources.ic_drag_handle_24dp
-import chat.stoat.shared.resources.ic_flag_24dp
-import chat.stoat.shared.resources.ic_group_24dp
 import chat.stoat.shared.resources.server_settings_roles
 import chat.stoat.shared.resources.server_settings_roles_above_you
 import chat.stoat.shared.resources.server_settings_roles_count
@@ -98,7 +95,6 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -327,7 +323,7 @@ fun ServerSettingsRoles(
                     },
                 ) {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_add_24dp),
+                        painter = StoatIcons.Add.painter(),
                         contentDescription = stringResource(Res.string.server_settings_roles_create),
                     )
                 }
@@ -373,7 +369,7 @@ fun ServerSettingsRoles(
             if (displayedEntries.isEmpty()) {
                 item(key = "empty") {
                     ServerSettingsEmptyState(
-                        icon = Res.drawable.ic_flag_24dp,
+                        icon = StoatIcons.Roles,
                         title = Res.string.server_settings_roles_empty_title,
                         description = Res.string.server_settings_roles_empty_description,
                     )
@@ -434,9 +430,7 @@ fun ServerSettingsRoles(
                                     onClick = {},
                                 ) {
                                     Icon(
-                                        painter = painterResource(
-                                            Res.drawable.ic_drag_handle_24dp
-                                        ),
+                                        painter = StoatIcons.Reorder.painter(),
                                         contentDescription = stringResource(
                                             Res.string.server_settings_roles_reorder
                                         ),
@@ -526,7 +520,7 @@ fun ServerSettingsRoles(
                                 .size(24.dp),
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_group_24dp),
+                                painter = StoatIcons.Members.painter(),
                                 contentDescription = null,
                             )
                         }
@@ -538,7 +532,7 @@ fun ServerSettingsRoles(
                                 .size(48.dp),
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.ic_chevron_forward_24dp),
+                                painter = StoatIcons.Disclosure.painter(),
                                 contentDescription = null,
                             )
                         }
@@ -628,7 +622,7 @@ private fun RoleListRow(
                 dragHandle()
             } else {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_chevron_forward_24dp),
+                    painter = StoatIcons.Disclosure.painter(),
                     contentDescription = null,
                 )
             }

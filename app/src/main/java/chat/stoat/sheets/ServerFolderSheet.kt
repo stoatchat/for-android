@@ -19,13 +19,10 @@ import androidx.compose.ui.Modifier
 import chat.stoat.api.settings.ServerFolders
 import chat.stoat.composables.generic.SheetButton
 import chat.stoat.composables.screens.chat.drawer.parseFolderColour
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
-import chat.stoat.shared.resources.ic_create_new_folder_24dp
-import chat.stoat.shared.resources.ic_delete_24dp
-import chat.stoat.shared.resources.ic_edit_24dp
-import chat.stoat.shared.resources.ic_folder_24dp
-import chat.stoat.shared.resources.ic_palette_24dp
 import chat.stoat.shared.resources.server_context_sheet_actions_new_folder
 import chat.stoat.shared.resources.server_folder_default_name
 import chat.stoat.shared.resources.server_folder_edit_name
@@ -35,7 +32,6 @@ import chat.stoat.shared.resources.server_folder_sheet_delete
 import chat.stoat.shared.resources.server_folder_sheet_rename
 import chat.stoat.shared.resources.server_folder_unnamed
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -87,7 +83,7 @@ fun ServerFolderSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_edit_24dp),
+                    painter = StoatIcons.Edit.painter(),
                     contentDescription = null
                 )
             },
@@ -100,7 +96,7 @@ fun ServerFolderSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_palette_24dp),
+                    painter = StoatIcons.FolderColour.painter(),
                     contentDescription = null
                 )
             },
@@ -115,7 +111,7 @@ fun ServerFolderSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_delete_24dp),
+                    painter = StoatIcons.Delete.painter(),
                     contentDescription = null
                 )
             },
@@ -146,7 +142,7 @@ fun ServerFolderPickerSheet(
             SheetButton(
                 leadingContent = {
                     Icon(
-                        painter = painterResource(Res.drawable.ic_folder_24dp),
+                        painter = StoatIcons.AddToFolder.painter(),
                         contentDescription = null,
                         tint = folder.colour?.let(::parseFolderColour)
                             ?: LocalContentColor.current
@@ -171,7 +167,7 @@ fun ServerFolderPickerSheet(
         SheetButton(
             leadingContent = {
                 Icon(
-                    painter = painterResource(Res.drawable.ic_create_new_folder_24dp),
+                    painter = StoatIcons.NewFolder.painter(),
                     contentDescription = null
                 )
             },

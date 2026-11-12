@@ -58,6 +58,8 @@ import chat.stoat.composables.sheets.SheetSelection
 import chat.stoat.composables.vectorassets.CreateServer
 import chat.stoat.composables.vectorassets.JoinServer
 import chat.stoat.composables.vectorassets.NewServer
+import chat.stoat.core.designsystem.icons.StoatIcons
+import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.material.EasingTokens
@@ -85,11 +87,9 @@ import chat.stoat.shared.resources.add_server_sheet_step_1j_join
 import chat.stoat.shared.resources.add_server_sheet_step_1j_label
 import chat.stoat.shared.resources.add_server_sheet_step_1j_title
 import chat.stoat.shared.resources.back
-import chat.stoat.shared.resources.ic_arrow_back_24dp
 import kotlinx.coroutines.launch
 import logcat.asLog
 import logcat.logcat
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class AddServerSheetStep(val animationValue: Int) {
@@ -241,7 +241,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                 }
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                    painter = StoatIcons.Back.painter(),
                                     contentDescription = stringResource(Res.string.back),
                                 )
                             }
@@ -394,7 +394,7 @@ fun AddServerSheet(onDismiss: () -> Unit) {
                                 }
                             ) {
                                 Icon(
-                                    painter = painterResource(Res.drawable.ic_arrow_back_24dp),
+                                    painter = StoatIcons.Back.painter(),
                                     contentDescription = stringResource(Res.string.back),
                                 )
                             }
