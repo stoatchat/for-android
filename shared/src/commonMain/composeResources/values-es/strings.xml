@@ -26,7 +26,7 @@
     <string name="register_data">Tus datos están a salvo con nosotros. No los vendemos, y tampoco los usamos para mostrarte anuncios.</string>
     <string name="register_email">Correo electrónico</string>
     <string name="register_password">Contraseña</string>
-    <string name="register_password_rules">Ocho o más, los comunes son malos. Símbolos y números recomendados.</string>
+    <string name="register_password_rules">Ocho o más caracteres, evita las más comunes. Se recomiendan símbolos y números.</string>
     <string name="check_mail">¡Revisa tu correo!</string>
     <string name="instructions_at_mail">Hemos enviado más instrucciones a %1$s.</string>
     <string name="verify_then_choose_username">Verifica tu correo electrónico y luego continuaremos con la elección de tu nombre de usuario.</string>
@@ -192,7 +192,7 @@
     <string name="report_reason_additional_hint">Cualquier información adicional que pueda ayudarnos en nuestra investigación. Opcional.</string>
     <string name="next">Siguiente →</string>
     <string name="ok">De acuerdo</string>
-    <string name="register_instructions">Es como un lugar para pasar el rato, reunirse y hablar de cosas. La mejor parte, está en Internet.</string>
+    <string name="register_instructions">Un lugar para pasar el rato, juntarse y hablar de lo que sea. Y lo mejor de todo: en internet.</string>
     <string name="report_message_bridge_notice">Nota: Este mensaje pudo haber sido enviado desde otra plataforma. Se recomienda denunciar también el mensaje en la plataforma desde la que fue enviado.</string>
     <string name="report_submit_error">Se ha producido un error al enviar tu denuncia. Por favor, inténtalo de nuevo más tarde.</string>
     <string name="cancel">Cancelar</string>
@@ -534,8 +534,8 @@
     <string name="user_info_sheet_open">Abrir información del usuario</string>
     <string name="user_info_sheet_owner_not_found">No se pudo obtener la información del propietario</string>
     <string name="user_info_sheet_category_owner">Propietario</string>
-    <string name="spark_early_access">¡Bienvenido al acceso anticipado! 🚀</string>
-    <string name="spark_early_access_description_1">Eres uno de los primeros en probar nuestra nueva aplicación para Android. ¡Estamos encantados de tenerte aquí!</string>
+    <string name="spark_early_access">Estás usando una versión en desarrollo</string>
+    <string name="spark_early_access_description_1">Nuestra aplicación móvil sigue en desarrollo, por lo que podrías experimentar errores, funciones no disponibles o aspectos por pulir.</string>
     <string name="hint_provide_feedback">¡Nos encanta recibir comentarios!</string>
     <string name="hint_provide_feedback_description">Si tienes algún comentario, sugerencia o informe de errores, háznoslo saber. Siempre buscamos mejorar Stoat.</string>
     <string name="hint_provide_feedback_cta">Calificar en Google Play</string>
@@ -562,9 +562,8 @@
     <string name="spark_keyboard_shortcuts">¿Utiliza un teclado?</string>
     <string name="spark_keyboard_shortcuts_description">¡Stoat tiene atajos de teclado! Pulsa %1$s para verlos.</string>
     <string name="spark_keyboard_shortcuts_dismiss">De acuerdo</string>
-    <string name="spark_early_access_description_2">Dado que se trata de un acceso anticipado, es posible que las cosas aún no sean perfectas. Puede que te encuentres con algún error, fallo o peculiaridad. Tus comentarios nos ayudarán a limar asperezas y a mejorar Stoat.</string>
-    <string name="spark_early_access_description_3">Estamos encantados de tenerte a bordo. ¡Hagamos algo grande juntos!</string>
-    <string name="spark_early_access_cta">Entendido</string>
+    <string name="spark_early_access_description_2">Si algo falla o no funciona como debería, cuéntanoslo en Comentarios dentro de Ajustes.</string>
+    <string name="spark_early_access_cta">De acuerdo</string>
     <string name="programming_language_snippet">[fragmento de %1$s]</string>
     <string name="user_card_tap_to_copy">Pulsa para copiar</string>
     <string name="user_card_error_sharing">Se produjo un error al compartir su tarjeta de usuario.</string>
