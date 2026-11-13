@@ -68,7 +68,7 @@ import chat.stoat.api.routes.custom.createEmoji
 import chat.stoat.api.routes.custom.deleteEmoji
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.misc.getRootRoute
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.settings.ServerSettingsEmptyState
 import chat.stoat.core.designsystem.icons.StoatIcons

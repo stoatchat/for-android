@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.internals.ChannelUtils
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.data.STOAT_FILES

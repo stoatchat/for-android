@@ -48,7 +48,7 @@ import chat.stoat.api.routes.custom.fetchEmoji
 import chat.stoat.api.routes.user.fetchUser
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.chat.MemberListItem
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User

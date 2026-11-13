@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.routes.microservices.january.asJanuaryProxyUrl
 import chat.stoat.composables.chat.specialembeds.SpecialEmbedSwitch
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.markdown.prose.ChatMarkdown
 import chat.stoat.core.model.schemas.Embed
 import chat.stoat.ui.colour.BrushCompat

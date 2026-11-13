@@ -116,7 +116,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import chat.stoat.activities.StoatTweenDp
 import chat.stoat.api.settings.Experiments
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.core.designsystem.icons.StoatIcons

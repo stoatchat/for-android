@@ -39,7 +39,7 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.composables.expressive.Wave
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.core.model.data.STOAT_FILES

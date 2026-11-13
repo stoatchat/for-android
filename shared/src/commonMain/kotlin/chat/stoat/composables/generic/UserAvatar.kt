@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.icons.StoatIcon
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -117,7 +118,7 @@ fun PresenceBadge(presence: Presence, size: Dp = 16.dp) {
 
 private val PresenceCutoutPadding = 2.dp
 
-internal fun Modifier.bottomEndCircleCutout(diameter: Dp): Modifier =
+fun Modifier.bottomEndCircleCutout(diameter: Dp): Modifier =
     graphicsLayer {
         compositingStrategy = CompositingStrategy.Offscreen
     }.drawWithCache {

@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.viewinterop.AndroidView
 import chat.stoat.composables.chat.VideoPlayButton
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.model.data.STOAT_PROXY
 import chat.stoat.core.model.schemas.Special
 import chat.stoat.shared.resources.Res

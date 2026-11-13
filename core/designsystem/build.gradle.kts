@@ -43,6 +43,8 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.android.core.ktx)
+            implementation(libs.glide)
+            implementation(libs.glide.compose)
         }
     }
 }

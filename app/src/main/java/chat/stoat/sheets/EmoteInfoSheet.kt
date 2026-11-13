@@ -35,7 +35,7 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.Server
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Platform
 import chat.stoat.shared.resources.Res

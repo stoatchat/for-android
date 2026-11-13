@@ -55,7 +55,7 @@ import chat.stoat.api.routes.custom.fetchEmoji
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.designsystem.theme.isThemeDark
 import chat.stoat.core.model.data.STOAT_FILES

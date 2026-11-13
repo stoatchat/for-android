@@ -43,7 +43,7 @@ import chat.stoat.api.routes.server.fetchMembers
 import chat.stoat.api.settings.Experiments
 import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.composables.generic.Presence
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.core.designsystem.components.CountableListHeader
 import chat.stoat.core.designsystem.components.SheetHeaderPadding

@@ -96,7 +96,7 @@ import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.api.settings.resolveServerSidebar
 import chat.stoat.composables.generic.GroupIcon
-import chat.stoat.composables.generic.RemoteImage
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.chat.ChannelIcon
