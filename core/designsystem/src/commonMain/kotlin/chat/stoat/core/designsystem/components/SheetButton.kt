@@ -22,6 +22,16 @@ fun SheetButton(
     dangerous: Boolean = false,
     special: Boolean = false
 ) {
+    val contentColour = when {
+        dangerous -> MaterialTheme.colorScheme.error
+        special -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+
+    fun tinted(content: @Composable () -> Unit): @Composable () -> Unit = {
+        CompositionLocalProvider(LocalContentColor provides contentColour, content = content)
+    }
+
     Box(
         modifier = modifier
             .clickable { onClick() }
@@ -29,61 +39,10 @@ fun SheetButton(
     ) {
         ListItem(
             colors = TransparentListItemColours,
-            leadingContent = {
-                CompositionLocalProvider(
-                    value = if (dangerous) {
-                        LocalContentColor provides MaterialTheme.colorScheme.error
-                    } else if (special) {
-                        LocalContentColor provides MaterialTheme.colorScheme.primary
-                    } else {
-                        LocalContentColor provides MaterialTheme.colorScheme.onSurface
-                    }
-                ) {
-                    leadingContent()
-                }
-            },
-            supportingContent = {
-                supportingContent?.run {
-                    CompositionLocalProvider(
-                        value = if (dangerous) {
-                            LocalContentColor provides MaterialTheme.colorScheme.error
-                        } else if (special) {
-                            LocalContentColor provides MaterialTheme.colorScheme.primary
-                        } else {
-                            LocalContentColor provides MaterialTheme.colorScheme.onSurface
-                        }
-                    ) {
-                        this()
-                    }
-                }
-            },
-            trailingContent = {
-                trailingContent?.run {
-                    CompositionLocalProvider(
-                        value = if (dangerous) {
-                            LocalContentColor provides MaterialTheme.colorScheme.error
-                        } else if (special) {
-                            LocalContentColor provides MaterialTheme.colorScheme.primary
-                        } else {
-                            LocalContentColor provides MaterialTheme.colorScheme.onSurface
-                        }
-                    ) {
-                        this()
-                    }
-                }
-            }
-        ) {
-            CompositionLocalProvider(
-                value = if (dangerous) {
-                    LocalContentColor provides MaterialTheme.colorScheme.error
-                } else if (special) {
-                    LocalContentColor provides MaterialTheme.colorScheme.primary
-                } else {
-                    LocalContentColor provides MaterialTheme.colorScheme.onSurface
-                }
-            ) {
-                headlineContent()
-            }
-        }
+            leadingContent = tinted(leadingContent),
+            supportingContent = supportingContent?.let(::tinted),
+            trailingContent = trailingContent?.let(::tinted),
+            content = tinted(headlineContent)
+        )
     }
 }
