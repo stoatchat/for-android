@@ -41,12 +41,6 @@ import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.attachment_spoiler
 import chat.stoat.shared.resources.media_viewer_play
-import dev.chrisbanes.haze.HazeInput
-import dev.chrisbanes.haze.HazePerformanceMode
-import dev.chrisbanes.haze.blur.hazeBlur
-import dev.chrisbanes.haze.blur.materials.HazeMaterials
-import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.rememberHazeState
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -90,8 +84,7 @@ fun FileAttachment(attachment: AutumnResource) {
 fun ImageAttachment(attachment: AutumnResource) {
     val url = "$STOAT_FILES/attachments/${attachment.id}/${attachment.filename}"
     var spoilerShown by remember { mutableStateOf(false) }
-    val hazeState =
-        if (attachment.filename?.startsWith("SPOILER_") == true) rememberHazeState() else null
+    val isSpoiler = attachment.filename?.startsWith("SPOILER_") == true
 
     BoxWithConstraints {
         RemoteImage(
@@ -101,21 +94,13 @@ fun ImageAttachment(attachment: AutumnResource) {
                 .width(attachment.metadata?.width?.toInt()?.dp ?: maxWidth)
                 .aspectRatio(
                     attachment.metadata!!.width!!.toFloat() / attachment.metadata!!.height!!.toFloat()
-                )
-                .then(
-                    if (hazeState != null) Modifier.hazeSource(state = hazeState)
-                    else Modifier
                 ),
-            description = attachment.filename ?: "Image"
+            description = attachment.filename ?: "Image",
+            blurred = isSpoiler && !spoilerShown
         )
-        if (hazeState != null && !spoilerShown) {
+        if (isSpoiler && !spoilerShown) {
             Box(
                 modifier = Modifier
-                    .hazeBlur(
-                        input = HazeInput.Backdrop(hazeState),
-                        style = HazeMaterials.ultraThin(),
-                        performanceMode = HazePerformanceMode.Quality
-                    )
                     .width(attachment.metadata?.width?.toInt()?.dp ?: maxWidth)
                     .aspectRatio(
                         attachment.metadata!!.width!!.toFloat() / attachment.metadata!!.height!!.toFloat()
@@ -126,11 +111,7 @@ fun ImageAttachment(attachment: AutumnResource) {
                 Box(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
-                        .hazeBlur(
-                            input = HazeInput.Backdrop(hazeState),
-                            style = HazeMaterials.regular(),
-                            performanceMode = HazePerformanceMode.Quality
-                        )
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                         .padding(8.dp)
                 ) {
                     Text(stringResource(Res.string.attachment_spoiler))

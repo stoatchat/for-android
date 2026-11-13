@@ -15,6 +15,7 @@ internal actual fun PlatformRemoteImage(
     modifier: Modifier,
     contentScale: ContentScale,
     allowAnimation: Boolean,
+    blurred: Boolean,
 ) {
     GlideImage(
         model = url,
@@ -23,7 +24,13 @@ internal actual fun PlatformRemoteImage(
         modifier = modifier,
         transition = CrossFade,
         requestBuilderTransform = { rb ->
-            if (!allowAnimation) rb.dontAnimate() else rb
+            when {
+                blurred -> rb.override(SPOILER_DECODE_SIZE_PX).transform(SpoilerBlurTransformation).dontAnimate()
+                !allowAnimation -> rb.dontAnimate()
+                else -> rb
+            }
         }
     )
 }
+
+private const val SPOILER_DECODE_SIZE_PX = 128
