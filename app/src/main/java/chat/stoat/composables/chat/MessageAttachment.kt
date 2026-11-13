@@ -41,10 +41,10 @@ import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.attachment_spoiler
 import chat.stoat.shared.resources.media_viewer_play
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.blur.hazeBlur
+import dev.chrisbanes.haze.blur.materials.HazeMaterials
 import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
 import org.jetbrains.compose.resources.stringResource
 
@@ -84,7 +84,6 @@ fun FileAttachment(attachment: AutumnResource) {
     }
 }
 
-@OptIn(ExperimentalHazeMaterialsApi::class)
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun ImageAttachment(attachment: AutumnResource) {
@@ -108,10 +107,10 @@ fun ImageAttachment(attachment: AutumnResource) {
                 ),
             description = attachment.filename ?: "Image"
         )
-        if (attachment.filename?.startsWith("SPOILER_") == true && !spoilerShown) {
+        if (hazeState != null && !spoilerShown) {
             Box(
                 modifier = Modifier
-                    .hazeEffect(state = hazeState, style = HazeMaterials.ultraThin())
+                    .hazeBlur(input = HazeInput.Sources(hazeState), style = HazeMaterials.ultraThin())
                     .width(attachment.metadata?.width?.toInt()?.dp ?: maxWidth)
                     .aspectRatio(
                         attachment.metadata!!.width!!.toFloat() / attachment.metadata!!.height!!.toFloat()
@@ -122,7 +121,7 @@ fun ImageAttachment(attachment: AutumnResource) {
                 Box(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
-                        .hazeEffect(state = hazeState, style = HazeMaterials.regular())
+                        .hazeBlur(input = HazeInput.Sources(hazeState), style = HazeMaterials.regular())
                         .padding(8.dp)
                 ) {
                     Text(stringResource(Res.string.attachment_spoiler))

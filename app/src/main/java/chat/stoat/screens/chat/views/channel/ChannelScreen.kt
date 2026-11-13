@@ -197,12 +197,13 @@ import com.mikepenz.markdown.model.State
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeProgressive
-import dev.chrisbanes.haze.HazeTint
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.HazeColorEffect
+import dev.chrisbanes.haze.blur.hazeBlur
+import dev.chrisbanes.haze.blur.materials.HazeMaterials
 import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -245,7 +246,7 @@ private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalMaterial3ExpressiveApi::class, ExperimentalHazeMaterialsApi::class
+    ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
 fun ChannelScreen(
@@ -504,9 +505,7 @@ fun ChannelScreen(
     // <editor-fold desc="UI elements">
     val lazyListState = rememberLazyListState()
     val messageComposerBlurEnabled = LoadedSettings.messageComposerBlurEnabled
-    val messageComposerHazeState = rememberHazeState(
-        blurEnabled = messageComposerBlurEnabled
-    )
+    val messageComposerHazeState = rememberHazeState()
     val snackbarHostState = remember { SnackbarHostState() }
     var messageComposerHeightPx by remember { mutableIntStateOf(0) }
     var messageComposerVisualHeightPx by remember { mutableIntStateOf(0) }
@@ -545,6 +544,31 @@ fun ChannelScreen(
         startY = 0f,
         endY = messageFieldGradientEndY
     )
+    val messageFieldHazeStyle = remember(messageComposerBackgroundColor, messageFieldGradientEndY) {
+        HazeBlurStyle {
+            blurEnabled(true)
+            backgroundColor(messageComposerBackgroundColor)
+            progressive(
+                HazeProgressive.verticalGradient(
+                    startY = 0f,
+                    startIntensity = 0f,
+                    endY = messageFieldGradientEndY,
+                    endIntensity = 1f
+                )
+            )
+            blurRadius(28.dp)
+            colorEffects(listOf(HazeColorEffect.tint(messageComposerBackgroundGradient)))
+            fallbackColorEffect(HazeColorEffect.tint(messageComposerBackgroundGradient))
+        }
+    }
+    val messageFieldContainerMaterial =
+        HazeMaterials.regular(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+    val messageFieldContainerHazeStyle = remember(messageFieldContainerMaterial) {
+        messageFieldContainerMaterial.then {
+            blurEnabled(true)
+            blurRadius(28.dp)
+        }
+    }
     var disableScroll by remember { mutableStateOf(false) }
     var highlightedMessageId by remember { mutableStateOf<String?>(null) }
     val showBottomAnchor = !viewModel.canLoadNewer && !viewModel.isJumpLoading
@@ -1291,21 +1315,10 @@ fun ChannelScreen(
                                 .zIndex(1f)
                                 .then(
                                     if (messageComposerBlurEnabled) {
-                                        Modifier.hazeEffect(messageComposerHazeState) {
-                                            backgroundColor = messageComposerBackgroundColor
-                                            progressive = HazeProgressive.verticalGradient(
-                                                startY = 0f,
-                                                startIntensity = 0f,
-                                                endY = messageFieldGradientEndY,
-                                                endIntensity = 1f
-                                            )
-                                            blurRadius = 28.dp
-                                            tints = listOf(
-                                                HazeTint(messageComposerBackgroundGradient)
-                                            )
-                                            fallbackTint =
-                                                HazeTint(messageComposerBackgroundGradient)
-                                        }
+                                        Modifier.hazeBlur(
+                                            input = HazeInput.Sources(messageComposerHazeState),
+                                            style = messageFieldHazeStyle
+                                        )
                                     } else {
                                         Modifier.background(messageComposerBackgroundGradient)
                                     }
@@ -1472,14 +1485,10 @@ fun ChannelScreen(
                                                         ?: stringResource(Res.string.unknown),
                                                     containerModifier =
                                                         if (messageComposerBlurEnabled) {
-                                                            Modifier.hazeEffect(
-                                                                state = messageComposerHazeState,
-                                                                style = HazeMaterials.regular(
-                                                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                                                                )
-                                                            ) {
-                                                                blurRadius = 28.dp
-                                                            }
+                                                            Modifier.hazeBlur(
+                                                                input = HazeInput.Sources(messageComposerHazeState),
+                                                                style = messageFieldContainerHazeStyle
+                                                            )
                                                         } else {
                                                             Modifier
                                                         },

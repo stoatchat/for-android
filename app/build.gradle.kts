@@ -244,7 +244,8 @@ dependencies {
     implementation(libs.zoomable.image)
     implementation(libs.zoomable.image.glide)
     implementation(libs.haze)
-    implementation(libs.haze.materials)
+    implementation(libs.haze.blur)
+    implementation(libs.haze.blur.materials)
 
     implementation(libs.zxing.core)
     implementation(libs.quickie.bundled)

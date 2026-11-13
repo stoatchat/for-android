@@ -61,10 +61,10 @@ import chat.stoat.shared.resources.typing_many
 import chat.stoat.shared.resources.typing_one
 import chat.stoat.shared.resources.typing_several
 import chat.stoat.shared.resources.unknown
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.hazeEffect
-import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
+import dev.chrisbanes.haze.blur.hazeBlur
+import dev.chrisbanes.haze.blur.materials.HazeMaterials
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -100,7 +100,6 @@ fun StackedUserAvatars(
     }
 }
 
-@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 fun TypingIndicator(
     users: List<String>,
@@ -137,19 +136,21 @@ fun TypingIndicator(
     )
     val pillShape = RoundedCornerShape(16.dp)
     val pillContainerColor = MaterialTheme.colorScheme.surfaceContainer
-    val pillHazeStyle = hazeState?.let {
-        HazeMaterials.thin(containerColor = pillContainerColor)
+    val pillMaterial = HazeMaterials.thin(containerColor = pillContainerColor)
+    val pillHazeStyle = remember(pillMaterial) {
+        pillMaterial.then {
+            blurEnabled(true)
+            blurRadius(20.dp)
+        }
     }
 
     fun Modifier.pillBackground(): Modifier =
         clip(pillShape).then(
-            if (hazeState != null && pillHazeStyle != null) {
-                Modifier.hazeEffect(
-                    state = hazeState,
+            if (hazeState != null) {
+                Modifier.hazeBlur(
+                    input = HazeInput.Sources(hazeState),
                     style = pillHazeStyle
-                ) {
-                    blurRadius = 20.dp
-                }
+                )
             } else {
                 Modifier.background(pillContainerColor.copy(alpha = 0.9f))
             }

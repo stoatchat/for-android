@@ -21,7 +21,7 @@ glide = "5.0.5"
 aboutlibraries = "15.0.0-a02"
 media3 = "1.11.0"
 telephoto = "1.0.0-alpha02"
-haze = "1.7.2"
+haze = "2.1.0"
 chucker = "4.3.1"
 androidx-test = "1.7.0"
 espresso = "3.7.0"
@@ -101,7 +101,8 @@ media3-ui-compose-material3 = { module = "androidx.media3:media3-ui-compose-mate
 zoomable-image = { module = "me.saket.telephoto:zoomable-image", version.ref = "telephoto" }
 zoomable-image-glide = { module = "me.saket.telephoto:zoomable-image-glide", version.ref = "telephoto" }
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+haze-blur = { module = "dev.chrisbanes.haze:haze-blur", version.ref = "haze" }
+haze-blur-materials = { module = "dev.chrisbanes.haze:haze-blur-materials", version.ref = "haze" }
 zxing-core = { module = "com.google.zxing:core", version = "3.5.3" }
 quickie-bundled = { module = "io.github.g00fy2.quickie:quickie-bundled", version = "1.11.0" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
