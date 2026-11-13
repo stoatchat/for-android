@@ -246,6 +246,8 @@ dependencies {
     implementation(libs.haze)
     implementation(libs.haze.blur)
     implementation(libs.haze.blur.materials)
+    implementation(libs.haze.glass)
+    implementation(libs.haze.glass.material3)
 
     implementation(libs.zxing.core)
     implementation(libs.quickie.bundled)

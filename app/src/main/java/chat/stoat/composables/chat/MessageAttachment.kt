@@ -42,6 +42,7 @@ import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.attachment_spoiler
 import chat.stoat.shared.resources.media_viewer_play
 import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazePerformanceMode
 import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.blur.materials.HazeMaterials
 import dev.chrisbanes.haze.hazeSource
@@ -110,7 +111,11 @@ fun ImageAttachment(attachment: AutumnResource) {
         if (hazeState != null && !spoilerShown) {
             Box(
                 modifier = Modifier
-                    .hazeBlur(input = HazeInput.Sources(hazeState), style = HazeMaterials.ultraThin())
+                    .hazeBlur(
+                        input = HazeInput.Backdrop(hazeState),
+                        style = HazeMaterials.ultraThin(),
+                        performanceMode = HazePerformanceMode.Quality
+                    )
                     .width(attachment.metadata?.width?.toInt()?.dp ?: maxWidth)
                     .aspectRatio(
                         attachment.metadata!!.width!!.toFloat() / attachment.metadata!!.height!!.toFloat()
@@ -121,7 +126,11 @@ fun ImageAttachment(attachment: AutumnResource) {
                 Box(
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
-                        .hazeBlur(input = HazeInput.Sources(hazeState), style = HazeMaterials.regular())
+                        .hazeBlur(
+                            input = HazeInput.Backdrop(hazeState),
+                            style = HazeMaterials.regular(),
+                            performanceMode = HazePerformanceMode.Quality
+                        )
                         .padding(8.dp)
                 ) {
                     Text(stringResource(Res.string.attachment_spoiler))

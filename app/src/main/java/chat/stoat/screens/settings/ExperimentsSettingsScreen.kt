@@ -41,6 +41,7 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
             enableServerIdentityOptionsChecked.value =
                 Experiments.enableServerIdentityOptions.isEnabled
             showUserSheet2Checked.value = Experiments.showUserSheet2.isEnabled
+            liquidGlassMessageFieldChecked.value = Experiments.liquidGlassMessageField.isEnabled
             voiceMessagesChecked.value = Experiments.voiceMessages.isEnabled
         }
     }
@@ -97,6 +98,16 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
             kv.set("exp/showUserSheet2", value)
             Experiments.showUserSheet2.setEnabled(value)
             showUserSheet2Checked.value = value
+        }
+    }
+
+    val liquidGlassMessageFieldChecked = mutableStateOf(false)
+
+    fun setLiquidGlassMessageFieldChecked(value: Boolean) {
+        viewModelScope.launch {
+            kv.set("exp/liquidGlassMessageField", value)
+            Experiments.liquidGlassMessageField.setEnabled(value)
+            liquidGlassMessageFieldChecked.value = value
         }
     }
 
@@ -204,6 +215,20 @@ fun ExperimentsSettingsScreen(
             modifier = Modifier.clickable { viewModel.setShowUserSheet2Checked(!viewModel.showUserSheet2Checked.value) }
         ) {
             Text("UserInfoSheet2")
+        }
+
+        ListItem(
+            trailingContent = {
+                Switch(
+                    checked = viewModel.liquidGlassMessageFieldChecked.value,
+                    onCheckedChange = null
+                )
+            },
+            modifier = Modifier.clickable {
+                viewModel.setLiquidGlassMessageFieldChecked(!viewModel.liquidGlassMessageFieldChecked.value)
+            }
+        ) {
+            Text("Liquid Glass Message Field")
         }
 
         if (Experiments.voiceMessages.isAvailable) {

@@ -59,6 +59,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.Badge
@@ -136,6 +137,7 @@ import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.has
 import chat.stoat.api.routes.channel.react
 import chat.stoat.api.routes.microservices.autumn.FileArgs
+import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
@@ -198,11 +200,17 @@ import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazePerformanceMode
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.blur.HazeBlurStyle
 import dev.chrisbanes.haze.blur.HazeColorEffect
 import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.blur.materials.HazeMaterials
+import dev.chrisbanes.haze.glass.GlassOptics
+import dev.chrisbanes.haze.glass.GlassStyle
+import dev.chrisbanes.haze.glass.OpticalSizeValue
+import dev.chrisbanes.haze.glass.hazeGlass
+import dev.chrisbanes.haze.glass.material3.material3
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.delay
@@ -544,6 +552,7 @@ fun ChannelScreen(
         startY = 0f,
         endY = messageFieldGradientEndY
     )
+    val liquidGlassMessageField = Experiments.liquidGlassMessageField.isEnabled
     val messageFieldHazeStyle = remember(messageComposerBackgroundColor, messageFieldGradientEndY) {
         HazeBlurStyle {
             blurEnabled(true)
@@ -569,6 +578,15 @@ fun ChannelScreen(
             blurRadius(28.dp)
         }
     }
+    val messageFieldGlassStyle = remember {
+        GlassStyle {
+            shape(RoundedCornerShape(28.dp))
+            optics(GlassOptics.regular.copy(blurRadius = OpticalSizeValue.Fixed(36.dp)))
+        }
+    }.material3(
+        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        tint = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.35f)
+    )
     var disableScroll by remember { mutableStateOf(false) }
     var highlightedMessageId by remember { mutableStateOf<String?>(null) }
     val showBottomAnchor = !viewModel.canLoadNewer && !viewModel.isJumpLoading
@@ -1006,7 +1024,7 @@ fun ChannelScreen(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .then(
-                                        if (messageComposerBlurEnabled) {
+                                        if (liquidGlassMessageField || messageComposerBlurEnabled) {
                                             Modifier.hazeSource(messageComposerHazeState)
                                         } else {
                                             Modifier
@@ -1314,10 +1332,13 @@ fun ChannelScreen(
                                 .height(messageFieldBackgroundHeight)
                                 .zIndex(1f)
                                 .then(
-                                    if (messageComposerBlurEnabled) {
+                                    if (liquidGlassMessageField) {
+                                        Modifier
+                                    } else if (messageComposerBlurEnabled) {
                                         Modifier.hazeBlur(
-                                            input = HazeInput.Sources(messageComposerHazeState),
-                                            style = messageFieldHazeStyle
+                                            input = HazeInput.Backdrop(messageComposerHazeState),
+                                            style = messageFieldHazeStyle,
+                                            performanceMode = HazePerformanceMode.Quality
                                         )
                                     } else {
                                         Modifier.background(messageComposerBackgroundGradient)
@@ -1484,10 +1505,16 @@ fun ChannelScreen(
                                                     }
                                                         ?: stringResource(Res.string.unknown),
                                                     containerModifier =
-                                                        if (messageComposerBlurEnabled) {
+                                                        if (liquidGlassMessageField) {
+                                                            Modifier.hazeGlass(
+                                                                input = HazeInput.Backdrop(messageComposerHazeState),
+                                                                style = messageFieldGlassStyle
+                                                            )
+                                                        } else if (messageComposerBlurEnabled) {
                                                             Modifier.hazeBlur(
-                                                                input = HazeInput.Sources(messageComposerHazeState),
-                                                                style = messageFieldContainerHazeStyle
+                                                                input = HazeInput.Backdrop(messageComposerHazeState),
+                                                                style = messageFieldContainerHazeStyle,
+                                                                performanceMode = HazePerformanceMode.Quality
                                                             )
                                                         } else {
                                                             Modifier

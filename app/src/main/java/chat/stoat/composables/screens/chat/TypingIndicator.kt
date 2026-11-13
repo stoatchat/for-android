@@ -62,6 +62,7 @@ import chat.stoat.shared.resources.typing_one
 import chat.stoat.shared.resources.typing_several
 import chat.stoat.shared.resources.unknown
 import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.HazePerformanceMode
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.blur.hazeBlur
 import dev.chrisbanes.haze.blur.materials.HazeMaterials
@@ -148,8 +149,9 @@ fun TypingIndicator(
         clip(pillShape).then(
             if (hazeState != null) {
                 Modifier.hazeBlur(
-                    input = HazeInput.Sources(hazeState),
-                    style = pillHazeStyle
+                    input = HazeInput.Backdrop(hazeState),
+                    style = pillHazeStyle,
+                    performanceMode = HazePerformanceMode.Quality
                 )
             } else {
                 Modifier.background(pillContainerColor.copy(alpha = 0.9f))
