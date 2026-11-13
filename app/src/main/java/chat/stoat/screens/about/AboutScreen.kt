@@ -2,7 +2,6 @@ package chat.stoat.screens.about
 
 import android.content.ClipData
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
@@ -34,7 +33,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,7 +44,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import chat.stoat.BuildConfig
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.StoatJson
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.core.designsystem.icons.StoatIcons
@@ -54,6 +52,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.about
@@ -79,8 +79,8 @@ class AboutViewModel : ViewModel() {
         viewModelScope.launch {
             runCatching { getRootRoute() }.getOrNull()?.let {
                 debugInfo = mapOf(
-                    "App Version" to BuildConfig.VERSION_NAME,
-                    "App Type" to BuildConfig.FLAVOUR_ID,
+                    "App Version" to StoatAPIHost.config.versionName,
+                    "App Type" to StoatAPIHost.config.flavourId,
                     "API Host" to URI(STOAT_BASE).host,
                     "API Version" to it.revolt,
                     "Runtime SDK" to Build.VERSION.SDK_INT.toString(),
@@ -98,7 +98,7 @@ class AboutViewModel : ViewModel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewModel()) {
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
 
@@ -151,7 +151,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                     )
 
                     Text(
-                        text = BuildConfig.VERSION_NAME,
+                        text = StoatAPIHost.config.versionName,
                         style = MaterialTheme.typography.labelMedium.copy(
                             fontWeight = FontWeight.Normal
                         ),
@@ -250,11 +250,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                                         )
 
                                         if (Platform.needsShowClipboardNotification()) {
-                                            Toast.makeText(
-                                                context,
-                                                getString(Res.string.copied),
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            toaster.show(getString(Res.string.copied))
                                         }
                                     }
                                 }

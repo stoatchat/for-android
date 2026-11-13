@@ -1,7 +1,6 @@
 package chat.stoat.sheets
 
 import android.text.format.DateUtils
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,6 +65,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Profile
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.rate_limit_toast
 import chat.stoat.shared.resources.unknown
@@ -110,7 +110,7 @@ fun UserInfoSheet(
     serverId: String? = null,
     dismissSheet: suspend () -> Unit
 ) {
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val scope = rememberCoroutineScope()
     val user = StoatAPI.userCache[userId]
 
@@ -147,11 +147,7 @@ fun UserInfoSheet(
                 throw error
             } catch (error: Exception) {
                 assignedRoleIds = previousRoleIds
-                Toast.makeText(
-                    context,
-                    if (error is HitRateLimitException) rateLimitMessage else roleUpdateError,
-                    Toast.LENGTH_SHORT,
-                ).show()
+                toaster.show(if (error is HitRateLimitException) rateLimitMessage else roleUpdateError)
             } finally {
                 updatingRoleId = null
             }

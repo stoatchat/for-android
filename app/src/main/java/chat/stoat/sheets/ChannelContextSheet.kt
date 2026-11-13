@@ -1,6 +1,5 @@
 package chat.stoat.sheets
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,7 +11,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
@@ -21,6 +19,8 @@ import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id
 import chat.stoat.shared.resources.channel_context_sheet_actions_copy_id_copied
@@ -44,7 +44,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
     }
 
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -66,11 +66,7 @@ fun ChannelContextSheet(channelId: String, onHideSheet: suspend () -> Unit) {
             clipboardManager.setText(AnnotatedString(channel.id!!))
 
             if (Platform.needsShowClipboardNotification()) {
-                Toast.makeText(
-                    context,
-                    channelContextSheetActionsCopyIdCopiedText,
-                    Toast.LENGTH_SHORT
-                ).show()
+                toaster.show(channelContextSheetActionsCopyIdCopiedText)
             }
 
             coroutineScope.launch {

@@ -48,18 +48,16 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.routes.invites.fetchInviteByCode
 import chat.stoat.api.routes.invites.joinInviteByCode
-import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.components.IconPlaceholder
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
-import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Invite
 import chat.stoat.core.model.schemas.InviteJoined
 import chat.stoat.core.model.util.RsResult
+import chat.stoat.platform.StoatAppTheme
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.invite_already_member
 import chat.stoat.shared.resources.invite_cancel
@@ -165,11 +163,7 @@ fun InviteScreen(
     val inviteValid = if (viewModel.loadingFinished) (viewModel.inviteResult?.ok ?: false) else null
     val invite = viewModel.inviteResult?.value
 
-    StoatTheme(
-        requestedTheme = LoadedSettings.theme,
-        requestedUserInterfaceFont = LoadedSettings.font,
-        colourOverrides = SyncedSettings.android.colourOverrides
-    ) {
+    StoatAppTheme {
         Surface(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)

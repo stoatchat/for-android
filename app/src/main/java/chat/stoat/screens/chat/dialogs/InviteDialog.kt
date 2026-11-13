@@ -1,7 +1,6 @@
 package chat.stoat.screens.chat.dialogs
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.slideInVertically
@@ -34,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +43,8 @@ import chat.stoat.api.routes.channel.createInvite
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_INVITES
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.invite_dialog_close
@@ -94,7 +94,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
     )
 
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val scope = rememberCoroutineScope()
 
     var swapInviteJob by remember { mutableStateOf<Job?>(null) }
@@ -217,11 +217,7 @@ fun InviteDialog(channelId: String, onDismissRequest: () -> Unit) {
                     }.toAnnotatedString())
 
                     if (Platform.needsShowClipboardNotification()) {
-                        Toast.makeText(
-                            context,
-                            copiedText,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toaster.show(copiedText)
                     }
                 }) {
                     Text(stringResource(Res.string.invite_dialog_copy))

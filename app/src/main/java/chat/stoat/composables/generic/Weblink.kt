@@ -1,7 +1,5 @@
 package chat.stoat.composables.generic
 
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
@@ -11,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,14 +18,9 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun Weblink(text: String, url: String, modifier: Modifier = Modifier) {
-    val ctx = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
-    AnyLink(text = text, action = {
-        val customTab = CustomTabsIntent
-            .Builder()
-            .build()
-        customTab.launchUrl(ctx, Uri.parse(url))
-    }, modifier = modifier)
+    AnyLink(text = text, action = { uriHandler.openUri(url) }, modifier = modifier)
 }
 
 @Composable

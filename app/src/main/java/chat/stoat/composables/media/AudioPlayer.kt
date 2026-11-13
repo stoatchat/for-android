@@ -3,7 +3,6 @@ package chat.stoat.composables.media
 import android.content.ContentValues
 import android.content.Intent
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -39,6 +38,8 @@ import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.blockSwipeReplyOnHorizontalDrag
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.media_viewer_more
 import chat.stoat.shared.resources.media_viewer_pause
@@ -60,6 +61,7 @@ fun AudioPlayer(
     contentType: String,
 ) {
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val snackbarHostState = LocalSnackbarHostState.current
 
     val showMenu = remember { mutableStateOf(false) }
@@ -127,7 +129,7 @@ fun AudioPlayer(
                     if (snackbarHostState != null) {
                         snackbarHostState.showSnackbar(message)
                     } else {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        toaster.show(message)
                     }
                 }
             }

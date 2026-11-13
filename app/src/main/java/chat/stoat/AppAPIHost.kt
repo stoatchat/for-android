@@ -26,6 +26,7 @@ fun installAppAPIHost(app: StoatApplication) {
             versionName = BuildConfig.VERSION_NAME,
             applicationId = BuildConfig.APPLICATION_ID,
             isDebug = BuildConfig.DEBUG,
+            flavourId = BuildConfig.FLAVOUR_ID,
         ),
         storage = AppAPIStorage(app),
         platform = AppAPIPlatform(app),

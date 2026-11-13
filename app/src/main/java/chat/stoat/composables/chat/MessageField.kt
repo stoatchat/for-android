@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.SystemClock
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
@@ -128,6 +127,8 @@ import chat.stoat.internals.Autocomplete
 import chat.stoat.media.AndroidVoiceRecorder
 import chat.stoat.media.Recording
 import chat.stoat.media.VoiceRecorder
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.add_attachment_alt
 import chat.stoat.shared.resources.message_field_placeholder_dm
@@ -313,6 +314,7 @@ fun MessageField(
     val voiceMessageRecordingFailedText = stringResource(Res.string.voice_message_recording_failed)
     val voiceMessageMicrophonePermissionDeniedText = stringResource(Res.string.voice_message_microphone_permission_denied)
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val scope = rememberCoroutineScope()
     val voiceRecorder = remember(context) {
         AndroidVoiceRecorder(context.applicationContext)
@@ -337,11 +339,7 @@ fun MessageField(
             isRecordingVoiceMessage = true
             true
         } catch (_: Exception) {
-            Toast.makeText(
-                context,
-                voiceMessageRecordingFailedText,
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(voiceMessageRecordingFailedText)
             false
         }
     }
@@ -349,11 +347,7 @@ fun MessageField(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (!granted) {
-            Toast.makeText(
-                context,
-                voiceMessageMicrophonePermissionDeniedText,
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(voiceMessageMicrophonePermissionDeniedText)
         }
     }
 
@@ -383,21 +377,13 @@ fun MessageField(
             heldDurationMillis >= VoiceRecorder.MIN_DURATION_MILLIS &&
             recording == null
         ) {
-            Toast.makeText(
-                context,
-                getString(Res.string.voice_message_recording_failed),
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(getString(Res.string.voice_message_recording_failed))
         } else if (
             recording != null &&
             recording.durationMillis >= VoiceRecorder.MIN_DURATION_MILLIS
         ) {
             if (recording.isSilent) {
-                Toast.makeText(
-                    context,
-                    getString(Res.string.voice_message_silent),
-                    Toast.LENGTH_SHORT
-                ).show()
+                toaster.show(getString(Res.string.voice_message_silent))
             } else {
                 pendingVoiceMessage = recording
             }

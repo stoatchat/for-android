@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.stoat.BuildConfig
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
@@ -172,7 +172,7 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
             url = "$STOAT_MARKETING/aup"
         )
 
-        if (BuildConfig.DEBUG) {
+        if (StoatAPIHost.config.isDebug) {
             AnyLink(
                 text = "Debug: Chucker",
                 action = {

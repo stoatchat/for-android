@@ -43,6 +43,11 @@ kotlin {
             implementation(libs.compose.multiplatform.ui.tooling.preview)
             implementation(libs.shimmer)
         }
+
+        androidMain.dependencies {
+            implementation(libs.android.core.ktx)
+            implementation(libs.android.browser)
+        }
     }
 }
 

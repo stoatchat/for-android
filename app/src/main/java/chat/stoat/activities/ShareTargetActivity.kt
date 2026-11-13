@@ -56,18 +56,18 @@ import chat.stoat.api.routes.channel.sendMessage
 import chat.stoat.api.routes.microservices.autumn.FileArgs
 import chat.stoat.api.routes.microservices.autumn.MAX_ATTACHMENTS_PER_MESSAGE
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
-import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.composables.chat.MessageField
 import chat.stoat.composables.emoji.EmojiPicker
 import chat.stoat.composables.screens.chat.AttachmentManager
 import chat.stoat.composables.screens.chat.drawer.ChannelItem
 import chat.stoat.composables.screens.chat.drawer.ChannelItemIconType
 import chat.stoat.composables.screens.chat.drawer.DMOrGroupItem
-import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.persistence.KVStorage
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.StoatAppTheme
+import chat.stoat.platform.show
 import chat.stoat.screens.chat.views.channel.ChannelScreenActivePane
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.share
@@ -259,14 +259,11 @@ fun ShareTargetScreen(
     viewModel: ShareTargetScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     LaunchedEffect(Unit) {
         if (!viewModel.isLoggedIn()) {
-            Toast.makeText(
-                context,
-                getString(Res.string.share_target_login_first),
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(getString(Res.string.share_target_login_first))
 
             onFinished()
             return@LaunchedEffect
@@ -304,11 +301,7 @@ fun ShareTargetScreen(
     var channelSearchContent by remember { mutableStateOf("") }
     var selectedChannel by rememberSaveable { mutableStateOf<String?>(null) }
 
-    StoatTheme(
-        requestedTheme = LoadedSettings.theme,
-        requestedUserInterfaceFont = LoadedSettings.font,
-        colourOverrides = SyncedSettings.android.colourOverrides
-    ) {
+    StoatAppTheme {
         Scaffold(
             topBar = {
                 TopAppBar(title = {
@@ -437,11 +430,7 @@ fun ShareTargetScreen(
                             },
                             onSendMessage = {
                                 if (selectedChannel == null) {
-                                    Toast.makeText(
-                                        context,
-                                        getStringBlocking(Res.string.share_target_select_channel),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    toaster.show(getStringBlocking(Res.string.share_target_select_channel))
                                     return@MessageField
                                 } else {
                                     viewModel.send(selectedChannel!!) {

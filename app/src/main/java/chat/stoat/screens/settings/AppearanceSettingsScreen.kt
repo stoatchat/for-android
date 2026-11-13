@@ -79,6 +79,8 @@ import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.core.model.settings.Theme
 import chat.stoat.core.model.settings.UserInterfaceFont
 import chat.stoat.internals.extensions.getStringBlocking
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.settings_appearance
@@ -277,7 +279,7 @@ fun AppearanceSettingsScreen(
         }
     }
 
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val scope = rememberCoroutineScope()
 
     if (viewModel.overridePickerSheetVisible) {
@@ -434,11 +436,7 @@ fun AppearanceSettingsScreen(
                                 .weight(1f)
                                 .testTag("set_theme_m3dynamic_unsupported")
                         ) {
-                            Toast.makeText(
-                                context,
-                                settingsAppearanceThemeM3dynamicUnsupportedToastText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.show(settingsAppearanceThemeM3dynamicUnsupportedToastText)
                         }
                     }
                 }

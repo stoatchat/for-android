@@ -1,6 +1,5 @@
 package chat.stoat.screens.login
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -40,10 +39,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import chat.stoat.BuildConfig
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_MARKETING
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.community_guidelines
 import chat.stoat.shared.resources.login
@@ -61,6 +62,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun LoginGreetingScreen(navController: NavController) {
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     var catTaps by remember { mutableIntStateOf(0) }
     var showBoringButton by remember { mutableStateOf(false) }
 
@@ -93,18 +95,12 @@ fun LoginGreetingScreen(navController: NavController) {
                             if (catTaps < 9) {
                                 catTaps++
                             } else {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "🐈",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                                toaster.show("🐈")
                                 catTaps = 0
                             }
                         },
                         onLongClick = {
-                            if (BuildConfig.DEBUG) showBoringButton = !showBoringButton
+                            if (StoatAPIHost.config.isDebug) showBoringButton = !showBoringButton
                         }
                     )
             )
@@ -201,7 +197,7 @@ fun LoginGreetingScreen(navController: NavController) {
                     text = stringResource(Res.string.community_guidelines),
                     url = "$STOAT_MARKETING/aup"
                 )
-                if (BuildConfig.DEBUG) {
+                if (StoatAPIHost.config.isDebug) {
                     AnyLink(
                         text = "Debug: Chucker",
                         action = {

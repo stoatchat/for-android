@@ -3,11 +3,9 @@ package chat.stoat.composables.chat
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.icu.text.DateFormat
-import android.net.Uri
 import android.text.format.DateUtils
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -47,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -196,17 +195,8 @@ fun authorAvatarUrl(message: MessageSchema): String? {
     return member.avatar?.let { "$STOAT_FILES/avatars/${it.id}" }
 }
 
-fun viewUrlInBrowser(ctx: android.content.Context, url: String) {
-    val customTab = CustomTabsIntent
-        .Builder()
-        .build()
-    customTab.launchUrl(ctx, Uri.parse(url))
-}
-
-fun viewAttachmentInBrowser(ctx: android.content.Context, attachment: AutumnResource) {
-    val url = "$STOAT_FILES/attachments/${attachment.id}/${attachment.filename}"
-    viewUrlInBrowser(ctx, url)
-}
+fun attachmentUrl(attachment: AutumnResource): String =
+    "$STOAT_FILES/attachments/${attachment.id}/${attachment.filename}"
 
 fun formatLongAsTime(time: Long): String {
     val date = java.util.Date(time)
@@ -254,6 +244,7 @@ fun Message(
 ) {
     val author = StoatAPI.userCache[message.author] ?: return CircularProgressIndicator()
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val voiceMessageMetadata = remember(author.badges, message.content, message.attachments) {
         if (!author.badges.hasUserBadge(UserBadges.Developer)) {
             return@remember null
@@ -272,7 +263,7 @@ fun Message(
                 ActionChannel.send(stoatLink.toNavigationAction())
             }
         } else {
-            viewUrlInBrowser(context, url)
+            uriHandler.openUri(url)
         }
     }
     var kv by remember { mutableStateOf<KVStorage?>(null) }
@@ -574,7 +565,7 @@ fun Message(
                                         }
 
                                         else -> {
-                                            viewAttachmentInBrowser(context, attachment)
+                                            uriHandler.openUri(attachmentUrl(attachment))
                                         }
                                     }
                                 }

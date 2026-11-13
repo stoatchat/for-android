@@ -1,6 +1,5 @@
 package chat.stoat.composables.screens.settings
 
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
@@ -48,6 +46,8 @@ import chat.stoat.dialogs.memberModerationPermissions
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.serverIdentityCapabilities
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.member_moderation_ban
@@ -83,7 +83,7 @@ fun UserButtons(
     dismissSheet: suspend () -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val clipboard = LocalClipboardManager.current
 
     var botEasterEgg by remember { mutableStateOf(false) }
@@ -220,11 +220,7 @@ fun UserButtons(
                                 ActionChannel.send(Action.SwitchChannel(dm.id!!))
                                 dismissSheet()
                             } else {
-                                Toast.makeText(
-                                    context,
-                                    getString(Res.string.user_info_sheet_failed_to_open_dm),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                toaster.show(getString(Res.string.user_info_sheet_failed_to_open_dm))
                             }
                         }
                     },
@@ -408,11 +404,7 @@ fun UserButtons(
                                 ActionChannel.send(Action.ReportUser(user.id!!))
 
                                 if (Platform.needsShowClipboardNotification()) {
-                                    Toast.makeText(
-                                        context,
-                                        getString(Res.string.copied),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    toaster.show(getString(Res.string.copied))
                                 }
                             }
                         }

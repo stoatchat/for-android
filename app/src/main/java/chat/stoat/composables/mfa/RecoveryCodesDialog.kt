@@ -1,6 +1,5 @@
 package chat.stoat.composables.mfa
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,12 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.settings_mfa_recovery_copy
@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.stringResource
 fun RecoveryCodesDialog(codes: List<String>, onDismiss: () -> Unit) {
     val copiedText = stringResource(Res.string.copied)
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -76,11 +76,7 @@ fun RecoveryCodesDialog(codes: List<String>, onDismiss: () -> Unit) {
             TextButton(onClick = {
                 clipboardManager.setText(AnnotatedString(codes.joinToString("\n")))
                 if (Platform.needsShowClipboardNotification()) {
-                    Toast.makeText(
-                        context,
-                        copiedText,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toaster.show(copiedText)
                 }
             }) {
                 Text(stringResource(Res.string.settings_mfa_recovery_copy))

@@ -3,7 +3,6 @@ package chat.stoat.sheets
 import android.content.ClipData
 import android.content.Intent
 import android.graphics.Bitmap
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +40,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User
 import chat.stoat.composables.profile.UserCard
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.copy
@@ -61,6 +62,7 @@ fun UserCardSheet(user: User?) {
     val cardGraphics = rememberGraphicsLayer()
 
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val clipboardManager = LocalClipboardManager.current
 
     var hasError by remember { mutableStateOf(false) }
@@ -158,11 +160,7 @@ fun UserCardSheet(user: User?) {
         )
 
         if (Platform.needsShowClipboardNotification()) {
-            Toast.makeText(
-                context,
-                getString(Res.string.copied),
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(getString(Res.string.copied))
         }
     }
 

@@ -1,15 +1,11 @@
 package chat.stoat.composables.generic
 
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.net.toUri
+import androidx.compose.ui.platform.LocalUriHandler
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.service_health_alert
@@ -20,8 +16,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
-    val context = LocalContext.current
-    val backgroundColour = MaterialTheme.colorScheme.background
+    val uriHandler = LocalUriHandler.current
 
     AlertDialog(
         onDismissRequest = {
@@ -38,15 +33,7 @@ fun HealthAlert(notice: HealthNotice, onDismiss: () -> Unit) {
                 when (action.type) {
                     "external" -> TextButton(
                         onClick = {
-                            val customTab = CustomTabsIntent.Builder()
-                                .setShowTitle(true)
-                                .setDefaultColorSchemeParams(
-                                    CustomTabColorSchemeParams.Builder()
-                                        .setToolbarColor(backgroundColour.toArgb())
-                                        .build()
-                                )
-                                .build()
-                            customTab.launchUrl(context, action.href?.toUri() ?: return@TextButton)
+                            uriHandler.openUri(action.href ?: return@TextButton)
                         }
                     ) {
                         Text(

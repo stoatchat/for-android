@@ -2,7 +2,6 @@ package chat.stoat.screens.settings
 
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.horizontalScroll
@@ -52,6 +51,8 @@ import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.KVStorage
 import chat.stoat.persistence.SqlStorage
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import com.google.android.gms.common.ConnectionResult
@@ -106,6 +107,7 @@ fun DebugSettingsScreen(
     viewModel: DebugSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val scope = rememberCoroutineScope()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -142,11 +144,7 @@ fun DebugSettingsScreen(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         askNotificationsPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
                     } else {
-                        Toast.makeText(
-                            context,
-                            "Will not ask for permission on pre-Tiramisu devices!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toaster.show("Will not ask for permission on pre-Tiramisu devices!")
                     }
                 }
             },

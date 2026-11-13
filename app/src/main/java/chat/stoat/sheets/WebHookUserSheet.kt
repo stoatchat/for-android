@@ -17,11 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import chat.stoat.composables.chat.viewUrlInBrowser
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_SUPPORT
@@ -33,7 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun WebHookUserSheet(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -70,7 +69,7 @@ fun WebHookUserSheet(modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
-                viewUrlInBrowser(context, "$STOAT_SUPPORT/kb/server-management/integrations-and-bots/webhooks")
+                uriHandler.openUri("$STOAT_SUPPORT/kb/server-management/integrations-and-bots/webhooks")
             },
             modifier = Modifier
                 .fillMaxWidth()

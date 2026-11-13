@@ -1,7 +1,5 @@
 package chat.stoat.screens.chat.views
 
-import android.content.Context
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
@@ -104,6 +102,9 @@ import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.extensions.zero
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.Toaster
+import chat.stoat.platform.show
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.friends
@@ -137,12 +138,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
-private fun showInvalidClipboardToast(context: Context) {
-    Toast.makeText(
-        context,
-        getStringBlocking(Res.string.friends_add_by_tag_sheet_invalid_clipboard),
-        Toast.LENGTH_SHORT
-    ).show()
+private fun showInvalidClipboardToast(toaster: Toaster) {
+    toaster.show(getStringBlocking(Res.string.friends_add_by_tag_sheet_invalid_clipboard))
 }
 
 @OptIn(
@@ -154,6 +151,7 @@ private fun showInvalidClipboardToast(context: Context) {
 fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: () -> Unit) {
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     var overflowMenuShown by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -308,7 +306,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                     ) ?: ""
                                 try {
                                     if (clipboardText.isEmpty()) {
-                                        showInvalidClipboardToast(context)
+                                        showInvalidClipboardToast(toaster)
                                         return@launch
                                     }
 
@@ -317,21 +315,21 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                         if (parts[0].length > 32 || parts[0].any { char ->
                                                 !char.isLetterOrDigit() && char != '_' && char != '.' && char != '-'
                                             }) {
-                                            showInvalidClipboardToast(context)
+                                            showInvalidClipboardToast(toaster)
                                             return@launch
                                         }
                                         if (parts[1].length > 4 || parts[1].any { char -> !char.isDigit() }) {
-                                            showInvalidClipboardToast(context)
+                                            showInvalidClipboardToast(toaster)
                                             return@launch
                                         }
 
                                         username = parts[0].trim()
                                         tag = parts[1].trim()
                                     } else {
-                                        showInvalidClipboardToast(context)
+                                        showInvalidClipboardToast(toaster)
                                     }
                                 } catch (_: Exception) {
-                                    showInvalidClipboardToast(context)
+                                    showInvalidClipboardToast(toaster)
                                 }
                             }
                         }
@@ -496,11 +494,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                                                 qrResult = null
                                                 contents = null
                                             } catch (e: Exception) {
-                                                Toast.makeText(
-                                                    context,
-                                                    e.localizedMessage ?: e.toString(),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                                toaster.show(e.localizedMessage ?: e.toString())
                                             }
                                         }
                                     }

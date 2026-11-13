@@ -1,9 +1,6 @@
 package chat.stoat.composables.markdown.prose
 
 import android.content.Intent
-import android.widget.Toast
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -73,6 +70,9 @@ import chat.stoat.markdown.SPOILER_ELEMENT_TYPE
 import chat.stoat.markdown.StoatMarkdownFlavour
 import chat.stoat.markdown.TIMESTAMP_ELEMENT_TYPE
 import chat.stoat.markdown.USER_MENTION_ELEMENT_TYPE
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.ToastDuration
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.link_type_no_intent
 import com.mikepenz.markdown.annotator.DefaultAnnotatorSettings
@@ -220,6 +220,7 @@ fun ChatMarkdown(
     val linkTypeNoIntentText = stringResource(Res.string.link_type_no_intent)
     val fontSize = LocalTextStyle.current.fontSize * fontSizeMultiplier
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val density = LocalDensity.current
     val fontSizePx = with(density) { fontSize.toPx() }
     val scope = rememberCoroutineScope()
@@ -480,8 +481,8 @@ fun ChatMarkdown(
         }
         spoilerAwareAnnotator
     }
-    val toolbarColor = MaterialTheme.colorScheme.surfaceContainer.toArgb()
-    val uriHandler = remember(scope, serverId, toolbarColor) {
+    val platformUriHandler = LocalUriHandler.current
+    val uriHandler = remember(scope, serverId, platformUriHandler) {
         object : UriHandler {
             override fun openUri(uri: String) {
                 when {
@@ -498,11 +499,7 @@ fun ChatMarkdown(
                     uri.startsWith("stoat-timestamp://") -> {
                         val epochSeconds = uri.removePrefix("stoat-timestamp://").toLongOrNull()
                         if (epochSeconds != null) {
-                            Toast.makeText(
-                                context,
-                                resolveTimestamp(epochSeconds, "F"),
-                                Toast.LENGTH_LONG
-                            ).show()
+                            toaster.show(resolveTimestamp(epochSeconds, "F"), ToastDuration.Long)
                         }
                     }
 
@@ -526,22 +523,10 @@ fun ChatMarkdown(
                         } catch (_: Exception) {
                             // no-op
                         }
-                        val customTab = CustomTabsIntent.Builder()
-                            .setShowTitle(true)
-                            .setDefaultColorSchemeParams(
-                                CustomTabColorSchemeParams.Builder()
-                                    .setToolbarColor(toolbarColor)
-                                    .build()
-                            )
-                            .build()
                         try {
-                            customTab.launchUrl(context, uri.toUri())
-                        } catch (_: Exception) {
-                            Toast.makeText(
-                                context,
-                                linkTypeNoIntentText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            platformUriHandler.openUri(uri)
+                        } catch (_: IllegalArgumentException) {
+                            toaster.show(linkTypeNoIntentText)
                         }
                     }
                 }

@@ -10,7 +10,6 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -168,6 +167,8 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.internals.extensions.zero
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources._new
@@ -276,6 +277,7 @@ fun ChannelScreen(
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val toaster = LocalToaster.current
     val config = LocalConfiguration.current
 
     DisposableEffect(Unit) {
@@ -476,11 +478,7 @@ fun ChannelScreen(
                     contentValues
                 )
         } catch (e: Exception) {
-            Toast.makeText(
-                context,
-                filePickerChipCameraFailedText,
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(filePickerChipCameraFailedText)
 
             return@cb
         }
@@ -490,11 +488,7 @@ fun ChannelScreen(
                 pickCameraLauncher.launch(uri)
             }
         } catch (e: Exception) {
-            Toast.makeText(
-                context,
-                filePickerChipCameraNoneInstalledText,
-                Toast.LENGTH_SHORT
-            ).show()
+            toaster.show(filePickerChipCameraNoneInstalledText)
         }
     }
 

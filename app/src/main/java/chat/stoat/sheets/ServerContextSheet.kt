@@ -1,6 +1,5 @@
 package chat.stoat.sheets
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
@@ -44,6 +42,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.availableServerSettingsOptions
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.server_context_sheet_actions_add_to_folder
 import chat.stoat.shared.resources.server_context_sheet_actions_copy_id
@@ -90,7 +90,7 @@ fun ServerContextSheet(
 
     val coroutineScope = rememberCoroutineScope()
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val permissions by rememberServerPermissions(serverId)
     val serverSettingsOptions = permissions?.let {
         availableServerSettingsOptions(
@@ -217,11 +217,7 @@ fun ServerContextSheet(
                 clipboardManager.setText(AnnotatedString(server.id!!))
 
                 if (Platform.needsShowClipboardNotification()) {
-                    Toast.makeText(
-                        context,
-                        serverContextSheetActionsCopyIdCopiedText,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toaster.show(serverContextSheetActionsCopyIdCopiedText)
                 }
 
                 coroutineScope.launch {

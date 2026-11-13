@@ -1,6 +1,5 @@
 package chat.stoat.screens.labs.ui.sandbox
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.aspectRatio
@@ -22,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -32,6 +30,8 @@ import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.designsystem.theme.FragmentMono
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.tmp_card_asset_tl
@@ -49,7 +49,7 @@ fun NewCardSandboxScreen(navController: NavController) {
         StoatAPI.userCache[activeUid]!!
     }
 
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     val date = remember {
         DateFormat
@@ -81,11 +81,7 @@ fun NewCardSandboxScreen(navController: NavController) {
                         activeUid = uidInput
                         uidInput = ""
                     } else if (!StoatAPI.userCache.containsKey(uidInput)) {
-                        Toast.makeText(
-                            context,
-                            "User id not found in cache",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toaster.show("User id not found in cache")
                     }
                 }
             ),

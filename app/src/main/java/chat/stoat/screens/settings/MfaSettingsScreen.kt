@@ -2,8 +2,6 @@ package chat.stoat.screens.settings
 
 import android.app.Application
 import android.net.Uri
-import android.widget.Toast
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,8 +54,8 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -66,7 +64,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -89,6 +86,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
@@ -239,7 +238,7 @@ fun MfaSettingsScreen(
     navController: NavController,
     viewModel: MfaSettingsScreenViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
@@ -464,10 +463,7 @@ fun MfaSettingsScreen(
 
                                 Button(
                                     onClick = {
-                                        val customTab = CustomTabsIntent
-                                            .Builder()
-                                            .build()
-                                        customTab.launchUrl(context, "$STOAT_WEB_APP/app".toUri())
+                                        uriHandler.openUri("$STOAT_WEB_APP/app")
                                     }
                                 ) {
                                     Text(stringResource(Res.string.settings_mfa_security_keys_web_manage_cta))
@@ -489,7 +485,7 @@ private fun TotpEnrollmentSheet(
     onDismiss: () -> Unit
 ) {
     val copiedText = stringResource(Res.string.copied)
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val resources = LocalResources.current
     val clipboardManager = LocalClipboardManager.current
 
@@ -553,11 +549,7 @@ private fun TotpEnrollmentSheet(
                 IconButton(onClick = {
                     clipboardManager.setText(AnnotatedString(enrollment.secret))
                     if (Platform.needsShowClipboardNotification()) {
-                        Toast.makeText(
-                            context,
-                            copiedText,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        toaster.show(copiedText)
                     }
                 }) {
                     Icon(

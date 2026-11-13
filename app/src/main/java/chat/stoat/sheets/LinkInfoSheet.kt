@@ -1,8 +1,5 @@
 package chat.stoat.sheets
 
-import android.net.Uri
-import android.widget.Toast
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,13 +16,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.copy
@@ -39,7 +38,8 @@ import org.jetbrains.compose.resources.stringResource
 fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
     val linkTypeNoIntentText = stringResource(Res.string.link_type_no_intent)
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
+    val uriHandler = LocalUriHandler.current
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -53,21 +53,10 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
                     interactionSource = remember(::MutableInteractionSource),
                     indication = null,
                     onClick = {
-                        val customTab = CustomTabsIntent
-                            .Builder()
-                            .setShowTitle(true)
-                            .build()
-
                         try {
-                            customTab.launchUrl(context, Uri.parse(url))
-                        } catch (e: Exception) {
-                            Toast
-                                .makeText(
-                                    context,
-                                    linkTypeNoIntentText,
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
+                            uriHandler.openUri(url)
+                        } catch (_: IllegalArgumentException) {
+                            toaster.show(linkTypeNoIntentText)
                         }
                     })
         ) {
@@ -93,21 +82,10 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
             )
         },
         onClick = {
-            val customTab = CustomTabsIntent
-                .Builder()
-                .setShowTitle(true)
-                .build()
-
             try {
-                customTab.launchUrl(context, Uri.parse(url))
-            } catch (e: Exception) {
-                Toast
-                    .makeText(
-                        context,
-                        linkTypeNoIntentText,
-                        Toast.LENGTH_SHORT
-                    )
-                    .show()
+                uriHandler.openUri(url)
+            } catch (_: IllegalArgumentException) {
+                toaster.show(linkTypeNoIntentText)
             }
         }
     )
@@ -127,11 +105,7 @@ fun LinkInfoSheet(url: String, onDismiss: () -> Unit) {
             coroutineScope.launch {
                 clipboardManager.setText(AnnotatedString(url))
                 if (Platform.needsShowClipboardNotification()) {
-                    Toast.makeText(
-                        context,
-                        getString(Res.string.copied),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    toaster.show(getString(Res.string.copied))
                 }
             }
             onDismiss()

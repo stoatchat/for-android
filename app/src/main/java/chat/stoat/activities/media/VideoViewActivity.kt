@@ -88,16 +88,14 @@ import androidx.media3.ui.compose.state.rememberSeekBackButtonState
 import androidx.media3.ui.compose.state.rememberSeekForwardButtonState
 import chat.stoat.api.StoatHttp
 import chat.stoat.api.StoatJson
-import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.core.designsystem.icons.StoatIcon
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
-import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.internals.extensions.zero
+import chat.stoat.platform.StoatAppTheme
 import chat.stoat.providers.getAttachmentContentUri
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
@@ -309,11 +307,7 @@ fun VideoViewScreen(resource: AutumnResource, onClose: () -> Unit = {}) {
         }
     }
 
-    StoatTheme(
-        requestedTheme = LoadedSettings.theme,
-        requestedUserInterfaceFont = LoadedSettings.font,
-        colourOverrides = SyncedSettings.android.colourOverrides
-    ) {
+    StoatAppTheme {
         Scaffold(
             containerColor = if (isFullscreen) {
                 Color.Black

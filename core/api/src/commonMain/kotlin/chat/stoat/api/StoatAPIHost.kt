@@ -11,6 +11,7 @@ data class StoatAPIConfig(
     val versionName: String,
     val applicationId: String,
     val isDebug: Boolean,
+    val flavourId: String,
 )
 
 interface StoatAPIStorage {

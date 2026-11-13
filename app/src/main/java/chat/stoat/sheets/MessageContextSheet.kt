@@ -1,6 +1,5 @@
 package chat.stoat.sheets
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.StoatAPI
@@ -45,6 +43,8 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.comingsoon_toast
 import chat.stoat.shared.resources.copied
@@ -93,7 +93,7 @@ fun MessageContextSheet(
         return
     }
 
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
     val clipboardManager = LocalClipboardManager.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -134,23 +134,15 @@ fun MessageContextSheet(
                             coroutineScope.launch {
                                 shareSheetState.hide()
                                 onHideSheet()
-                                Toast.makeText(
-                                    context,
-                                    getString(
+                                toaster.show(getString(
                                         Res.string.message_context_sheet_actions_copy_failed_empty
-                                    ),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    ))
                             }
                             return@SheetButton
                         }
 
                         if (Platform.needsShowClipboardNotification()) {
-                            Toast.makeText(
-                                context,
-                                copiedText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.show(copiedText)
                         }
 
                         coroutineScope.launch {
@@ -179,11 +171,7 @@ fun MessageContextSheet(
                     },
                     onClick = {
                         if (message.content.isNullOrEmpty()) {
-                            Toast.makeText(
-                                context,
-                                messageContextSheetActionsCopyFailedEmptyText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.show(messageContextSheetActionsCopyFailedEmptyText)
 
                             coroutineScope.launch {
                                 shareSheetState.hide()
@@ -205,11 +193,7 @@ fun MessageContextSheet(
 
                         clipboardManager.setText(AnnotatedString(messageLink))
                         if (Platform.needsShowClipboardNotification()) {
-                            Toast.makeText(
-                                context,
-                                messageContextSheetActionsCopyLinkCopiedText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.show(messageContextSheetActionsCopyLinkCopiedText)
                         }
 
                         coroutineScope.launch {
@@ -241,11 +225,7 @@ fun MessageContextSheet(
                         clipboardManager.setText(AnnotatedString(message.id!!))
 
                         if (Platform.needsShowClipboardNotification()) {
-                            Toast.makeText(
-                                context,
-                                messageContextSheetActionsCopyIdCopiedText,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            toaster.show(messageContextSheetActionsCopyIdCopiedText)
                         }
 
                         coroutineScope.launch {
@@ -421,11 +401,7 @@ fun MessageContextSheet(
                 )
             },
             onClick = {
-                Toast.makeText(
-                    context,
-                    comingsoonToastText,
-                    Toast.LENGTH_SHORT
-                ).show()
+                toaster.show(comingsoonToastText)
 
                 coroutineScope.launch {
                     onHideSheet()

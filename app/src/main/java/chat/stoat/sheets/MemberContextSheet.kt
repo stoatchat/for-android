@@ -1,6 +1,5 @@
 package chat.stoat.sheets
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -11,7 +10,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import chat.stoat.api.StoatAPI
@@ -20,6 +18,8 @@ import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.copied
 import chat.stoat.shared.resources.member_context_sheet_remove_from_channel
@@ -39,7 +39,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
     val scope = rememberCoroutineScope()
     val channel = StoatAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     LaunchedEffect(channel) {
         if (channel == null) {
@@ -96,11 +96,7 @@ fun ColumnScope.GroupDMMemberContextSheet(
             clipboardManager.setText(AnnotatedString(userId))
 
             if (Platform.needsShowClipboardNotification()) {
-                Toast.makeText(
-                    context,
-                    copiedText,
-                    Toast.LENGTH_SHORT
-                ).show()
+                toaster.show(copiedText)
             }
         }
     )
@@ -120,7 +116,7 @@ fun ColumnScope.ServerMemberContextSheet(
     val server = StoatAPI.serverCache[serverId]
     val channel = StoatAPI.channelCache[channelId]
     val clipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val toaster = LocalToaster.current
 
     LaunchedEffect(server) {
         if (server == null || channel == null) {
@@ -147,11 +143,7 @@ fun ColumnScope.ServerMemberContextSheet(
             clipboardManager.setText(AnnotatedString(userId))
 
             if (Platform.needsShowClipboardNotification()) {
-                Toast.makeText(
-                    context,
-                    copiedText,
-                    Toast.LENGTH_SHORT
-                ).show()
+                toaster.show(copiedText)
             }
         }
     )

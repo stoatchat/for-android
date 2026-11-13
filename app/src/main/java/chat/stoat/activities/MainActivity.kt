@@ -78,19 +78,17 @@ import chat.stoat.api.routes.microservices.health.healthCheck
 import chat.stoat.api.routes.onboard.needsOnboarding
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.GeoStateProvider
-import chat.stoat.api.settings.LoadedSettings
-import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
-import chat.stoat.core.designsystem.theme.StoatTheme
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.material.EasingTokens
 import chat.stoat.persistence.KVStorage
+import chat.stoat.platform.StoatAppTheme
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
@@ -519,11 +517,7 @@ fun AppEntrypoint(
 
     val navController = rememberNavController()
 
-    StoatTheme(
-        requestedTheme = LoadedSettings.theme,
-        requestedUserInterfaceFont = LoadedSettings.font,
-        colourOverrides = SyncedSettings.android.colourOverrides
-    ) {
+    StoatAppTheme {
         Box(
             Modifier
                 .fillMaxSize()

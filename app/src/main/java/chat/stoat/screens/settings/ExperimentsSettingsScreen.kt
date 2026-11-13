@@ -23,8 +23,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import chat.stoat.BuildConfig
 import chat.stoat.StoatApplication
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.persistence.KVStorage
@@ -267,10 +267,10 @@ fun ExperimentsSettingsScreen(
                         navController.popBackStack()
                     }
                 },
-                enabled = !BuildConfig.DEBUG,
+                enabled = !StoatAPIHost.config.isDebug,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                if (BuildConfig.DEBUG) {
+                if (StoatAPIHost.config.isDebug) {
                     Text("Experiments are always enabled in debug builds")
                 } else {
                     Text("Disable")

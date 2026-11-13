@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import chat.stoat.BuildConfig
 import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.core.designsystem.components.ListHeader
@@ -250,7 +250,7 @@ fun SettingsScreen(
                     val miscLastIsLabs =
                         !miscLastIsExperiments && FeatureFlags.labsAccessControlGranted
                     val miscLastIsDebug =
-                        !miscLastIsExperiments && !miscLastIsLabs && BuildConfig.DEBUG
+                        !miscLastIsExperiments && !miscLastIsLabs && StoatAPIHost.config.isDebug
                     val miscLastIsAbout =
                         !miscLastIsExperiments && !miscLastIsLabs && !miscLastIsDebug
 
@@ -271,7 +271,7 @@ fun SettingsScreen(
                             .clickable { navController.navigate("about") }
                     )
 
-                    if (BuildConfig.DEBUG) {
+                    if (StoatAPIHost.config.isDebug) {
                         Spacer(Modifier.height(2.dp))
                         SettingsListItem(
                             last = miscLastIsDebug,
@@ -332,7 +332,7 @@ fun SettingsScreen(
                         Text(
                             stringResource(
                                 Res.string.settings_category_last,
-                                BuildConfig.VERSION_NAME
+                                StoatAPIHost.config.versionName
                             )
                         )
                     }
