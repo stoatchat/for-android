@@ -25,6 +25,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import chat.stoat.api.StoatAPI
@@ -40,7 +41,6 @@ import chat.stoat.internals.server.ServerSettingsOption
 import chat.stoat.internals.server.availableServerSettingsOptions
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
-import chat.stoat.navigation.listDetailItem
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
@@ -255,7 +255,7 @@ private fun ServerSettingsSection(
             first = index == 0,
             last = index == options.lastIndex,
             onClick = { onOptionSelected(option) },
-            modifier = option.route(serverId)?.let { Modifier.listDetailItem(it) } ?: Modifier,
+            detailRoute = option.route(serverId),
         )
         if (index != options.lastIndex) {
             Spacer(Modifier.height(2.dp))
@@ -269,7 +269,7 @@ private fun ServerSettingsOptionRow(
     first: Boolean,
     last: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    detailRoute: NavKey? = null,
 ) {
     val dangerous = option == ServerSettingsOption.DeleteServer
 
@@ -282,7 +282,7 @@ private fun ServerSettingsOptionRow(
                 color = if (dangerous) {
                     MaterialTheme.colorScheme.error
                 } else {
-                    MaterialTheme.colorScheme.onSurface
+                    Color.Unspecified
                 },
             )
         },
@@ -294,7 +294,8 @@ private fun ServerSettingsOptionRow(
                 )
             }
         },
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = Modifier.clickable(onClick = onClick),
+        detailRoute = detailRoute,
     )
 }
 

@@ -1,5 +1,6 @@
 package chat.stoat.screens.labs
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -27,11 +30,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenColour
 import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.isListDetailSelected
 import chat.stoat.navigation.listDetailItem
 
 enum class LabsHomeScreenTab {
@@ -137,6 +143,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
+                            colors = labsItemColours(LabsRoute.NewLoginMockup),
                             modifier = Modifier.listDetailItem(LabsRoute.NewLoginMockup).clickable {
                                 navigator.navigate(LabsRoute.NewLoginMockup)
                             }
@@ -152,6 +159,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
+                            colors = labsItemColours(LabsRoute.SettingsDslSandbox),
                             modifier = Modifier.listDetailItem(LabsRoute.SettingsDslSandbox).clickable {
                                 navigator.navigate(LabsRoute.SettingsDslSandbox)
                             }
@@ -160,6 +168,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         }
                         HorizontalDivider()
                         ListItem(
+                            colors = labsItemColours(LabsRoute.NewCardSandbox),
                             modifier = Modifier.listDetailItem(LabsRoute.NewCardSandbox).clickable {
                                 navigator.navigate(LabsRoute.NewCardSandbox)
                             }
@@ -168,6 +177,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         }
                         HorizontalDivider()
                         ListItem(
+                            colors = labsItemColours(LabsRoute.TelecomSandbox),
                             modifier = Modifier.listDetailItem(LabsRoute.TelecomSandbox).clickable {
                                 navigator.navigate(LabsRoute.TelecomSandbox)
                             }
@@ -180,4 +190,19 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
             }
         }
     }
+}
+
+@Composable
+private fun labsItemColours(route: LabsRoute): ListItemColors {
+    val selected = isListDetailSelected(route)
+    val colours = MaterialTheme.colorScheme
+
+    @Composable
+    fun animated(selectedColour: Color, colour: Color) =
+        animateColorAsState(if (selected) selectedColour else colour, animationSpec = StoatTweenColour).value
+
+    return ListItemDefaults.colors(
+        containerColor = animated(colours.secondaryContainer, colours.surface),
+        headlineColor = animated(colours.onSecondaryContainer, colours.onSurface),
+    )
 }

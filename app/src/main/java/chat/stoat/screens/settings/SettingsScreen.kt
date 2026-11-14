@@ -1,6 +1,7 @@
 package chat.stoat.screens.settings
 
 import android.content.Intent
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,8 +24,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -32,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
+import androidx.navigation3.runtime.NavKey
 import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIHost
@@ -40,8 +45,10 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenColour
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
+import chat.stoat.navigation.isListDetailSelected
 import chat.stoat.navigation.listDetailItem
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
@@ -142,9 +149,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Account,
                         modifier = Modifier
                             .testTag("settings_view_account")
-                            .listDetailItem(Route.Settings.Account)
                             .clickable { navigator.navigate(Route.Settings.Account) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -158,9 +165,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Profile,
                         modifier = Modifier
                             .testTag("settings_view_profile")
-                            .listDetailItem(Route.Settings.Profile)
                             .clickable { navigator.navigate(Route.Settings.Profile) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -175,9 +182,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Sessions,
                         modifier = Modifier
                             .testTag("settings_view_sessions")
-                            .listDetailItem(Route.Settings.Sessions)
                             .clickable { navigator.navigate(Route.Settings.Sessions) }
                     )
 
@@ -196,9 +203,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Appearance,
                         modifier = Modifier
                             .testTag("settings_view_appearance")
-                            .listDetailItem(Route.Settings.Appearance)
                             .clickable { navigator.navigate(Route.Settings.Appearance) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -212,9 +219,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Language,
                         modifier = Modifier
                             .testTag("settings_view_language")
-                            .listDetailItem(Route.Settings.Language)
                             .clickable { navigator.navigate(Route.Settings.Language) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -228,9 +235,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Chat,
                         modifier = Modifier
                             .testTag("settings_view_chat")
-                            .listDetailItem(Route.Settings.Chat)
                             .clickable { navigator.navigate(Route.Settings.Chat) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -245,9 +252,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.Settings.Notifications,
                         modifier = Modifier
                             .testTag("settings_view_notifications")
-                            .listDetailItem(Route.Settings.Notifications)
                             .clickable { navigator.navigate(Route.Settings.Notifications) }
                     )
 
@@ -275,9 +282,9 @@ fun SettingsScreen(
                                 )
                             }
                         },
+                        detailRoute = Route.About.Home,
                         modifier = Modifier
                             .testTag("settings_view_about")
-                            .listDetailItem(Route.About.Home)
                             .clickable { navigator.navigate(Route.About.Home) }
                     )
 
@@ -294,9 +301,9 @@ fun SettingsScreen(
                                     )
                                 }
                             },
+                            detailRoute = Route.Settings.Debug,
                             modifier = Modifier
                                 .testTag("settings_view_debug")
-                                .listDetailItem(Route.Settings.Debug)
                                 .clickable { navigator.navigate(Route.Settings.Debug) }
                         )
                     }
@@ -333,9 +340,9 @@ fun SettingsScreen(
                                     )
                                 }
                             },
+                            detailRoute = Route.Settings.Experiments,
                             modifier = Modifier
                                 .testTag("settings_view_experiments")
-                                .listDetailItem(Route.Settings.Experiments)
                                 .clickable { navigator.navigate(Route.Settings.Experiments) }
                         )
                     }
@@ -424,40 +431,69 @@ fun SettingsListItem(
     supportingContent: (@Composable () -> Unit)? = null,
     leadingContent: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
+    detailRoute: NavKey? = null,
 ) {
-    ListItem(
-        colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        content = headlineContent,
-        supportingContent = supportingContent,
-        leadingContent = leadingContent,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(
-                when {
-                    first && last -> MaterialTheme.shapes.large
-                    first -> MaterialTheme.shapes.extraSmall.copy(
-                        topStart = MaterialTheme.shapes.large.topStart,
-                        topEnd = MaterialTheme.shapes.large.topEnd
-                    )
+    val selected = detailRoute != null && isListDetailSelected(detailRoute)
+    val colours = MaterialTheme.colorScheme
 
-                    last -> MaterialTheme.shapes.extraSmall.copy(
-                        bottomStart = MaterialTheme.shapes.large.bottomStart,
-                        bottomEnd = MaterialTheme.shapes.large.bottomEnd
-                    )
+    @Composable
+    fun animated(selectedColour: Color, colour: Color) =
+        animateColorAsState(
+            if (selected) selectedColour else colour,
+            animationSpec = StoatTweenColour
+        ).value
 
-                    else -> MaterialTheme.shapes.extraSmall
-                }
-            )
-            .then(modifier)
-    )
+    val containerColour = animated(colours.secondaryContainer, colours.surfaceContainer)
+    val headlineColour = animated(colours.onSecondaryContainer, colours.onSurface)
+    val secondaryColour = animated(colours.onSecondaryContainer, colours.onSurfaceVariant)
+    val iconColour = animated(colours.onSecondaryContainer, colours.onBackground)
+
+    CompositionLocalProvider(LocalSettingsIconColour provides iconColour) {
+        ListItem(
+            colors = ListItemDefaults.colors(
+                containerColor = containerColour,
+                headlineColor = headlineColour,
+                supportingColor = secondaryColour,
+                leadingIconColor = secondaryColour,
+                trailingIconColor = secondaryColour,
+            ),
+            content = headlineContent,
+            supportingContent = supportingContent,
+            leadingContent = leadingContent,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(
+                    when {
+                        first && last -> MaterialTheme.shapes.large
+                        first -> MaterialTheme.shapes.extraSmall.copy(
+                            topStart = MaterialTheme.shapes.large.topStart,
+                            topEnd = MaterialTheme.shapes.large.topEnd
+                        )
+
+                        last -> MaterialTheme.shapes.extraSmall.copy(
+                            bottomStart = MaterialTheme.shapes.large.bottomStart,
+                            bottomEnd = MaterialTheme.shapes.large.bottomEnd
+                        )
+
+                        else -> MaterialTheme.shapes.extraSmall
+                    }
+                )
+                .then(detailRoute?.let { Modifier.listDetailItem(it) } ?: Modifier)
+                .then(modifier)
+        )
+    }
 }
+
+private val LocalSettingsIconColour = compositionLocalOf { Color.Unspecified }
 
 @Composable
 fun SettingsIcon(danger: Boolean = false, content: @Composable () -> Unit) {
     CompositionLocalProvider(
-        LocalContentColor provides
-                if (danger) MaterialTheme.colorScheme.error
-                else MaterialTheme.colorScheme.onBackground
+        LocalContentColor provides when {
+            danger -> MaterialTheme.colorScheme.error
+            LocalSettingsIconColour.current.isSpecified -> LocalSettingsIconColour.current
+            else -> MaterialTheme.colorScheme.onBackground
+        }
     ) {
         content()
     }

@@ -1,5 +1,6 @@
 package chat.stoat.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,9 @@ class ListPaneItems {
     var ordered: List<NavKey> by mutableStateOf(emptyList())
         private set
 
+    /** Content key of the detail page currently open next to the list, see [paneContentKey]. */
+    var selectedContentKey: Any? by mutableStateOf(null)
+
     internal fun place(owner: Any, route: NavKey, position: Offset) {
         placed[owner] = route to position
         publish()
@@ -42,6 +46,16 @@ class ListPaneItems {
 }
 
 val LocalListPaneItems = staticCompositionLocalOf<ListPaneItems?> { null }
+
+/** Content key used for list-detail entries; the same format as Navigation 3's default. */
+fun paneContentKey(key: Any): Any = "$key:${key::class}"
+
+/** Whether [route]'s page is open in the detail pane next to this list. */
+@Composable
+fun isListDetailSelected(route: NavKey): Boolean {
+    val items = LocalListPaneItems.current ?: return false
+    return items.selectedContentKey == paneContentKey(route)
+}
 
 /**
  * Marks this row as opening [route] in the detail pane. On two-pane layouts the rows' drawn order

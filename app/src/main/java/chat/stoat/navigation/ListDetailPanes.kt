@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -67,11 +68,6 @@ internal sealed interface PaneRole {
 }
 
 private val NavEntry<*>.paneRole: PaneRole? get() = metadata[PaneRoleKey] as? PaneRole
-
-// Same format as Navigation 3's default content key, set explicitly so reported routes can be
-// matched to entries
-@PublishedApi
-internal fun paneContentKey(key: Any): Any = "$key:${key::class}"
 
 /** Registers one list screen and the detail screens it opens. */
 class ListDetailGroupScope @PublishedApi internal constructor(
@@ -187,6 +183,7 @@ private class ListDetailSceneStrategy(
             key = list.paneRole!!.group,
             list = list,
             detail = details.lastOrNull(),
+            selected = details.firstOrNull(),
             depth = details.size,
             split = split,
             openDefault = openDefault,
@@ -201,6 +198,7 @@ private data class ListDetailScene(
     override val key: Any,
     val list: NavEntry<NavKey>,
     val detail: NavEntry<NavKey>?,
+    val selected: NavEntry<NavKey>?,
     val depth: Int,
     val split: PaneSplit,
     val openDefault: (NavKey) -> Unit,
@@ -217,6 +215,9 @@ private data class ListDetailScene(
         var widthPx by remember { mutableFloatStateOf(0f) }
 
         val items = remember(list.contentKey) { ListPaneItems() }
+        // The first detail layer is the page the list opened, so it stays highlighted while
+        // deeper layers are shown
+        SideEffect { items.selectedContentKey = selected?.contentKey }
 
         // Each list fills its empty detail pane with its topmost row at most once, so backing out
         // of that detail leaves the pane empty instead of reopening it
