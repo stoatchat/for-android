@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.routes.account.RegistrationBody
 import chat.stoat.api.routes.account.register
 import chat.stoat.api.routes.misc.getRootRoute
@@ -58,6 +57,7 @@ import com.hcaptcha.sdk.HCaptchaTheme
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class RegisterDetailsScreenViewModel : ViewModel() {
     var email by mutableStateOf("")
@@ -125,7 +125,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
 @Composable
 fun RegisterDetailsScreen(
     navigator: Navigator,
-    viewModel: RegisterDetailsScreenViewModel = viewModel()
+    viewModel: RegisterDetailsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
 

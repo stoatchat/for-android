@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.auth.fetchAllSessions
 import chat.stoat.api.routes.auth.logoutAllSessions
@@ -68,6 +67,7 @@ import chat.stoat.shared.resources.settings_sessions_this_device
 import chat.stoat.shared.resources.settings_sessions_this_device_unavailable
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class SessionSettingsScreenViewModel : ViewModel() {
     var isLoading by mutableStateOf(true)
@@ -107,7 +107,7 @@ class SessionSettingsScreenViewModel : ViewModel() {
 @Composable
 fun SessionSettingsScreen(
     navigator: Navigator,
-    viewModel: SessionSettingsScreenViewModel = viewModel()
+    viewModel: SessionSettingsScreenViewModel = koinViewModel()
 ) {
     LaunchedEffect(Unit) {
         viewModel.fetchSessions()

@@ -126,7 +126,7 @@ livekit-android = { module = "io.livekit:livekit-android", version.ref = "liveki
 livekit-android-camerax = { module = "io.livekit:livekit-android-camerax", version.ref = "livekit" }
 livekit-android-compose = { module = "io.livekit:livekit-android-compose-components", version.ref = "livekit-compose" }
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 multiplatform-markdown-android = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown" }

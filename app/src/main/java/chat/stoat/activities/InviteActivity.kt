@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIError
 import chat.stoat.api.routes.invites.fetchInviteByCode
@@ -75,6 +74,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class InviteActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,7 +146,7 @@ class InviteViewModel : ViewModel() {
 fun InviteScreen(
     inviteCode: String?,
     onFinish: () -> Unit = {},
-    viewModel: InviteViewModel = viewModel()
+    viewModel: InviteViewModel = koinViewModel()
 ) {
     LaunchedEffect(inviteCode) {
         if (inviteCode != null) {

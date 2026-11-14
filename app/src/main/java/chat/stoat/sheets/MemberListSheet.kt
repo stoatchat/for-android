@@ -60,7 +60,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 val DO_NOT_FETCH_OFFLINE_MEMBERS_SERVERS = listOf(
     "01F7ZSBSFHQ8TA81725KQCSDDP" // Lounge

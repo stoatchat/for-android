@@ -80,7 +80,7 @@ import chat.stoat.shared.resources.channel_settings_overview_update_info_error_f
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import java.io.File
 
 class ChannelSettingsOverviewViewModel(val context: Application) :

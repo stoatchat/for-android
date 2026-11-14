@@ -114,7 +114,7 @@ import kotlinx.coroutines.sync.withPermit
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 internal fun inviteLink(code: String, compact: Boolean = false): String =
     if (compact) "${STOAT_INVITES.toUri().host}/$code"

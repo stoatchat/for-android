@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.getSupportedLocales
@@ -36,6 +35,7 @@ import chat.stoat.shared.resources.settings_language
 import chat.stoat.shared.resources.settings_language_auto
 import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
+import org.koin.compose.viewmodel.koinViewModel
 
 class LanguagePickerSettingsScreen : ViewModel() {
     val locales = mutableStateListOf<Locale>()
@@ -57,7 +57,7 @@ class LanguagePickerSettingsScreen : ViewModel() {
 @Composable
 fun LanguagePickerSettingsScreen(
     navigator: Navigator,
-    viewModel: LanguagePickerSettingsScreen = viewModel()
+    viewModel: LanguagePickerSettingsScreen = koinViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current

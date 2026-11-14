@@ -65,7 +65,7 @@ import chat.stoat.shared.resources.user_info_sheet_category_bio
 import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import java.io.File
 
 class ProfileSettingsScreenViewModel(val context: Application) :

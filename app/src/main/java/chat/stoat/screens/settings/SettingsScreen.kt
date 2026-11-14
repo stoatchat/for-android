@@ -64,7 +64,7 @@ import chat.stoat.shared.resources.settings_profile
 import chat.stoat.shared.resources.settings_sessions
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 class SettingsScreenViewModel(
     private val kvStorage: KVStorage

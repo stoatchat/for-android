@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.routes.channel.MAX_ADDABLE_PEOPLE_IN_GROUP
@@ -55,6 +54,7 @@ import chat.stoat.shared.resources.create_group_name
 import chat.stoat.shared.resources.create_group_search
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class CreateGroupScreenViewModel : ViewModel() {
     var groupName by mutableStateOf("")
@@ -107,7 +107,7 @@ class CreateGroupScreenViewModel : ViewModel() {
 @Composable
 fun CreateGroupScreen(
     navigator: Navigator,
-    viewModel: CreateGroupScreenViewModel = viewModel()
+    viewModel: CreateGroupScreenViewModel = koinViewModel()
 ) {
     LaunchedEffect(Unit) {
         viewModel.filterFriends()

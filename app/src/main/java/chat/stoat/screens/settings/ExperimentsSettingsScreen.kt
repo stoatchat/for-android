@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.Experiments
@@ -31,6 +30,7 @@ import chat.stoat.persistence.KVStorage
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.settings.dsl.SubcategoryContentInsets
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
 class ExperimentsSettingsScreenViewModel : ViewModel() {
     private val kv = KVStorage(StoatApplication.instance)
@@ -126,7 +126,7 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
 @Composable
 fun ExperimentsSettingsScreen(
     navigator: Navigator,
-    viewModel: ExperimentsSettingsScreenViewModel = viewModel()
+    viewModel: ExperimentsSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
 

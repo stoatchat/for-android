@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.routes.microservices.gazette.GazetteChangelog
 import chat.stoat.api.routes.microservices.gazette.getChangelogById
 import chat.stoat.composables.markdown.prose.ProseMarkdown
@@ -58,6 +57,8 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 sealed interface ReadChangelogScreenUiState {
     data object Loading : ReadChangelogScreenUiState
@@ -112,7 +113,7 @@ private fun rememberFormattedDate(isoDateTime: String?): String? {
 fun ReadChangelogScreen(
     navigator: Navigator,
     id: String,
-    viewModel: ReadChangelogScreenViewModel = viewModel { ReadChangelogScreenViewModel(id) }
+    viewModel: ReadChangelogScreenViewModel = koinViewModel { parametersOf(id) }
 ) {
     val state = viewModel.state.collectAsState()
     val formattedDate =

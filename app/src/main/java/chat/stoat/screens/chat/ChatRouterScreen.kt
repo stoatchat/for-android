@@ -125,7 +125,7 @@ import kotlinx.datetime.Instant
 import logcat.LogPriority
 import logcat.logcat
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 sealed class ChatRouterDestination {
     data object Overview : ChatRouterDestination()

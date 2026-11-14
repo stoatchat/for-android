@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.StoatJson
 import chat.stoat.api.routes.misc.getRootRoute
@@ -71,6 +70,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import java.net.URI
+import org.koin.compose.viewmodel.koinViewModel
 
 class AboutViewModel : ViewModel() {
     var debugInfo by mutableStateOf<Map<String, String>>(emptyMap())
@@ -98,7 +98,7 @@ class AboutViewModel : ViewModel() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen(navigator: Navigator, viewModel: AboutViewModel = viewModel()) {
+fun AboutScreen(navigator: Navigator, viewModel: AboutViewModel = koinViewModel()) {
     val toaster = LocalToaster.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()

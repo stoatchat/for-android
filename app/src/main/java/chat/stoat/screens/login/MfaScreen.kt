@@ -56,7 +56,7 @@ import chat.stoat.shared.resources.mfa_totp_lead
 import chat.stoat.shared.resources.next
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 class MfaScreenViewModel(
     private val kvStorage: KVStorage

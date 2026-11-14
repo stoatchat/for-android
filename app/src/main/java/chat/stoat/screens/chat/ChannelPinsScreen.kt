@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.result.LocalResultEventBus
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
@@ -56,6 +55,7 @@ import chat.stoat.shared.resources.pinned_messages_empty
 import chat.stoat.shared.resources.tap_to_retry
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class ChannelPinsScreenViewModel : ViewModel() {
     val pinnedMessages = mutableStateListOf<Message>()
@@ -103,7 +103,7 @@ fun ChannelPinsScreen(
     navigator: Navigator,
     channelId: String,
     modifier: Modifier = Modifier,
-    viewModel: ChannelPinsScreenViewModel = viewModel()
+    viewModel: ChannelPinsScreenViewModel = koinViewModel()
 ) {
     val resultBus = LocalResultEventBus.current
 

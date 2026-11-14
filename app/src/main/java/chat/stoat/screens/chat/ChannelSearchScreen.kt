@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.result.LocalResultEventBus
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
@@ -67,6 +66,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 private const val MAX_QUERY_LENGTH = 64
 private const val SEARCH_DEBOUNCE_MS = 350L
@@ -184,7 +184,7 @@ fun ChannelSearchScreen(
     navigator: Navigator,
     channelId: String,
     modifier: Modifier = Modifier,
-    viewModel: ChannelSearchScreenViewModel = viewModel()
+    viewModel: ChannelSearchScreenViewModel = koinViewModel()
 ) {
     val resultBus = LocalResultEventBus.current
 

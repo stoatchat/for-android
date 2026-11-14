@@ -275,7 +275,7 @@ dependencies {
     implementation(libs.kermit)
 
     implementation(libs.koin)
-    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
 
     implementation(libs.multiplatform.markdown.android)
     implementation(libs.multiplatform.markdown.m3)

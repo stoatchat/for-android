@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chat.stoat.api.StoatAPI
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -46,6 +45,7 @@ import chat.stoat.shared.resources.catch_up
 import logcat.LogPriority
 import logcat.logcat
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 sealed class CatchUpCard {
     data class UnreadMessageInChannel(
@@ -107,7 +107,7 @@ class CatchUpScreenViewModel : ViewModel() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatchUpScreen(navigator: Navigator, viewModel: CatchUpScreenViewModel = viewModel()) {
+fun CatchUpScreen(navigator: Navigator, viewModel: CatchUpScreenViewModel = koinViewModel()) {
     LaunchedEffect(Unit) {
         viewModel.initWith(StoatAPI.unreads.getAllUnreads())
     }
