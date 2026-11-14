@@ -37,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 import java.util.Locale
 import org.koin.compose.viewmodel.koinViewModel
 
-class LanguagePickerSettingsScreen : ViewModel() {
+class LanguagePickerSettingsScreenViewModel : ViewModel() {
     val locales = mutableStateListOf<Locale>()
 
     var currentLocale by mutableStateOf<Locale?>(null)
@@ -57,7 +57,7 @@ class LanguagePickerSettingsScreen : ViewModel() {
 @Composable
 fun LanguagePickerSettingsScreen(
     navigator: Navigator,
-    viewModel: LanguagePickerSettingsScreen = koinViewModel()
+    viewModel: LanguagePickerSettingsScreenViewModel = koinViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val context = LocalContext.current

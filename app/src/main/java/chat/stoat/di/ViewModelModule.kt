@@ -19,7 +19,7 @@ import chat.stoat.screens.settings.AppearanceSettingsScreenViewModel
 import chat.stoat.screens.settings.ChatSettingsScreenViewModel
 import chat.stoat.screens.settings.DebugSettingsScreenViewModel
 import chat.stoat.screens.settings.ExperimentsSettingsScreenViewModel
-import chat.stoat.screens.settings.LanguagePickerSettingsScreen
+import chat.stoat.screens.settings.LanguagePickerSettingsScreenViewModel
 import chat.stoat.screens.settings.MfaSettingsScreenViewModel
 import chat.stoat.screens.settings.NotificationsSettingsScreenViewModel
 import chat.stoat.screens.settings.ProfileSettingsScreenViewModel
@@ -76,7 +76,7 @@ val viewModelModule = module {
     viewModelOf(::CreateGroupScreenViewModel)
     viewModelOf(::ExperimentsSettingsScreenViewModel)
     viewModelOf(::InviteViewModel)
-    viewModelOf(::LanguagePickerSettingsScreen)
+    viewModelOf(::LanguagePickerSettingsScreenViewModel)
     viewModelOf(::RegisterDetailsScreenViewModel)
     viewModelOf(::SessionSettingsScreenViewModel)
 }
