@@ -46,6 +46,8 @@ kotlin {
             api(libs.navigation3.runtime)
             implementation(libs.navigationevent.compose)
             implementation(libs.kotlin.serialization.core)
+            implementation(libs.jetbrains.lifecycle.viewmodel)
+            implementation(libs.koin.compose.viewmodel)
         }
 
         androidMain.dependencies {

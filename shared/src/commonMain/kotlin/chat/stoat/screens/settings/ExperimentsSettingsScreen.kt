@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.AlertDialog
@@ -17,24 +15,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.navigation.Navigator
 import chat.stoat.persistence.KVStorage
+import chat.stoat.platform.rememberAppRestarter
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.settings.dsl.SubcategoryContentInsets
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
-class ExperimentsSettingsScreenViewModel : ViewModel() {
-    private val kv = KVStorage(StoatApplication.instance)
-
+class ExperimentsSettingsScreenViewModel(private val kv: KVStorage) : ViewModel() {
     fun init() {
         viewModelScope.launch {
             usePolarChecked.value = Experiments.usePolar.isEnabled
@@ -47,20 +42,6 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
     }
 
     val showNeedsRestartAlert = mutableStateOf(false)
-
-    // cf. https://stackoverflow.com/a/46848226
-    fun restartApp(context: Context) {
-        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-        if (intent == null) {
-            return
-        }
-
-        val componentName = intent.component
-        val mainIntent = Intent.makeRestartActivityTask(componentName)
-        mainIntent.`package` = context.packageName
-        context.startActivity(mainIntent)
-        Runtime.getRuntime().exit(0)
-    }
 
     fun disableExperiments(then: () -> Unit = {}) {
         viewModelScope.launch {
@@ -128,7 +109,7 @@ fun ExperimentsSettingsScreen(
     navigator: Navigator,
     viewModel: ExperimentsSettingsScreenViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
+    val restartApp = rememberAppRestarter()
 
     LaunchedEffect(Unit) {
         viewModel.init()
@@ -148,7 +129,7 @@ fun ExperimentsSettingsScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        viewModel.restartApp(context)
+                        restartApp()
                     }
                 ) {
                     Text("Restart")
