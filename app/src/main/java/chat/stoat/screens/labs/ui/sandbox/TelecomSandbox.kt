@@ -15,8 +15,8 @@ import androidx.core.net.toUri
 import androidx.core.telecom.CallAttributesCompat
 import androidx.core.telecom.CallControlScope
 import androidx.core.telecom.CallsManager
-import androidx.navigation.NavController
 import chat.stoat.activities.voice.IncomingActivity
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ import logcat.asLog
 import logcat.logcat
 
 @Composable
-fun TelecomSandbox(navController: NavController) {
+fun TelecomSandbox(navigator: Navigator) {
     val context = LocalContext.current
     val callsManager = remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) CallsManager(context) else null
@@ -35,7 +35,7 @@ fun TelecomSandbox(navController: NavController) {
     val scope = rememberCoroutineScope()
 
     SettingsPage(
-        navController,
+        navigator,
         title = {
             Text(
                 text = "Telecom Sandbox",

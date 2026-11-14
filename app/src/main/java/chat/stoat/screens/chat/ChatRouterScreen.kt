@@ -61,8 +61,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation3.runtime.result.ResultEffect
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.DirectMessages
 import chat.stoat.api.realtime.DisconnectionState
@@ -86,6 +85,8 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage
 import chat.stoat.screens.chat.dialogs.safety.ReportMessageDialog
 import chat.stoat.screens.chat.dialogs.safety.ReportServerDialog
@@ -356,13 +357,15 @@ val LocalIsConnected = compositionLocalOf(structuralEqualityPolicy()) { false }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatRouterScreen(
-    topNav: NavController,
+    topNav: Navigator,
     windowSizeClass: WindowSizeClass,
     disableBackHandler: Boolean,
     onNullifiedUser: () -> Unit,
     onEnterVoiceUI: (String) -> Unit,
     viewModel: ChatRouterViewModel = koinViewModel()
 ) {
+    ResultEffect<ChannelMessageJump> { viewModel.requestMessageJump(it.channelId, it.messageId) }
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -476,7 +479,7 @@ fun ChatRouterScreen(
             .collect { changelogId ->
                 if (changelogId != null) {
                     viewModel.showChangelogScreenForId = null
-                    topNav.navigate("changelog/${changelogId}")
+                    topNav.navigate(Route.Changelog(changelogId))
                 }
             }
     }
@@ -638,7 +641,7 @@ fun ChatRouterScreen(
                     }
                 },
                 onGoSettings = {
-                    topNav.navigate("settings")
+                    topNav.navigate(Route.Settings.Home)
                 }
             )
         }
@@ -953,7 +956,7 @@ fun ChatRouterScreen(
                     }
                 },
                 onOpenOptions = {
-                    topNav.navigate("settings/chat")
+                    topNav.navigate(Route.Settings.Chat)
                 }
             )
         }
@@ -1002,7 +1005,7 @@ fun ChatRouterScreen(
                             },
                             showSettingsButton = isTouchExplorationEnabled,
                             onOpenSettings = {
-                                topNav.navigate("settings")
+                                topNav.navigate(Route.Settings.Home)
                             },
                         )
                     }
@@ -1048,7 +1051,7 @@ fun ChatRouterScreen(
                                 },
                                 showSettingsButton = isTouchExplorationEnabled,
                                 onOpenSettings = {
-                                    topNav.navigate("settings")
+                                    topNav.navigate(Route.Settings.Home)
                                 },
                                 drawerState = drawerState
                             )
@@ -1114,7 +1117,7 @@ fun ChatRouterScreen(
 fun Sidebar(
     viewModel: ChatRouterViewModel,
     currentServer: String?,
-    topNav: NavController,
+    topNav: Navigator,
     drawerState: DrawerState? = null,
     onShowStatusSheet: () -> Unit,
     onShowServerContextSheet: (String) -> Unit,
@@ -1140,7 +1143,7 @@ fun Sidebar(
 @Composable
 fun ChannelNavigator(
     dest: ChatRouterDestination,
-    topNav: NavController,
+    topNav: Navigator,
     messageJump: ChannelMessageJump? = null,
     onMessageJumpConsumed: (ChannelMessageJump) -> Unit = {},
     useDrawer: Boolean,
@@ -1152,7 +1155,6 @@ fun ChannelNavigator(
     setDrawerGestureEnabled: (Boolean) -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-    val currentTopEntry by topNav.currentBackStackEntryAsState()
 
     BackHandler(useDrawer && !disableBackHandler) {
         toggleDrawer()
@@ -1162,7 +1164,7 @@ fun ChannelNavigator(
         when (dest) {
             is ChatRouterDestination.Overview -> {
                 OverviewScreen(
-                    navController = topNav,
+                    navigator = topNav,
                     useDrawer = useDrawer,
                     onDrawerClicked = toggleDrawer,
                 )
@@ -1180,16 +1182,6 @@ fun ChannelNavigator(
                 val routedMessageJump = messageJump?.takeIf {
                     it.channelId == dest.channelId
                 }
-                val requestedChannelId =
-                    currentTopEntry?.savedStateHandle?.get<String>(
-                        CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
-                    )
-                val requestedMessageId =
-                    currentTopEntry?.savedStateHandle?.get<String>(
-                        CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
-                    )?.takeIf { requestedChannelId == dest.channelId }
-                val effectiveRequestedMessageId =
-                    routedMessageJump?.messageId ?: requestedMessageId
 
                 ChannelScreen(
                     channelId = dest.channelId,
@@ -1206,15 +1198,9 @@ fun ChannelNavigator(
                     drawerGestureEnabled = drawerGestureEnabled,
                     setDrawerGestureEnabled = setDrawerGestureEnabled,
                     drawerIsOpen = drawerState?.isOpen == true,
-                    requestedMessageId = effectiveRequestedMessageId,
+                    requestedMessageId = routedMessageJump?.messageId,
                     onRequestedMessageConsumed = {
                         routedMessageJump?.let(onMessageJumpConsumed)
-                        currentTopEntry?.savedStateHandle?.remove<String>(
-                            CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
-                        )
-                        currentTopEntry?.savedStateHandle?.remove<String>(
-                            CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
-                        )
                     },
                 )
             }

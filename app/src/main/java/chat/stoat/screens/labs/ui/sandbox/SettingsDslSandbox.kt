@@ -3,7 +3,7 @@ package chat.stoat.screens.labs.ui.sandbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavController
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.settings.dsl.SubcategoryContentInsets
 
@@ -13,9 +13,9 @@ enum class SettingsDslSandboxTab {
 }
 
 @Composable
-fun SettingsDslSandbox(navController: NavController) {
+fun SettingsDslSandbox(navigator: Navigator) {
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = {
             Text(
                 text = "Settings DSL Demo",

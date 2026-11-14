@@ -22,11 +22,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.StoatApplication
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.Experiments
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.navigation.Navigator
 import chat.stoat.persistence.KVStorage
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.settings.dsl.SubcategoryContentInsets
@@ -125,7 +125,7 @@ class ExperimentsSettingsScreenViewModel : ViewModel() {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ExperimentsSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: ExperimentsSettingsScreenViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -167,7 +167,7 @@ fun ExperimentsSettingsScreen(
     }
 
     SettingsPage(
-        navController,
+        navigator,
         title = {
             Text("Experiments", maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
@@ -264,7 +264,7 @@ fun ExperimentsSettingsScreen(
             ElevatedButton(
                 onClick = {
                     viewModel.disableExperiments {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }
                 },
                 enabled = !StoatAPIHost.config.isDebug,

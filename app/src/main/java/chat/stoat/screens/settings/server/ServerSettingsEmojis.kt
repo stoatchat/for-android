@@ -60,7 +60,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
@@ -77,6 +76,7 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.Navigator
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
@@ -419,7 +419,7 @@ class ServerSettingsEmojisViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServerSettingsEmojis(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsEmojisViewModel = koinViewModel(),
 ) {
@@ -443,7 +443,7 @@ fun ServerSettingsEmojis(
         permissions != null &&
         permissions?.hasPermission(PermissionBit.ManageCustomisation) == false
     ) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -510,12 +510,12 @@ fun ServerSettingsEmojis(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_emojis)) },
         scrollable = false,
         onNavigateBack = {
             if (!viewModel.creating && viewModel.deletingEmojiId == null) {
-                navController.popBackStack()
+                navigator.popBackStack()
             }
         },
         floatingActionButton = {

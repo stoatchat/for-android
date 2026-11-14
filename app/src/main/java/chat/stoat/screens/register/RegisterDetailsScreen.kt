@@ -35,11 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.api.routes.account.RegistrationBody
 import chat.stoat.api.routes.account.register
 import chat.stoat.api.routes.misc.getRootRoute
 import chat.stoat.core.designsystem.components.FormTextField
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.register_data
@@ -102,7 +103,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
         }
     }
 
-    fun doRegistration(navController: NavController) {
+    fun doRegistration(navigator: Navigator) {
         val body = RegistrationBody(
             email = email,
             password = password,
@@ -113,7 +114,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
             val result = register(body)
 
             if (result.ok) {
-                navController.navigate("register/verify/$email")
+                navigator.navigate(Route.Register.Verify(email))
             } else {
                 error = result.unwrapError().type
             }
@@ -123,7 +124,7 @@ class RegisterDetailsScreenViewModel : ViewModel() {
 
 @Composable
 fun RegisterDetailsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: RegisterDetailsScreenViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -228,7 +229,7 @@ fun RegisterDetailsScreen(
 
         Row {
             TextButton(onClick = {
-                navController.popBackStack()
+                navigator.popBackStack()
             }) {
                 Text(text = stringResource(Res.string.back))
             }
@@ -238,7 +239,7 @@ fun RegisterDetailsScreen(
             Button(
                 onClick = {
                     viewModel.initCaptcha(context) {
-                        viewModel.doRegistration(navController)
+                        viewModel.doRegistration(navigator)
                     }
                 },
                 enabled = viewModel.email.isNotBlank() && viewModel.password.isNotBlank()

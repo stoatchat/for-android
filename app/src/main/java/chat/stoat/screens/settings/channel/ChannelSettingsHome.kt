@@ -35,7 +35,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
@@ -44,6 +43,8 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.shared.resources.Res
@@ -62,7 +63,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChannelSettingsHome(navController: NavController, channelId: String) {
+fun ChannelSettingsHome(navigator: Navigator, channelId: String) {
     val channel = StoatAPI.channelCache[channelId]
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val permissions by rememberChannelPermissions(channelId)
@@ -88,7 +89,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                     showDeletionConfirmation = false
                     scope.launch {
                         leaveDeleteOrCloseChannel(channelId)
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }
                 }) {
                     Text(stringResource(Res.string.channel_settings_delete_confirm_yes))
@@ -120,7 +121,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),
@@ -163,7 +164,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             modifier = Modifier
                                 .testTag("channel_settings_view_overview")
                                 .clickable {
-                                    navController.navigate("settings/channel/${channel.id}/overview")
+                                    channel.id?.let { navigator.navigate(Route.ChannelSettings.Overview(it)) }
                                 }
                         )
                     }
@@ -189,7 +190,7 @@ fun ChannelSettingsHome(navController: NavController, channelId: String) {
                             modifier = Modifier
                                 .testTag("channel_settings_view_permissions")
                                 .clickable {
-                                    navController.navigate("settings/channel/${channel.id}/permissions")
+                                    channel.id?.let { navigator.navigate(Route.ChannelSettings.Permissions(it)) }
                                 }
                         )
                     }

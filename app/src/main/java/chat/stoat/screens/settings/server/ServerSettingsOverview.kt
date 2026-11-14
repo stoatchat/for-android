@@ -44,7 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
@@ -58,6 +57,7 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.server_settings_overview
@@ -328,7 +328,7 @@ class ServerSettingsOverviewViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServerSettingsOverview(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsOverviewViewModel = koinViewModel(),
 ) {
@@ -337,7 +337,7 @@ fun ServerSettingsOverview(
     var showDiscardConfirmation by remember { mutableStateOf(false) }
 
     if (permissions != null && permissions?.hasPermission(PermissionBit.ManageServer) == false) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -356,7 +356,7 @@ fun ServerSettingsOverview(
         if (viewModel.hasChanges) {
             showDiscardConfirmation = true
         } else {
-            navController.popBackStack()
+            navigator.popBackStack()
         }
     }
 
@@ -376,7 +376,7 @@ fun ServerSettingsOverview(
                     onClick = {
                         viewModel.reset()
                         showDiscardConfirmation = false
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     },
                 ) {
                     Text(stringResource(Res.string.server_settings_overview_discard))
@@ -391,7 +391,7 @@ fun ServerSettingsOverview(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_overview)) },
         onNavigateBack = ::navigateBack,
         floatingActionButton = {

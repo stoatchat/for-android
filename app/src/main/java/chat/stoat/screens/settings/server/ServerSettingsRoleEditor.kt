@@ -63,7 +63,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
 import chat.stoat.api.internals.hasPermission
@@ -95,6 +94,7 @@ import chat.stoat.internals.server.overrideFor
 import chat.stoat.internals.server.serverRoleCapabilities
 import chat.stoat.internals.server.withOverride
 import chat.stoat.internals.server.withPermission
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
@@ -409,7 +409,7 @@ class ServerSettingsRoleEditorViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServerSettingsRoleEditor(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     roleId: String,
     viewModel: ServerSettingsRoleEditorViewModel = koinViewModel(),
@@ -437,7 +437,7 @@ fun ServerSettingsRoleEditor(
     fun navigateBack() {
         if (viewModel.saving || viewModel.deleting) return
         if (viewModel.hasChanges) showDiscardConfirmation = true
-        else navController.popBackStack()
+        else navigator.popBackStack()
     }
 
     BackHandler { navigateBack() }
@@ -456,7 +456,7 @@ fun ServerSettingsRoleEditor(
                 Button(onClick = {
                     viewModel.reset()
                     showDiscardConfirmation = false
-                    navController.popBackStack()
+                    navigator.popBackStack()
                 }) { Text(stringResource(Res.string.server_settings_role_discard)) }
             },
         )
@@ -500,12 +500,12 @@ fun ServerSettingsRoleEditor(
     LaunchedEffect(viewModel.deletedRoleId) {
         if (viewModel.deletedRoleId == roleId) {
             viewModel.consumeDeletedRole()
-            navController.popBackStack()
+            navigator.popBackStack()
         }
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = {
             Text(
                 if (roleId == DefaultRoleId) stringResource(Res.string.server_settings_roles_everyone)

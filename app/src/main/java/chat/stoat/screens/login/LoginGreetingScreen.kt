@@ -38,11 +38,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_MARKETING
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
@@ -60,7 +61,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LoginGreetingScreen(navController: NavController) {
+fun LoginGreetingScreen(navigator: Navigator) {
     val context = LocalContext.current
     val toaster = LocalToaster.current
     var catTaps by remember { mutableIntStateOf(0) }
@@ -140,7 +141,7 @@ fun LoginGreetingScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(
-                onClick = { navController.navigate("login/login") },
+                onClick = { navigator.navigate(Route.Login.Credentials) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("view_login_page_button")
@@ -151,7 +152,7 @@ fun LoginGreetingScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(5.dp))
 
             ElevatedButton(
-                onClick = { navController.navigate("register/greeting") },
+                onClick = { navigator.navigate(Route.Register.Greeting) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("view_signup_page_button")
@@ -163,7 +164,7 @@ fun LoginGreetingScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 TextButton(
-                    onClick = { navController.navigate("login2/init") },
+                    onClick = { navigator.navigate(Route.Login2.Init) },
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {

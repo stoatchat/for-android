@@ -9,14 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import chat.stoat.composables.screens.splash.DisconnectedScreen
 import chat.stoat.internals.extensions.getComponentActivity
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 
 @Composable
 fun DefaultDestinationScreen(
-    navController: NavController,
-    nextDestination: String? = null,
+    navigator: Navigator,
+    nextDestination: Route? = null,
     isConnected: Boolean = false,
     onRetryConnection: () -> Unit = {}
 ) {
@@ -38,8 +39,7 @@ fun DefaultDestinationScreen(
             val activity = context.getComponentActivity() as Activity
             activity.window.statusBarColor = Color.Transparent.toArgb()
 
-            navController.popBackStack(navController.graph.startDestinationRoute!!, true)
-            navController.navigate(it)
+            navigator.resetTo(it)
         }
     }
 

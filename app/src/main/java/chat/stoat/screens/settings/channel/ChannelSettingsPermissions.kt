@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
 import chat.stoat.api.internals.PermissionBit
@@ -65,6 +64,8 @@ import chat.stoat.internals.server.ServerPermissionOption
 import chat.stoat.internals.server.canManageServerRole
 import chat.stoat.internals.server.overrideFor
 import chat.stoat.internals.server.withOverride
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
@@ -248,7 +249,7 @@ class ChannelSettingsPermissionsViewModel(
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun ChannelSettingsPermissions(navController: NavController, channelId: String) {
+fun ChannelSettingsPermissions(navigator: Navigator, channelId: String) {
     val channel = StoatAPI.channelCache[channelId]
     val server = channel?.server?.let(StoatAPI.serverCache::get)
     val roles = remember(server?.roles) {
@@ -258,7 +259,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.channel_settings_permissions)) },
     ) {
         if (channel == null || server == null) {
@@ -295,9 +296,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
                 },
                 leadingContent = { Spacer(Modifier.size(24.dp)) },
                 modifier = Modifier.clickable {
-                    navController.navigate(
-                        "settings/channel/$channelId/permissions/$DefaultChannelRoleId"
-                    )
+                    navigator.navigate(Route.ChannelSettings.PermissionEditor(channelId, DefaultChannelRoleId))
                 },
             )
             Box(
@@ -348,7 +347,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
                     }
                 },
                 modifier = Modifier.clickable {
-                    navController.navigate("settings/channel/$channelId/permissions/${entry.id}")
+                    navigator.navigate(Route.ChannelSettings.PermissionEditor(channelId, entry.id))
                 },
             )
         }
@@ -360,7 +359,7 @@ fun ChannelSettingsPermissions(navController: NavController, channelId: String) 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ChannelSettingsPermissionEditor(
-    navController: NavController,
+    navigator: Navigator,
     channelId: String,
     roleId: String,
     viewModel: ChannelSettingsPermissionsViewModel = koinViewModel(),
@@ -386,7 +385,7 @@ fun ChannelSettingsPermissionEditor(
     fun navigateBack() {
         if (viewModel.saving) return
         if (viewModel.hasChanges) showDiscardConfirmation = true
-        else navController.popBackStack()
+        else navigator.popBackStack()
     }
 
     BackHandler(onBack = ::navigateBack)
@@ -409,7 +408,7 @@ fun ChannelSettingsPermissionEditor(
                 Button(onClick = {
                     viewModel.reset()
                     showDiscardConfirmation = false
-                    navController.popBackStack()
+                    navigator.popBackStack()
                 }) {
                     Text(stringResource(Res.string.server_settings_role_discard))
                 }
@@ -446,7 +445,7 @@ fun ChannelSettingsPermissionEditor(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = {
             Text(
                 if (roleId == DefaultChannelRoleId) {

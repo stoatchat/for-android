@@ -22,10 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.stoat.api.routes.onboard.OnboardingCompletionBody
 import chat.stoat.api.routes.onboard.completeOnboarding
 import chat.stoat.core.designsystem.components.FormTextField
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.next
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> Unit) {
+fun OnboardingScreen(navigator: Navigator, onOnboardingComplete: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -47,11 +48,7 @@ fun OnboardingScreen(navController: NavController, onOnboardingComplete: () -> U
 
     fun onboardingComplete() {
         onOnboardingComplete()
-        navController.popBackStack(
-            navController.graph.startDestinationRoute!!,
-            inclusive = true
-        )
-        navController.navigate("default")
+        navigator.resetTo(Route.Default)
     }
 
     suspend fun onboard() {

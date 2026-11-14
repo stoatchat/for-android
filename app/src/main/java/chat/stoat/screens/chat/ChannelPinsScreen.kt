@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.result.LocalResultEventBus
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
@@ -48,6 +48,7 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.pinned_messages
@@ -99,11 +100,13 @@ class ChannelPinsScreenViewModel : ViewModel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelPinsScreen(
-    navController: NavController,
+    navigator: Navigator,
     channelId: String,
     modifier: Modifier = Modifier,
     viewModel: ChannelPinsScreenViewModel = viewModel()
 ) {
+    val resultBus = LocalResultEventBus.current
+
     LaunchedEffect(channelId) {
         viewModel.loadPins(channelId)
     }
@@ -130,7 +133,7 @@ fun ChannelPinsScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = {
-                            navController.popBackStack()
+                            navigator.popBackStack()
                         }) {
                             Icon(
                                 painter = StoatIcons.Back.painter(),
@@ -185,11 +188,8 @@ fun ChannelPinsScreen(
                     PinnedMessageList(
                         messages = viewModel.pinnedMessages,
                         onMessageSelected = { messageId ->
-                            navController.previousBackStackEntry?.savedStateHandle?.apply {
-                                set(CHANNEL_MESSAGE_JUMP_CHANNEL_KEY, channelId)
-                                set(CHANNEL_MESSAGE_JUMP_MESSAGE_KEY, messageId)
-                            }
-                            navController.popBackStack()
+                            resultBus.sendResult(ChannelMessageJump(channelId, messageId))
+                            navigator.popBackStack()
                         }
                     )
                 }

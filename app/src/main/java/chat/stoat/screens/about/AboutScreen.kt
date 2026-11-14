@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.StoatJson
 import chat.stoat.api.routes.misc.getRootRoute
@@ -52,6 +51,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_BASE
 import chat.stoat.internals.Platform
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
@@ -97,7 +98,7 @@ class AboutViewModel : ViewModel() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewModel()) {
+fun AboutScreen(navigator: Navigator, viewModel: AboutViewModel = viewModel()) {
     val toaster = LocalToaster.current
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
@@ -106,7 +107,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
     val debugInfoChevronRotation by animateFloatAsState(if (debugInfoOpen) 270f else 90f)
 
     SettingsPage(
-        navController,
+        navigator,
         title = {
             Text(
                 text = stringResource(Res.string.about),
@@ -282,7 +283,7 @@ fun AboutScreen(navController: NavController, viewModel: AboutViewModel = viewMo
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable { navController.navigate("about/oss") }
+                        .clickable { navigator.navigate(Route.About.Oss) }
                         .fillMaxWidth()
                         .padding(24.dp)
                 ) {

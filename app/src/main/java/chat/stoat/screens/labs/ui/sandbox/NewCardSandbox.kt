@@ -26,10 +26,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.designsystem.theme.FragmentMono
+import chat.stoat.navigation.Navigator
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
@@ -42,7 +42,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun NewCardSandboxScreen(navController: NavController) {
+fun NewCardSandboxScreen(navigator: Navigator) {
     var uidInput by remember { mutableStateOf(StoatAPI.selfId ?: "") }
     var activeUid by remember { mutableStateOf(StoatAPI.selfId) }
     val activeUser = remember(activeUid) {
@@ -61,7 +61,7 @@ fun NewCardSandboxScreen(navController: NavController) {
     }
 
     SettingsPage(
-        navController,
+        navigator,
         title = {
             Text(
                 text = "New Card",

@@ -44,13 +44,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.result.LocalResultEventBus
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.searchChannel
 import chat.stoat.composables.chat.SystemMessage
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Message
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.channel_search_clear
@@ -69,8 +70,6 @@ import org.jetbrains.compose.resources.stringResource
 
 private const val MAX_QUERY_LENGTH = 64
 private const val SEARCH_DEBOUNCE_MS = 350L
-const val CHANNEL_MESSAGE_JUMP_CHANNEL_KEY = "channelMessageJumpChannel"
-const val CHANNEL_MESSAGE_JUMP_MESSAGE_KEY = "channelMessageJumpMessage"
 
 data class ChannelMessageJump(
     val channelId: String,
@@ -182,11 +181,13 @@ class ChannelSearchScreenViewModel : ViewModel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelSearchScreen(
-    navController: NavController,
+    navigator: Navigator,
     channelId: String,
     modifier: Modifier = Modifier,
     viewModel: ChannelSearchScreenViewModel = viewModel()
 ) {
+    val resultBus = LocalResultEventBus.current
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -202,10 +203,10 @@ fun ChannelSearchScreen(
                     onQueryChange = { viewModel.onQueryChange(channelId, it) },
                     onSearch = { viewModel.search(channelId) },
                     expanded = true,
-                    onExpandedChange = { if (!it) navController.popBackStack() },
+                    onExpandedChange = { if (!it) navigator.popBackStack() },
                     placeholder = { Text(stringResource(Res.string.channel_search_hint)) },
                     leadingIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(onClick = { navigator.popBackStack() }) {
                             Icon(
                                 painter = StoatIcons.Back.painter(),
                                 contentDescription = stringResource(Res.string.back)
@@ -225,7 +226,7 @@ fun ChannelSearchScreen(
                 )
             },
             expanded = true,
-            onExpandedChange = { if (!it) navController.popBackStack() },
+            onExpandedChange = { if (!it) navigator.popBackStack() },
             colors = SearchBarDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.background
             )
@@ -234,11 +235,8 @@ fun ChannelSearchScreen(
                 channelId = channelId,
                 viewModel = viewModel,
                 onMessageSelected = { messageId ->
-                    navController.previousBackStackEntry?.savedStateHandle?.apply {
-                        set(CHANNEL_MESSAGE_JUMP_CHANNEL_KEY, channelId)
-                        set(CHANNEL_MESSAGE_JUMP_MESSAGE_KEY, messageId)
-                    }
-                    navController.popBackStack()
+                    resultBus.sendResult(ChannelMessageJump(channelId, messageId))
+                    navigator.popBackStack()
                 },
             )
         }

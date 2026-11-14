@@ -58,7 +58,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavController
 import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.user.fetchSelf
@@ -69,6 +68,8 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.menu
@@ -95,7 +96,7 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    navController: NavController,
+    navigator: Navigator,
     useDrawer: Boolean,
     onDrawerClicked: () -> Unit,
     includePadding: Boolean = true
@@ -259,7 +260,7 @@ fun OverviewScreen(
                             item(key = "catchup") {
                                 OverviewScreenLink(
                                     onClick = {
-                                        if (hasUnreads) navController.navigate("catchup")
+                                        if (hasUnreads) navigator.navigate(Route.CatchUp)
                                     },
                                     clickable = hasUnreads,
                                     backgroundColour = if (hasUnreads) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant,
@@ -305,7 +306,7 @@ fun OverviewScreen(
                         item(key = "settings") {
                             OverviewScreenLink(
                                 onClick = {
-                                    navController.navigate("settings")
+                                    navigator.navigate(Route.Settings.Home)
                                 },
                                 backgroundColour = MaterialTheme.colorScheme.primaryContainer,
                                 foregroundColour = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -352,7 +353,7 @@ fun OverviewScreen(
                         item(key = "changelog") {
                             OverviewScreenLink(
                                 onClick = {
-                                    navController.navigate("changelog/latest")
+                                    navigator.navigate(Route.Changelog("latest"))
                                 },
                                 backgroundColour = MaterialTheme.colorScheme.errorContainer,
                                 foregroundColour = MaterialTheme.colorScheme.onErrorContainer,

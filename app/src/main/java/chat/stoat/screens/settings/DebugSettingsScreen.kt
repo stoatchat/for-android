@@ -41,13 +41,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.dialogs.NotificationRationaleDialog
+import chat.stoat.navigation.Navigator
 import chat.stoat.persistence.Database
 import chat.stoat.persistence.KVStorage
 import chat.stoat.persistence.SqlStorage
@@ -103,7 +103,7 @@ class DebugSettingsScreenViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DebugSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: DebugSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -196,7 +196,7 @@ fun DebugSettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),

@@ -44,7 +44,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.routes.account.MfaSettings
 import chat.stoat.api.routes.account.changeEmail
 import chat.stoat.api.routes.account.changePassword
@@ -53,6 +52,8 @@ import chat.stoat.api.routes.account.fetchMfaSettings
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.settings_account
@@ -177,7 +178,7 @@ class AccountSettingsScreenViewModel(val context: Application) : ViewModel() {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AccountSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: AccountSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -328,7 +329,7 @@ fun AccountSettingsScreen(
     }
 
     SettingsPage(
-        navController,
+        navigator,
         title = { Text(stringResource(Res.string.settings_account)) }
     ) {
         LaunchedEffect(viewModel.showSnackbarPasswordChanged) {
@@ -446,7 +447,7 @@ fun AccountSettingsScreen(
                                 .clip(MaterialTheme.shapes.medium)
                                 .background(MaterialTheme.colorScheme.surfaceContainerLow)
                                 .clickable {
-                                    navController.navigate("settings/account/mfa")
+                                    navigator.navigate(Route.Settings.AccountMfa)
                                 }
                                 .padding(horizontal = 22.dp, vertical = 18.dp)
                         ) {

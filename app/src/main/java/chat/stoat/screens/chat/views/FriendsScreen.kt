@@ -81,7 +81,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.internals.UserQR
 import chat.stoat.api.internals.UserQRContents
@@ -102,6 +101,8 @@ import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.Toaster
 import chat.stoat.platform.show
@@ -148,7 +149,7 @@ private fun showInvalidClipboardToast(toaster: Toaster) {
     ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
-fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: () -> Unit) {
+fun FriendsScreen(topNav: Navigator, useDrawer: Boolean, onDrawerClicked: () -> Unit) {
     val clipboard = LocalClipboard.current
     val context = LocalContext.current
     val toaster = LocalToaster.current
@@ -843,7 +844,7 @@ fun FriendsScreen(topNav: NavController, useDrawer: Boolean, onDrawerClicked: ()
                 FloatingActionButtonMenuItem(
                     modifier = Modifier.semantics { isTraversalGroup = true },
                     onClick = {
-                        topNav.navigate("create/group")
+                        topNav.navigate(Route.CreateGroup)
                         fabMenuExpanded = false
                     },
                     icon = {

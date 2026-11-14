@@ -26,10 +26,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.getSupportedLocales
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.settings_language
@@ -56,7 +56,7 @@ class LanguagePickerSettingsScreen : ViewModel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguagePickerSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: LanguagePickerSettingsScreen = viewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -79,9 +79,9 @@ fun LanguagePickerSettingsScreen(
                     )
                 },
                 navigationIcon = {
-                    navController?.let {
+                    navigator?.let {
                         IconButton(onClick = {
-                            navController.popBackStack()
+                            navigator.popBackStack()
                         }) {
                             Icon(
                                 painter = StoatIcons.Back.painter(),

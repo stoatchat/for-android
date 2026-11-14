@@ -37,6 +37,7 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
+import chat.stoat.navigation.Route
 import chat.stoat.screens.chat.dialogs.InviteDialog
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_info_sheet_options_add
@@ -223,7 +224,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 onHideSheet()
             }
             scope.launch {
-                ActionChannel.send(Action.TopNavigate("channel/${channel.id}/pins"))
+                channel.id?.let { ActionChannel.send(Action.TopNavigate(Route.Channel.Pins(it))) }
             }
         }
     )
@@ -250,7 +251,7 @@ fun ChannelInfoSheet(channelId: String, onHideSheet: suspend () -> Unit) {
                 }
                 scope.launch {
                     delay(100) // wait for the sheet to close or at least start closing
-                    ActionChannel.send(Action.TopNavigate("settings/channel/${channel.id}"))
+                    channel.id?.let { ActionChannel.send(Action.TopNavigate(Route.ChannelSettings.Home(it))) }
                 }
             }
         )

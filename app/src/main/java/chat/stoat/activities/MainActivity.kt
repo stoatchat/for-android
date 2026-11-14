@@ -16,15 +16,17 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -47,7 +49,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -60,9 +64,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.runtime.result.ResultEffect
+import androidx.navigation3.runtime.result.rememberResultEventBusNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import chat.stoat.BuildConfig
 import chat.stoat.api.HitRateLimitException
 import chat.stoat.api.StoatAPI
@@ -85,14 +93,16 @@ import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.material.EasingTokens
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
+import chat.stoat.navigation.RouteSavedStateConfiguration
 import chat.stoat.persistence.KVStorage
 import chat.stoat.platform.StoatAppTheme
 import chat.stoat.screens.DefaultDestinationScreen
 import chat.stoat.screens.about.AboutScreen
 import chat.stoat.screens.about.AttributionScreen
 import chat.stoat.screens.changelogs.ReadChangelogScreen
-import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
-import chat.stoat.screens.chat.CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
+import chat.stoat.screens.chat.ChannelMessageJump
 import chat.stoat.screens.chat.ChannelPinsScreen
 import chat.stoat.screens.chat.ChannelSearchScreen
 import chat.stoat.screens.chat.ChatRouterScreen
@@ -156,7 +166,7 @@ class MainActivityViewModel(
     private val kvStorage: KVStorage,
     private val context: Context
 ) : ViewModel() {
-    val nextDestination = MutableStateFlow<String?>(null)
+    val nextDestination = MutableStateFlow<Route?>(null)
     var isConnected = MutableStateFlow(false)
     val isReady = MutableStateFlow(false)
     val couldNotLogIn = MutableStateFlow(false)
@@ -187,7 +197,7 @@ class MainActivityViewModel(
         }
     }
 
-    private suspend fun startWithDestination(destination: String) {
+    private suspend fun startWithDestination(destination: Route) {
         nextDestination.emit(destination)
         isReady.emit(true)
     }
@@ -230,7 +240,7 @@ class MainActivityViewModel(
             Log.d("MainActivity", "We can reach Stoat, checking if we're logged in")
 
             val token = kvStorage.get("sessionToken")
-                ?: return@launch startWithDestination("login/greeting")
+                ?: return@launch startWithDestination(Route.Login.Greeting)
             val id = kvStorage.get("sessionId") ?: ""
 
             Log.d(
@@ -254,7 +264,7 @@ class MainActivityViewModel(
                     val onboard = needsOnboarding(token)
                     if (onboard) {
                         Log.d("MainActivity", "Onboarding state is incomplete, starting onboarding")
-                        startWithDestination("register/onboarding")
+                        startWithDestination(Route.Register.Onboarding)
                         return@launch
                     }
                 } catch (e: HitRateLimitException) {
@@ -275,9 +285,9 @@ class MainActivityViewModel(
                     StoatAPI.loginAs(token)
                     StoatAPI.setSessionId(id)
                     if (Experiments.usePolar.isEnabled) {
-                        startWithDestination("main")
+                        startWithDestination(Route.Main.Home)
                     } else {
-                        startWithDestination("chat")
+                        startWithDestination(Route.Chat)
                     }
                 } catch (e: Exception) {
                     Log.e("MainActivity", "Failed to login, could not log in", e)
@@ -294,11 +304,11 @@ class MainActivityViewModel(
             kvStorage.remove("selfId")
             kvStorage.remove("selfName")
             kvStorage.remove("selfAvatarUrl")
-            startWithDestination("login/greeting")
+            startWithDestination(Route.Login.Greeting)
         }
     }
 
-    fun updateNextDestination(destination: String) {
+    fun updateNextDestination(destination: Route) {
         viewModelScope.launch {
             nextDestination.emit(null)
             nextDestination.emit(destination)
@@ -466,7 +476,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun AppEntrypoint(
     windowSizeClass: WindowSizeClass,
-    nextDestination: String?,
+    nextDestination: Route?,
     isConnected: Boolean,
     healthNotice: HealthNotice?,
     isHealthAlertActive: Boolean,
@@ -475,7 +485,7 @@ fun AppEntrypoint(
     onDismissHealthAlert: () -> Unit = {},
     onDismissLoginError: () -> Unit = {},
     onRetryConnection: () -> Unit,
-    onUpdateNextDestination: (String) -> Unit = {}
+    onUpdateNextDestination: (Route) -> Unit = {}
 ) {
     val showVoiceUI = VoiceCallManager.isSheetVisible
     val hideVoiceUI = { VoiceCallManager.isSheetVisible = false }
@@ -505,7 +515,8 @@ fun AppEntrypoint(
         if (showVoiceUI) keyboardController?.hide()
     }
 
-    val navController = rememberNavController()
+    val backStack = rememberNavBackStack(RouteSavedStateConfiguration, Route.Default)
+    val navigator = remember(backStack) { Navigator(backStack) }
 
     StoatAppTheme {
         Box(
@@ -560,292 +571,176 @@ fun AppEntrypoint(
                     )
                 }
 
-                NavHost(
-                    navController = navController,
-                    startDestination = "default",
-                    enterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = NavTweenInt,
-                            initialOffset = { it / 3 }
-                        ) + fadeIn(animationSpec = NavTweenFloat)
-                    },
-                    exitTransition = {
-                        slideOutOfContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Left,
-                            animationSpec = NavTweenInt,
-                            targetOffset = { it / 3 }
-                        ) + fadeOut(animationSpec = NavTweenFloat)
-                    },
-                    popEnterTransition = {
-                        slideIntoContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = NavTweenInt,
-                            initialOffset = { it / 3 }
-                        ) + fadeIn(animationSpec = NavTweenFloat)
-                    },
-                    popExitTransition = {
-                        slideOutOfContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = NavTweenInt,
-                            targetOffset = { it / 2 }
-                        ) + fadeOut(animationSpec = NavTweenFloat)
-                    }
-                ) {
-                    composable("default") {
-                        DefaultDestinationScreen(
-                            navController,
-                            nextDestination,
-                            isConnected,
-                            onRetryConnection
-                        )
-                    }
-
-                    composable("login/greeting") { LoginGreetingScreen(navController) }
-                    composable("login/login") { LoginScreen(navController) }
-                    composable("login/mfa/{mfaTicket}/{allowedAuthTypes}") { backStackEntry ->
-                        val mfaTicket = backStackEntry.arguments?.getString("mfaTicket") ?: ""
-                        val allowedAuthTypes =
-                            backStackEntry.arguments?.getString("allowedAuthTypes") ?: ""
-
-                        MfaScreen(navController, allowedAuthTypes, mfaTicket)
-                    }
-
-                    composable("register/greeting") { RegisterGreetingScreen(navController) }
-                    composable("register/details") { RegisterDetailsScreen(navController) }
-                    composable("register/verify/{email}") { backStackEntry ->
-                        val email = backStackEntry.arguments?.getString("email") ?: ""
-
-                        RegisterVerifyScreen(navController, email)
-                    }
-                    composable("register/onboarding") {
-                        OnboardingScreen(
-                            navController,
-                            onOnboardingComplete = {
-                                onUpdateNextDestination("chat")
-                                navController.popBackStack(
-                                    navController.graph.startDestinationRoute!!,
-                                    inclusive = true
-                                )
-                                navController.navigate("default")
-                            }
-                        )
-                    }
-
-                    composable("login2/init") { InitScreen(navController, windowSizeClass) }
-
-                    // This is only used outside of Polar mode
-                    // Otherwise you may be looking for "main" right below
-                    composable(
-                        "chat",
-                        enterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Up,
-                                animationSpec = tween(
-                                    400,
-                                    easing = EasingTokens.EmphasizedDecelerate
-                                ),
-                                initialOffset = { it / 3 }
-                            ) + fadeIn(animationSpec = StoatTweenFloat)
-                        }
-                    ) {
-                        ChatRouterScreen(
-                            navController,
-                            windowSizeClass,
-                            disableBackHandler = showVoiceUI,
-                            onNullifiedUser = {
-                                onRetryConnection()
-                                navController.popBackStack(
-                                    navController.graph.startDestinationRoute!!,
-                                    inclusive = true
-                                )
-                                navController.navigate("default")
-                            },
-                            onEnterVoiceUI = { channelId ->
-                                VoiceCallManager.openSheet(channelId)
-                            },
-                        )
-                    }
-
-                    // This is only the main screen in Polar mode
-                    // Otherwise you may be looking for "chat" right above
-                    composable(
-                        "main",
-                        enterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Up,
-                                animationSpec = tween(
-                                    400,
-                                    easing = EasingTokens.EmphasizedDecelerate
-                                ),
-                                initialOffset = { it / 3 }
-                            ) + fadeIn(animationSpec = StoatTweenFloat) + scaleIn(
-                                animationSpec = tween(
-                                    400,
-                                    easing = EasingTokens.EmphasizedDecelerate
-                                ),
-                                initialScale = 0.8f,
-                                transformOrigin = TransformOrigin.Center
+                NavDisplay(
+                    backStack = backStack,
+                    onBack = { navigator.popBackStack() },
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator(),
+                        rememberResultEventBusNavEntryDecorator(),
+                    ),
+                    transitionSpec = { forwardEnter() togetherWith forwardExit() },
+                    popTransitionSpec = { backEnter() togetherWith backExit() },
+                    predictivePopTransitionSpec = { backEnter() togetherWith backExit() },
+                    entryProvider = entryProvider {
+                        entry<Route.Default> {
+                            DefaultDestinationScreen(
+                                navigator,
+                                nextDestination,
+                                isConnected,
+                                onRetryConnection
                             )
                         }
-                    ) {
-                        MainScreen(navController)
-                    }
-                    composable(
-                        "main/conversation/{channelId}",
-                        enterTransition = {
-                            slideIntoContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Left,
-                                animationSpec = tween(
-                                    600,
-                                    easing = EasingTokens.EmphasizedDecelerate
-                                ),
-                                initialOffset = { it }
-                            ) + fadeIn(animationSpec = StoatTweenFloat)
-                        },
-                        exitTransition = {
-                            slideOutOfContainer(
-                                AnimatedContentTransitionScope.SlideDirection.Right,
-                                animationSpec = tween(
-                                    600,
-                                    easing = EasingTokens.EmphasizedDecelerate
-                                ),
-                                targetOffset = { it }
-                            ) + fadeOut(animationSpec = StoatTweenFloat)
+
+                        entry<Route.Login.Greeting> { LoginGreetingScreen(navigator) }
+                        entry<Route.Login.Credentials> { LoginScreen(navigator) }
+                        entry<Route.Login.Mfa> { MfaScreen(navigator, it.allowedAuthTypes, it.ticket) }
+
+                        entry<Route.Register.Greeting> { RegisterGreetingScreen(navigator) }
+                        entry<Route.Register.Details> { RegisterDetailsScreen(navigator) }
+                        entry<Route.Register.Verify> { RegisterVerifyScreen(navigator, it.email) }
+                        entry<Route.Register.Onboarding> {
+                            OnboardingScreen(
+                                navigator,
+                                onOnboardingComplete = {
+                                    onUpdateNextDestination(Route.Chat)
+                                    navigator.resetTo(Route.Default)
+                                }
+                            )
                         }
-                    ) { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        val requestedMessageId =
-                            backStackEntry.savedStateHandle.get<String>(
-                                CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
-                            )?.takeIf {
-                                backStackEntry.savedStateHandle.get<String>(
-                                    CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
-                                ) == channelId
+
+                        entry<Route.Login2.Init> { InitScreen(navigator, windowSizeClass) }
+
+                        // This is only used outside of Polar mode
+                        // Otherwise you may be looking for Main right below
+                        entry<Route.Chat>(
+                            metadata = NavDisplay.transitionSpec {
+                                slideInVertically(
+                                    tween(400, easing = EasingTokens.EmphasizedDecelerate)
+                                ) { it / 3 } + fadeIn(StoatTweenFloat) togetherWith forwardExit()
                             }
-                        ChannelScreen(
-                            channelId = channelId,
-                            onToggleDrawer = {},
-                            useDrawer = false,
-                            useBackButton = true,
-                            backButtonAction = {
-                                navController.popBackStack()
-                            },
-                            useChatUI = true,
-                            requestedMessageId = requestedMessageId,
-                            onRequestedMessageConsumed = {
-                                backStackEntry.savedStateHandle.remove<String>(
-                                    CHANNEL_MESSAGE_JUMP_CHANNEL_KEY
-                                )
-                                backStackEntry.savedStateHandle.remove<String>(
-                                    CHANNEL_MESSAGE_JUMP_MESSAGE_KEY
-                                )
-                            },
-                        )
-                    }
-
-                    composable("catchup") { CatchUpScreen(navController) }
-
-                    composable("create/group") { CreateGroupScreen(navController) }
-
-                    composable("discover") { DiscoverScreen(navController) }
-
-                    composable("settings") { SettingsScreen(navController) }
-                    composable("settings/account") { AccountSettingsScreen(navController) }
-                    composable("settings/account/mfa") { MfaSettingsScreen(navController) }
-                    composable("settings/profile") { ProfileSettingsScreen(navController) }
-                    composable("settings/sessions") { SessionSettingsScreen(navController) }
-                    composable("settings/appearance") { AppearanceSettingsScreen(navController) }
-                    composable("settings/chat") { ChatSettingsScreen(navController) }
-                    composable("settings/notifications") { NotificationsSettingsScreen(navController) }
-                    composable("settings/debug") { DebugSettingsScreen(navController) }
-                    composable("settings/experiments") { ExperimentsSettingsScreen(navController) }
-                    composable("settings/language") { LanguagePickerSettingsScreen(navController) }
-
-                    composable("settings/channel/{channelId}") { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        ChannelSettingsHome(navController, channelId)
-                    }
-                    composable("settings/channel/{channelId}/overview") { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        ChannelSettingsOverview(navController, channelId)
-                    }
-                    composable("settings/channel/{channelId}/permissions") { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        ChannelSettingsPermissions(navController, channelId)
-                    }
-                    composable(
-                        "settings/channel/{channelId}/permissions/{roleId}"
-                    ) { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        val roleId = backStackEntry.arguments?.getString("roleId") ?: ""
-                        ChannelSettingsPermissionEditor(navController, channelId, roleId)
-                    }
-
-                    composable("settings/server/{serverId}") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsHome(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/identity") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        StoatAPI.selfId?.let { selfId ->
-                            ServerIdentitySettingsScreen(navController, serverId, selfId)
+                        ) {
+                            ChatRouterScreen(
+                                navigator,
+                                windowSizeClass,
+                                disableBackHandler = showVoiceUI,
+                                onNullifiedUser = {
+                                    onRetryConnection()
+                                    navigator.resetTo(Route.Default)
+                                },
+                                onEnterVoiceUI = { channelId ->
+                                    VoiceCallManager.openSheet(channelId)
+                                },
+                            )
                         }
-                    }
-                    composable("settings/server/{serverId}/identity/{userId}") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        val userId = backStackEntry.arguments?.getString("userId") ?: ""
-                        ServerIdentitySettingsScreen(navController, serverId, userId)
-                    }
-                    composable("settings/server/{serverId}/overview") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsOverview(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/emojis") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsEmojis(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/invites") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsInvites(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/bans") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsBans(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/channels") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsChannels(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/roles") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        ServerSettingsRoles(navController, serverId)
-                    }
-                    composable("settings/server/{serverId}/roles/{roleId}") { backStackEntry ->
-                        val serverId = backStackEntry.arguments?.getString("serverId") ?: ""
-                        val roleId = backStackEntry.arguments?.getString("roleId") ?: ""
-                        ServerSettingsRoleEditor(navController, serverId, roleId)
-                    }
 
-                    composable("channel/{channelId}/pins") { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        ChannelPinsScreen(navController, channelId)
+                        // This is only the main screen in Polar mode
+                        // Otherwise you may be looking for Chat right above
+                        entry<Route.Main.Home>(
+                            metadata = NavDisplay.transitionSpec {
+                                slideInVertically(
+                                    tween(400, easing = EasingTokens.EmphasizedDecelerate)
+                                ) { it / 3 } + fadeIn(StoatTweenFloat) + scaleIn(
+                                    tween(400, easing = EasingTokens.EmphasizedDecelerate),
+                                    initialScale = 0.8f,
+                                    transformOrigin = TransformOrigin.Center
+                                ) togetherWith forwardExit()
+                            }
+                        ) {
+                            MainScreen(navigator)
+                        }
+                        entry<Route.Main.Conversation>(
+                            metadata = NavDisplay.transitionSpec {
+                                slideInHorizontally(
+                                    tween(600, easing = EasingTokens.EmphasizedDecelerate)
+                                ) { it } + fadeIn(StoatTweenFloat) togetherWith forwardExit()
+                            } + NavDisplay.popTransitionSpec {
+                                backEnter() togetherWith conversationExit()
+                            } + NavDisplay.predictivePopTransitionSpec {
+                                backEnter() togetherWith conversationExit()
+                            }
+                        ) { key ->
+                            var requestedMessageId by remember { mutableStateOf<String?>(null) }
+                            ResultEffect<ChannelMessageJump> {
+                                if (it.channelId == key.channelId) requestedMessageId = it.messageId
+                            }
+                            ChannelScreen(
+                                channelId = key.channelId,
+                                onToggleDrawer = {},
+                                useDrawer = false,
+                                useBackButton = true,
+                                backButtonAction = {
+                                    navigator.popBackStack()
+                                },
+                                useChatUI = true,
+                                requestedMessageId = requestedMessageId,
+                                onRequestedMessageConsumed = { requestedMessageId = null },
+                            )
+                        }
+
+                        entry<Route.CatchUp> { CatchUpScreen(navigator) }
+
+                        entry<Route.CreateGroup> { CreateGroupScreen(navigator) }
+
+                        entry<Route.Discover> { DiscoverScreen(navigator) }
+
+                        entry<Route.Settings.Home> { SettingsScreen(navigator) }
+                        entry<Route.Settings.Account> { AccountSettingsScreen(navigator) }
+                        entry<Route.Settings.AccountMfa> { MfaSettingsScreen(navigator) }
+                        entry<Route.Settings.Profile> { ProfileSettingsScreen(navigator) }
+                        entry<Route.Settings.Sessions> { SessionSettingsScreen(navigator) }
+                        entry<Route.Settings.Appearance> { AppearanceSettingsScreen(navigator) }
+                        entry<Route.Settings.Chat> { ChatSettingsScreen(navigator) }
+                        entry<Route.Settings.Notifications> { NotificationsSettingsScreen(navigator) }
+                        entry<Route.Settings.Debug> { DebugSettingsScreen(navigator) }
+                        entry<Route.Settings.Experiments> { ExperimentsSettingsScreen(navigator) }
+                        entry<Route.Settings.Language> { LanguagePickerSettingsScreen(navigator) }
+
+                        entry<Route.ChannelSettings.Home> { ChannelSettingsHome(navigator, it.channelId) }
+                        entry<Route.ChannelSettings.Overview> {
+                            ChannelSettingsOverview(navigator, it.channelId)
+                        }
+                        entry<Route.ChannelSettings.Permissions> {
+                            ChannelSettingsPermissions(navigator, it.channelId)
+                        }
+                        entry<Route.ChannelSettings.PermissionEditor> {
+                            ChannelSettingsPermissionEditor(navigator, it.channelId, it.roleId)
+                        }
+
+                        entry<Route.ServerSettings.Home> { ServerSettingsHome(navigator, it.serverId) }
+                        entry<Route.ServerSettings.Identity> { key ->
+                            (key.userId ?: StoatAPI.selfId)?.let { userId ->
+                                ServerIdentitySettingsScreen(navigator, key.serverId, userId)
+                            }
+                        }
+                        entry<Route.ServerSettings.Overview> {
+                            ServerSettingsOverview(navigator, it.serverId)
+                        }
+                        entry<Route.ServerSettings.Emojis> { ServerSettingsEmojis(navigator, it.serverId) }
+                        entry<Route.ServerSettings.Invites> {
+                            ServerSettingsInvites(navigator, it.serverId)
+                        }
+                        entry<Route.ServerSettings.Bans> { ServerSettingsBans(navigator, it.serverId) }
+                        entry<Route.ServerSettings.Channels> {
+                            ServerSettingsChannels(navigator, it.serverId)
+                        }
+                        entry<Route.ServerSettings.Roles> { ServerSettingsRoles(navigator, it.serverId) }
+                        entry<Route.ServerSettings.RoleEditor> {
+                            ServerSettingsRoleEditor(navigator, it.serverId, it.roleId)
+                        }
+
+                        entry<Route.Channel.Pins> { ChannelPinsScreen(navigator, it.channelId) }
+                        entry<Route.Channel.Search> { ChannelSearchScreen(navigator, it.channelId) }
+
+                        entry<Route.About.Home> { AboutScreen(navigator) }
+                        entry<Route.About.Oss> { AttributionScreen(navigator) }
+
+                        entry<Route.Labs> { LabsRootScreen(navigator) }
+
+                        entry<Route.Changelog> { ReadChangelogScreen(navigator, it.id) }
                     }
-
-                    composable("channel/{channelId}/search") { backStackEntry ->
-                        val channelId = backStackEntry.arguments?.getString("channelId") ?: ""
-                        ChannelSearchScreen(navController, channelId)
-                    }
-
-                    composable("about") { AboutScreen(navController) }
-                    composable("about/oss") { AttributionScreen(navController) }
-
-                    composable("labs") { LabsRootScreen(navController) }
-
-                    composable("changelog/{id}") { ReadChangelogScreen(navController) }
-                }
+                )
             }
-
             if (showVoiceUI) { // if tapped outside the voice UI, close it
                 Box(
                     Modifier
@@ -904,3 +799,15 @@ fun AppEntrypoint(
         }
     }
 }
+
+private fun forwardEnter() = slideInHorizontally(NavTweenInt) { it / 3 } + fadeIn(NavTweenFloat)
+
+private fun forwardExit() = slideOutHorizontally(NavTweenInt) { -it / 3 } + fadeOut(NavTweenFloat)
+
+private fun backEnter() = slideInHorizontally(NavTweenInt) { -it / 3 } + fadeIn(NavTweenFloat)
+
+private fun backExit() = slideOutHorizontally(NavTweenInt) { it / 2 } + fadeOut(NavTweenFloat)
+
+private fun conversationExit() =
+    slideOutHorizontally(tween(600, easing = EasingTokens.EmphasizedDecelerate)) { it } +
+        fadeOut(StoatTweenFloat)

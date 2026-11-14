@@ -29,9 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
 
 enum class LabsHomeScreenTab {
     Home,
@@ -41,7 +41,7 @@ enum class LabsHomeScreenTab {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LabsHomeScreen(navController: NavController, topNav: NavController) {
+fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
     val currentTab = rememberSaveable { mutableStateOf(LabsHomeScreenTab.Home) }
 
     Scaffold(
@@ -143,7 +143,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                     ) {
                         ListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate("mockups/newlogin")
+                                navigator.navigate(LabsRoute.NewLoginMockup)
                             }
                         ) {
                             Text("New Login Experience")
@@ -158,7 +158,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                     ) {
                         ListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/settingsdsl")
+                                navigator.navigate(LabsRoute.SettingsDslSandbox)
                             }
                         ) {
                             Text("Settings DSL")
@@ -166,7 +166,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         HorizontalDivider()
                         ListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/newcard")
+                                navigator.navigate(LabsRoute.NewCardSandbox)
                             }
                         ) {
                             Text("New Card")
@@ -174,7 +174,7 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         HorizontalDivider()
                         ListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/telecom")
+                                navigator.navigate(LabsRoute.TelecomSandbox)
                             }
                         ) {
                             Text("Telecom")

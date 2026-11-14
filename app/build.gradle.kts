@@ -203,7 +203,9 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.serialization.kotlinx.json)
 
-    implementation(libs.navigation.compose)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.lifecycle.viewmodel.navigation3)
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
@@ -274,7 +276,6 @@ dependencies {
 
     implementation(libs.koin)
     implementation(libs.koin.compose)
-    implementation(libs.koin.compose.viewmodel.navigation)
 
     implementation(libs.multiplatform.markdown.android)
     implementation(libs.multiplatform.markdown.m3)

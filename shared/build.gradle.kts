@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.lint)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -42,6 +43,8 @@ kotlin {
             implementation(libs.compose.multiplatform.resources)
             implementation(libs.compose.multiplatform.ui.tooling.preview)
             implementation(libs.shimmer)
+            api(libs.navigation3.runtime)
+            implementation(libs.kotlin.serialization.core)
         }
 
         androidMain.dependencies {

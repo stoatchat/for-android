@@ -25,11 +25,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.components.RadioItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import kotlinx.coroutines.launch
@@ -95,7 +95,7 @@ interface SettingsPageScope {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(
-    navController: NavController?,
+    navigator: Navigator?,
     title: @Composable () -> Unit,
     onNavigateBack: (() -> Unit)? = null,
     floatingActionButton: @Composable () -> Unit = {},
@@ -113,9 +113,9 @@ fun SettingsPage(
                 scrollBehavior = scrollBehavior,
                 title = title,
                 navigationIcon = {
-                    navController?.let {
+                    navigator?.let {
                         IconButton(onClick = {
-                            onNavigateBack?.invoke() ?: navController.popBackStack()
+                            onNavigateBack?.invoke() ?: navigator.popBackStack()
                         }) {
                             Icon(
                                 painter = StoatIcons.Back.painter(),

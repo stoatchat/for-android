@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.callbacks.Action
@@ -38,6 +37,8 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.ServerSettingsOption
 import chat.stoat.internals.server.availableServerSettingsOptions
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
@@ -68,7 +69,7 @@ private const val MEMBERS_PANEL_ACCESSIBLE = false
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsHome(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     deleteServer: suspend (String) -> Unit = { leaveOrDeleteServer(it) },
 ) {
@@ -143,7 +144,7 @@ fun ServerSettingsHome(
                                     ActionChannel.send(
                                         Action.ChatNavigate(ChatRouterDestination.Overview)
                                     )
-                                    navController.popBackStack()
+                                    navigator.popBackStack()
                                 }
                                 .onFailure {
                                     deleteError = it.message ?: deleteErrorFallback
@@ -166,7 +167,7 @@ fun ServerSettingsHome(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings)) },
     ) {
         if (server == null || permissions == null) {
@@ -201,10 +202,10 @@ fun ServerSettingsHome(
                 onOptionSelected = { option ->
                     when (option) {
                         ServerSettingsOption.Overview ->
-                            navController.navigate("settings/server/$serverId/overview")
+                            navigator.navigate(Route.ServerSettings.Overview(serverId))
 
                         ServerSettingsOption.Channels ->
-                            navController.navigate("settings/server/$serverId/channels")
+                            navigator.navigate(Route.ServerSettings.Channels(serverId))
 
                         else -> Unit
                     }
@@ -218,7 +219,7 @@ fun ServerSettingsHome(
                 options = customisationOptions,
                 onOptionSelected = { option ->
                     if (option == ServerSettingsOption.Emojis) {
-                        navController.navigate("settings/server/$serverId/emojis")
+                        navigator.navigate(Route.ServerSettings.Emojis(serverId))
                     }
                 },
             )
@@ -231,13 +232,13 @@ fun ServerSettingsHome(
                 onOptionSelected = { option ->
                     when (option) {
                         ServerSettingsOption.Invites ->
-                            navController.navigate("settings/server/$serverId/invites")
+                            navigator.navigate(Route.ServerSettings.Invites(serverId))
 
                         ServerSettingsOption.Bans ->
-                            navController.navigate("settings/server/$serverId/bans")
+                            navigator.navigate(Route.ServerSettings.Bans(serverId))
 
                         ServerSettingsOption.Roles ->
-                            navController.navigate("settings/server/$serverId/roles")
+                            navigator.navigate(Route.ServerSettings.Roles(serverId))
 
                         else -> Unit
                     }

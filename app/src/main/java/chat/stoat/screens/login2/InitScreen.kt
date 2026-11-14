@@ -28,13 +28,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPIHost
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.AnyLink
 import chat.stoat.composables.generic.Weblink
 import chat.stoat.core.model.data.STOAT_MARKETING
 import chat.stoat.core.model.settings.Theme
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.community_guidelines
 import chat.stoat.shared.resources.login_bg
@@ -47,7 +47,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InitScreen(
-    navController: NavController,
+    navigator: Navigator,
     windowSizeClass: WindowSizeClass
 ) {
     Box {
@@ -144,13 +144,13 @@ private fun LinkPart(windowSizeClass: WindowSizeClass) {
     ) {
         Column(Modifier.widthIn(max = 150.dp)) {
             Button(
-                onClick = {/* navController.navigate("login2/existing/details") */ },
+                onClick = {/* navigator.navigate("login2/existing/details") */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Log In") // FIXME hardcoded string
             }
             TextButton(
-                onClick = {/* navController.navigate("login2/new/details") */ },
+                onClick = {/* navigator.navigate("login2/new/details") */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Sign Up") // FIXME hardcoded string

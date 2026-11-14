@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.auth.fetchAllSessions
 import chat.stoat.api.routes.auth.logoutAllSessions
@@ -54,6 +53,7 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
 import chat.stoat.composables.markdown.prose.UIMarkdown
 import chat.stoat.composables.settings.sessions.SessionItem
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.logout
@@ -106,7 +106,7 @@ class SessionSettingsScreenViewModel : ViewModel() {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SessionSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: SessionSettingsScreenViewModel = viewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -162,7 +162,7 @@ fun SessionSettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),

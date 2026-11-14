@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.routes.push.subscribePush
 import chat.stoat.api.routes.push.unsubscribePush
 import chat.stoat.core.designsystem.components.CenteredListItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.dialogs.NotificationRationaleDialog
+import chat.stoat.navigation.Navigator
 import chat.stoat.persistence.KVStorage
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
@@ -123,7 +123,7 @@ class NotificationsSettingsScreenViewModel(
 
 @Composable
 fun NotificationsSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: NotificationsSettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -150,7 +150,7 @@ fun NotificationsSettingsScreen(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.settings_notifications)) }
     ) {
         CenteredListItem(

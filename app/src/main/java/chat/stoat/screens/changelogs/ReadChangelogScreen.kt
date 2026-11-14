@@ -29,16 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.api.routes.microservices.gazette.GazetteChangelog
 import chat.stoat.api.routes.microservices.gazette.getChangelogById
 import chat.stoat.composables.markdown.prose.ProseMarkdown
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.changelog_header
@@ -67,9 +66,8 @@ sealed interface ReadChangelogScreenUiState {
 }
 
 class ReadChangelogScreenViewModel(
-    handle: SavedStateHandle
+    private val id: String
 ) : ViewModel() {
-    private val id: String = checkNotNull(handle["id"])
     private val retry = MutableSharedFlow<Unit>(replay = 1).apply { tryEmit(Unit) }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -112,8 +110,9 @@ private fun rememberFormattedDate(isoDateTime: String?): String? {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ReadChangelogScreen(
-    navController: NavController,
-    viewModel: ReadChangelogScreenViewModel = viewModel()
+    navigator: Navigator,
+    id: String,
+    viewModel: ReadChangelogScreenViewModel = viewModel { ReadChangelogScreenViewModel(id) }
 ) {
     val state = viewModel.state.collectAsState()
     val formattedDate =
@@ -145,7 +144,7 @@ fun ReadChangelogScreen(
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navigator.popBackStack() }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),
                             contentDescription = stringResource(Res.string.back)

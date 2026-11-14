@@ -46,6 +46,7 @@ import chat.stoat.dialogs.memberModerationPermissions
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.serverIdentityCapabilities
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
@@ -197,7 +198,7 @@ fun UserButtons(
                 Button(
                     onClick = {
                         scope.launch {
-                            ActionChannel.send(Action.TopNavigate("settings/profile"))
+                            ActionChannel.send(Action.TopNavigate(Route.Settings.Profile))
                             // We must now close the bottom sheet,
                             // else we will crash if we try to open this sheet again
                             dismissSheet()
@@ -430,9 +431,7 @@ fun UserButtons(
                                     scope.launch {
                                         dismissSheet()
                                         ActionChannel.send(
-                                            Action.TopNavigate(
-                                                "settings/server/${serverId!!}/identity/${user.id!!}"
-                                            )
+                                            Action.TopNavigate(Route.ServerSettings.Identity(serverId!!, user.id!!))
                                         )
                                     }
                                 },

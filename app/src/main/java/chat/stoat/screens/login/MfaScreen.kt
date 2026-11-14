@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.account.MfaResponseRecoveryCode
 import chat.stoat.api.routes.account.MfaResponseTotpCode
@@ -41,6 +40,8 @@ import chat.stoat.core.designsystem.components.CollapsibleCard
 import chat.stoat.core.designsystem.components.FormTextField
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
@@ -150,18 +151,15 @@ class MfaScreenViewModel(
 
 @Composable
 fun MfaScreen(
-    navController: NavController,
-    allowedAuthTypesCommaSep: String,
+    navigator: Navigator,
+    allowedAuthTypes: List<String>,
     mfaTicket: String,
     viewModel: MfaScreenViewModel = koinViewModel()
 ) {
-    val allowedAuthTypes = allowedAuthTypesCommaSep.split(",")
 
     LaunchedEffect(viewModel.navigateToHome) {
         if (viewModel.navigateToHome) {
-            navController.navigate("chat") {
-                popUpTo("login/greeting") { inclusive = true }
-            }
+            navigator.resetTo(Route.Chat)
         }
     }
 
@@ -335,7 +333,7 @@ fun MfaScreen(
         }
 
         ElevatedButton(
-            onClick = { navController.popBackStack() }
+            onClick = { navigator.popBackStack() }
         ) {
             Text(text = stringResource(Res.string.cancel))
         }

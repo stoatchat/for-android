@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.fetchMember
@@ -59,6 +58,7 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.ServerIdentityCapabilities
 import chat.stoat.internals.server.serverIdentityCapabilities
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.server_identity_avatar
@@ -319,7 +319,7 @@ class ServerIdentitySettingsViewModel(
 
 @Composable
 fun ServerIdentitySettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     targetUserId: String,
     viewModel: ServerIdentitySettingsViewModel = koinViewModel(),
@@ -342,7 +342,7 @@ fun ServerIdentitySettingsScreen(
         if (viewModel.hasChanges()) {
             showDiscardConfirmation = true
         } else {
-            navController.popBackStack()
+            navigator.popBackStack()
         }
     }
 
@@ -358,7 +358,7 @@ fun ServerIdentitySettingsScreen(
                     onClick = {
                         viewModel.reset()
                         showDiscardConfirmation = false
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     },
                 ) {
                     Text(stringResource(Res.string.server_identity_discard))
@@ -373,7 +373,7 @@ fun ServerIdentitySettingsScreen(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = {
             Text(
                 if (editingOwnIdentity) {

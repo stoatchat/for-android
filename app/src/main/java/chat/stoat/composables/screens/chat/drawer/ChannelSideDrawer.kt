@@ -82,7 +82,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.CategorisedChannelList
 import chat.stoat.api.internals.ChannelUtils
@@ -112,6 +111,8 @@ import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.has
 import chat.stoat.core.model.util.UserVoiceState
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.shared.resources.Res
@@ -158,7 +159,7 @@ fun ChannelSideDrawer(
     onShowServerContextSheet: (String) -> Unit,
     showSettingsIcon: Boolean,
     onOpenSettings: () -> Unit,
-    topNav: NavController,
+    topNav: Navigator,
     onShowAddServerSheet: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -553,7 +554,7 @@ fun ChannelSideDrawer(
                             .padding(8.dp)
                             .clip(CircleShape)
                             .clickable {
-                                topNav.navigate("discover")
+                                topNav.navigate(Route.Discover)
                             }
                             .size(48.dp),
                         contentAlignment = Alignment.Center

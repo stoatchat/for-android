@@ -31,11 +31,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.R
 import chat.stoat.composables.screens.settings.AttributionItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.oss_attribution
@@ -95,7 +95,7 @@ data class Scm(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttributionScreen(navController: NavController) {
+fun AttributionScreen(navigator: Navigator) {
     var libraries by remember { mutableStateOf<AboutLibraries?>(null) }
 
     val resources = LocalResources.current
@@ -163,7 +163,7 @@ fun AttributionScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),

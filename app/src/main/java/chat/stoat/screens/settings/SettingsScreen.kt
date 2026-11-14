@@ -32,7 +32,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.StoatAPIHost
@@ -41,6 +40,8 @@ import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.about
@@ -83,7 +84,7 @@ class SettingsScreenViewModel(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: SettingsScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -103,7 +104,7 @@ fun SettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),
@@ -142,7 +143,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_account")
-                            .clickable { navController.navigate("settings/account") }
+                            .clickable { navigator.navigate(Route.Settings.Account) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -157,7 +158,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_profile")
-                            .clickable { navController.navigate("settings/profile") }
+                            .clickable { navigator.navigate(Route.Settings.Profile) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -173,7 +174,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_sessions")
-                            .clickable { navController.navigate("settings/sessions") }
+                            .clickable { navigator.navigate(Route.Settings.Sessions) }
                     )
 
                     ListHeader {
@@ -193,7 +194,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_appearance")
-                            .clickable { navController.navigate("settings/appearance") }
+                            .clickable { navigator.navigate(Route.Settings.Appearance) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -208,7 +209,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_language")
-                            .clickable { navController.navigate("settings/language") }
+                            .clickable { navigator.navigate(Route.Settings.Language) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -223,7 +224,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_chat")
-                            .clickable { navController.navigate("settings/chat") }
+                            .clickable { navigator.navigate(Route.Settings.Chat) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -239,7 +240,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_notifications")
-                            .clickable { navController.navigate("settings/notifications") }
+                            .clickable { navigator.navigate(Route.Settings.Notifications) }
                     )
 
                     ListHeader {
@@ -268,7 +269,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_about")
-                            .clickable { navController.navigate("about") }
+                            .clickable { navigator.navigate(Route.About.Home) }
                     )
 
                     if (StoatAPIHost.config.isDebug) {
@@ -286,7 +287,7 @@ fun SettingsScreen(
                             },
                             modifier = Modifier
                                 .testTag("settings_view_debug")
-                                .clickable { navController.navigate("settings/debug") }
+                                .clickable { navigator.navigate(Route.Settings.Debug) }
                         )
                     }
 
@@ -305,7 +306,7 @@ fun SettingsScreen(
                             },
                             modifier = Modifier
                                 .testTag("settings_view_labs")
-                                .clickable { navController.navigate("labs") }
+                                .clickable { navigator.navigate(Route.Labs) }
                         )
                     }
 
@@ -324,7 +325,7 @@ fun SettingsScreen(
                             },
                             modifier = Modifier
                                 .testTag("settings_view_experiments")
-                                .clickable { navController.navigate("settings/experiments") }
+                                .clickable { navigator.navigate(Route.Settings.Experiments) }
                         )
                     }
 
@@ -350,7 +351,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_changelog")
-                            .clickable { navController.navigate("changelog/latest") }
+                            .clickable { navigator.navigate(Route.Changelog("latest")) }
                     )
                     Spacer(Modifier.height(2.dp))
                     SettingsListItem(
@@ -395,11 +396,7 @@ fun SettingsScreen(
                             .testTag("settings_view_logout")
                             .clickable {
                                 viewModel.logout()
-                                navController.navigate("login/greeting") {
-                                    popUpTo("chat") {
-                                        inclusive = true
-                                    }
-                                }
+                                navigator.resetTo(Route.Login.Greeting)
                             }
                     )
                 }

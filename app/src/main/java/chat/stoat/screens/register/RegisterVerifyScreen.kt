@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.check_mail
 import chat.stoat.shared.resources.instructions_at_mail
@@ -30,7 +30,7 @@ import chat.stoat.shared.resources.verify_then_choose_username
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun RegisterVerifyScreen(navController: NavController, email: String) {
+fun RegisterVerifyScreen(navigator: Navigator, email: String) {
     val intentLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()

@@ -1,5 +1,6 @@
 package chat.stoat.callbacks
 
+import chat.stoat.navigation.Route
 import chat.stoat.screens.chat.ChatRouterDestination
 import kotlinx.coroutines.channels.Channel
 
@@ -11,7 +12,7 @@ sealed class Action {
     data class LinkInfo(val url: String) : Action()
     data class EmoteInfo(val emoteId: String) : Action()
     data class MessageReactionInfo(val messageId: String, val emoji: String) : Action()
-    data class TopNavigate(val route: String) : Action()
+    data class TopNavigate(val route: Route) : Action()
     data class ChatNavigate(val destination: ChatRouterDestination) : Action()
     data class ReportUser(val userId: String) : Action()
     data class ReportMessage(val messageId: String) : Action()

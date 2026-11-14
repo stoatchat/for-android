@@ -57,7 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.createServerRole
 import chat.stoat.api.routes.server.reorderServerRoles
@@ -70,6 +69,8 @@ import chat.stoat.core.model.schemas.Role
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
 import chat.stoat.internals.server.serverRoleCapabilities
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
@@ -194,7 +195,7 @@ private data class RoleEntry(val id: String, val role: Role)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsRoles(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsRolesViewModel = koinViewModel(),
 ) {
@@ -247,7 +248,7 @@ fun ServerSettingsRoles(
     }
 
     if (capabilities?.canOpenRoles == false) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -257,7 +258,7 @@ fun ServerSettingsRoles(
         viewModel.createdRoleId?.let { roleId ->
             showCreateDialog = false
             viewModel.consumeCreatedRole()
-            navController.navigate("settings/server/$serverId/roles/$roleId")
+            navigator.navigate(Route.ServerSettings.RoleEditor(serverId, roleId))
         }
     }
 
@@ -307,11 +308,11 @@ fun ServerSettingsRoles(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_roles)) },
         scrollable = false,
         onNavigateBack = {
-            if (!viewModel.creating && viewModel.reorderingRoleId == null) navController.popBackStack()
+            if (!viewModel.creating && viewModel.reorderingRoleId == null) navigator.popBackStack()
         },
         floatingActionButton = {
             if (capabilities?.canManageRoles == true) {
@@ -443,7 +444,7 @@ fun ServerSettingsRoles(
                         canMoveUp = canMoveUp,
                         canMoveDown = canMoveDown,
                         onClick = {
-                            navController.navigate("settings/server/$serverId/roles/${entry.id}")
+                            navigator.navigate(Route.ServerSettings.RoleEditor(serverId, entry.id))
                         },
                         onMoveUp = {
                             val previousOrder = displayedEntries.map(RoleEntry::id)
@@ -486,7 +487,7 @@ fun ServerSettingsRoles(
                 }
                 Surface(
                     onClick = {
-                        navController.navigate("settings/server/$serverId/roles/default")
+                        navigator.navigate(Route.ServerSettings.RoleEditor(serverId, "default"))
                     },
                     enabled = capabilities.canManagePermissions &&
                             viewModel.reorderingRoleId == null,

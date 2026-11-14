@@ -21,7 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.next
@@ -30,7 +31,7 @@ import chat.stoat.shared.resources.register_instructions
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun RegisterGreetingScreen(navController: NavController) {
+fun RegisterGreetingScreen(navigator: Navigator) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +77,7 @@ fun RegisterGreetingScreen(navController: NavController) {
 
         Row {
             TextButton(onClick = {
-                navController.popBackStack()
+                navigator.popBackStack()
             }) {
                 Text(text = stringResource(Res.string.back))
             }
@@ -84,7 +85,7 @@ fun RegisterGreetingScreen(navController: NavController) {
             Spacer(modifier = Modifier.width(10.dp))
 
             Button(onClick = {
-                navController.navigate("register/details")
+                navigator.navigate(Route.Register.Details)
             }) {
                 Text(text = stringResource(Res.string.next))
             }

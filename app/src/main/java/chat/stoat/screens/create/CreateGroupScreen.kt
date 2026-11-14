@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.routes.channel.MAX_ADDABLE_PEOPLE_IN_GROUP
@@ -46,6 +45,7 @@ import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTweenFloat
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.create_group
@@ -106,7 +106,7 @@ class CreateGroupScreenViewModel : ViewModel() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateGroupScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: CreateGroupScreenViewModel = viewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -125,7 +125,7 @@ fun CreateGroupScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),
@@ -141,7 +141,7 @@ fun CreateGroupScreen(
                 enter = scaleIn(animationSpec = StoatTweenFloat),
                 exit = scaleOut(animationSpec = StoatTweenFloat)
             ) {
-                FloatingActionButton(onClick = { viewModel.createGroup(navController::popBackStack) }) {
+                FloatingActionButton(onClick = { viewModel.createGroup(navigator::popBackStack) }) {
                     Icon(
                         painter = StoatIcons.Confirm.painter(),
                         contentDescription = stringResource(Res.string.create_group_action)

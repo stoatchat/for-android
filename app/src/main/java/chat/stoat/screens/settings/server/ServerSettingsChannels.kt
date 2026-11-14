@@ -73,7 +73,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.ULID
@@ -94,6 +93,8 @@ import chat.stoat.internals.server.flattenChannelSections
 import chat.stoat.internals.server.moveServerChannelEntry
 import chat.stoat.internals.server.serverChannelSections
 import chat.stoat.internals.server.toServerCategories
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
@@ -339,7 +340,7 @@ private enum class ChannelDialogType {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsChannels(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsChannelsViewModel = koinViewModel()
 ) {
@@ -417,7 +418,7 @@ fun ServerSettingsChannels(
     }
 
     if (permissions != null && !canManage) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -428,7 +429,7 @@ fun ServerSettingsChannels(
             showCreateChannel = false
             showAddSheet = false
             viewModel.consumeCreatedChannel()
-            navController.navigate("settings/channel/$channelId")
+            navigator.navigate(Route.ChannelSettings.Home(channelId))
         }
     }
 
@@ -677,10 +678,10 @@ fun ServerSettingsChannels(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_channels)) },
         scrollable = false,
-        onNavigateBack = { if (!viewModel.busy) navController.popBackStack() },
+        onNavigateBack = { if (!viewModel.busy) navigator.popBackStack() },
         floatingActionButton = {
             if (canManage) {
                 FloatingActionButton(
@@ -948,9 +949,7 @@ fun ServerSettingsChannels(
                                     .first { it.id == entry.sectionId }
                                     .channelIds.lastOrNull() == entry.channelId,
                                 onClick = {
-                                    navController.navigate(
-                                        "settings/channel/${entry.channelId}"
-                                    )
+                                    navigator.navigate(Route.ChannelSettings.Home(entry.channelId))
                                 },
                                 onMoveUp = moveUp
                                     .takeIf { it != displayedSections }

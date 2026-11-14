@@ -66,7 +66,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.routes.account.MfaSettings
 import chat.stoat.api.routes.account.disableTotp
 import chat.stoat.api.routes.account.enableTotp
@@ -86,6 +85,7 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
 import chat.stoat.internals.Platform
+import chat.stoat.navigation.Navigator
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.settings.dsl.SettingsPage
@@ -235,7 +235,7 @@ class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MfaSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: MfaSettingsScreenViewModel = koinViewModel()
 ) {
     val uriHandler = LocalUriHandler.current
@@ -260,7 +260,7 @@ fun MfaSettingsScreen(
     }
 
     SettingsPage(
-        navController,
+        navigator,
         title = { Text(stringResource(Res.string.settings_mfa)) }
     ) {
         LaunchedEffect(viewModel.snackbarMessage) {

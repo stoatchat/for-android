@@ -42,6 +42,7 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.Platform
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.availableServerSettingsOptions
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
@@ -307,7 +308,7 @@ fun ServerContextSheet(
                 coroutineScope.launch {
                     delay(100.milliseconds)
                     ActionChannel.send(
-                        Action.TopNavigate("settings/server/$serverId/identity")
+                        Action.TopNavigate(Route.ServerSettings.Identity(serverId))
                     )
                 }
             },
@@ -330,7 +331,7 @@ fun ServerContextSheet(
                     }
                     coroutineScope.launch {
                         delay(100.milliseconds)
-                        ActionChannel.send(Action.TopNavigate("settings/server/$serverId"))
+                        ActionChannel.send(Action.TopNavigate(Route.ServerSettings.Home(serverId)))
                     }
                 },
             )

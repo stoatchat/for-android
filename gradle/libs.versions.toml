@@ -7,7 +7,7 @@ targetSdk = "37"
 kotlin = "2.3.10"
 kotlin-serialization = "1.10.0"
 ksp = "2.3.6"
-agp = "9.3.2"
+agp = "9.5.1"
 google-services = "4.4.4"
 sentry = "8.41.0" # This is separate from the gradle plugin version which is defined ad hoc below
 sqldelight = "2.3.2"
@@ -15,6 +15,8 @@ compose-bom = "2026.09.00"
 compose-multiplatform = "1.13.0-beta02"
 material3 = "1.5.0-rc01"
 lifecycle = "2.10.0"
+navigation3 = "1.2.0"
+lifecycle-navigation3 = "2.11.0"
 accompanist = "0.37.3"
 ktor = "3.4.1"
 glide = "5.0.5"
@@ -82,7 +84,10 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.9.8" }
+navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycle-navigation3" }
+kotlin-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlin-serialization" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compose = { module = "com.github.bumptech.glide:compose", version = "1.0.0-beta01" }
 glide-ksp = { module = "com.github.bumptech.glide:ksp", version.ref = "glide" }
@@ -122,7 +127,6 @@ livekit-android-camerax = { module = "io.livekit:livekit-android-camerax", versi
 livekit-android-compose = { module = "io.livekit:livekit-android-compose-components", version.ref = "livekit-compose" }
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 multiplatform-markdown-android = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown" }

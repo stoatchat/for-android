@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.account.EmailPasswordAssessment
 import chat.stoat.api.routes.account.negotiateAuthentication
@@ -53,6 +52,8 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.model.data.STOAT_WEB_APP
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
@@ -160,7 +161,7 @@ class LoginViewModel(
 }
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinViewModel()) {
+fun LoginScreen(navigator: Navigator, viewModel: LoginViewModel = koinViewModel()) {
     val passwordTextFieldState = rememberTextFieldState()
     LaunchedEffect(passwordTextFieldState.text) {
         viewModel.setPassword(passwordTextFieldState.text.toString())
@@ -171,25 +172,20 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
     LaunchedEffect(viewModel.navigateTo) {
         when (viewModel.navigateTo) {
             "mfa" -> {
-                navController.navigate(
-                    "login/mfa/${viewModel.mfaResponse!!.mfaSpec!!.ticket}/${
-                        viewModel.mfaResponse!!.mfaSpec!!.allowedMethods.joinToString(
-                            ","
-                        )
-                    }"
+                navigator.navigate(
+                    Route.Login.Mfa(
+                        ticket = viewModel.mfaResponse!!.mfaSpec!!.ticket,
+                        allowedAuthTypes = viewModel.mfaResponse!!.mfaSpec!!.allowedMethods,
+                    )
                 )
             }
 
             "home" -> {
-                navController.navigate("chat") {
-                    popUpTo("login/greeting") { inclusive = true }
-                }
+                navigator.resetTo(Route.Chat)
             }
 
             "onboarding" -> {
-                navController.navigate("register/onboarding") {
-                    popUpTo("login/greeting") { inclusive = true }
-                }
+                navigator.resetTo(Route.Register.Onboarding)
             }
         }
         if (viewModel.navigateTo != null) {
@@ -317,7 +313,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = koinVi
 
             Row {
                 TextButton(onClick = {
-                    navController.popBackStack()
+                    navigator.popBackStack()
                 }) {
                     Text(text = stringResource(Res.string.back))
                 }

@@ -50,7 +50,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
@@ -63,6 +62,7 @@ import chat.stoat.core.model.schemas.BanListResult
 import chat.stoat.core.model.schemas.BannedUser
 import chat.stoat.core.model.schemas.ServerBan
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.cancel
@@ -185,7 +185,7 @@ private fun BanListResult.entries(): List<BanListEntry> {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsBans(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsBansViewModel = koinViewModel(),
 ) {
@@ -199,7 +199,7 @@ fun ServerSettingsBans(
         permissions != null &&
         permissions?.hasPermission(PermissionBit.BanMembers) == false
     ) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -249,11 +249,11 @@ fun ServerSettingsBans(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_bans)) },
         scrollable = false,
         onNavigateBack = {
-            if (viewModel.unbanningUserId == null) navController.popBackStack()
+            if (viewModel.unbanningUserId == null) navigator.popBackStack()
         },
     ) {
         val unbannedMessage = stringResource(Res.string.server_settings_bans_unbanned)

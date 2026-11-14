@@ -47,7 +47,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.patchChannel
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
@@ -58,6 +57,7 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Channel
+import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.channel_settings_overview
@@ -219,7 +219,7 @@ class ChannelSettingsOverviewViewModel(val context: Application) :
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelSettingsOverview(
-    navController: NavController,
+    navigator: Navigator,
     channelId: String,
     viewModel: ChannelSettingsOverviewViewModel = koinViewModel()
 ) {
@@ -305,7 +305,7 @@ fun ChannelSettingsOverview(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),

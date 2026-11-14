@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
@@ -78,6 +77,7 @@ import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerInvite
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.Navigator
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
@@ -271,7 +271,7 @@ class ServerSettingsInvitesViewModel(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ServerSettingsInvites(
-    navController: NavController,
+    navigator: Navigator,
     serverId: String,
     viewModel: ServerSettingsInvitesViewModel = koinViewModel(),
 ) {
@@ -288,7 +288,7 @@ fun ServerSettingsInvites(
         permissions != null &&
         permissions?.hasPermission(PermissionBit.ManageServer) == false
     ) {
-        LaunchedEffect(serverId) { navController.popBackStack() }
+        LaunchedEffect(serverId) { navigator.popBackStack() }
         return
     }
 
@@ -376,12 +376,12 @@ fun ServerSettingsInvites(
     }
 
     SettingsPage(
-        navController = navController,
+        navigator = navigator,
         title = { Text(stringResource(Res.string.server_settings_invites)) },
         scrollable = false,
         onNavigateBack = {
             if (!viewModel.creating && viewModel.deletingInviteCode == null) {
-                navController.popBackStack()
+                navigator.popBackStack()
             }
         },
         floatingActionButton = {

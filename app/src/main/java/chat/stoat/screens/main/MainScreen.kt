@@ -13,9 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.Navigator
 import chat.stoat.screens.chat.views.OverviewScreen
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.main_tab_communities
@@ -30,7 +30,7 @@ enum class MainScreenTab {
 }
 
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navigator: Navigator) {
     var currentTab by rememberSaveable { mutableStateOf(MainScreenTab.Communities) }
 
     Scaffold(
@@ -91,13 +91,13 @@ fun MainScreen(navController: NavController) {
                 MainScreenTab.Communities -> {}
                 MainScreenTab.Conversations -> {
                     ConversationsScreen(
-                        navController
+                        navigator
                     )
                 }
 
                 MainScreenTab.Overview -> {
                     OverviewScreen(
-                        navController,
+                        navigator,
                         useDrawer = false,
                         onDrawerClicked = {},
                         includePadding = false

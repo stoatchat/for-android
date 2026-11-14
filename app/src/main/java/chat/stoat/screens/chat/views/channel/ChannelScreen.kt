@@ -167,6 +167,7 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.screens.chat.LocalIsConnected
@@ -963,7 +964,7 @@ fun ChannelScreen(
                         IconButton(onClick = {
                             scope.launch {
                                 ActionChannel.send(
-                                    Action.TopNavigate("channel/$channelId/search")
+                                    Action.TopNavigate(Route.Channel.Search(channelId))
                                 )
                             }
                         }) {

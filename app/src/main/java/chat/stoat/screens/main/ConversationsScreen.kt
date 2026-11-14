@@ -25,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import chat.stoat.api.StoatAPI
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -34,6 +33,8 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.Route
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_notes
 import chat.stoat.shared.resources.main_tab_conversations
@@ -43,7 +44,7 @@ import org.jetbrains.compose.resources.stringResource
 // Note - this is not a traditional screen per se, as it is a part of the main screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConversationsScreen(navController: NavController) {
+fun ConversationsScreen(navigator: Navigator) {
     val replyMessageEmptyHasAttachmentsText = stringResource(Res.string.reply_message_empty_has_attachments)
     val dmAbleChannels =
         StoatAPI.channelCache.values
@@ -111,7 +112,7 @@ fun ConversationsScreen(navController: NavController) {
                             }
                         },
                         modifier = Modifier.clickable {
-                            navController.navigate("main/conversation/${notesChannel.id}")
+                            notesChannel.id?.let { navigator.navigate(Route.Main.Conversation(it)) }
                         }
                     ) {
                         Text(stringResource(Res.string.channel_notes))
@@ -123,7 +124,7 @@ fun ConversationsScreen(navController: NavController) {
                 Text(
                     "Conversation $it", modifier = Modifier
                         .clickable {
-                            navController.navigate("main/conversation/${it}")
+                            navigator.navigate(Route.Main.Conversation(it.toString()))
                         }
                         .fillMaxWidth())
             }

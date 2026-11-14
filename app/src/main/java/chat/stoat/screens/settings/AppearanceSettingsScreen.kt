@@ -62,7 +62,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import chat.stoat.api.StoatCbor
 import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
@@ -79,6 +78,7 @@ import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.core.model.settings.Theme
 import chat.stoat.core.model.settings.UserInterfaceFont
 import chat.stoat.internals.extensions.getStringBlocking
+import chat.stoat.navigation.Navigator
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
 import chat.stoat.shared.resources.Res
@@ -253,7 +253,7 @@ class AppearanceSettingsScreenViewModel(val context: Application) : ViewModel() 
 )
 @Composable
 fun AppearanceSettingsScreen(
-    navController: NavController,
+    navigator: Navigator,
     viewModel: AppearanceSettingsScreenViewModel = koinViewModel()
 ) {
     val settingsAppearanceThemeM3dynamicUnsupportedToastText = stringResource(Res.string.settings_appearance_theme_m3dynamic_unsupported_toast)
@@ -342,7 +342,7 @@ fun AppearanceSettingsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.popBackStack()
+                        navigator.popBackStack()
                     }) {
                         Icon(
                             painter = StoatIcons.Back.painter(),
