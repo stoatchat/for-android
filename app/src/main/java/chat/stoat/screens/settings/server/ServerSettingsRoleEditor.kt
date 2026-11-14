@@ -2,7 +2,6 @@ package chat.stoat.screens.settings.server
 
 import android.app.Application
 import android.net.Uri
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -94,6 +93,7 @@ import chat.stoat.internals.server.overrideFor
 import chat.stoat.internals.server.serverRoleCapabilities
 import chat.stoat.internals.server.withOverride
 import chat.stoat.internals.server.withPermission
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res

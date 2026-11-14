@@ -2,7 +2,6 @@ package chat.stoat.screens.settings.server
 
 import android.app.Application
 import android.content.ClipData
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -77,6 +76,7 @@ import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerInvite
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage

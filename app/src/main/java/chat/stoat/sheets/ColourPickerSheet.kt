@@ -2,7 +2,6 @@ package chat.stoat.sheets
 
 import android.graphics.RuntimeShader
 import android.os.Build
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -58,6 +57,7 @@ import chat.stoat.core.designsystem.components.ControlledSlider
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.TailwindColourScheme
+import chat.stoat.navigation.BackHandler
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.colour_picker_alpha
 import chat.stoat.shared.resources.colour_picker_apply

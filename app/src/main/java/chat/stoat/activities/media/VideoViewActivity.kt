@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -95,6 +94,7 @@ import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.BackHandler
 import chat.stoat.platform.StoatAppTheme
 import chat.stoat.providers.getAttachmentContentUri
 import chat.stoat.shared.resources.Res

@@ -2,7 +2,6 @@ package chat.stoat.screens.settings.server
 
 import android.app.Application
 import android.net.Uri
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -58,6 +57,7 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.ServerIdentityCapabilities
 import chat.stoat.internals.server.serverIdentityCapabilities
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res

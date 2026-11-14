@@ -1,7 +1,6 @@
 package chat.stoat.screens.settings.server
 
 import android.app.Application
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -93,6 +92,7 @@ import chat.stoat.internals.server.flattenChannelSections
 import chat.stoat.internals.server.moveServerChannelEntry
 import chat.stoat.internals.server.serverChannelSections
 import chat.stoat.internals.server.toServerCategories
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.screens.settings.SettingsIcon

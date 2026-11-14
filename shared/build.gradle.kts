@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.compose.multiplatform.ui.tooling.preview)
             implementation(libs.shimmer)
             api(libs.navigation3.runtime)
+            implementation(libs.navigationevent.compose)
             implementation(libs.kotlin.serialization.core)
         }
 

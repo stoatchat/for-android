@@ -10,7 +10,6 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -167,6 +166,7 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show

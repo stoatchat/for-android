@@ -1,6 +1,5 @@
 package chat.stoat.screens.chat.views
 
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -101,6 +100,7 @@ import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Metadata
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.platform.LocalToaster

@@ -1,7 +1,6 @@
 package chat.stoat.screens.settings.server
 
 import android.app.Application
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,6 +61,7 @@ import chat.stoat.core.model.schemas.BanListResult
 import chat.stoat.core.model.schemas.BannedUser
 import chat.stoat.core.model.schemas.ServerBan
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res

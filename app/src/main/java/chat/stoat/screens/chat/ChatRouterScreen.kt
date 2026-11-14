@@ -6,7 +6,6 @@ import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityManager
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -85,6 +84,7 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.dialogs.NotificationRationaleDialog
 import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.zero
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.persistence.KVStorage

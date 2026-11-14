@@ -10,7 +10,6 @@ import android.os.Parcelable
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -64,6 +63,7 @@ import chat.stoat.composables.screens.chat.drawer.ChannelItemIconType
 import chat.stoat.composables.screens.chat.drawer.DMOrGroupItem
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.getStringBlocking
+import chat.stoat.navigation.BackHandler
 import chat.stoat.persistence.KVStorage
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.StoatAppTheme

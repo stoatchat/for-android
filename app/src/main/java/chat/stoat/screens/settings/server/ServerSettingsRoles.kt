@@ -1,7 +1,6 @@
 package chat.stoat.screens.settings.server
 
 import android.app.Application
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -69,6 +68,7 @@ import chat.stoat.core.model.schemas.Role
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.internals.server.canManageServerRole
 import chat.stoat.internals.server.serverRoleCapabilities
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.settings.dsl.SettingsPage

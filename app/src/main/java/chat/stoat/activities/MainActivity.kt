@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
@@ -93,6 +92,7 @@ import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.material.EasingTokens
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.navigation.RouteSavedStateConfiguration

@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.format.Formatter
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -76,6 +75,7 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Emoji
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
+import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage

@@ -118,19 +118,13 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            "Hey, this is kinda secret 🤫",
+                            "Internal testing",
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center
                         )
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            "Remember, everything you see here can be broken and is not guaranteed to work.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            "Don't tell anyone about anything either, okay?",
+                            "Mockups and sandboxes for work in progress. Things here may be incomplete or broken.",
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center
                         )
