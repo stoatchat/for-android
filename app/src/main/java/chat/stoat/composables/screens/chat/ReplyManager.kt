@@ -36,8 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.activities.StoatTweenSize
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.routes.channel.SendMessageReply
@@ -47,6 +45,8 @@ import chat.stoat.composables.chat.authorName
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
+import chat.stoat.core.designsystem.theme.StoatTweenSize
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.remove_reply_alt

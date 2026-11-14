@@ -21,10 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import chat.stoat.activities.StoatTweenColour
-import chat.stoat.activities.StoatTweenDp
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenColour
+import chat.stoat.core.designsystem.theme.StoatTweenDp
 import chat.stoat.internals.server.PermissionOverrideValue
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.permission_allow

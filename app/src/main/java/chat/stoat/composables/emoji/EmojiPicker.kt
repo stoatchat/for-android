@@ -58,13 +58,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.components.IconPlaceholder
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.internals.Category
 import chat.stoat.internals.EmojiImpl

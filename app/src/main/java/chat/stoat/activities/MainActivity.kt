@@ -18,8 +18,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseInOutExpo
-import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -58,9 +56,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModel
@@ -82,6 +77,9 @@ import chat.stoat.c2dm.NotificationDeepLink
 import chat.stoat.composables.generic.HealthAlert
 import chat.stoat.composables.voice.VoicePermissionSwitch
 import chat.stoat.composables.voice.VoiceSheet
+import chat.stoat.core.designsystem.theme.NavTweenFloat
+import chat.stoat.core.designsystem.theme.NavTweenInt
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.core.model.schemas.HealthNotice
 import chat.stoat.internals.StoatWebLink
 import chat.stoat.internals.extensions.getStringBlocking
@@ -462,14 +460,6 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-val StoatTweenInt: FiniteAnimationSpec<IntOffset> = tween(400, easing = EaseInOutExpo)
-val StoatTweenSize: FiniteAnimationSpec<IntSize> = tween(400, easing = EaseInOutExpo)
-val StoatTweenFloat: FiniteAnimationSpec<Float> = tween(400, easing = EaseInOutExpo)
-val StoatTweenDp: FiniteAnimationSpec<Dp> = tween(400, easing = EaseInOutExpo)
-val StoatTweenColour: FiniteAnimationSpec<Color> = tween(400, easing = EaseInOutExpo)
-
-val NavTweenInt: FiniteAnimationSpec<IntOffset> = tween(350, easing = EaseInOutExpo)
-val NavTweenFloat: FiniteAnimationSpec<Float> = tween(350, easing = EaseInOutExpo)
 
 // This composable handles the main compose entrypoint of the app, provides the main navigation
 // graph, and handles the animation and layout for the voice chat UI.

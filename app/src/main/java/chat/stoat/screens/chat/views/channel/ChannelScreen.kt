@@ -129,7 +129,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.documentfile.provider.DocumentFile
 import chat.stoat.StoatApplication
-import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.internals.PermissionBit
@@ -163,6 +162,7 @@ import chat.stoat.composables.skeletons.MessageSkeletonVariant
 import chat.stoat.composables.voice.VoiceCallBanner
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.extensions.rememberChannelPermissions

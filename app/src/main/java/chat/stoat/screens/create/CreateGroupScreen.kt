@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.routes.channel.MAX_ADDABLE_PEOPLE_IN_GROUP
@@ -46,6 +45,7 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.composables.chat.MemberListItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
 import chat.stoat.shared.resources.create_group

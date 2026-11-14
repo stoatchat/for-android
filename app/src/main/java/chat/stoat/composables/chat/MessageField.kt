@@ -113,13 +113,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import chat.stoat.activities.StoatTweenDp
 import chat.stoat.api.settings.Experiments
 import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.screens.chat.ChannelIcon
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenDp
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.core.model.schemas.Member

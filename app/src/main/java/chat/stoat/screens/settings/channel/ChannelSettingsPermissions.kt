@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import chat.stoat.activities.StoatTweenFloat
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
 import chat.stoat.api.internals.PermissionBit
@@ -55,6 +54,7 @@ import chat.stoat.composables.generic.PermissionOverridePicker
 import chat.stoat.composables.server.RoleColourIndicator
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.PermissionDescription
 import chat.stoat.core.model.schemas.Role

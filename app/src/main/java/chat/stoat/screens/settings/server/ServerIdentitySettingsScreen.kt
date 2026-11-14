@@ -43,8 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import chat.stoat.activities.StoatTweenFloat
-import chat.stoat.activities.StoatTweenSize
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.fetchMember
@@ -53,6 +51,8 @@ import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.StoatTweenFloat
+import chat.stoat.core.designsystem.theme.StoatTweenSize
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Member
 import chat.stoat.core.model.schemas.User

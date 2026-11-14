@@ -166,14 +166,6 @@ fun LabsHomeScreen(navController: NavController, topNav: NavController) {
                         HorizontalDivider()
                         ListItem(
                             modifier = Modifier.clickable {
-                                navController.navigate("sandboxes/gradienteditor")
-                            }
-                        ) {
-                            Text("Gradient Editor")
-                        }
-                        HorizontalDivider()
-                        ListItem(
-                            modifier = Modifier.clickable {
                                 navController.navigate("sandboxes/newcard")
                             }
                         ) {
