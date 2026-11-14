@@ -1373,4 +1373,6 @@
     <string name="server_context_sheet_actions_add_to_folder">Add to folder</string>
     <string name="server_context_sheet_actions_new_folder">New folder</string>
     <string name="server_context_sheet_actions_remove_from_folder">Remove from folder</string>
+
+    <string name="list_detail_placeholder">Select an item from the list</string>
 </resources>

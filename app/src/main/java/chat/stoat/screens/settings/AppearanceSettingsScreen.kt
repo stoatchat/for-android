@@ -78,6 +78,7 @@ import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.core.model.settings.Theme
 import chat.stoat.core.model.settings.UserInterfaceFont
 import chat.stoat.internals.extensions.getStringBlocking
+import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.show
@@ -341,13 +342,15 @@ fun AppearanceSettingsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navigator.popBackStack()
-                    }) {
-                        Icon(
-                            painter = StoatIcons.Back.painter(),
-                            contentDescription = stringResource(Res.string.back)
-                        )
+                    if (!LocalDetailBesideList.current) {
+                        IconButton(onClick = {
+                            navigator.popBackStack()
+                        }) {
+                            Icon(
+                                painter = StoatIcons.Back.painter(),
+                                contentDescription = stringResource(Res.string.back)
+                            )
+                        }
                     }
                 },
             )

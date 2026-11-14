@@ -35,6 +35,7 @@ import chat.stoat.R
 import chat.stoat.composables.screens.settings.AttributionItem
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
@@ -162,13 +163,15 @@ fun AttributionScreen(navigator: Navigator) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        navigator.popBackStack()
-                    }) {
-                        Icon(
-                            painter = StoatIcons.Back.painter(),
-                            contentDescription = stringResource(Res.string.back)
-                        )
+                    if (!LocalDetailBesideList.current) {
+                        IconButton(onClick = {
+                            navigator.popBackStack()
+                        }) {
+                            Icon(
+                                painter = StoatIcons.Back.painter(),
+                                contentDescription = stringResource(Res.string.back)
+                            )
+                        }
                     }
                 },
             )

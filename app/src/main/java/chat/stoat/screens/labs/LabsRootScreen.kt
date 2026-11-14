@@ -9,12 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import chat.stoat.api.settings.FeatureFlags
 import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.listDetail
+import chat.stoat.navigation.rememberListDetailSceneStrategy
 import chat.stoat.screens.labs.ui.mockups.NewLoginExperienceMockup
 import chat.stoat.screens.labs.ui.sandbox.NewCardSandboxScreen
 import chat.stoat.screens.labs.ui.sandbox.SettingsDslSandbox
@@ -69,12 +70,15 @@ fun LabsRootScreen(topNav: Navigator) {
             NavDisplay(
                 backStack = labsBackStack,
                 onBack = { labsNav.popBackStack() },
+                sceneStrategies = listOf(rememberListDetailSceneStrategy(labsBackStack)),
                 entryProvider = entryProvider {
-                    entry<LabsRoute.Home> { LabsHomeScreen(labsNav, topNav) }
-                    entry<LabsRoute.NewLoginMockup> { NewLoginExperienceMockup(labsNav) }
-                    entry<LabsRoute.SettingsDslSandbox> { SettingsDslSandbox(labsNav) }
-                    entry<LabsRoute.NewCardSandbox> { NewCardSandboxScreen(labsNav) }
-                    entry<LabsRoute.TelecomSandbox> { TelecomSandbox(labsNav) }
+                    listDetail(LabsRoute.Home, labsNav) {
+                        list<LabsRoute.Home> { _, nav -> LabsHomeScreen(nav, topNav) }
+                        detail<LabsRoute.NewLoginMockup> { _, nav -> NewLoginExperienceMockup(nav) }
+                        detail<LabsRoute.SettingsDslSandbox> { _, nav -> SettingsDslSandbox(nav) }
+                        detail<LabsRoute.NewCardSandbox> { _, nav -> NewCardSandboxScreen(nav) }
+                        detail<LabsRoute.TelecomSandbox> { _, nav -> TelecomSandbox(nav) }
+                    }
                 }
             )
         }

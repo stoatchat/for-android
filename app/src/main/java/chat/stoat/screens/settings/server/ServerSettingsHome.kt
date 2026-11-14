@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.server.leaveOrDeleteServer
 import chat.stoat.callbacks.Action
@@ -39,6 +40,7 @@ import chat.stoat.internals.server.ServerSettingsOption
 import chat.stoat.internals.server.availableServerSettingsOptions
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
+import chat.stoat.navigation.listDetailItem
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
@@ -195,21 +197,16 @@ fun ServerSettingsHome(
             ) && (it != ServerSettingsOption.Members || MEMBERS_PANEL_ACCESSIBLE)
         }
 
+        val openOption: (ServerSettingsOption) -> Unit = { option ->
+            option.route(serverId)?.let(navigator::navigate)
+        }
+
         if (overviewOptions.isNotEmpty()) {
             ServerSettingsSection(
                 title = server.name ?: stringResource(Res.string.server_settings),
                 options = overviewOptions,
-                onOptionSelected = { option ->
-                    when (option) {
-                        ServerSettingsOption.Overview ->
-                            navigator.navigate(Route.ServerSettings.Overview(serverId))
-
-                        ServerSettingsOption.Channels ->
-                            navigator.navigate(Route.ServerSettings.Channels(serverId))
-
-                        else -> Unit
-                    }
-                },
+                serverId = serverId,
+                onOptionSelected = openOption,
             )
         }
 
@@ -217,11 +214,8 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(Res.string.server_settings_category_customisation),
                 options = customisationOptions,
-                onOptionSelected = { option ->
-                    if (option == ServerSettingsOption.Emojis) {
-                        navigator.navigate(Route.ServerSettings.Emojis(serverId))
-                    }
-                },
+                serverId = serverId,
+                onOptionSelected = openOption,
             )
         }
 
@@ -229,20 +223,8 @@ fun ServerSettingsHome(
             ServerSettingsSection(
                 title = stringResource(Res.string.server_settings_category_user_management),
                 options = userManagementOptions,
-                onOptionSelected = { option ->
-                    when (option) {
-                        ServerSettingsOption.Invites ->
-                            navigator.navigate(Route.ServerSettings.Invites(serverId))
-
-                        ServerSettingsOption.Bans ->
-                            navigator.navigate(Route.ServerSettings.Bans(serverId))
-
-                        ServerSettingsOption.Roles ->
-                            navigator.navigate(Route.ServerSettings.Roles(serverId))
-
-                        else -> Unit
-                    }
-                },
+                serverId = serverId,
+                onOptionSelected = openOption,
             )
         }
 
@@ -263,6 +245,7 @@ fun ServerSettingsHome(
 private fun ServerSettingsSection(
     title: String,
     options: List<ServerSettingsOption>,
+    serverId: String,
     onOptionSelected: (ServerSettingsOption) -> Unit,
 ) {
     ListHeader { Text(title) }
@@ -272,6 +255,7 @@ private fun ServerSettingsSection(
             first = index == 0,
             last = index == options.lastIndex,
             onClick = { onOptionSelected(option) },
+            modifier = option.route(serverId)?.let { Modifier.listDetailItem(it) } ?: Modifier,
         )
         if (index != options.lastIndex) {
             Spacer(Modifier.height(2.dp))
@@ -285,6 +269,7 @@ private fun ServerSettingsOptionRow(
     first: Boolean,
     last: Boolean,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val dangerous = option == ServerSettingsOption.DeleteServer
 
@@ -309,8 +294,18 @@ private fun ServerSettingsOptionRow(
                 )
             }
         },
-        modifier = Modifier.clickable(onClick = onClick),
+        modifier = modifier.clickable(onClick = onClick),
     )
+}
+
+private fun ServerSettingsOption.route(serverId: String): NavKey? = when (this) {
+    ServerSettingsOption.Overview -> Route.ServerSettings.Overview(serverId)
+    ServerSettingsOption.Channels -> Route.ServerSettings.Channels(serverId)
+    ServerSettingsOption.Emojis -> Route.ServerSettings.Emojis(serverId)
+    ServerSettingsOption.Roles -> Route.ServerSettings.Roles(serverId)
+    ServerSettingsOption.Invites -> Route.ServerSettings.Invites(serverId)
+    ServerSettingsOption.Bans -> Route.ServerSettings.Bans(serverId)
+    ServerSettingsOption.Members, ServerSettingsOption.DeleteServer -> null
 }
 
 private val ServerSettingsOption.stringResource: StringResource

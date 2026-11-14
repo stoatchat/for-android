@@ -142,6 +142,7 @@ import chat.stoat.core.designsystem.resources.ic_visibility_off_24dp
 import chat.stoat.core.designsystem.resources.ic_voice_chat_24dp
 import chat.stoat.core.designsystem.resources.ic_volume_up_24dp
 import chat.stoat.core.designsystem.resources.ic_waving_hand_24dp
+import chat.stoat.core.designsystem.resources.ic_web_traffic_24dp
 import chat.stoat.core.designsystem.resources.ic_webhook_24dp
 import chat.stoat.core.designsystem.resources.ic_wifi_tethering_24dp
 import chat.stoat.core.designsystem.resources.ic_wifi_tethering_error_24dp
@@ -193,6 +194,7 @@ object StoatIcons {
     val Channels = StoatIcon(Res.drawable.ic_grid_3x3_24dp)
     val ChatSettings = StoatIcon(Res.drawable.ic_chat_24dp)
     val ClearSearch = StoatIcon(Res.drawable.ic_close_24dp)
+    val Click = StoatIcon(Res.drawable.ic_web_traffic_24dp)
     val CloseSkinToneMenu = StoatIcon(Res.drawable.ic_keyboard_arrow_right_24dp)
     val Collapse = StoatIcon(Res.drawable.ic_keyboard_arrow_up_24dp)
     val Confirm = StoatIcon(Res.drawable.ic_check_24dp)

@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.internals.extensions.getSupportedLocales
+import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
@@ -79,14 +80,16 @@ fun LanguagePickerSettingsScreen(
                     )
                 },
                 navigationIcon = {
-                    navigator?.let {
-                        IconButton(onClick = {
-                            navigator.popBackStack()
-                        }) {
-                            Icon(
-                                painter = StoatIcons.Back.painter(),
-                                contentDescription = stringResource(Res.string.back)
-                            )
+                    if (!LocalDetailBesideList.current) {
+                        navigator?.let {
+                            IconButton(onClick = {
+                                navigator.popBackStack()
+                            }) {
+                                Icon(
+                                    painter = StoatIcons.Back.painter(),
+                                    contentDescription = stringResource(Res.string.back)
+                                )
+                            }
                         }
                     }
                 },

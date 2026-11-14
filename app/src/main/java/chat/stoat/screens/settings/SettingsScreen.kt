@@ -42,6 +42,7 @@ import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
+import chat.stoat.navigation.listDetailItem
 import chat.stoat.persistence.KVStorage
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.about
@@ -143,6 +144,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_account")
+                            .listDetailItem(Route.Settings.Account)
                             .clickable { navigator.navigate(Route.Settings.Account) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -158,6 +160,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_profile")
+                            .listDetailItem(Route.Settings.Profile)
                             .clickable { navigator.navigate(Route.Settings.Profile) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -174,6 +177,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_sessions")
+                            .listDetailItem(Route.Settings.Sessions)
                             .clickable { navigator.navigate(Route.Settings.Sessions) }
                     )
 
@@ -194,6 +198,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_appearance")
+                            .listDetailItem(Route.Settings.Appearance)
                             .clickable { navigator.navigate(Route.Settings.Appearance) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -209,6 +214,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_language")
+                            .listDetailItem(Route.Settings.Language)
                             .clickable { navigator.navigate(Route.Settings.Language) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -224,6 +230,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_chat")
+                            .listDetailItem(Route.Settings.Chat)
                             .clickable { navigator.navigate(Route.Settings.Chat) }
                     )
                     Spacer(Modifier.height(2.dp))
@@ -240,6 +247,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_notifications")
+                            .listDetailItem(Route.Settings.Notifications)
                             .clickable { navigator.navigate(Route.Settings.Notifications) }
                     )
 
@@ -269,6 +277,7 @@ fun SettingsScreen(
                         },
                         modifier = Modifier
                             .testTag("settings_view_about")
+                            .listDetailItem(Route.About.Home)
                             .clickable { navigator.navigate(Route.About.Home) }
                     )
 
@@ -287,6 +296,7 @@ fun SettingsScreen(
                             },
                             modifier = Modifier
                                 .testTag("settings_view_debug")
+                                .listDetailItem(Route.Settings.Debug)
                                 .clickable { navigator.navigate(Route.Settings.Debug) }
                         )
                     }
@@ -325,6 +335,7 @@ fun SettingsScreen(
                             },
                             modifier = Modifier
                                 .testTag("settings_view_experiments")
+                                .listDetailItem(Route.Settings.Experiments)
                                 .clickable { navigator.navigate(Route.Settings.Experiments) }
                         )
                     }

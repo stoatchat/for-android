@@ -45,6 +45,7 @@ import chat.stoat.core.model.schemas.ChannelType
 import chat.stoat.internals.extensions.rememberChannelPermissions
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
+import chat.stoat.navigation.listDetailItem
 import chat.stoat.screens.settings.SettingsIcon
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.shared.resources.Res
@@ -163,6 +164,7 @@ fun ChannelSettingsHome(navigator: Navigator, channelId: String) {
                             },
                             modifier = Modifier
                                 .testTag("channel_settings_view_overview")
+                                .listDetailItem(Route.ChannelSettings.Overview(channelId))
                                 .clickable {
                                     channel.id?.let { navigator.navigate(Route.ChannelSettings.Overview(it)) }
                                 }
@@ -189,6 +191,7 @@ fun ChannelSettingsHome(navigator: Navigator, channelId: String) {
                             },
                             modifier = Modifier
                                 .testTag("channel_settings_view_permissions")
+                                .listDetailItem(Route.ChannelSettings.Permissions(channelId))
                                 .clickable {
                                     channel.id?.let { navigator.navigate(Route.ChannelSettings.Permissions(it)) }
                                 }

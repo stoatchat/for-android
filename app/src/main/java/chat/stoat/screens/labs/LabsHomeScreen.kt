@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.navigation.Navigator
+import chat.stoat.navigation.listDetailItem
 
 enum class LabsHomeScreenTab {
     Home,
@@ -136,7 +137,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.listDetailItem(LabsRoute.NewLoginMockup).clickable {
                                 navigator.navigate(LabsRoute.NewLoginMockup)
                             }
                         ) {
@@ -151,7 +152,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.listDetailItem(LabsRoute.SettingsDslSandbox).clickable {
                                 navigator.navigate(LabsRoute.SettingsDslSandbox)
                             }
                         ) {
@@ -159,7 +160,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         }
                         HorizontalDivider()
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.listDetailItem(LabsRoute.NewCardSandbox).clickable {
                                 navigator.navigate(LabsRoute.NewCardSandbox)
                             }
                         ) {
@@ -167,7 +168,7 @@ fun LabsHomeScreen(navigator: Navigator, topNav: Navigator) {
                         }
                         HorizontalDivider()
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = Modifier.listDetailItem(LabsRoute.TelecomSandbox).clickable {
                                 navigator.navigate(LabsRoute.TelecomSandbox)
                             }
                         ) {

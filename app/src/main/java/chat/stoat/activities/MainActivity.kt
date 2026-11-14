@@ -93,9 +93,12 @@ import chat.stoat.internals.extensions.getStringBlocking
 import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.material.EasingTokens
 import chat.stoat.navigation.BackHandler
+import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
 import chat.stoat.navigation.RouteSavedStateConfiguration
+import chat.stoat.navigation.listDetail
+import chat.stoat.navigation.rememberListDetailSceneStrategy
 import chat.stoat.persistence.KVStorage
 import chat.stoat.platform.StoatAppTheme
 import chat.stoat.screens.DefaultDestinationScreen
@@ -582,6 +585,7 @@ fun AppEntrypoint(
                     transitionSpec = { forwardEnter() togetherWith forwardExit() },
                     popTransitionSpec = { backEnter() togetherWith backExit() },
                     predictivePopTransitionSpec = { backEnter() togetherWith backExit() },
+                    sceneStrategies = listOf(rememberListDetailSceneStrategy(backStack)),
                     entryProvider = entryProvider {
                         entry<Route.Default> {
                             DefaultDestinationScreen(
@@ -636,46 +640,48 @@ fun AppEntrypoint(
 
                         // This is only the main screen in Polar mode
                         // Otherwise you may be looking for Chat right above
-                        entry<Route.Main.Home>(
-                            metadata = NavDisplay.transitionSpec {
-                                slideInVertically(
-                                    tween(400, easing = EasingTokens.EmphasizedDecelerate)
-                                ) { it / 3 } + fadeIn(StoatTweenFloat) + scaleIn(
-                                    tween(400, easing = EasingTokens.EmphasizedDecelerate),
-                                    initialScale = 0.8f,
-                                    transformOrigin = TransformOrigin.Center
-                                ) togetherWith forwardExit()
+                        listDetail(PaneScene.Main, navigator) {
+                            list<Route.Main.Home>(
+                                metadata = NavDisplay.transitionSpec {
+                                    slideInVertically(
+                                        tween(400, easing = EasingTokens.EmphasizedDecelerate)
+                                    ) { it / 3 } + fadeIn(StoatTweenFloat) + scaleIn(
+                                        tween(400, easing = EasingTokens.EmphasizedDecelerate),
+                                        initialScale = 0.8f,
+                                        transformOrigin = TransformOrigin.Center
+                                    ) togetherWith forwardExit()
+                                }
+                            ) { _, nav ->
+                                MainScreen(nav)
                             }
-                        ) {
-                            MainScreen(navigator)
-                        }
-                        entry<Route.Main.Conversation>(
-                            metadata = NavDisplay.transitionSpec {
-                                slideInHorizontally(
-                                    tween(600, easing = EasingTokens.EmphasizedDecelerate)
-                                ) { it } + fadeIn(StoatTweenFloat) togetherWith forwardExit()
-                            } + NavDisplay.popTransitionSpec {
-                                backEnter() togetherWith conversationExit()
-                            } + NavDisplay.predictivePopTransitionSpec {
-                                backEnter() togetherWith conversationExit()
+                            detail<Route.Main.Conversation>(
+                                metadata = NavDisplay.transitionSpec {
+                                    slideInHorizontally(
+                                        tween(600, easing = EasingTokens.EmphasizedDecelerate)
+                                    ) { it } + fadeIn(StoatTweenFloat) togetherWith forwardExit()
+                                } + NavDisplay.popTransitionSpec {
+                                    backEnter() togetherWith conversationExit()
+                                } + NavDisplay.predictivePopTransitionSpec {
+                                    backEnter() togetherWith conversationExit()
+                                }
+                            ) { key, nav ->
+                                var requestedMessageId by remember { mutableStateOf<String?>(null) }
+                                ResultEffect<ChannelMessageJump> {
+                                    if (it.channelId == key.channelId) requestedMessageId = it.messageId
+                                }
+                                ChannelScreen(
+                                    channelId = key.channelId,
+                                    onToggleDrawer = {},
+                                    useDrawer = false,
+                                    useBackButton = !LocalDetailBesideList.current,
+                                    backButtonAction = {
+                                        nav.popBackStack()
+                                    },
+                                    useChatUI = true,
+                                    requestedMessageId = requestedMessageId,
+                                    onRequestedMessageConsumed = { requestedMessageId = null },
+                                )
                             }
-                        ) { key ->
-                            var requestedMessageId by remember { mutableStateOf<String?>(null) }
-                            ResultEffect<ChannelMessageJump> {
-                                if (it.channelId == key.channelId) requestedMessageId = it.messageId
-                            }
-                            ChannelScreen(
-                                channelId = key.channelId,
-                                onToggleDrawer = {},
-                                useDrawer = false,
-                                useBackButton = true,
-                                backButtonAction = {
-                                    navigator.popBackStack()
-                                },
-                                useChatUI = true,
-                                requestedMessageId = requestedMessageId,
-                                onRequestedMessageConsumed = { requestedMessageId = null },
-                            )
                         }
 
                         entry<Route.CatchUp> { CatchUpScreen(navigator) }
@@ -684,56 +690,52 @@ fun AppEntrypoint(
 
                         entry<Route.Discover> { DiscoverScreen(navigator) }
 
-                        entry<Route.Settings.Home> { SettingsScreen(navigator) }
-                        entry<Route.Settings.Account> { AccountSettingsScreen(navigator) }
-                        entry<Route.Settings.AccountMfa> { MfaSettingsScreen(navigator) }
-                        entry<Route.Settings.Profile> { ProfileSettingsScreen(navigator) }
-                        entry<Route.Settings.Sessions> { SessionSettingsScreen(navigator) }
-                        entry<Route.Settings.Appearance> { AppearanceSettingsScreen(navigator) }
-                        entry<Route.Settings.Chat> { ChatSettingsScreen(navigator) }
-                        entry<Route.Settings.Notifications> { NotificationsSettingsScreen(navigator) }
-                        entry<Route.Settings.Debug> { DebugSettingsScreen(navigator) }
-                        entry<Route.Settings.Experiments> { ExperimentsSettingsScreen(navigator) }
-                        entry<Route.Settings.Language> { LanguagePickerSettingsScreen(navigator) }
-
-                        entry<Route.ChannelSettings.Home> { ChannelSettingsHome(navigator, it.channelId) }
-                        entry<Route.ChannelSettings.Overview> {
-                            ChannelSettingsOverview(navigator, it.channelId)
-                        }
-                        entry<Route.ChannelSettings.Permissions> {
-                            ChannelSettingsPermissions(navigator, it.channelId)
-                        }
-                        entry<Route.ChannelSettings.PermissionEditor> {
-                            ChannelSettingsPermissionEditor(navigator, it.channelId, it.roleId)
+                        listDetail(PaneScene.Settings, navigator) {
+                            list<Route.Settings.Home> { _, nav -> SettingsScreen(nav) }
+                            detail<Route.Settings.Account> { _, nav -> AccountSettingsScreen(nav) }
+                            detail<Route.Settings.Profile> { _, nav -> ProfileSettingsScreen(nav) }
+                            detail<Route.Settings.Sessions> { _, nav -> SessionSettingsScreen(nav) }
+                            detail<Route.Settings.Appearance> { _, nav -> AppearanceSettingsScreen(nav) }
+                            detail<Route.Settings.Language> { _, nav -> LanguagePickerSettingsScreen(nav) }
+                            detail<Route.Settings.Chat> { _, nav -> ChatSettingsScreen(nav) }
+                            detail<Route.Settings.Notifications> { _, nav -> NotificationsSettingsScreen(nav) }
+                            detail<Route.About.Home> { _, nav -> AboutScreen(nav) }
+                            detail<Route.Settings.Debug> { _, nav -> DebugSettingsScreen(nav) }
+                            detail<Route.Settings.Experiments> { _, nav -> ExperimentsSettingsScreen(nav) }
+                            detail<Route.Settings.AccountMfa> { _, nav -> MfaSettingsScreen(nav) }
+                            detail<Route.About.Oss> { _, nav -> AttributionScreen(nav) }
                         }
 
-                        entry<Route.ServerSettings.Home> { ServerSettingsHome(navigator, it.serverId) }
+                        listDetail(PaneScene.ChannelSettings, navigator) {
+                            list<Route.ChannelSettings.Home> { key, nav -> ChannelSettingsHome(nav, key.channelId) }
+                            detail<Route.ChannelSettings.Overview> { key, nav -> ChannelSettingsOverview(nav, key.channelId) }
+                            detail<Route.ChannelSettings.Permissions> { key, nav -> ChannelSettingsPermissions(nav, key.channelId) }
+                            detail<Route.ChannelSettings.PermissionEditor> { key, nav ->
+                                ChannelSettingsPermissionEditor(nav, key.channelId, key.roleId)
+                            }
+                        }
+
+                        listDetail(PaneScene.ServerSettings, navigator) {
+                            list<Route.ServerSettings.Home> { key, nav -> ServerSettingsHome(nav, key.serverId) }
+                            detail<Route.ServerSettings.Overview> { key, nav -> ServerSettingsOverview(nav, key.serverId) }
+                            detail<Route.ServerSettings.Channels> { key, nav -> ServerSettingsChannels(nav, key.serverId) }
+                            detail<Route.ServerSettings.Emojis> { key, nav -> ServerSettingsEmojis(nav, key.serverId) }
+                            detail<Route.ServerSettings.Roles> { key, nav -> ServerSettingsRoles(nav, key.serverId) }
+                            detail<Route.ServerSettings.Invites> { key, nav -> ServerSettingsInvites(nav, key.serverId) }
+                            detail<Route.ServerSettings.Bans> { key, nav -> ServerSettingsBans(nav, key.serverId) }
+                            detail<Route.ServerSettings.RoleEditor> { key, nav ->
+                                ServerSettingsRoleEditor(nav, key.serverId, key.roleId)
+                            }
+                        }
+
                         entry<Route.ServerSettings.Identity> { key ->
                             (key.userId ?: StoatAPI.selfId)?.let { userId ->
                                 ServerIdentitySettingsScreen(navigator, key.serverId, userId)
                             }
                         }
-                        entry<Route.ServerSettings.Overview> {
-                            ServerSettingsOverview(navigator, it.serverId)
-                        }
-                        entry<Route.ServerSettings.Emojis> { ServerSettingsEmojis(navigator, it.serverId) }
-                        entry<Route.ServerSettings.Invites> {
-                            ServerSettingsInvites(navigator, it.serverId)
-                        }
-                        entry<Route.ServerSettings.Bans> { ServerSettingsBans(navigator, it.serverId) }
-                        entry<Route.ServerSettings.Channels> {
-                            ServerSettingsChannels(navigator, it.serverId)
-                        }
-                        entry<Route.ServerSettings.Roles> { ServerSettingsRoles(navigator, it.serverId) }
-                        entry<Route.ServerSettings.RoleEditor> {
-                            ServerSettingsRoleEditor(navigator, it.serverId, it.roleId)
-                        }
 
                         entry<Route.Channel.Pins> { ChannelPinsScreen(navigator, it.channelId) }
                         entry<Route.Channel.Search> { ChannelSearchScreen(navigator, it.channelId) }
-
-                        entry<Route.About.Home> { AboutScreen(navigator) }
-                        entry<Route.About.Oss> { AttributionScreen(navigator) }
 
                         entry<Route.Labs> { LabsRootScreen(navigator) }
 
@@ -811,3 +813,5 @@ private fun backExit() = slideOutHorizontally(NavTweenInt) { it / 2 } + fadeOut(
 private fun conversationExit() =
     slideOutHorizontally(tween(600, easing = EasingTokens.EmphasizedDecelerate)) { it } +
         fadeOut(StoatTweenFloat)
+
+private enum class PaneScene { Main, Settings, ChannelSettings, ServerSettings }
