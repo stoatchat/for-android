@@ -570,7 +570,7 @@ fun ChannelScreen(
     val messageFieldContainerHazeStyle = remember(messageFieldContainerMaterial) {
         messageFieldContainerMaterial.then {
             blurEnabled(true)
-            blurRadius(28.dp)
+            blurRadius(20.dp)
         }
     }
     val messageFieldGlassStyle = remember {
