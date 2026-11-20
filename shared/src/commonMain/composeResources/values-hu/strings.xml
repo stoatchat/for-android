@@ -561,7 +561,6 @@
     <string name="spark_early_access">Üdvözlünk a Korai Hozzáférésben! 🚀</string>
     <string name="spark_early_access_description_1">Te egy vagy a sok közül aki kipróbálhatja a vadiúj Android appunkat. Nagyon örülünk hogy itt vagy!</string>
     <string name="spark_early_access_description_2">Mivel ez csak korai hozzáférés, lehet hogy fogsz találkozni hibákkal. Néha egy-két bug jön szembe, vagy az app összeomlik, ilyesmi furcsaságok. A visszajelzésed segít abban hogy a Revolt fejlődjön.</string>
-    <string name="spark_early_access_description_3">Libabőrösek lettük attól, hogy itt vagy. Alkossunk valami csodálatosat!</string>
     <string name="spark_early_access_cta">Értettem</string>
     <string name="hint_provide_feedback">Imádjuk a visszajelzéseiteket!</string>
     <string name="hint_provide_feedback_description">Ha van bármi visszajelzésed, ötleted, vagy egy hiba amit bejelentenél, ne habozz. Nekünk a Revolt tökéletesítése az első.</string>

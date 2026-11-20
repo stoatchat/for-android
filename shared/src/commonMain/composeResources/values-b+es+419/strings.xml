@@ -432,7 +432,6 @@
     <string name="spark_early_access_cta">Entiendo</string>
     <string name="hint_provide_feedback">¡Nos encanta la retroalimentación!</string>
     <string name="hint_provide_feedback_dismiss">Hecho</string>
-    <string name="spark_early_access_description_3">Estamos encantados de tenerte a bordo. ¡Hagamos algo grande juntos!</string>
     <string name="badge_webhook_alt">Webhook</string>
     <string name="overview_screen_title">Sobre mí</string>
     <string name="overview_screen_error">No se pudo cargar tu vista general</string>
