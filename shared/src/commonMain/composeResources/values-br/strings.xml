@@ -166,4 +166,60 @@
     <string name="server_settings_role_delete_title">Dilemel %1$s ?</string>
     <string name="server_folder_edit_save">Enrollañ</string>
     <string name="server_folder_edit_name">Anv</string>
+    <plurals name="server_settings_bans_count">
+        <item quantity="one">%1$d ezel forbannet</item>
+        <item quantity="two">%1$d ezel forbannet</item>
+        <item quantity="few">%1$d ezel forbannet</item>
+        <item quantity="many">%1$d a izili forbannet</item>
+        <item quantity="other">%1$d ezel forbannet</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">%1$d devezh</item>
+        <item quantity="two">%1$d zevezh</item>
+        <item quantity="few">%1$d devezh</item>
+        <item quantity="many">%1$d a zevezhioù</item>
+        <item quantity="other">%1$d devezh</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$d eurvezh</item>
+        <item quantity="two">%1$d eurvezh</item>
+        <item quantity="few">%1$d eurvezh</item>
+        <item quantity="many">%1$d a eurvezhioù</item>
+        <item quantity="other">%1$d eurvezh</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$d munutenn</item>
+        <item quantity="two">%1$d vunutenn</item>
+        <item quantity="few">%1$d munutenn</item>
+        <item quantity="many">%1$d a munutennoù</item>
+        <item quantity="other">%1$d munutenn</item>
+    </plurals>
+    <plurals name="server_settings_channels_category_count">
+        <item quantity="one">%1$d chadenn</item>
+        <item quantity="two">%1$d chadenn</item>
+        <item quantity="few">%1$d chadenn</item>
+        <item quantity="many">%1$d a chadennoù</item>
+        <item quantity="other">%1$d chadenn</item>
+    </plurals>
+    <plurals name="system_message_call_duration_years">
+        <item quantity="one">%1$d bloavezh</item>
+        <item quantity="two">%1$d vloavezh</item>
+        <item quantity="few">%1$d bloavezh</item>
+        <item quantity="many">%1$d a vloavezhioù</item>
+        <item quantity="other">%1$d bloavezh</item>
+    </plurals>
+    <plurals name="system_message_call_duration_months">
+        <item quantity="one">%1$d mizvezh</item>
+        <item quantity="two">%1$d vizvezh</item>
+        <item quantity="few">%1$d mizvezh</item>
+        <item quantity="many">%1$d a vizvezhioù</item>
+        <item quantity="other">%1$d mizvezh</item>
+    </plurals>
+    <plurals name="system_message_call_duration_days">
+        <item quantity="one">%1$d devezh</item>
+        <item quantity="two">%1$d zevezh</item>
+        <item quantity="few">%1$d devezh</item>
+        <item quantity="many">%1$d a zevezhioù</item>
+        <item quantity="other">%1$d devezh</item>
+    </plurals>
 </resources>
