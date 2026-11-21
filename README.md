@@ -42,6 +42,7 @@ uses [Jetpack Compose](https://developer.android.com/jetpack/compose).
 - [Stoat Development Server](https://app.revolt.chat/invite/API)
 - [Stoat Server](https://app.revolt.chat/invite/Testers)
 - [General Stoat Contribution Guide](https://developers.revolt.chat/contrib.html)
+- [APort Agent Guardrails](https://aport.io) - Pre-action authorization guardrails for AI agents and MCP/tool-use workflows.
 
 ## Quick Start
 
