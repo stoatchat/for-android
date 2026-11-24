@@ -512,7 +512,6 @@
     <string name="notification_channel_group_conversations">Mga conversations</string>
     <string name="notification_channel_group_social">Kaibigan at Sosyal</string>
     <string name="notification_channel_friend_requests">Mga Kahilingan ulang maging kaibigan</string>
-    <string name="spark_early_access_description_3">Kami ay nasasabik na nakasakay ka. Magkasama tayong gumawa ng isang magandang bagay!</string>
     <string name="spark_early_access_cta">Nakuha ko</string>
     <string name="hint_provide_feedback">Gustung-gusto namin ang feedback!</string>
     <string name="hint_provide_feedback_description">Kung ikaw ay mayroong anumang puna, mungkahi, o ulat ng bug, mangyaring ipaalam sa amin. Palagi kaming naghahanap upang mapabuti ang Revolt.</string>
