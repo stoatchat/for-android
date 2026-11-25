@@ -39,6 +39,7 @@ import chat.stoat.api.routes.channel.react
 import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.composables.chat.Message
 import chat.stoat.core.designsystem.components.SheetButton
+import chat.stoat.core.designsystem.components.StoatButtonDefaults
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_WEB_APP
@@ -286,6 +287,7 @@ fun MessageContextSheet(
             },
             confirmButton = {
                 Button(
+                    colors = StoatButtonDefaults.dangerColors(),
                     onClick = {
                         showDeleteMessageConfirmation = false
                         coroutineScope.launch {

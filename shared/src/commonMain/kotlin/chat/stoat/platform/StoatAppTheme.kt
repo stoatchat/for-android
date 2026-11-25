@@ -1,5 +1,6 @@
 package chat.stoat.platform
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalUriHandler
@@ -11,7 +12,7 @@ import chat.stoat.core.designsystem.theme.StoatTheme
 @Composable
 fun StoatAppTheme(content: @Composable () -> Unit) {
     StoatTheme(
-        requestedTheme = LoadedSettings.theme,
+        requestedTheme = LoadedSettings.themeFor(isSystemInDarkTheme()),
         requestedUserInterfaceFont = LoadedSettings.font,
         colourOverrides = SyncedSettings.android.colourOverrides
     ) {

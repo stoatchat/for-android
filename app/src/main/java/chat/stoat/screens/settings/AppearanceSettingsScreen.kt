@@ -8,13 +8,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,13 +68,18 @@ import chat.stoat.api.StoatCbor
 import chat.stoat.api.StoatJson
 import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.api.settings.SyncedSettings
+import chat.stoat.api.settings.legacyThemeValue
 import chat.stoat.composables.screens.settings.appearance.ColourChip
 import chat.stoat.composables.screens.settings.appearance.CornerRadiusPicker
+import chat.stoat.composables.screens.settings.appearance.ThemePreview
 import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
+import chat.stoat.core.designsystem.theme.AmoledColorScheme
+import chat.stoat.core.designsystem.theme.DarkColorScheme
 import chat.stoat.core.designsystem.theme.GoogleSansFlex
 import chat.stoat.core.designsystem.theme.Inter
+import chat.stoat.core.designsystem.theme.LightColorScheme
 import chat.stoat.core.designsystem.theme.systemSupportsDynamicColors
 import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.core.model.settings.Theme
@@ -94,12 +101,13 @@ import chat.stoat.shared.resources.settings_appearance_colour_overrides_import_e
 import chat.stoat.shared.resources.settings_appearance_message_composer_blur
 import chat.stoat.shared.resources.settings_appearance_theme
 import chat.stoat.shared.resources.settings_appearance_theme_amoled
+import chat.stoat.shared.resources.settings_appearance_theme_dark_mode
 import chat.stoat.shared.resources.settings_appearance_theme_default
 import chat.stoat.shared.resources.settings_appearance_theme_light
+import chat.stoat.shared.resources.settings_appearance_theme_light_mode
 import chat.stoat.shared.resources.settings_appearance_theme_m3dynamic
 import chat.stoat.shared.resources.settings_appearance_theme_m3dynamic_unsupported
 import chat.stoat.shared.resources.settings_appearance_theme_m3dynamic_unsupported_toast
-import chat.stoat.shared.resources.settings_appearance_theme_none
 import chat.stoat.shared.resources.settings_appearance_typeface
 import chat.stoat.shared.resources.settings_appearance_typeface_default
 import chat.stoat.shared.resources.settings_appearance_typeface_google_sans_flex
@@ -123,10 +131,18 @@ class AppearanceSettingsScreenViewModel(val context: Application) : ViewModel() 
     var selectedOverrideInitialValue by mutableStateOf<Int?>(null)
     var overridePickerSheetVisible by mutableStateOf(false)
 
-    fun saveNewTheme(theme: Theme) {
-        LoadedSettings.theme = theme
+    fun saveNewTheme(theme: Theme, forDarkMode: Boolean) {
+        if (forDarkMode) LoadedSettings.darkTheme = theme else LoadedSettings.lightTheme = theme
+        val dark = LoadedSettings.darkTheme
+        val light = LoadedSettings.lightTheme
         viewModelScope.launch {
-            SyncedSettings.updateAndroid(SyncedSettings.android.copy(theme = theme.name))
+            SyncedSettings.updateAndroid(
+                SyncedSettings.android.copy(
+                    theme = legacyThemeValue(dark, light).name,
+                    themeDark = dark.name,
+                    themeLight = light.name,
+                )
+            )
         }
     }
 
@@ -257,7 +273,8 @@ fun AppearanceSettingsScreen(
     navigator: Navigator,
     viewModel: AppearanceSettingsScreenViewModel = koinViewModel()
 ) {
-    val settingsAppearanceThemeM3dynamicUnsupportedToastText = stringResource(Res.string.settings_appearance_theme_m3dynamic_unsupported_toast)
+    val settingsAppearanceThemeM3dynamicUnsupportedToastText =
+        stringResource(Res.string.settings_appearance_theme_m3dynamic_unsupported_toast)
     val colourOverridesOpenerArrowRotation by animateFloatAsState(
         if (viewModel.showColourOverrides) {
             if (LocalLayoutDirection.current == LayoutDirection.Ltr) 90f else -90f
@@ -366,83 +383,28 @@ fun AppearanceSettingsScreen(
                     Text(stringResource(Res.string.settings_appearance_theme))
                 }
 
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp)
-                ) {
-                    ColourChip(
-                        color = Color(0xff333642),
-                        text = stringResource(Res.string.settings_appearance_theme_default),
-                        selected = LoadedSettings.theme == Theme.Default,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_default")
-                    ) {
-                        viewModel.saveNewTheme(Theme.Default)
-                    }
-
-                    ColourChip(
-                        color = Color(0xfff7f7f7),
-                        text = stringResource(Res.string.settings_appearance_theme_light),
-                        selected = LoadedSettings.theme == Theme.Light,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_light")
-                    ) {
-                        viewModel.saveNewTheme(Theme.Light)
-                    }
-
-                    ColourChip(
-                        color = Color(0xff000000),
-                        text = stringResource(Res.string.settings_appearance_theme_amoled),
-                        selected = LoadedSettings.theme == Theme.Amoled,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_amoled")
-                    ) {
-                        viewModel.saveNewTheme(Theme.Amoled)
-                    }
-
-                    ColourChip(
-                        color = if (isSystemInDarkTheme()) Color(0xff333642) else Color(0xfff7f7f7),
-                        text = stringResource(Res.string.settings_appearance_theme_none),
-                        selected = LoadedSettings.theme == Theme.None,
-                        modifier = Modifier
-                            .weight(1f)
-                            .testTag("set_theme_none")
-                    ) {
-                        viewModel.saveNewTheme(Theme.None)
-                    }
-
-                    if (systemSupportsDynamicColors()) {
-                        ColourChip(
-                            color = dynamicDarkColorScheme(LocalContext.current).primary,
-                            text = stringResource(Res.string.settings_appearance_theme_m3dynamic),
-                            selected = LoadedSettings.theme == Theme.M3Dynamic,
-                            modifier = Modifier
-                                .weight(1f)
-                                .testTag("set_theme_m3dynamic")
-                        ) {
-                            viewModel.saveNewTheme(Theme.M3Dynamic)
-                        }
-                    } else {
-                        ColourChip(
-                            color = Color(0xffa0a0a0),
-                            text = stringResource(
-                                Res.string.settings_appearance_theme_m3dynamic_unsupported
-                            ),
-                            selected = false,
-                            modifier = Modifier
-                                .weight(1f)
-                                .testTag("set_theme_m3dynamic_unsupported")
-                        ) {
-                            toaster.show(settingsAppearanceThemeM3dynamicUnsupportedToastText)
-                        }
-                    }
-                }
+                ThemeModeRow(
+                    label = stringResource(Res.string.settings_appearance_theme_dark_mode),
+                    forDarkMode = true,
+                    selected = LoadedSettings.darkTheme,
+                    onSelect = { viewModel.saveNewTheme(it, forDarkMode = true) },
+                    onUnsupported = {
+                        toaster.show(
+                            settingsAppearanceThemeM3dynamicUnsupportedToastText
+                        )
+                    },
+                )
+                ThemeModeRow(
+                    label = stringResource(Res.string.settings_appearance_theme_light_mode),
+                    forDarkMode = false,
+                    selected = LoadedSettings.lightTheme,
+                    onSelect = { viewModel.saveNewTheme(it, forDarkMode = false) },
+                    onUnsupported = {
+                        toaster.show(
+                            settingsAppearanceThemeM3dynamicUnsupportedToastText
+                        )
+                    },
+                )
 
                 ListHeader {
                     Text(stringResource(Res.string.settings_appearance_visual_effects))
@@ -624,3 +586,76 @@ fun AppearanceSettingsScreen(
         }
     }
 }
+
+@Composable
+private fun ThemePreviewRow(content: @Composable RowScope.() -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        content = content,
+    )
+}
+
+@Composable
+private fun ThemeModeRow(
+    label: String,
+    forDarkMode: Boolean,
+    selected: Theme,
+    onSelect: (Theme) -> Unit,
+    onUnsupported: () -> Unit,
+) {
+    val context = LocalContext.current
+    Text(
+        text = label,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 20.dp, top = 12.dp, bottom = 4.dp),
+    )
+    ThemePreviewRow {
+        ThemePreview(
+            scheme = DarkColorScheme,
+            selected = selected == Theme.Default,
+            label = stringResource(Res.string.settings_appearance_theme_default),
+            onClick = { onSelect(Theme.Default) },
+            modifier = Modifier.testTag(if (forDarkMode) "set_dark_theme_default" else "set_light_theme_default"),
+        )
+        ThemePreview(
+            scheme = LightColorScheme,
+            selected = selected == Theme.Light,
+            label = stringResource(Res.string.settings_appearance_theme_light),
+            onClick = { onSelect(Theme.Light) },
+            modifier = Modifier.testTag(if (forDarkMode) "set_dark_theme_light" else "set_light_theme_light"),
+        )
+        ThemePreview(
+            scheme = AmoledColorScheme,
+            selected = selected == Theme.Amoled,
+            label = stringResource(Res.string.settings_appearance_theme_amoled),
+            onClick = { onSelect(Theme.Amoled) },
+            modifier = Modifier.testTag(if (forDarkMode) "set_dark_theme_amoled" else "set_light_theme_amoled"),
+        )
+        if (systemSupportsDynamicColors()) {
+            ThemePreview(
+                scheme = if (forDarkMode) dynamicDarkColorScheme(context) else dynamicLightColorScheme(
+                    context
+                ),
+                selected = selected == Theme.M3Dynamic,
+                label = stringResource(Res.string.settings_appearance_theme_m3dynamic),
+                onClick = { onSelect(Theme.M3Dynamic) },
+                modifier = Modifier.testTag(if (forDarkMode) "set_dark_theme_m3dynamic" else "set_light_theme_m3dynamic"),
+            )
+        } else {
+            ThemePreview(
+                scheme = if (forDarkMode) DarkColorScheme else LightColorScheme,
+                selected = false,
+                enabled = false,
+                label = stringResource(Res.string.settings_appearance_theme_m3dynamic_unsupported),
+                onClick = onUnsupported,
+                modifier = Modifier.testTag("set_theme_m3dynamic_unsupported"),
+            )
+        }
+    }
+}
+

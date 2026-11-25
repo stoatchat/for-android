@@ -253,6 +253,13 @@ private fun pxAsDp(px: Int): Dp {
 
 private const val NOT_ENOUGH_SPACE_FOR_PANES_THRESHOLD = 500
 
+private data class PageLoadState(
+    val isNearEdge: Boolean,
+    val canLoad: Boolean,
+    val isLoading: Boolean,
+    val listSize: Int,
+)
+
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -274,7 +281,8 @@ fun ChannelScreen(
     viewModel: ChannelScreenViewModel = koinViewModel()
 ) {
     val filePickerChipCameraFailedText = stringResource(Res.string.file_picker_chip_camera_failed)
-    val filePickerChipCameraNoneInstalledText = stringResource(Res.string.file_picker_chip_camera_none_installed)
+    val filePickerChipCameraNoneInstalledText =
+        stringResource(Res.string.file_picker_chip_camera_none_installed)
     // <editor-fold desc="State and effects">
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -617,34 +625,46 @@ fun ChannelScreen(
         }
     }
 
+    // Each edge loads at most once per list size: a finished page clears the loading flag before
+    // the list has laid out its new items, so without this the stale "near the edge" reading would
+    // immediately request another page, and again for as long as a fling lasts
     LaunchedEffect(lazyListState) {
+        var requestedAtSize = -1
         snapshotFlow {
-            Triple(
-                isNearOlderEdge.value,
-                viewModel.canLoadOlder,
-                viewModel.isLoadingOlder,
+            PageLoadState(
+                isNearEdge = isNearOlderEdge.value,
+                canLoad = viewModel.canLoadOlder,
+                isLoading = viewModel.isLoadingOlder,
+                listSize = lazyListState.layoutInfo.totalItemsCount,
             )
         }
             .distinctUntilChanged()
-            .collect { (isNearEdge, canLoad, isLoading) ->
-                if (isNearEdge && canLoad && !isLoading) {
-                    Log.d("ChannelScreen", "Loading more messages")
+            .collect { state ->
+                if (!state.isNearEdge) requestedAtSize = -1
+                if (state.isNearEdge && state.canLoad && !state.isLoading && state.listSize != requestedAtSize) {
+                    requestedAtSize = state.listSize
                     viewModel.loadOlder()
                 }
             }
     }
 
     LaunchedEffect(lazyListState) {
+        var requestedAtSize = -1
         snapshotFlow {
-            Triple(
-                lazyListState.firstVisibleItemIndex <= 6,
-                viewModel.canLoadNewer,
-                viewModel.isLoadingNewer,
+            PageLoadState(
+                isNearEdge = lazyListState.firstVisibleItemIndex <= 6,
+                canLoad = viewModel.canLoadNewer,
+                isLoading = viewModel.isLoadingNewer,
+                listSize = lazyListState.layoutInfo.totalItemsCount,
             )
         }
             .distinctUntilChanged()
-            .collect { (isNearEdge, canLoad, isLoading) ->
-                if (isNearEdge && canLoad && !isLoading) viewModel.loadNewer()
+            .collect { state ->
+                if (!state.isNearEdge) requestedAtSize = -1
+                if (state.isNearEdge && state.canLoad && !state.isLoading && state.listSize != requestedAtSize) {
+                    requestedAtSize = state.listSize
+                    viewModel.loadNewer()
+                }
             }
     }
 
@@ -835,7 +855,8 @@ fun ChannelScreen(
                                         val partner =
                                             StoatAPI.userCache[ChannelUtils.resolveDMPartner(it)]
                                         UserAvatar(
-                                            username = it.name ?: stringResource(Res.string.unknown),
+                                            username = it.name
+                                                ?: stringResource(Res.string.unknown),
                                             userId = ChannelUtils.resolveDMPartner(it) ?: "",
                                             size = 24.dp,
                                             presenceSize = 12.dp,
@@ -987,163 +1008,147 @@ fun ChannelScreen(
                     targetState = viewModel.ageGateUnlocked,
                     label = "ageGateUnlocked"
                 ) { ageGateUnlocked ->
-                if (ageGateUnlocked == false) {
-                    ChannelScreenAgeGate(
-                        onAccept = {
-                            scope.launch {
-                                viewModel.unlockAgeGate()
-                            }
-                        },
-                        onDeny = {
-                            onToggleDrawer()
-                        }
-                    )
-                } else if (ageGateUnlocked == null) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        CircularProgressIndicator(modifier = Modifier.size(48.dp))
-                    }
-                } else if (ageGateUnlocked) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(pv)
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.BottomCenter
-                        ) {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .then(
-                                        if (liquidGlassMessageField || messageComposerBlurEnabled) {
-                                            Modifier.hazeSource(messageComposerHazeState)
-                                        } else {
-                                            Modifier
-                                        }
-                                    ),
-                                state = lazyListState,
-                                userScrollEnabled = !disableScroll,
-                                reverseLayout = true,
-                                contentPadding = PaddingValues(
-                                    top = 16.dp,
-                                    bottom = messageListBottomInset + 32.dp
-                                )
-                            ) {
-                                if (showBottomAnchor) {
-                                    // Hack - Too bad!
-                                    item(key = "guaranteed_first") {
-                                        Spacer(Modifier.height(1.dp))
-                                    }
+                    if (ageGateUnlocked == false) {
+                        ChannelScreenAgeGate(
+                            onAccept = {
+                                scope.launch {
+                                    viewModel.unlockAgeGate()
                                 }
-
-                                items(
-                                    viewModel.items.size,
-                                    key = { index ->
-                                        if (index < 0 || index >= viewModel.items.size) {
-                                            return@items index
-                                        }
-                                        when (val item = viewModel.items[index]) {
-                                            is ChannelScreenItem.RegularMessage -> item.message.id!!
-                                            is ChannelScreenItem.ProspectiveMessage -> item.message.id!!
-                                            is ChannelScreenItem.FailedMessage -> item.message.id!!
-                                            is ChannelScreenItem.SystemMessage -> item.message.id!!
-                                            is ChannelScreenItem.DateDivider -> item.instant.toEpochMilliseconds()
-                                            is ChannelScreenItem.LoadTrigger -> index
-                                            is ChannelScreenItem.Loading -> index
-                                        }
-                                    },
-                                    contentType = { index ->
-                                        when (viewModel.items.getOrNull(index)) {
-                                            null -> null
-                                            is ChannelScreenItem.RegularMessage -> "RegularMessage"
-                                            is ChannelScreenItem.ProspectiveMessage -> "ProspectiveMessage"
-                                            is ChannelScreenItem.FailedMessage -> "FailedMessage"
-                                            is ChannelScreenItem.SystemMessage -> "SystemMessage"
-                                            is ChannelScreenItem.DateDivider -> "DateDivider"
-                                            is ChannelScreenItem.LoadTrigger -> "LoadTrigger"
-                                            is ChannelScreenItem.Loading -> "Loading"
-                                        }
-                                    }
-                                ) { index ->
-                                    // out of bounds check
-                                    if (index < 0 || index >= viewModel.items.size) {
-                                        return@items
-                                    }
-                                    val item = viewModel.items[index]
-                                    val messageId = item.messageIdOrNull()
-                                    val isHighlighted =
-                                        highlightedMessageId?.let { it == messageId } == true
-                                    val highlightColor by animateColorAsState(
-                                        targetValue = if (isHighlighted) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
-                                        } else {
-                                            Color.Transparent
-                                        },
-                                        animationSpec = tween(durationMillis = 500),
-                                        label = "messageJumpHighlight",
-                                    )
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(highlightColor)
-                                    ) {
-                                        when (item) {
-                                            is ChannelScreenItem.RegularMessage -> {
-                                                RegularMessage(
-                                                    item.message,
-                                                    viewModel.channel,
-                                                    drawerIsOpen = drawerIsOpen,
-                                                    setDrawerGestureEnabled = {
-                                                        setDrawerGestureEnabled(it)
-                                                    },
-                                                    setDisableScroll = {
-                                                        disableScroll = it
-                                                    },
-                                                    showMessageBottomSheet = {
-                                                        messageContextSheetTarget = it
-                                                        messageContextSheetShown = true
-                                                    },
-                                                    showReactBottomSheet = {
-                                                        item.message.id?.let {
-                                                            reactSheetTarget = it
-                                                            reactSheetShown = true
-                                                        }
-                                                    },
-                                                    putTextAtCursorPosition = viewModel::putAtCursorPosition,
-                                                    replyToMessage = viewModel::addReplyTo,
-                                                    jumpToMessage = viewModel::requestJump,
-                                                    scope = scope,
-                                                    mdAst = item.mdAst
-                                                )
+                            },
+                            onDeny = {
+                                onToggleDrawer()
+                            }
+                        )
+                    } else if (ageGateUnlocked == null) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                        }
+                    } else if (ageGateUnlocked) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(pv)
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.BottomCenter
+                            ) {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .then(
+                                            if (liquidGlassMessageField || messageComposerBlurEnabled) {
+                                                Modifier.hazeSource(messageComposerHazeState)
+                                            } else {
+                                                Modifier
                                             }
+                                        ),
+                                    state = lazyListState,
+                                    userScrollEnabled = !disableScroll,
+                                    reverseLayout = true,
+                                    contentPadding = PaddingValues(
+                                        top = 16.dp,
+                                        bottom = messageListBottomInset + 32.dp
+                                    )
+                                ) {
+                                    if (showBottomAnchor) {
+                                        // Hack - Too bad!
+                                        item(key = "guaranteed_first") {
+                                            Spacer(Modifier.height(1.dp))
+                                        }
+                                    }
 
-                                            is ChannelScreenItem.ProspectiveMessage -> {
-                                                Box(Modifier.alpha(0.5f)) {
-                                                    Message(
-                                                        message = item.message,
-                                                        onMessageContextMenu = {
-                                                            // TODO Context menu that allows you to cancel send
+                                    items(
+                                        viewModel.items.size,
+                                        key = { index ->
+                                            if (index < 0 || index >= viewModel.items.size) {
+                                                return@items index
+                                            }
+                                            when (val item = viewModel.items[index]) {
+                                                is ChannelScreenItem.RegularMessage -> item.message.id!!
+                                                is ChannelScreenItem.ProspectiveMessage -> item.message.id!!
+                                                is ChannelScreenItem.FailedMessage -> item.message.id!!
+                                                is ChannelScreenItem.SystemMessage -> item.message.id!!
+                                                is ChannelScreenItem.DateDivider -> item.instant.toEpochMilliseconds()
+                                                is ChannelScreenItem.LoadTrigger -> index
+                                                is ChannelScreenItem.Loading -> index
+                                            }
+                                        },
+                                        contentType = { index ->
+                                            when (viewModel.items.getOrNull(index)) {
+                                                null -> null
+                                                is ChannelScreenItem.RegularMessage -> "RegularMessage"
+                                                is ChannelScreenItem.ProspectiveMessage -> "ProspectiveMessage"
+                                                is ChannelScreenItem.FailedMessage -> "FailedMessage"
+                                                is ChannelScreenItem.SystemMessage -> "SystemMessage"
+                                                is ChannelScreenItem.DateDivider -> "DateDivider"
+                                                is ChannelScreenItem.LoadTrigger -> "LoadTrigger"
+                                                is ChannelScreenItem.Loading -> "Loading"
+                                            }
+                                        }
+                                    ) { index ->
+                                        // out of bounds check
+                                        if (index < 0 || index >= viewModel.items.size) {
+                                            return@items
+                                        }
+                                        val item = viewModel.items[index]
+                                        val messageId = item.messageIdOrNull()
+                                        val isHighlighted =
+                                            highlightedMessageId?.let { it == messageId } == true
+                                        val highlightColor by animateColorAsState(
+                                            targetValue = if (isHighlighted) {
+                                                MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                                            } else {
+                                                Color.Transparent
+                                            },
+                                            animationSpec = tween(durationMillis = 500),
+                                            label = "messageJumpHighlight",
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .background(highlightColor)
+                                        ) {
+                                            when (item) {
+                                                is ChannelScreenItem.RegularMessage -> {
+                                                    RegularMessage(
+                                                        item.message,
+                                                        viewModel.channel,
+                                                        drawerIsOpen = drawerIsOpen,
+                                                        setDrawerGestureEnabled = {
+                                                            setDrawerGestureEnabled(it)
                                                         },
-                                                        onAvatarClick = {},
-                                                        onNameClick = {},
-                                                        canReply = false,
-                                                        onReply = {},
-                                                        onAddReaction = {},
-                                                        mdAst = item.mdAst,
+                                                        setDisableScroll = {
+                                                            disableScroll = it
+                                                        },
+                                                        showMessageBottomSheet = {
+                                                            messageContextSheetTarget = it
+                                                            messageContextSheetShown = true
+                                                        },
+                                                        showReactBottomSheet = {
+                                                            item.message.id?.let {
+                                                                reactSheetTarget = it
+                                                                reactSheetShown = true
+                                                            }
+                                                        },
+                                                        putTextAtCursorPosition = viewModel::putAtCursorPosition,
+                                                        replyToMessage = viewModel::addReplyTo,
+                                                        jumpToMessage = viewModel::requestJump,
+                                                        scope = scope,
+                                                        mdAst = item.mdAst
                                                     )
                                                 }
-                                            }
 
-                                            is ChannelScreenItem.FailedMessage -> {
-                                                CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
-                                                    Column {
+                                                is ChannelScreenItem.ProspectiveMessage -> {
+                                                    Box(Modifier.alpha(0.5f)) {
                                                         Message(
                                                             message = item.message,
-                                                            onMessageContextMenu = {},
+                                                            onMessageContextMenu = {
+                                                                // TODO Context menu that allows you to cancel send
+                                                            },
                                                             onAvatarClick = {},
                                                             onNameClick = {},
                                                             canReply = false,
@@ -1151,756 +1156,782 @@ fun ChannelScreen(
                                                             onAddReaction = {},
                                                             mdAst = item.mdAst,
                                                         )
-                                                        Row {
-                                                            UserAvatarWidthPlaceholder()
-                                                            Text(
-                                                                stringResource(Res.string.message_failed_to_send),
-                                                                style = MaterialTheme.typography.bodyMedium,
-                                                                color = MaterialTheme.colorScheme.error.copy(
-                                                                    alpha = 0.8f
-                                                                ),
-                                                                modifier = Modifier.padding(
-                                                                    top = 4.dp,
-                                                                    bottom = 4.dp,
-                                                                    start = 20.dp
-                                                                )
-                                                            )
-                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            is ChannelScreenItem.SystemMessage -> {
-                                                SystemMessage(message = item.message)
-                                            }
-
-                                            is ChannelScreenItem.DateDivider -> {
-                                                DateDivider(instant = item.instant)
-                                            }
-
-                                            is ChannelScreenItem.LoadTrigger -> {
-                                                LaunchedEffect(Unit) {
-                                                    Log.d(
-                                                        "ChannelScreen",
-                                                        "LoadTrigger: After ${item.after} Before ${item.before}"
-                                                    )
-                                                }
-                                            }
-
-                                            is ChannelScreenItem.Loading -> {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .shimmer(rememberShimmer(ShimmerBounds.Window)),
-                                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                                                ) {
-                                                    MessageSkeleton(MessageSkeletonVariant.One)
-                                                    MessageSkeleton(MessageSkeletonVariant.Two)
-                                                    MessageSkeleton(MessageSkeletonVariant.Three)
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = viewModel.isJumpLoading,
-                                modifier = Modifier.align(Alignment.Center),
-                                enter = scaleIn(
-                                    animationSpec = StoatTweenFloat,
-                                    initialScale = 0.8f,
-                                ) + fadeIn(animationSpec = StoatTweenFloat),
-                                exit = scaleOut(
-                                    animationSpec = StoatTweenFloat,
-                                    targetScale = 0.8f,
-                                ) + fadeOut(animationSpec = StoatTweenFloat),
-                            ) {
-                                LoadingIndicator()
-                            }
-
-                            SnackbarHost(
-                                hostState = snackbarHostState,
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(bottom = messageComposerHeight)
-                                    .fillMaxWidth()
-                                    .zIndex(1f)
-                            )
-
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(8.dp)
-                            ) {
-                                if (viewModel.showPhysicalKeyboardSpark) {
-                                    Card {
-                                        Column(
-                                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                                            modifier = Modifier.padding(16.dp)
-                                        ) {
-                                            Text(
-                                                stringResource(Res.string.spark_keyboard_shortcuts),
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                fontWeight = FontWeight.SemiBold
-                                            )
-                                            Text(
-                                                buildAnnotatedString {
-                                                    val raw =
-                                                        stringResource(Res.string.spark_keyboard_shortcuts_description)
-                                                    val before = raw.substringBefore("%1\$s")
-                                                    val after = raw.substringAfter("%1\$s")
-
-                                                    append(before)
-                                                    appendInlineContent("metaKey", "Meta")
-                                                    append(" + /")
-                                                    append(after)
-                                                },
-                                                inlineContent = mapOf(
-                                                    "metaKey" to InlineTextContent(
-                                                        placeholder = Placeholder(
-                                                            width = 1.em,
-                                                            height = 1.em,
-                                                            placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-                                                        )
-                                                    ) {
-                                                        with(LocalDensity.current) {
-                                                            Image(
-                                                                StoatIcons.MetaKey.painter(),
-                                                                contentDescription = null,
-                                                                colorFilter = ColorFilter.tint(
-                                                                    LocalContentColor.current
-                                                                )
+                                                is ChannelScreenItem.FailedMessage -> {
+                                                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
+                                                        Column {
+                                                            Message(
+                                                                message = item.message,
+                                                                onMessageContextMenu = {},
+                                                                onAvatarClick = {},
+                                                                onNameClick = {},
+                                                                canReply = false,
+                                                                onReply = {},
+                                                                onAddReaction = {},
+                                                                mdAst = item.mdAst,
                                                             )
-                                                        }
-                                                    }
-                                                ),
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
-                                            Row(
-                                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                            ) {
-                                                Button(
-                                                    onClick = {
-                                                        viewModel.dismissPhysicalKeyboardSpark()
-                                                    },
-                                                    modifier = Modifier.weight(1f)
-                                                ) {
-                                                    Text(stringResource(Res.string.spark_keyboard_shortcuts_dismiss))
-                                                }
-                                                TextButton(
-                                                    onClick = {
-                                                        (context as Activity).requestShowKeyboardShortcuts()
-                                                    },
-                                                    modifier = Modifier.weight(1f)
-                                                ) {
-                                                    Text(stringResource(Res.string.spark_keyboard_shortcuts_cta))
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                                val isDmLikeWithOngoingCall =
-                                    (viewModel.channel?.channelType == ChannelType.DirectMessage ||
-                                            viewModel.channel?.channelType == ChannelType.Group) &&
-                                            StoatAPI.voiceStateCache[channelId]
-                                                ?.participants
-                                                ?.isNotEmpty() == true
-                                if ((viewModel.channel?.channelType == ChannelType.VoiceChannel ||
-                                            viewModel.channel?.voice != null ||
-                                            isDmLikeWithOngoingCall) &&
-                                    channelPermissions has PermissionBit.Connect
-                                ) {
-                                    JoinVoiceChannelButton(channelId)
-                                }
-                            }
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = messageComposerBottomContentHeight)
-                                .fillMaxWidth()
-                                .height(messageFieldBackgroundHeight)
-                                .zIndex(1f)
-                                .then(
-                                    if (liquidGlassMessageField) {
-                                        Modifier
-                                    } else if (messageComposerBlurEnabled) {
-                                        Modifier.hazeBlur(
-                                            input = HazeInput.Backdrop(messageComposerHazeState),
-                                            style = messageFieldHazeStyle,
-                                            performanceMode = HazePerformanceMode.Quality
-                                        )
-                                    } else {
-                                        Modifier.background(messageComposerBackgroundGradient)
-                                    }
-                                )
-                        )
-
-                        if (
-                            scrollDownTransition.currentState ||
-                            scrollDownTransition.targetState
-                        ) {
-                            BadgedBox(
-                                modifier = Modifier
-                                    .padding(bottom = messageComposerHeight)
-                                    .align(Alignment.BottomCenter)
-                                    .zIndex(2f)
-                                    .offset { IntOffset(0, scrollDownOffsetY) }
-                                    .padding(16.dp),
-                                badge = {
-                                    androidx.compose.animation.AnimatedVisibility(
-                                        visible = viewModel.hasUnseenNewMessages,
-                                        modifier = Modifier.offset(x = (-4).dp, y = 0.dp),
-                                        enter = scaleIn(
-                                            animationSpec = StoatTweenFloat,
-                                            initialScale = 0.5f,
-                                        ) + fadeIn(animationSpec = StoatTweenFloat),
-                                        exit = scaleOut(
-                                            animationSpec = StoatTweenFloat,
-                                            targetScale = 0.5f,
-                                        ) + fadeOut(animationSpec = StoatTweenFloat),
-                                    ) {
-                                        Badge(
-                                            containerColor = MaterialTheme.colorScheme.primary
-                                        ) {
-                                            Text(stringResource(Res.string._new))
-                                        }
-                                    }
-                                }
-                            ) {
-                                SmallFloatingActionButton(
-                                    onClick = {
-                                        if (
-                                            viewModel.canLoadNewer ||
-                                            viewModel.hasUnseenNewMessages
-                                        ) {
-                                            viewModel.loadLatest(requestScrollToBottom = true)
-                                        } else {
-                                            scope.launch {
-                                                lazyListState.animateScrollToItem(0)
-                                            }
-                                        }
-                                    },
-                                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                                ) {
-                                    Icon(
-                                        painter = StoatIcons.ScrollToBottom.painter(),
-                                        contentDescription = stringResource(
-                                            Res.string.scroll_to_bottom
-                                        )
-                                    )
-                                }
-                            }
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .onSizeChanged { messageComposerHeightPx = it.height }
-                                .zIndex(3f),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .onSizeChanged {
-                                        messageComposerVisualHeightPx = it.height
-                                    },
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                TypingIndicator(
-                                    users = viewModel.typingUsers,
-                                    serverId = viewModel.channel?.server,
-                                    slowmodeSeconds = slowmodeSeconds,
-                                    slowmodeRemainingSeconds = slowmodeRemainingSeconds,
-                                    slowmodeImmune = slowmodeImmune,
-                                    hazeState = messageComposerHazeState.takeIf {
-                                        messageComposerBlurEnabled
-                                    },
-                                )
-
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                ) {
-                                    AnimatedContent(
-                                        targetState = viewModel.denyMessageField,
-                                        modifier = Modifier.onSizeChanged {
-                                            messageFieldHeightPx = it.height
-                                        },
-                                        label = "denyMessageField"
-                                    ) { deny ->
-                                        if (!deny) {
-                                            Column(modifier = Modifier.fillMaxWidth()) {
-                                                MessageField(
-                                                    initialValue = viewModel.initialTextFieldValue,
-                                                    initialValueDirtyMarker = viewModel.initialTextFieldValueDirtyMarker,
-                                                    onValueChange = viewModel::putDraftContent,
-                                                    onAddAttachment = {
-                                                        if (viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        } else {
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.AttachmentPicker
-                                                        }
-                                                    },
-                                                    onCommitAttachment = {
-                                                        processFileUri(it, null)
-                                                    },
-                                                    onPickEmoji = {
-                                                        if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        } else {
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.EmojiPicker
-                                                        }
-                                                    },
-                                                    onSendMessage = {
-                                                        viewModel.sendPendingMessage()
-                                                    },
-                                                    onSendVoiceMessage = { recording ->
-                                                        val filename =
-                                                            "voice-message-${System.currentTimeMillis()}.${recording.fileExtension}"
-                                                        val file = File.createTempFile(
-                                                            "voice_message_",
-                                                            ".${recording.fileExtension}",
-                                                            context.cacheDir
-                                                        ).apply {
-                                                            writeBytes(recording.bytes)
-                                                        }
-
-                                                        val started = viewModel.sendAttachmentMessage(
-                                                            content = recording.toMessageContent(),
-                                                            attachment = FileArgs(
-                                                                file = file,
-                                                                filename = filename,
-                                                                contentType = recording.mimeType
-                                                            )
-                                                        )
-                                                        if (!started) {
-                                                            file.delete()
-                                                        }
-                                                        started
-                                                    },
-                                                    channelType = viewModel.channel?.channelType
-                                                        ?: ChannelType.TextChannel,
-                                                    channelName = viewModel.channel?.let { channel ->
-                                                        ChannelUtils.resolveName(channel)
-                                                    }
-                                                        ?: stringResource(Res.string.unknown),
-                                                    containerModifier =
-                                                        if (liquidGlassMessageField) {
-                                                            Modifier.hazeGlass(
-                                                                input = HazeInput.Backdrop(messageComposerHazeState),
-                                                                style = messageFieldGlassStyle
-                                                            )
-                                                        } else if (messageComposerBlurEnabled) {
-                                                            Modifier.hazeBlur(
-                                                                input = HazeInput.Backdrop(messageComposerHazeState),
-                                                                style = messageFieldContainerHazeStyle,
-                                                                performanceMode = HazePerformanceMode.Quality
-                                                            )
-                                                        } else {
-                                                            Modifier
-                                                        },
-                                                    onFocusChange = { isFocused ->
-                                                        if (isFocused && viewModel.activePane != ChannelScreenActivePane.None) {
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                            imeInTransition = true
-                                                        }
-                                                    },
-                                                    forceSendButton = viewModel.draftAttachments.isNotEmpty(),
-                                                    canAttach = (channelPermissions has PermissionBit.UploadFiles) && viewModel.editingMessage == null,
-                                                    serverId = viewModel.channel?.server,
-                                                    channelId = channelId,
-                                                    failedValidation = viewModel.draftContent.length > 2000,
-                                                    valueIsBlank = viewModel.draftContent.isBlank(),
-                                                    editMode = viewModel.editingMessage != null,
-                                                    sendEnabled =
-                                                        viewModel.editingMessage != null || !slowmodeActive,
-                                                    cancelEdit = {
-                                                        viewModel.editingMessage = null
-                                                        viewModel.putDraftContent("", true)
-                                                    },
-                                                    contentBeforeInput = {
-                                                        val isEditing =
-                                                            viewModel.editingMessage != null
-                                                        val hasReplyContext =
-                                                            !isEditing && viewModel.draftReplyTo.isNotEmpty()
-
-                                                        AnimatedVisibility(visible = isEditing) {
-                                                            Row(
-                                                                modifier = Modifier
-                                                                    .fillMaxWidth()
-                                                                    .padding(
-                                                                        start = 16.dp,
-                                                                        top = 8.dp,
-                                                                        end = 8.dp,
-                                                                        bottom = 4.dp
-                                                                    ),
-                                                                verticalAlignment = Alignment.CenterVertically
-                                                            ) {
-                                                                Icon(
-                                                                    painter = StoatIcons.Editing.painter(),
-                                                                    contentDescription = null,
-                                                                    modifier = Modifier.size(20.dp)
-                                                                )
-                                                                Spacer(Modifier.width(8.dp))
+                                                            Row {
+                                                                UserAvatarWidthPlaceholder()
                                                                 Text(
-                                                                    stringResource(Res.string.message_field_editing_message),
-                                                                    modifier = Modifier.weight(1f),
-                                                                    style = MaterialTheme.typography.labelLarge
-                                                                )
-                                                                Icon(
-                                                                    painter = StoatIcons.CancelEditing.painter(),
-                                                                    contentDescription = stringResource(
-                                                                        Res.string.message_field_editing_message_cancel_alt
-                                                                    ),
-                                                                    tint = MaterialTheme.colorScheme.onSurface.copy(
+                                                                    stringResource(Res.string.message_failed_to_send),
+                                                                    style = MaterialTheme.typography.bodyMedium,
+                                                                    color = MaterialTheme.colorScheme.error.copy(
                                                                         alpha = 0.8f
                                                                     ),
-                                                                    modifier = Modifier
-                                                                        .clip(MaterialTheme.shapes.small)
-                                                                        .clickable {
-                                                                            viewModel.editingMessage =
-                                                                                null
-                                                                            viewModel.putDraftContent(
-                                                                                "",
-                                                                                true
-                                                                            )
-                                                                        }
-                                                                        .padding(4.dp)
-                                                                        .size(20.dp)
+                                                                    modifier = Modifier.padding(
+                                                                        top = 4.dp,
+                                                                        bottom = 4.dp,
+                                                                        start = 20.dp
+                                                                    )
                                                                 )
                                                             }
                                                         }
-
-                                                        ReplyManager(
-                                                            replies = if (isEditing) {
-                                                                emptyList()
-                                                            } else {
-                                                                viewModel.draftReplyTo
-                                                            },
-                                                            onToggleMention = {
-                                                                scope.launch {
-                                                                    viewModel.toggleMentionOnReply(
-                                                                        it.id
-                                                                    )
-                                                                }
-                                                            },
-                                                            onRemove = {
-                                                                viewModel.draftReplyTo.remove(it)
-                                                            },
-                                                            embedded = true,
-                                                        )
-
-                                                        AnimatedVisibility(
-                                                            visible = viewModel.draftAttachments.isNotEmpty()
-                                                        ) {
-                                                            Column {
-                                                                if (isEditing || hasReplyContext) {
-                                                                    HorizontalDivider(
-                                                                        color = MaterialTheme.colorScheme.outlineVariant.copy(
-                                                                            alpha = 0.5f
-                                                                        )
-                                                                    )
-                                                                }
-                                                                AttachmentManager(
-                                                                    attachments = viewModel.draftAttachments,
-                                                                    uploading = viewModel.attachmentUploadProgress > 0,
-                                                                    uploadProgress = viewModel.attachmentUploadProgress,
-                                                                    canRemove = true,
-                                                                    canPreview = true,
-                                                                    onRemove = {
-                                                                        viewModel.draftAttachments.remove(
-                                                                            it
-                                                                        )
-                                                                    },
-                                                                    onToggleSpoiler = {
-                                                                        val index =
-                                                                            viewModel.draftAttachments
-                                                                                .indexOfFirst { attachment ->
-                                                                                    attachment.pickerIdentifier ==
-                                                                                            it.pickerIdentifier
-                                                                                }
-
-                                                                        if (index != -1) {
-                                                                            val attachment =
-                                                                                viewModel.draftAttachments[index]
-                                                                            viewModel.draftAttachments[index] =
-                                                                                attachment.copy(
-                                                                                    spoiler = !attachment.spoiler
-                                                                                )
-                                                                        }
-                                                                    },
-                                                                    embedded = true,
-                                                                )
-                                                            }
-                                                        }
-
-                                                        if (isEditing || hasReplyContext ||
-                                                            viewModel.draftAttachments.isNotEmpty()
-                                                        ) {
-                                                            HorizontalDivider(
-                                                                color = MaterialTheme.colorScheme.outlineVariant.copy(
-                                                                    alpha = 0.5f
-                                                                )
-                                                            )
-                                                        }
-                                                    },
-                                                )
-
-                                                DropdownMenu(
-                                                    expanded = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker && notEnoughSpaceForPanes,
-                                                    onDismissRequest = {
-                                                        viewModel.activePane =
-                                                            ChannelScreenActivePane.None
                                                     }
-                                                ) {
-                                                    DropdownMenuItem(
-                                                        leadingIcon = {
-                                                            Icon(
-                                                                painter = StoatIcons.AttachFile.painter(),
-                                                                contentDescription = null // Provided by text below
-                                                            )
-                                                        },
-                                                        text = { Text(stringResource(Res.string.file_picker_chip_documents)) },
-                                                        onClick = {
-                                                            openDocumentPickerCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        }
-                                                    )
-                                                    DropdownMenuItem(
-                                                        leadingIcon = {
-                                                            Icon(
-                                                                painter = StoatIcons.TakePhoto.painter(),
-                                                                contentDescription = null // Provided by text below
-                                                            )
-                                                        },
-                                                        text = { Text(stringResource(Res.string.file_picker_chip_camera)) },
-                                                        onClick = {
-                                                            openCameraCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        }
-                                                    )
-                                                    DropdownMenuItem(
-                                                        leadingIcon = {
-                                                            Icon(
-                                                                painter = StoatIcons.PhotoLibrary.painter(),
-                                                                contentDescription = null // Provided by text below
-                                                            )
-                                                        },
-                                                        text = { Text(stringResource(Res.string.file_picker_chip_photo_picker)) },
-                                                        onClick = {
-                                                            openPhotoPickerCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        }
-                                                    )
                                                 }
-                                            }
-                                        } else {
-                                            Box(
-                                                modifier = Modifier
-                                                    .padding(horizontal = 32.dp, vertical = 16.dp)
-                                            ) {
-                                                Text(
-                                                    stringResource(viewModel.denyMessageFieldReasonResource),
-                                                    color = MaterialTheme.colorScheme.error,
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                    textAlign = TextAlign.Center
-                                                )
-                                            }
-                                        }
-                                    }
 
-                                    if (viewModel.activePane == ChannelScreenActivePane.None) {
-                                        Spacer(
-                                            Modifier
-                                                .fillMaxWidth()
-                                                .height(navigationBarHeight)
-                                        )
-                                    }
-                                }
-                            }
+                                                is ChannelScreenItem.SystemMessage -> {
+                                                    SystemMessage(message = item.message)
+                                                }
 
-                            if (viewModel.activePane == ChannelScreenActivePane.None && !imeInTransition) {
-                                Spacer(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(with(LocalDensity.current) {
-                                            keyboardOnlyInset.toDp()
-                                        })
-                                )
-                            } else {
-                                if (!notEnoughSpaceForPanes) {
-                                    Box(
-                                        Modifier
-                                            .heightIn(min = pxAsDp(composerBottomSpacerHeight))
-                                            .then(
-                                                if (viewModel.activePane != ChannelScreenActivePane.None) {
-                                                    Modifier.background(
-                                                        MaterialTheme.colorScheme.background
-                                                    )
-                                                } else {
-                                                    Modifier
+                                                is ChannelScreenItem.DateDivider -> {
+                                                    DateDivider(instant = item.instant)
                                                 }
-                                            )
-                                    ) {
-                                        Box(
-                                            Modifier.then(
-                                                if (emojiSearchFocused) {
-                                                    Modifier.requiredHeight(
-                                                        pxAsDp(
-                                                            max(
-                                                                imeCurrentInset * 2,
-                                                                composerBottomSpacerHeight
-                                                            )
+
+                                                is ChannelScreenItem.LoadTrigger -> {
+                                                    LaunchedEffect(Unit) {
+                                                        Log.d(
+                                                            "ChannelScreen",
+                                                            "LoadTrigger: After ${item.after} Before ${item.before}"
                                                         )
-                                                    )
-                                                } else {
-                                                    Modifier.requiredHeight(
-                                                        pxAsDp(
-                                                            composerBottomSpacerHeight
-                                                        )
-                                                    )
-                                                }
-                                            )
-                                        ) {
-                                            when (viewModel.activePane) {
-                                                ChannelScreenActivePane.EmojiPicker -> {
-                                                    BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
-                                                        viewModel.activePane =
-                                                            ChannelScreenActivePane.None
                                                     }
+                                                }
 
+                                                is ChannelScreenItem.Loading -> {
                                                     Column(
                                                         modifier = Modifier
                                                             .fillMaxWidth()
-                                                            .background(MaterialTheme.colorScheme.background)
-                                                            .padding(4.dp)
-                                                            .navigationBarsPadding()
+                                                            .shimmer(rememberShimmer(ShimmerBounds.Window)),
+                                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                                        verticalArrangement = Arrangement.spacedBy(8.dp)
                                                     ) {
-                                                        EmojiPicker(
-                                                            onEmojiSelected = viewModel::putAtCursorPosition,
-                                                            bottomInset = pxAsDp(
-                                                                max(
-                                                                    imeCurrentInset - navigationBarsInset,
-                                                                    0
+                                                        MessageSkeleton(MessageSkeletonVariant.One)
+                                                        MessageSkeleton(MessageSkeletonVariant.Two)
+                                                        MessageSkeleton(MessageSkeletonVariant.Three)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                androidx.compose.animation.AnimatedVisibility(
+                                    visible = viewModel.isJumpLoading,
+                                    modifier = Modifier.align(Alignment.Center),
+                                    enter = scaleIn(
+                                        animationSpec = StoatTweenFloat,
+                                        initialScale = 0.8f,
+                                    ) + fadeIn(animationSpec = StoatTweenFloat),
+                                    exit = scaleOut(
+                                        animationSpec = StoatTweenFloat,
+                                        targetScale = 0.8f,
+                                    ) + fadeOut(animationSpec = StoatTweenFloat),
+                                ) {
+                                    LoadingIndicator()
+                                }
+
+                                SnackbarHost(
+                                    hostState = snackbarHostState,
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .padding(bottom = messageComposerHeight)
+                                        .fillMaxWidth()
+                                        .zIndex(1f)
+                                )
+
+                                Column(
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier
+                                        .align(Alignment.TopCenter)
+                                        .padding(8.dp)
+                                ) {
+                                    if (viewModel.showPhysicalKeyboardSpark) {
+                                        Card {
+                                            Column(
+                                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                                modifier = Modifier.padding(16.dp)
+                                            ) {
+                                                Text(
+                                                    stringResource(Res.string.spark_keyboard_shortcuts),
+                                                    style = MaterialTheme.typography.bodyLarge,
+                                                    fontWeight = FontWeight.SemiBold
+                                                )
+                                                Text(
+                                                    buildAnnotatedString {
+                                                        val raw =
+                                                            stringResource(Res.string.spark_keyboard_shortcuts_description)
+                                                        val before = raw.substringBefore("%1\$s")
+                                                        val after = raw.substringAfter("%1\$s")
+
+                                                        append(before)
+                                                        appendInlineContent("metaKey", "Meta")
+                                                        append(" + /")
+                                                        append(after)
+                                                    },
+                                                    inlineContent = mapOf(
+                                                        "metaKey" to InlineTextContent(
+                                                            placeholder = Placeholder(
+                                                                width = 1.em,
+                                                                height = 1.em,
+                                                                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+                                                            )
+                                                        ) {
+                                                            with(LocalDensity.current) {
+                                                                Image(
+                                                                    StoatIcons.MetaKey.painter(),
+                                                                    contentDescription = null,
+                                                                    colorFilter = ColorFilter.tint(
+                                                                        LocalContentColor.current
+                                                                    )
                                                                 )
-                                                            ),
-                                                            onSearchFocus = {
-                                                                emojiSearchFocused = it
+                                                            }
+                                                        }
+                                                    ),
+                                                    style = MaterialTheme.typography.bodyLarge
+                                                )
+                                                Row(
+                                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                                ) {
+                                                    Button(
+                                                        onClick = {
+                                                            viewModel.dismissPhysicalKeyboardSpark()
+                                                        },
+                                                        modifier = Modifier.weight(1f)
+                                                    ) {
+                                                        Text(stringResource(Res.string.spark_keyboard_shortcuts_dismiss))
+                                                    }
+                                                    TextButton(
+                                                        onClick = {
+                                                            (context as Activity).requestShowKeyboardShortcuts()
+                                                        },
+                                                        modifier = Modifier.weight(1f)
+                                                    ) {
+                                                        Text(stringResource(Res.string.spark_keyboard_shortcuts_cta))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    val isDmLikeWithOngoingCall =
+                                        (viewModel.channel?.channelType == ChannelType.DirectMessage ||
+                                                viewModel.channel?.channelType == ChannelType.Group) &&
+                                                StoatAPI.voiceStateCache[channelId]
+                                                    ?.participants
+                                                    ?.isNotEmpty() == true
+                                    if ((viewModel.channel?.channelType == ChannelType.VoiceChannel ||
+                                                viewModel.channel?.voice != null ||
+                                                isDmLikeWithOngoingCall) &&
+                                        channelPermissions has PermissionBit.Connect
+                                    ) {
+                                        JoinVoiceChannelButton(channelId)
+                                    }
+                                }
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = messageComposerBottomContentHeight)
+                                    .fillMaxWidth()
+                                    .height(messageFieldBackgroundHeight)
+                                    .zIndex(1f)
+                                    .then(
+                                        if (liquidGlassMessageField) {
+                                            Modifier
+                                        } else if (messageComposerBlurEnabled) {
+                                            Modifier.hazeBlur(
+                                                input = HazeInput.Backdrop(messageComposerHazeState),
+                                                style = messageFieldHazeStyle,
+                                                performanceMode = HazePerformanceMode.Quality
+                                            )
+                                        } else {
+                                            Modifier.background(messageComposerBackgroundGradient)
+                                        }
+                                    )
+                            )
+
+                            if (
+                                scrollDownTransition.currentState ||
+                                scrollDownTransition.targetState
+                            ) {
+                                BadgedBox(
+                                    modifier = Modifier
+                                        .padding(bottom = messageComposerHeight)
+                                        .align(Alignment.BottomCenter)
+                                        .zIndex(2f)
+                                        .offset { IntOffset(0, scrollDownOffsetY) }
+                                        .padding(16.dp),
+                                    badge = {
+                                        androidx.compose.animation.AnimatedVisibility(
+                                            visible = viewModel.hasUnseenNewMessages,
+                                            modifier = Modifier.offset(x = (-4).dp, y = 0.dp),
+                                            enter = scaleIn(
+                                                animationSpec = StoatTweenFloat,
+                                                initialScale = 0.5f,
+                                            ) + fadeIn(animationSpec = StoatTweenFloat),
+                                            exit = scaleOut(
+                                                animationSpec = StoatTweenFloat,
+                                                targetScale = 0.5f,
+                                            ) + fadeOut(animationSpec = StoatTweenFloat),
+                                        ) {
+                                            Badge(
+                                                containerColor = MaterialTheme.colorScheme.primary
+                                            ) {
+                                                Text(stringResource(Res.string._new))
+                                            }
+                                        }
+                                    }
+                                ) {
+                                    SmallFloatingActionButton(
+                                        onClick = {
+                                            if (
+                                                viewModel.canLoadNewer ||
+                                                viewModel.hasUnseenNewMessages
+                                            ) {
+                                                viewModel.loadLatest(requestScrollToBottom = true)
+                                            } else {
+                                                scope.launch {
+                                                    lazyListState.animateScrollToItem(0)
+                                                }
+                                            }
+                                        },
+                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                    ) {
+                                        Icon(
+                                            painter = StoatIcons.ScrollToBottom.painter(),
+                                            contentDescription = stringResource(
+                                                Res.string.scroll_to_bottom
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .fillMaxWidth()
+                                    .onSizeChanged { messageComposerHeightPx = it.height }
+                                    .zIndex(3f),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .onSizeChanged {
+                                            messageComposerVisualHeightPx = it.height
+                                        },
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    TypingIndicator(
+                                        users = viewModel.typingUsers,
+                                        serverId = viewModel.channel?.server,
+                                        slowmodeSeconds = slowmodeSeconds,
+                                        slowmodeRemainingSeconds = slowmodeRemainingSeconds,
+                                        slowmodeImmune = slowmodeImmune,
+                                        hazeState = messageComposerHazeState.takeIf {
+                                            messageComposerBlurEnabled
+                                        },
+                                    )
+
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        AnimatedContent(
+                                            targetState = viewModel.denyMessageField,
+                                            modifier = Modifier.onSizeChanged {
+                                                messageFieldHeightPx = it.height
+                                            },
+                                            label = "denyMessageField"
+                                        ) { deny ->
+                                            if (!deny) {
+                                                Column(modifier = Modifier.fillMaxWidth()) {
+                                                    MessageField(
+                                                        initialValue = viewModel.initialTextFieldValue,
+                                                        initialValueDirtyMarker = viewModel.initialTextFieldValueDirtyMarker,
+                                                        onValueChange = viewModel::putDraftContent,
+                                                        onAddAttachment = {
+                                                            if (viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            } else {
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.AttachmentPicker
+                                                            }
+                                                        },
+                                                        onCommitAttachment = {
+                                                            processFileUri(it, null)
+                                                        },
+                                                        onPickEmoji = {
+                                                            if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            } else {
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.EmojiPicker
+                                                            }
+                                                        },
+                                                        onSendMessage = {
+                                                            viewModel.sendPendingMessage()
+                                                        },
+                                                        onSendVoiceMessage = { recording ->
+                                                            val filename =
+                                                                "voice-message-${System.currentTimeMillis()}.${recording.fileExtension}"
+                                                            val file = File.createTempFile(
+                                                                "voice_message_",
+                                                                ".${recording.fileExtension}",
+                                                                context.cacheDir
+                                                            ).apply {
+                                                                writeBytes(recording.bytes)
+                                                            }
+
+                                                            val started =
+                                                                viewModel.sendAttachmentMessage(
+                                                                    content = recording.toMessageContent(),
+                                                                    attachment = FileArgs(
+                                                                        file = file,
+                                                                        filename = filename,
+                                                                        contentType = recording.mimeType
+                                                                    )
+                                                                )
+                                                            if (!started) {
+                                                                file.delete()
+                                                            }
+                                                            started
+                                                        },
+                                                        channelType = viewModel.channel?.channelType
+                                                            ?: ChannelType.TextChannel,
+                                                        channelName = viewModel.channel?.let { channel ->
+                                                            ChannelUtils.resolveName(channel)
+                                                        }
+                                                            ?: stringResource(Res.string.unknown),
+                                                        containerModifier =
+                                                            if (liquidGlassMessageField) {
+                                                                Modifier.hazeGlass(
+                                                                    input = HazeInput.Backdrop(
+                                                                        messageComposerHazeState
+                                                                    ),
+                                                                    style = messageFieldGlassStyle
+                                                                )
+                                                            } else if (messageComposerBlurEnabled) {
+                                                                Modifier.hazeBlur(
+                                                                    input = HazeInput.Backdrop(
+                                                                        messageComposerHazeState
+                                                                    ),
+                                                                    style = messageFieldContainerHazeStyle,
+                                                                    performanceMode = HazePerformanceMode.Quality
+                                                                )
+                                                            } else {
+                                                                Modifier
+                                                            },
+                                                        onFocusChange = { isFocused ->
+                                                            if (isFocused && viewModel.activePane != ChannelScreenActivePane.None) {
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                                imeInTransition = true
+                                                            }
+                                                        },
+                                                        forceSendButton = viewModel.draftAttachments.isNotEmpty(),
+                                                        canAttach = (channelPermissions has PermissionBit.UploadFiles) && viewModel.editingMessage == null,
+                                                        serverId = viewModel.channel?.server,
+                                                        channelId = channelId,
+                                                        failedValidation = viewModel.draftContent.length > 2000,
+                                                        valueIsBlank = viewModel.draftContent.isBlank(),
+                                                        editMode = viewModel.editingMessage != null,
+                                                        sendEnabled =
+                                                            viewModel.editingMessage != null || !slowmodeActive,
+                                                        cancelEdit = {
+                                                            viewModel.editingMessage = null
+                                                            viewModel.putDraftContent("", true)
+                                                        },
+                                                        contentBeforeInput = {
+                                                            val isEditing =
+                                                                viewModel.editingMessage != null
+                                                            val hasReplyContext =
+                                                                !isEditing && viewModel.draftReplyTo.isNotEmpty()
+
+                                                            AnimatedVisibility(visible = isEditing) {
+                                                                Row(
+                                                                    modifier = Modifier
+                                                                        .fillMaxWidth()
+                                                                        .padding(
+                                                                            start = 16.dp,
+                                                                            top = 8.dp,
+                                                                            end = 8.dp,
+                                                                            bottom = 4.dp
+                                                                        ),
+                                                                    verticalAlignment = Alignment.CenterVertically
+                                                                ) {
+                                                                    Icon(
+                                                                        painter = StoatIcons.Editing.painter(),
+                                                                        contentDescription = null,
+                                                                        modifier = Modifier.size(20.dp)
+                                                                    )
+                                                                    Spacer(Modifier.width(8.dp))
+                                                                    Text(
+                                                                        stringResource(Res.string.message_field_editing_message),
+                                                                        modifier = Modifier.weight(
+                                                                            1f
+                                                                        ),
+                                                                        style = MaterialTheme.typography.labelLarge
+                                                                    )
+                                                                    Icon(
+                                                                        painter = StoatIcons.CancelEditing.painter(),
+                                                                        contentDescription = stringResource(
+                                                                            Res.string.message_field_editing_message_cancel_alt
+                                                                        ),
+                                                                        tint = MaterialTheme.colorScheme.onSurface.copy(
+                                                                            alpha = 0.8f
+                                                                        ),
+                                                                        modifier = Modifier
+                                                                            .clip(MaterialTheme.shapes.small)
+                                                                            .clickable {
+                                                                                viewModel.editingMessage =
+                                                                                    null
+                                                                                viewModel.putDraftContent(
+                                                                                    "",
+                                                                                    true
+                                                                                )
+                                                                            }
+                                                                            .padding(4.dp)
+                                                                            .size(20.dp)
+                                                                    )
+                                                                }
+                                                            }
+
+                                                            ReplyManager(
+                                                                replies = if (isEditing) {
+                                                                    emptyList()
+                                                                } else {
+                                                                    viewModel.draftReplyTo
+                                                                },
+                                                                onToggleMention = {
+                                                                    scope.launch {
+                                                                        viewModel.toggleMentionOnReply(
+                                                                            it.id
+                                                                        )
+                                                                    }
+                                                                },
+                                                                onRemove = {
+                                                                    viewModel.draftReplyTo.remove(it)
+                                                                },
+                                                                embedded = true,
+                                                            )
+
+                                                            AnimatedVisibility(
+                                                                visible = viewModel.draftAttachments.isNotEmpty()
+                                                            ) {
+                                                                Column {
+                                                                    if (isEditing || hasReplyContext) {
+                                                                        HorizontalDivider(
+                                                                            color = MaterialTheme.colorScheme.outlineVariant.copy(
+                                                                                alpha = 0.5f
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    AttachmentManager(
+                                                                        attachments = viewModel.draftAttachments,
+                                                                        uploading = viewModel.attachmentUploadProgress > 0,
+                                                                        uploadProgress = viewModel.attachmentUploadProgress,
+                                                                        canRemove = true,
+                                                                        canPreview = true,
+                                                                        onRemove = {
+                                                                            viewModel.draftAttachments.remove(
+                                                                                it
+                                                                            )
+                                                                        },
+                                                                        onToggleSpoiler = {
+                                                                            val index =
+                                                                                viewModel.draftAttachments
+                                                                                    .indexOfFirst { attachment ->
+                                                                                        attachment.pickerIdentifier ==
+                                                                                                it.pickerIdentifier
+                                                                                    }
+
+                                                                            if (index != -1) {
+                                                                                val attachment =
+                                                                                    viewModel.draftAttachments[index]
+                                                                                viewModel.draftAttachments[index] =
+                                                                                    attachment.copy(
+                                                                                        spoiler = !attachment.spoiler
+                                                                                    )
+                                                                            }
+                                                                        },
+                                                                        embedded = true,
+                                                                    )
+                                                                }
+                                                            }
+
+                                                            if (isEditing || hasReplyContext ||
+                                                                viewModel.draftAttachments.isNotEmpty()
+                                                            ) {
+                                                                HorizontalDivider(
+                                                                    color = MaterialTheme.colorScheme.outlineVariant.copy(
+                                                                        alpha = 0.5f
+                                                                    )
+                                                                )
+                                                            }
+                                                        },
+                                                    )
+
+                                                    DropdownMenu(
+                                                        expanded = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker && notEnoughSpaceForPanes,
+                                                        onDismissRequest = {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+                                                    ) {
+                                                        DropdownMenuItem(
+                                                            leadingIcon = {
+                                                                Icon(
+                                                                    painter = StoatIcons.AttachFile.painter(),
+                                                                    contentDescription = null // Provided by text below
+                                                                )
+                                                            },
+                                                            text = { Text(stringResource(Res.string.file_picker_chip_documents)) },
+                                                            onClick = {
+                                                                openDocumentPickerCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            }
+                                                        )
+                                                        DropdownMenuItem(
+                                                            leadingIcon = {
+                                                                Icon(
+                                                                    painter = StoatIcons.TakePhoto.painter(),
+                                                                    contentDescription = null // Provided by text below
+                                                                )
+                                                            },
+                                                            text = { Text(stringResource(Res.string.file_picker_chip_camera)) },
+                                                            onClick = {
+                                                                openCameraCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            }
+                                                        )
+                                                        DropdownMenuItem(
+                                                            leadingIcon = {
+                                                                Icon(
+                                                                    painter = StoatIcons.PhotoLibrary.painter(),
+                                                                    contentDescription = null // Provided by text below
+                                                                )
+                                                            },
+                                                            text = { Text(stringResource(Res.string.file_picker_chip_photo_picker)) },
+                                                            onClick = {
+                                                                openPhotoPickerCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
                                                             }
                                                         )
                                                     }
                                                 }
-
-                                                ChannelScreenActivePane.AttachmentPicker -> {
-                                                    BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
-                                                        viewModel.activePane =
-                                                            ChannelScreenActivePane.None
-                                                    }
-
-                                                    MediaPickerGateway(
-                                                        onOpenPhotoPicker = {
-                                                            openPhotoPickerCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        },
-                                                        onOpenDocumentPicker = {
-                                                            openDocumentPickerCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        },
-                                                        onOpenCamera = {
-                                                            openCameraCallback()
-                                                            viewModel.activePane =
-                                                                ChannelScreenActivePane.None
-                                                        },
+                                            } else {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(
+                                                            horizontal = 32.dp,
+                                                            vertical = 16.dp
+                                                        )
+                                                ) {
+                                                    Text(
+                                                        stringResource(viewModel.denyMessageFieldReasonResource),
+                                                        color = MaterialTheme.colorScheme.error,
+                                                        style = MaterialTheme.typography.bodyMedium,
+                                                        textAlign = TextAlign.Center
                                                     )
-                                                }
-
-                                                else -> {
-                                                    // Do nothing
                                                 }
                                             }
                                         }
-                                        Box(
-                                            Modifier.then(
-                                                if (viewModel.activePane == ChannelScreenActivePane.None) {
-                                                    Modifier.height(with(LocalDensity.current) {
-                                                        keyboardOnlyInset.toDp()
-                                                    })
-                                                } else {
-                                                    Modifier.imePadding()
-                                                }
-                                            )
-                                        )
-                                    }
-                                } else {
-                                    if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
-                                        BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
-                                            viewModel.activePane =
-                                                ChannelScreenActivePane.None
-                                        }
 
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(600.dp)
-                                                .background(MaterialTheme.colorScheme.background)
-                                                .padding(4.dp)
-                                                .navigationBarsPadding()
-                                        ) {
-                                            EmojiPicker(
-                                                onEmojiSelected = viewModel::putAtCursorPosition,
-                                                bottomInset = pxAsDp(
-                                                    max(
-                                                        imeCurrentInset - navigationBarsInset,
-                                                        0
-                                                    )
-                                                ),
-                                                onSearchFocus = {
-                                                    emojiSearchFocused = it
-                                                }
+                                        if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                            Spacer(
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .height(navigationBarHeight)
                                             )
                                         }
                                     }
-                                    Box(
+                                }
+
+                                if (viewModel.activePane == ChannelScreenActivePane.None && !imeInTransition) {
+                                    Spacer(
                                         Modifier
                                             .fillMaxWidth()
-                                            .then(
-                                                if (viewModel.activePane == ChannelScreenActivePane.None) {
-                                                    Modifier.height(with(LocalDensity.current) {
-                                                        keyboardOnlyInset.toDp()
-                                                    })
-                                                } else {
-                                                    Modifier
-                                                        .imePadding()
-                                                        .navigationBarsPadding()
-                                                }
-                                            )
+                                            .height(with(LocalDensity.current) {
+                                                keyboardOnlyInset.toDp()
+                                            })
                                     )
+                                } else {
+                                    if (!notEnoughSpaceForPanes) {
+                                        Box(
+                                            Modifier
+                                                .heightIn(min = pxAsDp(composerBottomSpacerHeight))
+                                                .then(
+                                                    if (viewModel.activePane != ChannelScreenActivePane.None) {
+                                                        Modifier.background(
+                                                            MaterialTheme.colorScheme.background
+                                                        )
+                                                    } else {
+                                                        Modifier
+                                                    }
+                                                )
+                                        ) {
+                                            Box(
+                                                Modifier.then(
+                                                    if (emojiSearchFocused) {
+                                                        Modifier.requiredHeight(
+                                                            pxAsDp(
+                                                                max(
+                                                                    imeCurrentInset * 2,
+                                                                    composerBottomSpacerHeight
+                                                                )
+                                                            )
+                                                        )
+                                                    } else {
+                                                        Modifier.requiredHeight(
+                                                            pxAsDp(
+                                                                composerBottomSpacerHeight
+                                                            )
+                                                        )
+                                                    }
+                                                )
+                                            ) {
+                                                when (viewModel.activePane) {
+                                                    ChannelScreenActivePane.EmojiPicker -> {
+                                                        BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+
+                                                        Column(
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .background(MaterialTheme.colorScheme.background)
+                                                                .padding(4.dp)
+                                                                .navigationBarsPadding()
+                                                        ) {
+                                                            EmojiPicker(
+                                                                onEmojiSelected = viewModel::putAtCursorPosition,
+                                                                bottomInset = pxAsDp(
+                                                                    max(
+                                                                        imeCurrentInset - navigationBarsInset,
+                                                                        0
+                                                                    )
+                                                                ),
+                                                                onSearchFocus = {
+                                                                    emojiSearchFocused = it
+                                                                }
+                                                            )
+                                                        }
+                                                    }
+
+                                                    ChannelScreenActivePane.AttachmentPicker -> {
+                                                        BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.AttachmentPicker) {
+                                                            viewModel.activePane =
+                                                                ChannelScreenActivePane.None
+                                                        }
+
+                                                        MediaPickerGateway(
+                                                            onOpenPhotoPicker = {
+                                                                openPhotoPickerCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            },
+                                                            onOpenDocumentPicker = {
+                                                                openDocumentPickerCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            },
+                                                            onOpenCamera = {
+                                                                openCameraCallback()
+                                                                viewModel.activePane =
+                                                                    ChannelScreenActivePane.None
+                                                            },
+                                                        )
+                                                    }
+
+                                                    else -> {
+                                                        // Do nothing
+                                                    }
+                                                }
+                                            }
+                                            Box(
+                                                Modifier.then(
+                                                    if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                                        Modifier.height(with(LocalDensity.current) {
+                                                            keyboardOnlyInset.toDp()
+                                                        })
+                                                    } else {
+                                                        Modifier.imePadding()
+                                                    }
+                                                )
+                                            )
+                                        }
+                                    } else {
+                                        if (viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
+                                            BackHandler(enabled = viewModel.activePane == ChannelScreenActivePane.EmojiPicker) {
+                                                viewModel.activePane =
+                                                    ChannelScreenActivePane.None
+                                            }
+
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(600.dp)
+                                                    .background(MaterialTheme.colorScheme.background)
+                                                    .padding(4.dp)
+                                                    .navigationBarsPadding()
+                                            ) {
+                                                EmojiPicker(
+                                                    onEmojiSelected = viewModel::putAtCursorPosition,
+                                                    bottomInset = pxAsDp(
+                                                        max(
+                                                            imeCurrentInset - navigationBarsInset,
+                                                            0
+                                                        )
+                                                    ),
+                                                    onSearchFocus = {
+                                                        emojiSearchFocused = it
+                                                    }
+                                                )
+                                            }
+                                        }
+                                        Box(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .then(
+                                                    if (viewModel.activePane == ChannelScreenActivePane.None) {
+                                                        Modifier.height(with(LocalDensity.current) {
+                                                            keyboardOnlyInset.toDp()
+                                                        })
+                                                    } else {
+                                                        Modifier
+                                                            .imePadding()
+                                                            .navigationBarsPadding()
+                                                    }
+                                                )
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-                }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package chat.stoat.screens.labs.ui.mockups
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
@@ -87,7 +88,7 @@ fun NewLoginExperienceMockup(navigator: Navigator) {
                             Image(
                                 painter = painterResource(Res.drawable.stoat_wordmark_white),
                                 contentDescription = null,
-                                colorFilter = if (LoadedSettings.theme == Theme.M3Dynamic) ColorFilter.tint(
+                                colorFilter = if (LoadedSettings.themeFor(isSystemInDarkTheme()) == Theme.M3Dynamic) ColorFilter.tint(
                                     MaterialTheme.colorScheme.onBackground
                                 ) else null,
                                 modifier = Modifier.fillMaxWidth(0.5f)

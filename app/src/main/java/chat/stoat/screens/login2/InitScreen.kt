@@ -1,5 +1,6 @@
 package chat.stoat.screens.login2
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,7 +58,7 @@ fun InitScreen(
                 .scale(3f)
                 .offset(y = 32.dp)
                 .align(Alignment.TopCenter),
-            colorFilter = if (LoadedSettings.theme == Theme.M3Dynamic) ColorFilter.tint(
+            colorFilter = if (LoadedSettings.themeFor(isSystemInDarkTheme()) == Theme.M3Dynamic) ColorFilter.tint(
                 MaterialTheme.colorScheme.tertiaryContainer
             ) else null,
             contentDescription = null

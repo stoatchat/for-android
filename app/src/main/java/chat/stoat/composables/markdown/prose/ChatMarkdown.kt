@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -49,12 +48,11 @@ import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.isUlid
 import chat.stoat.api.routes.custom.fetchEmoji
-import chat.stoat.api.settings.LoadedSettings
 import chat.stoat.callbacks.Action
 import chat.stoat.callbacks.ActionChannel
 import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.theme.FragmentMono
-import chat.stoat.core.designsystem.theme.isThemeDark
+import chat.stoat.core.designsystem.theme.LocalThemeIsDark
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.isInviteUri
@@ -533,9 +531,7 @@ fun ChatMarkdown(
             }
         }
     }
-    val systemIsDark = isSystemInDarkTheme()
-    val isDarkTheme =
-        remember(LoadedSettings.theme) { isThemeDark(LoadedSettings.theme, systemIsDark) }
+    val isDarkTheme = LocalThemeIsDark.current
     val highlightsBuilder = remember(isDarkTheme) {
         Highlights.Builder().theme(SyntaxThemes.atom(darkMode = isDarkTheme))
     }

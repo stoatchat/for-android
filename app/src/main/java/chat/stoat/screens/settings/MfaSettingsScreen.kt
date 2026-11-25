@@ -24,7 +24,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -80,6 +79,7 @@ import chat.stoat.composables.mfa.RecoveryCodesDialog
 import chat.stoat.composables.mfa.mfaErrorText
 import chat.stoat.composables.vectorassets.MfaOff
 import chat.stoat.composables.vectorassets.MfaOn
+import chat.stoat.core.designsystem.components.StoatButtonDefaults
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
@@ -369,10 +369,7 @@ fun MfaSettingsScreen(
                                 Button(
                                     onClick = { viewModel.disableAuthenticator() },
                                     enabled = !viewModel.actionBusy,
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                                    )
+                                    colors = StoatButtonDefaults.dangerColors()
                                 ) {
                                     Text(stringResource(Res.string.settings_mfa_disable_totp_cta))
                                 }

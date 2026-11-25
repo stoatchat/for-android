@@ -584,9 +584,9 @@ class ChannelScreenViewModel(
             )
 
             val ast = parseAst(content)
-            updateItems(
-                listOf(ChannelScreenItem.ProspectiveMessage(prospectiveMessage, ast)) + items
-            )
+            updateItems(prospectiveMessage.channel) { current ->
+                listOf(ChannelScreenItem.ProspectiveMessage(prospectiveMessage, ast)) + current
+            }
 
             kvStorage.remove("draftContent/${channel?.id}")
             putDraftContent("", true)
@@ -608,13 +608,14 @@ class ChannelScreenViewModel(
                 )
             } catch (e: Exception) {
                 Log.e("ChannelScreenViewModel", "Failed to send message", e)
-                updateItems(
+                updateItems(prospectiveMessage.channel) { current ->
                     listOf(
                         ChannelScreenItem.FailedMessage(
                             prospectiveMessage,
                             ast
                         )
-                    ) + items.filter { it !is ChannelScreenItem.ProspectiveMessage })
+                    ) + current.filter { it !is ChannelScreenItem.ProspectiveMessage }
+                }
             } finally {
                 isSending = false
             }
@@ -676,9 +677,10 @@ class ChannelScreenViewModel(
     ) {
         val expectedChannelId = channelId ?: return
         val messages = fetchMessagePage(expectedChannelId, amount)
+        val latest = messagesToItems(messages)
         if (channelId != expectedChannelId) return
 
-        updateItems(messagesToItems(messages))
+        updateItems(expectedChannelId) { latest }
         canLoadNewer = false
         canLoadOlder = messages.size >= amount
         hasUnseenNewMessages = false
@@ -730,9 +732,10 @@ class ChannelScreenViewModel(
                     amount = amount,
                     before = oldestId,
                 )
+                val older = messagesToItems(messages)
                 if (channelId != expectedChannelId) return@launch
 
-                updateItems(items + messagesToItems(messages))
+                updateItems(expectedChannelId) { current -> current + older }
                 canLoadOlder = messages.size >= amount
             } catch (e: CancellationException) {
                 throw e
@@ -758,9 +761,10 @@ class ChannelScreenViewModel(
                     after = newestId,
                     sort = "Oldest",
                 )
+                val newer = messagesToItems(messages)
                 if (channelId != expectedChannelId) return@launch
 
-                updateItems(items + messagesToItems(messages))
+                updateItems(expectedChannelId) { current -> current + newer }
                 canLoadNewer = messages.size >= amount
                 if (!canLoadNewer) {
                     hasUnseenNewMessages = false
@@ -818,7 +822,9 @@ class ChannelScreenViewModel(
                     targetMessageId = messageId,
                     requestedLimit = amount,
                 )
-                updateItems(messagesToItems(messages))
+                val nearby = messagesToItems(messages)
+                if (channelId != expectedChannelId || requestId != requestSequence) return@launch
+                updateItems(expectedChannelId) { nearby }
                 canLoadNewer = boundaries.canLoadNewer
                 canLoadOlder = boundaries.canLoadOlder
                 hasUnseenNewMessages = false
@@ -937,13 +943,15 @@ class ChannelScreenViewModel(
                                 it.system != null -> ChannelScreenItem.SystemMessage(it)
                                 else -> ChannelScreenItem.RegularMessage(it, null)
                             }
-                            updateItems(listOf(newItem) + items.filter { m ->
-                                if (m is ChannelScreenItem.ProspectiveMessage) {
-                                    m.message.id != it.nonce
-                                } else {
-                                    true
+                            updateItems(it.channel) { current ->
+                                listOf(newItem) + current.filter { m ->
+                                    if (m is ChannelScreenItem.ProspectiveMessage) {
+                                        m.message.id != it.nonce
+                                    } else {
+                                        true
+                                    }
                                 }
-                            })
+                            }
                         }
 
                         hydrateIncomingMessage(it, channel?.id ?: return@onEach)
@@ -952,16 +960,15 @@ class ChannelScreenViewModel(
                     is MessageDeleteFrame -> {
                         if (it.channel != channel?.id) return@onEach
 
-                        val newRenderableMessages =
-                            items.filter { m ->
+                        updateItems(it.channel) { current ->
+                            current.filter { m ->
                                 if (m is ChannelScreenItem.RegularMessage) {
                                     m.message.id != it.id
                                 } else {
                                     true
                                 }
                             }
-
-                        updateItems(newRenderableMessages)
+                        }
                     }
 
 
@@ -973,25 +980,29 @@ class ChannelScreenViewModel(
 
                         val currentMessage = items.find { m ->
                             m is ChannelScreenItem.RegularMessage && m.message.id == it.id
-                        }
-                        if (currentMessage == null) return@onEach
+                        } as? ChannelScreenItem.RegularMessage ?: return@onEach
 
                         if (messageFrame.author != null) {
                             addUserIfUnknown(messageFrame.author!!)
                         }
+                        val updatedAst = if (messageFrame.content != null) {
+                            parseAst(currentMessage.message.mergeWithPartial(messageFrame).content)
+                        } else {
+                            null
+                        }
 
-                        updateItems(
-                            items.map { m ->
+                        updateItems(it.channel) { current ->
+                            current.map { m ->
                                 if (m is ChannelScreenItem.RegularMessage && m.message.id == it.id) {
-                                    val merged = m.message.mergeWithPartial(messageFrame)
-                                    val ast =
-                                        if (messageFrame.content != null) parseAst(merged.content) else m.mdAst
-                                    ChannelScreenItem.RegularMessage(merged, ast)
+                                    ChannelScreenItem.RegularMessage(
+                                        m.message.mergeWithPartial(messageFrame),
+                                        if (messageFrame.content != null) updatedAst else m.mdAst,
+                                    )
                                 } else {
                                     m
                                 }
                             }
-                        )
+                        }
                     }
 
                     is MessageAppendFrame -> {
@@ -1003,8 +1014,8 @@ class ChannelScreenViewModel(
 
                         if (!hasMessage) return@onEach
 
-                        updateItems(
-                            items.map { currentMsg ->
+                        updateItems(it.channel) { current ->
+                            current.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
@@ -1013,7 +1024,7 @@ class ChannelScreenViewModel(
                                     currentMsg
                                 }
                             }
-                        )
+                        }
                     }
 
                     is MessageReactFrame -> {
@@ -1027,8 +1038,8 @@ class ChannelScreenViewModel(
 
                         if (!hasMessage) return@onEach
 
-                        updateItems(
-                            items.map { currentMsg ->
+                        updateItems(it.channel_id) { current ->
+                            current.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
@@ -1037,7 +1048,7 @@ class ChannelScreenViewModel(
                                     currentMsg
                                 }
                             }
-                        )
+                        }
                     }
 
                     is MessageUnreactFrame -> {
@@ -1051,8 +1062,8 @@ class ChannelScreenViewModel(
 
                         if (!hasMessage) return@onEach
 
-                        updateItems(
-                            items.map { currentMsg ->
+                        updateItems(it.channel_id) { current ->
+                            current.map { currentMsg ->
                                 if (currentMsg is ChannelScreenItem.RegularMessage && currentMsg.message.id == it.id) {
                                     StoatAPI.messageCache[it.id]?.let { m ->
                                         ChannelScreenItem.RegularMessage(m, currentMsg.mdAst)
@@ -1061,7 +1072,7 @@ class ChannelScreenViewModel(
                                     currentMsg
                                 }
                             }
-                        )
+                        }
                     }
 
                     is ChannelStartTypingFrame -> {
@@ -1170,7 +1181,18 @@ class ChannelScreenViewModel(
         }
     }
 
-    private suspend fun updateItems(newItems: List<ChannelScreenItem>) {
+    /**
+     * Applies [transform] to the current items and regroups them in one synchronous step, so nothing
+     * can change the list between reading and writing it. Slow work (parsing, fetching) must happen
+     * before calling this. Does nothing if the channel is no longer [expectedChannelId], so late
+     * results can never leak into another channel.
+     */
+    private fun updateItems(
+        expectedChannelId: String?,
+        transform: (List<ChannelScreenItem>) -> List<ChannelScreenItem>,
+    ) {
+        if (expectedChannelId == null || expectedChannelId != channelId) return
+        val newItems = transform(items.toList())
         // Spec https://wiki.rvlt.gg/index.php/Text_Channel_(UI)#Message_Grouping_Algorithm
         val innerItems = normalizeByUlid(newItems) { it.messageIdOrNull() }.toMutableStateList()
         // Let L be the list of messages ordered from newest to oldest
@@ -1288,17 +1310,15 @@ class ChannelScreenViewModel(
             }
         }
 
-        withContext(Dispatchers.Main) {
-            items.clear()
-            items.addAll(groupedItems.fastDistinctBy {
-                when (it) {
-                    is ChannelScreenItem.RegularMessage -> it.message.id
-                    is ChannelScreenItem.SystemMessage -> it.message.id
-                    is ChannelScreenItem.DateDivider -> it.instant.toString()
-                    else -> it.toString() // Fallback for other item types
-                }
-            })
-        }
+        items.clear()
+        items.addAll(groupedItems.fastDistinctBy {
+            when (it) {
+                is ChannelScreenItem.RegularMessage -> it.message.id
+                is ChannelScreenItem.SystemMessage -> it.message.id
+                is ChannelScreenItem.DateDivider -> it.instant.toString()
+                else -> it.toString() // Fallback for other item types
+            }
+        })
     }
 
     var showPhysicalKeyboardSpark by mutableStateOf(false)

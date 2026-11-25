@@ -18,7 +18,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -46,12 +45,13 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.auth.fetchAllSessions
 import chat.stoat.api.routes.auth.logoutAllSessions
 import chat.stoat.api.routes.auth.logoutSessionById
+import chat.stoat.composables.markdown.prose.UIMarkdown
+import chat.stoat.composables.settings.sessions.SessionItem
 import chat.stoat.core.designsystem.components.ListHeader
+import chat.stoat.core.designsystem.components.StoatButtonDefaults
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
-import chat.stoat.composables.markdown.prose.UIMarkdown
-import chat.stoat.composables.settings.sessions.SessionItem
 import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
@@ -129,7 +129,8 @@ fun SessionSettingsScreen(
                     onClick = {
                         viewModel.showLogoutOtherConfirmation = false
                         viewModel.logoutOtherSessions()
-                    }
+                    },
+                    colors = StoatButtonDefaults.dangerColors(),
                 ) {
                     Text(stringResource(Res.string.settings_sessions_log_out_other_confirm_yes))
                 }
@@ -263,9 +264,10 @@ fun SessionSettingsScreen(
                                     )
                                 }
 
-                                FilledTonalButton(onClick = {
-                                    viewModel.showLogoutOtherConfirmation = true
-                                }) {
+                                Button(
+                                    onClick = { viewModel.showLogoutOtherConfirmation = true },
+                                    colors = StoatButtonDefaults.dangerColors(),
+                                ) {
                                     Text(stringResource(Res.string.logout))
                                 }
                             }

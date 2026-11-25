@@ -11,14 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import chat.stoat.core.designsystem.theme.isThemeDark
+import chat.stoat.core.designsystem.theme.LocalThemeIsDark
 import chat.stoat.core.model.schemas.Special
-import chat.stoat.api.settings.LoadedSettings
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun AppleMusicEmbed(special: Special, modifier: Modifier = Modifier) {
-    val useDarkTheme = isThemeDark(LoadedSettings.theme)
+    val useDarkTheme = LocalThemeIsDark.current
 
     AndroidView(
         factory = { ctx ->

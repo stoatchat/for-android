@@ -65,6 +65,16 @@ data class AndroidSpecificSettings(
      */
     var theme: String? = null,
     /**
+     * The theme to use while the system is in light mode, overriding [theme] when set.
+     * Can be one of `{ Default, Light, M3Dynamic, Amoled }`
+     */
+    var themeLight: String? = null,
+    /**
+     * The theme to use while the system is in dark mode, overriding [theme] when set.
+     * Can be one of `{ Default, Light, M3Dynamic, Amoled }`
+     */
+    var themeDark: String? = null,
+    /**
      * The font to use for the app.
      * Can be one of `{ Default, GoogleSansFlex }`
      */

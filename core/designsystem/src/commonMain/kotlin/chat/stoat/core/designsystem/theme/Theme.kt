@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import chat.stoat.core.model.data.OverridableColourScheme
 import chat.stoat.core.model.settings.Theme
@@ -162,6 +164,9 @@ fun getColorScheme(
     return colourOverrides.applyTo(colorScheme)
 }
 
+/** Whether the active theme is dark, including themes that follow the system setting. */
+val LocalThemeIsDark = staticCompositionLocalOf { true }
+
 @Composable
 fun StoatTheme(
     requestedTheme: Theme,
@@ -175,11 +180,13 @@ fun StoatTheme(
         UserInterfaceFont.GoogleSansFlex -> GoogleTypography
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = typography,
-        content = content
-    )
+    CompositionLocalProvider(LocalThemeIsDark provides isThemeDark(requestedTheme)) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = typography,
+            content = content
+        )
+    }
 }
 
 fun getDefaultTheme(): Theme {
