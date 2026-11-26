@@ -1,5 +1,7 @@
 package chat.stoat.settings.dsl
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +15,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,9 +35,9 @@ import chat.stoat.navigation.LocalDetailBesideList
 import chat.stoat.navigation.Navigator
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.back
+import kotlin.enums.EnumEntries
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import kotlin.enums.EnumEntries
 
 val SubcategoryContentInsets = PaddingValues(horizontal = 16.dp)
 
@@ -100,6 +102,7 @@ fun SettingsPage(
     title: @Composable () -> Unit,
     onNavigateBack: (() -> Unit)? = null,
     floatingActionButton: @Composable () -> Unit = {},
+    floatingActionButtonMenu: (@Composable BoxScope.() -> Unit)? = null,
     scrollable: Boolean = true,
     content: @Composable SettingsPageScope.() -> Unit
 ) {
@@ -134,44 +137,50 @@ fun SettingsPage(
         },
         floatingActionButton = floatingActionButton,
     ) { pv ->
-        Column(
+        Box(
             Modifier
                 .padding(pv)
                 .imePadding()
                 .fillMaxSize()
-                .then(
-                    if (scrollable) {
-                        Modifier.verticalScroll(rememberScrollState())
-                    } else {
-                        Modifier
-                    }
-                )
         ) {
-            content(
-                object : SettingsPageScope {
-                    override fun showSnackbar(
-                        message: String,
-                        actionLabel: String?,
-                        onAction: (() -> Unit)?,
-                        dismissCurrent: Boolean,
-                    ) {
-                        scope.launch {
-                            if (dismissCurrent) snackbarHostState.currentSnackbarData?.dismiss()
-                            val result = snackbarHostState.showSnackbar(
-                                message = message,
-                                actionLabel = actionLabel,
-                                withDismissAction = actionLabel != null,
-                                duration = if (actionLabel == null) {
-                                    SnackbarDuration.Short
-                                } else {
-                                    SnackbarDuration.Long
-                                },
-                            )
-                            if (result == SnackbarResult.ActionPerformed) onAction?.invoke()
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (scrollable) {
+                            Modifier.verticalScroll(rememberScrollState())
+                        } else {
+                            Modifier
+                        }
+                    )
+            ) {
+                content(
+                    object : SettingsPageScope {
+                        override fun showSnackbar(
+                            message: String,
+                            actionLabel: String?,
+                            onAction: (() -> Unit)?,
+                            dismissCurrent: Boolean,
+                        ) {
+                            scope.launch {
+                                if (dismissCurrent) snackbarHostState.currentSnackbarData?.dismiss()
+                                val result = snackbarHostState.showSnackbar(
+                                    message = message,
+                                    actionLabel = actionLabel,
+                                    withDismissAction = actionLabel != null,
+                                    duration = if (actionLabel == null) {
+                                        SnackbarDuration.Short
+                                    } else {
+                                        SnackbarDuration.Long
+                                    },
+                                )
+                                if (result == SnackbarResult.ActionPerformed) onAction?.invoke()
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
+            floatingActionButtonMenu?.invoke(this)
         }
     }
 }

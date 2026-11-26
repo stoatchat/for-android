@@ -32,7 +32,8 @@ import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonMenu
+import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -46,14 +47,18 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ToggleFloatingActionButton
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +68,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -403,6 +410,7 @@ fun ServerSettingsChannels(
     }
 
     var showAddSheet by remember { mutableStateOf(false) }
+    var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var showCreateChannel by remember { mutableStateOf(false) }
     var showCreateCategory by remember { mutableStateOf(false) }
     var channelName by remember { mutableStateOf("") }
@@ -438,6 +446,22 @@ fun ServerSettingsChannels(
             categoryToRename = null
             categoryToDelete = null
         }
+    }
+
+    BackHandler(enabled = fabMenuExpanded) { fabMenuExpanded = false }
+
+    fun startCreateChannel(sectionId: String, type: ChannelDialogType) {
+        selectedSectionId = sectionId
+        channelName = ""
+        channelType = type
+        viewModel.beginMutation()
+        showCreateChannel = true
+    }
+
+    fun startCreateCategory() {
+        categoryName = ""
+        viewModel.beginMutation()
+        showCreateCategory = true
     }
 
     fun applyAccessibleMove(movedSections: List<ServerChannelSection>) {
@@ -681,25 +705,18 @@ fun ServerSettingsChannels(
         title = { Text(stringResource(Res.string.server_settings_channels)) },
         scrollable = false,
         onNavigateBack = { if (!viewModel.busy) navigator.popBackStack() },
-        floatingActionButton = {
-            if (canManage) {
-                FloatingActionButton(
-                    onClick = {
-                        selectedSectionId = UncategorisedChannelSectionId
-                        channelName = ""
-                        channelType = ChannelDialogType.Text
-                        viewModel.beginMutation()
-                        showAddSheet = true
-                    }
-                ) {
-                    Icon(
-                        StoatIcons.Add.painter(),
-                        contentDescription = stringResource(
-                            Res.string.server_settings_channels_add_title
-                        )
-                    )
-                }
+        floatingActionButtonMenu = if (canManage) {
+            {
+                CreateFloatingActionButtonMenu(
+                    expanded = fabMenuExpanded,
+                    onExpandedChange = { fabMenuExpanded = it },
+                    onCreateChannel = { startCreateChannel(UncategorisedChannelSectionId, it) },
+                    onCreateCategory = ::startCreateCategory,
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                )
             }
+        } else {
+            null
         }
     ) {
         val savedMessage = stringResource(Res.string.server_settings_channels_reordered)
@@ -1444,3 +1461,63 @@ private fun sectionTitle(section: ServerChannelSection): String =
     } else {
         section.title.orEmpty()
     }
+
+@Composable
+private fun CreateFloatingActionButtonMenu(
+    expanded: Boolean,
+    onExpandedChange: (Boolean) -> Unit,
+    onCreateChannel: (ChannelDialogType) -> Unit,
+    onCreateCategory: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FloatingActionButtonMenu(
+        expanded = expanded,
+        modifier = modifier,
+        button = {
+            ToggleFloatingActionButton(
+                checked = expanded,
+                onCheckedChange = onExpandedChange,
+                modifier = Modifier.semantics { traversalIndex = -1f },
+            ) {
+                val icon by remember {
+                    derivedStateOf {
+                        if (checkedProgress > 0.5f) StoatIcons.Dismiss else StoatIcons.Add
+                    }
+                }
+                Icon(
+                    painter = icon.painter(),
+                    contentDescription = stringResource(Res.string.server_settings_channels_add_title),
+                    modifier = Modifier.animateIcon({ checkedProgress }),
+                )
+            }
+        }
+    ) {
+        FloatingActionButtonMenuItem(
+            modifier = Modifier.semantics { isTraversalGroup = true },
+            onClick = {
+                onExpandedChange(false)
+                onCreateChannel(ChannelDialogType.Text)
+            },
+            icon = { Icon(StoatIcons.TextChannel.painter(), contentDescription = null) },
+            text = { Text(stringResource(Res.string.server_settings_channels_text_channel)) },
+        )
+        FloatingActionButtonMenuItem(
+            modifier = Modifier.semantics { isTraversalGroup = true },
+            onClick = {
+                onExpandedChange(false)
+                onCreateChannel(ChannelDialogType.Voice)
+            },
+            icon = { Icon(StoatIcons.VoiceChannel.painter(), contentDescription = null) },
+            text = { Text(stringResource(Res.string.server_settings_channels_voice_channel)) },
+        )
+        FloatingActionButtonMenuItem(
+            modifier = Modifier.semantics { isTraversalGroup = true },
+            onClick = {
+                onExpandedChange(false)
+                onCreateCategory()
+            },
+            icon = { Icon(StoatIcons.ChannelCategory.painter(), contentDescription = null) },
+            text = { Text(stringResource(Res.string.server_settings_channels_category)) },
+        )
+    }
+}
