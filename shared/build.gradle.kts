@@ -48,6 +48,14 @@ kotlin {
             implementation(libs.kotlin.serialization.core)
             implementation(libs.jetbrains.lifecycle.viewmodel)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.kotlin.datetime)
+            implementation(libs.jetbrains.markdown)
+            implementation(libs.multiplatform.markdown)
+            implementation(libs.multiplatform.markdown.m3)
+            implementation(libs.multiplatform.markdown.coil3)
+            implementation(libs.multiplatform.markdown.code)
+            implementation(libs.highlights)
+            implementation(libs.ratex)
         }
 
         androidMain.dependencies {

@@ -1,6 +1,6 @@
 package chat.stoat.api.internals
 
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.experimental.and
 import kotlin.random.Random
 

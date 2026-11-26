@@ -2,14 +2,14 @@ package chat.stoat.internals
 
 import android.text.format.DateUtils
 import android.util.Log
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun resolveTimestamp(timestamp: Long, modifier: String? = null): String {
+actual fun resolveTimestamp(timestamp: Long, modifier: String?): String {
     val normalisedModifier = modifier.orEmpty().removePrefix(":")
 
     val instant = Instant.fromEpochSeconds(timestamp)

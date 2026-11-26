@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import chat.stoat.api.settings.ServerFolders
-import chat.stoat.composables.screens.chat.drawer.parseFolderColour
 import chat.stoat.core.designsystem.components.SheetButton
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -31,6 +30,7 @@ import chat.stoat.shared.resources.server_folder_sheet_colour
 import chat.stoat.shared.resources.server_folder_sheet_delete
 import chat.stoat.shared.resources.server_folder_sheet_rename
 import chat.stoat.shared.resources.server_folder_unnamed
+import chat.stoat.ui.colour.parseSolidColour
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
@@ -144,7 +144,7 @@ fun ServerFolderPickerSheet(
                     Icon(
                         painter = StoatIcons.AddToFolder.painter(),
                         contentDescription = null,
-                        tint = folder.colour?.let(::parseFolderColour)
+                        tint = folder.colour?.let(::parseSolidColour)
                             ?: LocalContentColor.current
                     )
                 },

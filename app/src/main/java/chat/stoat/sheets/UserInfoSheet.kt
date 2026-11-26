@@ -85,7 +85,7 @@ import chat.stoat.ui.colour.BrushCompat
 import chat.stoat.ui.colour.solidColor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.semantics.Role as SemanticsRole
 

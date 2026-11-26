@@ -57,15 +57,15 @@ import chat.stoat.shared.resources.member_moderation_timeout_length
 import chat.stoat.shared.resources.member_moderation_timeout_member
 import chat.stoat.shared.resources.unknown
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
-internal sealed interface MemberModerationAction {
+sealed interface MemberModerationAction {
     data object Timeout : MemberModerationAction
     data object Kick : MemberModerationAction
     data object Ban : MemberModerationAction
@@ -94,7 +94,7 @@ private fun DurationOption.label(): String = when {
     }
 }
 
-internal data class MemberModerationPermissions(
+data class MemberModerationPermissions(
     val canTimeout: Boolean,
     val canKick: Boolean,
     val canBan: Boolean,
@@ -108,7 +108,7 @@ private fun memberRanking(serverId: String, userId: String): Double {
     return Roles.resolveHighestRole(serverId, userId)?.rank ?: Double.POSITIVE_INFINITY
 }
 
-internal fun memberModerationPermissions(
+fun memberModerationPermissions(
     serverId: String,
     targetUserId: String?,
 ): MemberModerationPermissions {
@@ -139,7 +139,7 @@ internal fun memberModerationPermissions(
 }
 
 @Composable
-internal fun MemberModerationDialog(
+fun MemberModerationDialog(
     action: MemberModerationAction,
     serverId: String,
     user: User,

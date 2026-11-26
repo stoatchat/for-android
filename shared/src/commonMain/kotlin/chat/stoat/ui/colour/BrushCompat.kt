@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.core.graphics.toColorInt
 
 fun Brush.Companion.solidColor(colour: Color) = SolidColor(colour)
 
@@ -258,16 +257,7 @@ object BrushCompat {
 
     @Composable
     private fun parseColourName(colour: String): Color {
-        return try {
-            val cssColour = CSSColours[colour.lowercase()]
-            if (cssColour != null) {
-                return cssColour
-            }
-
-            Color(colour.toColorInt())
-        } catch (e: RuntimeException) {
-            LocalContentColor.current
-        }
+        return CSSColours[colour.lowercase()] ?: parseHexColour(colour) ?: LocalContentColor.current
     }
 
     @Composable
@@ -411,16 +401,7 @@ class InstancedBrushCompat(
     }
 
     private fun parseColourName(colour: String): Color {
-        return try {
-            val cssColour = CSSColours[colour.lowercase()]
-            if (cssColour != null) {
-                return cssColour
-            }
-
-            Color(colour.toColorInt())
-        } catch (e: RuntimeException) {
-            defaultColour
-        }
+        return CSSColours[colour.lowercase()] ?: parseHexColour(colour) ?: defaultColour
     }
 
     fun parseColour(colour: String): Brush {

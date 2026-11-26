@@ -24,6 +24,7 @@ fun Uri.toStoatWebLinkOrNull(): StoatWebLink? {
 
     val segments = pathSegments
 
+    @Suppress("IntroduceWhenSubject") // in case we need more complex logic later
     return when {
         segments.size == 2 &&
                 segments[0] == "channel" &&

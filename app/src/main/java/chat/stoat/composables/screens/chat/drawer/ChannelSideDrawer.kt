@@ -1,7 +1,6 @@
 package chat.stoat.composables.screens.chat.drawer
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
@@ -38,9 +37,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.rememberOverscrollEffect
-import androidx.compose.foundation.withoutVisualEffect
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.withoutVisualEffect
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -95,10 +94,10 @@ import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.api.settings.SyncedSettings
 import chat.stoat.api.settings.resolveServerSidebar
 import chat.stoat.composables.generic.GroupIcon
-import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
 import chat.stoat.composables.screens.chat.ChannelIcon
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.FragmentMono
@@ -106,7 +105,6 @@ import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.Category
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.ChannelType
-import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.ServerFlags
 import chat.stoat.core.model.schemas.User
 import chat.stoat.core.model.schemas.has
@@ -139,6 +137,7 @@ import chat.stoat.sheets.ColourPickerSheet
 import chat.stoat.sheets.ServerFolderSheet
 import chat.stoat.sheets.colourPickerString
 import chat.stoat.sheets.colourPickerValue
+import chat.stoat.ui.colour.parseSolidColour
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -221,7 +220,8 @@ fun ChannelSideDrawer(
 
     val railRows = remember(sidebarEntries) { sidebarEntries.toRailRows() }
     val railListState = rememberLazyListState()
-    val railDragState = remember(railListState) { RailDragState(railListState, stickyHeaderKey = "self") }
+    val railDragState =
+        remember(railListState) { RailDragState(railListState, stickyHeaderKey = "self") }
     SideEffect { railDragState.rows = railRows }
     val haptics = LocalHapticFeedback.current
     val folderGroupLayout = remember { FolderGroupLayout() }
@@ -231,7 +231,7 @@ fun ChannelSideDrawer(
         .filterIsInstance<ServerSidebarEntry.Folder>()
         .associate { entry ->
             entry.id to FolderGroupStyle(
-                colour = entry.folder.colour?.let(::parseFolderColour)?.copy(alpha = 0.18f)
+                colour = entry.folder.colour?.let(::parseSolidColour)?.copy(alpha = 0.18f)
                     ?: defaultFolderGroupColour,
                 lastMemberKey = entry.servers.last().id!!
             )

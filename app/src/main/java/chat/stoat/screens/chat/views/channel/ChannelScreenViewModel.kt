@@ -45,6 +45,7 @@ import chat.stoat.callbacks.ActionChannel
 import chat.stoat.callbacks.UiCallback
 import chat.stoat.callbacks.UiCallbacks
 import chat.stoat.composables.markdown.prose.easyLineBreaks
+import chat.stoat.composables.markdown.prose.prepareChatMarkdownMath
 import chat.stoat.core.model.schemas.Channel
 import chat.stoat.core.model.schemas.Message
 import chat.stoat.internals.text.MessageProcessor
@@ -72,9 +73,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.toJavaInstant
+import kotlin.time.Clock
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 import logcat.LogPriority
 import logcat.asLog
 import logcat.logcat
@@ -349,6 +350,7 @@ class ChannelScreenViewModel(
             val prepared = injectMassMentionMarkers(easyLineBreaks(c.stripPUAChars()))
             parseMarkdownFlow(prepared, flavour = StoatMarkdownFlavour(prepared))
                 .first { it !is State.Loading }
+                .also { prepareChatMarkdownMath(it) }
         }
 
     // Replaces @everyone/@online with <@EVERYONE>/<@ONLINE> outside code blocks and inline code spans.

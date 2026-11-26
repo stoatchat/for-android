@@ -1,7 +1,5 @@
 package chat.stoat.composables.markdown.prose
 
-import android.content.Intent
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -23,12 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
@@ -42,23 +37,15 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.core.graphics.toColorInt
-import androidx.core.net.toUri
-import chat.stoat.activities.InviteActivity
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.isUlid
 import chat.stoat.api.routes.custom.fetchEmoji
-import chat.stoat.callbacks.Action
-import chat.stoat.callbacks.ActionChannel
 import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.theme.FragmentMono
 import chat.stoat.core.designsystem.theme.LocalThemeIsDark
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.User
-import chat.stoat.internals.extensions.isInviteUri
 import chat.stoat.internals.resolveTimestamp
-import chat.stoat.internals.toNavigationAction
-import chat.stoat.internals.toStoatWebLinkOrNull
 import chat.stoat.markdown.CHANNEL_MENTION_ELEMENT_TYPE
 import chat.stoat.markdown.CUSTOM_EMOTE_ELEMENT_TYPE
 import chat.stoat.markdown.MASS_MENTION_ELEMENT_TYPE
@@ -71,6 +58,7 @@ import chat.stoat.markdown.USER_MENTION_ELEMENT_TYPE
 import chat.stoat.platform.LocalToaster
 import chat.stoat.platform.ToastDuration
 import chat.stoat.platform.show
+import chat.stoat.ui.colour.parseSolidColour
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.link_type_no_intent
 import com.mikepenz.markdown.annotator.DefaultAnnotatorSettings
@@ -87,35 +75,23 @@ import com.mikepenz.markdown.model.markdownInlineContent
 import com.mikepenz.markdown.model.rememberMarkdownState
 import dev.snipme.highlights.Highlights
 import dev.snipme.highlights.model.SyntaxThemes
-import io.ratex.RaTeXEngine
-import io.ratex.RaTeXFontLoader
-import io.ratex.RaTeXRenderer
-import kotlinx.coroutines.Dispatchers
+import io.ratex.compose.RaTeX
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.parser.MarkdownParser
-import java.util.concurrent.ConcurrentHashMap
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
-private data class MathEntry(val key: String, val latex: String, val displayMode: Boolean)
-private data class RenderedMath(val renderer: RaTeXRenderer, val size: Size)
+internal data class MathEntry(val key: String, val latex: String, val displayMode: Boolean) {
+    val cacheKey get() = MathKey(latex, displayMode)
+}
 
 private const val CONCEALED_INLINE_PREFIX = "concealed:"
 
-private val mathSizeCache = ConcurrentHashMap<Triple<String, Boolean, Float>, Size>()
-
-// Hard-cap ratex blocks size so adversarial expressions can't crash the layout engine
-private const val MAX_MATH_DIMENSION_PX = 4096f
-private fun Size.clampForLayout(): Size = Size(
-    width.coerceIn(0f, MAX_MATH_DIMENSION_PX),
-    height.coerceIn(0f, MAX_MATH_DIMENSION_PX),
-)
-
-private fun collectMathEntries(node: ASTNode, content: String): List<MathEntry> {
+internal fun collectMathEntries(node: ASTNode, content: String): List<MathEntry> {
     val entries = mutableListOf<MathEntry>()
     node.children.forEach { child ->
         when (child.type) {
@@ -150,7 +126,7 @@ private fun collectEmoteUlids(node: ASTNode, content: String): List<String> {
 
 // Converts single \n to hard line breaks so chat messages render line by line, while leaving fenced
 // code blocks and double-newline paragraph breaks untouched, e.g. GitHub style line breaks
-internal fun easyLineBreaks(content: String): String {
+fun easyLineBreaks(content: String): String {
     val sb = StringBuilder(content.length + 16)
     var i = 0
     var inFence = false
@@ -217,7 +193,7 @@ fun ChatMarkdown(
 ) {
     val linkTypeNoIntentText = stringResource(Res.string.link_type_no_intent)
     val fontSize = LocalTextStyle.current.fontSize * fontSizeMultiplier
-    val context = LocalContext.current
+    val actions = koinInject<ChatMarkdownActions>()
     val toaster = LocalToaster.current
     val density = LocalDensity.current
     val fontSizePx = with(density) { fontSize.toPx() }
@@ -237,44 +213,8 @@ fun ChatMarkdown(
             collectEmoteUlids(it.node, it.content).distinct()
         } ?: emptyList()
     }
-    var mathSizes by remember(mathEntries, fontSizePx) {
-        mutableStateOf(buildMap {
-            mathEntries.forEach { entry ->
-                mathSizeCache[Triple(
-                    entry.latex,
-                    entry.displayMode,
-                    fontSizePx
-                )]?.let { put(entry.key, it) }
-            }
-        })
-    }
-    // RaTeXView permanently cancels its render scope when detached. Lazy list items can be
-    // reattached, so retain the renderer as Compose state and draw it without an embedded View.
-    var renderedMath by remember(mathEntries, fontSizePx, onSurfaceArgb) {
-        mutableStateOf<Map<String, RenderedMath>>(emptyMap())
-    }
-    LaunchedEffect(mathEntries, fontSizePx, onSurfaceArgb) {
-        if (mathEntries.isEmpty()) return@LaunchedEffect
-        withContext(Dispatchers.IO) { RaTeXFontLoader.ensureLoaded(context) }
-        val newRenders = withContext(Dispatchers.Default) {
-            buildMap {
-                mathEntries.forEach { entry ->
-                    try {
-                        val dl =
-                            RaTeXEngine.parseBlocking(entry.latex, entry.displayMode, onSurfaceArgb)
-                        val r = RaTeXRenderer(dl, fontSizePx) { RaTeXFontLoader.getTypeface(it) }
-                        val size = Size(r.widthPx, r.totalHeightPx).clampForLayout()
-                        mathSizeCache[Triple(entry.latex, entry.displayMode, fontSizePx)] = size
-                        put(entry.key, RenderedMath(r, size))
-                    } catch (_: Exception) {
-                    }
-                }
-            }
-        }
-        if (newRenders.isNotEmpty()) {
-            renderedMath = newRenders
-            mathSizes = mathSizes + newRenders.mapValues { it.value.size }
-        }
+    LaunchedEffect(mathEntries, onSurfaceArgb) {
+        mathEntries.forEach { MathCache.parseColoured(it.cacheKey, onSurfaceArgb) }
     }
     val mentionLinkStyle = remember(primaryColor) {
         TextLinkStyles(
@@ -423,7 +363,7 @@ fun ChatMarkdown(
                         val role = serverId?.let { StoatAPI.serverCache[it]?.roles?.get(roleId) }
                         val roleColor = role?.colour
                             ?.takeIf { !it.contains("gradient") }
-                            ?.let { runCatching { Color(it.toColorInt()) }.getOrNull() }
+                            ?.let(::parseSolidColour)
                             ?: primaryColor
                         withStyle(
                             SpanStyle(
@@ -480,18 +420,18 @@ fun ChatMarkdown(
         spoilerAwareAnnotator
     }
     val platformUriHandler = LocalUriHandler.current
-    val uriHandler = remember(scope, serverId, platformUriHandler) {
+    val uriHandler = remember(scope, serverId, platformUriHandler, actions) {
         object : UriHandler {
             override fun openUri(uri: String) {
                 when {
                     uri.startsWith("stoat-user://") -> {
                         val ulid = uri.removePrefix("stoat-user://")
-                        scope.launch { ActionChannel.send(Action.OpenUserSheet(ulid, serverId)) }
+                        scope.launch { actions.openUser(ulid, serverId) }
                     }
 
                     uri.startsWith("stoat-channel://") -> {
                         val channelId = uri.removePrefix("stoat-channel://")
-                        scope.launch { ActionChannel.send(Action.SwitchChannel(channelId)) }
+                        scope.launch { actions.openChannel(channelId) }
                     }
 
                     uri.startsWith("stoat-timestamp://") -> {
@@ -501,26 +441,8 @@ fun ChatMarkdown(
                         }
                     }
 
-                    else -> {
-                        try {
-                            val parsed = uri.toUri()
-                            val stoatLink = parsed.toStoatWebLinkOrNull()
-                            if (stoatLink != null) {
-                                scope.launch {
-                                    ActionChannel.send(stoatLink.toNavigationAction())
-                                }
-                                return
-                            }
-                            if (parsed.isInviteUri()) {
-                                context.startActivity(
-                                    Intent(context, InviteActivity::class.java)
-                                        .apply { data = parsed }
-                                )
-                                return
-                            }
-                        } catch (_: Exception) {
-                            // no-op
-                        }
+                    else -> scope.launch {
+                        if (actions.openInAppLink(uri)) return@launch
                         try {
                             platformUriHandler.openUri(uri)
                         } catch (_: IllegalArgumentException) {
@@ -561,13 +483,13 @@ fun ChatMarkdown(
             inlineContent = markdownInlineContent(
                 buildMap {
                     mathEntries.forEach { entry ->
-                        val measured = mathSizes[entry.key]
+                        val measured = MathCache.size(entry.cacheKey, fontSizePx)
                         val (widthSp, heightSp) = if (measured != null) {
                             with(density) { measured.width.toSp() to measured.height.toSp() }
-                        } else if (entry.displayMode) {
-                            fontSize * 16f to fontSize * 3f
                         } else {
-                            fontSize * 4f to fontSize * 1.5f
+                            // Most formulas are about one line tall
+                            val width = if (entry.displayMode) 16f else 4f
+                            fontSize * width to fontSize * 1.5f
                         }
                         put(
                             entry.key, InlineTextContent(
@@ -577,10 +499,8 @@ fun ChatMarkdown(
                                     placeholderVerticalAlign = PlaceholderVerticalAlign.Center,
                                 )
                             ) {
-                                Canvas(Modifier.fillMaxSize()) {
-                                    renderedMath[entry.key]?.renderer?.draw(
-                                        drawContext.canvas.nativeCanvas
-                                    )
+                                MathCache.coloured(entry.cacheKey, onSurfaceArgb)?.let {
+                                    RaTeX(displayList = it, fontSize = fontSize)
                                 }
                             })
                         put(
@@ -625,13 +545,7 @@ fun ChatMarkdown(
                                                     interactionSource = remember { MutableInteractionSource() },
                                                     indication = null,
                                                 ) {
-                                                    scope.launch {
-                                                        ActionChannel.send(
-                                                            Action.EmoteInfo(
-                                                                ulid
-                                                            )
-                                                        )
-                                                    }
+                                                    scope.launch { actions.openEmoteInfo(ulid) }
                                                 },
                                         )
                                     }

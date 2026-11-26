@@ -89,7 +89,7 @@ import chat.stoat.shared.resources.server_settings_role_keep_editing
 import chat.stoat.shared.resources.server_settings_roles_above_you
 import chat.stoat.shared.resources.server_settings_roles_everyone
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource

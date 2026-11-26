@@ -17,7 +17,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import chat.stoat.BuildConfig
+import chat.stoat.api.StoatAPIHost
 import chat.stoat.composables.vectorassets.NotificationRationale
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.spark_notifications_rationale
@@ -51,7 +51,7 @@ fun NotificationRationaleDialog(
                 Text(
                     text = stringResource(Res.string.spark_notifications_rationale_description)
                 )
-                if (BuildConfig.DEBUG) {
+                if (StoatAPIHost.config.isDebug) {
                     Text(
                         text = buildAnnotatedString {
                             pushStyle(SpanStyle(fontWeight = FontWeight.Bold))

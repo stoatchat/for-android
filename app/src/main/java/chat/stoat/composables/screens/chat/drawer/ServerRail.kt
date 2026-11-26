@@ -45,7 +45,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.settings.ServerSidebarEntry
 import chat.stoat.core.designsystem.components.RemoteImage
@@ -62,19 +61,11 @@ import chat.stoat.shared.resources.server_folder_unnamed
 import chat.stoat.shared.resources.unknown
 import chat.stoat.shared.resources.voice_notification_ongoing_call
 import chat.stoat.shared.resources.voice_screen_sharing
-import chat.stoat.ui.colour.CSSColours
-import chat.stoat.ui.colour.parseCssFunctionColour
+import chat.stoat.ui.colour.parseSolidColour
 import org.jetbrains.compose.resources.stringResource
 
 private val ServerVoiceBadgeSize = 16.dp
 private val ServerVoiceBadgeIconSize = 12.dp
-
-fun parseFolderColour(colour: String): Color? {
-    val trimmed = colour.trim()
-    return CSSColours[trimmed.lowercase()]
-        ?: parseCssFunctionColour(trimmed)
-        ?: runCatching { Color(trimmed.toColorInt()) }.getOrNull()
-}
 
 private val Server.iconUrl: String?
     get() = icon?.id?.let { "$STOAT_FILES/icons/$it" }
@@ -328,7 +319,7 @@ fun FolderRailHeader(
 @Composable
 fun FolderIcon(entry: ServerSidebarEntry.Folder, modifier: Modifier = Modifier) {
     val collapsed = entry.folder.collapsed == true
-    val colour = entry.folder.colour?.let(::parseFolderColour)
+    val colour = entry.folder.colour?.let(::parseSolidColour)
 
     Box(
         contentAlignment = Alignment.Center,

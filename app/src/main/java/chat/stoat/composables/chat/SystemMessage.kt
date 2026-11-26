@@ -68,7 +68,7 @@ import chat.stoat.shared.resources.system_message_user_left_alt
 import chat.stoat.shared.resources.system_message_user_removed
 import chat.stoat.shared.resources.system_message_user_removed_alt
 import chat.stoat.shared.resources.unknown
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 

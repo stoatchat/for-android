@@ -159,3 +159,21 @@ val CSSColours = mapOf(
     "initial" to Color.Unspecified,
     "unset" to Color.Unspecified
 )
+
+/** Parse `#RRGGBB` or `#AARRGGBB`, the hex forms Android's `Color.parseColor` accepts. */
+fun parseHexColour(value: String): Color? {
+    if (!value.startsWith("#")) return null
+    val digits = value.substring(1)
+    if (digits.length != 6 && digits.length != 8) return null
+    if (!digits.all { it.isDigit() || it.lowercaseChar() in 'a'..'f' }) return null
+    val hex = digits.toLongOrNull(16) ?: return null
+    return Color(if (digits.length == 6) hex or 0xFF000000 else hex)
+}
+
+/** Parse a single CSS colour: named colour, `#RRGGBB`, `#AARRGGBB`, `rgb()` or `rgba()`. */
+fun parseSolidColour(value: String): Color? {
+    val cleaned = value.trim()
+    return CSSColours[cleaned.lowercase()]
+        ?: parseHexColour(cleaned)
+        ?: parseCssFunctionColour(cleaned)
+}

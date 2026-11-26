@@ -8,7 +8,7 @@ import chat.stoat.core.model.schemas.PermissionDescription
 import chat.stoat.core.model.schemas.Role
 import chat.stoat.core.model.schemas.Server
 import chat.stoat.core.model.schemas.User
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 object Roles {
     // lowest rank = highest role

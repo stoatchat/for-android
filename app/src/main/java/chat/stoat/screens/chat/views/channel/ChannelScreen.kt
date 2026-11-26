@@ -219,12 +219,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import java.io.File
 import kotlin.math.max
+import kotlin.time.Instant
 
 sealed class ChannelScreenItem {
     data class RegularMessage(val message: Message, val mdAst: State?) : ChannelScreenItem()

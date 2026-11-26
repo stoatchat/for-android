@@ -57,7 +57,7 @@ android-datastore-preferences-core = { module = "androidx.datastore:datastore-pr
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlin-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlin-serialization" }
-kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.4.0" }
+kotlin-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.8.0" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui", version = "1.8.2" }
 compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
@@ -132,13 +132,14 @@ livekit-android-camerax = { module = "io.livekit:livekit-android-camerax", versi
 livekit-android-compose = { module = "io.livekit:livekit-android-compose-components", version.ref = "livekit-compose" }
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+multiplatform-markdown = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-android = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-coil3 = { module = "com.mikepenz:multiplatform-markdown-renderer-coil3", version.ref = "multiplatform-markdown" }
 multiplatform-markdown-code = { module = "com.mikepenz:multiplatform-markdown-renderer-code", version.ref = "multiplatform-markdown" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
-ratex-android = { module = "io.github.erweixin:ratex-android", version = "0.1.11" }
+ratex = { module = "io.github.darriousliu:ratex", version = "0.1.16" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version = "3.1.0" }
 
 [plugins]

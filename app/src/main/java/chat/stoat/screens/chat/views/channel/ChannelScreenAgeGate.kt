@@ -40,7 +40,7 @@ import chat.stoat.shared.resources.channel_age_gate_dob_proceed
 import chat.stoat.shared.resources.channel_age_gate_dob_section
 import chat.stoat.shared.resources.channel_age_gate_dob_too_young
 import chat.stoat.shared.resources.channel_age_gate_title
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.UtcOffset

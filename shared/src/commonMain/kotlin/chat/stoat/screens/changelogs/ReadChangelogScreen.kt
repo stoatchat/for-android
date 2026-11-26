@@ -27,7 +27,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -53,10 +52,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import org.jetbrains.compose.resources.stringResource
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -89,24 +84,9 @@ class ReadChangelogScreenViewModel(
     }
 }
 
+/** Format an ISO 8601 date-time as a medium-length local date, e.g. "25 Nov 2026". */
 @Composable
-private fun rememberDateFormatter(): DateTimeFormatter {
-    val locale = LocalConfiguration.current.locales[0]
-    return remember(locale) {
-        DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale)
-    }
-}
-
-@Composable
-private fun rememberFormattedDate(isoDateTime: String?): String? {
-    val formatter = rememberDateFormatter()
-    val zone = remember { ZoneId.systemDefault() }
-    return remember(isoDateTime, formatter, zone) {
-        isoDateTime?.let {
-            Instant.parse(it).atZone(zone).toLocalDate().format(formatter)
-        }
-    }
-}
+internal expect fun rememberFormattedDate(isoDateTime: String?): String?
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -155,9 +135,11 @@ fun ReadChangelogScreen(
             )
         }
     ) { pv ->
-        Box(Modifier
-            .fillMaxSize()
-            .padding(pv)) {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(pv)
+        ) {
             AnimatedContent(
                 targetState = state.value,
                 modifier = Modifier.fillMaxSize()
