@@ -311,11 +311,9 @@ class MainActivityViewModel(
         }
     }
 
-    fun updateNextDestination(destination: Route) {
-        viewModelScope.launch {
-            nextDestination.emit(null)
-            nextDestination.emit(destination)
-        }
+    fun finishOnboarding() {
+        nextDestination.value = null
+        checkLoggedInState()
     }
 
     val activeAlert = MutableStateFlow<HealthNotice?>(null)
@@ -425,7 +423,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel::onDismissHealthAlert,
                 viewModel::onDismissLoginError,
                 viewModel::checkLoggedInState,
-                viewModel::updateNextDestination
+                viewModel::finishOnboarding
             )
         }
 
@@ -488,7 +486,7 @@ fun AppEntrypoint(
     onDismissHealthAlert: () -> Unit = {},
     onDismissLoginError: () -> Unit = {},
     onRetryConnection: () -> Unit,
-    onUpdateNextDestination: (Route) -> Unit = {}
+    onOnboardingComplete: () -> Unit = {}
 ) {
     val showVoiceUI = VoiceCallManager.isSheetVisible
     val hideVoiceUI = { VoiceCallManager.isSheetVisible = false }
@@ -598,7 +596,13 @@ fun AppEntrypoint(
 
                         entry<Route.Login.Greeting> { LoginGreetingScreen(navigator) }
                         entry<Route.Login.Credentials> { LoginScreen(navigator) }
-                        entry<Route.Login.Mfa> { MfaScreen(navigator, it.allowedAuthTypes, it.ticket) }
+                        entry<Route.Login.Mfa> {
+                            MfaScreen(
+                                navigator,
+                                it.allowedAuthTypes,
+                                it.ticket
+                            )
+                        }
 
                         entry<Route.Register.Greeting> { RegisterGreetingScreen(navigator) }
                         entry<Route.Register.Details> { RegisterDetailsScreen(navigator) }
@@ -606,10 +610,7 @@ fun AppEntrypoint(
                         entry<Route.Register.Onboarding> {
                             OnboardingScreen(
                                 navigator,
-                                onOnboardingComplete = {
-                                    onUpdateNextDestination(Route.Chat)
-                                    navigator.resetTo(Route.Default)
-                                }
+                                onOnboardingComplete = onOnboardingComplete
                             )
                         }
 
@@ -667,7 +668,8 @@ fun AppEntrypoint(
                             ) { key, nav ->
                                 var requestedMessageId by remember { mutableStateOf<String?>(null) }
                                 ResultEffect<ChannelMessageJump> {
-                                    if (it.channelId == key.channelId) requestedMessageId = it.messageId
+                                    if (it.channelId == key.channelId) requestedMessageId =
+                                        it.messageId
                                 }
                                 ChannelScreen(
                                     channelId = key.channelId,
@@ -695,34 +697,100 @@ fun AppEntrypoint(
                             detail<Route.Settings.Account> { _, nav -> AccountSettingsScreen(nav) }
                             detail<Route.Settings.Profile> { _, nav -> ProfileSettingsScreen(nav) }
                             detail<Route.Settings.Sessions> { _, nav -> SessionSettingsScreen(nav) }
-                            detail<Route.Settings.Appearance> { _, nav -> AppearanceSettingsScreen(nav) }
-                            detail<Route.Settings.Language> { _, nav -> LanguagePickerSettingsScreen(nav) }
+                            detail<Route.Settings.Appearance> { _, nav ->
+                                AppearanceSettingsScreen(
+                                    nav
+                                )
+                            }
+                            detail<Route.Settings.Language> { _, nav ->
+                                LanguagePickerSettingsScreen(
+                                    nav
+                                )
+                            }
                             detail<Route.Settings.Chat> { _, nav -> ChatSettingsScreen(nav) }
-                            detail<Route.Settings.Notifications> { _, nav -> NotificationsSettingsScreen(nav) }
+                            detail<Route.Settings.Notifications> { _, nav ->
+                                NotificationsSettingsScreen(
+                                    nav
+                                )
+                            }
                             detail<Route.About.Home> { _, nav -> AboutScreen(nav) }
                             detail<Route.Settings.Debug> { _, nav -> DebugSettingsScreen(nav) }
-                            detail<Route.Settings.Experiments> { _, nav -> ExperimentsSettingsScreen(nav) }
+                            detail<Route.Settings.Experiments> { _, nav ->
+                                ExperimentsSettingsScreen(
+                                    nav
+                                )
+                            }
                             detail<Route.Settings.AccountMfa> { _, nav -> MfaSettingsScreen(nav) }
                             detail<Route.About.Oss> { _, nav -> AttributionScreen(nav) }
                         }
 
                         listDetail(PaneScene.ChannelSettings, navigator) {
-                            list<Route.ChannelSettings.Home> { key, nav -> ChannelSettingsHome(nav, key.channelId) }
-                            detail<Route.ChannelSettings.Overview> { key, nav -> ChannelSettingsOverview(nav, key.channelId) }
-                            detail<Route.ChannelSettings.Permissions> { key, nav -> ChannelSettingsPermissions(nav, key.channelId) }
+                            list<Route.ChannelSettings.Home> { key, nav ->
+                                ChannelSettingsHome(
+                                    nav,
+                                    key.channelId
+                                )
+                            }
+                            detail<Route.ChannelSettings.Overview> { key, nav ->
+                                ChannelSettingsOverview(
+                                    nav,
+                                    key.channelId
+                                )
+                            }
+                            detail<Route.ChannelSettings.Permissions> { key, nav ->
+                                ChannelSettingsPermissions(
+                                    nav,
+                                    key.channelId
+                                )
+                            }
                             detail<Route.ChannelSettings.PermissionEditor> { key, nav ->
                                 ChannelSettingsPermissionEditor(nav, key.channelId, key.roleId)
                             }
                         }
 
                         listDetail(PaneScene.ServerSettings, navigator) {
-                            list<Route.ServerSettings.Home> { key, nav -> ServerSettingsHome(nav, key.serverId) }
-                            detail<Route.ServerSettings.Overview> { key, nav -> ServerSettingsOverview(nav, key.serverId) }
-                            detail<Route.ServerSettings.Channels> { key, nav -> ServerSettingsChannels(nav, key.serverId) }
-                            detail<Route.ServerSettings.Emojis> { key, nav -> ServerSettingsEmojis(nav, key.serverId) }
-                            detail<Route.ServerSettings.Roles> { key, nav -> ServerSettingsRoles(nav, key.serverId) }
-                            detail<Route.ServerSettings.Invites> { key, nav -> ServerSettingsInvites(nav, key.serverId) }
-                            detail<Route.ServerSettings.Bans> { key, nav -> ServerSettingsBans(nav, key.serverId) }
+                            list<Route.ServerSettings.Home> { key, nav ->
+                                ServerSettingsHome(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Overview> { key, nav ->
+                                ServerSettingsOverview(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Channels> { key, nav ->
+                                ServerSettingsChannels(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Emojis> { key, nav ->
+                                ServerSettingsEmojis(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Roles> { key, nav ->
+                                ServerSettingsRoles(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Invites> { key, nav ->
+                                ServerSettingsInvites(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
+                            detail<Route.ServerSettings.Bans> { key, nav ->
+                                ServerSettingsBans(
+                                    nav,
+                                    key.serverId
+                                )
+                            }
                             detail<Route.ServerSettings.RoleEditor> { key, nav ->
                                 ServerSettingsRoleEditor(nav, key.serverId, key.roleId)
                             }
@@ -812,6 +880,6 @@ private fun backExit() = slideOutHorizontally(NavTweenInt) { it / 2 } + fadeOut(
 
 private fun conversationExit() =
     slideOutHorizontally(tween(600, easing = EasingTokens.EmphasizedDecelerate)) { it } +
-        fadeOut(StoatTweenFloat)
+            fadeOut(StoatTweenFloat)
 
 private enum class PaneScene { Main, Settings, ChannelSettings, ServerSettings }
