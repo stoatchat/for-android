@@ -6,6 +6,7 @@ import chat.stoat.api.StoatJson
 import chat.stoat.api.api
 import chat.stoat.core.model.schemas.Channel
 import io.ktor.client.request.delete
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -55,6 +56,16 @@ suspend fun removeMember(channelId: String, userId: String) {
 
 suspend fun addMember(channelId: String, userId: String) {
     val response = StoatHttp.put("/channels/$channelId/recipients/$userId".api())
+
+    if (!response.status.isSuccess()) {
+        throw Error(response.status.toString())
+    }
+}
+
+suspend fun leaveGroup(channelId: String, silently: Boolean = false) {
+    val response = StoatHttp.delete("/channels/$channelId".api()) {
+        parameter("leave_silently", silently)
+    }
 
     if (!response.status.isSuccess()) {
         throw Error(response.status.toString())

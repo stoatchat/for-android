@@ -437,6 +437,13 @@
     <string name="channel_info_sheet_options_members">Members</string>
     <string name="channel_info_sheet_options_invite">Invite</string>
     <string name="channel_info_sheet_options_add">Add members</string>
+    <string name="channel_info_sheet_options_leave_group">Leave group</string>
+    <string name="channel_info_sheet_leave_group_confirm">Leave %1$s?</string>
+    <string name="channel_info_sheet_leave_group_confirm_eyebrow">You won't be able to rejoin unless someone adds you back.</string>
+    <string name="channel_info_sheet_leave_group_silently">Leave silently</string>
+    <string name="channel_info_sheet_leave_group_confirm_yes">Leave</string>
+    <string name="channel_info_sheet_leave_group_confirm_no">Stay</string>
+    <string name="channel_info_sheet_leave_group_failed">Couldn't leave the group. Try again.</string>
     <string name="channel_info_sheet_options_notifications_manage">Manage notifications</string>
 
     <string name="invite_dialog_header">Invite to #%1$s</string>
