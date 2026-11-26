@@ -1,6 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -44,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -61,6 +61,7 @@ import chat.stoat.api.routes.server.createServerRole
 import chat.stoat.api.routes.server.reorderServerRoles
 import chat.stoat.composables.server.RoleColourIndicator
 import chat.stoat.composables.settings.ServerSettingsEmptyState
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.data.STOAT_FILES
@@ -91,9 +92,6 @@ import chat.stoat.shared.resources.server_settings_roles_reorder
 import chat.stoat.shared.resources.server_settings_roles_reorder_error
 import chat.stoat.shared.resources.server_settings_roles_reordered
 import chat.stoat.shared.resources.server_settings_roles_undo
-import com.bumptech.glide.integration.compose.CrossFade
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.pluralStringResource
@@ -102,9 +100,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
-class ServerSettingsRolesViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerSettingsRolesViewModel : ViewModel() {
     var creating by mutableStateOf(false)
         private set
     var reorderingRoleId by mutableStateOf<String?>(null)
@@ -560,7 +556,6 @@ fun ServerSettingsRoles(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun RoleListRow(
     entry: RoleEntry,
@@ -659,10 +654,10 @@ private fun RoleListRow(
                 modifier = Modifier.weight(1f, fill = false),
             )
             if (roleIcon != null) {
-                GlideImage(
-                    model = "$STOAT_FILES/icons/${roleIcon.id}/original",
-                    contentDescription = null,
-                    transition = CrossFade,
+                RemoteImage(
+                    url = "$STOAT_FILES/icons/${roleIcon.id}/original",
+                    description = null,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .padding(start = 4.dp)
                         .size(16.dp),

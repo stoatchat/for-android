@@ -1,6 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -88,9 +87,7 @@ import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class ServerSettingsBansViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerSettingsBansViewModel : ViewModel() {
     var banList by mutableStateOf<BanListResult?>(null)
         private set
     var loading by mutableStateOf(false)

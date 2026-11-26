@@ -56,11 +56,15 @@ kotlin {
             implementation(libs.multiplatform.markdown.code)
             implementation(libs.highlights)
             implementation(libs.ratex)
+            implementation(libs.reorderable)
+            implementation(libs.kermit)
+            implementation(libs.ktor.http)
         }
 
         androidMain.dependencies {
             implementation(libs.android.core.ktx)
             implementation(libs.android.browser)
+            implementation(libs.zxing.core)
         }
     }
 }

@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,9 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
@@ -61,8 +57,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.api.routes.account.MfaSettings
@@ -73,6 +67,7 @@ import chat.stoat.api.routes.account.fetchMfaSettings
 import chat.stoat.api.routes.account.fetchRecoveryCodes
 import chat.stoat.api.routes.account.generateTotpSecret
 import chat.stoat.api.routes.account.regenerateRecoveryCodes
+import chat.stoat.composables.generic.encodeQrCode
 import chat.stoat.composables.mfa.MfaPromptSheet
 import chat.stoat.composables.mfa.MfaPromptState
 import chat.stoat.composables.mfa.RecoveryCodesDialog
@@ -121,9 +116,7 @@ import chat.stoat.shared.resources.settings_mfa_totp_setup_manual
 import chat.stoat.shared.resources.settings_mfa_totp_setup_scan
 import chat.stoat.shared.resources.settings_mfa_totp_setup_title
 import chat.stoat.shared.resources.settings_mfa_totp_setup_verify
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.qrcode.QRCodeWriter
+import io.ktor.http.encodeURLParameter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -139,7 +132,7 @@ class TotpEnrollment(val secret: String, val otpauthUrl: String) {
     var error by mutableStateOf<String?>(null)
 }
 
-class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
+class MfaSettingsScreenViewModel() : ViewModel() {
     val mfaPrompt = MfaPromptState()
 
     var mfaStateLoaded by mutableStateOf(false)
@@ -227,7 +220,7 @@ class MfaSettingsScreenViewModel(val context: Application) : ViewModel() {
     }
 
     private fun otpauthUrl(secret: String, email: String?): String {
-        val label = Uri.encode("Stoat:${email ?: "account"}")
+        val label = "Stoat:${email ?: "account"}".encodeURLParameter()
         return "otpauth://totp/$label?secret=$secret&issuer=Stoat"
     }
 }
@@ -239,7 +232,6 @@ fun MfaSettingsScreen(
     viewModel: MfaSettingsScreenViewModel = koinViewModel()
 ) {
     val uriHandler = LocalUriHandler.current
-    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         viewModel.loadDetails()
@@ -483,7 +475,6 @@ private fun TotpEnrollmentSheet(
 ) {
     val copiedText = stringResource(Res.string.copied)
     val toaster = LocalToaster.current
-    val resources = LocalResources.current
     val clipboardManager = LocalClipboardManager.current
 
     ModalBottomSheet(
@@ -640,29 +631,7 @@ private fun TotpQrCode(contents: String) {
     var qrCode by remember(contents) { mutableStateOf<ImageBitmap?>(null) }
 
     LaunchedEffect(contents) {
-        qrCode = withContext(Dispatchers.Default) {
-            val matrix = QRCodeWriter().encode(
-                contents,
-                BarcodeFormat.QR_CODE,
-                512,
-                512,
-                mapOf(EncodeHintType.MARGIN to "1")
-            )
-
-            val bitmap = createBitmap(matrix.width, matrix.height)
-
-            for (x in 0 until matrix.width) {
-                for (y in 0 until matrix.height) {
-                    bitmap[x, y] = if (matrix.get(x, y)) {
-                        android.graphics.Color.BLACK
-                    } else {
-                        android.graphics.Color.WHITE
-                    }
-                }
-            }
-
-            bitmap.asImageBitmap()
-        }
+        qrCode = withContext(Dispatchers.Default) { encodeQrCode(contents, 512) }
     }
 
     Box(

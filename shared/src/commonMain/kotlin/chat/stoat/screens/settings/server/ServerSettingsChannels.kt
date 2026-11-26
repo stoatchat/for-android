@@ -1,6 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
@@ -152,7 +151,7 @@ private data class PendingLayoutRequest(
     val undoSections: List<ServerChannelSection>?
 )
 
-class ServerSettingsChannelsViewModel(private val context: Application) : ViewModel() {
+class ServerSettingsChannelsViewModel : ViewModel() {
     var mutating by mutableStateOf(false)
         private set
     var savingLayout by mutableStateOf(false)

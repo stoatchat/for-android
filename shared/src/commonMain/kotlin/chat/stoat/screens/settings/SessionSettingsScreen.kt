@@ -1,6 +1,5 @@
 package chat.stoat.screens.settings
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -66,6 +65,7 @@ import chat.stoat.shared.resources.settings_sessions_log_out_other_description
 import chat.stoat.shared.resources.settings_sessions_other_sessions
 import chat.stoat.shared.resources.settings_sessions_this_device
 import chat.stoat.shared.resources.settings_sessions_this_device_unavailable
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -80,10 +80,9 @@ class SessionSettingsScreenViewModel : ViewModel() {
         viewModelScope.launch {
             sessions.addAll(fetchAllSessions())
             currentSession = sessions.firstOrNull { it.id == StoatAPI.sessionId }
-            Log.d(
-                "SessionSettingsScreen",
+            Logger.withTag("SessionSettingsScreen").d {
                 "Current session: $currentSession. Current session ID: ${StoatAPI.sessionId}"
-            )
+            }
             isLoading = false
         }
     }
@@ -91,7 +90,7 @@ class SessionSettingsScreenViewModel : ViewModel() {
     fun logoutSession(id: String) {
         viewModelScope.launch {
             logoutSessionById(id)
-            sessions.removeIf { it.id == id }
+            sessions.removeAll { it.id == id }
         }
     }
 

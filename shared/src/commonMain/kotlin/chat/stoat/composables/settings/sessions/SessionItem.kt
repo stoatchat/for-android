@@ -1,6 +1,5 @@
 package chat.stoat.composables.settings.sessions
 
-import android.text.format.DateUtils
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -15,6 +14,7 @@ import chat.stoat.api.internals.ULID
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.model.schemas.Session
+import chat.stoat.internals.resolveTimestamp
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.logout
 import chat.stoat.shared.resources.settings_sessions_first_seen
@@ -29,11 +29,7 @@ fun SessionItem(
 ) {
     val decodedUlid by remember(session) { mutableLongStateOf(ULID.asTimestamp(session.id)) }
     val formattedTimestamp = remember(decodedUlid) {
-        DateUtils.getRelativeTimeSpanString(
-            decodedUlid,
-            System.currentTimeMillis(),
-            DateUtils.MINUTE_IN_MILLIS
-        )
+        resolveTimestamp(decodedUlid / 1000, "R")
     }
 
     ListItem(

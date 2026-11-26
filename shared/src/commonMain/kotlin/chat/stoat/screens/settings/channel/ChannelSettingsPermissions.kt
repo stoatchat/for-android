@@ -1,6 +1,5 @@
 package chat.stoat.screens.settings.channel
 
-import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -89,11 +88,11 @@ import chat.stoat.shared.resources.server_settings_role_keep_editing
 import chat.stoat.shared.resources.server_settings_roles_above_you
 import chat.stoat.shared.resources.server_settings_roles_everyone
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Clock
 
 private const val DefaultChannelRoleId = "default"
 
@@ -102,9 +101,7 @@ private data class ChannelPermissionRoleEntry(
     val role: Role,
 )
 
-class ChannelSettingsPermissionsViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ChannelSettingsPermissionsViewModel : ViewModel() {
     var permissions by mutableStateOf(PermissionDescription(0, 0))
         private set
     var loaded by mutableStateOf(false)
@@ -296,7 +293,12 @@ fun ChannelSettingsPermissions(navigator: Navigator, channelId: String) {
                 },
                 leadingContent = { Spacer(Modifier.size(24.dp)) },
                 modifier = Modifier.clickable {
-                    navigator.navigate(Route.ChannelSettings.PermissionEditor(channelId, DefaultChannelRoleId))
+                    navigator.navigate(
+                        Route.ChannelSettings.PermissionEditor(
+                            channelId,
+                            DefaultChannelRoleId
+                        )
+                    )
                 },
             )
             Box(

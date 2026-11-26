@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
-import android.content.ClipData
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -49,12 +47,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
@@ -78,6 +74,7 @@ import chat.stoat.core.model.schemas.User
 import chat.stoat.internals.extensions.rememberServerPermissions
 import chat.stoat.navigation.BackHandler
 import chat.stoat.navigation.Navigator
+import chat.stoat.platform.plainTextClipEntry
 import chat.stoat.screens.settings.SettingsListItem
 import chat.stoat.settings.dsl.SettingsPage
 import chat.stoat.shared.resources.Res
@@ -105,6 +102,7 @@ import chat.stoat.shared.resources.server_settings_invites_no_channels
 import chat.stoat.shared.resources.server_settings_invites_retry
 import chat.stoat.shared.resources.server_settings_invites_unknown_channel
 import chat.stoat.shared.resources.server_settings_invites_unknown_user
+import io.ktor.http.Url
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -117,7 +115,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 internal fun inviteLink(code: String, compact: Boolean = false): String =
-    if (compact) "${STOAT_INVITES.toUri().host}/$code"
+    if (compact) "${Url(STOAT_INVITES).host}/$code"
     else "$STOAT_INVITES/$code"
 
 
@@ -130,9 +128,7 @@ internal fun availableInviteChannels(
     .mapNotNull(channels::get)
     .filter { it.channelType == ChannelType.TextChannel }
 
-class ServerSettingsInvitesViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerSettingsInvitesViewModel : ViewModel() {
     var invites by mutableStateOf<List<ServerInvite>>(emptyList())
         private set
     var loading by mutableStateOf(false)
@@ -781,12 +777,7 @@ private fun InviteLink(link: String, copyableLink: String) {
             .clip(MaterialTheme.shapes.large)
             .clickable {
                 coroutineScope.launch {
-                    clip.setClipEntry(
-                        ClipData.newPlainText(
-                            "Stoat invite link",
-                            copyableLink
-                        ).toClipEntry()
-                    )
+                    clip.setClipEntry(plainTextClipEntry("Stoat invite link", copyableLink))
                 }
             }
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
