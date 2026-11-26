@@ -50,7 +50,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.kotlin.datetime)
             implementation(libs.jetbrains.markdown)
-            implementation(libs.multiplatform.markdown)
+            api(libs.multiplatform.markdown)
             implementation(libs.multiplatform.markdown.m3)
             implementation(libs.multiplatform.markdown.coil3)
             implementation(libs.multiplatform.markdown.code)

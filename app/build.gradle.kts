@@ -257,9 +257,6 @@ dependencies {
 
     implementation(libs.sqldelight.android.driver)
 
-    implementation(libs.jetbrains.markdown)
-    implementation(libs.highlights)
-
     implementation(libs.livekit.android)
     implementation(libs.livekit.android.camerax)
     implementation(libs.livekit.android.compose)
@@ -278,14 +275,8 @@ dependencies {
     implementation(libs.koin)
     implementation(libs.koin.compose.viewmodel)
 
-    implementation(libs.multiplatform.markdown.android)
-    implementation(libs.multiplatform.markdown.m3)
-    implementation(libs.multiplatform.markdown.coil3)
-    implementation(libs.multiplatform.markdown.code)
-
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-
 
     androidTestImplementation(libs.android.test.core)
     androidTestImplementation(libs.android.test.rules)
