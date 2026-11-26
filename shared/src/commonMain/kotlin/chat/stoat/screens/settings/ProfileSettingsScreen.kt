@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,10 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
-import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.api.routes.user.patchSelf
 import chat.stoat.composables.generic.InlineMediaPicker
+import chat.stoat.composables.generic.uploadPickedFile
 import chat.stoat.composables.screens.settings.RawUserOverview
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -63,14 +61,12 @@ import chat.stoat.shared.resources.settings_profile_profile_picture
 import chat.stoat.shared.resources.settings_profile_pronouns
 import chat.stoat.shared.resources.settings_profile_save
 import chat.stoat.shared.resources.user_info_sheet_category_bio
-import io.ktor.http.ContentType
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.File
 
-class ProfileSettingsScreenViewModel(val context: Application) :
-    ViewModel() {
+class ProfileSettingsScreenViewModel : ViewModel() {
     var isLoading by mutableStateOf(true)
     var pfpModel by mutableStateOf<Any?>(null)
     var currentProfile by mutableStateOf<Profile?>(null)
@@ -114,29 +110,14 @@ class ProfileSettingsScreenViewModel(val context: Application) :
     fun saveNewPfp() {
         uploadError = null
 
-        val uri = when (pfpModel) {
-            is Uri -> pfpModel as Uri
-            is String -> Uri.parse(pfpModel as String)
-            else -> return
-        }
-
-        val mFile = File(context.cacheDir, uri.lastPathSegment ?: "avatar")
-
-        mFile.outputStream().use { output ->
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                input.copyTo(output)
-            }
-        }
-
-        val mime = context.contentResolver.getType(uri)
+        val file = pfpModel as? PlatformFile ?: return
 
         viewModelScope.launch {
             try {
-                val id = uploadToAutumn(
-                    mFile,
-                    uri.lastPathSegment ?: "avatar",
-                    "avatars",
-                    ContentType.parse(mime ?: "image/*"),
+                val id = uploadPickedFile(
+                    file,
+                    tag = "avatars",
+                    fallbackName = "avatar",
                     onProgress = { soFar, outOf ->
                         uploadProgress = soFar.toFloat() / outOf.toFloat()
                     }
@@ -160,29 +141,14 @@ class ProfileSettingsScreenViewModel(val context: Application) :
     fun saveNewBackground() {
         uploadError = null
 
-        val uri = when (backgroundModel) {
-            is Uri -> backgroundModel as Uri
-            is String -> Uri.parse(backgroundModel as String)
-            else -> return
-        }
-
-        val mFile = File(context.cacheDir, uri.lastPathSegment ?: "background")
-
-        mFile.outputStream().use { output ->
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                input.copyTo(output)
-            }
-        }
-
-        val mime = context.contentResolver.getType(uri)
+        val file = backgroundModel as? PlatformFile ?: return
 
         viewModelScope.launch {
             try {
-                val id = uploadToAutumn(
-                    mFile,
-                    uri.lastPathSegment ?: "background",
-                    "backgrounds",
-                    ContentType.parse(mime ?: "image/*"),
+                val id = uploadPickedFile(
+                    file,
+                    tag = "backgrounds",
+                    fallbackName = "background",
                     onProgress = { soFar, outOf ->
                         uploadProgress = soFar.toFloat() / outOf.toFloat()
                     }
@@ -396,7 +362,7 @@ fun ProfileSettingsScreen(
                                 circular = true,
                                 useAvatarCircularity = true,
                                 onPick = {
-                                    viewModel.pfpModel = it.toString()
+                                    viewModel.pfpModel = it
                                     viewModel.saveNewPfp()
                                 },
                                 canRemove = true,
@@ -420,7 +386,7 @@ fun ProfileSettingsScreen(
                             InlineMediaPicker(
                                 currentModel = viewModel.backgroundModel,
                                 onPick = {
-                                    viewModel.backgroundModel = it.toString()
+                                    viewModel.backgroundModel = it
                                     viewModel.saveNewBackground()
                                 },
                                 canRemove = true,

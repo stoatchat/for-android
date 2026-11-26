@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -42,10 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
-import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.fetchMember
 import chat.stoat.api.routes.server.patchMemberIdentity
 import chat.stoat.composables.generic.InlineMediaPicker
+import chat.stoat.composables.generic.uploadPickedFile
 import chat.stoat.composables.screens.settings.UserOverview
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -91,18 +89,13 @@ import chat.stoat.shared.resources.server_identity_saved
 import chat.stoat.shared.resources.server_identity_title
 import chat.stoat.shared.resources.server_identity_update_error
 import chat.stoat.shared.resources.unknown
-import io.ktor.http.ContentType
-import kotlinx.coroutines.Dispatchers
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.File
 
-class ServerIdentitySettingsViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerIdentitySettingsViewModel : ViewModel() {
     var initialMember by mutableStateOf<Member?>(null)
         private set
     var loaded by mutableStateOf(false)
@@ -174,8 +167,8 @@ class ServerIdentitySettingsViewModel(
         updateError = null
     }
 
-    fun setAvatar(uri: Uri?) {
-        avatarModel = uri
+    fun setAvatar(file: PlatformFile?) {
+        avatarModel = file
         updateError = null
     }
 
@@ -240,7 +233,7 @@ class ServerIdentitySettingsViewModel(
                             null
                         }
 
-                        is Uri -> uploadAvatar(selectedAvatar)
+                        is PlatformFile -> uploadAvatar(selectedAvatar)
                         else -> null
                     }
                 } else {
@@ -273,7 +266,7 @@ class ServerIdentitySettingsViewModel(
         if (avatarModel == initialAvatarModel) return false
         return when (avatarModel) {
             null -> capabilities.canRemoveAvatar
-            is Uri -> capabilities.canSetAvatar
+            is PlatformFile -> capabilities.canSetAvatar
             else -> false
         }
     }
@@ -287,34 +280,15 @@ class ServerIdentitySettingsViewModel(
         member.id?.let { StoatAPI.members.setMember(it.server, member) }
     }
 
-    private suspend fun uploadAvatar(uri: Uri): String {
-        val mime = context.contentResolver.getType(uri) ?: "image/*"
-
-        val file = withContext(Dispatchers.IO) {
-            File.createTempFile("stoat-server-avatar-", null, context.cacheDir)
-                .also { temporaryFile ->
-                    context.contentResolver.openInputStream(uri)?.use { input ->
-                        temporaryFile.outputStream().use(input::copyTo)
-                    } ?: throw IllegalArgumentException(
-                        getString(Res.string.server_identity_file_error)
-                    )
-                }
-        }
-
-        return try {
-            uploadToAutumn(
-                file = file,
-                name = uri.lastPathSegment ?: "server-avatar",
-                tag = "avatars",
-                contentType = ContentType.parse(mime),
-                onProgress = { sent, total ->
-                    uploadProgress = if (total > 0) sent.toFloat() / total.toFloat() else 0f
-                },
-            )
-        } finally {
-            withContext(Dispatchers.IO) { file.delete() }
-        }
-    }
+    private suspend fun uploadAvatar(file: PlatformFile): String = uploadPickedFile(
+        file,
+        tag = "avatars",
+        fallbackName = "server-avatar",
+        readError = Res.string.server_identity_file_error,
+        onProgress = { sent, total ->
+            uploadProgress = if (total > 0) sent.toFloat() / total.toFloat() else 0f
+        },
+    )
 }
 
 @Composable

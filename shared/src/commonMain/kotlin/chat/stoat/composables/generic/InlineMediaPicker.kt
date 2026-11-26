@@ -1,8 +1,5 @@
 package chat.stoat.composables.generic
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,17 +23,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import chat.stoat.api.settings.LoadedSettings
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.inline_media_picker_current_description
 import chat.stoat.shared.resources.inline_media_picker_no_media_placeholder
 import chat.stoat.shared.resources.inline_media_picker_remove
-import com.bumptech.glide.integration.compose.CrossFade
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.dialogs.FileKitType
+import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * @param currentModel the image to show: a picked [PlatformFile], a remote URL, or null for none
+ * @param mimeType what can be picked; image types open the photo picker, anything else a file picker
+ */
 @Composable
 fun InlineMediaPicker(
     currentModel: Any?,
@@ -44,7 +46,7 @@ fun InlineMediaPicker(
     mimeType: String = "image/*",
     circular: Boolean = false,
     useAvatarCircularity: Boolean = false,
-    onPick: (Uri) -> Unit,
+    onPick: (PlatformFile) -> Unit,
     canRemove: Boolean = true,
     onRemove: () -> Unit = {},
     enabled: Boolean = true,
@@ -117,7 +119,6 @@ fun InlineMediaPicker(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun InlineMediaPickerMediaPicker(
     currentModel: Any?,
@@ -125,20 +126,21 @@ fun InlineMediaPickerMediaPicker(
     circular: Boolean = false,
     useAvatarCircularity: Boolean = false,
     enabled: Boolean = true,
-    onPick: (Uri) -> Unit
+    onPick: (PlatformFile) -> Unit
 ) {
-    val documentsUiLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri ->
-        if (uri != null) {
-            onPick(uri)
+    val launcher = rememberFilePickerLauncher(
+        type = if (mimeType.startsWith("image/")) FileKitType.Image else FileKitType.File(),
+    ) { file ->
+        if (file != null) {
+            onPick(file)
         }
     }
 
-    if (currentModel != null) {
-        GlideImage(
-            model = currentModel,
-            contentDescription = stringResource(Res.string.inline_media_picker_current_description),
+    val currentUrl = mediaModelUrl(currentModel)
+    if (currentUrl != null) {
+        RemoteImage(
+            url = currentUrl,
+            description = stringResource(Res.string.inline_media_picker_current_description),
             contentScale = if (circular) ContentScale.Crop else ContentScale.FillWidth,
             modifier = if (circular) {
                 Modifier
@@ -157,9 +159,8 @@ fun InlineMediaPickerMediaPicker(
                     .width(480.dp)
                     .height(140.dp)
             }.clickable(enabled = enabled) {
-                documentsUiLauncher.launch(mimeType)
+                launcher.launch()
             },
-            transition = CrossFade,
         )
     } else {
         Box(
@@ -181,7 +182,7 @@ fun InlineMediaPickerMediaPicker(
                     .height(140.dp)
             }
                 .clickable(enabled = enabled) {
-                    documentsUiLauncher.launch(mimeType)
+                    launcher.launch()
                 }
                 .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.4f)),
             contentAlignment = Alignment.Center

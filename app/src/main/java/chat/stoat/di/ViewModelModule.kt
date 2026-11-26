@@ -53,18 +53,18 @@ val viewModelModule = module {
     viewModel { DebugSettingsScreenViewModel(get()) }
     viewModel { NotificationsSettingsScreenViewModel(get(), androidContext()) }
     viewModel { LoginViewModel(get()) }
-    viewModel { ProfileSettingsScreenViewModel(androidApplication()) }
+    viewModelOf(::ProfileSettingsScreenViewModel)
     viewModel { AppearanceSettingsScreenViewModel(androidApplication()) }
-    viewModel { ChannelSettingsOverviewViewModel(androidApplication()) }
+    viewModelOf(::ChannelSettingsOverviewViewModel)
     viewModelOf(::ChannelSettingsPermissionsViewModel)
-    viewModel { ServerSettingsOverviewViewModel(androidApplication()) }
-    viewModel { ServerIdentitySettingsViewModel(androidApplication()) }
+    viewModelOf(::ServerSettingsOverviewViewModel)
+    viewModelOf(::ServerIdentitySettingsViewModel)
     viewModelOf(::ServerSettingsBansViewModel)
     viewModelOf(::ServerSettingsChannelsViewModel)
     viewModel { ServerSettingsEmojisViewModel(androidApplication()) }
     viewModelOf(::ServerSettingsInvitesViewModel)
     viewModelOf(::ServerSettingsRolesViewModel)
-    viewModel { ServerSettingsRoleEditorViewModel(androidApplication()) }
+    viewModelOf(::ServerSettingsRoleEditorViewModel)
     viewModel { AccountSettingsScreenViewModel(androidApplication()) }
     viewModelOf(::MfaSettingsScreenViewModel)
     viewModel { (id: String) -> ReadChangelogScreenViewModel(id) }

@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -54,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.Role as SemanticsRole
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -65,7 +64,6 @@ import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.BitDefaults
 import chat.stoat.api.internals.hasPermission
-import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.deleteServerRole
 import chat.stoat.api.routes.server.editServerRole
 import chat.stoat.api.routes.server.fetchServerRole
@@ -73,6 +71,8 @@ import chat.stoat.api.routes.server.setDefaultServerPermissions
 import chat.stoat.api.routes.server.setServerRolePermissions
 import chat.stoat.composables.generic.InlineMediaPicker
 import chat.stoat.composables.generic.PermissionOverridePicker
+import chat.stoat.composables.generic.mediaModelUrl
+import chat.stoat.composables.generic.uploadPickedFile
 import chat.stoat.composables.server.RoleColourIndicator
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -135,22 +135,16 @@ import chat.stoat.ui.colour.BrushCompat
 import com.bumptech.glide.integration.compose.CrossFade
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import io.ktor.http.ContentType
-import kotlinx.coroutines.Dispatchers
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.File
-import androidx.compose.ui.semantics.Role as SemanticsRole
 
 private const val DefaultRoleId = "default"
 
-class ServerSettingsRoleEditorViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerSettingsRoleEditorViewModel : ViewModel() {
     var loaded by mutableStateOf(false)
         private set
     var roleName by mutableStateOf("")
@@ -267,8 +261,8 @@ class ServerSettingsRoleEditorViewModel(
         hoist = value
     }
 
-    fun updateIcon(uri: Uri?) {
-        iconModel = uri
+    fun updateIcon(file: PlatformFile?) {
+        iconModel = file
         error = null
     }
 
@@ -378,31 +372,16 @@ class ServerSettingsRoleEditorViewModel(
             return null
         }
 
-        val uri = iconModel as? Uri ?: return null
-        val mime = context.contentResolver.getType(uri) ?: "image/*"
-        val file = withContext(Dispatchers.IO) {
-            File.createTempFile("stoat-role-icon-", null, context.cacheDir).also { target ->
-                context.contentResolver.openInputStream(uri)?.use { input ->
-                    target.outputStream().use(input::copyTo)
-                } ?: throw IllegalArgumentException(
-                    getString(Res.string.server_settings_role_file_error)
-                )
-            }
-        }
-
-        return try {
-            uploadToAutumn(
-                file = file,
-                name = uri.lastPathSegment ?: "role-icon",
-                tag = "icons",
-                contentType = ContentType.parse(mime),
-                onProgress = { sent, total ->
-                    uploadProgress = if (total > 0) sent.toFloat() / total else 0f
-                },
-            )
-        } finally {
-            withContext(Dispatchers.IO) { file.delete() }
-        }
+        val file = iconModel as? PlatformFile ?: return null
+        return uploadPickedFile(
+            file,
+            tag = "icons",
+            fallbackName = "role-icon",
+            readError = Res.string.server_settings_role_file_error,
+            onProgress = { sent, total ->
+                uploadProgress = if (total > 0) sent.toFloat() / total else 0f
+            },
+        )
     }
 }
 
@@ -751,10 +730,11 @@ private fun RolePreviewSurface(
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false),
                         )
-                        if (iconModel != null) {
+                        val iconUrl = mediaModelUrl(iconModel)
+                        if (iconUrl != null) {
                             Spacer(Modifier.width(4.dp))
                             GlideImage(
-                                model = iconModel,
+                                model = iconUrl,
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
                                 transition = CrossFade,

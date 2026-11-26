@@ -141,6 +141,7 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" 
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 ratex = { module = "io.github.darriousliu:ratex", version = "0.1.16" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version = "3.1.0" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version = "0.17.1" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

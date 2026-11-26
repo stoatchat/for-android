@@ -266,6 +266,8 @@
     <string name="channel_group">Group</string>
     <string name="channel_notes">Notes</string>
 
+    <string name="channel_notes_open_failed">Couldn't open your notes. Try again.</string>
+
     <string name="start_of_conversation">This is the start of your conversation</string>
     <string name="time_rift_heading">There may be some messages missing here.</string>
     <string name="time_rift_cta">Load messages</string>

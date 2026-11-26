@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,9 +38,9 @@ import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.ULID
 import chat.stoat.api.routes.user.fetchUserProfile
 import chat.stoat.composables.expressive.Wave
-import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.composables.generic.UserAvatar
 import chat.stoat.composables.generic.presenceFromStatus
+import chat.stoat.core.designsystem.components.RemoteImage
 import chat.stoat.core.model.data.STOAT_FILES
 import chat.stoat.core.model.schemas.AutumnResource
 import chat.stoat.core.model.schemas.Profile
@@ -50,8 +49,6 @@ import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.unknown
 import chat.stoat.ui.colour.solidColor
 import chat.stoat.ui.theme.TeamMemberFlairs
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -95,19 +92,7 @@ fun RawUserOverview(
     backgroundUrl: String? = null,
     internalPadding: Boolean = true
 ) {
-    val context = LocalContext.current
-    var teamMemberFlair by remember { mutableStateOf<Brush?>(null) }
-
-    LaunchedEffect(user.id) {
-        withContext(Dispatchers.IO) {
-            user.id?.let {
-                teamMemberFlair = TeamMemberFlairs.teamFlairAsBrush(
-                    context,
-                    it
-                )
-            }
-        }
-    }
+    val teamMemberFlair = user.id?.let(TeamMemberFlairs::teamFlairAsBrush)
 
     Box(
         contentAlignment = Alignment.BottomStart,
@@ -238,19 +223,7 @@ fun RawUserOverview2(
     backgroundUrl: String? = null,
     showWave: WaveInclusionPolicy = WaveInclusionPolicy.Include,
 ) {
-    val context = LocalContext.current
-    var teamMemberFlair by remember { mutableStateOf<Brush?>(null) }
-
-    LaunchedEffect(user.id) {
-        withContext(Dispatchers.IO) {
-            user.id?.let {
-                teamMemberFlair = TeamMemberFlairs.teamFlairAsBrush(
-                    context,
-                    it
-                )
-            }
-        }
-    }
+    val teamMemberFlair = user.id?.let(TeamMemberFlairs::teamFlairAsBrush)
 
     Column {
         val background = backgroundUrl ?: profile?.background

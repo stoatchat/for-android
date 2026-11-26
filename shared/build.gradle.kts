@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.reorderable)
             implementation(libs.kermit)
             implementation(libs.ktor.http)
+            api(libs.filekit.dialogs.compose)
         }
 
         androidMain.dependencies {

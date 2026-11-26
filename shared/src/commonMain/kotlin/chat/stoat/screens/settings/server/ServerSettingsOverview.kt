@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings.server
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -46,9 +44,9 @@ import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.internals.PermissionBit
 import chat.stoat.api.internals.hasPermission
-import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.api.routes.server.patchServer
 import chat.stoat.composables.generic.InlineMediaPicker
+import chat.stoat.composables.generic.uploadPickedFile
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
 import chat.stoat.core.designsystem.theme.StoatTweenFloat
@@ -80,18 +78,13 @@ import chat.stoat.shared.resources.server_settings_overview_user_banned
 import chat.stoat.shared.resources.server_settings_overview_user_joined
 import chat.stoat.shared.resources.server_settings_overview_user_kicked
 import chat.stoat.shared.resources.server_settings_overview_user_left
-import io.ktor.http.ContentType
-import kotlinx.coroutines.Dispatchers
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.File
 
-class ServerSettingsOverviewViewModel(
-    private val context: Application,
-) : ViewModel() {
+class ServerSettingsOverviewViewModel : ViewModel() {
     var initialServer by mutableStateOf<Server?>(null)
         private set
     var loaded by mutableStateOf(false)
@@ -161,13 +154,13 @@ class ServerSettingsOverviewViewModel(
         if (value.length <= 1024) serverDescription = value
     }
 
-    fun setIcon(uri: Uri?) {
-        iconModel = uri
+    fun setIcon(file: PlatformFile?) {
+        iconModel = file
         updateError = null
     }
 
-    fun setBanner(uri: Uri?) {
-        bannerModel = uri
+    fun setBanner(file: PlatformFile?) {
+        bannerModel = file
         updateError = null
     }
 
@@ -296,32 +289,16 @@ class ServerSettingsOverviewViewModel(
             return null
         }
 
-        val uri = current as? Uri ?: return null
-        val mime = context.contentResolver.getType(uri) ?: "image/*"
-
-        val file = withContext(Dispatchers.IO) {
-            File.createTempFile("stoat-$tag-", null, context.cacheDir).also { temporaryFile ->
-                context.contentResolver.openInputStream(uri)?.use { input ->
-                    temporaryFile.outputStream().use(input::copyTo)
-                } ?: throw IllegalArgumentException(
-                    getString(Res.string.server_settings_overview_file_error)
-                )
-            }
-        }
-
-        return try {
-            uploadToAutumn(
-                file = file,
-                name = uri.lastPathSegment ?: fallbackName,
-                tag = tag,
-                contentType = ContentType.parse(mime),
-                onProgress = { sent, total ->
-                    uploadProgress = if (total > 0) sent.toFloat() / total.toFloat() else 0f
-                },
-            )
-        } finally {
-            withContext(Dispatchers.IO) { file.delete() }
-        }
+        val file = current as? PlatformFile ?: return null
+        return uploadPickedFile(
+            file,
+            tag = tag,
+            fallbackName = fallbackName,
+            readError = Res.string.server_settings_overview_file_error,
+            onProgress = { sent, total ->
+                uploadProgress = if (total > 0) sent.toFloat() / total.toFloat() else 0f
+            },
+        )
     }
 }
 

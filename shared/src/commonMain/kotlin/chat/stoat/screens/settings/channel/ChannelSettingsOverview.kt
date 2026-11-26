@@ -1,7 +1,5 @@
 package chat.stoat.screens.settings.channel
 
-import android.app.Application
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
@@ -49,8 +47,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chat.stoat.api.StoatAPI
 import chat.stoat.api.routes.channel.patchChannel
-import chat.stoat.api.routes.microservices.autumn.uploadToAutumn
 import chat.stoat.composables.generic.InlineMediaPicker
+import chat.stoat.composables.generic.uploadPickedFile
 import chat.stoat.core.designsystem.components.ListHeader
 import chat.stoat.core.designsystem.icons.StoatIcons
 import chat.stoat.core.designsystem.icons.painter
@@ -78,14 +76,12 @@ import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_t
 import chat.stoat.shared.resources.channel_settings_overview_nsfw_undo_confirm_yes
 import chat.stoat.shared.resources.channel_settings_overview_save
 import chat.stoat.shared.resources.channel_settings_overview_update_info_error_fallback
-import io.ktor.http.ContentType
+import io.github.vinceglb.filekit.PlatformFile
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import java.io.File
 
-class ChannelSettingsOverviewViewModel(val context: Application) :
-    ViewModel() {
+class ChannelSettingsOverviewViewModel : ViewModel() {
     var initialChannel by mutableStateOf<Channel?>(null)
 
     var channelName by mutableStateOf("")
@@ -135,33 +131,18 @@ class ChannelSettingsOverviewViewModel(val context: Application) :
         uploadError = null
         iconUploadProgress = 0f
 
-        val uri = when (newModel) {
-            is Uri -> newModel
-            is String -> Uri.parse(newModel)
-            else -> null
-        } ?: run {
+        val file = newModel as? PlatformFile ?: run {
             unsetIcon()
             return
         }
 
-        val mFile = File(context.cacheDir, uri.lastPathSegment ?: "icon")
-
-        mFile.outputStream().use { output ->
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                input.copyTo(output)
-            }
-        }
-
-        val mime = context.contentResolver.getType(uri)
-
         viewModelScope.launch {
             iconIsUploading = true
             try {
-                val id = uploadToAutumn(
-                    mFile,
-                    uri.lastPathSegment ?: "icon",
-                    "icons",
-                    ContentType.parse(mime ?: "image/*"),
+                val id = uploadPickedFile(
+                    file,
+                    tag = "icons",
+                    fallbackName = "icon",
                     onProgress = { soFar, outOf ->
                         iconUploadProgress = soFar.toFloat() / outOf.toFloat()
                     }

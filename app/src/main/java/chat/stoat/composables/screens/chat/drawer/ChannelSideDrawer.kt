@@ -87,6 +87,7 @@ import chat.stoat.api.internals.ChannelUtils
 import chat.stoat.api.internals.DirectMessages
 import chat.stoat.api.internals.FriendRequests
 import chat.stoat.api.routes.user.addUserIfUnknown
+import chat.stoat.api.routes.user.openDM
 import chat.stoat.api.settings.GeoStateProvider
 import chat.stoat.api.settings.NotificationSettingsProvider
 import chat.stoat.api.settings.ServerFolders
@@ -111,11 +112,14 @@ import chat.stoat.core.model.schemas.has
 import chat.stoat.core.model.util.UserVoiceState
 import chat.stoat.navigation.Navigator
 import chat.stoat.navigation.Route
+import chat.stoat.platform.LocalToaster
+import chat.stoat.platform.show
 import chat.stoat.screens.chat.ChatRouterDestination
 import chat.stoat.screens.chat.LocalIsConnected
 import chat.stoat.shared.resources.Res
 import chat.stoat.shared.resources.channel_context_sheet_open
 import chat.stoat.shared.resources.channel_notes
+import chat.stoat.shared.resources.channel_notes_open_failed
 import chat.stoat.shared.resources.channel_voice_participants_more
 import chat.stoat.shared.resources.direct_messages
 import chat.stoat.shared.resources.discover_alt
@@ -804,27 +808,57 @@ fun ColumnScope.DirectMessagesChannelListRenderer(
         item(key = "saved_messages") {
             val notesChannel =
                 StoatAPI.channelCache.values.firstOrNull { it.channelType == ChannelType.SavedMessages }
+            val toaster = LocalToaster.current
+            val openFailedText = stringResource(Res.string.channel_notes_open_failed)
+            var creatingNotes by remember { mutableStateOf(false) }
 
-            if (notesChannel != null) {
-                ChannelItem(
-                    channel = Channel(
-                        id = notesChannel.id,
-                        name = stringResource(Res.string.channel_notes),
-                        channelType = ChannelType.SavedMessages
-                    ),
-                    isCurrent = currentDestination is ChatRouterDestination.Channel &&
-                            currentDestination.channelId == notesChannel.id,
-                    onDestinationChanged = {
-                        onDestinationChanged(it)
-                        scope.launch {
-                            drawerState?.close()
-                        }
-                    },
-                    hasUnread = false,
-                    onOpenChannelContextSheet = {},
-                )
-                Spacer(Modifier.height(4.dp))
+            val goTo: (ChatRouterDestination) -> Unit = {
+                onDestinationChanged(it)
+                scope.launch {
+                    drawerState?.close()
+                }
             }
+
+            ChannelItem(
+                channel = Channel(
+                    id = notesChannel?.id,
+                    name = stringResource(Res.string.channel_notes),
+                    channelType = ChannelType.SavedMessages
+                ),
+                isCurrent = notesChannel != null &&
+                        currentDestination is ChatRouterDestination.Channel &&
+                        currentDestination.channelId == notesChannel.id,
+                onDestinationChanged = goTo,
+                hasUnread = false,
+                onOpenChannelContextSheet = {},
+                // New accounts don't have a notes channel until it's first opened
+                onClick = if (notesChannel == null) {
+                    {
+                        val selfId = StoatAPI.selfId
+                        if (selfId != null && !creatingNotes) {
+                            creatingNotes = true
+                            scope.launch {
+                                try {
+                                    val created = openDM(selfId)
+                                    created.id?.let {
+                                        StoatAPI.channelCache[it] = created
+                                        goTo(ChatRouterDestination.Channel(it))
+                                    }
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (_: Throwable) {
+                                    toaster.show(openFailedText)
+                                } finally {
+                                    creatingNotes = false
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    null
+                },
+            )
+            Spacer(Modifier.height(4.dp))
         }
 
         item("divider") {
@@ -1006,7 +1040,8 @@ fun ChannelItem(
     appendServerName: Boolean = false,
     showVoiceParticipants: Boolean = false,
     onDestinationChanged: (ChatRouterDestination) -> Unit,
-    onOpenChannelContextSheet: (String) -> Unit
+    onOpenChannelContextSheet: (String) -> Unit,
+    onClick: (() -> Unit)? = null,
 ) {
     CompositionLocalProvider(
         LocalContentColor provides if (isCurrent) {
@@ -1035,10 +1070,13 @@ fun ChannelItem(
                                 onOpenChannelContextSheet(chId)
                             }
                         },
-                        onClick = {
-                            channel.id?.let { chId ->
-                                onDestinationChanged(ChatRouterDestination.Channel(chId))
-                            }
+                        onClick = onClick ?: {
+                            val chId = channel.id
+                            if (chId != null) onDestinationChanged(
+                                ChatRouterDestination.Channel(
+                                    chId
+                                )
+                            )
                         }
                     )
                     .then(
