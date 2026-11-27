@@ -568,7 +568,6 @@
     <string name="channel_settings_overview_update_info_error_fallback">Der opstod en fejl ved opdatering af kanalen.</string>
     <string name="channel_settings_overview_info">Kanalinfo</string>
     <string name="keyboard_shortcut_messaging">Beskeder</string>
-    <string name="spark_early_access_description_3">Vi er begejstrede for at have dig om bord. Lad os skabe noget stort sammen!</string>
     <string name="report_message">Tak, fordi du tog dig tid til at rapportere denne besked. Din rapport deles ikke med brugeren, der sendte beskeden, eller serverens moderatorer.</string>
     <string name="report_reason_content_malware">Malware eller phishing</string>
     <string name="report_reason_user_underage">Ikke minimumsalderen for at bruge platformen</string>
